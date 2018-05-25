@@ -1,0 +1,59 @@
+{
+    "remote": {
+        "version": 2,
+        "objects": {
+            "root": "root_path"
+        },
+        "subdir": {
+            "development": {
+                "version": 1,
+                "objects": {
+                    "read_db": "collision",
+                    "development_data": "development_body"
+                },
+                "subdir": {
+                    "read_db": {
+                        "version": 0,
+                        "objects": {
+                            "port": 10080,
+                            "host": "127.0.0.1"
+                        }
+                    },
+                    "write_db": {
+                        "version": 0,
+                        "objects": {
+                            "port": 10080,
+                            "host": "0.0.0.0"
+                        }
+                    }
+                }
+            },
+            "production": {
+                "version": 0,
+                "objects": {
+                    "production_data": "production_body"
+                },
+                "subdir": {
+                    "read_db": {
+                        "version": 1,
+                        "objects": {
+                            "port": 10080,
+                            "host": "127.0.0.1",
+                            "connects": {
+                                "a": "b",
+                                "c": "d"
+                            }
+                        }
+                    },
+                    "write_db": {
+                        "version": 0,
+                        "objects": {
+                            "port": 10080,
+                            "host": "0.0.0.0"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
