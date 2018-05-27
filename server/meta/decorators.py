@@ -4,10 +4,12 @@
 import functools
 from .errors import *
 
+# 封装字典，flask_restplus返回对象
 class Response(dict):
     def __init__(self, *args, **kwargs):
         super(Response, self).__init__(*args, **kwargs)
 
+# 封装装饰器
 def make_decorator(f):
     def input_params(**params):
         restriction = {}

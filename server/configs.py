@@ -13,56 +13,21 @@ configs = SuperConf(serialize=JsonSerialize(remote_filename=''.join([str(os.getp
                         hosts=SuperConf(JsonSerialize(), engine=Engine()).env.zookeeper.host
                         ), root='superconf')
 
-@configs.register('.union.mysql.read_db')
-def __read_db(conf):
+@configs.register('.bi_dashboard.mysql.read_prod')
+def __read_prod(conf):
     pass
 
 
-@configs.register('.union.mysql.write_db')
-def __write_db(conf):
+@configs.register('.bi_dashboard.mysql.read_bi')
+def __read_bi(conf):
     pass
 
 
-@configs.register('.union.log')
+@configs.register('.bi_dashboard.mysql.write_bi')
+def __write_bi(conf):
+    pass
+
+
+@configs.register('.bi_dashboard.log')
 def __log(conf):
-    pass
-
-
-@configs.register('.union.redis.token')
-def __token(conf):
-    pass
-
-
-@configs.register('.union.redis.price_cache')
-def __cache(conf):
-    pass
-
-
-@configs.register('.union.service_urls')
-def __service_urls(conf):
-    pass
-
-
-@configs.register('.union.urls')
-def __urls(conf):
-    pass
-
-
-@configs.register('.union.shorturl')
-def __shorturl(conf):
-    pass
-
-
-@configs.register('.union.messager')
-def __messager(conf):
-    pass
-
-
-@configs.register('.union.open_event')
-def __open_event(conf):
-    pass
-
-
-@configs.register('.feed_service')
-def __feed_service(conf):
     pass

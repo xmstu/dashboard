@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, session, request, redirect
 from flask_restplus import Api
+from datetime import timedelta
 
 from server.configs import configs
 from server.status import HTTPStatus, make_result, APIStatus
@@ -21,6 +22,19 @@ api = Api(app, version='4.0.2', title='省省回头车 Feed API 4.0.1',
         }
     }, security='apikey', ui=True
 )
+
+# session超时时间
+app.permanent_session_lifetime = timedelta(days=3)
+
+# 登录验证
+@app.before_request
+def login_auth():
+    # 接口页面
+    if request.path == '/' or 'swagger' in request.path:
+        pass
+    elif not session.get('login') and request.path != '/login/':
+        return redirect('/login/')
+
 
 # 跨域设置
 @app.after_request
@@ -67,11 +81,8 @@ def value_error(e):
     log.warn('服务发生异常: [error: %s]' % (e, ), exc_info=True)
     return jsonify(make_result(APIStatus.InternalServerError)), 500
 
-# api页面权限
+# 接口页面展示
 if configs.env.deploy != "dev":
     @api.documentation
     def disable_document():
         return api.render_root()
-
-
-from server.resources import *
