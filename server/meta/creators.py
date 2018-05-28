@@ -1,6 +1,7 @@
 # coding=utf-8
 # author=veficos
 
+
 def StaticClass(name, *args, **kwargs):
     methods = []
     methods.extend(args)

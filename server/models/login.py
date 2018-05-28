@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import hashlib
 import logging
+import time
 
-from server import log
-from server.models.general import UserModel
+from server import log, read_db, write_db
+from server.models.general import UserModel, UserStatsModel
 from server.status import message
 from server.workflow import utils
 
@@ -12,8 +13,11 @@ class Login(object):
 
     @staticmethod
     @utils.performance(log=log, level=logging.INFO)
-    def add(user_id, password):
+    def add(args):
         """正常登陆"""
+
+        user_id = args['user_id']
+        password = args['password']
 
         user = UserModel.query_one(read_db, id=user_id)
 
@@ -22,9 +26,7 @@ class Login(object):
             raise message.MessageException(message.PasswordError)
 
         with write_db.begin() as db:
-            RefreshTokenModel.update(db.conn, {'is_deleted': 1, 'expired_time': int(time.time())},
-                                     user_id=user_id, device_type=device_type, is_deleted=0)
-            Login._delete_old_token(db.conn, user_id)
+
             UserStatsModel.update(db.conn, {'last_login_time': int(time.time())}, user_id=user_id)
             log.debug('Login add user_id:%s _delete_old_token ok' % user_id)
-            return Login.common_login(db.conn, user_id)
+            return args

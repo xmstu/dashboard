@@ -34,5 +34,5 @@ class LoginDecorator(object):
     @staticmethod
     @make_decorator
     def post(args):
-        result = Login.add(args['user_id'], args['password'])
+        result = Login.add(args)
         return Passing(args=result)

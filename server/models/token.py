@@ -42,8 +42,7 @@ def get_user_id_by_token(token):
 
 def get_user_id_by_mobile(mobile):
     result = read_db.query_one('SELECT id FROM shu_users WHERE mobile=:mobile AND is_deleted = 0', {'mobile': mobile})
-    # Result == {'id': 480}
-    log.info('Result == %s ' % result)
+    log.info('Result:%s ' % result)
     if result and result.get('id'):
         return result['id']
     else:
