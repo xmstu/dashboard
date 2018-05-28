@@ -1,0 +1,125 @@
+@charset "UTF-8";
+*{box-sizing: border-box}
+html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img { margin:0; padding:0;box-sizing:border-box; }
+fieldset, img,input,button { border:none; padding:0;margin:0;outline-style:none; }
+ul, ol { list-style:none; }
+input { padding-top:0; padding-bottom:0; font-family:"Microsoft YaHei";}
+select, input { vertical-align:middle;}
+select, input, textarea { font-size:12px; margin:0;}
+textarea { resize:none; } /*防止拖动*/
+img {border:0; vertical-align:middle; }
+table { border-collapse:collapse; }
+html,body{
+    height: 100%;
+}
+
+.clearfix::after,
+.clearfix::before{
+    display: block;
+    height:0;
+    content: '.';
+    visibility: hidden;
+    overflow: hidden;
+    clear: both;
+}
+a {color:#666; text-decoration:none; }
+a:hover{color:#C81623;}
+h1,h2,h3,h4,h5,h6 {text-decoration:none;font-weight:normal;font-size:100%;}
+s,i,em{font-style:normal;text-decoration:none;}
+.col-red{color: #C81623!important;}
+.w {
+    width: 1210px;margin:0 auto;
+}
+.fl {
+    float:left
+}
+.fr {
+    float:right
+}
+.al {
+    text-align:left
+}
+.ac {
+    text-align:center
+}
+.ar {
+    text-align:right
+}
+.hide {
+    display:none
+}
+.nav-fixed-to{
+    position: fixed;
+    right:0;
+    left:0;
+    z-index: 1111;
+}
+.font12{ font-size: 12px !important;}
+.font14{ font-size: 14px !important;}
+.font16{ font-size: 16px !important;}
+.font18{ font-size: 18px !important;}
+.font20{ font-size: 20px !important;}
+.font22{ font-size: 22px !important;}
+.font24{ font-size: 24px !important;}
+.font26{ font-size: 26px !important;}
+.font28{ font-size: 28px !important;}
+.font30{ font-size: 30px !important;}
+.mr-4{
+    margin-right:4px;
+}
+.mr-10{
+    margin-right:10px;
+}
+.mr-20{
+    margin-right:20px;
+}
+.mr-30{
+    margin-right:30px;
+}
+.fwb{
+    font-weight: bold;
+}
+.black{
+    color: #000;
+}
+.color-ccc{
+    color: #ccc;
+}
+.color-999{
+    color: #999;
+}
+.color-444{
+    color: #444;
+}
+.color-666 {
+    color: #666;
+}
+.color-999 {
+    color: #999;
+}
+.tac {
+    text-align: center;
+}
+.tal {
+    text-align: left;
+}
+.tar {
+    text-align: right;
+}
+.display_no{display:none;}
+.display_yes{display:block;}
+.fix-to-right {
+    position: fixed;
+    right: 20px;
+    bottom: 450px;
+}
+.fix-to-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+/*
+[class^="iconfont"]{
+    position: absolute;
+}*/
+

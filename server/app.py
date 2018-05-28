@@ -32,6 +32,9 @@ def login_auth():
     # 接口页面
     if request.path == '/' or 'swagger' in request.path:
         pass
+    # 静态文件
+    elif 'static' in request.path:
+        pass
     elif not session.get('login') and request.path != '/login/':
         return redirect('/login/')
 
