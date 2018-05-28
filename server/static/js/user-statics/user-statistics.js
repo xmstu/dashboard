@@ -4,6 +4,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     laydate.render({
         elem: '#date_show_one',
         value: String(common.getNowFormatDate()[0]),
+        max:String(common.getNowFormatDate()[0]),
         theme: '#1E9FFF',
         calendar: true,
         ready: function () {
@@ -122,7 +123,7 @@ $('#charts_container_one').highcharts({
     },
 
     title: {
-        text: '测试图表'
+        text: '用户变化趋势曲线图'
     },
     subtitle: {
         text: '数据来源：省省官方后台数据库'

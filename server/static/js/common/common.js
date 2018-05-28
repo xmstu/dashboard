@@ -21,21 +21,7 @@ var common = {
         $('.main-content-right').addClass('animated fadeIn');
         var nav_menu = $('.icon-caidan');
         nav_menu.on('click', function (e) {
-            e.preventDefault();
-            if ($('.layui-nav-tree').width() == '50') {
-                $('.layui-nav-tree').animate({'width':'200px'});
-                $('.layui-icon-right').animate({'opacity':0});
-                $('.main-content-right').animate({'margin-left':'200px'});
-               setTimeout(function(){
-                   $('.nav-content span').fadeIn('fast');
-                   $('.nav-header >p span').fadeIn('fast');
-               },300);$('.nav-header').animate({'width':'200px'});
-                $(this).css({'transform':'rotateZ(270deg)','transition':'all 0.4s'});
-                $('.layui-nav-item >a').animate({'width':'200px'});
-                $('.layui-nav-item > a > i:nth-child(1)').animate({'width':'44px'});
-
-
-            } else if ($('.layui-nav-tree').width() == '200') {
+         if ($('.layui-nav-tree').width() == '200') {
                 $('.layui-nav-tree').animate({'width':'50px'});
                 $('.layui-icon-right').animate({'opacity':0});
                 $('.main-content-right').animate({'margin-left':'50px'});
@@ -44,8 +30,23 @@ var common = {
                 $('.layui-nav-item >a').animate({'width':'50px'});
                 $('.nav-content span').fadeOut('fast');
                 $('.layui-nav-item > a > i:nth-child(1)').animate({'width':'50px'});
-            }
-            console.log($('.layui-nav-tree').width());
+                return false
+            }else if ($('.layui-nav-tree').width() == '50') {
+                $('.layui-nav-tree').animate({'width':'200px'});
+                $('.layui-icon-right').animate({'opacity':0});
+                $('.main-content-right').animate({'margin-left':'200px'});
+                setTimeout(function(){
+                    $('.nav-content span').fadeIn('fast');
+                    $('.nav-header >p span').fadeIn('fast');
+                },300);$('.nav-header').animate({'width':'200px'});
+                $(this).css({'transform':'rotateZ(270deg)','transition':'all 0.4s'});
+                $('.layui-nav-item >a').animate({'width':'200px'});
+                $('.layui-nav-item > a > i:nth-child(1)').animate({'width':'44px'});
+                layer.closeAll('tips');
+                return false
+
+            } else
+                console.log($('.layui-nav-tree').width());
         });
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {

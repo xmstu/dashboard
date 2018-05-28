@@ -213,9 +213,9 @@ body {
     border-bottom: 1px solid #ccc;
 }
 .nav-header > p > span {
-    font-size: 16px;
+    font-size: 15px;
     display: inline-block;
-    margin-left: 24px;
+    margin-left: 20px;
 }
 .layui-nav{
     border-radius: 0;
@@ -282,7 +282,7 @@ body {
     left: 2px;
 }
 .layui-nav-item {
-    border-bottom: 1px solid rgba(240, 240, 240, 1) !important;
+    border-bottom: 1px dashed #ddd !important;
 }
 nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     line-height:42px;
@@ -367,6 +367,23 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     background: #f1f1f1;
     padding-right: 0;
     min-width: 1700px;
+    position: relative;
+}
+.main-content-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-width: 0 42px 42px 0;
+    border-style: solid;
+    border-color: #ffffff rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.3);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
 }
 .main-content-right > div {
     padding: 14px;
@@ -431,4 +448,13 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 .icon-caidan {
     cursor: pointer;
 
+}
+.highcharts-credits{
+    display: none!important;
+}
+#charts_container_one {
+    min-width: 1632px;
+}
+.part-2 .layui-form {
+    max-width: 1630px;
 }
