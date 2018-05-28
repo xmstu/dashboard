@@ -64,6 +64,7 @@ target/
 *.zip
 *.7z
 *.sln
+*.json
 
 # IDE configuration
 .vs

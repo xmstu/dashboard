@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # author=hexm
+import time
+
 from flask import session
 
 from server.meta.decorators import make_decorator
@@ -16,5 +18,6 @@ class Login(object):
         session['login'] = {
             'user_id': args.get('user_id'),
             'mobile': args.get('mobile'),
+            'login_time': time.time()
         }
         return direct_response({'status': UserAPIStatus.Ok, 'msg': '登录成功'})

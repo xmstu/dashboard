@@ -21,7 +21,6 @@ class Login(Resource):
     @performance(log=log, level=logging.INFO)
     @collect_exceptions(message_handler)
     @filters.Login.post(args=dict)
-    @operations.LoginDecorator.post(args=dict)
     @operations.LoginDecorator.common_check(args=dict)
     @verify.LoginSetting.post(args=dict)
     def post(self):
