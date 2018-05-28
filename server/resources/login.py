@@ -10,6 +10,7 @@ from server.status import UserAPIStatus
 from server.status.message import message_handler, direct_response
 from server.workflow.passing import Passing
 from server.workflow.utils import performance, collect_exceptions
+from server.utils.request import *
 
 
 class Login(Resource):
@@ -25,7 +26,7 @@ class Login(Resource):
     @verify.LoginSetting.post(args=dict)
     def post(self):
         """用户登录"""
-        args = request.get_json()
+        args = get_payload()
         log.info('login %s' % args)
         return Passing(args=args)
 

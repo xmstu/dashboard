@@ -9,7 +9,7 @@ import pymongo
 import redis
 import requests
 
-from server import configs, modules, read_db, log
+from server import configs, modules, log
 from server.workflow.utils import performance
 
 
@@ -36,7 +36,7 @@ def parameter_sign(secret, parameters):
 
 
 class ExtendRedis(object):
-    logger = modules.log
+    logger = log
 
     def __init__(self, ip='127.0.0.1', port='6379', db=0, name='token'):
 
@@ -237,7 +237,7 @@ class ExtendHandler(object):
 
         """
         area_sql = "SELECT `code`, `name` FROM `shm_regions`"
-        area_data = read_db.query(area_sql)
+        area_data = modules.read_io.query(area_sql)
         area = dict([(x['code'], x['name']) for x in area_data])
         if not area:
             return {}
@@ -434,7 +434,7 @@ class ExtendHandler(object):
         region_redis = ExtendRedis(name='region')
         name = region_redis.conn.hget('online.region' + str(region_id), 'name')
         if not name:
-            desc = read_db.query_one('SELECT `name` FROM shm_regions WHERE id = %s' % region_id)
+            desc = modules.read_io.query_one('SELECT `name` FROM shm_regions WHERE id = %s' % region_id)
             return {'id': region_id, 'name': desc.get('name', '') if desc else ''}
         return {'id': region_id, 'name': name or ''}
 

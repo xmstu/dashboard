@@ -3,7 +3,7 @@ import hashlib
 import logging
 import time
 
-from server import log, read_db, write_db
+from server import log, read_io, write_io
 from server.models.general import UserModel, UserStatsModel
 from server.status import message
 from server.workflow import utils
@@ -17,16 +17,28 @@ class Login(object):
         """正常登陆"""
 
         user_id = args['user_id']
-        password = args['password']
 
-        user = UserModel.query_one(read_db, id=user_id)
-
-        if not (user and user['password'] == hashlib.md5(password.encode('utf8')).hexdigest()):
-            log.info('Login add user_id:%s PasswordError' % user_id)
-            raise message.MessageException(message.PasswordError)
-
-        with write_db.begin() as db:
+        with write_io.begin() as db:
 
             UserStatsModel.update(db.conn, {'last_login_time': int(time.time())}, user_id=user_id)
-            log.debug('Login add user_id:%s _delete_old_token ok' % user_id)
+            log.debug('Login add user_id:%s ok' % user_id)
             return args
+
+    @staticmethod
+    def get_user(args):
+        mobile = str(args['mobile'])
+        password = args['password']
+        password = hashlib.md5(password.encode('utf8')).hexdigest()
+
+        result = read_io.query_one("""
+                                  SELECT *
+                                  FROM shu_users
+                                  WHERE `mobile` = :mobile AND `password` = :password AND is_deleted = 0
+                                  """, {'mobile': mobile, 'password': password})
+
+        log.info('Result:%s ' % result)
+        if result and result.get('id'):
+            return result
+        else:
+            log.info('LoginDecorator common_check %s NotUser' % args['mobile'])
+            raise message.MessageException(message.NotUser)
