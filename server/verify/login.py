@@ -1,9 +1,8 @@
 from server import log
-from server.meta.decorators import make_decorator
 from server.status import UserAPIStatus
 from server.status.message import direct_response
-from server.utils.extend import Check, Limit
-from server.workflow.passing import Passing
+from server.utils.extend import Check
+from server.workflow.passing import Passing, make_passing
 
 
 class LoginSetting(object):
@@ -11,7 +10,7 @@ class LoginSetting(object):
         pass
 
     @staticmethod
-    @make_decorator
+    @make_passing
     def post(args):
         if not Check.is_mobile(args.get('mobile')):
             log.info('LoginSetting post mobile error %s' % args.get('mobile'))

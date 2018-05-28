@@ -26,7 +26,7 @@ class Login(Resource):
     def post(self):
         """用户登录"""
         args = get_payload()
-        log.info('login %s' % args)
+        log.info('login == %s' % args)
         return Passing(args=args)
 
     @staticmethod
