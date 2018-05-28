@@ -1,8 +1,9 @@
 
-from server import log
-from server.meta.decorators import make_decorator, Response
 from flask_restful import abort
+
+from server.meta.decorators import make_decorator, Response
 from server.status import make_result, HTTPStatus, APIStatus
+
 
 class LoginSetting(object):
 

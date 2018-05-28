@@ -8,6 +8,7 @@ from server.utils.request import *
 from server.meta.decorators import Response
 from server import log, operations, filters
 
+
 @document.response_not_found
 @document.response_bad_request
 @document.response_internal_server_error

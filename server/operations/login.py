@@ -1,13 +1,15 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # author=hexm
-from server.models.login import Login
-from server.meta.decorators import make_decorator, Response
-from server.database import db
-from server.status import make_result, HTTPStatus, APIStatus
+import hashlib
 
 from flask_restful import abort
-import hashlib
+
+from server.database import db
+from server.meta.decorators import make_decorator, Response
+from server.models.login import Login
+from server.status import make_result, HTTPStatus, APIStatus
+
 
 class LoginDecorator(object):
 

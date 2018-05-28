@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 from server.meta.decorators import make_decorator
 
 
-class UserListDecorator(object):
+class UserList(object):
 
     @staticmethod
     @make_decorator
