@@ -1,7 +1,7 @@
 /**
-* 网络请求
-* @type {{}}
-*/
+ * 网络请求
+ * @type {{}}
+ */
 var http = {};
 
 /**Ajax*/
@@ -12,14 +12,14 @@ http.ajax.CONTENT_TYPE_2 = 'application/json;charset=utf-8';
 /**GET请求*/
 http.ajax.get = function (async, cache, url, data, contentType, callback) {
     $.ajax({
-        async : async,
-        cache : cache,
+        async: async,
+        cache: cache,
         type: 'GET',
         url: url,
         data: data,
         contentType: contentType,
         dataType: 'json',
-        beforeSend:function(){
+        beforeSend: function () {
             layer.load(2, {offset: ['55%', '50%']});
         },
         complete: function () {
@@ -27,7 +27,7 @@ http.ajax.get = function (async, cache, url, data, contentType, callback) {
         },
         success: function (result) {
             if (typeof callback == 'function') {
-                 callback(result);
+                callback(result);
             }
         }
     });
@@ -36,8 +36,8 @@ http.ajax.get = function (async, cache, url, data, contentType, callback) {
 
 http.ajax.get_no_loading = function (async, cache, url, data, contentType, callback) {
     $.ajax({
-        async : async,
-        cache : cache,
+        async: async,
+        cache: cache,
         type: 'GET',
         url: url,
         data: data,
@@ -45,8 +45,8 @@ http.ajax.get_no_loading = function (async, cache, url, data, contentType, callb
         dataType: 'json',
         success: function (result) {
             if (typeof callback == 'function') {
-                    callback(result);
-                    return;
+                callback(result);
+                return;
             }
         }
     });
@@ -55,16 +55,15 @@ http.ajax.get_no_loading = function (async, cache, url, data, contentType, callb
 
 /**POST请求*/
 http.ajax.post = function (async, cache, url, data, contentType, callback) {
-
     $.ajax({
-        async : async,
-        cache : cache,
+        async: async,
+        cache: cache,
         type: 'POST',
         url: url,
         data: data,
         contentType: contentType,
         dataType: 'json',
-        beforeSend:function(){
+        beforeSend: function () {
             layer.load(2, {offset: ['55%', '50%']});
         },
         complete: function () {
@@ -72,15 +71,10 @@ http.ajax.post = function (async, cache, url, data, contentType, callback) {
         },
         success: function (result) {
             if (typeof callback == 'function') {
-                if (result.success) {
-                    callback(result);
-                    return;
-                }
-                if (result.msg != null && result != '') {
-                    layer.msg(result.msg);
-                    return;
-                }
-                layer.msg('服务器异常');
+                callback(result);
+                return false;
+            } else if (result.msg != null && result != '') {
+                layer.msg('服务器异常' + result.msg);
             }
         }
     });
@@ -90,8 +84,8 @@ http.ajax.post = function (async, cache, url, data, contentType, callback) {
 http.ajax.post_no_loading = function (async, cache, url, data, contentType, callback) {
 
     $.ajax({
-        async : async,
-        cache : cache,
+        async: async,
+        cache: cache,
         type: 'POST',
         url: url,
         data: data,
@@ -112,14 +106,14 @@ http.ajax.post_no_loading = function (async, cache, url, data, contentType, call
 /**PATCH请求*/
 http.ajax.patch = function (async, cache, url, data, contentType, callback) {
     $.ajax({
-        async : async,
-        cache : cache,
+        async: async,
+        cache: cache,
         type: 'PATCH',
         url: url,
         data: data,
         contentType: contentType,
         dataType: 'json',
-        beforeSend:function(){
+        beforeSend: function () {
             layer.load(2, {offset: ['55%', '50%']});
         },
         complete: function () {

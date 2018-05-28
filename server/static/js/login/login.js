@@ -43,24 +43,15 @@ $('button[type="button"]').click(function () {
     } else if (pwd == '') {
         layer.msg('对不起,您输入密码不能为空!');
     } else {
-        layer.msg('success')
-        $.ajax({
-            url:'test.txt',
-            type:'GET',
-            dataType:'txt',
-            beforeSend:function(){
-                var index = layer.load(1, {
-                    shade: [0.1,'#fff']
-                });
-            },
-            success:function(res){
-                layer.msg(res)
-                layer.close(layer.index)
-            },
-            error:function(){
-                layer.close(layer.index)
-            }
+        var url = ENV.feedService+'/login/';
+        var data = {
+            user_name:login,
+            password:pwd
+        };
+        data=JSON.stringify(data);
+        http.ajax.post(true,false,url,data,http.ajax.CONTENT_TYPE_2,function(res){
+            console.log(res)
         })
     }
-})
+});
 // ----------------------------------------------------------------------
