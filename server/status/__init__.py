@@ -30,6 +30,7 @@ class HTTPStatus:
     # 货源下架
     GoodCloseError = 400003
 
+
 class APIStatus:
     # 成功
     Ok = 100000
@@ -89,6 +90,14 @@ class FeedAPIStatus(APIStatus):
         GoodsRequestVehicle: '车长与车型填写错误',
         GoodsUnknownCarpoolType: '拼单类型错误',
 
+    }
+
+
+class UserAPIStatus(APIStatus):
+    Decriptions = {
+        APIStatus.Ok: '成功',
+        APIStatus.NotFound: '未找到该资源',
+        APIStatus.BadRequest: '请求参数有误'
     }
 
 
