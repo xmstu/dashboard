@@ -28,6 +28,16 @@ def __write_bi(conf):
     pass
 
 
+@configs.register('.bi_dashboard.mysql.read_io')
+def __read_io(conf):
+    pass
+
+
+@configs.register('.bi_dashboard.mysql.write_io')
+def __write_io(conf):
+    pass
+
+
 @configs.register('.bi_dashboard.log')
 def __log(conf):
     pass
