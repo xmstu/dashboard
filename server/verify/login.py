@@ -1,19 +1,17 @@
-from server import log
-from server.status import UserAPIStatus
-from server.status.message import direct_response
-from server.utils.extend import Check
-from server.workflow.passing import Passing, make_passing
 
+from server import log
+from server.meta.decorators import make_decorator, Response
+from flask_restful import abort
+from server.status import make_result, HTTPStatus, APIStatus
 
 class LoginSetting(object):
-    def __init__(self):
-        pass
 
     @staticmethod
-    @make_passing
-    def post(args):
-        if not Check.is_mobile(args.get('mobile')):
-            log.info('LoginSetting post mobile error %s' % args.get('mobile'))
-            return direct_response({'status': UserAPIStatus.BadRequest, 'msg': '电话号码有错误'})
+    @make_decorator
+    def post(user_name, password):
+        if user_name and password:
+            return Response(user_name=user_name, password=password)
 
-        return Passing(args=args)
+        abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound))
+
+

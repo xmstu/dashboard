@@ -1,41 +1,42 @@
 # -*- coding: utf-8 -*-
-import logging
-
-from flask import session, request
+from flask import session
 from flask_restplus.resource import Resource
 
 import server.document.login as doc
-from server import api, verify, log, operations, filters
-from server.status import UserAPIStatus
-from server.status.message import message_handler, direct_response
-from server.workflow.passing import Passing
-from server.workflow.utils import performance, collect_exceptions
+from server import verify, api, document
 from server.utils.request import *
+from server.meta.decorators import Response
+from server import log, operations, filters
 
-
+@document.response_not_found
+@document.response_bad_request
+@document.response_internal_server_error
+@document.response_unauthorized
 class Login(Resource):
     """登录接口"""
-
-    @doc.api_user_register_doc
+    @staticmethod
+    @doc.request_user_login
     @doc.response_user_login_success
-    @performance(log=log, level=logging.INFO)
-    @collect_exceptions(message_handler)
-    @filters.Login.post(args=dict)
-    @operations.LoginDecorator.common_check(args=dict)
-    @verify.LoginSetting.post(args=dict)
-    def post(self):
+    @filters.Login.post(user_info=dict)
+    @operations.LoginDecorator.common_check(user_name=str, password=str)
+    @verify.LoginSetting.post(user_name=str, password=str)
+    def post():
         """用户登录"""
-        args = get_payload()
-        log.info('login == %s' % args)
-        return Passing(args=args)
+        payload = get_payload()
+        user_name = payload.get('user_name', '')
+        password = payload.get('password', '')
+        resp = Response(user_name=user_name, password=password)
+
+        log.info('获取用户登录请求参数: [user_name: %s][password: %s]' % (resp['user_name'], resp['password']))
+        return resp
 
     @staticmethod
     def delete():
         """用户登出"""
         if not session.get('login'):
-            return direct_response({'status': UserAPIStatus.Ok, 'msg': '成功'})
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数错误'))
         del session['login']
-        return direct_response({'status': UserAPIStatus.Ok, 'msg': '成功'})
+        return {'status': APIStatus.Ok, 'msg': '成功'}, 200
 
 
 ns = api.namespace('login', description='登录接口')

@@ -5,19 +5,18 @@ import time
 
 from flask import session
 
-from server.status import UserAPIStatus
-from server.status.message import direct_response
-from server.workflow.passing import make_passing
+from server.status import HTTPStatus, APIStatus, build_result
+from server.meta.decorators import make_decorator
 
 
 class Login(object):
 
     @staticmethod
-    @make_passing
-    def post(args):
+    @make_decorator
+    def post(user_info):
         session['login'] = {
-            'user_id': args['user_id'],
-            'mobile': args['mobile'],
+            'user_id': user_info['id'],
+            'mobile': user_info['mobile'],
             'login_time': time.time()
         }
-        return direct_response({'status': UserAPIStatus.Ok, 'msg': '登录成功'})
+        return build_result(APIStatus.Ok, data=''), HTTPStatus.Ok

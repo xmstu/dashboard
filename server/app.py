@@ -11,10 +11,11 @@ from server.logger import log
 # flask对象
 app = Flask(__name__)
 app.config['ERROR_404_HELP'] = False
+app.secret_key = '\x1a\x8dfb#\xb9\xc8\xc3\x05\x86|\xda\x96\xff\xceo3\xf0\xa3\xb8\x8beoW'
 
 # flask_restplus对象
-api = Api(app, version='4.0.2', title='省省回头车 Feed API 4.0.1',
-    description='省省回头车 Feed API 4.0.1', authorizations={
+api = Api(app, version='4.0.2', title='省省回头车 BI API 4.0.1',
+    description='省省回头车 BI API 4.0.1', authorizations={
         'apikey': {
             'type': 'apiKey',
             'in': 'header',

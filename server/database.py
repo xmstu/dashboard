@@ -5,8 +5,6 @@ from .meta.creators import DictModel
 from .configs import configs
 from .mysqldb import MySQLdb
 
-import redis as pyredis
-
 
 db = DictModel({
     'read_prod': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_prod.get())),

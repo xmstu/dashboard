@@ -30,16 +30,13 @@ def make_decorator(f):
             def wrapper(*args, **kwargs):
                 last_result = func(*args, **kwargs)
                 if not isinstance(last_result, Response):
-                    raise ResponseError(
-                        'the {func_name} return value must be a Response'.format(func_name=func.__name__))
+                    raise ResponseError('the {func_name} return value must be a Response'.format(func_name=func.__name__))
 
                 next_params = {}
                 for k in restriction:
                     value = last_result.get(k, None)
                     if value is None:
-                        raise ResponseError(
-                            "{func_name} missing 1 required positional argument: {key}".format(func_name=f.__name__,
-                                                                                               key=k))
+                        raise ResponseError("{func_name} missing 1 required positional argument: {key}".format(func_name=f.__name__, key=k))
 
                     if not isinstance(value, restriction[k]):
                         raise ParameterError('{key} must be a {typ}'.format(key=k, typ=restriction[k].__name__))
@@ -48,26 +45,10 @@ def make_decorator(f):
                 if values:
                     next_params.update(values)
                 return f(**next_params)
-
             return wrapper
-
         return accept_func
 
     return input_params
-
-
-def catch_exception(handler):
-    def accept_func(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            try:
-                return func(*args, **kwargs)
-            except Exception as e:
-                handler(e)
-
-        return wrapper
-
-    return accept_func
 
 
 if __name__ == '__main__':
