@@ -412,6 +412,13 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     border-right: 1px solid #F6F6F6;
    
 }
+.layui-form ul > li > button {
+    background: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 32px;
+}
 .layui-form-pane .layui-form-label {
     padding: 6px 10px;
     width: auto;
@@ -421,7 +428,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .part-2 .layui-form-item {
     vertical-align: top;
-    width: 300px;
+    width: 270px;
 }
 .layui-icon-riqi{
     position: absolute;
@@ -453,8 +460,11 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     display: none!important;
 }
 #charts_container_one {
-    min-width: 1632px;
+    min-width: 1600px;
 }
 .part-2 .layui-form {
     max-width: 1630px;
+}
+.layui-form-item .layui-input-inline {
+    width: 160px;
 }

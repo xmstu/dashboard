@@ -158,6 +158,25 @@ var common = {
         var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
         var tommorwdate = date2.getFullYear()+seperator1 + monthAnother + seperator1 + dateAnother
         return [currentdate,tommorwdate];
+    },
+    dateInterval:function(num1,num2){
+        var date1 = new Date(num1.replace(/-/g,"/"));
+        var date2 = new Date(num2.replace(/-/g,"/"));
+        var days = date1.getTime()-date2.getTime();
+        var time = parseInt(days/(1000*60*60*24));
+        if(time<7){
+            $("#week_methods").attr("disabled","disabled");
+            $("#month_methods").attr("disabled","disabled");
+        }else if(time>7&&time<31){
+             $("#month_methods").attr("disabled","disabled");
+        }else{
+             $("#week_methods").removeAttr('disabled');
+             $("#month_methods").removeAttr('disabled')
+        }
+        console.log(time)
+    },
+    ceshi:function(){
+        alert('test')
     }
 };
 setTimeout(function () {

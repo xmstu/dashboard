@@ -1,9 +1,14 @@
+var startTime;
+var endTime;
+var beginTime;
+var finishTime;
+$('#date_show_one').val(String(common.getNowFormatDate()[0]));
+$('#date_show_two').val(String(common.getNowFormatDate()[1]));
 layui.use(['laydate', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
     laydate.render({
         elem: '#date_show_one',
-        value: String(common.getNowFormatDate()[0]),
         max:String(common.getNowFormatDate()[0]),
         theme: '#1E9FFF',
         calendar: true,
@@ -11,24 +16,22 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            console.log(val)
+           startTime = val;
         }
     });
     laydate.render({
         elem: '#date_show_two',
-        value: String(common.getNowFormatDate()[1]),
         theme: '#1E9FFF',
         calendar: true,
         ready: function () {
 
         },
         done: function (val, index) {
-            console.log(val)
+            endTime = val;
         }
-    })
+    });
     laydate.render({
         elem: '#date_show_three',
-        value: String(common.getNowFormatDate()[0]),
         theme: '#1E9FFF',
         calendar: true,
         ready: function () {
@@ -40,7 +43,6 @@ layui.use(['laydate', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_four',
-        value: String(common.getNowFormatDate()[1]),
         theme: '#1E9FFF',
         calendar: true,
         ready: function () {
@@ -154,4 +156,8 @@ $('#charts_container_one').highcharts({
         data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
     }]
 
+});
+$('#search_btn').click(function(e){
+    e.preventDefault();
+    layer.msg('success')
 });
