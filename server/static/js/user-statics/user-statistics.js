@@ -2,21 +2,26 @@ var startTime;
 var endTime;
 var beginTime;
 var finishTime;
-$('#date_show_one').val(String(common.getNowFormatDate()[0]));
-$('#date_show_two').val(String(common.getNowFormatDate()[1]));
+$('#date_show_one').val(String(common.getNowFormatDate()[2]));
+$('#date_show_two').val(String(common.getNowFormatDate()[3]));
+$('#date_show_three').val();
+$('#date_show_four').val();
+setTimeout(function(){
+    common.dateInterval($('#date_show_one').val(),$('#date_show_one').val());
+},100);
 layui.use(['laydate', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
     laydate.render({
         elem: '#date_show_one',
-        max:String(common.getNowFormatDate()[0]),
+        max:String(common.getNowFormatDate()[3]),
         theme: '#1E9FFF',
         calendar: true,
         ready: function () {
 
         },
         done: function (val, index) {
-           startTime = val;
+           beginTime =String(val);
         }
     });
     laydate.render({
@@ -27,7 +32,9 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            endTime = val;
+            endTime = String(val);
+            console.log(beginTime+'::'+endTime);
+            common.dateInterval(endTime,beginTime);
         }
     });
     laydate.render({
