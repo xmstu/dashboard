@@ -48,9 +48,9 @@ class UserList(Resource):
     @staticmethod
     @doc.request_user_list_param
     @doc.response_user_list_param_success
-    # @filters.UserList.get(user_list=dict)
-    @operations.UserListDecorator.get_user_list(params=dict)
-    @verify.UserList.check_params(params=dict)
+    @filters.UserList.get(user_list=dict)
+    @operations.UserListDecorator.get_user_list(pages=int, limit=int, params=dict)
+    @verify.UserList.check_params(pages=int, limit=int, params=dict)
     @verify.UserList.check_paging(pages=int, limit=int, params=dict)
     def get():
 
