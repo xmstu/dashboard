@@ -28,16 +28,16 @@ api = Api(app, version='4.0.2', title='省省回头车 BI API 4.0.1',
 app.permanent_session_lifetime = timedelta(days=3)
 
 # 登录验证
-@app.before_request
-def login_auth():
-    # 接口页面
-    if request.path == '/' or 'swagger' in request.path:
-        pass
-    # 静态文件
-    elif 'static' in request.path:
-        pass
-    elif not session.get('login') and request.path != '/login/':
-        return redirect('/login/')
+# @app.before_request
+# def login_auth():
+#     # 接口页面
+#     if request.path == '/' or 'swagger' in request.path:
+#         pass
+#     # 静态文件
+#     elif 'static' in request.path:
+#         pass
+#     elif not session.get('login') and request.path != '/login/':
+#         return redirect('/login/')
 
 
 # 跨域设置
