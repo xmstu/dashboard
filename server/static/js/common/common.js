@@ -21,27 +21,29 @@ var common = {
         $('.main-content-right').addClass('animated fadeIn');
         var nav_menu = $('.icon-caidan');
         nav_menu.on('click', function (e) {
-         if ($('.layui-nav-tree').width() == '200') {
-                $('.layui-nav-tree').animate({'width':'50px'});
-                $('.layui-icon-right').animate({'opacity':0});
-                $('.main-content-right').animate({'margin-left':'50px'});
-                $('.nav-header >p span').fadeOut('fast');$('.nav-header').animate({'width':'56px'});
-                $(this).css({'transform':'rotateZ(360deg)','transition':'all 0.4s'});
-                $('.layui-nav-item >a').animate({'width':'50px'});
-                $('.nav-content span').fadeOut('fast');
-                $('.layui-nav-item > a > i:nth-child(1)').animate({'width':'50px'});
+            if ($('.layui-nav-tree').width() == '176') {
+                $('.layui-icon-right').animate({'opacity': 0});
+                $('.nav-header >p span').css({'display': 'none'});
+                $('.nav-header').animate({'width': '56px'});
+                $('.layui-nav-tree').css({'margin-left': 0}).animate({'width': '50px'});
+                $('.main-content-right').animate({'margin-left': '50px'});
+                $(this).css({'transform': 'rotateZ(270deg)', 'transition': 'all 0.4s'});
+                $('.layui-nav-item >a').animate({'width': '50px'});
+                $('.nav-content span').fadeOut('10');
+                $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '50px'});
                 return false
-            }else if ($('.layui-nav-tree').width() == '50') {
-                $('.layui-nav-tree').animate({'width':'200px'});
-                $('.layui-icon-right').animate({'opacity':0});
-                $('.main-content-right').animate({'margin-left':'200px'});
-                setTimeout(function(){
-                    $('.nav-content span').fadeIn('fast');
-                    $('.nav-header >p span').fadeIn('fast');
-                },300);$('.nav-header').animate({'width':'200px'});
-                $(this).css({'transform':'rotateZ(270deg)','transition':'all 0.4s'});
-                $('.layui-nav-item >a').animate({'width':'200px'});
-                $('.layui-nav-item > a > i:nth-child(1)').animate({'width':'44px'});
+            } else if ($('.layui-nav-tree').width() == '50') {
+                $('.layui-nav-tree').css({'margin-left': '12px'}).animate({'width': '176'});
+                $('.layui-icon-right').animate({'opacity': 0});
+                $('.main-content-right').animate({'margin-left': '200px'});
+                setTimeout(function () {
+                    $('.nav-content span').fadeIn('10');
+                    $('.nav-header >p span').fadeIn('10');
+                }, 300);
+                $('.nav-header').animate({'width': '200px'});
+                $(this).css({'transform': 'rotateZ(360deg)', 'transition': 'all 0.4s'});
+                $('.layui-nav-item >a').animate({'width': '200px'});
+                $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '44px'});
                 layer.closeAll('tips');
                 return false
 
@@ -110,7 +112,7 @@ var common = {
             });
         });
     },
-    dateNow:function(){
+    dateNow: function () {
         var date = new Date();
         var seperator1 = "-";
         var seperator2 = ":";
@@ -135,44 +137,157 @@ var common = {
             strSecond = "0" + strSecond;
         }
         var currentDate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
-        var currentHour  =  strHour + seperator2 + strMinutes+ seperator2 + strSecond;
-        return [currentDate,currentHour];
+        var currentHour = strHour + seperator2 + strMinutes + seperator2 + strSecond;
+        return [currentDate, currentHour];
     },
-    getNowFormatDate:function(){
-        var date = new Date();
-        var date2 = new Date();
-        date2.setTime(date2.getTime()+24*60*60*1000);
+    getNowFormatDate: function () {
+        var date = new Date();//今天
+        var date2 = new Date();//明天
+        var date3 = new Date();//八天前
+        var date4 = new Date();//昨天
+        date3.setTime(date3.getTime() - 8 * 24 * 60 * 60 * 1000);
+        date2.setTime(date2.getTime() + 24 * 60 * 60 * 1000);
+        date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
         var seperator1 = "-";
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
-        var monthAnother = date2.getMonth()+1;
+        var monthAnother = date2.getMonth() + 1;
+        var month_3 = date3.getMonth() + 1;
         var dateAnother = date2.getDate();
+        var date_3 = date3.getDate();
+        var month_4 = date4.getMonth() + 1;
+        var date_4 = date4.getDate();
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
         if (strDate >= 0 && strDate <= 9) {
             strDate = "0" + strDate;
         }
-        monthAnother>10?monthAnother:"0"+monthAnother;
-        dateAnother>10?dateAnother:"0"+dateAnother;
-        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-        var tommorwdate = date2.getFullYear()+seperator1 + monthAnother + seperator1 + dateAnother
-        return [currentdate,tommorwdate];
+        if (month_3 >= 1 && month_3 <= 9) {
+            month_3 = "0" + month_3;
+        }
+        if (date_3 >= 0 && date_3 <= 9) {
+            date_3 = "0" + date_3;
+        }
+        if (month_4 >= 1 && month_4 <= 9) {
+            month_4 = "0" + month_4;
+        }
+        if (date_3 >= 0 && date_3 <= 9) {
+            date_4 = "0" + date_4;
+        }
+        monthAnother > 10 ? monthAnother : "0" + monthAnother;
+        dateAnother > 10 ? dateAnother : "0" + dateAnother;
+        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+        var tommorwdate = date2.getFullYear() + seperator1 + monthAnother + seperator1 + dateAnother;
+        var defaultdate = date3.getFullYear() + seperator1 + month_3 + seperator1 + date_3;
+        var yesterdaydate = date4.getFullYear() + seperator1 + month_4 + seperator1 + date_4;
+        return [currentdate, tommorwdate, defaultdate, yesterdaydate];
+    },
+    dateInterval: function (num1, num2) {
+        var date1 = new Date(num1.replace(/-/g, "/"));
+        var date2 = new Date(num2.replace(/-/g, "/"));
+        var days = date1.getTime() - date2.getTime();
+        var time = parseInt(days / (1000 * 60 * 60 * 24));
+        if (time < 7) {
+            $("#week_methods").attr("disabled", "disabled");
+            $("#month_methods").attr("disabled", "disabled");
+        } else if (time > 7 && time < 31) {
+            $("#month_methods").attr("disabled", "disabled");
+        } else {
+            $("#week_methods").removeAttr('disabled');
+            $("#month_methods").removeAttr('disabled')
+        }
+        console.log(time)
+    },
+    setFavicon: function () {
+        alert('test')
+    },
+    cookieSet: function () {
+        (function ($, document, undefined) {
+
+            var pluses = /\+/g;
+
+            function raw(s) {
+                return s;
+            }
+
+            function decoded(s) {
+                return decodeURIComponent(s.replace(pluses, ' '));
+            }
+
+            var config = $.cookie = function (key, value, options) {
+
+                // write
+                if (value !== undefined) {
+                    options = $.extend({}, config.defaults, options);
+
+                    if (value === null) {
+                        options.expires = -1;
+                    }
+
+                    if (typeof options.expires === 'number') {
+                        var days = options.expires, t = options.expires = new Date();
+                        t.setDate(t.getDate() + days);
+                    }
+
+                    value = config.json ? JSON.stringify(value) : String(value);
+
+                    return (document.cookie = [
+                        encodeURIComponent(key), '=', config.raw ? value : encodeURIComponent(value),
+                        options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                        options.path ? '; path=' + options.path : '',
+                        options.domain ? '; domain=' + options.domain : '',
+                        options.secure ? '; secure' : ''
+                    ].join(''));
+                }
+
+                // read
+                var decode = config.raw ? raw : decoded;
+                var cookies = document.cookie.split('; ');
+                for (var i = 0, l = cookies.length; i < l; i++) {
+                    var parts = cookies[i].split('=');
+                    if (decode(parts.shift()) === key) {
+                        var cookie = decode(parts.join('='));
+                        return config.json ? JSON.parse(cookie) : cookie;
+                    }
+                }
+
+                return null;
+            };
+
+            config.defaults = {};
+
+            $.removeCookie = function (key, options) {
+                if ($.cookie(key) !== null) {
+                    $.cookie(key, null, options);
+                    return true;
+                }
+                return false;
+            };
+
+        })(jQuery, document);
+    },
+    setLink:function(){
+        var link = $('<link rel="shortcut icon " type="images/x-icon" href="../static/images/favicon.ico">');
+        var head=$('head')
+        head.append(link)
     }
 };
 setTimeout(function () {
+    common.cookieSet();
     common.weather();
     common.init();
+    common.setLink();
     common.fullScreen();
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
 }, 50);
-setInterval(function(){
+setInterval(function () {
     $('.header-content-main').fadeIn('normal');
     $('#date_now').html('');
     $('#hour_now').html('');
     $('#date_now').html(common.dateNow()[0]);
     $('#hour_now').html(common.dateNow()[1]);
 
-},1000);
+}, 1000);
 
 

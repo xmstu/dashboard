@@ -232,11 +232,13 @@ body {
 }
 .layui-nav-tree{
     padding:0 0 800px 0;
-    background: none;
     box-shadow:0 1px 0 rgba(0, 0, 0, 0.1);
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border-radius: 5px;
+    border-radius: 6px;
+    width: 176px;
+    margin: 12px;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0.1);
 }
 .layui-nav-tree .layui-nav-item a:hover{
     background: none!important;
@@ -293,16 +295,22 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .layui-nav-tree .layui-nav-item >a:hover{
     text-shadow: none!important;
-    color: #333!important;
+    color: purple!important;
 }
 .layui-nav-tree .layui-nav-item a:hover i:nth-child(1) {
-    background: #55c660;
+    background: #55c660!important;
 }
 .layui-nav-tree .layui-nav-item a i:nth-child(2){
     position: absolute;
     right: 5px;
     width: 64px;
     text-align: right;
+}
+.selected-active {
+     color: purple!important;
+}
+.select-active{
+      background: #55c660;
 }
 .layui-nav-tree .layui-nav-item a i:nth-child(2):hover{
 
@@ -407,10 +415,18 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     border-right: none;
     line-height: 38px;
     text-align: center;
+    height: 30px;
 }
 .layui-form ul > li:last-child {
     border-right: 1px solid #F6F6F6;
    
+}
+.layui-form ul > li > button {
+    background: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 30px;
 }
 .layui-form-pane .layui-form-label {
     padding: 6px 10px;
@@ -421,28 +437,29 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .part-2 .layui-form-item {
     vertical-align: top;
-    width: 300px;
+    width: 270px;
 }
 .layui-icon-riqi{
     position: absolute;
-    top: 8px;
-    right: 4px;
+    top: 3px;
+    right: 6px;
+    font-size: 20px;
 }
 #LAY_table_user {
     overflow-x: hidden;
 }
 .layui-form-pane .layui-form-label {
-    height: 32px;
-    line-height: 32px;
+    height: 30px;
+    line-height: 30px;
     padding: 0 8px;
 }
 .main-content-right .layui-input {
-    height: 32px;
-    line-height: 32px;
+    height: 30px;
+    line-height: 30px;
 }
 .layui-btn {
-    height: 32px;
-    line-height: 32px;
+    height: 30px;
+    line-height: 30px;
     margin-left: 0;
 }
 .icon-caidan {
@@ -453,8 +470,14 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     display: none!important;
 }
 #charts_container_one {
-    min-width: 1632px;
+    min-width: 1600px;
 }
 .part-2 .layui-form {
     max-width: 1630px;
+}
+.layui-form-item .layui-input-inline {
+    width: 160px;
+}
+.part-1-top  .layui-form-item {
+    vertical-align: top;
 }
