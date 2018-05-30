@@ -27,13 +27,13 @@ class UserList(object):
         download_channel = params.get('download_channel') if params.get('download_channel') else ''
         from_channel = params.get('from_channel') if params.get('from_channel') else ''
 
-        is_referenced = params.get('is_referenced') if params.get('is_referenced') else 0
-        home_station_id = params.get('home_station_id') if params.get('home_station_id') else 0
-        role_type = params.get('role_type') if params.get('role_type') else 0
-        role_auth = params.get('role_auth') if params.get('role_auth') else 0
-        is_actived = params.get('is_actived') if params.get('is_actived') else 0
-        is_used = params.get('is_used') if params.get('is_used') else 0
-        is_car_sticker = params.get('is_car_sticker') if params.get('is_car_sticker') else 0
+        is_referenced = int(params.get('is_referenced')) if params.get('is_referenced') else 0
+        home_station_id = int(params.get('home_station_id')) if params.get('home_station_id') else 0
+        role_type = int(params.get('role_type')) if params.get('role_type') else 0
+        role_auth = int(params.get('role_auth')) if params.get('role_auth') else 0
+        is_actived = int(params.get('is_actived')) if params.get('is_actived') else 0
+        is_used = int(params.get('is_used')) if params.get('is_used') else 0
+        is_car_sticker = int(params.get('is_car_sticker')) if params.get('is_car_sticker') else 0
 
         last_login_start_time = int(params.get('last_login_start_time')) if params.get('last_login_start_time') else 0
         last_login_end_time = int(params.get('last_login_end_time')) if params.get('last_login_end_time') else 0
