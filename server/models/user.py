@@ -154,4 +154,6 @@ class UserList(object):
             'user_detail': user_detail if user_detail else [],
             'user_count': user_count['count'] if user_count['count'] else 0
         }
+        log.info('user_list:{}'.format(user_list))
+
         return user_list

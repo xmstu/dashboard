@@ -1,5 +1,6 @@
 import json
 
+from server import log
 from server.meta.decorators import make_decorator
 from server.status import build_result, HTTPStatus, APIStatus
 
@@ -28,4 +29,4 @@ class UserList(object):
 
             detail['usual_city'] = detail['usual_city'] if detail['usual_city'] else ''
 
-        return build_result(APIStatus.Ok, data={'list': user_detail, 'counts': user_list['user_count']}), HTTPStatus.Ok
+        return build_result(APIStatus.Ok, count=user_list['user_count'], data=user_detail), HTTPStatus.Ok
