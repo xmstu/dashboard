@@ -2,13 +2,6 @@
 from server import log
 
 
-class UserQuery(object):
-
-    @staticmethod
-    def get_area(cursor, ):
-        pass
-
-
 class UserList(object):
 
     @staticmethod

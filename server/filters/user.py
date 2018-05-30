@@ -1,6 +1,5 @@
 import json
 
-from server import log
 from server.meta.decorators import make_decorator
 from server.status import build_result, HTTPStatus, APIStatus
 

@@ -1,16 +1,14 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # author=hexm
-import time
 
 from flask_restplus.resource import Resource
 
 import server.document.user as doc
-from server import api, log, document
+import server.verify.general as general_verify
+from server import api, log
 from server import verify, operations, filters
-from server.database import db
 from server.meta.decorators import Response
-from server.models.user import UserQuery
 from server.utils.request import *
 
 
@@ -51,7 +49,7 @@ class UserList(Resource):
     @filters.UserList.get(user_list=dict)
     @operations.UserListDecorator.get_user_list(page=int, limit=int, params=dict)
     @verify.UserList.check_params(page=int, limit=int, params=dict)
-    @verify.UserList.check_paging(page=int, limit=int, params=dict)
+    @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():
 
         resp = Response(page=get_arg_int('page', 1),

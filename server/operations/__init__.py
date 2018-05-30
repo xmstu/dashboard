@@ -4,3 +4,4 @@
 
 from server.operations.login import LoginDecorator
 from server.operations.user import UserListDecorator
+from server.operations.promote import PromoteEffectDecorator

@@ -14,5 +14,5 @@ class UserListDecorator(object):
     def get_user_list(page, limit, params):
         user_list = UserList.get_user_list(db.read_io, page, limit, params)
         if not user_list:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='找不到用户列表'))
+            abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound, msg='找不到用户列表'))
         return Response(user_list=user_list)

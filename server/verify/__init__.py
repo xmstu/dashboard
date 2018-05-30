@@ -2,5 +2,7 @@
 # -*- coding:utf-8 -*-
 # author=hexm
 
-from server.verify.login import LoginSetting
-from server.verify.user import User, UserList
+from server.verify.login import *
+from server.verify.user import *
+from server.verify.promote import *
+from server.verify.general import *

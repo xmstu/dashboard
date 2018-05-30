@@ -17,19 +17,6 @@ class UserList(object):
 
     @staticmethod
     @make_decorator
-    def check_paging(page, limit, **kwargs):
-        # 检验page, limit是否为整数
-        if not str(page).isdigit() or int(page) <= 0:
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='page参数不能为%s' % page))
-
-        if not str(limit).isdigit() or (int(limit) not in [10, 20, 30, 40, 50, 300]):
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='count参数不能为%s' % limit))
-
-        log.info("params:{}".format(kwargs))
-        return Response(page=page, limit=limit, **kwargs)
-
-    @staticmethod
-    @make_decorator
     def check_params(page, limit, params):
 
         # 通过params获取请求的参数，不管参数有没有值，都会给一个默认值，避免多次检验
@@ -57,7 +44,10 @@ class UserList(object):
         if not (last_login_start_time and last_login_end_time):
             pass
         elif last_login_start_time and last_login_end_time:
-            if (last_login_end_time > last_login_start_time) and (last_login_end_time > time.time()):
+            # 如果时间存在，则强转一下类型
+            last_login_end_time = int(last_login_end_time)
+            last_login_start_time = int(last_login_start_time)
+            if (last_login_end_time > last_login_start_time) and (last_login_end_time < time.time()):
                 pass
         else:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最后登录时间有误'))
@@ -66,7 +56,9 @@ class UserList(object):
         if not (register_start_time and register_end_time):
             pass
         elif register_start_time and register_end_time:
-            if (register_end_time > register_start_time) and (register_end_time > time.time()):
+            register_end_time = int(register_end_time)
+            register_start_time = int(register_start_time)
+            if (register_end_time > register_start_time) and (register_end_time < time.time()):
                 pass
         else:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='选择的注册时间有误'))

@@ -23,7 +23,7 @@ request_user_list_param = api.doc(params={
     'last_login_end_time': '最后登录结束时间',
     'register_start_time': '注册开始时间',
     'register_end_time': '注册结束时间',
-    'pages': '页数',
+    'page': '页数',
     'limit': '条数'
     }, description='用户统计列表查询参数')
 
