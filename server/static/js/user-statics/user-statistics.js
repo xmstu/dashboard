@@ -64,6 +64,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         },
         done: function (val, index) {
             beginTime = val + ' 00:00:00'
+            console.log(beginTime)
         }
     });
     laydate.render({
@@ -107,19 +108,35 @@ layui.use(['laydate', 'form', 'table'], function () {
         response: {
             statusName: 'status',
             statusCode: 100000
+        },
+        done: function(res, curr, count){
+           $("[data-field='user_type']").children().each(function(){
+               if($(this).text()==1){
+                   $(this).text('货主')
+               }else  if($(this).text()==2){
+                   $(this).text('司机')
+               }else if($(this).text()==3){
+                   $(this).text('物流公司')
+               }
+           })
+            $("[data-field='usual_city']").children().each(function(){
+               if($(this).text()==''){
+                   $(this).text('未查询到该用户常驻地')
+               }
+           })
         }
         , cols: [[
-            {field: 'id', title: '用户ID', width: 80},
-            {field: 'user_name', title: '用户名', width: 100}
+              {field: 'id', title: '用户ID', width: 80},
+              {field: 'user_name', title: '用户名', width: 100}
             , {field: 'mobile', title: '手机号', width: 130}
-            , {field: 'user_type', title: '注册角色', width: 80}
-            , {field: 'role_auth', title: '认证', width: 180}
+            , {field: 'user_type', title: '注册角色', width: 130}
+            , {field: 'role_auth', title: '认证', width: 150}
             , {field: 'usual_city', title: '常驻地', width: 280}
-            , {field: 'goods_count', title: '发货', width: 90}
-            , {field: 'order_count', title: '接单', width: 90}
+            , {field: 'goods_count', title: '发货', width: 60}
+            , {field: 'order_count', title: '接单', width: 60}
             , {field: 'order_completed', title: '完成订单', width: 90}
             , {field: 'download_channel', title: '下载渠道', width: 130}
-            , {field: 'from_channel', title: '注册渠道', width: 80}
+            , {field: 'from_channel', title: '注册渠道', width: 130}
             , {field: 'last_login_time', title: '最后登陆', width: 130}
             , {field: 'create_time', title: '注册时间', width: 130}
         ]]
@@ -144,7 +161,6 @@ layui.use(['laydate', 'form', 'table'], function () {
             });
         }
     };
-
     $('.dataTable .layui-btn').on('click', function () {
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
@@ -209,16 +225,20 @@ $('#charts_container_one').highcharts({
         data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
     }]
 });
-$('#search_btn').click(function (e) {
-    e.preventDefault();
-    layer.msg('success')
-});
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
+    if(beginTime!==''&&finishTime==''){
+        layer.msg('请选择登陆结束日期')
+    }
+     if(beginTime==''&&finishTime!=''){
+        layer.msg('请选择登陆开始日期')
+    }
     if (beginTime != '') {
         beginTime = common.timeTransform(beginTime)
+        console.log(beginTime)
     }
     if (finishTime != '') {
+        var currentFinish = finishTime;
         finishTime = common.timeTransform(finishTime)
     }
     if (infinteTime != '') {
@@ -226,6 +246,12 @@ $('#user_search_box').on('click', function (e) {
     }
     if (overTIme != '') {
         overTIme = common.timeTransform(overTIme)
+    }
+     if(infinteTime!==''&&overTIme==''){
+        layer.msg('请选择登陆结束日期')
+    }
+     if(infinteTime==''&&overTIme!=''){
+        layer.msg('请选择登陆开始日期')
     }
     var data = {
         user_name: $.trim($('#user_name').val()),
@@ -266,11 +292,11 @@ $('#user_search_box').on('click', function (e) {
                 , {field: 'user_type', title: '注册角色', width: 80}
                 , {field: 'role_auth', title: '认证', width: 180}
                 , {field: 'usual_city', title: '常驻地', width: 280}
-                , {field: 'goods_count', title: '发货', width: 90}
-                , {field: 'order_count', title: '接单', width: 90}
+                , {field: 'goods_count', title: '发货', width: 70}
+                , {field: 'order_count', title: '接单', width: 70}
                 , {field: 'order_completed', title: '完成订单', width: 90}
                 , {field: 'download_channel', title: '下载渠道', width: 130}
-                , {field: 'from_channel', title: '注册渠道', width: 80}
+                , {field: 'from_channel', title: '注册渠道', width: 180}
                 , {field: 'last_login_time', title: '最后登陆', width: 130}
                 , {field: 'create_time', title: '注册时间', width: 130}
             ]]
