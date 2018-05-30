@@ -216,7 +216,6 @@ var common = {
             }
 
             var config = $.cookie = function (key, value, options) {
-
                 // write
                 if (value !== undefined) {
                     options = $.extend({}, config.defaults, options);

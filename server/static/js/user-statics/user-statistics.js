@@ -1,15 +1,16 @@
-var startTime;
-var endTime;
-var beginTime;
-var finishTime;
-var infinteTime;
-var overTIme;
+
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#date_show_three').val();
 $('#date_show_four').val();
 $('#date_show_five').val();
 $('#date_show_six').val();
+var startTime=$('#date_show_one').val();
+var endTime=$('#date_show_two').val();
+var beginTime=$('#date_show_three').val();
+var finishTime=$('#date_show_four').val();
+var infinteTime=$('#date_show_five').val();
+var overTIme=$('#date_show_six').val();
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
@@ -25,7 +26,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            beginTime = String(val);
+            startTime = String(val);
         }
     });
     laydate.render({
@@ -49,7 +50,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            console.log(val)
+            beginTime=val
         }
     });
     laydate.render({
@@ -60,7 +61,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            console.log(val)
+            finishTime=val
         }
     });
       laydate.render({
@@ -71,7 +72,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            console.log(val)
+            infinteTime=val
         }
     });
         laydate.render({
@@ -82,7 +83,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            console.log(val)
+            overTIme=val
         }
     });
     table.render({
