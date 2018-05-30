@@ -21,32 +21,30 @@ class UserList(object):
 
         # 通过params获取请求的参数，不管参数有没有值，都会给一个默认值，避免多次检验
 
-        user_name = params.get('user_name', '')
-        mobile = params.get('mobile', '')
-        reference_mobile = params.get('reference_mobile', '')
-        download_channel = params.get('download_channel', '')
-        from_channel = params.get('from_channel', '')
-        is_referenced = int(params.get('is_referenced', 0))
-        home_station_id = int(params.get('home_station_id', 0))
-        role_type = int(params.get('role_type', 0))
-        role_auth = int(params.get('role_auth', 0))
-        is_actived = int(params.get('is_actived', 0))
-        is_used = int(params.get('is_used', 0))
-        is_car_sticker = int(params.get('is_car_sticker', 0))
+        user_name = params.get('user_name') if params.get('user_name') else ''
+        mobile = params.get('mobile') if params.get('mobile') else ''
+        reference_mobile = params.get('reference_mobile') if params.get('reference_mobile') else ''
+        download_channel = params.get('download_channel') if params.get('download_channel') else ''
+        from_channel = params.get('from_channel') if params.get('from_channel') else ''
 
-        last_login_start_time = int(params.get('last_login_start_time', 0))
-        last_login_end_time = int(params.get('last_login_end_time', 0))
+        is_referenced = params.get('is_referenced') if params.get('is_referenced') else 0
+        home_station_id = params.get('home_station_id') if params.get('home_station_id') else 0
+        role_type = params.get('role_type') if params.get('role_type') else 0
+        role_auth = params.get('role_auth') if params.get('role_auth') else 0
+        is_actived = params.get('is_actived') if params.get('is_actived') else 0
+        is_used = params.get('is_used') if params.get('is_used') else 0
+        is_car_sticker = params.get('is_car_sticker') if params.get('is_car_sticker') else 0
 
-        register_start_time = int(params.get('register_start_time', 0))
-        register_end_time = int(params.get('register_end_time', 0))
+        last_login_start_time = params.get('last_login_start_time') if params.get('last_login_start_time') else 0
+        last_login_end_time = params.get('last_login_end_time') if params.get('last_login_end_time') else 0
+
+        register_start_time = params.get('register_start_time') if params.get('register_start_time') else 0
+        register_end_time = params.get('register_end_time') if params.get('register_end_time') else 0
 
         # 检验最后登陆时间
         if not (last_login_start_time and last_login_end_time):
             pass
         elif last_login_start_time and last_login_end_time:
-            # 如果时间存在，则强转一下类型
-            last_login_end_time = int(last_login_end_time)
-            last_login_start_time = int(last_login_start_time)
             if (last_login_end_time > last_login_start_time) and (last_login_end_time < time.time()):
                 pass
         else:
@@ -56,8 +54,6 @@ class UserList(object):
         if not (register_start_time and register_end_time):
             pass
         elif register_start_time and register_end_time:
-            register_end_time = int(register_end_time)
-            register_start_time = int(register_start_time)
             if (register_end_time > register_start_time) and (register_end_time < time.time()):
                 pass
         else:

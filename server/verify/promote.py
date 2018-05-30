@@ -20,16 +20,13 @@ class PromoteEffect(object):
         goods_type = int(params.get('goods_type', 0))
         is_actived = int(params.get('is_actived', 0))
         is_car_sticker = int(params.get('is_car_sticker', 0))
-        start_time = params.get('start_time', '')
-        end_time = params.get('end_time', '')
+        start_time = int(params.get('start_time', 0))
+        end_time = int(params.get('end_time', 0))
 
         # 判断时间是否合法
         if not (start_time and end_time):
             pass
         elif start_time and end_time:
-            # 如果时间存在，则强转一下类型
-            start_time = int(start_time)
-            end_time = int(end_time)
             if (end_time > start_time) and (end_time < time.time()):
                 pass
         else:
