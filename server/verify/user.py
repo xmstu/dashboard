@@ -35,11 +35,11 @@ class UserList(object):
         is_used = params.get('is_used') if params.get('is_used') else 0
         is_car_sticker = params.get('is_car_sticker') if params.get('is_car_sticker') else 0
 
-        last_login_start_time = params.get('last_login_start_time') if params.get('last_login_start_time') else 0
-        last_login_end_time = params.get('last_login_end_time') if params.get('last_login_end_time') else 0
+        last_login_start_time = int(params.get('last_login_start_time')) if params.get('last_login_start_time') else 0
+        last_login_end_time = int(params.get('last_login_end_time')) if params.get('last_login_end_time') else 0
 
-        register_start_time = params.get('register_start_time') if params.get('register_start_time') else 0
-        register_end_time = params.get('register_end_time') if params.get('register_end_time') else 0
+        register_start_time = int(params.get('register_start_time')) if params.get('register_start_time') else 0
+        register_end_time = int(params.get('register_end_time')) if params.get('register_end_time') else 0
 
         # 检验最后登陆时间
         if not (last_login_start_time and last_login_end_time):

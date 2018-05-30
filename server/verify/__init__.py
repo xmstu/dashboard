@@ -6,3 +6,4 @@ from server.verify.login import *
 from server.verify.user import *
 from server.verify.promote import *
 from server.verify.general import *
+from server.verify.goods import *

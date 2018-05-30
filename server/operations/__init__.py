@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 # author=hexm
 
-from server.operations.login import LoginDecorator
-from server.operations.user import UserListDecorator
-from server.operations.promote import PromoteEffectDecorator
+from server.operations.login import *
+from server.operations.user import *
+from server.operations.promote import *
+from server.operations.goods import *
