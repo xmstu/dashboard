@@ -17,20 +17,20 @@ class UserList(object):
 
     @staticmethod
     @make_decorator
-    def check_paging(pages, limit, **kwargs):
-        # 检验pages, limit是否为整数
-        if not str(pages).isdigit() or int(pages) <= 0:
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='pages参数不能为%s' % pages))
+    def check_paging(page, limit, **kwargs):
+        # 检验page, limit是否为整数
+        if not str(page).isdigit() or int(page) <= 0:
+            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='page参数不能为%s' % page))
 
         if not str(limit).isdigit() or (int(limit) not in [10, 20, 30, 40, 50, 300]):
             abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='count参数不能为%s' % limit))
 
         log.info("params:{}".format(kwargs))
-        return Response(pages=pages, limit=limit, **kwargs)
+        return Response(page=page, limit=limit, **kwargs)
 
     @staticmethod
     @make_decorator
-    def check_params(pages, limit, params):
+    def check_params(page, limit, params):
 
         # 通过params获取请求的参数，不管参数有没有值，都会给一个默认值，避免多次检验
 
@@ -81,4 +81,4 @@ class UserList(object):
 
         log.info("Response:{}".format(params))
 
-        return Response(pages=pages, limit=limit, params=params)
+        return Response(page=page, limit=limit, params=params)

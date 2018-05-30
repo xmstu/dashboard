@@ -12,7 +12,7 @@ class UserQuery(object):
 class UserList(object):
 
     @staticmethod
-    def get_user_list(cursor, pages, limit, params):
+    def get_user_list(cursor, page, limit, params):
         # 查询字段
         fields = '''
             shu_users.id,
@@ -136,17 +136,20 @@ class UserList(object):
             params['last_login_start_time'], params['last_login_end_time'])
         # 注册日期
         if params['register_start_time'] and params['register_end_time']:
-            command += 'AND shu_users.create_time > %s AND shu_users.create_time < %s ' %(
+            command += 'AND shu_users.create_time > %s AND shu_users.create_time < %s ' % (
                 params['register_start_time'], params['register_end_time'])
+
+        # 总数
+        user_count = cursor.query_one(command % 'COUNT(*) AS count')
+
         # 分页
         command += """
                     ORDER BY shu_user_stats.last_login_time DESC 
                     LIMIT %s, %s
-                    """ % ((pages - 1) * limit, limit)
+                    """ % ((page - 1) * limit, limit)
         # 详情
         user_detail = cursor.query(command % fields)
-        # 总数
-        user_count = cursor.query_one(command % 'COUNT(*) AS count')
+
         user_list = {
             'user_detail': user_detail if user_detail else [],
             'user_count': user_count['count'] if user_count['count'] else 0

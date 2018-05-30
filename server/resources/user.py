@@ -49,12 +49,12 @@ class UserList(Resource):
     @doc.request_user_list_param
     @doc.response_user_list_param_success
     @filters.UserList.get(user_list=dict)
-    @operations.UserListDecorator.get_user_list(pages=int, limit=int, params=dict)
-    @verify.UserList.check_params(pages=int, limit=int, params=dict)
-    @verify.UserList.check_paging(pages=int, limit=int, params=dict)
+    @operations.UserListDecorator.get_user_list(page=int, limit=int, params=dict)
+    @verify.UserList.check_params(page=int, limit=int, params=dict)
+    @verify.UserList.check_paging(page=int, limit=int, params=dict)
     def get():
 
-        resp = Response(pages=get_arg_int('pages', 1),
+        resp = Response(page=get_arg_int('page', 1),
                         limit=get_arg_int('limit', 10),
                         params=get_all_arg())
 
