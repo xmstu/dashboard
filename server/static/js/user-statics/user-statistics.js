@@ -1,45 +1,58 @@
-
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#date_show_three').val();
 $('#date_show_four').val();
 $('#date_show_five').val();
 $('#date_show_six').val();
-var startTime=$('#date_show_one').val();
-var endTime=$('#date_show_two').val();
-var beginTime=$('#date_show_three').val();
-var finishTime=$('#date_show_four').val();
-var infinteTime=$('#date_show_five').val();
-var overTIme=$('#date_show_six').val();
+var dataAll;
+var startTime = $('#date_show_one').val();
+var endTime = $('#date_show_two').val();
+var beginTime = $('#date_show_three').val();
+var finishTime = $('#date_show_four').val();
+var infinteTime = $('#date_show_five').val();
+var overTIme = $('#date_show_six').val();
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
+
+function init() {
+    var data = ''
+    var url = '/user/list/'
+    $.ajax({
+        url: url
+        , type: "get"
+        , async: false
+        , dataType: "json"
+        , success: function (result) {
+            dataAll = result
+        }
+    });
+}
+
 layui.use(['laydate', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
     laydate.render({
         elem: '#date_show_one',
-        max: String(common.getNowFormatDate()[3]),
         theme: '#1E9FFF',
         calendar: true,
         ready: function () {
 
         },
         done: function (val, index) {
-            startTime = String(val);
+            startTime = val;
         }
     });
     laydate.render({
         elem: '#date_show_two',
         theme: '#1E9FFF',
         calendar: true,
+        max: String(common.getNowFormatDate()[3]),
         ready: function () {
 
         },
         done: function (val, index) {
-            endTime = String(val);
-            console.log(beginTime + '::' + endTime);
-            common.dateInterval(endTime, beginTime);
+            endTime = val;
         }
     });
     laydate.render({
@@ -50,21 +63,22 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            beginTime=val
+            beginTime = val + ' 00:00:00'
         }
     });
     laydate.render({
         elem: '#date_show_four',
         theme: '#1E9FFF',
         calendar: true,
+        max: String(common.getNowFormatDate()[3]),
         ready: function () {
 
         },
         done: function (val, index) {
-            finishTime=val
+            finishTime = val + ' 23:59:59';
         }
     });
-      laydate.render({
+    laydate.render({
         elem: '#date_show_five',
         theme: '#1E9FFF',
         calendar: true,
@@ -72,18 +86,19 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            infinteTime=val
+            infinteTime = val + ' 00:00:00'
         }
     });
-        laydate.render({
+    laydate.render({
         elem: '#date_show_six',
         theme: '#1E9FFF',
+        max: String(common.getNowFormatDate()[3]),
         calendar: true,
         ready: function () {
 
         },
         done: function (val, index) {
-            overTIme=val
+            overTIme = val + ' 23:59:59'
         }
     });
     table.render({
@@ -94,10 +109,10 @@ layui.use(['laydate', 'form', 'table'], function () {
             statusCode: 100000
         }
         , cols: [[
-            {field: 'id', title: '用户ID', width: 180},
-            {field: 'user_name', title: '用户名', width: 130}
-            , {field: 'mobile', title: '手机号', width: 180}
-            , {field: 'user_type', title: '注册角色', width: 140}
+            {field: 'id', title: '用户ID', width: 80},
+            {field: 'user_name', title: '用户名', width: 100}
+            , {field: 'mobile', title: '手机号', width: 130}
+            , {field: 'user_type', title: '注册角色', width: 80}
             , {field: 'role_auth', title: '认证', width: 180}
             , {field: 'usual_city', title: '常驻地', width: 280}
             , {field: 'goods_count', title: '发货', width: 90}
@@ -110,7 +125,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         ]]
         , id: 'testReload'
         , page: true
-        , height: 315
     });
 
     var $ = layui.$, active = {
@@ -194,7 +208,6 @@ $('#charts_container_one').highcharts({
         name: '东京',
         data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
     }]
-
 });
 $('#search_btn').click(function (e) {
     e.preventDefault();
@@ -202,24 +215,67 @@ $('#search_btn').click(function (e) {
 });
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
-    var data = {
-        user_name:$.trim($('#user_name').val()),
-        mobile:$.trim($('#phone_number').val()),
-        reference_mobile:$.trim($('#reference_mobile').val()),
-        download_ch:$.trim($('#download_ch').val()),
-        from_channel:$.trim($('#register').val()),
-        is_referenced:$.trim($('#is_referenced').val()),
-        home_station_id:$.trim($('#home_station_id').val()),
-        role_type:$.trim($('#role_type').val()),
-        role_auth:$.trim($('#role_auth').val()),
-        is_actived:$.trim($('#is_actived').val()),
-        is_used:$.trim($('#is_used').val()),
-        is_car_sticker:$.trim($('#is_car_sticker').val()),
-        last_login_start_time:$.trim($('#date_show_three').val()),
-        last_login_end_time:$.trim($('#date_show_four').val()),
-        register_start_time:$.trim($('#date_show_five').val()),
-        register_end_time:$.trim($('#date_show_six').val()),
-        page:1,
-        limit:10
+    if (beginTime != '') {
+        beginTime = common.timeTransform(beginTime)
     }
+    if (finishTime != '') {
+        finishTime = common.timeTransform(finishTime)
+    }
+    if (infinteTime != '') {
+        infinteTime = common.timeTransform(infinteTime)
+    }
+    if (overTIme != '') {
+        overTIme = common.timeTransform(overTIme)
+    }
+    var data = {
+        user_name: $.trim($('#user_name').val()),
+        mobile: $.trim($('#phone_number').val()),
+        reference_mobile: $.trim($('#reference_mobile').val()),
+        download_ch: $.trim($('#download_ch').val()),
+        from_channel: $.trim($('#register').val()),
+        is_referenced: $.trim($('#is_referenced').val()),
+        home_station_id: $.trim($('#home_station_id').val()),
+        role_type: $.trim($('#role_type').val()),
+        role_auth: $.trim($('#role_auth').val()),
+        is_actived: $.trim($('#is_actived').val()),
+        is_used: $.trim($('#is_used').val()),
+        is_car_sticker: $.trim($('#is_car_sticker').val()),
+        last_login_start_time: beginTime,
+        last_login_end_time: finishTime,
+        register_start_time: infinteTime,
+        register_end_time: overTIme,
+        page: 1,
+        limit: 10
+    }
+     var url = '/user/list/?user_name='+data.user_name+'&mobile='+data.mobile+'&reference_mobile='+data.reference_mobile+'&download_ch='+data.download_ch+'&from_channel=' +
+         data.from_channel+'&is_referenced='+data.is_referenced+'&home_station_id='+data.home_station_id+'&role_type='+data.role_type+'&role_auth='+data.role_auth+'&is_actived='+data.is_actived+'&is_used='+data.is_used+'&is_car_sticker='+data.is_car_sticker+'&last_login_start_time='+data.last_login_start_time+ '&last_login_end_time='+data.last_login_end_time+'&register_start_time='+data.register_start_time+'&register_end_time='+data.register_end_time;
+
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+              url:url
+            , elem: '#LAY_table_user'
+            , response: {
+                statusName: 'status',
+                statusCode: 100000
+            }
+            , cols: [[
+                {field: 'id', title: '用户ID', width: 80},
+                {field: 'user_name', title: '用户名', width: 100}
+                , {field: 'mobile', title: '手机号', width: 130}
+                , {field: 'user_type', title: '注册角色', width: 80}
+                , {field: 'role_auth', title: '认证', width: 180}
+                , {field: 'usual_city', title: '常驻地', width: 280}
+                , {field: 'goods_count', title: '发货', width: 90}
+                , {field: 'order_count', title: '接单', width: 90}
+                , {field: 'order_completed', title: '完成订单', width: 90}
+                , {field: 'download_channel', title: '下载渠道', width: 130}
+                , {field: 'from_channel', title: '注册渠道', width: 80}
+                , {field: 'last_login_time', title: '最后登陆', width: 130}
+                , {field: 'create_time', title: '注册时间', width: 130}
+            ]]
+            , id: 'testReload'
+            , page: true
+        });
+    })
 })
