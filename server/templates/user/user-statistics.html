@@ -203,14 +203,14 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">推荐人手机</label>
                                     <div class="layui-input-inline">
-                                        <input id="phone_number_2" type="tel" name="phone" lay-verify="required|phone" placeholder="请输入推荐人手机" autocomplete="off" class="layui-input">
+                                        <input id="reference_mobile" type="tel" name="phone" lay-verify="required|phone" placeholder="请输入推荐人手机" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label">下载渠道</label>
                                 <div class="layui-input-inline">
-                                    <input id="download_ways" type="text" name="username" lay-verify="required" placeholder="请输入下载渠道" autocomplete="off" class="layui-input">
+                                    <input id="download_ch" type="text" name="username" lay-verify="required" placeholder="请输入下载渠道" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
@@ -229,7 +229,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">推荐注册</label>
                                     <div class="layui-input-inline" style="width: 150px;">
-                                        <select name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_referenced" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">有</option>
                                             <option value="2">无</option>
@@ -241,7 +241,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">常驻地</label>
                                     <div class="layui-input-inline">
-                                        <select name="modules" lay-verify="required" lay-search="">
+                                        <select id="home_station_id" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">layer</option>
                                             <option value="2">form</option>
@@ -253,7 +253,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">注册角色</label>
                                     <div class="layui-input-inline" style="width: 146px;">
-                                        <select name="modules" lay-verify="required" lay-search="">
+                                        <select id="role_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">司机</option>
                                             <option value="2">货主</option>
@@ -266,7 +266,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">认证角色</label>
                                     <div class="layui-input-inline">
-                                        <select name="modules" lay-verify="required" lay-search="">
+                                        <select id="role_auth" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">司机</option>
                                             <option value="2">货主</option>
@@ -279,7 +279,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">是否活跃</label>
                                     <div class="layui-input-inline">
-                                        <select name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_actived" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">活跃（每天登录）</option>
                                             <option value="2">一般（1-3天未登录）</option>
@@ -293,7 +293,7 @@
                                 <div class="layui-inline" style="">
                                     <label class="layui-form-label">操作过</label>
                                     <div class="layui-input-inline" style="width: 174px;">
-                                        <select name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_used" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">发布货源</option>
                                             <option value="2">接单</option>
@@ -306,7 +306,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">贴车贴</label>
                                     <div class="layui-input-inline" style="width: 150px;">
-                                        <select name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_car_sticker" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">有</option>
                                             <option value="2">无</option>
@@ -350,7 +350,7 @@
                                     </div>
                                 </div>
                             </div>
-                          <button style="position: relative;padding-left: 20px;" class="layui-btn layui-btn-normal"><i style="" class="iconfont icon-sousuo1"></i> 搜索</button>
+                          <button id="user_search_box" style="position: relative;padding-left: 20px;" class="layui-btn layui-btn-normal"><i style="" class="iconfont icon-sousuo1"></i> 搜索</button>
                         </form>
                         <div class="dataTable">
                             <div class="layui-inline">

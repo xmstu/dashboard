@@ -2,26 +2,30 @@ var startTime;
 var endTime;
 var beginTime;
 var finishTime;
+var infinteTime;
+var overTIme;
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#date_show_three').val();
 $('#date_show_four').val();
-setTimeout(function(){
-    common.dateInterval($('#date_show_one').val(),$('#date_show_one').val());
-},100);
+$('#date_show_five').val();
+$('#date_show_six').val();
+setTimeout(function () {
+    common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
+}, 100);
 layui.use(['laydate', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
     laydate.render({
         elem: '#date_show_one',
-        max:String(common.getNowFormatDate()[3]),
+        max: String(common.getNowFormatDate()[3]),
         theme: '#1E9FFF',
         calendar: true,
         ready: function () {
 
         },
         done: function (val, index) {
-           beginTime =String(val);
+            beginTime = String(val);
         }
     });
     laydate.render({
@@ -33,8 +37,8 @@ layui.use(['laydate', 'form', 'table'], function () {
         },
         done: function (val, index) {
             endTime = String(val);
-            console.log(beginTime+'::'+endTime);
-            common.dateInterval(endTime,beginTime);
+            console.log(beginTime + '::' + endTime);
+            common.dateInterval(endTime, beginTime);
         }
     });
     laydate.render({
@@ -59,30 +63,57 @@ layui.use(['laydate', 'form', 'table'], function () {
             console.log(val)
         }
     });
+      laydate.render({
+        elem: '#date_show_five',
+        theme: '#1E9FFF',
+        calendar: true,
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            console.log(val)
+        }
+    });
+        laydate.render({
+        elem: '#date_show_six',
+        theme: '#1E9FFF',
+        calendar: true,
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            console.log(val)
+        }
+    });
     table.render({
         elem: '#LAY_table_user'
-        ,url: '../static/js/user-statics/test.json'
-        ,cols: [[
-             {field:'user_name', title: '用户名', width:130}
-            ,{field:'phone_number', title: '手机号', width:180}
-            ,{field:'roles', title: '注册角色', width:140}
-            ,{field:'profession', title: '认证', width:280}
-            ,{field:'usual_city', title: '常驻地', width:280}
-            ,{field:'shipments', title: '发货',width:90}
-            ,{field:'order_receiving', title: '接单',  width:90}
-            ,{field:'accomplish_orders', title: '完成订单',  width:90}
-            ,{field:'download_ways', title: '下载渠道',  width:135}
-            ,{field:'register_channel', title: '注册渠道',  width:80}
-            ,{field:'last_login', title: '最后登陆', width:135}
-            ,{field:'register_time', title: '注册时间',  width:135}
+        , url: '/user/list/',
+        response: {
+            statusName: 'status',
+            statusCode: 100000
+        }
+        , cols: [[
+            {field: 'id', title: '用户ID', width: 180},
+            {field: 'user_name', title: '用户名', width: 130}
+            , {field: 'mobile', title: '手机号', width: 180}
+            , {field: 'user_type', title: '注册角色', width: 140}
+            , {field: 'role_auth', title: '认证', width: 180}
+            , {field: 'usual_city', title: '常驻地', width: 280}
+            , {field: 'goods_count', title: '发货', width: 90}
+            , {field: 'order_count', title: '接单', width: 90}
+            , {field: 'order_completed', title: '完成订单', width: 90}
+            , {field: 'download_channel', title: '下载渠道', width: 130}
+            , {field: 'from_channel', title: '注册渠道', width: 80}
+            , {field: 'last_login_time', title: '最后登陆', width: 130}
+            , {field: 'create_time', title: '注册时间', width: 130}
         ]]
-        ,id: 'testReload'
-        ,page: true
-        ,height: 315
+        , id: 'testReload'
+        , page: true
+        , height: 315
     });
 
     var $ = layui.$, active = {
-        reload: function(){
+        reload: function () {
             var demoReload = $('#demoReload');
 
             //执行重载
@@ -90,7 +121,7 @@ layui.use(['laydate', 'form', 'table'], function () {
                 page: {
                     curr: 1 //重新从第 1 页开始
                 }
-                ,where: {
+                , where: {
                     key: {
                         id: demoReload.val()
                     }
@@ -99,14 +130,14 @@ layui.use(['laydate', 'form', 'table'], function () {
         }
     };
 
-    $('.dataTable .layui-btn').on('click', function(){
+    $('.dataTable .layui-btn').on('click', function () {
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
     });
 });
 $('#charts_container_one').highcharts({
     tooltip: {
-        shared:false,
+        shared: false,
         crosshairs: [{
             width: 1,
             color: '#ccc'
@@ -137,8 +168,8 @@ $('#charts_container_one').highcharts({
     subtitle: {
         text: '数据来源：省省官方后台数据库'
     },
-    legend:{
-        labelFormatter:function () {
+    legend: {
+        labelFormatter: function () {
             return this.name
         }
     },
@@ -164,7 +195,30 @@ $('#charts_container_one').highcharts({
     }]
 
 });
-$('#search_btn').click(function(e){
+$('#search_btn').click(function (e) {
     e.preventDefault();
     layer.msg('success')
 });
+$('#user_search_box').on('click', function (e) {
+    e.preventDefault();
+    var data = {
+        user_name:$.trim($('#user_name').val()),
+        mobile:$.trim($('#phone_number').val()),
+        reference_mobile:$.trim($('#reference_mobile').val()),
+        download_ch:$.trim($('#download_ch').val()),
+        from_channel:$.trim($('#register').val()),
+        is_referenced:$.trim($('#is_referenced').val()),
+        home_station_id:$.trim($('#home_station_id').val()),
+        role_type:$.trim($('#role_type').val()),
+        role_auth:$.trim($('#role_auth').val()),
+        is_actived:$.trim($('#is_actived').val()),
+        is_used:$.trim($('#is_used').val()),
+        is_car_sticker:$.trim($('#is_car_sticker').val()),
+        last_login_start_time:$.trim($('#date_show_three').val()),
+        last_login_end_time:$.trim($('#date_show_four').val()),
+        register_start_time:$.trim($('#date_show_five').val()),
+        register_end_time:$.trim($('#date_show_six').val()),
+        page:1,
+        limit:10
+    }
+})

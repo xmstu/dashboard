@@ -271,6 +271,10 @@ var common = {
         var link = $('<link rel="shortcut icon " type="images/x-icon" href="../static/images/favicon.ico">');
         var head=$('head')
         head.append(link)
+    },
+    timeTransform:function(str){
+        var date = new Date(str);
+        return date.getTime()/1000;
     }
 };
 setTimeout(function () {
