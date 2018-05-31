@@ -117,9 +117,17 @@ class GoodsList(object):
                     -- AND (shf_goods.to_province_id = 1 OR shf_goods.to_city_id = 820002 OR shf_goods.to_county_id = 1 OR shf_goods.to_town_id = 1)
                     
                     -- 货源类型
+                    -- `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '货源类型：1 普通货源，2 零担货源，默认为1',
+                    --  `goods_level` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '货源等级：1 议价货源，2 优质货源/定价货源, 3.同城定价/非优质',
+                    --  `haul_dist` tinyint(4) NOT NULL DEFAULT '2' COMMENT '运输距离：1 同城，2 跨城',
+                    
+                    -- 同城普通货源
                     -- AND shf_goods.haul_dist = 1 AND shf_goods.type = 1
+                    -- 跨城定价普通货源
                     -- AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 2 AND shf_goods.type = 1
+                    -- 跨城议价普通货源
                     -- AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 1 AND shf_goods.type = 1
+                    -- 零担货源
                     -- AND shf_goods.type = 2
                     
                     -- 货源状态
@@ -172,7 +180,14 @@ class GoodsList(object):
 
         # 货源类型
         if params['goods_type']:
-            pass
+            if params['goods_type'] == 1:
+                command += """ AND shf_goods.haul_dist = 1 AND shf_goods.type = 1 """
+            if params['goods_type'] == 2:
+                command += """ AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 2 AND shf_goods.type = 1 """
+            if params['goods_type'] == 3:
+                command += """ AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 1 AND shf_goods.type = 1 """
+            if params['goods_type'] == 4:
+                command += """ AND shf_goods.type = 2 """
 
         # 货源状态
         if params['goods_status']:
