@@ -189,13 +189,13 @@ var common = {
         var days = date1.getTime() - date2.getTime();
         var time = parseInt(days / (1000 * 60 * 60 * 24));
         if (time < 7) {
-            $("#week_methods").attr("disabled", "disabled");
-            $("#month_methods").attr("disabled", "disabled");
+            $("#week_methods").attr("disabled", "disabled").css({'cursor':'not-allowed'});
+            $("#month_methods").attr("disabled", "disabled").css({'cursor':'not-allowed'});
         } else if (time > 7 && time < 31) {
-            $("#month_methods").attr("disabled", "disabled");
+            $("#month_methods").attr("disabled", "disabled").css({'cursor':'not-allowed'});
         } else {
-            $("#week_methods").removeAttr('disabled');
-            $("#month_methods").removeAttr('disabled')
+            $("#week_methods").removeAttr('disabled').css({'cursor':'pointer'});
+            $("#month_methods").removeAttr('disabled').css({'cursor':'pointer'});
         }
         console.log(time)
     },

@@ -1,16 +1,10 @@
+/**
+ * Created by Creazy_Run on 2018/5/30.
+ */
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#date_show_three').val();
 $('#date_show_four').val();
-$('#date_show_five').val();
-$('#date_show_six').val();
-var dataAll;
-var startTime = $('#date_show_one').val();
-var endTime = $('#date_show_two').val();
-var beginTime = $('#date_show_three').val();
-var finishTime = $('#date_show_four').val();
-var infinteTime = $('#date_show_five').val();
-var overTIme = $('#date_show_six').val();
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
@@ -40,7 +34,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            startTime = val;
+
         }
     });
     laydate.render({
@@ -52,7 +46,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            endTime = val;
+
         }
     });
     laydate.render({
@@ -63,8 +57,6 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            beginTime = val + ' 00:00:00'
-            console.log(beginTime)
         }
     });
     laydate.render({
@@ -76,33 +68,9 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            finishTime = val + ' 23:59:59';
         }
     });
-    laydate.render({
-        elem: '#date_show_five',
-        theme: '#1E9FFF',
-        calendar: true,
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            infinteTime = val + ' 00:00:00'
-        }
-    });
-    laydate.render({
-        elem: '#date_show_six',
-        theme: '#1E9FFF',
-        max: String(common.getNowFormatDate()[3]),
-        calendar: true,
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            overTIme = val + ' 23:59:59'
-        }
-    });
-    table.render({
+  /*  table.render({
         elem: '#LAY_table_user'
         , url: '/user/list/',
         response: {
@@ -110,35 +78,33 @@ layui.use(['laydate', 'form', 'table'], function () {
             statusCode: 100000
         },
         done: function(res, curr, count){
-           $("[data-field='user_type']").children().each(function(){
-               if($(this).text()==1){
-                   $(this).text('货主')
-               }else  if($(this).text()==2){
-                   $(this).text('司机')
-               }else if($(this).text()==3){
-                   $(this).text('物流公司')
-               }
-           })
+            $("[data-field='user_type']").children().each(function(){
+                if($(this).text()==1){
+                    $(this).text('货主')
+                }else  if($(this).text()==2){
+                    $(this).text('司机')
+                }else if($(this).text()==3){
+                    $(this).text('物流公司')
+                }
+            })
             $("[data-field='usual_city']").children().each(function(){
-               if($(this).text()==''){
-                   $(this).text('未查询到该用户常驻地')
-               }
-           })
+                if($(this).text()==''){
+                    $(this).text('未查询到该用户常驻地')
+                }
+            })
         }
         , cols: [[
-              {field: 'id', title: '用户ID', width: 80},
-              {field: 'user_name', title: '用户名', width: 100}
-            , {field: 'mobile', title: '手机号', width: 130}
-            , {field: 'user_type', title: '注册角色', width: 130}
-            , {field: 'role_auth', title: '认证', width: 150}
-            , {field: 'usual_city', title: '常驻地', width: 280}
-            , {field: 'goods_count', title: '发货', width: 60}
-            , {field: 'order_count', title: '接单', width: 60}
-            , {field: 'order_completed', title: '完成订单', width: 90}
-            , {field: 'download_channel', title: '下载渠道', width: 130}
-            , {field: 'from_channel', title: '注册渠道', width: 130}
-            , {field: 'last_login_time', title: '最后登陆', width: 130}
-            , {field: 'create_time', title: '注册时间', width: 130}
+            {field: 'id', title: '用户ID', width: 150},
+            {field: 'user_name', title: '用户名', width: 180}
+            , {field: 'mobile', title: '手机号', width: 180}
+            , {field: 'user_type', title: '推荐人数', width: 130}
+            , {field: 'role_auth', title: '发货数', width: 150}
+            , {field: 'usual_city', title: '完成数', width: 150}
+            , {field: 'goods_count', title: '货源金额', width: 120}
+            , {field: 'order_count', title: '订单金额', width: 120}
+            , {field: 'order_completed', title: '完成金额', width: 120}
+            , {field: 'download_channel', title: '下载渠道', width: 190}
+            , {field: 'from_channel', title: '操作', width: 130}
         ]]
         , id: 'testReload'
         , page: true
@@ -164,6 +130,42 @@ layui.use(['laydate', 'form', 'table'], function () {
     $('.dataTable .layui-btn').on('click', function () {
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
+    });*/
+    //监听工具条
+    table.on('tool(demo)', function(obj){
+        var data = obj.data;
+        if(obj.event === 'detail'){
+            layer.msg('ID：'+ data.id + ' 的查看操作');
+        } else if(obj.event === 'del'){
+            layer.confirm('真的删除行么', function(index){
+                obj.del();
+                layer.close(index);
+            });
+        } else if(obj.event === 'edit'){
+            layer.alert('编辑行：<br>'+ JSON.stringify(data))
+        }
+    });
+
+    var $ = layui.$, active = {
+        getCheckData: function(){ //获取选中数据
+            var checkStatus = table.checkStatus('idTest')
+                ,data = checkStatus.data;
+            layer.alert(JSON.stringify(data));
+        }
+        ,getCheckLength: function(){ //获取选中数目
+            var checkStatus = table.checkStatus('idTest')
+                ,data = checkStatus.data;
+            layer.msg('选中了：'+ data.length + ' 个');
+        }
+        ,isAll: function(){ //验证是否全选
+            var checkStatus = table.checkStatus('idTest');
+            layer.msg(checkStatus.isAll ? '全选': '未全选')
+        }
+    };
+
+    $('.demoTable .layui-btn').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
     });
 });
 $('#charts_container_one').highcharts({
@@ -187,14 +189,12 @@ $('#charts_container_one').highcharts({
         }
     },
     chart: {
-        colors: ['#058DC7', '#fff', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
-            '#FF9655', '#FFF263', '#6AF9C4'],
         backgroundColor: '#fff',
         type: 'line'
     },
 
     title: {
-        text: '用户变化趋势曲线图'
+        text: '推广统计变化趋势图'
     },
     subtitle: {
         text: '数据来源：省省官方后台数据库'
@@ -209,7 +209,7 @@ $('#charts_container_one').highcharts({
     },
     yAxis: {
         title: {
-            text: '气温 (°C)'
+            text: '人数 (人)'
         }
     },
     plotOptions: {
@@ -221,17 +221,19 @@ $('#charts_container_one').highcharts({
         }
     },
     series: [{
-        name: '东京',
+        name: '人数',
         data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
     }]
 });
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
-    if(beginTime!==''&&finishTime==''){
-        layer.msg('请选择登陆结束日期')
+    if(beginTime!=''&&finishTime==''){
+        layer.msg('请选择新增结束日期')
+        return false;
     }
-     if(beginTime==''&&finishTime!=''){
-        layer.msg('请选择登陆开始日期')
+    if(beginTime==''&&finishTime!=''){
+        layer.msg('请选择新增开始日期')
+        return false;
     }
     if (beginTime != '') {
         beginTime = common.timeTransform(beginTime)
@@ -241,19 +243,7 @@ $('#user_search_box').on('click', function (e) {
         var currentFinish = finishTime;
         finishTime = common.timeTransform(finishTime)
     }
-    if (infinteTime != '') {
-        infinteTime = common.timeTransform(infinteTime)
-    }
-    if (overTIme != '') {
-        overTIme = common.timeTransform(overTIme)
-    }
-     if(infinteTime!==''&&overTIme==''){
-        layer.msg('请选择登陆结束日期')
-    }
-     if(infinteTime==''&&overTIme!=''){
-        layer.msg('请选择登陆开始日期')
-    }
-    var data = {
+   /* var data = {
         user_name: $.trim($('#user_name').val()),
         mobile: $.trim($('#phone_number').val()),
         reference_mobile: $.trim($('#reference_mobile').val()),
@@ -273,13 +263,13 @@ $('#user_search_box').on('click', function (e) {
         page: 1,
         limit: 10
     }
-     var url = '/user/list/?user_name='+data.user_name+'&mobile='+data.mobile+'&reference_mobile='+data.reference_mobile+'&download_ch='+data.download_ch+'&from_channel=' +
-         data.from_channel+'&is_referenced='+data.is_referenced+'&home_station_id='+data.home_station_id+'&role_type='+data.role_type+'&role_auth='+data.role_auth+'&is_actived='+data.is_actived+'&is_used='+data.is_used+'&is_car_sticker='+data.is_car_sticker+'&last_login_start_time='+data.last_login_start_time+ '&last_login_end_time='+data.last_login_end_time+'&register_start_time='+data.register_start_time+'&register_end_time='+data.register_end_time;
+    var url = '/user/list/?user_name='+data.user_name+'&mobile='+data.mobile+'&reference_mobile='+data.reference_mobile+'&download_ch='+data.download_ch+'&from_channel=' +
+        data.from_channel+'&is_referenced='+data.is_referenced+'&home_station_id='+data.home_station_id+'&role_type='+data.role_type+'&role_auth='+data.role_auth+'&is_actived='+data.is_actived+'&is_used='+data.is_used+'&is_car_sticker='+data.is_car_sticker+'&last_login_start_time='+data.last_login_start_time+ '&last_login_end_time='+data.last_login_end_time+'&register_start_time='+data.register_start_time+'&register_end_time='+data.register_end_time;
 
     layui.use('table', function () {
         var table = layui.table;
         table.render({
-              url:url
+            url:url
             , elem: '#LAY_table_user'
             , response: {
                 statusName: 'status',
@@ -303,5 +293,17 @@ $('#user_search_box').on('click', function (e) {
             , id: 'testReload'
             , page: true
         });
-    })
+    })*/
+})
+$('#add_promote_person').on('click',function(e){
+    e.preventDefault();
+    var str = "<p  style='position: relative;'><span class='phone-number'>输入号码</span><i class='iconfont icon-dianhua'></i><input id='add_users' type='text' placeholder='请输入添加人的号码'></p> "
+    layer.confirm(str, {
+        title:'新增推广人员',
+        btn: ['确定添加','取消'] //按钮
+    }, function(){
+        layer.msg('success')
+    }, function(){
+        layer.msg('取消')
+    });
 })
