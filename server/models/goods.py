@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from server import log
 from server.meta.decorators import make_decorator
 
 
@@ -85,7 +86,7 @@ class GoodsList(object):
                     %s
                     FROM shf_goods
                     LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
-                    WHERE 1
+                    WHERE 1=1
                     -- 货源id
                     -- AND shf_goods.id = 1
                     -- 货主手机
@@ -125,11 +126,14 @@ class GoodsList(object):
         if params['mobile']:
             pass
 
-        goods_count = cursor.query_one(command % "COUNT(*) as goods_count")
+        goods_count = cursor.query_one(command % "COUNT(*) as goods_count")['goods_count']
 
         command += """LIMIT %s, %s""" % ((page - 1) * limit, limit)
 
+        log.info('sql:{}'.format(command % fileds))
         goods_detail = cursor.query(command % fileds)
+
+        log.info('goods_detail:{}'.format(goods_detail))
 
         goods_list = {'goods_detail': goods_detail if goods_detail else [],
                       'goods_count': goods_count if goods_count else 0}

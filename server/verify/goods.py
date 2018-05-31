@@ -72,9 +72,8 @@ class GoodsList(object):
                 "load_start_time": load_start_time,
                 "load_end_time": load_end_time,
             }
+            return Response(page=page, limit=limit, params=params)
 
         except Exception as e:
             log.error('Error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
-
-        return Response(page=page, limit=limit, params=params)

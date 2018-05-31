@@ -6,11 +6,21 @@ class GoodsList(object):
 
     @staticmethod
     @make_decorator
-    def get_result(goods_list):
+    def get_result(data):
 
-        goods_count = goods_list['goods_count']
-        goods_detail = goods_list['goods_detail']
+        goods_detail = data['goods_detail']
         # TODO 过滤参数
-        pass
+        for detail in goods_detail:
+            goods_standard = []
+            if detail['NAME']:
+                goods_standard.append(detail['NAME'])
+            if detail['weight']:
+                goods_standard.append(detail['weight'])
+            if detail['volume']:
+                goods_standard.append(detail['volume'])
+            detail['goods_standard'] = ','.join(goods_standard) if goods_standard else '没有规格'
+            detail.pop('NAME')
+            detail.pop('weight')
+            detail.pop('volume')
 
-        return build_result(APIStatus.Ok, count=goods_count, data=goods_detail), HTTPStatus.Ok
+        return build_result(APIStatus.Ok, count=data['goods_count'], data=goods_detail), HTTPStatus.Ok

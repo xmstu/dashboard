@@ -83,15 +83,6 @@ class UserList(object):
         elif params['is_referenced'] == 2:
             command += 'AND shu_user_profiles.reference_id = 0 '
         # TODO 常驻地(待议)
-        if params['provinceid'] and (not params['cityid']):
-            pass
-
-        if params['provinceid'] and params['cityid'] and (not params['regionid']):
-            pass
-
-        if params['provinceid'] and params['cityid'] and params['regionid'] and (not params['townid']):
-            pass
-
         if params['provinceid'] and params['cityid'] and params['regionid'] and params['townid']:
             pass
 

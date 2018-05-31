@@ -17,4 +17,4 @@ class GoodsListDecorator(object):
         if not goods_list:
             abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound, msg='找不到货源列表'))
 
-        return Response(goods_list=goods_list)
+        return Response(data=goods_list)

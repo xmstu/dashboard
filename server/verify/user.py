@@ -86,9 +86,11 @@ class UserList(object):
                       'register_start_time': register_start_time,
                       'register_end_time': register_end_time}
 
+            log.info("Response:{}".format(params))
+
+            return Response(page=page, limit=limit, params=params)
+
         except Exception as e:
             log.info("Error:{}".format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
 
-        log.info("Response:{}".format(params))
-
-        return Response(page=page, limit=limit, params=params)

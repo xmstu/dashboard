@@ -6,6 +6,7 @@ import server.document.goods as doc
 from server import log, verify, operations, filters, api
 from server.meta.decorators import Response
 from server.utils.request import get_all_arg, get_arg_int
+import server.filters.general as general_filters
 
 
 class GoodsList(Resource):
@@ -13,7 +14,8 @@ class GoodsList(Resource):
     @staticmethod
     @doc.request_goods_list_param
     @doc.response_goods_list_param_success
-    # @filters.GoodsList.get_result(goods_list=dict)
+    @filters.GoodsList.get_result(data=dict)
+    @general_filters.General.success(data=dict)
     @operations.GoodsListDecorator.get_goods_list(page=int, limit=int, params=dict)
     @verify.GoodsList.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
