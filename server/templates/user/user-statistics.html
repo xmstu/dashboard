@@ -63,7 +63,7 @@
                     <u></u>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="" class="selected-active">
+                    <a href="/user/" class="selected-active">
                         <i  class="iconfont icon-permissions-user select-active"></i>用户统计
                     </a>
                     <u></u>
@@ -239,12 +239,8 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">常驻地</label>
-                                    <div class="layui-input-inline">
-                                        <select id="home_station_id" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">请选择</option>
-                                            <option value="1">layer</option>
-                                            <option value="2">form</option>
-                                        </select>
+                                     <div class="layui-input-inline">
+                                        <input id="area_select" type="tel" name="phone" placeholder="请选择日期" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>
@@ -269,7 +265,7 @@
                                             <option value="">请选择</option>
                                             <option value="1">司机</option>
                                             <option value="2">货主</option>
-                                             <option value="2">物流公司</option>
+                                             <option value="3">物流公司</option>
                                         </select>
                                     </div>
                                 </div>
@@ -282,8 +278,8 @@
                                             <option value="">请选择</option>
                                             <option value="1">活跃（每天登录）</option>
                                             <option value="2">一般（1-3天未登录）</option>
-                                            <option value="2">即将沉睡（4-10天未登录）</option>
-                                            <option value="2">沉睡（10天以上未登录）</option>
+                                            <option value="3">即将沉睡（4-10天未登录）</option>
+                                            <option value="4">沉睡（10天以上未登录）</option>
                                         </select>
                                     </div>
                                 </div>
@@ -296,7 +292,7 @@
                                             <option value="">请选择</option>
                                             <option value="1">发布货源</option>
                                             <option value="2">接单</option>
-                                            <option value="2">完成订单</option>
+                                            <option value="3">完成订单</option>
                                         </select>
                                     </div>
                                 </div>
@@ -313,39 +309,43 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width:240px ;">
+                            <div class="layui-form-item" style="width:240px;position: relative;">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">最后登陆</label>
                                     <div class="layui-input-block">
                                         <i class="layui-icon layui-icon-riqi"></i>
                                         <input id="date_show_three" name="date_three" autocomplete="off" lay-verify="date_show_three" class="layui-input" type="text">
+                                        <span class="date-tips">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
                             <span style="display: inline-block;margin-top: 9px;">至</span>
-                            <div class="layui-form-item" style="width:240px ;">
+                            <div class="layui-form-item" style="width:240px;position: relative;">
                                 <div class="layui-inline">
                                     <div class="layui-input-block" style="margin-left: 10px;">
                                         <i class="layui-icon layui-icon-riqi"></i>
                                         <input id="date_show_four" name="date_four" autocomplete="off" lay-verify="date_show_four" class="layui-input" type="text">
+                                        <span class="date-tips">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width:240px ;">
+                            <div class="layui-form-item" style="width:240px;position: relative;">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">注册日期</label>
                                     <div class="layui-input-block">
                                         <i class="layui-icon layui-icon-riqi"></i>
                                         <input id="date_show_five" name="date_five" autocomplete="off" lay-verify="date_show_five" class="layui-input" type="text">
+                                        <span class="date-tips">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
                             <span style="display: inline-block;margin-top: 9px;">至</span>
-                            <div class="layui-form-item" style="width:240px ;">
+                            <div class="layui-form-item" style="width:240px;position: relative;">
                                 <div class="layui-inline">
                                     <div class="layui-input-block" style="margin-left: 10px;">
                                         <i class="layui-icon layui-icon-riqi"></i>
                                         <input id="date_show_six" name="date_six" autocomplete="off" lay-verify="date_show_six" class="layui-input" type="text">
+                                        <span class="date-tips">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
@@ -367,6 +367,8 @@
 </article>
 <script src="../static/js/libs/jquery-2.1.1.min.js"></script>
 <script src="../static/js/libs/highcharts.min.js"></script>
+<script src="../static/js/libs/highcharts-exporting.js"></script>
+<script src="../static/js/libs/jquery.address.js"></script>
 <script src="../static/layui/layui.js"></script>
 <script src="../static/js/common/common.js"></script>
 <script src="../static/js/common/http.js"></script>
