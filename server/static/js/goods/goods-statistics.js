@@ -4,6 +4,7 @@
 /**
  * Created by Creazy_Run on 2018/5/30.
  */
+
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#date_show_three').val();
@@ -211,6 +212,86 @@ var chart = Highcharts.chart('charts_container_one', {
             ['接单货源', 1987]
         ]
     }]
+});
+$('#charts_container_two').highcharts({
+    		chart: {
+				zoomType: 'xy'
+		},
+		title: {
+				text: '货源分布及发货人数趋势图'
+		},
+		subtitle: {
+				text: '数据来源: 省省官方数据库'
+		},
+		xAxis: [{
+				categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+										 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				crosshair: true
+		}],
+		yAxis: [{ // Primary yAxis
+				labels: {
+						format: '{value}人',
+						style: {
+								color: Highcharts.getOptions().colors[1]
+						}
+				},
+				title: {
+						text: '人数',
+						style: {
+								color: Highcharts.getOptions().colors[1]
+						}
+				}
+		}, { // Secondary yAxis
+				title: {
+						text: '发货数',
+						style: {
+								color: Highcharts.getOptions().colors[0]
+						}
+				},
+				labels: {
+						format: '{value} 人',
+						style: {
+								color: Highcharts.getOptions().colors[0]
+						}
+				},
+				opposite: true
+		}],
+		tooltip: {
+				shared: true
+		},
+		legend: {
+				layout: 'vertical',
+				align: 'left',
+				x: 120,
+				verticalAlign: 'top',
+				y: 100,
+				floating: true,
+				backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+		},
+		series: [{
+				name: '人数',
+				type: 'column',
+				yAxis: 1,
+				data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+				tooltip: {
+						valueSuffix: ' mm'
+				}
+		},{
+				name: '上海',
+				type: 'column',
+				yAxis: 1,
+				data: [68.9, 81.5, 76.4, 79.2, 104.0, 171.0, 126.6, 114.5, 176.4, 154.1, 56.6, 54.4],
+				tooltip: {
+						valueSuffix: ' mm'
+				}
+		}, {
+				name: '温度',
+				type: 'line',
+				data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+				tooltip: {
+						valueSuffix: '°C'
+				}
+		}]
 });
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();

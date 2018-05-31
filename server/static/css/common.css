@@ -480,7 +480,8 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 .layui-form-item .layui-input-inline {
     width: 160px;
 }
-.part-1-top  .layui-form-item {
+.part-1-top  .layui-form-item,
+.charts-area-two .layui-form-item{
     vertical-align: top;
 }
 .highcharts-container  {
@@ -556,4 +557,11 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .content-show:nth-of-type(2) ul{
     background-color: #99c262;
+}
+.charts-area-two {
+    padding: 16px;
+
+}
+.highcharts-button{
+    transform: translate(1500px,10px)!important;
 }
