@@ -72,6 +72,7 @@ class GoodsList(object):
                 "load_start_time": load_start_time,
                 "load_end_time": load_end_time,
             }
+            log.info("params:{}".format(params))
             return Response(page=page, limit=limit, params=params)
 
         except Exception as e:
