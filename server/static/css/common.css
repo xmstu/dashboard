@@ -307,7 +307,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     text-align: right;
 }
 .selected-active {
-     color: purple!important;
+     color: orange!important;
 }
 .select-active{
       background: #55c660;
@@ -457,6 +457,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 .main-content-right .layui-input {
     height: 30px;
     line-height: 30px;
+    background: transparent;
 }
 .layui-btn {
     height: 30px;
@@ -484,4 +485,21 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .highcharts-container  {
     width:100% !important;
+}
+.none{
+    display: none !important;
+}
+.date-tips {
+    position: absolute;
+    color: #cccccc;
+    font-size: 14px;
+    right: 78px;
+    top: 6px;
+}
+#date_show_three,#date_show_four,#date_show_five,#date_show_six{
+    position: relative;
+    z-index: 999;
+}
+.layui-form-select dl{
+    z-index: 99999;
 }
