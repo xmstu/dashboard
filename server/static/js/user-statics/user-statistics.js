@@ -21,7 +21,7 @@ function init() {
     });
     $('#area_select').address({
         offsetLeft: '0',
-        level: 4,
+        level: 3,
         onClose: function () {
 
         }

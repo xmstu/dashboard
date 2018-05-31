@@ -175,7 +175,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
 });
 Highcharts.setOptions({
-    colors:['#4572A7', '#AA4643', '#89A54E', '#80699B', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
+    colors:['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
 });
 var chart = Highcharts.chart('charts_container_one', {
     chart: {
