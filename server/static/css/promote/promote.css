@@ -1,0 +1,30 @@
+.layui-item-spec dl.layui-anim  {
+    padding-top:0px;
+    margin-top:4px;
+}
+.phone-number {
+    display: inline-block;
+    border: 1px solid #ccc;
+    font-size:13px;
+    padding:0 6px;
+    line-height:32px;
+    vertical-align: top;
+}
+#add_users {
+    padding-left: 23px;
+    font-size:12px;
+    font-weight: bold;
+    border:1px solid #ccc;
+    line-height: 32px;
+    border-left:none;
+}
+.icon-dianhua {
+    position: absolute;
+    color: #bbb;
+    font-size:15px;
+    left:70px;
+    top:4px;
+}
+.layui-layer-btn{
+    text-align: center;
+}
