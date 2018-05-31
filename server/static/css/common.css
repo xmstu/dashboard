@@ -307,7 +307,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     text-align: right;
 }
 .selected-active {
-     color: orange!important;
+     color: yellow!important;
 }
 .select-active{
       background: #55c660;
@@ -429,11 +429,11 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     line-height: 30px;
     cursor: pointer;
 }
-.layui-form-pane .layui-form-label {
+.main-content .layui-form-pane .layui-form-label {
     padding: 6px 10px;
     width: auto;
 }
-.layui-form-pane .layui-input-block {
+.main-content .layui-form-pane .layui-input-block {
     margin-left: 74px;
 }
 .part-2 .layui-form-item {
@@ -449,7 +449,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 #LAY_table_user {
     overflow-x: hidden;
 }
-.layui-form-pane .layui-form-label {
+.main-content .layui-form-pane .layui-form-label {
     height: 30px;
     line-height: 30px;
     padding: 0 8px;
@@ -502,4 +502,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .layui-form-select dl{
     z-index: 99999;
+}
+#popup {
+    padding: 14px;
 }
