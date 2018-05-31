@@ -15,6 +15,6 @@ class GoodsListDecorator(object):
         goods_list = GoodsList.get_goods_list(db.read_io, page, limit, params)
 
         if not goods_list:
-            abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound, msg='找不到用户列表'))
+            abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound, msg='找不到货源列表'))
 
         return Response(goods_list=goods_list)

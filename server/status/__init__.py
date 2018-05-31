@@ -147,10 +147,8 @@ Decriptions = {
 
 
 def build_result(status, msg=None, count=None, data=None):
-    if data:
-        return {'status': status, 'msg': msg if msg else Decriptions[status], 'count': count if count else None,
-                'data': data}
-    return {'status': status, 'msg': msg if msg else Decriptions[status]}
+    return {'status': status, 'msg': msg if msg else Decriptions[status], 'count': count if count else None,
+            'data': data}
 
 
 def make_result(status, msg=None, data=None):
