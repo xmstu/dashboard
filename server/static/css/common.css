@@ -307,7 +307,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     text-align: right;
 }
 .selected-active {
-     color: orange!important;
+     color: yellow!important;
 }
 .select-active{
       background: #55c660;
@@ -429,11 +429,11 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     line-height: 30px;
     cursor: pointer;
 }
-.layui-form-pane .layui-form-label {
+.main-content .layui-form-pane .layui-form-label {
     padding: 6px 10px;
     width: auto;
 }
-.layui-form-pane .layui-input-block {
+.main-content .layui-form-pane .layui-input-block {
     margin-left: 74px;
 }
 .part-2 .layui-form-item {
@@ -449,7 +449,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 #LAY_table_user {
     overflow-x: hidden;
 }
-.layui-form-pane .layui-form-label {
+.main-content .layui-form-pane .layui-form-label {
     height: 30px;
     line-height: 30px;
     padding: 0 8px;
@@ -502,4 +502,58 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .layui-form-select dl{
     z-index: 99999;
+}
+#popup {
+    padding: 14px;
+}
+.part-1-bottom {
+    margin-bottom: 17px;
+}
+.part-2 {
+    border-top: 1px dashed #cdd;
+    padding-top: 16px;
+}
+.content-show {
+    display: inline-block;
+    width: 640px;
+    background: #42cac0;
+    border-radius: 4px;
+    height: auto;
+    color: #fff;
+    vertical-align: top;
+    margin-left: 30px;
+    padding-bottom: 20px;
+}
+.content-show > dl {
+    padding: 25px 0 0 35px;
+    line-height: 34px;
+    font-size: 16px;
+}
+.content-show > ul {
+    background: #39b7ac;
+    height: 85px;
+    padding-left: 2em;
+}
+.content-show h2 {
+    font-size: 50px;
+    line-height: 85px;
+    padding: 0;
+    margin: 0;
+    float: left;
+}
+.content-show>ul> li {
+    float: left;
+    line-height: 16px;
+    list-style-type: none;
+    margin-left: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 47px;
+}
+.content-show:nth-of-type(2){
+    background-color:#a6d669;
+    margin-bottom: 18px;
+}
+.content-show:nth-of-type(2) ul{
+    background-color: #99c262;
 }

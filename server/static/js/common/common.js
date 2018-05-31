@@ -17,6 +17,9 @@ var common = {
     init: function () {
         layui.use('layer', function () {
             var layer = layui.layer;
+            layer.config({
+                skin: 'layui-layer-molv'
+            });
         });
         $('.main-content-right').addClass('animated fadeIn');
         var nav_menu = $('.icon-caidan');
@@ -52,11 +55,27 @@ var common = {
         });
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {
+                skin: 'layui-layer-molv',
                 btn: ['取消', '确定  '] //按钮
             }, function (index) {
                 layer.close(index);
             }, function () {
-                window.location.href = 'https://www.baidu.com'
+                var url = '/login/';
+                $.ajax({
+                    url: url,
+                    type: 'delete',
+                    beforeSend: function () {
+                        var index = layer.load(1, {
+                            shade: [0.1, '#fff'] //0.1透明度的白色背景
+                        });
+                    },
+                    success: function (res) {
+                        if (res.status == 100000) {
+                            layer.closeAll('loading');
+                            window.location.href = '/login/'
+                        }
+                    }
+                });
             });
         })
     },
@@ -189,13 +208,13 @@ var common = {
         var days = date1.getTime() - date2.getTime();
         var time = parseInt(days / (1000 * 60 * 60 * 24));
         if (time < 7) {
-            $("#week_methods").attr("disabled", "disabled").css({'cursor':'not-allowed'});
-            $("#month_methods").attr("disabled", "disabled").css({'cursor':'not-allowed'});
+            $("#week_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
+            $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
         } else if (time > 7 && time < 31) {
-            $("#month_methods").attr("disabled", "disabled").css({'cursor':'not-allowed'});
+            $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
         } else {
-            $("#week_methods").removeAttr('disabled').css({'cursor':'pointer'});
-            $("#month_methods").removeAttr('disabled').css({'cursor':'pointer'});
+            $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
+            $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
         }
         console.log(time)
     },
@@ -266,14 +285,14 @@ var common = {
 
         })(jQuery, document);
     },
-    setLink:function(){
+    setLink: function () {
         var link = $('<link rel="shortcut icon " type="images/x-icon" href="../static/images/favicon.ico">');
-        var head=$('head')
+        var head = $('head')
         head.append(link)
     },
-    timeTransform:function(str){
+    timeTransform: function (str) {
         var date = new Date(str);
-        return date.getTime()/1000;
+        return date.getTime() / 1000;
     }
 };
 setTimeout(function () {

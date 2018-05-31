@@ -21,7 +21,7 @@ function init() {
     });
     $('#area_select').address({
         offsetLeft: '0',
-        level: 4,
+        level: 3,
         onClose: function () {
 
         }
@@ -106,6 +106,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     table.render({
         elem: '#LAY_table_user'
         , url: '/user/list/',
+        even:true,
         response: {
             statusName: 'status',
             statusCode: 100000
