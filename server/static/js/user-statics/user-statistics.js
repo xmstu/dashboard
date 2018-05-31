@@ -169,9 +169,13 @@ layui.use(['laydate', 'form', 'table'], function () {
         active[type] ? active[type].call(this) : '';
     });
 });
+Highcharts.setOptions({
+    colors:['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
+});
 $('#charts_container_one').highcharts({
     tooltip: {
-        shared: false,
+        shared: true,
+        valueSuffix:'人',
         crosshairs: [{
             width: 1,
             color: '#ccc'
@@ -203,6 +207,14 @@ $('#charts_container_one').highcharts({
         text: '数据来源：省省官方后台数据库'
     },
     legend: {
+        layout:'vertical',
+        align:'left',
+        verticalAlign:'top',
+        x:250,
+        y:86,
+        floating:true,
+        borderWidth:1,
+        backgroundColor:'transparent',
         labelFormatter: function () {
             return this.name
         }
@@ -212,7 +224,7 @@ $('#charts_container_one').highcharts({
     },
     yAxis: {
         title: {
-            text: '气温 (°C)'
+            text: '人数 (人)'
         }
     },
     plotOptions: {
@@ -228,6 +240,7 @@ $('#charts_container_one').highcharts({
         data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
     }]
 });
+
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
     var beginTime = $.trim($('#date_show_three').val());
