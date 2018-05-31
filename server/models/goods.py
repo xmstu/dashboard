@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import time
+
 from server import log
 
 
@@ -14,10 +16,12 @@ class GoodsList(object):
                 shf_goods.goods_level,
                 shf_goods.haul_dist,-- 旧车型
                 
+                # TODO 优化
                 ( SELECT shm_regions.full_short_name FROM shm_regions WHERE shf_goods.from_city_id = shm_regions.`code` ) AS from_full_name,
                 ( SELECT shm_regions.short_name FROM shm_regions WHERE shf_goods.from_city_id = shm_regions.`code` ) AS from_short_name,
                 ( SELECT shm_regions.full_short_name FROM shm_regions WHERE shf_goods.to_city_id = shm_regions.`code` ) AS to_full_name,
                 ( SELECT shm_regions.short_name FROM shm_regions WHERE shf_goods.to_city_id = shm_regions.`code` ) AS to_short_name,
+                
                 shf_goods.from_address,
                 shf_goods.to_address,
                 
@@ -150,7 +154,7 @@ class GoodsList(object):
                     -- AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) > 10
         """
 
-        # 货源
+        # 货源id
         if params['goods_id']:
             command += ' AND shf_goods.id = %s AND shf_goods.is_deleted = 0 ' % params['goods_id']
 
@@ -175,6 +179,7 @@ class GoodsList(object):
             command += ' AND shf_goods.status = {} AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '.format(
                 params['goods_status'])
 
+        # 是否通话
         if params['is_called']:
             called_sql = """ AND (SELECT COUNT(*)
                             FROM shu_call_records
@@ -187,6 +192,46 @@ class GoodsList(object):
                 command += called_sql + '= 0 '
             if params['is_called'] == 3:
                 command += called_sql + '> 10 '
+
+        # 车长要求
+        if params['vehicle_length']:
+            pass
+
+        # 车型要求
+        if params['vehicle_type']:
+            pass
+
+        # 所属网点
+        if params['node_id']:
+            pass
+
+        # 是否初次下单
+        if params['new_goods_type']:
+            command += """ AND ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) = 1 """
+
+        # 急需处理
+        if params['urgent_goods']:
+            pass
+
+        # 是否加价
+        if params['is_addition']:
+            command += ' AND shf_goods.price_addition > 0 '
+
+        # 发布时间
+        if params['create_start_time'] and params['create_end_time']:
+            command += """ AND shf_goods.create_time > %s AND shf_goods.create_time < %s """ % (
+                params['create_start_time'], params['create_end_time'])
+
+        # 装货时间
+        if params['load_start_time'] and params['load_end_time']:
+            load_start_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(params['load_start_time']))
+            load_end_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(params['load_end_time']))
+
+            command += """ AND (( UNIX_TIMESTAMP( shf_goods.loading_time_date ) > UNIX_TIMESTAMP( "%s" ) 
+            AND UNIX_TIMESTAMP( shf_goods.loading_time_date ) < UNIX_TIMESTAMP( "%s" ) ) 
+            OR -- 新版
+            ( shf_goods.loading_time_period_begin > %s AND shf_goods.loading_time_period_begin < %s )) """ % (
+            load_start_date, load_end_date, params['load_start_time'], params['load_end_time'])
 
         goods_count = cursor.query_one(command % "COUNT(*) as goods_count")['goods_count']
 
