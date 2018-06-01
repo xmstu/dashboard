@@ -18,21 +18,29 @@
     <div class="login-body">
         <form action="" class="layui-form">
             <div class="layui-form-item">
-                <h5>USERNAME</h5>
-                <p><i class="iconfont icon-guanliyuan"></i><input maxlength="11" type="text" name="username" lay-verify="username"
+                <p><span>用户名</span><i class="iconfont icon-guanliyuan"></i><input maxlength="11" type="text" name="username"
+                                                                  lay-verify="username"
                                                                   autocomplete="on" placeholder="请输入用户名"
                                                                   class="layui-input"></p>
-                <h5>PASSWORD</h5>
-                <p><i class="iconfont icon-ai-password"></i><input type="password" name="password" lay-verify="password"
+                <p><span>密码</span><i class="iconfont icon-ai-password"></i><input type="password" name="password" lay-verify="password"
                                                                    autocomplete="on" placeholder="请输入密码"
                                                                    class="layui-input"></p>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色选择</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="role" value="管理员" title="管理员">
+                    <input type="radio" name="role" value="区镇合伙人" title="区镇合伙人" checked>
+                    <input type="radio" name="role" value="网点管理员" title="网点管理员">
+                    <input type="radio" name="role" value="城市经理" title="城市经理">
+                </div>
             </div>
         </form>
     </div>
     <div class="login-footer">
         <form action="" class="layui-form">
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="box-sizing:content-box;">记住密码</label>
+            <div class="layui-form-item" style="width: 140px;">
+                <label class="layui-form-label" style="box-sizing:content-box;margin-right: 6px;">记住密码</label>
                 <div class="layui-input-block" style="box-sizing:content-box;">
                     <input type="checkbox" name="close" lay-skin="switch" lay-text="ON|OFF">
                 </div>
@@ -40,7 +48,6 @@
             <button type="button" id="btn" class="login-btn layui-btn layui-btn-primary">点击登陆</button>
         </form>
     </div>
-
 </div>
 <div class="OverWindows"></div>
 <script type="text/javascript" src="../static/js/libs/jquery-2.1.1.min.js"></script>

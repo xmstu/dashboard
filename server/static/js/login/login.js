@@ -1,3 +1,4 @@
+$('.login-page').addClass('animated zoomIn')
 $(document).keypress(function (e) {
     if (e.which == 13) {
         $('input[type="button"]').click();
