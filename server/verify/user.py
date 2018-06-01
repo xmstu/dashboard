@@ -28,8 +28,8 @@ class UserStatistic(object):
             if start_time and end_time:
                 if start_time < end_time < time.time():
                     pass
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+                else:
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             params = {
                 'start_time': start_time,
@@ -86,15 +86,15 @@ class UserList(object):
             if last_login_start_time and last_login_end_time:
                 if last_login_start_time < last_login_end_time < time.time():
                     pass
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最后登录时间有误'))
+                else:
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最后登录时间有误'))
 
             # 检验注册时间
             if register_start_time and register_end_time:
                 if register_start_time < register_end_time < time.time():
                     pass
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='选择的注册时间有误'))
+                else:
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='选择的注册时间有误'))
 
             params = {
                 'user_name': user_name,

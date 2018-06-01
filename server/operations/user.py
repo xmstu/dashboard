@@ -3,7 +3,7 @@ from flask_restful import abort
 
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.user import UserList
+from server.models.user import UserList,UserStatistic
 from server.status import HTTPStatus, make_result, APIStatus
 
 
@@ -23,4 +23,9 @@ class UserStatisticDecorator(object):
     @staticmethod
     @make_decorator
     def get_user_statistic(params):
-        pass
+        user_statistic = UserStatistic.get_user_statistic(db.read_io, params)
+
+        if not user_statistic:
+            abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound, msg='找不到用户趋势数据'))
+        return Response(data=user_statistic)
+

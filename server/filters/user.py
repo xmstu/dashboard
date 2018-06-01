@@ -1,7 +1,7 @@
 import json
 
 from server.meta.decorators import make_decorator
-from server.status import build_result, HTTPStatus, APIStatus
+from server.status import build_result, HTTPStatus, APIStatus, make_result
 
 
 class UserList(object):
@@ -35,5 +35,7 @@ class UserStatistic(object):
 
     @staticmethod
     @make_decorator
-    def get_result():
-        pass
+    def get_result(data):
+        # TODO 过滤参数
+
+        return make_result(APIStatus.Ok), HTTPStatus.Ok

@@ -151,3 +151,17 @@ class UserList(object):
         log.info('user_list:{}'.format(user_list))
 
         return user_list
+
+
+class UserStatistic(object):
+
+    @staticmethod
+    def get_user_statistic(cursor, params):
+
+        fields = """"""
+
+        command = """"""
+
+        user_statistic = cursor.query(command)
+
+        return user_statistic
