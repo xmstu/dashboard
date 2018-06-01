@@ -4,7 +4,7 @@
 /**
  * Created by Creazy_Run on 2018/5/30.
  */
-$('.layui-table-cell').css({'height':'auto!important'});
+$('.layui-table-cell').css({'height': 'auto!important'});
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#date_show_three').val();
@@ -14,17 +14,26 @@ setTimeout(function () {
 }, 100);
 
 function init() {
-  /*  var data = ''
-    var url = '/user/list/'
-    $.ajax({
-        url: url
-        , type: "get"
-        , async: false
-        , dataType: "json"
-        , success: function (result) {
-            dataAll = result
-        }
-    });*/
+    /*  var data = ''
+      var url = '/user/list/'
+      $.ajax({
+          url: url
+          , type: "get"
+          , async: false
+          , dataType: "json"
+          , success: function (result) {
+              dataAll = result
+          }
+      });*/
+    Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
+        return {
+            radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},
+            stops: [
+                [0, color],
+                [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+            ]
+        };
+    });
 }
 
 layui.use(['laydate', 'form', 'table'], function () {
@@ -83,8 +92,8 @@ layui.use(['laydate', 'form', 'table'], function () {
               statusCode: 100000
           },*/
         cols: [[
-             {field: 'goods_id', title: '货源ID', width: 80},
-             {field: 'user_name', title: '货物规格', width: 140}
+            {field: 'goods_id', title: '货源ID', width: 80},
+            {field: 'user_name', title: '货物规格', width: 140}
             , {field: 'mobile', title: '类型', width: 120}
             , {field: 'user_type', title: '所属网点', width: 140}
             , {field: 'role_auth', title: '出发地-目的地', width: 220}
@@ -105,7 +114,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             $('.nearby').on('click', function () {
                 layer.open({
                     type: 1,
-                    area: ['1400px', '400px'],
+                    area: ['1620px', '520px'],
                     skin: 'layui-layer-molv',
                     closeBtn: 1,
                     content: $('#popup')
@@ -113,9 +122,9 @@ layui.use(['laydate', 'form', 'table'], function () {
             });
             $("td[data-field='goods_id']").children().each(function (val) {
                 var value = $(this).parent().parent('tr').attr('data-index');
-                if($(this).text()==''){
-                   //下面的一定要用html
-                   //$(this).html(res.data[value].user_name+'</br>'+res.data[value].goods_count)
+                if ($(this).text() == '') {
+                    //下面的一定要用html
+                    //$(this).html(res.data[value].user_name+'</br>'+res.data[value].goods_count)
                 }
             })
         }
@@ -233,7 +242,10 @@ $('#charts_container_two').highcharts({
     xAxis: [{
         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        crosshair: true
+        crosshair: true,
+        gridLineColor: '#eee',
+        gridLineWidth: 1
+
     }],
     yAxis: [{ // Primary yAxis
         labels: {
@@ -269,17 +281,21 @@ $('#charts_container_two').highcharts({
     legend: {
         layout: 'vertical',
         align: 'left',
-        x: 120,
         verticalAlign: 'top',
-        y: 100,
+        x: 1300,
+        y: 0,
         floating: true,
-        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        borderWidth: 1,
+        backgroundColor: 'transparent',
+        labelFormatter: function () {
+            return this.name
+        }
     },
     series: [{
         name: '潜在货源',
         type: 'column',
         yAxis: 1,
-        data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+        data: [59.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
         tooltip: {
             valueSuffix: ' 人'
         }
@@ -288,7 +304,7 @@ $('#charts_container_two').highcharts({
             name: '实际货源',
             type: 'column',
             yAxis: 1,
-            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+            data: [49.9, 61.5, 86.4, 79.2, 64.0, 85.0, 68.6, 26.5, 108.4, 136.1, 75.6, 15.4],
             tooltip: {
                 valueSuffix: ' 人'
             }
@@ -296,18 +312,149 @@ $('#charts_container_two').highcharts({
             name: '接单人数',
             type: 'column',
             yAxis: 1,
-            data: [68.9, 81.5, 76.4, 79.2, 104.0, 171.0, 126.6, 114.5, 176.4, 154.1, 56.6, 54.4],
+            data: [38.9, 81.5, 76.4, 79.2, 104.0, 171.0, 126.6, 114.5, 176.4, 154.1, 56.6, 54.4],
             tooltip: {
                 valueSuffix: ' 人'
             }
         }, {
             name: '发货人数',
             type: 'line',
-            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+            data: [105.0, 69.9, 99.5, 149.5, 180.2, 179.5, 159.2, 172.5, 123.3, 180.3, 130.9, 99.6],
             tooltip: {
                 valueSuffix: '人'
             }
         }]
+});
+$('#charts_container_three').highcharts({
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: '发货/接单率趋势'
+    },
+    subtitle: {
+        text: '数据来源: 省省官方后台数据库'
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 1300,
+        y: 0,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: 'transparent',
+        labelFormatter: function () {
+            return this.name
+        }
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: '%',
+        crosshairs: [{
+            width: 1,
+            color: '#ccc'
+        }, {
+            width: 1,
+            color: '#ccc'
+        }],
+        plotOptions: {
+            spline: {
+                marker: {
+                    radius: 4,
+                    lineColor: '#666666',
+                    lineWidth: 1
+                }
+            }
+        }
+    },
+    xAxis: {
+        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        crosshair: true,
+        gridLineColor: '#eee',
+        gridLineWidth: 1
+    },
+    yAxis: {
+        title: {
+            text: '百分比(%)'
+        },
+        labels: {
+            format: '{value}%',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: true
+        }
+    },
+    series: [{
+        name: '发货率',
+        data: [17.0, 16.9, 19.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 19.6]
+    }, {
+        name: '接单率',
+        data: [13.9, 14.2, 15.7, 18.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 16.6, 14.8]
+    }]
+});
+$('#charts_container_four').highcharts({
+    chart: {
+        renderTo: 'chart'
+    },
+    title: {
+        text: '取消原因统计'
+    },
+    plotArea: {
+        shadow: true,
+        borderWidth: true,
+        backgroundColor: true
+    },
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.point.name + '</b>: ' + Highcharts.numberFormat(this.percentage, 1) + '% (' +
+                Highcharts.numberFormat(this.y, 0, ',') + ' 个)';
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                formatter: function () {
+                    if (this.percentage > 4) return this.point.name;
+                },
+                color: 'white',
+                style: {
+                    font: '13px Trebuchet MS, Verdana, sans-serif'
+                }
+            }
+        }
+    },
+    legend: {
+        backgroundColor: '#FFFFFF',
+        x: 0,
+        y: -30
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+        type: 'pie',
+        name: 'Browser share',
+        data: [
+            ['装货时间不合适', 3617],
+            ['司机让我取消订单', 3436],
+            ['突发事件', 416],
+            ['运输变化有变', 200],
+            ['车型大小不合适', 1000],
+            ['其他', 5000]
+        ]
+    }]
 });
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
@@ -378,4 +525,5 @@ $('#user_search_box').on('click', function (e) {
      , page: true
      });
      })*/
-})
+});
+

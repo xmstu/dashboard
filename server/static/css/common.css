@@ -559,10 +559,32 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 .content-show:nth-of-type(2) ul{
     background-color: #99c262;
 }
-.charts-area-two {
+.charts-area-two,
+.charts-area-three,
+.charts-area-four{
     padding: 16px;
-
 }
 .highcharts-button{
     transform: translate(1500px,10px)!important;
+}
+.river {
+    height: 10px;
+    background: #f5f5f5;
+    box-shadow: 0 0 3px #eee;
+    border-radius: 2px;
+}
+.chart-area-four-body-bottom > #charts_container_four{
+    max-width: 800px;
+    height: 430px;
+    padding-bottom:14px;
+    border: 1px dashed #ddd;
+    display: inline-block;
+}
+.chart-area-body-bottom-right {
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: top;
+}
+.chart-area-body-bottom-right>.layui-table {
+    margin-top: 0;
 }

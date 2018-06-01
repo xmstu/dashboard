@@ -199,13 +199,23 @@ $('#charts_container_one').highcharts({
     subtitle: {
         text: '数据来源：省省官方后台数据库'
     },
-    legend: {
+   legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 1300,
+        y: 0,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: 'transparent',
         labelFormatter: function () {
             return this.name
         }
     },
     xAxis: {
-        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        gridLineColor: '#eee',
+        gridLineWidth: 1
     },
     yAxis: {
         title: {

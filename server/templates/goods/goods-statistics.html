@@ -58,7 +58,7 @@
             </div>
             <ul class="layui-nav layui-nav-tree" lay-filter="nav-slider">
                 <li class="layui-nav-item">
-                    <a href="">
+                    <a href="/admin/">
                         <i class="layui-icon">&#xe68e;</i>首页
                     </a>
                     <u></u>
@@ -76,7 +76,7 @@
                     <u></u>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="" class="">
+                    <a href="/transport/" class="">
                         <i class="iconfont icon-line"></i>运力统计
                     </a>
                     <u></u>
@@ -88,7 +88,7 @@
                     <u></u>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="">
+                    <a href="/maps/">
                         <i class="iconfont icon-relitu"></i>热力图
                     </a>
                     <u></u>
@@ -184,7 +184,7 @@
                                 <dl>
                                     <dt>潜在货源总数：<strong class="counter">9876</strong></dt>
                                     <dt>实际货源总数：<strong class="counter">7891</strong></dt>
-                                    <dt>接单货源：<strong class="counter">5678</strong></dt>
+                                    <dt>接单货源总数：<strong class="counter">5678</strong></dt>
                                 </dl>
                                 <ul>
                                     <h2><span class="counter">85.20</span>%</h2>
@@ -265,6 +265,221 @@
                             <div id="charts_container_two"></div>
                         </div>
                     </div>
+                    <div class="river"></div>
+                    <div class="charts-area-three">
+                        <div class="charts-area-three-header content-header">
+                            <h2><i class="iconfont icon-yifahuo"></i>发货/接单趋势</h2>
+                            <hr>
+                        </div>
+                        <div class="chart-area-three-body">
+                            <form action="" class="layui-form layui-form-pane">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">开始日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="start_date_two" name="start_date_two" autocomplete="off"
+                                                   lay-verify="start_date_two" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">结束日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="end_time_two" name="end_time_two" autocomplete="off"
+                                                   lay-verify="end_time_two" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <button>按日</button>
+                                    </li>
+                                    <li>
+                                        <button id="goods_week_methods">按周</button>
+                                    </li>
+                                    <li>
+                                        <button id="goods_month_methods">按月</button>
+                                    </li>
+                                </ul>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 230px">
+                                        <label class="layui-form-label">搜索选择</label>
+                                        <div class="layui-input-inline" style="width: 140px">
+                                            <select id="new_users" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">同城</option>
+                                                <option value="2">跨城</option>
+                                                <option value="3">零担</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="width:252px;">
+                                    <div class="layui-inline" style="">
+                                        <label class="layui-form-label">搜索选择</label>
+                                        <div class="layui-input-inline" style="width:140px;">
+                                            <select name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部地区</option>
+                                                <option value="1">天河区</option>
+                                                <option value="2">越秀区</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="searchBox_2" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn layui-btn-normal"><i
+                                        class="iconfont icon-sousuo1"></i> 搜索
+                                </button>
+                            </form>
+                            <div id="charts_container_three"></div>
+                        </div>
+                    </div>
+                    <div class="charts-area-four">
+                        <div class="chart-area-four-header content-header">
+                            <h2><i class="layui-icon">&#xe609;</i>取消发货原因统计</h2>
+                            <hr>
+                        </div>
+                        <div class="chart-area-four-body">
+                            <form action="" class="layui-form layui-form-pane">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">开始日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="start_date_three" name="start_date_three" autocomplete="off"
+                                                   lay-verify="start_date_three" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">结束日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="end_time_three" name="end_time_three" autocomplete="off"
+                                                   lay-verify="start_date_three" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul>
+                                    <li>
+                                        <button>按日</button>
+                                    </li>
+                                    <li>
+                                        <button id="goods_week_methods_2">按周</button>
+                                    </li>
+                                    <li>
+                                        <button id="goods_month_methods_2">按月</button>
+                                    </li>
+                                </ul>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 230px">
+                                        <label class="layui-form-label">搜索选择</label>
+                                        <div class="layui-input-inline" style="width: 140px">
+                                            <select id="cancel_reason_types" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">同城</option>
+                                                <option value="2">跨城</option>
+                                                <option value="3">零担</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="width:252px;">
+                                    <div class="layui-inline" style="">
+                                        <label class="layui-form-label">搜索选择</label>
+                                        <div class="layui-input-inline" style="width:140px;">
+                                            <select id="cancel_reason_area" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部地区</option>
+                                                <option value="1">天河区</option>
+                                                <option value="2">越秀区</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="searchBox_3" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn layui-btn-normal"><i
+                                        class="iconfont icon-sousuo1"></i> 搜索
+                                </button>
+                            </form>
+                            <div class="chart-area-four-body-bottom">
+                                <div id="charts_container_four"></div>
+                                <div class="chart-area-body-bottom-right">
+                                    <table class="layui-table" lay-skin="line">
+                                        <colgroup>
+                                            <col width="300">
+                                            <col width="300">
+                                            <col width="300">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th>人物</th>
+                                            <th>民族</th>
+                                            <th>比率</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>贤心</td>
+                                            <td>汉族</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>张爱玲</td>
+                                            <td>汉族</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>Helen Keller</td>
+                                            <td>拉丁美裔</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>岳飞</td>
+                                            <td>汉族</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>孟子</td>
+                                            <td>华夏族（汉族）</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>孟子</td>
+                                            <td>华夏族（汉族）</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>岳飞</td>
+                                            <td>汉族</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>孟子</td>
+                                            <td>华夏族（汉族）</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>孟子</td>
+                                            <td>华夏族（汉族）</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        <tr>
+                                            <td>岳飞</td>
+                                            <td>汉族</td>
+                                            <th>比率</th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="part-2">
                         <form action="" class="layui-form layui-form-pane">
                             <div class="layui-form-item">
@@ -278,7 +493,8 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货主手机</label>
                                     <div class="layui-input-inline" style="width: 162px">
-                                        <input id="phone_number" maxlength="11" type="tel" name="phone" placeholder="请输入手机号"
+                                        <input id="phone_number" maxlength="11" type="tel" name="phone"
+                                               placeholder="请输入手机号"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
@@ -446,7 +662,8 @@
                         </form>
                         <div class="dataTable">
                             <div class="layui-inline">
-                                <input placeholder='输入用户名或手机号' maxlength="11" class="layui-input" name="id" id="demoReload"
+                                <input placeholder='输入用户名或手机号' maxlength="11" class="layui-input" name="id"
+                                       id="demoReload"
                                        autocomplete="off">
                             </div>
                             <button class="layui-btn" data-type="reload">搜索</button>
@@ -461,8 +678,8 @@
     <div class="popup" id="popup" style="display:none;">
         <form class="layui-form layui-form-pane" action="">
             <div class="layui-form-item">
-                <label class="layui-form-label">选择货源类型</label>
-                <div class="layui-input-block">
+                <label class="layui-form-label" style="width: 130px;">选择货源类型</label>
+                <div class="layui-input-block" style="margin-left: 130px;">
                     <select name="interest" lay-filter="aihao">
                         <option value="0">全部货源</option>
                         <option value="1" selected="">适应货源</option>
