@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import time
 
 from server import log
 
@@ -12,9 +11,10 @@ class GoodsList(object):
                 shf_goods.NAME,
                 shf_goods.weight,
                 shf_goods.volume,
+                
                 shf_goods.type,
                 shf_goods.goods_level,
-                shf_goods.haul_dist,-- 旧车型
+                shf_goods.haul_dist,
                 
                 # TODO 优化
                 ( SELECT shm_regions.full_short_name FROM shm_regions WHERE shf_goods.from_city_id = shm_regions.`code` ) AS from_full_name,
@@ -239,14 +239,14 @@ class GoodsList(object):
 
         # 装货时间
         if params['load_start_time'] and params['load_end_time']:
-            load_start_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(params['load_start_time']))
-            load_end_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(params['load_end_time']))
+            # load_start_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(params['load_start_time']))
+            # load_end_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(params['load_end_time']))
 
-            command += """ AND (( UNIX_TIMESTAMP( shf_goods.loading_time_date ) > UNIX_TIMESTAMP( "%s" ) 
-            AND UNIX_TIMESTAMP( shf_goods.loading_time_date ) < UNIX_TIMESTAMP( "%s" ) ) 
+            command += """ AND (( UNIX_TIMESTAMP( shf_goods.loading_time_date ) > {0} 
+            AND UNIX_TIMESTAMP( shf_goods.loading_time_date ) < {1}  ) 
             OR -- 新版
-            ( shf_goods.loading_time_period_begin > %s AND shf_goods.loading_time_period_begin < %s )) """ % (
-            load_start_date, load_end_date, params['load_start_time'], params['load_end_time'])
+            ( shf_goods.loading_time_period_begin > {0} AND shf_goods.loading_time_period_begin < {1} )) """.format(
+                params['load_start_time'], params['load_end_time'])
 
         goods_count = cursor.query_one(command % "COUNT(*) as goods_count")['goods_count']
 
