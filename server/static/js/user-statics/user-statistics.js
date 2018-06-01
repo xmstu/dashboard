@@ -1,8 +1,5 @@
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
-var dataAll;
-var startTime = $('#date_show_one').val();
-var endTime = $('#date_show_two').val();
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
@@ -39,7 +36,9 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-
+            var startTime = $('#date_show_one').val();
+            var endTime = $('#date_show_two').val();
+            common.dateInterval(endTime, startTime);
         }
     });
     laydate.render({
@@ -51,6 +50,9 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
+            var startTime = $('#date_show_one').val();
+            var endTime = $('#date_show_two').val();
+            common.dateInterval(endTime, startTime);
         }
     });
     laydate.render({
@@ -61,7 +63,11 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            $('#date_show_three').next('.date-tips').css({'display': 'none'})
+           if ($('#date_show_three').val() == '') {
+                $('#date_show_three').next('.date-tips').show();
+            } else {
+                $('#date_show_three').next('.date-tips').hide()
+            }
         }
     });
     laydate.render({
@@ -88,7 +94,11 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            $('#date_show_five').next('.date-tips').css({'display': 'none'})
+             if ($('#date_show_five').val() == '') {
+                $('#date_show_five').next('.date-tips').show();
+            } else {
+                $('#date_show_five').next('.date-tips').hide()
+            }
         }
     });
     laydate.render({
@@ -100,19 +110,23 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            $('#date_show_six').next('.date-tips').css({'display': 'none'})
+             if ($('#date_show_four').val() == '') {
+                $('#date_show_four').next('.date-tips').show();
+            } else {
+                $('#date_show_four').next('.date-tips').hide()
+            }
         }
     });
     table.render({
         elem: '#LAY_table_user'
         , url: '/user/list/',
-        even:true,
+        even: true,
         response: {
             statusName: 'status',
             statusCode: 100000
         },
         done: function (res, curr, count) {
-            $('[data-field]>div').css({'padding':'0 6px'})
+            $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
                     $(this).text('未录入')
@@ -148,7 +162,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         , id: 'testReload'
         , page: true
     });
-
     var $ = layui.$, active = {
         reload: function () {
             var demoReload = $('#demoReload');
@@ -170,12 +183,12 @@ layui.use(['laydate', 'form', 'table'], function () {
     });
 });
 Highcharts.setOptions({
-    colors:['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
+    colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
 });
 $('#charts_container_one').highcharts({
     tooltip: {
         shared: true,
-        valueSuffix:'人',
+        valueSuffix: '人',
         crosshairs: [{
             width: 1,
             color: '#ccc'
@@ -207,22 +220,40 @@ $('#charts_container_one').highcharts({
         text: '数据来源：省省官方后台数据库'
     },
     legend: {
-        layout:'vertical',
-        align:'left',
-        verticalAlign:'top',
-        x:250,
-        y:86,
-        floating:true,
-        borderWidth:1,
-        backgroundColor:'transparent',
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 250,
+        y: 86,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: 'transparent',
         labelFormatter: function () {
             return this.name
         }
     },
     xAxis: {
-        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        gridLineColor: '#eee',
+        gridLineWidth: 1
     },
     yAxis: {
+        gridLineColor: '#eee',
+        gridLineWidth: 1,
+        plotLines: [
+            {
+                color: '#ddd',
+                dashStyle: 'dash',
+                value: 14,
+                width: 1
+            },
+            {
+                color: '#ddd',
+                dashStyle: 'dash',
+                value: 28,
+                width: 1
+            },
+        ],
         title: {
             text: '人数 (人)'
         }
@@ -248,23 +279,34 @@ $('#user_search_box').on('click', function (e) {
     var infinteTime = $.trim($('#date_show_five').val());
     var overTIme = $.trim($('#date_show_six').val());
     var provinceid = $.trim($('#area_select').attr('provinceid'));
-    var townid = $.trim($('#area_select').attr('townid'));
-    console.log('街道编号:' + townid)
-    if (provinceid != '' && townid == '') {
-        layer.msg('请将常驻地选择到第四级街道级别', function () {
+    var districtsid = $.trim($('#area_select').attr('districtsid'));
+    console.log('街道编号:' + districtsid)
+    if (provinceid != '' && districtsid == '') {
+        layer.msg('请将常驻地选择到第三级别',function(){
+        });
+        return false;
+    }
+    if($('#phone_number').val()!=''&&$('#phone_number').val().length!=11){
+         layer.msg('请检查用户名号码长度!', function () {
 
         });
         return false;
-
     }
+    if($('#reference_mobile').val()!=''&&$('#reference_mobile').val().length!=11){
+         layer.msg('请检查推荐人号码长度!', function () {
+
+        });
+        return false;
+    }
+
     if (beginTime !== '' && finishTime == '') {
-        layer.msg('请选择登陆结束日期', function () {
+        layer.msg('请选择最后登陆的结束日期', function () {
 
         });
         return false;
     }
     if (beginTime == '' && finishTime != '') {
-        layer.msg('请选择登陆开始日期', function () {
+        layer.msg('请选择最后登陆的起始日期', function () {
 
         });
         return false;
@@ -282,13 +324,13 @@ $('#user_search_box').on('click', function (e) {
         overTIme = common.timeTransform(overTIme)
     }
     if (infinteTime !== '' && overTIme == '') {
-        layer.msg('请选择登陆结束日期', function () {
+        layer.msg('请选择注册日期的结束日期', function () {
 
         });
         return false
     }
     if (infinteTime == '' && overTIme != '') {
-        layer.msg('请选择登陆开始日期', function () {
+        layer.msg('请选择注册日期的开始日期', function () {
 
         });
         return false;
@@ -322,21 +364,25 @@ $('#user_search_box').on('click', function (e) {
         table.render({
             url: url
             , elem: '#LAY_table_user'
+            ,even:true
             , response: {
                 statusName: 'status',
                 statusCode: 100000
             }
             , done: function () {
-                $('[data-field]>div').css({'padding':'0 6px'})
-                if ($(this).text() == 0) {
-                    $(this).text('未录入')
-                } else if ($(this).text() == 1) {
-                    $(this).text('司机')
-                } else if ($(this).text() == 2) {
-                    $(this).text('货主')
-                } else if ($(this).text() == 3) {
-                    $(this).text('物流公司')
-                }
+                $('[data-field]>div').css({'padding': '0 6px'})
+                $("[data-field='user_type']").children().each(function () {
+                    if ($(this).text() == 0) {
+                        $(this).text('未录入')
+                    } else if ($(this).text() == 1) {
+                        $(this).text('司机')
+                    } else if ($(this).text() == 2) {
+                        $(this).text('货主')
+                    } else if ($(this).text() == 3) {
+                        $(this).text('物流公司')
+                    }
+                })
+
                 $("[data-field='usual_city']").children().each(function () {
                     if ($(this).text() == '') {
                         $(this).text('未查询到该用户常驻地')

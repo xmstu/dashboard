@@ -17,9 +17,6 @@ var common = {
     init: function () {
         layui.use('layer', function () {
             var layer = layui.layer;
-            layer.config({
-                skin: 'layui-layer-molv'
-            });
         });
         $('.main-content-right').addClass('animated fadeIn');
         var nav_menu = $('.icon-caidan');
@@ -212,6 +209,7 @@ var common = {
             $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
         } else if (time > 7 && time < 31) {
             $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
+            $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
         } else {
             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
