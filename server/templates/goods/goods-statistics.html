@@ -168,7 +168,7 @@
                         </div>
                         <div class="part-1-bottom">
                             <div id="charts_container_one"
-                                 style="float:left;min-width:800px;max-width:800px;height: 482px;border: 1px solid #ddd; background: #f5f5f5;"></div>
+                                 style="float:left;min-width:900px;max-width:900px;height: 482px;border: 1px solid #ddd; background: #f5f5f5;"></div>
                             <div class="content-show">
                                 <dl>
                                     <dt>潜在货源总数：<strong class="counter">9876</strong></dt>
@@ -278,7 +278,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货主手机</label>
                                     <div class="layui-input-inline" style="width: 162px">
-                                        <input id="phone_number" type="tel" name="phone" placeholder="请输入手机号"
+                                        <input id="phone_number" maxlength="11" type="tel" name="phone" placeholder="请输入手机号"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
@@ -287,7 +287,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">出发地</label>
                                     <div class="layui-input-inline" style="width: 172px">
-                                        <input id="phone_number" type="tel" name="phone" placeholder="请输入地名"
+                                        <input id="start_address_name" type="tel" name="phone" placeholder="请输入地名"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
@@ -296,7 +296,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">目的地</label>
                                     <div class="layui-input-inline" style="width: 172px">
-                                        <input id="phone_number" type="tel" name="phone" placeholder="请输入地名"
+                                        <input id="over_address_name" type="tel" name="phone" placeholder="请输入地名"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
@@ -305,7 +305,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货源类型</label>
                                     <div class="layui-input-inline">
-                                        <select id="register" name="modules" lay-verify="required" lay-search="">
+                                        <select id="foods_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部类型</option>
                                             <option value="1">同城</option>
                                             <option value="2">跨城定价</option>
@@ -319,7 +319,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货源状态</label>
                                     <div class="layui-input-inline" style="width: 150px;">
-                                        <select id="is_referenced" name="modules" lay-verify="required" lay-search="">
+                                        <select id="foods_status" name="modules" lay-verify="required" lay-search="">
                                             <option value="1">待接单</option>
                                             <option value="2">已接单</option>
                                             <option value="3">已取消</option>
@@ -332,7 +332,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">是否通话</label>
                                     <div class="layui-input-inline">
-                                        <select id="home_station_id" name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_talking" name="modules" lay-verify="required" lay-search="">
                                             <option value="1">是</option>
                                             <option value="2">否</option>
                                         </select>
@@ -343,7 +343,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">车长要求</label>
                                     <div class="layui-input-inline" style="">
-                                        <select id="role_type" name="modules" lay-verify="required" lay-search="">
+                                        <select id="vehicle_length" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="1">1.7m</option>
                                             <option value="2">2.7m</option>
@@ -362,7 +362,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">车型要求</label>
                                     <div class="layui-input-inline" style="width: 162px;">
-                                        <select id="role_auth" name="modules" lay-verify="required" lay-search="">
+                                        <select id="car_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="1">箱式尾板车</option>
                                             <option value="2">箱式高栏车</option>
                                         </select>
@@ -373,7 +373,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">所属网点</label>
                                     <div class="layui-input-inline" style="width: 158px;">
-                                        <select id="role_auth" name="modules" lay-verify="required" lay-search="">
+                                        <select id="belong_stipple" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="1">天河区</option>
                                             <option value="2">越秀区</option>
@@ -385,7 +385,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">初次下单</label>
                                     <div class="layui-input-inline" style="width: 160px;">
-                                        <select id="role_type" name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_first" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="1">同城</option>
                                             <option value="2">跨城定价</option>
@@ -399,7 +399,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">急需处理</label>
                                     <div class="layui-input-inline" style="width: 146px;">
-                                        <select id="role_type" name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_fastly" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">小于5分钟</option>
                                             <option value="2">5分钟~10分钟</option>
@@ -412,7 +412,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">是否加价</label>
                                     <div class="layui-input-inline" style="">
-                                        <select id="role_type" name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_add_price" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">是</option>
                                             <option value="2">否</option>
@@ -446,12 +446,12 @@
                         </form>
                         <div class="dataTable">
                             <div class="layui-inline">
-                                <input placeholder='输入用户名或手机号' class="layui-input" name="id" id="demoReload"
+                                <input placeholder='输入用户名或手机号' maxlength="11" class="layui-input" name="id" id="demoReload"
                                        autocomplete="off">
                             </div>
                             <button class="layui-btn" data-type="reload">搜索</button>
                         </div>
-                        <table class="layui-hide" id="LAY_table_goods" lay-filter="user"></table>
+                        <table class="layui-hide goods-table" id="LAY_table_goods" lay-filter="user"></table>
                     </div>
                 </div>
             </div>
