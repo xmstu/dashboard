@@ -32,13 +32,19 @@ from server.utils.request import *
 #         resp = Response()
 
 
-# class UserStatistic(Resource):
-#
-#     @verify.User.get
-#     def get(self):
-#         payload = get_payload()
-#
-#         resp = Response()
+class UserStatistic(Resource):
+    @staticmethod
+    @doc.request_user_statistic_param
+    @doc.response_user_statistic_param_success
+    # @filters.UserStatistic.get_result()
+    # @operations.UserStatisticDecorator.get_user_statistic(params=dict)
+    @verify.UserStatistic.check_params(params=dict)
+    def get():
+
+        resp = Response(params=get_all_arg())
+
+        log.info('获取用户变化趋势查询参数: [resp: {}]'.format(resp))
+        return resp
 
 
 class UserList(Resource):
@@ -62,5 +68,5 @@ class UserList(Resource):
 
 ns = api.namespace('user', description='用户统计')
 # ns.add_resource(User, '/user/')
-# ns.add_resource(UserStatistic, '/statistic/')
+ns.add_resource(UserStatistic, '/statistic/')
 ns.add_resource(UserList, '/list/')

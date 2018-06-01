@@ -29,3 +29,11 @@ class UserList(object):
             detail['usual_city'] = detail['usual_city'] if detail['usual_city'] else ''
 
         return build_result(APIStatus.Ok, count=user_list['user_count'], data=user_detail), HTTPStatus.Ok
+
+
+class UserStatistic(object):
+
+    @staticmethod
+    @make_decorator
+    def get_result():
+        pass

@@ -36,18 +36,13 @@ class GoodsList(object):
             load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else 0
 
             # TODO 校验参数
-            pass
-            if not (create_end_time and create_start_time):
-                pass
-            elif create_end_time and create_start_time:
+            if create_end_time and create_start_time:
                 if (create_start_time < create_end_time) and (create_end_time < time.time()):
                     pass
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='发布时间有误'))
 
-            if not (load_start_time and load_end_time):
-                pass
-            elif load_start_time and load_end_time:
+            if load_start_time and load_end_time:
                 if (load_start_time < load_end_time) and (load_end_time < time.time()):
                     pass
             else:
