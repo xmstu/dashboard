@@ -13,7 +13,5 @@ class PromoteEffectDecorator(object):
     @make_decorator
     def get_promote_effet_list(page, limit, params):
         promote_effet_list = PromoteEffetList.get_promote_effet_list(db.read_io, page, limit, params)
-        if not promote_effet_list:
-            abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound, msg='找不到推荐人员效果列表'))
 
         return Response(promote_effet_list=promote_effet_list)

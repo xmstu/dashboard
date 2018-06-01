@@ -147,7 +147,7 @@ Decriptions = {
 
 
 def build_result(status, msg=None, count=None, data=None):
-    return {'status': status, 'msg': msg if msg else Decriptions[status], 'count': count if count else None,
+    return {'status': status, 'msg': msg if msg else Decriptions[status], 'count': count if count else 0,
             'data': data}
 
 
