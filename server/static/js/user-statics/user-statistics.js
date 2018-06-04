@@ -32,6 +32,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#1E9FFF',
         calendar: true,
+        max:String(common.getNowFormatDate()[4]),
         ready: function () {
 
         },
@@ -145,7 +146,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             })
         }
         , cols: [[
-            {field: 'id', title: '用户ID', width: 80},
+            {field: 'id', title: '用户ID', width: 80,sort:true},
             {field: 'user_name', title: '用户名', width: 100}
             , {field: 'mobile', title: '手机号', width: 130}
             , {field: 'user_type', title: '注册角色', width: 130}
@@ -390,7 +391,7 @@ $('#user_search_box').on('click', function (e) {
                 })
             }
             , cols: [[
-                {field: 'id', title: '用户ID', width: 80},
+                {field: 'id', title: '用户ID', width: 80,sort:true},
                 {field: 'user_name', title: '用户名', width: 100}
                 , {field: 'mobile', title: '手机号', width: 130}
                 , {field: 'user_type', title: '注册角色', width: 130}

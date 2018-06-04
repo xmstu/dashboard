@@ -25,6 +25,20 @@ function init() {
               dataAll = result
           }
       });*/
+    $('#start_address_name').address({
+        offsetLeft: '0',
+        level: 3,
+        onClose: function () {
+
+        }
+    });
+    $('#over_address_name').address({
+        offsetLeft:'0',
+        level:3,
+        onClose:function(){
+
+        }
+    });
     Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
         return {
             radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},
@@ -92,20 +106,20 @@ layui.use(['laydate', 'form', 'table'], function () {
               statusCode: 100000
           },*/
         cols: [[
-            {field: 'goods_id', title: '货源ID', width: 80},
+            {field: 'goods_id', title: '货源ID', width: 60},
             {field: 'user_name', title: '货物规格', width: 140}
             , {field: 'mobile', title: '类型', width: 120}
             , {field: 'user_type', title: '所属网点', width: 140}
             , {field: 'role_auth', title: '出发地-目的地', width: 220}
-            , {field: 'usual_city', title: '车型要求', width: 150}
+            , {field: 'usual_city', title: '车型要求', width: 144}
             , {field: 'goods_count', title: '运费', width: 180}
             , {field: 'order_count123', title: '货主手机', width: 120}
             , {field: 'order_completed', title: '状态', width: 90}
-            , {field: 'download_channel', title: '通话数', width: 50}
-            , {field: 'download_channel', title: '时间', width: 230}
+            , {field: 'download_channel', title: '通话数', width: 60}
+            , {field: 'time_show', title: '时间', width: 230}
             , {
-                field: 'from_channel', title: '操作', width: 130, templet: function (d) {
-                    return '<button id="' + d.phone_number + '" class="layui-btn nearby">附近的车</button>'
+                field: 'from_channel', title: '操作', width: 112, templet: function (d) {
+                    return '<button id="' + d.phone_number + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
                 }
             }
         ]],

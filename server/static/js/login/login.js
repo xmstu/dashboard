@@ -53,12 +53,11 @@ $('button[type="button"]').click(function () {
         };
         data=JSON.stringify(data);
         http.ajax.post(true,false,url,data,http.ajax.CONTENT_TYPE_2,function(res){
-            console.log(res);
             if(res.msg=='电话号码有误'){
                 layer.msg('号码有误，请核对您的号码！')
             }else if(res.status=='100000'){
                 layer.msg('success');
-                window.location.href='/user/'
+                window.location.href='/admin/'
             }else{
                 layer.msg('服务器错误')
             }
