@@ -4,6 +4,25 @@ from server import log
 
 class RegionsModel(object):
     @staticmethod
+    def get_three_area(cursor, code):
+        try:
+            command = """
+            SELECT region.*, shm_regions.parent_id AS first_code
+            FROM shm_regions
+            INNER JOIN (SELECT `code` AS third_code, parent_id AS second_code
+            FROM shm_regions
+            WHERE `code` = :code) AS region ON shm_regions.`code` = region.second_code
+            """
+            result = cursor.query_one(command, {
+                'code': code
+            })
+
+            return result if result else {}
+
+        except Exception as e:
+            log.warn('获取三级地区失败: [error: %s]' % (e,), exc_info=True)
+
+    @staticmethod
     def get_user_region(cursor, user_id):
         """获取区镇合伙人查询地区"""
         try:

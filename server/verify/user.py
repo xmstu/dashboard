@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import time
 
 from flask_restful import abort
@@ -30,6 +32,10 @@ class UserStatistic(object):
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+            elif not start_time and not end_time:
+                pass
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             params = {
                 'start_time': start_time,

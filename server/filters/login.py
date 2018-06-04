@@ -13,14 +13,15 @@ class Login(object):
 
     @staticmethod
     @make_decorator
-    def post(user_info, role):
+    def post(user_info, role, locations):
         session['login'] = {
             'user_id': user_info['id'],
             'user_name': user_info['user_name'] if user_info['user_name'] else '',
             'mobile': user_info['mobile'],
             'avatar_url': user_info['avatar_url'] if user_info['avatar_url'] else 'https://mp.huitouche.com/static/images/newicon.png',
             'login_time': time.time(),
-            'role': role
+            'role': role,
+            'locations': locations
         }
         data = {
             'user_name': user_info['user_name'] if user_info['user_name'] else '',
