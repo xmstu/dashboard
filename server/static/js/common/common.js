@@ -302,9 +302,31 @@ var common = {
     timeTransform: function (str) {
         var date = new Date(str);
         return date.getTime() / 1000;
+    },
+    periods:function(){
+        var lis = $('.periods li');
+        lis.on('click',function(e){
+            e.preventDefault();
+            $(this).find('button').addClass('active').parent('li').siblings('li').find('button').removeClass('active')
+            console.log($(this).find('button.active').val())
+        })
+    },
+    periods_val:function(val){
+        switch (val){
+            case 1:
+                return 1;
+                break;
+            case 2:
+                return 2;
+                break;
+            case 3:
+                return 3;
+                break;
+        }
     }
 };
 setTimeout(function () {
+    common.periods();
     common.cookieSet();
     common.weather();
     common.init();
@@ -327,5 +349,4 @@ $(window).resize(function(){
 }else {
      $('.header-right').show()
 }
-
-})
+});

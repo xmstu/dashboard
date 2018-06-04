@@ -122,19 +122,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul>
-                                    <li><button>按日</button></li>
-                                    <li><button id="week_methods">按周</button></li>
-                                    <li><button id="month_methods">按月</button></li>
+                                <ul class="periods">
+                                    <li><button class="active" value="1" id="day_methods">按日</button></li>
+                                    <li><button value="2" id="week_methods">按周</button></li>
+                                    <li><button value="3" id="month_methods">按月</button></li>
                                 </ul>
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width: 140px">
-                                            <select id="new_users" name="modules" lay-verify="required" lay-search="">
+                                            <select id="user_type" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">新增用户</option>
-                                                <option value="1">layer</option>
-                                                <option value="2">form</option>
+                                                <option value="1">新增用户</option>
+                                                <option value="2">累计用户</option>
                                             </select>
                                         </div>
                                     </div>
@@ -143,10 +143,11 @@
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                            <select name="modules" lay-verify="required" lay-search="">
-                                                <option value="">全部角色</option>
-                                                <option value="1">layer</option>
-                                                <option value="2">form</option>
+                                            <select id="role_type_first" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">货主</option>
+                                                <option value="1">货主</option>
+                                                <option value="2">司机</option>
+                                                <option value="3">物流公司</option>
                                             </select>
                                         </div>
                                     </div>
@@ -155,10 +156,10 @@
                                     <div class="layui-inline">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                            <select name="modules" lay-verify="required" lay-search="">
+                                            <select id="region_id" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
-                                                <option value="{{ location['region'] }}">{{ location['name'] }}</option>
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -168,10 +169,10 @@
                                     <div class="layui-inline">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                            <select name="modules" lay-verify="required" lay-search="">
+                                            <select id="is_auth" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部</option>
-                                                <option value="1">layer</option>
-                                                <option value="2">form</option>
+                                                <option value="1">认证</option>
+                                                <option value="2">非认证</option>
                                             </select>
                                         </div>
                                     </div>

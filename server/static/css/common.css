@@ -633,3 +633,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .layui-body{overflow-y: scroll;}
 body{overflow-y: scroll;}
+.periods li > button.active{
+    background:#009688;
+    color: #fff;
+}

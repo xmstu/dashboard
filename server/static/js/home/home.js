@@ -15,9 +15,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#1E9FFF',
         calendar: true,
-        ready: function () {
-
-        },
+        max: String(common.getNowFormatDate()[4]),
         done: function (val, index) {
 
         }
@@ -27,9 +25,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#1E9FFF',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
-        ready: function () {
-
-        },
         done: function (val, index) {
 
         }
@@ -44,19 +39,19 @@ layui.use(['laydate', 'form', 'table'], function () {
         },
         loading:true,
         cols: [[
-            {field: 'id', title: '货源ID', width: 60},
-            {field: 'priority', title: '优先级', width: 80},
-            {field: 'goods_type', title: '类型', width: 140},
-            {field: 'weight', title: '货物规格', width: 120},
-            {field: 'stipple', title: '所属网点', width: 140},
-            {field: 'run_line', title: '出发地-目的地', width: 220},
-            {field: 'vehicle_order', title: '车型要求', width: 144},
-            {field: 'carriage', title: '运费', width: 180},
-            {field: 'shipper_phone', title: '货主手机', width: 120},
-            {field: 'communicate_count', title: '通话数', width: 60},
-            {field: 'time_show', title: '时间', width: 230},
+            {field: 'id', title: '货源ID'},
+            {field: 'priority', title: '优先级'},
+            {field: 'goods_type', title: '类型'},
+            {field: 'weight', title: '货物规格'},
+            {field: 'stipple', title: '所属网点'},
+            {field: 'run_line', title: '出发地-目的地'},
+            {field: 'vehicle_order', title: '车型要求'},
+            {field: 'carriage', title: '运费'},
+            {field: 'shipper_phone', title: '货主手机'},
+            {field: 'communicate_count', title: '通话数'},
+            {field: 'time_show', title: '时间'},
             {
-                field: 'operate', title: '操作', width: 112, templet: function (d) {
+                field: 'operate', title: '操作', templet: function (d) {
                     return '<button id="' + d.phone_number + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
                 }
             }
@@ -70,18 +65,18 @@ layui.use(['laydate', 'form', 'table'], function () {
                     , url: '/demo/table/user/' //数据接口
                     , page: true //开启分页
                     , cols: [[ //表头
-                        {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
-                        , {field: 'username', title: '司机姓名', width: 150}
-                        , {field: 'sex', title: '手机号码', width: 130}
-                        , {field: 'city', title: '所在地', width: 255}
-                        , {field: 'sign', title: '常驻地', width: 177}
-                        , {field: 'experience', title: '车长', width: 120}
-                        , {field: 'score', title: '车型', width: 160}
-                        , {field: 'classify', title: '司机评分', width: 120}
-                        , {field: 'wealth', title: '诚信会员', width: 150, sort: true}
-                        , {field: 'test', title: '接单数', width: 80, sort: true}
-                        , {field: 'test123', title: '完成数', width: 80, sort: true}
-                        , {field: 'test1234', title: '取消数', width: 80, sort: true}
+                        {field: 'id', title: 'ID' ,sort: true, fixed: 'left'}
+                        , {field: 'username', title: '司机姓名'}
+                        , {field: 'sex', title: '手机号码'}
+                        , {field: 'city', title: '所在地'}
+                        , {field: 'sign', title: '常驻地'}
+                        , {field: 'experience', title: '车长'}
+                        , {field: 'score', title: '车型'}
+                        , {field: 'classify', title: '司机评分'}
+                        , {field: 'wealth', title: '诚信会员', sort: true}
+                        , {field: 'test', title: '接单数' , sort: true}
+                        , {field: 'test123', title: '完成数', sort: true}
+                        , {field: 'test1234', title: '取消数' ,sort: true}
                     ]]
                 });
                 layer.open({
@@ -112,6 +107,16 @@ var dataStyle = {
     normal: {
         label: {show: false},
         labelLine: {show: false}
+    }
+};
+var placeHolderStyle = {
+    normal : {
+        color: 'rgba(0,0,0,0)',
+        label: {show:false},
+        labelLine: {show:false}
+    },
+    emphasis : {
+        color: 'rgba(0,0,0,0)'
     }
 };
 option = {
@@ -185,6 +190,11 @@ option = {
                 {
                     value: 91,
                     name: '已接单车辆数'
+                },
+                 {
+                    value:97,
+                    name:'invisible',
+                    itemStyle : placeHolderStyle
                 }
             ]
         }
@@ -193,3 +203,7 @@ option = {
 if (option && typeof option === "object") {
     myChart.setOption(option, true);
 }
+$('#search_btn').click(function(e){
+    e.preventDefault();
+
+});
