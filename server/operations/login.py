@@ -54,7 +54,7 @@ class LoginDecorator(object):
                     })
         # 区镇合伙人
         elif role == 2:
-            result = RegionsModel.get_user_region(db.read_db, session['user_id'])
+            result = RegionsModel.get_user_region(db.read_db, user_info['id'])
             for location in result:
                 if location['region_id'] and location['full_short_name']:
                     locations.append({
