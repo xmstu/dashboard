@@ -32,6 +32,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#1E9FFF',
         calendar: true,
+        max:String(common.getNowFormatDate()[4]),
         ready: function () {
 
         },

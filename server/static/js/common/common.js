@@ -161,9 +161,11 @@ var common = {
         var date2 = new Date();//明天
         var date3 = new Date();//八天前
         var date4 = new Date();//昨天
+        var date5 = new Date();//前天
         date3.setTime(date3.getTime() - 8 * 24 * 60 * 60 * 1000);
         date2.setTime(date2.getTime() + 24 * 60 * 60 * 1000);
         date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
+        date5.setTime(date5.getTime()-2*24*60*60*1000);
         var seperator1 = "-";
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
@@ -173,6 +175,8 @@ var common = {
         var date_3 = date3.getDate();
         var month_4 = date4.getMonth() + 1;
         var date_4 = date4.getDate();
+        var month_5 = date5.getMonth() + 1;
+        var date_5 = date5.getDate();
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
@@ -188,8 +192,14 @@ var common = {
         if (month_4 >= 1 && month_4 <= 9) {
             month_4 = "0" + month_4;
         }
-        if (date_3 >= 0 && date_3 <= 9) {
+        if (date_4 >= 0 && date_4 <= 9) {
             date_4 = "0" + date_4;
+        }
+        if (month_5 >= 1 && month_5 <= 9) {
+            month_5 = "0" + month_5;
+        }
+        if (date_5 >= 0 && date_5 <= 9) {
+            date_5 = "0" + date_5;
         }
         monthAnother > 10 ? monthAnother : "0" + monthAnother;
         dateAnother > 10 ? dateAnother : "0" + dateAnother;
@@ -197,7 +207,8 @@ var common = {
         var tommorwdate = date2.getFullYear() + seperator1 + monthAnother + seperator1 + dateAnother;
         var defaultdate = date3.getFullYear() + seperator1 + month_3 + seperator1 + date_3;
         var yesterdaydate = date4.getFullYear() + seperator1 + month_4 + seperator1 + date_4;
-        return [currentdate, tommorwdate, defaultdate, yesterdaydate];
+        var beforeYesterday = date5.getFullYear()+seperator1+month_5+seperator1+date_5;
+        return [currentdate, tommorwdate, defaultdate, yesterdaydate,beforeYesterday];
     },
     dateInterval: function (num1, num2) {
         var date1 = new Date(num1.replace(/-/g, "/"));
@@ -285,7 +296,7 @@ var common = {
     },
     setLink: function () {
         var link = $('<link rel="shortcut icon " type="images/x-icon" href="../static/images/favicon.ico">');
-        var head = $('head')
+        var head = $('head');
         head.append(link)
     },
     timeTransform: function (str) {
@@ -309,5 +320,12 @@ setInterval(function () {
     $('#hour_now').html(common.dateNow()[1]);
 
 }, 1000);
+$(window).resize(function(){
+    var $width = $('.header').width();
+    if($width<1600){
+    $('.header-right').hide()
+}else {
+     $('.header-right').show()
+}
 
-
+})

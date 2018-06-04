@@ -130,10 +130,9 @@ main {
     width: 540px;
     height: 300px;
     position: absolute;
-    top: 30%;
+    top: 25%;
     left: 50%;
     margin-left: -270px;
-    box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.4);
     padding-top: 30px;
     border-radius: 8px;
 }

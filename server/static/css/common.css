@@ -57,7 +57,7 @@ body {
     -webkit-background-size: cover;
     background-size: cover;
     box-sizing: border-box;
-    width:1920px;
+    width:100%;
     box-shadow:1px 2px 3px rgba(0, 0, 0, 0.1);
     top: 0;
 }
@@ -78,9 +78,10 @@ body {
     margin-top: 8px;
 }
 .header-content{
-    width:1184px;
+    width:60%;
     height:100%;
     float: left;
+    min-width: 920px;
     border-right: 1px solid rgba(0,0,0,.1);
     padding-left: 10px;
     padding-top: 10px;
@@ -91,9 +92,10 @@ body {
     color: #FFFFFF;
     margin: 6px;
     padding: 10px 15px 6px 20px;
-    width: 920px;
+    width: 90%;
     margin-left: 36px;
     display: none;
+    min-width: 1016px;
 }
 .header-content-main>p{
     display: inline-block;
@@ -111,7 +113,7 @@ body {
     color: #fff;
 }
 .header-right{
-    width:450px;
+    width:26%;
     float: left;
     height:100%;
     padding:0 30px 0 20px;
@@ -211,6 +213,8 @@ body {
 }
 .oneself-set>div:nth-of-type(1) > span.layui-btn{
     float: right;
+    line-height: 40px;
+    height: 40px;
 }
 .dropdown-menu .icon-xiaoxi {
     font-size: 15px;
@@ -452,7 +456,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 .layui-form ul > li {
     float: left;
     width: 33.33333%;
-    border: 1px solid #f5f5f6;
+    border: 1px solid #eee;
     border-right: none;
     line-height: 38px;
     text-align: center;
@@ -513,11 +517,9 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
     display: none!important;
 }
 #charts_container_one {
-    min-width: 1600px;
+    min-width: 100%;
 }
-.part-2 .layui-form {
-    max-width: 1630px;
-}
+
 .layui-form-item .layui-input-inline {
     width: 160px;
 }
