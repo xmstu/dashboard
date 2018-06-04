@@ -631,3 +631,5 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 .chart-area-body-bottom-right>.layui-table {
     margin-top: 0;
 }
+.layui-body{overflow-y: scroll;}
+body{overflow-y: scroll;}

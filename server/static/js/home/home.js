@@ -37,16 +37,17 @@ layui.use(['laydate', 'form', 'table'], function () {
     table.render({
         elem: '#LAY_table_goods',
         even: true
-        , url: '../static/js/user-statics/test.json',
-        /*  response: {
-              statusName: 'status',
-              statusCode: 100000
-          },*/
+        , url: '/city/latest_orders',
+        response: {
+            statusName: 'status',
+            statusCode: 100000
+        },
+        loading:true,
         cols: [[
-            {field: 'good_id', title: '货源ID', width: 60},
+            {field: 'id', title: '货源ID', width: 60},
             {field: 'priority', title: '优先级', width: 80},
             {field: 'goods_type', title: '类型', width: 140},
-            {field: 'specification', title: '货物规格', width: 120},
+            {field: 'weight', title: '货物规格', width: 120},
             {field: 'stipple', title: '所属网点', width: 140},
             {field: 'run_line', title: '出发地-目的地', width: 220},
             {field: 'vehicle_order', title: '车型要求', width: 144},
