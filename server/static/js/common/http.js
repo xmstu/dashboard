@@ -22,8 +22,18 @@ http.ajax.get = function (async, cache, url, data, contentType, callback) {
         beforeSend: function () {
             layer.load(2, {offset: ['55%', '50%']});
         },
-        complete: function () {
-            layer.closeAll('loading');
+        complete: function (response) {
+            if (response.status == 400) {
+                layer.msg('请检查您输入的的数据');
+                layer.closeAll('loading');
+                return false;
+            }
+            if (response.status == 500) {
+                layer.msg('服务器内部错误！');
+                layer.closeAll('loading');
+                return false;
+            }
+
         },
         success: function (result) {
             if (typeof callback == 'function') {
@@ -34,7 +44,7 @@ http.ajax.get = function (async, cache, url, data, contentType, callback) {
 
 };
 
-http.ajax.get_no_loading = function (async, cache, url, data, contentType, callback,returnStatus) {
+http.ajax.get_no_loading = function (async, cache, url, data, contentType, callback, returnStatus) {
     $.ajax({
         async: async,
         cache: cache,
@@ -48,13 +58,14 @@ http.ajax.get_no_loading = function (async, cache, url, data, contentType, callb
                 callback(result);
                 return;
             }
+
         }
     });
 
 };
 
 /**POST请求*/
-http.ajax.post = function (async, cache, url, data, contentType,callback) {
+http.ajax.post = function (async, cache, url, data, contentType, callback) {
     $.ajax({
         async: async,
         cache: cache,
@@ -67,11 +78,17 @@ http.ajax.post = function (async, cache, url, data, contentType,callback) {
             layer.load(2, {offset: ['55%', '50%']});
         },
         complete: function (response) {
-           if(response.status==400){
-               layer.msg('请检查账号密码！');
-               layer.closeAll('loading')
-               return false;
-           }
+            if (response.status == 400) {
+                layer.msg('请检查账号密码！');
+                layer.closeAll('loading')
+                return false;
+            }
+            ;
+            if (response.status == 500) {
+                layer.msg('服务器内部错误！');
+                layer.closeAll('loading')
+                return false;
+            }
         },
         success: function (result) {
             if (typeof callback == 'function') {

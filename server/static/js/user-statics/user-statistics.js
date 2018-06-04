@@ -309,7 +309,20 @@ $('#search_btn').on('click', function (e) {
     e.preventDefault();
     var requestStartTime = common.timeTransform($('#date_show_one').val()+' 00:00:00');
     var requestEndTime = common.timeTransform($('#date_show_two').val()+' 23:59:59');
-
+    var data = {
+        start_time:requestStartTime,
+        end_time:requestEndTime,
+        periods:$('.periods>li').find('button.active').val(),
+        user_type:$('#user_type').val(),
+        role_type:$('#role_type_first').val(),
+        region_id:$('#region_id').val(),
+        is_auth:$("#is_auth").val()
+    };
+    var url = '/user/statistic/'
+    http.ajax.get(true,false,url,data,http.ajax.CONTENT_TYPE_2,function(res){
+        console.log(res);
+    })
+   console.log(data.region_id)
 })
 
 function init() {

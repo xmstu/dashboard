@@ -70,3 +70,9 @@ target/
 .vs
 .vscode
 .idea/
+# node-npm
+node_modules/
+gulpfile.js
+package.js
+#environment
+enviroment.js
