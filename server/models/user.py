@@ -160,7 +160,50 @@ class UserStatistic(object):
 
         fields = """"""
 
-        command = """"""
+        command = """
+                    SELECT
+                    
+                    CASE  
+                    WHEN ( SELECT auth_goods FROM shu_user_auths WHERE id = shu_user_profiles.last_auth_goods_id AND auth_status = 2 AND is_deleted != 1 ) = 1 THEN
+                    1 ELSE 0 
+                    END AS auth_goods,
+                    
+                    CASE
+                            
+                    WHEN ( SELECT auth_driver FROM shu_user_auths WHERE id = shu_user_profiles.last_auth_driver_id AND auth_status = 2 AND is_deleted != 1 ) = 1 THEN
+                    1 ELSE 0 
+                    END AS auth_driver,
+                    
+                    CASE
+                            
+                    WHEN ( SELECT auth_company FROM shu_user_auths WHERE id = shu_user_profiles.last_auth_company_id AND auth_status = 2 AND is_deleted != 1 ) = 1 THEN
+                    1 ELSE 0 
+                    END AS auth_company ,
+                    shu_users.create_time
+                    
+                    FROM
+                        shu_users
+                        LEFT JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
+                        LEFT JOIN shu_user_stats ON shu_users.id = shu_user_stats.user_id 
+                    WHERE
+                        1 = 1 -- 按日期
+                    -- AND shu_users.create_time > 1477782400 AND shu_users.create_time < 1527782400
+                    
+                    -- 按日
+                    -- 按周
+                    -- 按月
+                    
+                    -- 新增用户
+                    -- 累计用户
+                    
+                    -- 货主
+                    -- 司机
+                    -- 物流公司
+                    
+                    -- 按地区
+                    
+                    -- 是否认证
+        """
 
         user_statistic = cursor.query(command)
 

@@ -5,3 +5,4 @@ from server.resources.login import *
 from server.resources.user import *
 from server.resources.promote import *
 from server.resources.goods import *
+from server.resources.city import *

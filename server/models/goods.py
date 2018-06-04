@@ -221,7 +221,7 @@ class GoodsList(object):
             pass
 
         # 是否初次下单
-        if params['new_goods_type']:
+        if params['new_goods_type'] > 0:
             command += """ AND ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) = 1 """
 
         # 急需处理
@@ -230,7 +230,10 @@ class GoodsList(object):
 
         # 是否加价
         if params['is_addition']:
-            command += ' AND shf_goods.price_addition > 0 '
+            if params['is_addition'] == 1:
+                command += ' AND shf_goods.price_addition > 0 '
+            elif params['is_addition'] == 2:
+                command += ' AND shf_goods.price_addition = 0 '
 
         # 发布时间
         if params['create_start_time'] and params['create_end_time']:

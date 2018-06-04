@@ -6,3 +6,4 @@ from server.operations.login import *
 from server.operations.user import *
 from server.operations.promote import *
 from server.operations.goods import *
+from server.operations.city import *

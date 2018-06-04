@@ -11,6 +11,7 @@ from server import verify, operations, filters
 from server.meta.decorators import Response
 from server.utils.request import *
 
+
 class UserStatistic(Resource):
     @staticmethod
     @doc.request_user_statistic_param
