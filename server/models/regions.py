@@ -9,9 +9,9 @@ class RegionsModel(object):
             command = """
             SELECT region.*, shm_regions.parent_id AS first_code
             FROM shm_regions
-            INNER JOIN (SELECT `code` AS third_code, parent_id AS second_code
+            INNER JOIN (SELECT id AS third_code, parent_id AS second_code
             FROM shm_regions
-            WHERE `code` = :code) AS region ON shm_regions.`code` = region.second_code
+            WHERE id = :code) AS region ON shm_regions.id = region.second_code
             """
             result = cursor.query_one(command, {
                 'code': code
