@@ -43,7 +43,7 @@ class UserStatistic(object):
 
             return Response(params=params)
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.warn('Error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数非法'))
 
 

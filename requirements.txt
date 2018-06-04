@@ -4,3 +4,4 @@ kazoo
 fluent-logger
 pymysql
 redis
+pymongo

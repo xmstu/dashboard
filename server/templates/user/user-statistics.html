@@ -29,9 +29,9 @@
         <section class="header-right">
             <div class="oneself-set">
                 <img width="52" height="52" style="border-radius: 50%;border: 1px dotted #ccc;"
-                     src="../static/images/Test/head-icon.gif" alt="">
+                     src="{{ avatar_url }}" alt="">
                 <div>
-                    <b style="display: inline-block;margin-top:12px;margin-right:6px;color: #fff;">Hi,超级管理员</b>
+                    <b style="display: inline-block;margin-top:12px;margin-right:6px;color: #fff;">Hi,{{ user_name }}</b>
                     <span id="show_hide" style="cursor:pointer;color: #fff;" class="layui-icon">&#xe61a;</span>
                     <ul class="dropdown-menu" style="display:none;">
                         <li><a href="/password/change-password.html"><i class="iconfont icon-shezhi1"></i> <span
@@ -157,8 +157,9 @@
                                         <div class="layui-input-inline" style="width:140px;">
                                             <select name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
-                                                <option value="1">layer</option>
-                                                <option value="2">form</option>
+                                                {% for location in locations %}
+                                                <option value="{{ location['region'] }}">{{ location['name'] }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>

@@ -11,27 +11,6 @@ from server import verify, operations, filters
 from server.meta.decorators import Response
 from server.utils.request import *
 
-
-# class User(Resource):
-#
-#     def get(self):
-#         area = UserQuery.get_area(db.read_io)
-#         return area
-#
-#     def post(self):
-#         payload = get_payload()
-#         start_time = payload.get('start_time', '')
-#         end_time = payload.get('end_time', '')
-#         periods = payload.get('periods', '')
-#         user_type = payload.get('user_type', '')
-#
-#         role = payload.get('role', '')
-#         region_id = payload.get('region_id', '')
-#         is_auth = payload.get('is_auth', '')
-#
-#         resp = Response()
-
-
 class UserStatistic(Resource):
     @staticmethod
     @doc.request_user_statistic_param

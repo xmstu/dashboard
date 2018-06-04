@@ -12,6 +12,6 @@ class GoodsListDecorator(object):
     @staticmethod
     @make_decorator
     def get_goods_list(page, limit, params):
-        goods_list = GoodsList.get_goods_list(db.read_io, page, limit, params)
+        goods_list = GoodsList.get_goods_list(db.read_db, page, limit, params)
 
         return Response(data=goods_list)

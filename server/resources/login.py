@@ -18,15 +18,16 @@ class Login(Resource):
     @staticmethod
     @doc.request_user_login
     @doc.response_user_login_success
-    @filters.Login.post(user_info=dict)
-    @operations.LoginDecorator.common_check(user_name=str, password=str)
-    @verify.LoginSetting.post(user_name=str, password=str)
+    @filters.Login.post(user_info=dict, role=int)
+    @operations.LoginDecorator.common_check(user_name=str, password=str, role=int)
+    @verify.LoginSetting.post(user_name=str, password=str, role=int)
     def post():
         """用户登录"""
         payload = get_payload()
         user_name = payload.get('user_name', '')
         password = payload.get('password', '')
-        resp = Response(user_name=user_name, password=password)
+        role = payload.get('role', 1)
+        resp = Response(user_name=user_name, password=password, role=role)
 
         log.info('获取用户登录请求参数: [user_name: %s][password: %s]' % (resp['user_name'], resp['password']))
         return resp

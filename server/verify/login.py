@@ -9,9 +9,9 @@ class LoginSetting(object):
 
     @staticmethod
     @make_decorator
-    def post(user_name, password):
-        if user_name and password:
-            return Response(user_name=user_name, password=password)
+    def post(user_name, password, role):
+        if user_name and password and role:
+            return Response(user_name=user_name, password=password, role=role)
 
         abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound))
 

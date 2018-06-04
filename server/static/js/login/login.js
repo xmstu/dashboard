@@ -39,6 +39,7 @@ layui.use(['layer','form'], function () {
 $('button[type="button"]').click(function () {
     var login = $('input[name="username"]').val();
     var pwd = hex_md5($('input[name="password"]').val());
+    var role = $('[name=role]:checked').val() ? parseInt($('[name=role]:checked').val()) : 1;
     if (login == '') {
         layer.msg('对不起,您输入的账号不能为空!');
     } else if (pwd == '') {
@@ -46,12 +47,13 @@ $('button[type="button"]').click(function () {
     } else {
         var url = '/login/';
         var data = {
-            user_name:login,
-            password:pwd
+            user_name: login,
+            password: pwd,
+            role: role
         };
         data=JSON.stringify(data);
         http.ajax.post(true,false,url,data,http.ajax.CONTENT_TYPE_2,function(res){
-            console.log(res)
+            console.log(res);
             if(res.msg=='电话号码有误'){
                 layer.msg('号码有误，请核对您的号码！')
             }else if(res.status=='100000'){

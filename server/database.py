@@ -4,14 +4,16 @@
 from .meta.creators import DictModel
 from .configs import configs
 from .mysqldb import MySQLdb
+from .mysqldb import MongoLinks
 
 
 db = DictModel({
-    'read_prod': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_prod.get())),
-    'read_bi': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_bi.get())),
-    'write_bi': MySQLdb(dict(configs.remote.bi_dashboard.mysql.write_bi.get())),
-    'read_io': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_io.get())),
-    'write_io': MySQLdb(dict(configs.remote.bi_dashboard.mysql.write_io.get())),
+    'read_db': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_db.get())),
+    'write_db': MySQLdb(dict(configs.remote.bi_dashboard.mysql.write_db.get())),
+})
+
+mongo = DictModel({
+    'user_locations': MongoLinks(dict(configs.remote.bi_dashboard.mongo.user_locations.get()))
 })
 
 # redis = DictModel({
