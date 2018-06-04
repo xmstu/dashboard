@@ -1,30 +1,16 @@
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+var requestStart = $('#date_show_one').val() + ' 00:00:00';
+var requestEnd = $('#date_show_two').val() + ' 23:59:59';
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
-
-function init() {
-    var data = ''
-    var url = '/user/list/'
-    $.ajax({
-        url: url
-        , type: "get"
-        , async: false
-        , dataType: "json"
-        , success: function (result) {
-            dataAll = result
-        }
-    });
-    $('#area_select').address({
-        offsetLeft: '0',
-        level: 3,
-        onClose: function () {
-
-        }
-    });
-}
-
+$('#area_select').address({
+    offsetLeft: '0',
+    level: 3,
+    onClose: function () {
+    }
+});
 layui.use(['laydate', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
@@ -32,7 +18,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#1E9FFF',
         calendar: true,
-        max:String(common.getNowFormatDate()[4]),
+        max: String(common.getNowFormatDate()[4]),
         ready: function () {
 
         },
@@ -64,7 +50,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-           if ($('#date_show_three').val() == '') {
+            if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
             } else {
                 $('#date_show_three').next('.date-tips').hide()
@@ -95,7 +81,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-             if ($('#date_show_five').val() == '') {
+            if ($('#date_show_five').val() == '') {
                 $('#date_show_five').next('.date-tips').show();
             } else {
                 $('#date_show_five').next('.date-tips').hide()
@@ -111,7 +97,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-             if ($('#date_show_four').val() == '') {
+            if ($('#date_show_four').val() == '') {
                 $('#date_show_four').next('.date-tips').show();
             } else {
                 $('#date_show_four').next('.date-tips').hide()
@@ -146,19 +132,19 @@ layui.use(['laydate', 'form', 'table'], function () {
             })
         }
         , cols: [[
-            {field: 'id', title: '用户ID', width: 80,sort:true},
-            {field: 'user_name', title: '用户名', width: 100}
-            , {field: 'mobile', title: '手机号', width: 130}
-            , {field: 'user_type', title: '注册角色', width: 130}
-            , {field: 'role_auth', title: '认证', width: 150}
-            , {field: 'usual_city', title: '常驻地', width: 280}
-            , {field: 'goods_count', title: '发货', width: 60}
-            , {field: 'order_count', title: '接单', width: 60}
-            , {field: 'order_completed', title: '完成订单', width: 70}
-            , {field: 'download_channel', title: '下载渠道', width: 130}
-            , {field: 'from_channel', title: '注册渠道', width: 160}
-            , {field: 'last_login_time', title: '最后登陆', width: 130}
-            , {field: 'create_time', title: '注册时间', width: 130}
+            {field: 'id', title: '用户ID', sort: true},
+            {field: 'user_name', title: '用户名'}
+            , {field: 'mobile', title: '手机号'}
+            , {field: 'user_type', title: '注册角色'}
+            , {field: 'role_auth', title: '认证'}
+            , {field: 'usual_city', title: '常驻地'}
+            , {field: 'goods_count', title: '发货'}
+            , {field: 'order_count', title: '接单'}
+            , {field: 'order_completed', title: '完成订单'}
+            , {field: 'download_channel', title: '下载渠道'}
+            , {field: 'from_channel', title: '注册渠道'}
+            , {field: 'last_login_time', title: '最后登陆'}
+            , {field: 'create_time', title: '注册时间'}
         ]]
         , id: 'testReload'
         , page: true
@@ -183,96 +169,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         active[type] ? active[type].call(this) : '';
     });
 });
-Highcharts.setOptions({
-    colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
-});
-$('#charts_container_one').highcharts({
-    tooltip: {
-        shared: true,
-        valueSuffix: '人',
-        crosshairs: [{
-            width: 1,
-            color: '#ccc'
-        }, {
-            width: 1,
-            color: '#ccc'
-        }],
-        plotOptions: {
-            spline: {
-                marker: {
-                    radius: 4,
-                    lineColor: '#666666',
-                    lineWidth: 1
-                }
-            }
-        }
-    },
-    chart: {
-        colors: ['#058DC7', '#fff', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
-            '#FF9655', '#FFF263', '#6AF9C4'],
-        backgroundColor: '#fff',
-        type: 'line'
-    },
-
-    title: {
-        text: '用户变化趋势曲线图'
-    },
-    subtitle: {
-        text: '数据来源：省省官方后台数据库'
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        x: 1250,
-        y: 0,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor: 'transparent',
-        labelFormatter: function () {
-            return this.name
-        }
-    },
-    xAxis: {
-        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-        gridLineColor: '#eee',
-        gridLineWidth: 1
-    },
-    yAxis: {
-        gridLineColor: '#eee',
-        gridLineWidth: 1,
-        plotLines: [
-            {
-                color: '#ddd',
-                dashStyle: 'dash',
-                value: 14,
-                width: 1
-            },
-            {
-                color: '#ddd',
-                dashStyle: 'dash',
-                value: 28,
-                width: 1
-            },
-        ],
-        title: {
-            text: '人数 (人)'
-        }
-    },
-    plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: true
-        }
-    },
-    series: [{
-        name: '人数',
-        data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-    }]
-});
-
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
     var beginTime = $.trim($('#date_show_three').val());
@@ -281,20 +177,19 @@ $('#user_search_box').on('click', function (e) {
     var overTIme = $.trim($('#date_show_six').val());
     var provinceid = $.trim($('#area_select').attr('provinceid'));
     var districtsid = $.trim($('#area_select').attr('districtsid'));
-    console.log('街道编号:' + districtsid)
     if (provinceid != '' && districtsid == '') {
-        layer.msg('请将常驻地选择到第三级别',function(){
+        layer.msg('请将常驻地选择到第三级别', function () {
         });
         return false;
     }
-    if($('#phone_number').val()!=''&&$('#phone_number').val().length!=11){
-         layer.msg('请检查用户名号码长度!', function () {
+    if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
+        layer.msg('请检查用户名号码长度!', function () {
 
         });
         return false;
     }
-    if($('#reference_mobile').val()!=''&&$('#reference_mobile').val().length!=11){
-         layer.msg('请检查推荐人号码长度!', function () {
+    if ($('#reference_mobile').val() != '' && $('#reference_mobile').val().length != 11) {
+        layer.msg('请检查推荐人号码长度!', function () {
 
         });
         return false;
@@ -365,7 +260,7 @@ $('#user_search_box').on('click', function (e) {
         table.render({
             url: url
             , elem: '#LAY_table_user'
-            ,even:true
+            , even: true
             , response: {
                 statusName: 'status',
                 statusCode: 100000
@@ -391,7 +286,7 @@ $('#user_search_box').on('click', function (e) {
                 })
             }
             , cols: [[
-                {field: 'id', title: '用户ID', width: 80,sort:true},
+                {field: 'id', title: '用户ID', width: 80, sort: true},
                 {field: 'user_name', title: '用户名', width: 100}
                 , {field: 'mobile', title: '手机号', width: 130}
                 , {field: 'user_type', title: '注册角色', width: 130}
@@ -409,4 +304,102 @@ $('#user_search_box').on('click', function (e) {
             , page: true
         });
     })
+});
+$('#search_btn').on('click', function (e) {
+    e.preventDefault();
+    var requestStartTime = common.timeTransform($('#date_show_one').val()+' 00:00:00');
+    var requestEndTime = common.timeTransform($('#date_show_two').val()+' 23:59:59');
+
 })
+
+function init() {
+    Highcharts.setOptions({
+        colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
+    });
+    $('#charts_container_one').highcharts({
+        tooltip: {
+            shared: true,
+            valueSuffix: '人',
+            crosshairs: [{
+                width: 1,
+                color: '#ccc'
+            }, {
+                width: 1,
+                color: '#ccc'
+            }],
+            plotOptions: {
+                spline: {
+                    marker: {
+                        radius: 4,
+                        lineColor: '#666666',
+                        lineWidth: 1
+                    }
+                }
+            }
+        },
+        chart: {
+            colors: ['#058DC7', '#fff', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
+                '#FF9655', '#FFF263', '#6AF9C4'],
+            backgroundColor: '#fff',
+            type: 'line'
+        },
+
+        title: {
+            text: '用户变化趋势曲线图'
+        },
+        subtitle: {
+            text: '数据来源：省省官方后台数据库'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            verticalAlign: 'top',
+            x: 1250,
+            y: 0,
+            floating: true,
+            borderWidth: 1,
+            backgroundColor: 'transparent',
+            labelFormatter: function () {
+                return this.name
+            }
+        },
+        xAxis: {
+            categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            gridLineColor: '#eee',
+            gridLineWidth: 1
+        },
+        yAxis: {
+            gridLineColor: '#eee',
+            gridLineWidth: 1,
+            plotLines: [
+                {
+                    color: '#ddd',
+                    dashStyle: 'dash',
+                    value: 14,
+                    width: 1
+                },
+                {
+                    color: '#ddd',
+                    dashStyle: 'dash',
+                    value: 28,
+                    width: 1
+                },
+            ],
+            title: {
+                text: '人数 (人)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
+            }
+        },
+        series: [{
+            name: '人数',
+            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+        }]
+    });
+}
