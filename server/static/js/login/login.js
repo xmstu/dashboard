@@ -57,7 +57,7 @@ $('button[type="button"]').click(function () {
                 layer.msg('号码有误，请核对您的号码！')
             }else if(res.status=='100000'){
                 layer.msg('success');
-                window.location.href='/user/'
+                window.location.href='/admin/'
             }else{
                 layer.msg('服务器错误')
             }
