@@ -7,6 +7,12 @@
 $('.layui-table-cell').css({'height': 'auto!important'});
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+$('#start_date_one').val(String(common.getNowFormatDate()[2]));
+$('#end_time_one').val(String(common.getNowFormatDate()[3]));
+$('#start_date_two').val(String(common.getNowFormatDate()[2]));
+$('#end_time_two').val(String(common.getNowFormatDate()[3]));
+$('#start_date_three').val(String(common.getNowFormatDate()[2]));
+$('#end_time_three').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
@@ -64,7 +70,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         }
     });
     laydate.render({
-        elem: '#date_show_three',
+        elem: '#create_start_time',
         theme: '#1E9FFF',
         calendar: true,
         max: String(common.getNowFormatDate()[4]),
@@ -72,15 +78,15 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            if ($('#date_show_three').val() == '') {
-                $('#date_show_three').next('.date-tips').show();
+            if ($('#create_start_time').val() == '') {
+                $('#create_start_time').next('.date-tips').show();
             } else {
-                $('#date_show_three').next('.date-tips').hide()
+                $('#create_start_time').next('.date-tips').hide()
             }
         }
     });
     laydate.render({
-        elem: '#date_show_four',
+        elem: '#create_end_time',
         theme: '#1E9FFF',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
@@ -88,10 +94,138 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            if ($('#date_show_four').val() == '') {
-                $('#date_show_four').next('.date-tips').show();
+            if ($('#create_end_time').val() == '') {
+                $('#create_end_time').next('.date-tips').show();
             } else {
-                $('#date_show_four').next('.date-tips').hide()
+                $('#create_end_time').next('.date-tips').hide()
+            }
+        }
+    });
+    laydate.render({
+        elem: '#load_start_time',
+        theme: '#1E9FFF',
+        calendar: true,
+        max: String(common.getNowFormatDate()[4]),
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            if ($('#load_start_time').val() == '') {
+                $('#load_start_time').next('.date-tips').show();
+            } else {
+                $('#load_start_time').next('.date-tips').hide()
+            }
+        }
+    });
+    laydate.render({
+        elem: '#load_end_time',
+        theme: '#1E9FFF',
+        calendar: true,
+        max: String(common.getNowFormatDate()[3]),
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            if ($('#load_end_time').val() == '') {
+                $('#load_end_time').next('.date-tips').show();
+            } else {
+                $('#load_end_time').next('.date-tips').hide()
+            }
+        }
+    });
+    laydate.render({
+        elem: '#start_date_one',
+        theme: '#1E9FFF',
+        calendar: true,
+        max: String(common.getNowFormatDate()[4]),
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            if ($('#start_date_one').val() == '') {
+                $('#start_date_one').next('.date-tips').show();
+            } else {
+                $('#start_date_one').next('.date-tips').hide()
+            }
+        }
+    });
+    laydate.render({
+        elem: '#end_time_one',
+        theme: '#1E9FFF',
+        calendar: true,
+        max: String(common.getNowFormatDate()[3]),
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            if ($('#end_time_one').val() == '') {
+                $('#end_time_one').next('.date-tips').show();
+            } else {
+                $('#end_time_one').next('.date-tips').hide()
+            }
+        }
+    });
+    laydate.render({
+        elem: '#start_date_two',
+        theme: '#1E9FFF',
+        calendar: true,
+        max: String(common.getNowFormatDate()[4]),
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            if ($('#start_date_two').val() == '') {
+                $('#start_date_two').next('.date-tips').show();
+            } else {
+                $('#start_date_two').next('.date-tips').hide()
+            }
+        }
+    });
+    laydate.render({
+        elem: '#end_time_two',
+        theme: '#1E9FFF',
+        calendar: true,
+        max: String(common.getNowFormatDate()[3]),
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            if ($('#end_time_two').val() == '') {
+                $('#end_time_two').next('.date-tips').show();
+            } else {
+                $('#end_time_two').next('.date-tips').hide()
+            }
+        }
+    });
+    laydate.render({
+        elem: '#start_date_three',
+        theme: '#1E9FFF',
+        calendar: true,
+        max: String(common.getNowFormatDate()[4]),
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            if ($('#start_date_two').val() == '') {
+                $('#start_date_two').next('.date-tips').show();
+            } else {
+                $('#start_date_two').next('.date-tips').hide()
+            }
+        }
+    });
+    laydate.render({
+        elem: '#end_time_three',
+        theme: '#1E9FFF',
+        calendar: true,
+        max: String(common.getNowFormatDate()[3]),
+        ready: function () {
+
+        },
+        done: function (val, index) {
+            if ($('#end_time_two').val() == '') {
+                $('#end_time_two').next('.date-tips').show();
+            } else {
+                $('#end_time_two').next('.date-tips').hide()
             }
         }
     });
@@ -99,10 +233,10 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#LAY_table_goods',
         even: true
         , url: '/goods/list/',
-          response: {
-              statusName: 'status',
-              statusCode: 100000
-          },
+        response: {
+            statusName: 'status',
+            statusCode: 100000
+        },
         cols: [[
             {field: 'id', title: '货源ID', width: 60},
             {field: 'goods_standard', title: '货物规格', width: 140}
@@ -110,7 +244,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             , {field: 'node_id', title: '所属网点', width: 140}
             , {field: 'from_to_dist', title: '出发地-目的地', width: 220}
             , {field: 'vehicle_type', title: '车型要求', width: 144}
-            , {field: 'price_recommend', title: '运费', width: 180}
+            , {field: 'fee', title: '运费', width: 180}
             , {field: 'mobile', title: '货主手机', width: 120}
             , {field: 'STATUS', title: '状态', width: 90}
             , {field: 'call_count', title: '通话数', width: 60}
@@ -123,7 +257,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         ]],
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'});
-            console.log(res)
             $('.nearby').on('click', function () {
                 layer.open({
                     type: 1,
@@ -134,30 +267,32 @@ layui.use(['laydate', 'form', 'table'], function () {
                 })
             });
             $("td[data-field='goods_standard']").children().each(function (val) {
-                var value = $(this).parent().parent('tr').attr('data-index');
-                if($(this).text()!=''){
-                  var result = $(this).text().split(',');
-                   $(this).html('名称：<span style="font-weight: 500;color: deepskyblue;">'+result[0]+'</span><br>重量：<span style="font-weight: 500;color: deepskyblue;">'+result[1]+'</span><br>体积：<span style="font-weight: 500;color: deepskyblue;">'+result[2]+'</span>')
+                if ($(this).text() != '') {
+                    var result = $(this).text().split(',');
+                    $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="iconfont icon-tijikongjian mr-4"></i><span style="font-weight: 500;color: deepskyblue;">' + result[2] + '</span>')
                 }
             })
-              $("td[data-field='STATUS']").children().each(function (val) {
-                if($(this).text()==2){
+               $("td[data-field='fee']").children().each(function (val) {
+                if ($(this).text() != '') {
+                    var result = $(this).text().split(',');
+                    $(this).html('货主出价：<span>' + result[0] + '元</span >(<span style="color: #f40;">'+result[1]+'</span>)<br>' + '</span>系统价：<span style="font-weight: 500;color: deepskyblue;">' + result[2] + '</span>')
+                }
+            })
+            $("td[data-field='STATUS']").children().each(function (val) {
+                if ($(this).text() == 1) {
                     $(this).text('待接单')
-                }else if($(this).text()==3){
-$(this).html('<span style="color: #40AFFE">已接单</span>')
-                }else if($(this).text()==4){
-$(this).html('<span style="color: #1E1E1E">已过期</span>')
-                }else if($(this).text()==-1){
-                $(this).html('<span style="color: #1E1E1E;font-weight: bold;">已取消</span>')
+                } else if ($(this).text() == 2) {
+                    $(this).html('<span style="color: #40AFFE">已接单</span>')
+                } else if ($(this).text() == 3) {
+                    $(this).html('<span style="color: #1E1E1E">已过期</span>')
+                } else if ($(this).text() == -1) {
+                    $(this).html('<span style="color: #1E1E1E;font-weight: bold;">已取消</span>')
                 }
             })
              $("td[data-field='from_to_dist']").children().each(function (val) {
                 if($(this).text()!=''){
-                  var result = $(this).text().split(',');
-                  // $(this).html('<p><i class="iconfont icon-qidian"></i></p>')
-                    console.log(result)
-                }else {
-                    $(this).text('未记录')
+                     var result = $(this).text().split(',');
+                     $(this).html('<i class="iconfont icon-qidian mr-4"></i>'+result[0]+'<br><i class="iconfont icon-zhongdian mr-4"></i>'+result[1]+'<br><i class="iconfont icon-luxian"></i>'+result[2])
                 }
             })
         }
@@ -489,74 +624,71 @@ $('#charts_container_four').highcharts({
         ]
     }]
 });
-$('#user_search_box').on('click', function (e) {
+$('#goods_search_box').on('click', function (e) {
     e.preventDefault();
-    if (beginTime != '' && finishTime == '') {
-        layer.msg('请选择新增结束日期')
-        return false;
+    var create_start_time = $('#create_start_time').val();
+    var create_end_time = $('#create_end_time').val();
+    var load_start_time = $('#load_start_time').val();
+    var load_end_time = $('#load_end_time').val();
+    if (create_start_time != '') {
+        create_start_time = common.timeTransform(create_start_time)
     }
-    if (beginTime == '' && finishTime != '') {
-        layer.msg('请选择新增开始日期')
-        return false;
+    if (create_end_time != '') {
+        create_end_time = common.timeTransform(create_end_time)
     }
-    if (beginTime != '') {
-        beginTime = common.timeTransform(beginTime)
-        console.log(beginTime)
+    var data = {
+        goods_id: $.trim($('#goods_id').val()),
+        mobile: $.trim($('#mobile').val()),
+        from_region_id: $.trim($('#reference_mobile').val()),
+        to_region_id: $.trim($('#to_region_id').val()),
+        goods_type: $.trim($('#goods_type').val()),
+        goods_status: $.trim($('#goods_status').val()),
+        is_called: $.trim($('#is_called').val()),
+        vehicle_length: $.trim($('#vehicle_length').val()),
+        vehicle_type: $.trim($('#vehicle_type').val()),
+        node_id: $.trim($('#node_id').val()),
+        new_goods_type: $.trim($('#new_goods_type').val()),
+        urgent_goods: $.trim($('#urgent_goods').val()),
+        is_addition: $.trim($('#is_addition').val()),
+        create_start_time: finishTime,
+        create_end_time: infinteTime,
+        load_start_time: overTIme,
+        load_end_time: '123',
+        page: 1,
+        limit: 10
     }
-    if (finishTime != '') {
-        var currentFinish = finishTime;
-        finishTime = common.timeTransform(finishTime)
-    }
-    /* var data = {
-     user_name: $.trim($('#user_name').val()),
-     mobile: $.trim($('#phone_number').val()),
-     reference_mobile: $.trim($('#reference_mobile').val()),
-     download_ch: $.trim($('#download_ch').val()),
-     from_channel: $.trim($('#register').val()),
-     is_referenced: $.trim($('#is_referenced').val()),
-     home_station_id: $.trim($('#home_station_id').val()),
-     role_type: $.trim($('#role_type').val()),
-     role_auth: $.trim($('#role_auth').val()),
-     is_actived: $.trim($('#is_actived').val()),
-     is_used: $.trim($('#is_used').val()),
-     is_car_sticker: $.trim($('#is_car_sticker').val()),
-     last_login_start_time: beginTime,
-     last_login_end_time: finishTime,
-     register_start_time: infinteTime,
-     register_end_time: overTIme,
-     page: 1,
-     limit: 10
-     }
-     var url = '/user/list/?user_name='+data.user_name+'&mobile='+data.mobile+'&reference_mobile='+data.reference_mobile+'&download_ch='+data.download_ch+'&from_channel=' +
-     data.from_channel+'&is_referenced='+data.is_referenced+'&home_station_id='+data.home_station_id+'&role_type='+data.role_type+'&role_auth='+data.role_auth+'&is_actived='+data.is_actived+'&is_used='+data.is_used+'&is_car_sticker='+data.is_car_sticker+'&last_login_start_time='+data.last_login_start_time+ '&last_login_end_time='+data.last_login_end_time+'&register_start_time='+data.register_start_time+'&register_end_time='+data.register_end_time;
+
+    /* var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_region_id=' + data.from_region_id + '&to_region_id=' + data.to_region_id + '&goods_type=' +
+         data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&is_car_sticker=' + data.urgent_goods + '&last_login_start_time=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
 
      layui.use('table', function () {
-     var table = layui.table;
-     table.render({
-     url:url
-     , elem: '#LAY_table_user'
-     , response: {
-     statusName: 'status',
-     statusCode: 100000
-     }
-     , cols: [[
-     {field: 'id', title: '用户ID', width: 80},
-     {field: 'user_name', title: '用户名', width: 100}
-     , {field: 'mobile', title: '手机号', width: 130}
-     , {field: 'user_type', title: '注册角色', width: 80}
-     , {field: 'role_auth', title: '认证', width: 180}
-     , {field: 'usual_city', title: '常驻地', width: 280}
-     , {field: 'goods_count', title: '发货', width: 70}
-     , {field: 'order_count', title: '接单', width: 70}
-     , {field: 'order_completed', title: '完成订单', width: 90}
-     , {field: 'download_channel', title: '下载渠道', width: 130}
-     , {field: 'from_channel', title: '注册渠道', width: 180}
-     , {field: 'last_login_time', title: '最后登陆', width: 130}
-     , {field: 'create_time', title: '注册时间', width: 130}
-     ]]
-     , id: 'testReload'
-     , page: true
-     });
-     })*/
+         var table = layui.table;
+         table.render({
+             url: url
+             , elem: '#LAY_table_user'
+             , response: {
+                 statusName: 'status',
+                 statusCode: 100000
+             }
+             , cols: [[
+                 {field: 'id', title: '用户ID', width: 80},
+                 {field: 'user_name', title: '用户名', width: 100}
+                 , {field: 'mobile', title: '手机号', width: 130}
+                 , {field: 'user_type', title: '注册角色', width: 80}
+                 , {field: 'role_auth', title: '认证', width: 180}
+                 , {field: 'usual_city', title: '常驻地', width: 280}
+                 , {field: 'goods_count', title: '发货', width: 70}
+                 , {field: 'order_count', title: '接单', width: 70}
+                 , {field: 'order_completed', title: '完成订单', width: 90}
+                 , {field: 'download_channel', title: '下载渠道', width: 130}
+                 , {field: 'from_channel', title: '注册渠道', width: 180}
+                 , {field: 'last_login_time', title: '最后登陆', width: 130}
+                 , {field: 'create_time', title: '注册时间', width: 130}
+             ]]
+             , id: 'testReload'
+             , page: true
+         });
+     })
+     */
 });
 
