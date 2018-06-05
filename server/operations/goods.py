@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from flask_restful import abort
-
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.goods import GoodsList

@@ -1,9 +1,11 @@
 import time
 
+from flask_restful import abort
+
 from server import log
 from server.init_regions import init_regions
 from server.meta.decorators import make_decorator
-from server.status import build_result, APIStatus, HTTPStatus
+from server.status import build_result, APIStatus, HTTPStatus, make_result
 
 
 class GoodsList(object):
@@ -22,7 +24,9 @@ class GoodsList(object):
                     detail['mobile'] = detail['mobile'] + ',初次下单'
 
                 # 构造运费
-                detail['fee'] = detail.get('price_expect', 0) + ',' + detail.get('price_addition', 0) + ',' + detail.get('price_recommend', 0)
+                detail['fee'] = detail.get('price_expect', 0) + ',' + detail.get('price_addition',
+                                                                                 0) + ',' + detail.get(
+                    'price_recommend', 0)
                 detail.pop('price_expect')
                 detail.pop('price_addition')
                 detail.pop('price_recommend')
@@ -59,12 +63,26 @@ class GoodsList(object):
                 detail.pop('volume')
 
                 # TODO 优化 构造出发地-目的地-距离
-                a = init_regions.to_province(detail['from_province_id'])
-                detail['full_from_region_name'] = init_regions.to_province(detail['from_province_id']) + init_regions.to_city(
-                    init_regions['from_city_id']) + init_regions.to_county(detail['from_county_id'])
+                full_from_region_name = init_regions.to_province(
+                    detail['from_province_id']) + init_regions.to_city(detail['from_city_id']) + init_regions.to_county(
+                    detail['from_county_id']) + init_regions.to_town(detail['from_town_id']) + detail['from_address'] if detail.get('from_address') else ''
 
-                detail['full_to_region_name'] = init_regions.to_province(detail['to_province_id']) + init_regions.to_city(
-                    init_regions['to_city_id']) + init_regions.to_county(detail['to_county_id'])
+                full_to_region_name = init_regions.to_province(
+                    detail['to_province_id']) + init_regions.to_city(
+                    detail['to_city_id']) + init_regions.to_county(detail['to_county_id']) + init_regions.to_town(detail['to_town_id']) + detail['to_address'] if detail.get('to_address') else ''
+
+                detail['from_to_dis'] = full_from_region_name + ',' + full_to_region_name + ',' + detail['mileage_total'] if detail.get('mileage_total') else 0
+
+                detail.pop('from_province_id')
+                detail.pop('from_city_id')
+                detail.pop('from_county_id')
+                detail.pop('from_town_id')
+                detail.pop('from_address')
+                detail.pop('to_province_id')
+                detail.pop('to_city_id')
+                detail.pop('to_county_id')
+                detail.pop('to_town_id')
+                detail.pop('to_address')
 
                 # 构造装货时间
                 if detail['loading_time_period_begin'] == 0:
@@ -88,4 +106,5 @@ class GoodsList(object):
 
             return build_result(APIStatus.Ok, count=data['goods_count'], data=goods_detail), HTTPStatus.Ok
         except Exception as e:
-            e
+            log.error('Error:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='内部服务器错误'))

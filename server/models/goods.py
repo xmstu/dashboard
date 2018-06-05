@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 
 from server import log
 
@@ -126,22 +127,18 @@ class GoodsList(object):
         # 出发地
         if params['from_dist_id']:
             command += ' AND shf_goods.from_county_id = %s ' % params['from_dist_id']
-        elif params['from_city_id']:
+        if params['from_city_id']:
             command += ' AND shf_goods.from_city_id = %s ' % params['from_city_id']
-        elif params['from_province_id']:
+        if params['from_province_id']:
             command += ' AND shf_goods.from_province_id = %s ' % params['from_province_id']
-        else:
-            pass
 
         # 目的地
         if params['to_dist_id']:
             command += ' AND shf_goods.to_county_id = %s ' % params['to_dist_id']
-        elif params['to_city_id']:
+        if params['to_city_id']:
             command += ' AND shf_goods.to_city_id = %s ' % params['to_city_id']
-        elif params['to_province_id']:
+        if params['to_province_id']:
             command += ' AND shf_goods.to_province_id = %s ' % params['to_province_id']
-        else:
-            pass
 
         # 货源类型
         if params['goods_type']:
@@ -191,7 +188,12 @@ class GoodsList(object):
 
         # 急需处理
         if params['urgent_goods']:
-            pass
+            if params['urgent_goods'] == 1:
+                command += """ AND ({0} - shf_goods.create_time) > 0 AND ({0} - shf_goods.create_time) < 5 * 60 """.format(time.time())
+            if params['urgent_goods'] == 2:
+                command += """ AND ({0} - shf_goods.create_time) > 5 * 60 AND ({0} - shf_goods.create_time) < 10 * 60 """.format(time.time())
+            if params['urgent_goods'] == 3:
+                command += """ AND ({0} - shf_goods.create_time) > 10 * 60 """.format(time.time())
 
         # 是否加价
         if params['is_addition']:
@@ -218,7 +220,7 @@ class GoodsList(object):
 
         goods_count = cursor.query_one(command % "COUNT(*) as goods_count")['goods_count']
 
-        command += """ORDER BY shf_goods.create_time DESC LIMIT %s, %s""" % ((page - 1) * limit, limit)
+        command += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
         log.info('sql:{}'.format(command % fileds))
         goods_detail = cursor.query(command % fileds)
