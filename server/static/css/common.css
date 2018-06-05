@@ -553,6 +553,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a{
 }
 .part-1-bottom {
     margin-bottom: 17px;
+    position: relative;
 }
 .part-2 {
     border-top: 1px dashed #cdd;
@@ -637,4 +638,15 @@ body{overflow-y: scroll;}
 .periods li > button.active{
     background:#009688;
     color: #fff;
+}
+.chart-tips{
+    font-size: 36px;
+    color: #ddd;
+    width: auto;
+    height: auto;
+    position: absolute;
+    left: 700px;
+    top: 200px;
+    letter-spacing: 4px;
+    display: none;
 }

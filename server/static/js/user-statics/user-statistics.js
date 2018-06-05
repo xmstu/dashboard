@@ -12,6 +12,7 @@ $('#area_select').address({
     }
 });
 layui.use(['laydate', 'form', 'table'], function () {
+    dataInit();
     var laydate = layui.laydate;
     var table = layui.table;
     laydate.render({
@@ -132,19 +133,19 @@ layui.use(['laydate', 'form', 'table'], function () {
             })
         }
         , cols: [[
-            {field: 'id', title: '用户ID', sort: true},
-            {field: 'user_name', title: '用户名'}
-            , {field: 'mobile', title: '手机号'}
-            , {field: 'user_type', title: '注册角色'}
-            , {field: 'role_auth', title: '认证'}
-            , {field: 'usual_city', title: '常驻地'}
-            , {field: 'goods_count', title: '发货'}
-            , {field: 'order_count', title: '接单'}
-            , {field: 'order_completed', title: '完成订单'}
-            , {field: 'download_channel', title: '下载渠道'}
-            , {field: 'from_channel', title: '注册渠道'}
-            , {field: 'last_login_time', title: '最后登陆'}
-            , {field: 'create_time', title: '注册时间'}
+              {field: 'id', title: '用户ID',  sort: true,width:80},
+                 {field: 'user_name', title: '用户名',width:100}
+                , {field: 'mobile', title: '手机号',width:120}
+                , {field: 'user_type', title: '注册角色',width:100}
+                , {field: 'role_auth', title: '认证',width:180}
+                , {field: 'usual_city', title: '常驻地',minWidth:260}
+                , {field: 'goods_count', title: '发货',width:60}
+                , {field: 'order_count', title: '接单',width:60}
+                , {field: 'order_completed', title: '完成订单',width:100}
+                , {field: 'download_channel', title: '下载渠道',width:138}
+                , {field: 'from_channel', title: '注册渠道',width:138}
+                , {field: 'last_login_time', title: '最后登陆',width:124}
+                , {field: 'create_time', title: '注册时间',width:124}
         ]]
         , id: 'testReload'
         , page: true
@@ -286,19 +287,19 @@ $('#user_search_box').on('click', function (e) {
                 })
             }
             , cols: [[
-                {field: 'id', title: '用户ID', width: 80, sort: true},
-                {field: 'user_name', title: '用户名', width: 100}
-                , {field: 'mobile', title: '手机号', width: 130}
-                , {field: 'user_type', title: '注册角色', width: 130}
-                , {field: 'role_auth', title: '认证', width: 150}
-                , {field: 'usual_city', title: '常驻地', width: 280}
-                , {field: 'goods_count', title: '发货', width: 60}
-                , {field: 'order_count', title: '接单', width: 60}
-                , {field: 'order_completed', title: '完成订单', width: 70}
-                , {field: 'download_channel', title: '下载渠道', width: 130}
-                , {field: 'from_channel', title: '注册渠道', width: 160}
-                , {field: 'last_login_time', title: '最后登陆', width: 130}
-                , {field: 'create_time', title: '注册时间', width: 130}
+                  {field: 'id', title: '用户ID',  sort: true,width:80},
+                 {field: 'user_name', title: '用户名',width:100}
+                , {field: 'mobile', title: '手机号',width:120}
+                , {field: 'user_type', title: '注册角色',width:100}
+                , {field: 'role_auth', title: '认证',width:180}
+                , {field: 'usual_city', title: '常驻地',minWidth:260}
+                , {field: 'goods_count', title: '发货',width:60}
+                , {field: 'order_count', title: '接单',width:60}
+                , {field: 'order_completed', title: '完成订单',width:100}
+                , {field: 'download_channel', title: '下载渠道',width:138}
+                , {field: 'from_channel', title: '注册渠道',width:138}
+                , {field: 'last_login_time', title: '最后登陆',width:124}
+                , {field: 'create_time', title: '注册时间',width:124}
             ]]
             , id: 'testReload'
             , page: true
@@ -307,25 +308,46 @@ $('#user_search_box').on('click', function (e) {
 });
 $('#search_btn').on('click', function (e) {
     e.preventDefault();
-    var requestStartTime = common.timeTransform($('#date_show_one').val()+' 00:00:00');
-    var requestEndTime = common.timeTransform($('#date_show_two').val()+' 23:59:59');
+    dataInit()
+})
+function dataInit() {
+    var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
+    var requestEndTime = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
     var data = {
-        start_time:requestStartTime,
-        end_time:requestEndTime,
-        periods:$('.periods>li').find('button.active').val(),
-        user_type:$('#user_type').val(),
-        role_type:$('#role_type_first').val(),
-        region_id:$('#region_id').val(),
-        is_auth:$("#is_auth").val()
+        start_time: requestStartTime,
+        end_time: requestEndTime,
+        periods: $('.periods>li').find('button.active').val(),
+        user_type: $('#user_type').val(),
+        role_type: $('#role_type_first').val(),
+        region_id: $('#region_id').val(),
+        is_auth: $("#is_auth").val()
     };
     var url = '/user/statistic/'
-    http.ajax.get(true,false,url,data,http.ajax.CONTENT_TYPE_2,function(res){
-        console.log(res);
+    http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+       var len = res.data.xAxis.length;
+       console.log(len)
+       if(res.status==100000){
+           console.log(res.data)
+       }
+       if(len>0&&len<20){
+           console.log(res.data)
+           $('.chart-tips').css({'display':'none'})
+            chartInit(res.data.xAxis,res.data.series)
+       }else if(len>0&&len>20&&len<40){
+            $('.chart-tips').css({'display':'none'})
+            chartInit(res.data.xAxis,res.data.series,2)
+       }else if(len>0&&len>40&&len<90){
+           $('.chart-tips').css({'display':'none'})
+            chartInit(res.data.xAxis,res.data.series,4)
+       }else {
+          $('#charts_container_one').html('');
+          $('.chart-tips').css({'display':'block'})
+           return false
+       }
     })
-   console.log(data.region_id)
-})
+}
 
-function init() {
+function chartInit(xAxis,series,interval) {
     Highcharts.setOptions({
         colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
     });
@@ -351,8 +373,6 @@ function init() {
             }
         },
         chart: {
-            colors: ['#058DC7', '#fff', '#ED561B', '#DDDF00', '#24CBE5', '#64E572',
-                '#FF9655', '#FFF263', '#6AF9C4'],
             backgroundColor: '#fff',
             type: 'line'
         },
@@ -377,7 +397,8 @@ function init() {
             }
         },
         xAxis: {
-            categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            tickInterval:interval,
+            categories:xAxis,
             gridLineColor: '#eee',
             gridLineWidth: 1
         },
@@ -412,7 +433,7 @@ function init() {
         },
         series: [{
             name: '人数',
-            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+            data:series
         }]
     });
 }

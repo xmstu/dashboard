@@ -7,24 +7,11 @@
 $('.layui-table-cell').css({'height': 'auto!important'});
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
-$('#date_show_three').val();
-$('#date_show_four').val();
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
 
 function init() {
-    /*  var data = ''
-      var url = '/user/list/'
-      $.ajax({
-          url: url
-          , type: "get"
-          , async: false
-          , dataType: "json"
-          , success: function (result) {
-              dataAll = result
-          }
-      });*/
     $('#start_address_name').address({
         offsetLeft: '0',
         level: 3,
@@ -33,9 +20,9 @@ function init() {
         }
     });
     $('#over_address_name').address({
-        offsetLeft:'0',
-        level:3,
-        onClose:function(){
+        offsetLeft: '0',
+        level: 3,
+        onClose: function () {
 
         }
     });
@@ -80,10 +67,16 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_three',
         theme: '#1E9FFF',
         calendar: true,
+        max: String(common.getNowFormatDate()[4]),
         ready: function () {
 
         },
         done: function (val, index) {
+            if ($('#date_show_three').val() == '') {
+                $('#date_show_three').next('.date-tips').show();
+            } else {
+                $('#date_show_three').next('.date-tips').hide()
+            }
         }
     });
     laydate.render({
@@ -95,28 +88,33 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
+            if ($('#date_show_four').val() == '') {
+                $('#date_show_four').next('.date-tips').show();
+            } else {
+                $('#date_show_four').next('.date-tips').hide()
+            }
         }
     });
     table.render({
         elem: '#LAY_table_goods',
         even: true
-        , url: '../static/js/user-statics/test.json',
-        /*  response: {
+        , url: '/goods/list/',
+          response: {
               statusName: 'status',
               statusCode: 100000
-          },*/
+          },
         cols: [[
-            {field: 'goods_id', title: '货源ID', width: 60},
-            {field: 'user_name', title: '货物规格', width: 140}
-            , {field: 'mobile', title: '类型', width: 120}
-            , {field: 'user_type', title: '所属网点', width: 140}
-            , {field: 'role_auth', title: '出发地-目的地', width: 220}
-            , {field: 'usual_city', title: '车型要求', width: 144}
-            , {field: 'goods_count', title: '运费', width: 180}
-            , {field: 'order_count123', title: '货主手机', width: 120}
-            , {field: 'order_completed', title: '状态', width: 90}
-            , {field: 'download_channel', title: '通话数', width: 60}
-            , {field: 'time_show', title: '时间', width: 230}
+            {field: 'id', title: '货源ID', width: 60},
+            {field: 'goods_standard', title: '货物规格', width: 140}
+            , {field: 'goods_type', title: '类型', width: 120}
+            , {field: 'node_id', title: '所属网点', width: 140}
+            , {field: 'from_to_dist', title: '出发地-目的地', width: 220}
+            , {field: 'vehicle_type', title: '车型要求', width: 144}
+            , {field: 'price_recommend', title: '运费', width: 180}
+            , {field: 'mobile', title: '货主手机', width: 120}
+            , {field: 'STATUS', title: '状态', width: 90}
+            , {field: 'call_count', title: '通话数', width: 60}
+            , {field: 'loading_time', title: '时间', width: 230}
             , {
                 field: 'from_channel', title: '操作', width: 112, templet: function (d) {
                     return '<button id="' + d.phone_number + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
@@ -125,6 +123,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         ]],
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'});
+            console.log(res)
             $('.nearby').on('click', function () {
                 layer.open({
                     type: 1,
@@ -134,11 +133,31 @@ layui.use(['laydate', 'form', 'table'], function () {
                     content: $('#popup')
                 })
             });
-            $("td[data-field='goods_id']").children().each(function (val) {
+            $("td[data-field='goods_standard']").children().each(function (val) {
                 var value = $(this).parent().parent('tr').attr('data-index');
-                if ($(this).text() == '') {
-                    //下面的一定要用html
-                    //$(this).html(res.data[value].user_name+'</br>'+res.data[value].goods_count)
+                if($(this).text()!=''){
+                  var result = $(this).text().split(',');
+                   $(this).html('名称：<span style="font-weight: 500;color: deepskyblue;">'+result[0]+'</span><br>重量：<span style="font-weight: 500;color: deepskyblue;">'+result[1]+'</span><br>体积：<span style="font-weight: 500;color: deepskyblue;">'+result[2]+'</span>')
+                }
+            })
+              $("td[data-field='STATUS']").children().each(function (val) {
+                if($(this).text()==2){
+                    $(this).text('待接单')
+                }else if($(this).text()==3){
+$(this).html('<span style="color: #40AFFE">已接单</span>')
+                }else if($(this).text()==4){
+$(this).html('<span style="color: #1E1E1E">已过期</span>')
+                }else if($(this).text()==-1){
+                $(this).html('<span style="color: #1E1E1E;font-weight: bold;">已取消</span>')
+                }
+            })
+             $("td[data-field='from_to_dist']").children().each(function (val) {
+                if($(this).text()!=''){
+                  var result = $(this).text().split(',');
+                  // $(this).html('<p><i class="iconfont icon-qidian"></i></p>')
+                    console.log(result)
+                }else {
+                    $(this).text('未记录')
                 }
             })
         }

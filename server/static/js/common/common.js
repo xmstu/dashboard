@@ -18,37 +18,71 @@ var common = {
         layui.use('layer', function () {
             var layer = layui.layer;
         });
+
         $('.main-content-right').addClass('animated fadeIn');
+
         var nav_menu = $('.icon-caidan');
+
         nav_menu.on('click', function (e) {
+            e.preventDefault();
             if ($('.layui-nav-tree').width() == '176') {
+
                 $('.layui-icon-right').animate({'opacity': 0});
+
                 $('.nav-header >p span').css({'display': 'none'});
+
                 $('.nav-header').animate({'width': '56px'});
+
                 $('.layui-nav-tree').css({'margin-left': 0}).animate({'width': '50px'});
+
                 $('.main-content-right').animate({'margin-left': '50px'});
+
                 $(this).css({'transform': 'rotateZ(270deg)', 'transition': 'all 0.4s'});
+
                 $('.layui-nav-item >a').animate({'width': '50px'});
+
                 $('.nav-content span').fadeOut('10');
+
                 $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '50px'});
-                return false
-            } else if ($('.layui-nav-tree').width() == '50') {
-                $('.layui-nav-tree').css({'margin-left': '12px'}).animate({'width': '176'});
-                $('.layui-icon-right').animate({'opacity': 0});
-                $('.main-content-right').animate({'margin-left': '200px'});
-                setTimeout(function () {
-                    $('.nav-content span').fadeIn('10');
-                    $('.nav-header >p span').fadeIn('10');
-                }, 300);
-                $('.nav-header').animate({'width': '200px'});
-                $(this).css({'transform': 'rotateZ(360deg)', 'transition': 'all 0.4s'});
-                $('.layui-nav-item >a').animate({'width': '200px'});
-                $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '44px'});
-                layer.closeAll('tips');
+
+                $('.part-2 .layui-table').css({'width':'100%'});
+
+                $('#charts_container_one').css({'width':'100%'});
+
+                $('.highcharts-root').css({'width':'100%'});
+
                 return false
 
-            } else
-                console.log($('.layui-nav-tree').width());
+            } else if ($('.layui-nav-tree').width() == '50') {
+
+                $('.layui-nav-tree').css({'margin-left': '12px'}).animate({'width': '176'});
+
+                $('.layui-icon-right').animate({'opacity': 0});
+
+                $('.main-content-right').animate({'margin-left': '200px'});
+
+                setTimeout(function () {
+
+                    $('.nav-content span').fadeIn('10');
+
+                    $('.nav-header >p span').fadeIn('10');
+
+                }, 300);
+
+                $('.nav-header').animate({'width': '200px'});
+
+                $(this).css({'transform': 'rotateZ(360deg)', 'transition': 'all 0.4s'});
+
+                $('.layui-nav-item >a').animate({'width': '200px'});
+
+                $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '44px'});
+
+                layer.closeAll('tips');
+
+                return false
+
+            }
+            console.log($('.layui-nav-tree').width());
         });
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {

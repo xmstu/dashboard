@@ -28,3 +28,11 @@
 .layui-layer-btn{
     text-align: center;
 }
+.part-2 .layui-table-body .layui-table-cell {
+    height: auto !important;
+    line-height: 22px!important;
+}
+[data-field="price_expect"] div{
+    width: 0!important;
+    padding: 0!important;
+}
