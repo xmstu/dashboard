@@ -636,6 +636,12 @@ $('#goods_search_box').on('click', function (e) {
     if (create_end_time != '') {
         create_end_time = common.timeTransform(create_end_time)
     }
+    if(load_start_time!=''){
+        load_start_time = common.timeTransform(load_start_time)
+    }
+     if(load_end_time!=''){
+        load_end_time = common.timeTransform(load_end_time)
+    }
     var data = {
         goods_id: $.trim($('#goods_id').val()),
         mobile: $.trim($('#mobile').val()),
@@ -650,10 +656,10 @@ $('#goods_search_box').on('click', function (e) {
         new_goods_type: $.trim($('#new_goods_type').val()),
         urgent_goods: $.trim($('#urgent_goods').val()),
         is_addition: $.trim($('#is_addition').val()),
-        create_start_time: finishTime,
-        create_end_time: infinteTime,
-        load_start_time: overTIme,
-        load_end_time: '123',
+        create_start_time: create_start_time,
+        create_end_time: create_end_time,
+        load_start_time: load_start_time,
+        load_end_time: load_end_time,
         page: 1,
         limit: 10
     }
