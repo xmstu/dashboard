@@ -1,6 +1,7 @@
 import time
 
 from server import log
+from server.init_regions import init_regions
 from server.meta.decorators import make_decorator
 from server.status import build_result, APIStatus, HTTPStatus
 
@@ -58,26 +59,12 @@ class GoodsList(object):
                 detail.pop('volume')
 
                 # TODO 优化 构造出发地-目的地-距离
-                if detail['from_full_name'] and detail['from_address'] and detail['to_full_name'] \
-                        and detail['to_address'] and detail['mileage_total']:
-                    detail['from_to_dist'] = detail['from_full_name'] + detail['from_address'] + ',' + \
-                                             detail['to_full_name'] + detail['to_address'] + ',' + \
-                                             detail['mileage_total'] + '㎞'
-                elif detail['from_full_name'] and detail['to_full_name'] and detail['mileage_total']:
-                    detail['from_to_dist'] = detail['from_full_name'] + ',' + detail['to_full_name'] + ',' + \
-                                             detail['mileage_total'] + '㎞'
-                elif detail['from_short_name'] and detail['to_short_name'] and detail['mileage_total']:
-                    detail['from_to_dist'] = detail['from_short_name'] + ',' + detail['to_short_name'] + ',' + \
-                                             detail['mileage_total'] + '㎞'
-                else:
-                    detail['from_to_dist'] = '未知出发地和目的地，距离未知'
-                detail.pop('from_full_name')
-                detail.pop('to_full_name')
-                detail.pop('from_short_name')
-                detail.pop('to_short_name')
-                detail.pop('from_address')
-                detail.pop('to_address')
-                detail.pop('mileage_total')
+                a = init_regions.to_province(detail['from_province_id'])
+                detail['full_from_region_name'] = init_regions.to_province(detail['from_province_id']) + init_regions.to_city(
+                    init_regions['from_city_id']) + init_regions.to_county(detail['from_county_id'])
+
+                detail['full_to_region_name'] = init_regions.to_province(detail['to_province_id']) + init_regions.to_city(
+                    init_regions['to_city_id']) + init_regions.to_county(detail['to_county_id'])
 
                 # 构造装货时间
                 if detail['loading_time_period_begin'] == 0:
@@ -101,4 +88,4 @@ class GoodsList(object):
 
             return build_result(APIStatus.Ok, count=data['goods_count'], data=goods_detail), HTTPStatus.Ok
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            e

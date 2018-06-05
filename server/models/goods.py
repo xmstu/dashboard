@@ -15,12 +15,15 @@ class GoodsList(object):
                 shf_goods.type,
                 shf_goods.goods_level,
                 shf_goods.haul_dist,
-                
-                # TODO 优化
-                ( SELECT shm_regions.full_short_name FROM shm_regions WHERE shf_goods.from_city_id = shm_regions.`code` ) AS from_full_name,
-                ( SELECT shm_regions.short_name FROM shm_regions WHERE shf_goods.from_city_id = shm_regions.`code` ) AS from_short_name,
-                ( SELECT shm_regions.full_short_name FROM shm_regions WHERE shf_goods.to_city_id = shm_regions.`code` ) AS to_full_name,
-                ( SELECT shm_regions.short_name FROM shm_regions WHERE shf_goods.to_city_id = shm_regions.`code` ) AS to_short_name,
+
+                shf_goods.from_province_id,
+                shf_goods.from_city_id,
+                shf_goods.from_county_id,
+                shf_goods.from_town_id,
+                shf_goods.to_province_id,
+                shf_goods.to_city_id,
+                shf_goods.to_county_id,
+                shf_goods.to_town_id,
                 
                 shf_goods.from_address,
                 shf_goods.to_address,
