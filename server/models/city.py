@@ -11,7 +11,8 @@ class CityOrderListModel(object):
                 shf_goods.volume,
                 shf_goods.type,
                 shf_goods.goods_level,
-                shf_goods.haul_dist,# TODO 优化
+                shf_goods.haul_dist,
+                # TODO 优化
                 ( SELECT shm_regions.full_short_name FROM shm_regions WHERE shf_goods.from_city_id = shm_regions.`code` ) AS from_full_name,
                 ( SELECT shm_regions.short_name FROM shm_regions WHERE shf_goods.from_city_id = shm_regions.`code` ) AS from_short_name,
                 ( SELECT shm_regions.full_short_name FROM shm_regions WHERE shf_goods.to_city_id = shm_regions.`code` ) AS to_full_name,
@@ -90,7 +91,7 @@ class CityOrderListModel(object):
         """
 
         command = """
-                    SELECT
+            SELECT
                 %s 
             FROM
                 shf_goods
@@ -150,10 +151,10 @@ class CityOrderListModel(object):
         # 是否通话
         if params.get('is_called'):
             called_sql = """ AND (SELECT COUNT(*)
-                                        FROM shu_call_records
-                                        WHERE source_type = 1
-                                        AND source_id = shf_goods.id
-                                        AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) """
+                            FROM shu_call_records
+                            WHERE source_type = 1
+                            AND source_id = shf_goods.id
+                            AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) """
             if params['is_called'] == 1:
                 command += called_sql + '> 0 '
             if params['is_called'] == 2:

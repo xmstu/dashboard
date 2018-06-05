@@ -16,10 +16,8 @@ class UserStatistic(object):
     def check_params(params):
         try:
             # 校验参数
-            start_time = int(params.get('start_time')) if params.get('start_time') else time.localtime(
-                time.time() - 8 * 60 * 60 * 24)
-            end_time = int(params.get('end_time')) if params.get('end_time') else time.localtime(
-                time.time() - 60 * 60 * 24)
+            start_time = int(params.get('start_time')) if params.get('start_time') else time.time() - 8 * 60 * 60 * 24
+            end_time = int(params.get('end_time')) if params.get('end_time') else time.time() - 60 * 60 * 24
             periods = int(params.get('periods')) if params.get('periods') else 2
             user_type = int(params.get('user_type')) if params.get('user_type') else 0
             role_type = int(params.get('role_type')) if params.get('role_type') else 0

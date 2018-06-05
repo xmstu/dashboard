@@ -22,9 +22,7 @@ class CityOrderList(object):
             new_goods_type = int(params.get('new_goods_type')) if params.get('new_goods_type') else 0
 
             # TODO 校验参数
-
             params = {
-
                 "goods_type": goods_type,
                 "priority": priority,
                 "is_called": is_called,
