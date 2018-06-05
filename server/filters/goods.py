@@ -16,6 +16,16 @@ class GoodsList(object):
         try:
             for detail in goods_detail:
 
+                # 初次下单
+                if detail['shf_goods_counts'] == 1:
+                    detail['mobile'] = detail['mobile'] + ',初次下单'
+
+                # 构造运费
+                detail['fee'] = detail.get('price_expect', 0) + ',' + detail.get('price_addition', 0) + ',' + detail.get('price_recommend', 0)
+                detail.pop('price_expect')
+                detail.pop('price_addition')
+                detail.pop('price_recommend')
+
                 # 网点
                 detail['node_id'] = detail['node_id'] if detail.get('node_id') else "未知网点"
 
@@ -50,14 +60,14 @@ class GoodsList(object):
                 # TODO 优化 构造出发地-目的地-距离
                 if detail['from_full_name'] and detail['from_address'] and detail['to_full_name'] \
                         and detail['to_address'] and detail['mileage_total']:
-                    detail['from_to_dist'] = detail['from_full_name'] + detail['from_address'] + '到' + \
-                                             detail['to_full_name'] + detail['to_address'] + ' ' + \
+                    detail['from_to_dist'] = detail['from_full_name'] + detail['from_address'] + ',' + \
+                                             detail['to_full_name'] + detail['to_address'] + ',' + \
                                              detail['mileage_total'] + '㎞'
-                if detail['from_full_name'] and detail['to_full_name'] and detail['mileage_total']:
-                    detail['from_to_dist'] = detail['from_full_name'] + '到' + detail['to_full_name'] + ' ' + \
+                elif detail['from_full_name'] and detail['to_full_name'] and detail['mileage_total']:
+                    detail['from_to_dist'] = detail['from_full_name'] + ',' + detail['to_full_name'] + ',' + \
                                              detail['mileage_total'] + '㎞'
                 elif detail['from_short_name'] and detail['to_short_name'] and detail['mileage_total']:
-                    detail['from_to_dist'] = detail['from_short_name'] + '到' + detail['to_short_name'] + ' ' + \
+                    detail['from_to_dist'] = detail['from_short_name'] + ',' + detail['to_short_name'] + ',' + \
                                              detail['mileage_total'] + '㎞'
                 else:
                     detail['from_to_dist'] = '未知出发地和目的地，距离未知'

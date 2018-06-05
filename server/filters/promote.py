@@ -9,3 +9,11 @@ class PromoteEffect(object):
     def get_result(data):
 
         return build_result(APIStatus.Ok, count=data['count'], data=data['promote_effet_detail']), HTTPStatus.Ok
+
+
+class PromoteQuality(object):
+
+    @staticmethod
+    @make_decorator
+    def get_result(data):
+        return build_result(APIStatus.Ok, count=data['count'], data=data['promote_effet_detail']), HTTPStatus.Ok

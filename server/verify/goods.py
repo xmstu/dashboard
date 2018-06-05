@@ -17,8 +17,13 @@ class GoodsList(object):
         try:
             goods_id = params.get('goods_id') if params.get('goods_id') else ''
             mobile = params.get('mobile') if params.get('mobile') else ''
-            from_region_id = params.get('from_region_id') if params.get('from_region_id') else ''
-            to_region_id = params.get('to_region_id') if params.get('to_region_id') else ''
+
+            from_province_id = params.get('from_province_id') if params.get('from_province_id') else ''
+            from_city_id = params.get('from_city_id') if params.get('from_city_id') else ''
+            from_dist_id = params.get('from_dist_id') if params.get('from_dist_id') else ''
+            to_province_id =params.get('to_province_id') if params.get('to_province_id') else ''
+            to_city_id = params.get('to_city_id') if params.get('to_city_id') else ''
+            to_dist_id = params.get('to_dist_id') if params.get('to_dist_id') else ''
 
             goods_type = int(params.get('goods_type')) if params.get('goods_type') else 0
             goods_status = int(params.get('goods_status')) if params.get('goods_status') else 0
@@ -51,8 +56,13 @@ class GoodsList(object):
             params = {
                 "goods_id": goods_id,
                 "mobile": mobile,
-                "from_region_id": from_region_id,
-                "to_region_id": to_region_id,
+                'from_province_id': from_province_id,
+                'from_city_id': from_city_id,
+                'from_dist_id': from_dist_id,
+                'to_province_id': to_province_id,
+                'to_city_id': to_city_id,
+                'to_dist_id': to_dist_id,
+
                 "goods_type": goods_type,
                 "goods_status": goods_status,
                 "is_called": is_called,

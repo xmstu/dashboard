@@ -31,7 +31,21 @@ class PromoteEffect(Resource):
         return resp
 
 
+class PromoteQuality(Resource):
+    @staticmethod
+    @doc.request_promote_quality_param
+    @doc.response_promote_quality_param_success
+    # @filters.PromoteQuality.get_result(data=dict)
+    @operations.PromoteQualityDecorator.get_promote_quality(params=dict)
+    @verify.PromoteQuality.check_params(params=dict)
+    def get():
+        """获取参数"""
+        resp = Response(params=get_all_arg())
+
+        return resp
+
+
 ns = api.namespace('promote', description='推广统计')
 # ns.add_resource(PromoteAdd, '/add/')
-# ns.add_resource(PromoteQuality, '/quality/')
+ns.add_resource(PromoteQuality, '/quality/')
 ns.add_resource(PromoteEffect, '/effect/')

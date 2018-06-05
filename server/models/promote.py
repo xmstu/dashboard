@@ -56,3 +56,30 @@ class PromoteEffetList(object):
         }
 
         return promote_effet_list if promote_effet_list else None
+
+
+class PromoteQuality(object):
+    @staticmethod
+    def get_promote_quality(cursor, user_id, params):
+
+        command = """ """
+
+        # 拉新 - 新增 累计
+
+        # 用户行为 - 登录 发货 接单 完成订单
+
+        # 金额 - 货源总额 订单总额 实际完成总额
+
+        # 地区
+        if params['region_id'] and user_id:
+            region_user = 'AND shu_users.id IN (%s)' % ','.join(str(i) for i in user_id if i)
+        elif params['region_id'] and not user_id:
+            return []
+        else:
+            region_user = 'AND 1'
+
+        promote_quality = cursor.query(command, {
+            'start_time': params['start_time'],
+            'end_time': params['end_time']
+        })
+        return promote_quality if promote_quality else []

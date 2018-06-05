@@ -104,62 +104,12 @@ class GoodsList(object):
                     FROM shf_goods
                     LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
                     WHERE 1=1
-                    -- 货源id
-                    -- 	AND shf_goods.id = 2 and shf_goods.is_deleted = 0
-                    
-                    -- 货主手机
-                    -- AND shu_users.mobile = 15917907641
-                    
+                         
                     -- 出发地
                     -- AND (shf_goods.from_province_id = 1 OR shf_goods.from_city_id = 1 OR shf_goods.from_county_id = 440106 OR shf_goods.from_town_id = 1)
                     
                     -- 目的地
-                    -- AND (shf_goods.to_province_id = 1 OR shf_goods.to_city_id = 820002 OR shf_goods.to_county_id = 1 OR shf_goods.to_town_id = 1)
-                    
-                    -- 货源类型
-                    -- `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '货源类型：1 普通货源，2 零担货源，默认为1',
-                    --  `goods_level` tinyint(4) unsigned NOT NULL DEFAULT '1' COMMENT '货源等级：1 议价货源，2 优质货源/定价货源, 3.同城定价/非优质',
-                    --  `haul_dist` tinyint(4) NOT NULL DEFAULT '2' COMMENT '运输距离：1 同城，2 跨城',
-                    
-                    -- 同城普通货源
-                    -- AND shf_goods.haul_dist = 1 AND shf_goods.type = 1
-                    -- 跨城定价普通货源
-                    -- AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 2 AND shf_goods.type = 1
-                    -- 跨城议价普通货源
-                    -- AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 1 AND shf_goods.type = 1
-                    -- 零担货源
-                    -- AND shf_goods.type = 2
-                    
-                    -- 货源状态
-                        -- 下单
-                        -- AND shf_goods.status = 1
-                        -- 派单中
-                        -- AND shf_goods.status = 2
-                        -- 已生成运单
-                        -- AND shf_goods.status = 3
-                        -- 关闭/取消订单
-                        -- AND shf_goods.status = -1
-                        -- 订单时间是否过期
-                        -- AND shf_goods.expired_timestamp < UNIX_TIMESTAMP()
-                        
-                    -- 是否通话
-                    -- AND (SELECT COUNT(*)
-                    -- FROM shu_call_records
-                    -- WHERE source_type = 1
-                    -- AND source_id = shf_goods.id
-                    -- AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) > 0
-                    
-                    -- AND (SELECT COUNT(*)
-                    -- FROM shu_call_records
-                    -- WHERE source_type = 1
-                    -- AND source_id = shf_goods.id
-                    -- AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) = 0
-                    
-                    -- AND (SELECT COUNT(*)
-                    -- FROM shu_call_records
-                    -- WHERE source_type = 1
-                    -- AND source_id = shf_goods.id
-                    -- AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) > 10
+                    -- AND (shf_goods.to_province_id = 1 OR shf_goods.to_city_id = 820002 OR shf_goods.to_county_id = 1 OR shf_goods.to_town_id = 1)                
         """
 
         # 货源id
@@ -171,11 +121,23 @@ class GoodsList(object):
             command += ' AND shu_users.mobile = %s ' % params['mobile']
 
         # 出发地
-        if params['from_region_id']:
+        if params['from_dist_id']:
+            command += ' AND shf_goods.from_county_id = %s ' % params['from_dist_id']
+        elif params['from_city_id']:
+            command += ' AND shf_goods.from_city_id = %s ' % params['from_city_id']
+        elif params['from_province_id']:
+            command += ' AND shf_goods.from_province_id = %s ' % params['from_province_id']
+        else:
             pass
 
         # 目的地
-        if params['to_region_id']:
+        if params['to_dist_id']:
+            command += ' AND shf_goods.to_county_id = %s ' % params['to_dist_id']
+        elif params['to_city_id']:
+            command += ' AND shf_goods.to_city_id = %s ' % params['to_city_id']
+        elif params['to_province_id']:
+            command += ' AND shf_goods.to_province_id = %s ' % params['to_province_id']
+        else:
             pass
 
         # 货源类型
@@ -253,7 +215,7 @@ class GoodsList(object):
 
         goods_count = cursor.query_one(command % "COUNT(*) as goods_count")['goods_count']
 
-        command += """ LIMIT %s, %s""" % ((page - 1) * limit, limit)
+        command += """ORDER BY shf_goods.create_time DESC LIMIT %s, %s""" % ((page - 1) * limit, limit)
 
         log.info('sql:{}'.format(command % fileds))
         goods_detail = cursor.query(command % fileds)

@@ -24,3 +24,17 @@ response_promote_effect_param_success = response_success = api.response(200, '�
     'state': fields.Integer(description=str(APIStatus.Ok)),
     'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
 }))
+
+request_promote_quality_param = api.doc(params={
+    'start_time':'开始日期(时间戳)',
+    'end_time':'结束日期(时间戳)',
+    'periods':'时间周期',
+    'dimension':'统计维度',
+    'type':'数据类型',
+    'region_id':'地区代码'
+    }, description='推广统计列表查询参数')
+
+response_promote_quality_param_success = api.response(200, '成功', api.model('response_success', {
+    'state': fields.Integer(description=str(APIStatus.Ok)),
+    'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
+}))
