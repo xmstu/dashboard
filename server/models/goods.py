@@ -31,6 +31,11 @@ class GoodsList(object):
                 
                 shf_goods.mileage_total,
                 shf_goods.STATUS,
+                CASE WHEN
+                ((shf_goods.loading_time_is_realtime = 1 AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600)
+                OR (shf_goods.loading_time_is_realtime = 0 
+                AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_begin)>0 
+                OR (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(shf_goods.loading_time_date))>0))) THEN 1 ELSE 0 END AS expire,
                 (
                 SELECT
                 IF
@@ -108,12 +113,6 @@ class GoodsList(object):
                     FROM shf_goods
                     LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
                     WHERE 1=1
-                         
-                    -- 出发地
-                    -- AND (shf_goods.from_province_id = 1 OR shf_goods.from_city_id = 1 OR shf_goods.from_county_id = 440106 OR shf_goods.from_town_id = 1)
-                    
-                    -- 目的地
-                    -- AND (shf_goods.to_province_id = 1 OR shf_goods.to_city_id = 820002 OR shf_goods.to_county_id = 1 OR shf_goods.to_town_id = 1)                
         """
 
         # 货源id
@@ -151,10 +150,20 @@ class GoodsList(object):
             if params['goods_type'] == 4:
                 command += """ AND shf_goods.type = 2 """
 
-        # 货源状态
+        # TODO 货源状态
         if params['goods_status']:
-            command += ' AND shf_goods.status = {} AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '.format(
-                params['goods_status'])
+            if params['goods_status'] == 2:
+                command += ' AND (shf_goods.status = 1 OR shf_goods.status = 2) AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
+            if params['goods_status'] == 3:
+                command += ' AND shf_goods.status = 3 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
+            if params['goods_status'] == -1:
+                command += ' AND shf_goods.status = -1 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
+            if params['goods_status'] == 4:
+                command += """ AND (shf_goods.status = 1 OR shf_goods.status = 2) 
+                                AND ((shf_goods.loading_time_is_realtime = 1 AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600)
+                                OR (shf_goods.loading_time_is_realtime = 0 
+                                AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_begin)>0 
+                                OR (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(shf_goods.loading_time_date))>0))) """
 
         # 是否通话
         if params['is_called']:
@@ -184,7 +193,7 @@ class GoodsList(object):
 
         # 是否初次下单
         if params['new_goods_type'] > 0:
-            command += """ AND ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) = 1 """
+            command += """ AND ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) < 3 """
 
         # 急需处理
         if params['urgent_goods']:

@@ -19,14 +19,32 @@ class GoodsList(object):
         try:
             for detail in goods_detail:
 
+                # 构造货源状态
+                if detail.get('expire'):
+                    detail['goods_status'] = '已过期'
+                    if detail.get('STATUS') in (1, 2):
+                        detail['goods_status'] += ',待接单'
+                    if detail.get('STATUS') == 3:
+                        detail['goods_status'] += ',已接单'
+                    if detail.get('STATUS') == -1:
+                        detail['goods_status'] += ',已取消'
+                else:
+                    if detail.get('STATUS') in (1, 2):
+                        detail['goods_status'] = '待接单'
+                    if detail.get('STATUS') == 3:
+                        detail['goods_status'] = '已接单'
+                    if detail.get('STATUS') == -1:
+                        detail['goods_status'] = '已取消'
+
+                detail.pop('expire')
+                detail.pop('STATUS')
+
                 # 初次下单
                 if detail['shf_goods_counts'] == 1:
                     detail['mobile'] = detail['mobile'] + ',初次下单'
 
                 # 构造运费
-                detail['fee'] = detail.get('price_expect', 0) + ',' + detail.get('price_addition',
-                                                                                 0) + ',' + detail.get(
-                    'price_recommend', 0)
+                detail['fee'] = detail.get('price_expect', 0) + ',' + detail.get('price_addition', 0) + ',' + detail.get('price_recommend', 0)
                 detail.pop('price_expect')
                 detail.pop('price_addition')
                 detail.pop('price_recommend')

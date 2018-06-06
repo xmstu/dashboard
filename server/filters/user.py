@@ -86,5 +86,9 @@ class UserStatistic(object):
                     series.append(sum_count)
 
                 end_val += datetime.timedelta(days=1)
+        # 月
+        elif params['periods'] == 4:
+
+            pass
 
         return make_result(APIStatus.Ok, data={'xAxis': xAxis, 'series': series}), HTTPStatus.Ok
