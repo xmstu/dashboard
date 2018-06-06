@@ -225,9 +225,9 @@ $('#charts_container_one').highcharts({
     plotOptions: {
         line: {
             dataLabels: {
-                enabled: true          // 开启数据标签
+                enabled: true
             },
-            enableMouseTracking: true // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+            enableMouseTracking: true
         }
     },
     series: [{

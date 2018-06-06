@@ -772,7 +772,7 @@ body {
     color: #ddd;
     width: auto;
     height: auto;
-    position: absolute;
+    position: relative;
     left: 700px;
     top: 200px;
     letter-spacing: 4px;
