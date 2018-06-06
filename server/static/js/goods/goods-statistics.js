@@ -242,16 +242,16 @@ layui.use(['laydate', 'form', 'table'], function () {
             {field: 'goods_standard', title: '货物规格', width: 140}
             , {field: 'goods_type', title: '类型', width: 120}
             , {field: 'node_id', title: '所属网点', width: 140}
-            , {field: 'from_to_dist', title: '出发地-目的地', width: 220}
+            , {field: 'from_to_dis', title: '出发地-目的地', width: 220}
             , {field: 'vehicle_type', title: '车型要求', width: 144}
             , {field: 'fee', title: '运费', width: 180}
             , {field: 'mobile', title: '货主手机', width: 120}
             , {field: 'STATUS', title: '状态', width: 90}
             , {field: 'call_count', title: '通话数', width: 60}
-            , {field: 'loading_time', title: '时间', width: 230}
+            , {field: 'time', title: '时间', width: 230}
             , {
                 field: 'from_channel', title: '操作', width: 112, templet: function (d) {
-                    return '<button id="' + d.phone_number + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
+                    return '<button value="'+d.id+'" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
                 }
             }
         ]],
@@ -272,10 +272,22 @@ layui.use(['laydate', 'form', 'table'], function () {
                     $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="iconfont icon-tijikongjian mr-4"></i><span style="font-weight: 500;color: deepskyblue;">' + result[2] + '</span>')
                 }
             })
-               $("td[data-field='fee']").children().each(function (val) {
+              $("td[data-field='time']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split(',');
-                    $(this).html('货主出价：<span>' + result[0] + '元</span >(<span style="color: #f40;">'+result[1]+'</span>)<br>' + '</span>系统价：<span style="font-weight: 500;color: deepskyblue;">' + result[2] + '</span>')
+                    $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1]')
+                }
+            })
+            $("td[data-field='fee']").children().each(function (val) {
+                if ($(this).text() != '') {
+                    var result = $(this).text().split(',');
+                    $(this).html('货主出价：<span>' + result[0] + '元</span >(<span style="color: #f40;">' + result[1] + '</span>)<br>' + '</span>系统价：<span style="font-weight: 500;color: deepskyblue;">' + result[2] + '</span>')
+                }
+            })
+            $("td[data-field='vehicle_type']").children().each(function (val) {
+                if ($(this).text() != '') {
+                    var result = $(this).text().split(',');
+                    $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>'+result[0]+'<br><i class="iconfont icon-yifahuo mr-4"></i>'+result[1]+'<br><i class="iconfont icon-yifahuo mr-4"></i>'+result[2])
                 }
             })
             $("td[data-field='STATUS']").children().each(function (val) {
@@ -289,10 +301,10 @@ layui.use(['laydate', 'form', 'table'], function () {
                     $(this).html('<span style="color: #1E1E1E;font-weight: bold;">已取消</span>')
                 }
             })
-             $("td[data-field='from_to_dist']").children().each(function (val) {
-                if($(this).text()!=''){
-                     var result = $(this).text().split(',');
-                     $(this).html('<i class="iconfont icon-qidian mr-4"></i>'+result[0]+'<br><i class="iconfont icon-zhongdian mr-4"></i>'+result[1]+'<br><i class="iconfont icon-luxian"></i>'+result[2])
+            $("td[data-field='from_to_dis']").children().each(function (val) {
+                if ($(this).text() != '') {
+                    var result = $(this).text().split(',');
+                    $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
                 }
             })
         }
@@ -300,64 +312,64 @@ layui.use(['laydate', 'form', 'table'], function () {
         , page: true
     });
 
-    var $ = layui.$, active = {
-        reload: function () {
-            var demoReload = $('#demoReload');
+    /* var $ = layui.$, active = {
+         reload: function () {
+             var demoReload = $('#demoReload');
 
-            //执行重载
-            table.reload('testReload', {
-                page: {
-                    curr: 1 //重新从第 1 页开始
-                }
-                , where: {
-                    key: {
-                        id: demoReload.val()
-                    }
-                }
-            });
-        }
-    };
-    $('.dataTable .layui-btn').on('click', function () {
-        var type = $(this).data('type');
-        active[type] ? active[type].call(this) : '';
-    });
-    //监听工具条
-    table.on('tool(demo)', function (obj) {
-        var data = obj.data;
-        if (obj.event === 'detail') {
-            layer.msg('ID：' + data.id + ' 的查看操作');
-        } else if (obj.event === 'del') {
-            layer.confirm('真的删除行么', function (index) {
-                obj.del();
-                layer.close(index);
-            });
-        } else if (obj.event === 'edit') {
-            layer.alert('编辑行：<br>' + JSON.stringify(data))
-        }
-    });
+             //执行重载
+             table.reload('testReload', {
+                 page: {
+                     curr: 1 //重新从第 1 页开始
+                 }
+                 , where: {
+                     key: {
+                         id: demoReload.val()
+                     }
+                 }
+             });
+         }
+     };
+     $('.dataTable .layui-btn').on('click', function () {
+         var type = $(this).data('type');
+         active[type] ? active[type].call(this) : '';
+     });
+     //监听工具条
+     table.on('tool(demo)', function (obj) {
+         var data = obj.data;
+         if (obj.event === 'detail') {
+             layer.msg('ID：' + data.id + ' 的查看操作');
+         } else if (obj.event === 'del') {
+             layer.confirm('真的删除行么', function (index) {
+                 obj.del();
+                 layer.close(index);
+             });
+         } else if (obj.event === 'edit') {
+             layer.alert('编辑行：<br>' + JSON.stringify(data))
+         }
+     });
 
-    var $ = layui.$, active = {
-        getCheckData: function () { //获取选中数据
-            var checkStatus = table.checkStatus('idTest')
-                , data = checkStatus.data;
-            layer.alert(JSON.stringify(data));
-        }
-        , getCheckLength: function () { //获取选中数目
-            var checkStatus = table.checkStatus('idTest')
-                , data = checkStatus.data;
-            layer.msg('选中了：' + data.length + ' 个');
-        }
-        , isAll: function () { //验证是否全选
-            var checkStatus = table.checkStatus('idTest');
-            layer.msg(checkStatus.isAll ? '全选' : '未全选')
-        }
-    };
+     var $ = layui.$, active = {
+         getCheckData: function () { //获取选中数据
+             var checkStatus = table.checkStatus('idTest')
+                 , data = checkStatus.data;
+             layer.alert(JSON.stringify(data));
+         }
+         , getCheckLength: function () { //获取选中数目
+             var checkStatus = table.checkStatus('idTest')
+                 , data = checkStatus.data;
+             layer.msg('选中了：' + data.length + ' 个');
+         }
+         , isAll: function () { //验证是否全选
+             var checkStatus = table.checkStatus('idTest');
+             layer.msg(checkStatus.isAll ? '全选' : '未全选')
+         }
+     };
 
-    $('.demoTable .layui-btn').on('click', function () {
-        var type = $(this).data('type');
-        active[type] ? active[type].call(this) : '';
-    });
-
+     $('.demoTable .layui-btn').on('click', function () {
+         var type = $(this).data('type');
+         active[type] ? active[type].call(this) : '';
+     });
+ */
 });
 Highcharts.setOptions({
     colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
@@ -636,10 +648,10 @@ $('#goods_search_box').on('click', function (e) {
     if (create_end_time != '') {
         create_end_time = common.timeTransform(create_end_time)
     }
-    if(load_start_time!=''){
+    if (load_start_time != '') {
         load_start_time = common.timeTransform(load_start_time)
     }
-     if(load_end_time!=''){
+    if (load_end_time != '') {
         load_end_time = common.timeTransform(load_end_time)
     }
     var data = {
