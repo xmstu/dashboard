@@ -36,32 +36,8 @@ class GoodsList(object):
                 OR (shf_goods.loading_time_is_realtime = 0 
                 AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_begin)>0 
                 OR (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(shf_goods.loading_time_date))>0))) THEN 1 ELSE 0 END AS expire,
-                (
-                SELECT
-                IF
-                    ( shf_goods_vehicles.attribute_value_id = 0, '不限车型', GROUP_CONCAT( shm_dictionary_items.NAME ) ) 
-                FROM
-                    shf_goods_vehicles
-                    LEFT JOIN shm_dictionary_items ON shf_goods_vehicles.attribute_value_id = shm_dictionary_items.id 
-                    AND shm_dictionary_items.is_deleted = 0 
-                WHERE
-                    shf_goods_vehicles.goods_id = shf_goods.id 
-                    AND shf_goods_vehicles.vehicle_attribute = 1 
-                    AND shf_goods_vehicles.is_deleted = 0 
-                ) AS vehicle_type,
-                (
-                SELECT
-                IF
-                    ( shf_goods_vehicles.attribute_value_id = 0, '不限车长', GROUP_CONCAT( shm_dictionary_items.NAME ) ) 
-                FROM
-                    shf_goods_vehicles
-                    LEFT JOIN shm_dictionary_items ON shf_goods_vehicles.attribute_value_id = shm_dictionary_items.id 
-                    AND shm_dictionary_items.is_deleted = 0 
-                WHERE
-                    shf_goods_vehicles.goods_id = shf_goods.id 
-                    AND shf_goods_vehicles.vehicle_attribute = 2 
-                    AND shf_goods_vehicles.is_deleted = 0 
-                ) AS vehicle_length,-- 新车型
+                
+                -- 新车型
                 (
                 SELECT
                     shf_goods_vehicles.NAME 
