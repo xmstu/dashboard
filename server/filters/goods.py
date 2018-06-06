@@ -65,13 +65,13 @@ class GoodsList(object):
                 # TODO 优化 构造出发地-目的地-距离
                 full_from_region_name = init_regions.to_province(
                     detail['from_province_id']) + init_regions.to_city(detail['from_city_id']) + init_regions.to_county(
-                    detail['from_county_id']) + init_regions.to_town(detail['from_town_id']) + detail['from_address'] if detail.get('from_address') else ''
+                    detail['from_county_id']) + init_regions.to_town(detail['from_town_id']) + detail.get('from_address', '')
 
                 full_to_region_name = init_regions.to_province(
                     detail['to_province_id']) + init_regions.to_city(
-                    detail['to_city_id']) + init_regions.to_county(detail['to_county_id']) + init_regions.to_town(detail['to_town_id']) + detail['to_address'] if detail.get('to_address') else ''
+                    detail['to_city_id']) + init_regions.to_county(detail['to_county_id']) + init_regions.to_town(detail['to_town_id']) + detail.get('to_address', '')
 
-                detail['from_to_dis'] = full_from_region_name + ',' + full_to_region_name + ',' + detail['mileage_total'] if detail.get('mileage_total') else 0
+                detail['from_to_dis'] = full_from_region_name + ',' + full_to_region_name + ',' + detail.get('mileage_total', 0)
 
                 detail.pop('from_province_id')
                 detail.pop('from_city_id')
