@@ -778,3 +778,11 @@ body {
     letter-spacing: 4px;
     display: none;
 }
+.layui-table-header .layui-table-cell {
+    font-weight: bold;
+}
+.layui-table-cell {
+    font-size: 13px;
+    color: #111;
+    padding: 0 12px;
+}
