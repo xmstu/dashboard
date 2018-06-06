@@ -34,13 +34,13 @@ response_user_list_param_success =  api.response(200, '成功', api.model('respo
 
 
 request_user_statistic_param = api.doc(params={
-    'start_time': '开始日期(时间戳)',
-    'end_time': '结束日期(时间戳)',
-    'periods': '时间周期',
-    'user_type': '用户类型',
-    'role_type': '角色类型',
-    'region_id': '地区id',
-    'is_auth': '认证',
+    'start_time': '开始日期(时间戳),默认:8天前',
+    'end_time': '结束日期(时间戳),默认:昨天',
+    'periods': '时间周期,2:日，3:周，4:月，默认:2',
+    'user_type': '用户类型,0:全部,1:新增用户,2:累计用户,默认:0',
+    'role_type': '角色类型,0:全部,1:货主,2:司机,3:物流公司,默认:0',
+    'region_id': '地区id,0:全部,其他地区用行政代码(模板写入),默认:0',
+    'is_auth': '认证,0:全部,1:认证,2:非认证,默认:0',
     }, description='用户变化趋势查询参数')
 
 response_user_statistic_param_success = api.response(200, '成功', api.model('response_success', {

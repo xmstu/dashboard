@@ -6,7 +6,7 @@
     display: inline-block;
     border: 1px solid #ccc;
     font-size:13px;
-    padding:0 6px;
+    padding:0 12px;
     line-height:32px;
     vertical-align: top;
 }
@@ -28,11 +28,8 @@
 .layui-layer-btn{
     text-align: center;
 }
+
 .part-2 .layui-table-body .layui-table-cell {
     height: auto !important;
     line-height: 22px!important;
-}
-[data-field="price_expect"] div{
-    width: 0!important;
-    padding: 0!important;
 }

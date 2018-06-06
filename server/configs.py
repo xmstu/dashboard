@@ -31,3 +31,13 @@ def __log(conf):
 @configs.register('.bi_dashboard.mongo.user_locations')
 def __log(conf):
     pass
+
+
+@configs.register('.bi_dashboard.mysql.read_bi')
+def __read_bi(conf):
+    pass
+
+
+@configs.register('.bi_dashboard.mysql.write_bi')
+def __write_bi(conf):
+    pass

@@ -7,4 +7,3 @@ from server.route.promote import *
 from server.route.admin import *
 from server.route.password import *
 from server.route.transport import *
-# from server.route.header import *

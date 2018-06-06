@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from server import log
-
+import time
 
 class UserList(object):
 
@@ -156,83 +156,32 @@ class UserList(object):
 class UserStatistic(object):
 
     @staticmethod
-    def get_user_statistic(cursor, params, user_id):
+    def get_user_statistic(cursor, params):
         command = """
-        SELECT FROM_UNIXTIME(shu_users.create_time, '%%%%Y-%%%%m-%%%%d') AS create_time, COUNT(*) AS count
-        FROM shu_users
-        LEFT JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
-        -- 认证
-        INNER JOIN (
-        SELECT
-        shu_users.id,
-        CASE WHEN
-            (SELECT auth_goods FROM shu_user_auths
-             WHERE id = shu_user_profiles.last_auth_goods_id
-             AND auth_status = 2
-             AND is_deleted != 1) = 1
-            THEN 1 ELSE 0 END AS auth_goods,
-        CASE WHEN
-            (SELECT auth_driver FROM shu_user_auths
-             WHERE id = shu_user_profiles.last_auth_driver_id
-             AND auth_status = 2
-             AND is_deleted != 1) = 1
-            THEN 1 ELSE 0 END AS auth_driver,
-        CASE WHEN
-            (SELECT auth_company FROM shu_user_auths
-             WHERE id = shu_user_profiles.last_auth_company_id
-             AND auth_status = 2
-             AND is_deleted != 1) = 1
-            THEN 1 ELSE 0 END AS auth_company
-        FROM shu_users
-        LEFT JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id AND shu_user_profiles.is_deleted = 0
-        WHERE shu_users.is_deleted = 0
-        -- 认证、非认证
-        ) AS auth ON shu_users.id = auth.id AND %(auth)s
-
-        WHERE
-        shu_users.is_deleted = 0
-        -- 起始、终止时间
-        AND shu_users.create_time >= :start_time
-        AND shu_users.create_time < :end_time
+        SELECT create_time, COUNT(*) AS count
+        FROM tb_inf_user
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
         -- 角色
-        %(role_type)s
-        -- 地区
-        %(region_user)s
-        GROUP BY FROM_UNIXTIME(shu_users.create_time, '%%%%Y-%%%%m-%%%%d')
+        AND ((:role_type = 0)
+        OR (:role_type = 1 AND user_type = 1)
+        OR (:role_type = 2 AND user_type = 2)
+        OR (:role_type = 3 AND user_type = 3)
+        )
+        -- 认证
+        AND ((:is_auth = 0)
+        OR (:is_auth = 1 AND (goods_auth = 1 OR driver_auth = 1 OR company_auth = 1))
+        OR (:is_auth = 2 AND goods_auth = 0 AND driver_auth = 0 AND company_auth = 0)
+        )
+        GROUP BY create_time
         """
-        # 认证
-        if params['is_auth'] == 1:
-            auth = '(auth_goods = 1 OR auth_driver = 1 OR auth_company = 1)'
-        elif params['is_auth'] == 2:
-            auth = '(auth_goods = 0 AND auth_driver = 0 AND auth_company = 0)'
-        else:
-            auth = '1'
-        # 角色类型
-        if params['role_type'] == 1:
-            role_type = 'AND shu_user_profiles.user_type = 1'
-        elif params['role_type'] == 2:
-            role_type = 'AND shu_user_profiles.user_type = 2'
-        elif params['role_type'] == 3:
-            role_type = 'AND shu_user_profiles.user_type = 3'
-        else:
-            role_type = 'AND 1'
-        # 地区
-        if params['region_id'] and user_id:
-            region_user = 'AND shu_users.id IN (%s)' % ','.join(str(i) for i in user_id if i)
-        elif params['region_id'] and not user_id:
-            return []
-        else:
-            region_user = 'AND 1'
 
-        command = command % {
-            'auth': auth,
-            'role_type': role_type,
-            'region_user': region_user
-        }
 
         user_statistic = cursor.query(command, {
-            'start_time': params['start_time'],
-            'end_time': params['end_time']
+            'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
+            'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'])),
+            'role_type': params['role_type'],
+            'is_auth': params['is_auth']
         })
 
         return user_statistic if user_statistic else []

@@ -772,9 +772,17 @@ body {
     color: #ddd;
     width: auto;
     height: auto;
-    position: absolute;
+    position: relative;
     left: 700px;
     top: 200px;
     letter-spacing: 4px;
     display: none;
+}
+.layui-table-header .layui-table-cell {
+    font-weight: bold;
+}
+.layui-table-cell {
+    font-size: 13px;
+    color: #111;
+    padding: 0 12px;
 }
