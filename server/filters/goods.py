@@ -56,7 +56,7 @@ class GoodsList(object):
                 if detail['weight']:
                     goods_standard.append(detail['weight'] + '吨')
                 if detail['volume']:
-                    goods_standard.append(detail['volume'] + '㎡')
+                    goods_standard.append(detail['volume'] + 'm³')
                 detail['goods_standard'] = ','.join(goods_standard) if goods_standard else '没有规格'
                 detail.pop('NAME')
                 detail.pop('weight')
@@ -95,11 +95,14 @@ class GoodsList(object):
                         loading_time_period = '12:00:00'
                     if detail['loading_time_period'] == 3:
                         loading_time_period = '19:00:00'
-                    detail['loading_time'] = detail['loading_time_date'] + ' ' + loading_time_period
+                    loading_time = detail['loading_time_date'] + ' ' + loading_time_period
                 else:
-                    detail['loading_time'] = time.strftime('%Y-%m-%d %H:%M:%S',
-                                                           time.localtime(detail['loading_time_period_begin']))
+                    loading_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(detail['loading_time_period_begin']))
 
+                # 构造时间
+                detail['time'] = detail.get('shf_goods_create_time', '') + ',' + loading_time
+
+                detail.pop('shf_goods_create_time')
                 detail.pop('loading_time_period_begin')
                 detail.pop('loading_time_date')
                 detail.pop('loading_time_period')
