@@ -3,7 +3,8 @@ $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 var requestStart = $('#date_show_one').val() + ' 00:00:00';
 var requestEnd = $('#date_show_two').val() + ' 23:59:59';
 setTimeout(function () {
-    chart_one_init();
+    line_chart_init();
+    radar_chart_init();
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
 $('#area_select').address({
@@ -117,7 +118,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         active[type] ? active[type].call(this) : '';
     });
 });
-function chart_one_init(){
+function line_chart_init(){
     $('#charts_container_one').highcharts({
         chart: {
         type: 'line'
@@ -171,5 +172,52 @@ function chart_one_init(){
         name: '实际接单',
         data: [6.9, 8.2, 4.7, 12.5, 1.9, 11.2, 12.0, 6.6, 9.2, 7.3, 16.6, 14.8]
     }]
+    })
+}
+function radar_chart_init(){
+    $('#charts_container_two').highcharts({
+        chart: {
+				polar: true,
+				type: 'line'
+		},
+		title: {
+				text: '运力雷达图',
+				x: -80
+		},
+		pane: {
+				size: '80%'
+		},
+		xAxis: {
+				categories: ['小面包车', '17M', '13M', '9.6M',
+										 '7.6M', '6.8M', '4.2M', '中面包车','小货车'],
+				tickmarkPlacement: 'on',
+				lineWidth: 0
+		},
+		yAxis: {
+				gridLineInterpolation: 'polygon',
+				lineWidth: 0,
+				min: 0
+		},
+		tooltip: {
+				shared: true,
+				pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}辆</b><br/>'
+		},
+		legend: {
+				align: 'left',
+				verticalAlign: 'top',
+				y: 70,
+				layout: 'vertical'
+		},
+		series: [{
+				name: '货源量',
+				data: [43000, 19000, 60000, 35000, 17000, 10000,19000, 60000, 35000, 17000, 10000],
+				pointPlacement: 'on',
+                type:'area'
+		}, {
+				name: '车辆数',
+				data: [50000, 39000, 42000, 31000, 26000, 14000,19000, 60000, 35000, 17000, 10000],
+				pointPlacement: 'on',
+                type:'line'
+		}]
     })
 }
