@@ -10,6 +10,8 @@ from .mysqldb import MongoLinks
 db = DictModel({
     'read_db': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_db.get())),
     'write_db': MySQLdb(dict(configs.remote.bi_dashboard.mysql.write_db.get())),
+    'read_bi': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_bi.get())),
+    'write_bi': MySQLdb(dict(configs.remote.bi_dashboard.mysql.write_bi.get()))
 })
 
 mongo = DictModel({
