@@ -176,7 +176,6 @@ class UserStatistic(object):
         GROUP BY create_time
         """
 
-
         user_statistic = cursor.query(command, {
             'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
             'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'])),
