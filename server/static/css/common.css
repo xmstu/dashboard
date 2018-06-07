@@ -64,6 +64,7 @@ body {
 }
 
 .header {
+    min-width: 1550px;
     height: 66px;
     background: #47475c;
     -webkit-background-size: cover;
@@ -494,7 +495,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 }
 
 .main-content-right {
-    padding: 20px;
+    padding: 16px;
     height: auto;
     margin-left: 176px;
     margin-top: 66px;
@@ -509,7 +510,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     position: absolute;
     top: 0;
     left: 0;
-    border-width: 0 42px 42px 0;
+    border-width: 0 32px 32px 0;
     border-style: solid;
     border-color: #ffffff rgba(0, 0, 0, 0.1);
     -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.3);

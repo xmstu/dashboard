@@ -144,7 +144,7 @@
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width: 140px">
                                             <select id="user_type" name="modules" lay-verify="required" lay-search="">
-                                                <option value="">新增用户</option>
+                                                <option value="">全部</option>
                                                 <option value="1">新增用户</option>
                                                 <option value="2">累计用户</option>
                                             </select>
@@ -157,7 +157,7 @@
                                         <div class="layui-input-inline" style="width:140px;">
                                             <select id="role_type_first" name="modules" lay-verify="required"
                                                     lay-search="">
-                                                <option value="">货主</option>
+                                                <option value="">全部</option>
                                                 <option value="1">货主</option>
                                                 <option value="2">司机</option>
                                                 <option value="3">物流公司</option>
@@ -243,11 +243,8 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">注册渠道</label>
                                     <div class="layui-input-inline">
-                                        <select id="register" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部地区</option>
-                                            <option value="1">layer</option>
-                                            <option value="2">form</option>
-                                        </select>
+                                        <input id="register" type="text" name="username" lay-verify="required"
+                                               placeholder="请输入注册渠道" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>

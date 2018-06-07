@@ -11,10 +11,12 @@ $('#area_select').address({
     onClose: function () {
     }
 });
-layui.use(['laydate', 'form', 'table'], function () {
+layui.use(['laydate', 'layer', 'form', 'table'], function () {
     dataInit();
     var laydate = layui.laydate;
     var table = layui.table;
+    var layer = layui.layer;
+    layer.load();
     laydate.render({
         elem: '#date_show_one',
         theme: '#1E9FFF',
@@ -47,6 +49,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_three',
         theme: '#1E9FFF',
         calendar: true,
+        max: String(common.getNowFormatDate()[5]),
         ready: function () {
 
         },
@@ -77,6 +80,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     laydate.render({
         elem: '#date_show_five',
         theme: '#1E9FFF',
+        max: String(common.getNowFormatDate()[5]),
         calendar: true,
         ready: function () {
 
@@ -114,6 +118,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             statusCode: 100000
         },
         done: function (res, curr, count) {
+            layer.closeAll('loading')
             $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
@@ -131,21 +136,39 @@ layui.use(['laydate', 'form', 'table'], function () {
                     $(this).text('未查询到该用户常驻地')
                 }
             })
+            $("[data-field='goods_count']").children().each(function () {
+                if ($(this).text() != '') {
+                    var str = $(this).text();
+                    $(this).html(str + '次')
+                }
+            })
+            $("[data-field='order_count']").children().each(function () {
+                if ($(this).text() != '') {
+                    var str = $(this).text();
+                    $(this).html(str + '次')
+                }
+            })
+            $("td[data-field='order_completed']").children().each(function () {
+                if ($(this).text() != '') {
+                    var str = $(this).text();
+                    $(this).html(str + '单')
+                }
+            })
         }
         , cols: [[
-              {field: 'id', title: '用户ID',  sort: true,width:80},
-                 {field: 'user_name', title: '用户名',width:100}
-                , {field: 'mobile', title: '手机号',width:120}
-                , {field: 'user_type', title: '注册角色',width:100}
-                , {field: 'role_auth', title: '认证',width:180}
-                , {field: 'usual_city', title: '常驻地',minWidth:260}
-                , {field: 'goods_count', title: '发货',width:60}
-                , {field: 'order_count', title: '接单',width:60}
-                , {field: 'order_completed', title: '完成订单',width:100}
-                , {field: 'download_channel', title: '下载渠道',width:138}
-                , {field: 'from_channel', title: '注册渠道',width:138}
-                , {field: 'last_login_time', title: '最后登陆',width:124}
-                , {field: 'create_time', title: '注册时间',width:124}
+            {field: 'id', title: '用户ID', sort: true, width: 80},
+            {field: 'user_name', title: '用户名', width: 100}
+            , {field: 'mobile', title: '手机号', width: 120}
+            , {field: 'user_type', title: '注册角色', width: 100}
+            , {field: 'role_auth', title: '认证', width: 180}
+            , {field: 'usual_city', title: '常驻地', minWidth: 260}
+            , {field: 'goods_count', title: '发货', width: 60}
+            , {field: 'order_count', title: '接单', width: 60}
+            , {field: 'order_completed', title: '完成订单', width: 100}
+            , {field: 'download_channel', title: '下载渠道', width: 138}
+            , {field: 'from_channel', title: '注册渠道', width: 138}
+            , {field: 'last_login_time', title: '最后登陆', width: 124}
+            , {field: 'create_time', title: '注册时间', width: 124}
         ]]
         , id: 'testReload'
         , page: true
@@ -287,19 +310,19 @@ $('#user_search_box').on('click', function (e) {
                 })
             }
             , cols: [[
-                  {field: 'id', title: '用户ID',  sort: true,width:80},
-                 {field: 'user_name', title: '用户名',width:100}
-                , {field: 'mobile', title: '手机号',width:120}
-                , {field: 'user_type', title: '注册角色',width:100}
-                , {field: 'role_auth', title: '认证',width:180}
-                , {field: 'usual_city', title: '常驻地',minWidth:260}
-                , {field: 'goods_count', title: '发货',width:60}
-                , {field: 'order_count', title: '接单',width:60}
-                , {field: 'order_completed', title: '完成订单',width:100}
-                , {field: 'download_channel', title: '下载渠道',width:138}
-                , {field: 'from_channel', title: '注册渠道',width:138}
-                , {field: 'last_login_time', title: '最后登陆',width:124}
-                , {field: 'create_time', title: '注册时间',width:124}
+                {field: 'id', title: '用户ID', sort: true, width: 80},
+                {field: 'user_name', title: '用户名', width: 100}
+                , {field: 'mobile', title: '手机号', width: 120}
+                , {field: 'user_type', title: '注册角色', width: 100}
+                , {field: 'role_auth', title: '认证', width: 180}
+                , {field: 'usual_city', title: '常驻地', minWidth: 260}
+                , {field: 'goods_count', title: '发货', width: 60}
+                , {field: 'order_count', title: '接单', width: 60}
+                , {field: 'order_completed', title: '完成订单', width: 100}
+                , {field: 'download_channel', title: '下载渠道', width: 138}
+                , {field: 'from_channel', title: '注册渠道', width: 138}
+                , {field: 'last_login_time', title: '最后登陆', width: 124}
+                , {field: 'create_time', title: '注册时间', width: 124}
             ]]
             , id: 'testReload'
             , page: true
@@ -310,6 +333,7 @@ $('#search_btn').on('click', function (e) {
     e.preventDefault();
     dataInit()
 })
+
 function dataInit() {
     var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
     var requestEndTime = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
@@ -324,30 +348,28 @@ function dataInit() {
     };
     var url = '/user/statistic/'
     http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-       var len = res.data.xAxis.length;
-       console.log(len)
-       if(res.status==100000){
-           console.log(res.data)
-       }
-       if(len>0&&len<20){
-           console.log(res.data)
-           $('.chart-tips').css({'display':'none'})
-            chartInit(res.data.xAxis,res.data.series)
-       }else if(len>0&&len>20&&len<40){
-            $('.chart-tips').css({'display':'none'})
-            chartInit(res.data.xAxis,res.data.series,2)
-       }else if(len>0&&len>40&&len<90){
-           $('.chart-tips').css({'display':'none'})
-            chartInit(res.data.xAxis,res.data.series,4)
-       }else {
-          $('#charts_container_one').html('');
-          $('.chart-tips').css({'display':'block'})
-           return false
-       }
+        if (res.status == 100000) {
+            var len = res.data.xAxis.length;
+            var X_data = res.data.xAxis;
+            if (len > 0 && len < 20) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit(res.data.xAxis, res.data.series, 1, X_data[1])
+            } else if (len > 0 && len > 20 && len < 40) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit(res.data.xAxis, res.data.series, 2, X_data[1])
+            } else if (len > 0 && len > 40 && len < 90) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit(res.data.xAxis, res.data.series, 4, X_data[1])
+            } else {
+                $('#charts_container_one').html('');
+                $('.chart-tips').css({'display': 'block'})
+                return false
+            }
+        }
     })
 }
 
-function chartInit(xAxis,series,interval) {
+function chartInit(xAxis, series, interval, x_value1) {
     Highcharts.setOptions({
         colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
     });
@@ -397,8 +419,8 @@ function chartInit(xAxis,series,interval) {
             }
         },
         xAxis: {
-            tickInterval:interval,
-            categories:xAxis,
+            tickInterval: interval,
+            categories: xAxis,
             gridLineColor: '#eee',
             gridLineWidth: 1
         },
@@ -409,15 +431,9 @@ function chartInit(xAxis,series,interval) {
                 {
                     color: '#ddd',
                     dashStyle: 'dash',
-                    value: 14,
+                    value: x_value1,
                     width: 1
-                },
-                {
-                    color: '#ddd',
-                    dashStyle: 'dash',
-                    value: 28,
-                    width: 1
-                },
+                }
             ],
             title: {
                 text: '人数 (人)'
@@ -433,7 +449,7 @@ function chartInit(xAxis,series,interval) {
         },
         series: [{
             name: '人数',
-            data:series
+            data: series
         }]
     });
 }
