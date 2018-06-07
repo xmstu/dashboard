@@ -3,9 +3,22 @@ from server import log
 import time
 
 class UserList(object):
+    @staticmethod
+    def get_user_id_by_home_station(cursor, home_station_id):
+        """常驻地或认证获取user_id"""
+        command = '''SELECT
+        user_id
+        FROM tb_inf_user
+        WHERE from_province_id = :home_station_id OR from_city_id = :home_station_id OR from_county_id = :home_station_id OR from_town_id = :home_station_id'''
+
+        result = cursor.query(command, {
+            'home_station_id': home_station_id
+        })
+
+        return  [str(i['user_id']) for i in result if i] if result else []
 
     @staticmethod
-    def get_user_list(cursor, page, limit, params):
+    def get_user_list(cursor, page, limit, params, user_station=None):
         # 查询字段
         fields = '''
             shu_users.id,
@@ -82,10 +95,9 @@ class UserList(object):
             command += 'AND shu_user_profiles.reference_id != 0 '
         elif params['is_referenced'] == 2:
             command += 'AND shu_user_profiles.reference_id = 0 '
-        # TODO 常驻地(待议)
-        if params['provinceid'] and params['cityid'] and params['regionid'] and params['townid']:
-            pass
-
+        # 常驻地
+        if params['home_station_id'] and user_station:
+            command += 'AND shu_users IN (%s)' % user_station
         # 注册角色
         if params['role_type'] == 1:
             command += 'AND shu_user_profiles.user_type = 1 '
@@ -102,16 +114,24 @@ class UserList(object):
         elif params['role_auth'] == 2:
             command += '''
             AND (SELECT COUNT(*) FROM shu_user_auths
-            WHERE shu_user_auths.id = shu_user_profiles.last_auth_goods_id AND shu_user_auths.auth_status = 2
+            WHERE shu_user_auths.id = shu_user_profiles.last_auth_driver_id AND shu_user_auths.auth_status = 2
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_driver = 1) > 0 '''
         elif params['role_auth'] == 3:
             command += '''
             AND (SELECT COUNT(*) FROM shu_user_auths
-            WHERE shu_user_auths.id = shu_user_profiles.last_auth_goods_id AND shu_user_auths.auth_status = 2
+            WHERE shu_user_auths.id = shu_user_profiles.last_auth_company_id AND shu_user_auths.auth_status = 2
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_company = 1) > 0 '''
-        # TODO 是否活跃(待议)
-        if params['is_actived']:
-            pass
+        # 是否活跃
+        if params['is_actived'] == 1:
+            command += 'AND shu_user_stats.keep_login_days > 1 '
+        elif params['is_actived'] == 2:
+            command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 1 * 86400
+            AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 3 * 86400 '''
+        elif params['is_actived'] == 3:
+            command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 4 * 86400
+            AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 10 * 86400 '''
+        elif params['is_actived'] == 4:
+            command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
         # 操作过
         if params['is_used'] == 1:
             command += 'AND (SELECT COUNT(*) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) > 0 '

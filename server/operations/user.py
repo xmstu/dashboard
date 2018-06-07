@@ -15,7 +15,13 @@ class UserListDecorator(object):
     @staticmethod
     @make_decorator
     def get_user_list(page, limit, params):
-        user_list = UserList.get_user_list(db.read_db, page, limit, params)
+        # 常驻地, 先去bi库筛选user_id
+        user_station = None
+        if params['home_station_id']:
+            users = UserList.get_user_id_by_home_station(db.read_bi, params['home_station_id'])
+            user_station = ','.join(users)
+        # 用户详情
+        user_list = UserList.get_user_list(db.read_db, page, limit, params, user_station)
         return Response(user_list=user_list)
 
 

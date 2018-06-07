@@ -47,6 +47,5 @@ class UserList(Resource):
 
 
 ns = api.namespace('user', description='用户统计')
-# ns.add_resource(User, '/user/')
 ns.add_resource(UserStatistic, '/statistic/')
 ns.add_resource(UserList, '/list/')

@@ -67,10 +67,7 @@ class UserList(object):
 
             is_referenced = int(params.get('is_referenced')) if params.get('is_referenced') else 0
 
-            provinceid = int(params.get('provinceid')) if params.get('provinceid') else 0
-            regionid = int(params.get('regionid')) if params.get('regionid') else 0
-            cityid = int(params.get('cityid')) if params.get('cityid') else 0
-            townid = int(params.get('townid')) if params.get('townid') else 0
+            home_station_id = int(params.get('home_station_id')) if params.get('home_station_id') else 0
 
             role_type = int(params.get('role_type')) if params.get('role_type') else 0
             role_auth = int(params.get('role_auth')) if params.get('role_auth') else 0
@@ -114,10 +111,7 @@ class UserList(object):
                 'download_ch': download_ch,
                 'from_channel': from_channel,
                 'is_referenced': is_referenced,
-                'provinceid': provinceid,
-                'cityid': cityid,
-                'townid': townid,
-                'regionid': regionid,
+                'home_station_id': home_station_id,
                 'role_type': role_type,
                 'role_auth': role_auth,
                 'is_actived': is_actived,
