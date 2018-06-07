@@ -662,11 +662,13 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     position: relative;
 }
 
-.part-2 {
+.part-2,.part-3 {
     border-top: 1px dashed #cdd;
     padding-top: 16px;
 }
-
+.part-3,.part-4{
+    margin-top: 16px;
+}
 .content-show {
     display: inline-block;
     width: 640px;
