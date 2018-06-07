@@ -246,7 +246,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             , {field: 'vehicle_type', title: '车型要求', width: 144}
             , {field: 'fee', title: '运费', width: 210}
             , {field: 'mobile', title: '货主手机', width: 120}
-            , {field: 'STATUS', title: '状态', width: 90}
+            , {field: 'goods_status', title: '状态', width: 109}
             , {field: 'call_count', title: '通话数', width: 60}
             , {field: 'time', title: '时间', width: 180}
             , {
@@ -290,17 +290,12 @@ layui.use(['laydate', 'form', 'table'], function () {
                     $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
                 }
             })
-            $("td[data-field='STATUS']").children().each(function (val) {
-                if ($(this).text() == 1) {
-                    $(this).text('待接单')
-                } else if ($(this).text() == 2) {
-                    $(this).html('<span style="color: #40AFFE">已接单</span>')
-                } else if ($(this).text() == 3) {
-                    $(this).html('<span style="color: #1E1E1E">已过期</span>')
-                } else if ($(this).text() == -1) {
-                    $(this).html('<span style="color: #1E1E1E;font-weight: bold;">已取消</span>')
-                }
-            })
+              $("td[data-field='mobile']").children().each(function (val) {
+                    if ($(this).text().length>12) {
+                        var result = $(this).text().split(',');
+                        $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
+                    }
+                })
             $("td[data-field='from_to_dis']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split(',');
@@ -668,7 +663,7 @@ $('#goods_search_box').on('click', function (e) {
                 , {field: 'vehicle_type', title: '车型要求', width: 144}
                 , {field: 'fee', title: '运费', width: 210}
                 , {field: 'mobile', title: '货主手机', width: 120}
-                , {field: 'STATUS', title: '状态', width: 90}
+                , {field: 'goods_status', title: '状态', width: 109}
                 , {field: 'call_count', title: '通话数', width: 60}
                 , {field: 'time', title: '时间', width: 180}
                 , {
@@ -706,23 +701,19 @@ $('#goods_search_box').on('click', function (e) {
                         $(this).html('货主出价：<span>' + result[0] + '元</span >(<span style="color: #f40;">' + result[1] + '</span>)<br>' + '</span>系统价：<span style="font-weight: 500;color: deepskyblue;">' + result[2] + '</span>')
                     }
                 })
+                  $("td[data-field='mobile']").children().each(function (val) {
+                    if ($(this).text() != '') {
+                        var result = $(this).text().split(',');
+                        $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
+                    }
+                })
                 $("td[data-field='vehicle_type']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split(',');
                         $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
                     }
                 })
-                $("td[data-field='STATUS']").children().each(function (val) {
-                    if ($(this).text() == 1) {
-                        $(this).text('待接单')
-                    } else if ($(this).text() == 2) {
-                        $(this).html('<span style="color: #40AFFE">已接单</span>')
-                    } else if ($(this).text() == 3) {
-                        $(this).html('<span style="color: #1E1E1E">已过期</span>')
-                    } else if ($(this).text() == -1) {
-                        $(this).html('<span style="color: #1E1E1E;font-weight: bold;">已取消</span>')
-                    }
-                })
+
                 $("td[data-field='from_to_dis']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split(',');

@@ -49,10 +49,11 @@
         <nav class="main-content-left nav-fixed-to">
             <div>
                 <section class="nav-header">
-                    <p><i class="iconfont icon-caidan" style=""></i><span>省省数据统计中心</span></p>
+                    <p><i class="iconfont icon-caidan" style=""></i><span>省省数据中心</span></p>
                 </section>
                 <section class="nav-content">
-                    <p> <i class="iconfont icon-guanliyuan" style="margin-right: 4px;"></i><span>欢迎<strong>XX管理管理员</strong></span></p>
+                    <p><i class="iconfont icon-guanliyuan"
+                          style="margin-right: 4px;"></i><span>欢迎<strong>XX管理管理员</strong></span></p>
                 </section>
             </div>
             <ul class="layui-nav layui-nav-tree" lay-filter="nav-slider">
@@ -64,7 +65,7 @@
                 </li>
                 <li class="layui-nav-item">
                     <a href="/user/" class="">
-                        <i  class="iconfont icon-permissions-user"></i>用户统计
+                        <i class="iconfont icon-permissions-user"></i>用户统计
                     </a>
                     <u></u>
                 </li>
@@ -109,7 +110,8 @@
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_one" name="date_one" autocomplete="off" lay-verify="date" class="layui-input" type="text">
+                                            <input id="date_show_one" name="date_one" autocomplete="off"
+                                                   lay-verify="date" class="layui-input" type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -118,20 +120,27 @@
                                         <label class="layui-form-label">结束日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_two" name="date_two" autocomplete="off" lay-verify="date_show_two" class="layui-input" type="text">
+                                            <input id="date_show_two" name="date_two" autocomplete="off"
+                                                   lay-verify="date_show_two" class="layui-input" type="text">
                                         </div>
                                     </div>
                                 </div>
                                 <ul>
-                                    <li><button>按日</button></li>
-                                    <li><button id="week_methods">按周</button></li>
-                                    <li><button id="month_methods">按月</button></li>
+                                    <li>
+                                        <button>按日</button>
+                                    </li>
+                                    <li>
+                                        <button id="week_methods">按周</button>
+                                    </li>
+                                    <li>
+                                        <button id="month_methods">按月</button>
+                                    </li>
                                 </ul>
                                 <div class="layui-form-item layui-item-spec" id="">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width: 140px">
-                                            <select id="new_users" name="modules" lay-verify="required" lay-search="">
+                                            <select id="is_actived" name="modules" lay-verify="required" lay-search=""  lay-filter='is_actived'>
                                                 <option value="1">拉新</option>
                                                 <option value="2">用户行为</option>
                                                 <option value="3">金额</option>
@@ -139,32 +148,46 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline layui-item-spec" style="" >
+                                <div id="select_spec_one" class="layui-form-item select-spec">
+                                    <div  class="layui-inline layui-item-spec" style="">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                            <select name="modules" lay-verify="required" lay-search="">
+                                            <select class="select-reset"  name="modules" lay-verify="required">
                                                 <option value="1">新增</option>
                                                 <option value="2">累计</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline">
+                                  <div id="select_spec_two" style="display: none;" class="layui-form-item select-spec">
+                                    <div  class="layui-inline layui-item-spec" style="">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                            <select name="modules" lay-verify="required" lay-search="">
-                                                <option value="">全部地区</option>
-                                                {% for location in locations %}
-                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
-                                                </option>
-                                                {% endfor %}
+                                            <select class="select-reset"  name="modules" lay-verify="required">
+                                                <option value="1">登陆</option>
+                                                <option value="2">发货</option>
+                                                <option value="3">接单</option>
+                                                <option value="4">完成订单</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <button id="search_btn" style="position: relative;padding-left: 20px;" class="layui-btn layui-btn-normal"><i style="" class="iconfont icon-sousuo1"></i> 搜索</button>
+                                 <div id="select_spec_three" style="display: none;" class="layui-form-item select-spec">
+                                    <div  class="layui-inline layui-item-spec" style="">
+                                        <label class="layui-form-label">搜索选择</label>
+                                        <div class="layui-input-inline" style="width:140px;">
+                                            <select class="select-reset"  name="modules" lay-verify="required">
+                                                <option value="1">货源总额</option>
+                                                <option value="2">订单总额</option>
+                                                <option value="3">实际完成总额</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="search_btn" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn layui-btn-normal"><i style=""
+                                                                              class="iconfont icon-sousuo1"></i> 搜索
+                                </button>
                             </form>
                         </div>
                         <div class="part-1-bottom">
@@ -174,28 +197,18 @@
                     <div class="part-2">
                         <form action="" class="layui-form layui-form-pane">
                             <div class="layui-form-item">
-                                <label  class="layui-form-label">用户名</label>
-                                <div class="layui-input-inline"  style="width: 172px">
-                                    <input id="user_name" type="text" name="username" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                                <label class="layui-form-label">用户名</label>
+                                <div class="layui-input-inline" style="width: 172px">
+                                    <input id="user_name" type="text" name="username" lay-verify="required"
+                                           placeholder="请输入用户名" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">手机号</label>
-                                    <div class="layui-input-inline"  style="width: 172px">
-                                        <input id="phone_number" type="tel" name="phone" placeholder="请输入手机号" lay-verify="required|phone" autocomplete="off" class="layui-input">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">所属地区</label>
-                                    <div class="layui-input-inline">
-                                        <select id="register" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部地区</option>
-                                            <option value="1">天河</option>
-                                            <option value="2">越秀</option>
-                                        </select>
+                                    <div class="layui-input-inline" style="width: 172px">
+                                        <input id="phone_number" type="tel" name="phone" placeholder="请输入手机号"
+                                               lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>
@@ -252,10 +265,12 @@
                             </div>
                             <div class="layui-form-item" style="width:240px ;">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">最后登陆</label>
+                                    <label class="layui-form-label">注册日期</label>
                                     <div class="layui-input-block">
                                         <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="date_show_three" name="date_three" autocomplete="off" lay-verify="date_show_three" class="layui-input" type="text">
+                                        <input id="date_show_three" name="date_three" autocomplete="off"
+                                               lay-verify="date_show_three" class="layui-input" type="text">
+                                        <span class="date-tips">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
@@ -264,20 +279,30 @@
                                 <div class="layui-inline">
                                     <div class="layui-input-block" style="margin-left: 10px;">
                                         <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="date_show_four" name="date_four" autocomplete="off" lay-verify="date_show_four" class="layui-input" type="text">
+                                        <input id="date_show_four" name="date_four" autocomplete="off"
+                                               lay-verify="date_show_four" class="layui-input" type="text">
+                                        <span class="date-tips">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
-                            <button id="user_search_box" style="position: relative;padding-left: 20px;" class="layui-btn layui-btn-normal"><i style="" class="iconfont icon-sousuo1"></i> 搜索</button>
-                            <button id="add_promote_person" style="padding-left: 10px;margin-left:500px;" class="layui-btn"><i style="" class="layui-icon">&#xe614;</i> 新增推广人员</button>
+                            <button id="user_search_box" style="position: relative;padding-left: 20px;"
+                                    class="layui-btn layui-btn-normal"><i style="" class="iconfont icon-sousuo1"></i> 搜索
+                            </button>
+                            <button id="add_promote_person" style="padding-left: 10px;margin-left:500px;"
+                                    class="layui-btn"><i style="" class="layui-icon">&#xe614;</i> 新增推广人员
+                            </button>
                         </form>
                         <div class="dataTable">
                             <div class="layui-inline">
-                                <input placeholder='输入用户名或手机号' class="layui-input" name="id" id="demoReload" autocomplete="off">
+                                <input placeholder='输入用户名或手机号' class="layui-input" name="id" id="demoReload"
+                                       autocomplete="off">
                             </div>
                             <button class="layui-btn" data-type="reload">搜索</button>
                         </div>
-                        <table class="layui-table" lay-data="{ height:332, url:'../static/js/user-statics/test.json', page:true, id:'idTest',even:true}" lay-filter="demo">
+                        <table class="layui-hide" id="promote_table"></table>
+                        <!--<table class="layui-table"
+                               lay-data="{ height:332, url:'../static/js/user-statics/test.json', page:true, id:'idTest',even:true}"
+                               lay-filter="demo">
                             <thead>
                             <tr>
                                 <th lay-data="{field:'id', width:140, fixed: true}">ID</th>
@@ -293,7 +318,7 @@
                                 <th lay-data="{fixed: 'right', width:130, align:'center', toolbar: '#barDemo'}">操作</th>
                             </tr>
                             </thead>
-                        </table>
+                        </table>-->
                         <script type="text/html" id="barDemo">
                             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                         </script>
@@ -312,6 +337,3 @@
 <script src="../static/js/promote/promote-statistics.js"></script>
 </body>
 </html>
-<script>
-    init();
-</script>
