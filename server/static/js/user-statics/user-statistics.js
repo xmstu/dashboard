@@ -156,19 +156,19 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             })
         }
         , cols: [[
-            {field: 'id', title: '用户ID', sort: true, width: 80},
-            {field: 'user_name', title: '用户名', width: 100}
-            , {field: 'mobile', title: '手机号', width: 120}
-            , {field: 'user_type', title: '注册角色', width: 100}
-            , {field: 'role_auth', title: '认证', width: 180}
-            , {field: 'usual_city', title: '常驻地', minWidth: 260}
-            , {field: 'goods_count', title: '发货', width: 60}
-            , {field: 'order_count', title: '接单', width: 60}
-            , {field: 'order_completed', title: '完成订单', width: 100}
-            , {field: 'download_channel', title: '下载渠道', width: 138}
-            , {field: 'from_channel', title: '注册渠道', width: 138}
-            , {field: 'last_login_time', title: '最后登陆', width: 124}
-            , {field: 'create_time', title: '注册时间', width: 124}
+            {field: 'id', title: '用户ID', sort: true},
+            {field: 'user_name', title: '用户名'}
+            , {field: 'mobile', title: '手机号'}
+            , {field: 'user_type', title: '注册角色'}
+            , {field: 'role_auth', title: '认证'}
+            , {field: 'usual_city', title: '常驻地'}
+            , {field: 'goods_count', title: '发货'}
+            , {field: 'order_count', title: '接单'}
+            , {field: 'order_completed', title: '完成订单'}
+            , {field: 'download_channel', title: '下载渠道'}
+            , {field: 'from_channel', title: '注册渠道'}
+            , {field: 'last_login_time', title: '最后登陆'}
+            , {field: 'create_time', title: '注册时间'}
         ]]
         , id: 'testReload'
         , page: true
