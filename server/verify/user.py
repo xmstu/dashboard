@@ -63,7 +63,7 @@ class UserList(object):
             user_name = params.get('user_name') if params.get('user_name') else ''
             mobile = params.get('mobile') if params.get('mobile') else ''
             reference_mobile = params.get('reference_mobile') if params.get('reference_mobile') else ''
-            download_channel = params.get('download_channel') if params.get('download_channel') else ''
+            download_ch = params.get('download_ch') if params.get('download_ch') else ''
             from_channel = params.get('from_channel') if params.get('from_channel') else ''
 
             is_referenced = int(params.get('is_referenced')) if params.get('is_referenced') else 0
@@ -88,23 +88,31 @@ class UserList(object):
 
             # 检验最后登陆时间
             if last_login_start_time and last_login_end_time:
-                if last_login_start_time < last_login_end_time < time.time():
+                if last_login_start_time <= last_login_end_time < time.time():
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最后登录时间有误'))
+            elif not last_login_start_time and not last_login_end_time:
+                pass
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             # 检验注册时间
             if register_start_time and register_end_time:
-                if register_start_time < register_end_time < time.time():
+                if register_start_time <= register_end_time < time.time():
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='选择的注册时间有误'))
+            elif not register_start_time and not register_end_time:
+                pass
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             params = {
                 'user_name': user_name,
                 'mobile': mobile,
                 'reference_mobile': reference_mobile,
-                'download_channel': download_channel,
+                'download_ch': download_ch,
                 'from_channel': from_channel,
                 'is_referenced': is_referenced,
                 'provinceid': provinceid,

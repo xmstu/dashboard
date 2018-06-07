@@ -72,8 +72,8 @@ class UserList(object):
         if params['reference_mobile']:
             command += 'AND shu_user_profiles.reference_id = (SELECT id FROM shu_users WHERE mobile = "%s") ' % params['reference_mobile']
         # 下载渠道
-        if params['download_channel']:
-            command += 'AND shu_user_profiles.download_channel = "%s" ' % params['download_channel']
+        if params['download_ch']:
+            command += 'AND shu_user_profiles.download_channel = "%s" ' % params['download_ch']
         # 注册渠道
         if params['from_channel']:
             command += 'AND shu_user_profiles.from_channel = "%s" ' % params['from_channel']
@@ -118,7 +118,7 @@ class UserList(object):
         elif params['is_used'] == 2:
             command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shb_orders.id OR shb_orders.driver_id = shb_orders.id) > 0 '
         elif params['is_used'] == 3:
-            command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE (shb_orders.owner_id = shb_orders.id OR shb_orders.driver_id = shb_orders.id) > 0 '
+            command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shb_orders.id OR shb_orders.driver_id = shb_orders.id) > 0 '
         # 贴车贴
         if params['is_car_sticker'] == 1:
             command += 'AND shu_user_profiles.trust_member_type = 2 AND ad_expired_time > UNIX_TIMESTAMP() '
@@ -126,11 +126,11 @@ class UserList(object):
             command += 'AND shu_user_profiles.trust_member_type != 2 '
         # 最后登录
         if params['last_login_start_time'] and params['last_login_end_time']:
-            command += 'AND shu_user_stats.last_login_time > %s AND shu_user_stats.last_login_time < %s ' % (
+            command += 'AND shu_user_stats.last_login_time >= %s AND shu_user_stats.last_login_time <= %s ' % (
             params['last_login_start_time'], params['last_login_end_time'])
         # 注册日期
         if params['register_start_time'] and params['register_end_time']:
-            command += 'AND shu_users.create_time > %s AND shu_users.create_time < %s ' % (
+            command += 'AND shu_users.create_time >= %s AND shu_users.create_time <= %s ' % (
                 params['register_start_time'], params['register_end_time'])
 
         # 总数
