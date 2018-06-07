@@ -5,4 +5,8 @@ def transport():
     """货源统计页面"""
     if not session.get('login'):
         return redirect('/login/')
-    return render_template('/transport/transport-capacity.html')
+    # 用户名，头像, 地区
+    user_name = session['login'].get('user_name', '')
+    avatar_url = session['login'].get('avatar_url', 'https://mp.huitouche.com/static/images/newicon.png')
+    locations = session['login'].get('locations', [])
+    return render_template('/transport/transport-capacity.html', user_name=user_name, avatar_url=avatar_url, locations=locations)

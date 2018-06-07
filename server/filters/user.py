@@ -36,7 +36,7 @@ class UserStatistic(object):
 
     @staticmethod
     @make_decorator
-    def get_result(params, data):
+    def get_result(params, data, before_user_count):
         # 结构化数据
         date_count = {}
         for count in data:
@@ -105,9 +105,9 @@ class UserStatistic(object):
                 end_flag += datetime.timedelta(days=1)
 
         # 新增
-        if params['user_type'] != 2:
+        if params['user_type'] == 1:
             pass
         # 累计
         else:
-            series = [sum(series[: i+1]) if i > 0 else series[i] for i in range(len(series))]
+            series = [sum(series[: i+1]) + before_user_count if i > 0 else series[i] + before_user_count for i in range(len(series))]
         return make_result(APIStatus.Ok, data={'xAxis': xAxis, 'series': series}), HTTPStatus.Ok

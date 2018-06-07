@@ -1,8 +1,6 @@
 $('.layui-table-cell').css({'height': 'auto!important'});
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
-$('#date_show_three').val();
-$('#date_show_four').val();
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
@@ -81,7 +79,7 @@ layui.use(['laydate', 'form', 'table'], function () {
                 });
                 layer.open({
                     type: 1,
-                    area: ['1620px', '520px'],
+                    area: ['1600px', '520px'],
                     skin: 'layui-layer-molv',
                     closeBtn: 1,
                     content: $('#popup')

@@ -12,4 +12,4 @@ def goods():
     user_name = session['login'].get('user_name', '')
     avatar_url = session['login'].get('avatar_url', 'https://mp.huitouche.com/static/images/newicon.png')
     locations = session['login'].get('locations', [])
-    return render_template('/goods/goods-statistics.html')
+    return render_template('/goods/goods-statistics.html', user_name=user_name, avatar_url=avatar_url, locations=locations)

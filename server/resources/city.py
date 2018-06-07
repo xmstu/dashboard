@@ -9,8 +9,18 @@ import server.filters.general as general_filters
 from server.utils.request import get_arg_int, get_all_arg
 
 
-class CityLatestOpenOrderList(Resource):
+class CityResourceBalance(Resource):
+    """供需平衡"""
+    @staticmethod
+    @doc.request_city_resource_balance
+    @filters.CityResourceBalance.get_result(goods=list, vehicle=list, params=dict)
+    @operations.CityResourceBalance.get_data(params=dict)
+    @verify.CityResourceBalance.check_params(params=dict)
+    def get():
+        resp = Response(params=get_all_arg())
+        return resp
 
+class CityLatestOpenOrderList(Resource):
     @staticmethod
     @doc.request_order_list_param
     @doc.response_order_list_param_success
@@ -28,5 +38,6 @@ class CityLatestOpenOrderList(Resource):
 
 
 ns = api.namespace('city', description='城市概况')
+ns.add_resource(CityResourceBalance, '/resource/')
 ns.add_resource(CityLatestOpenOrderList, '/latest_orders/')
 

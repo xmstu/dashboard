@@ -11,4 +11,4 @@ def admin():
     user_name = session['login'].get('user_name', '')
     avatar_url = session['login'].get('avatar_url', 'https://mp.huitouche.com/static/images/newicon.png')
     locations = session['login'].get('locations', [])
-    return render_template('/admin/home.html')
+    return render_template('/admin/home.html', user_name=user_name, avatar_url=avatar_url, locations=locations)

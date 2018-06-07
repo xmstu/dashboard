@@ -154,9 +154,35 @@ class UserList(object):
 
 
 class UserStatistic(object):
+    @staticmethod
+    def get_before_user_count(cursor, params):
+        command = """
+        SELECT COUNT(*) AS count
+        FROM tb_inf_user
+        WHERE create_time < :start_time
+        -- 角色
+        AND ((:role_type = 0)
+        OR (:role_type = 1 AND user_type = 1)
+        OR (:role_type = 2 AND user_type = 2)
+        OR (:role_type = 3 AND user_type = 3)
+        )
+        -- 认证
+        AND ((:is_auth = 0)
+        OR (:is_auth = 1 AND (goods_auth = 1 OR driver_auth = 1 OR company_auth = 1))
+        OR (:is_auth = 2 AND goods_auth = 0 AND driver_auth = 0 AND company_auth = 0)
+        )
+        """
+        before_user_count = cursor.query_one(command, {
+            'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
+            'role_type': params['role_type'],
+            'is_auth': params['is_auth']
+        })
+
+        return before_user_count['count'] if before_user_count else 0
 
     @staticmethod
     def get_user_statistic(cursor, params):
+        """用户新增"""
         command = """
         SELECT create_time, COUNT(*) AS count
         FROM tb_inf_user
