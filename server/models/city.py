@@ -1,3 +1,98 @@
+# -*- coding: utf-8 -*-
+
+class CityResourceBalanceModel(object):
+    @staticmethod
+    def get_goods_data(cursor, params):
+        """获取货源数据"""
+        command = '''
+        SELECT shf_goods.id, shf_goods.`status`,
+        -- 车型
+        IF(old_vehicle.attribute_value_id = 0, '不限车型', (SELECT `name` FROM shm_dictionary_items WHERE id = old_vehicle.attribute_value_id)) AS old_vehicle,
+        (SELECT `name` FROM shm_dictionary_items WHERE id = new_vehicle.attribute_value_id) AS new_vehicle,
+        -- 是否通话
+        (SELECT COUNT(*)
+        FROM shu_call_records
+        WHERE source_type = 1
+        AND source_id = shf_goods.id
+        AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) AS call_count
+        
+        FROM shf_goods
+        LEFT JOIN shf_goods_vehicles AS new_vehicle ON shf_goods.id = new_vehicle.goods_id AND new_vehicle.vehicle_attribute = 3
+        LEFT JOIN shf_goods_vehicles AS old_vehicle ON shf_goods.id = old_vehicle.goods_id AND old_vehicle.vehicle_attribute = 2
+        WHERE shf_goods.create_time >= :start_time
+        AND shf_goods.create_time < :end_time
+        -- 地区
+        AND 1 = 1 %(region)s
+        -- 货源类型
+        AND 1 = 1 %(goods_type)s'''
+
+        # 地区
+        region = ''
+        if params['region_id']:
+            region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s)' % {'region_id': params['region_id']}
+        # 同城
+        goods_type = ''
+        if params['goods_type'] == 1:
+            goods_type = 'AND haul_dist = 1'
+        # 跨城定价
+        elif params['goods_type'] == 2:
+            goods_type = 'AND haul_dist = 2 AND goods_level = 2'
+        # 跨城议价
+        elif params['goods_type'] == 3:
+            goods_type = 'AND haul_dist = 2 AND goods_level = 1'
+
+        command = command % {
+            'region': region,
+            'goods_type': goods_type
+        }
+        result = cursor.query(command, {
+            'start_time': params['start_time'],
+            'end_time': params['end_time']
+        })
+        return result if result else []
+
+    @staticmethod
+    def get_booking_data(cursor, params):
+        """获取线路车型"""
+        command = """
+        SELECT shf_booking_settings.user_id,
+        IF(shf_booking_settings.vehicle_length_id = 0, '不限车型', shm_dictionary_items.`name`) AS booking_vehicle,
+        orders.count
+        FROM shf_booking_settings
+        -- 同城、跨城
+        %(goods_type)s
+        LEFT JOIN shm_dictionary_items ON shf_booking_settings.vehicle_length_id = shm_dictionary_items.id
+        LEFT JOIN (
+        SELECT driver_id, COUNT(*) AS count
+        FROM shb_orders
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        GROUP BY driver_id) AS orders ON shf_booking_settings.user_id = orders.driver_id
+        
+        WHERE shf_booking_settings.create_time >= :start_time
+        AND shf_booking_settings.create_time < :end_time
+        -- 地区
+        AND 1 = 1 %(region)s"""
+
+        # 地区
+        region = ''
+        if params['region_id']:
+            region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s)' % {'region_id': params['region_id']}
+        # 同城
+        if params['goods_type'] == 1:
+            goods_type = 'INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id AND enabled_short_haul = 1'
+        # 跨城
+        else:
+            goods_type = 'INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id AND enabled_long_haul = 1'
+        command = command % {
+            'region': region,
+            'goods_type': goods_type
+        }
+        result = cursor.query(command, {
+            'start_time': params['start_time'],
+            'end_time': params['end_time']
+        })
+        return result if result else []
 
 class CityOrderListModel(object):
 

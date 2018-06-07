@@ -1,8 +1,37 @@
 from flask_restful import abort
+import time
 
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
+
+class CityResourceBalance(object):
+    @staticmethod
+    @make_decorator
+    def check_params(params):
+        start_time = int(params.get('start_time')) if params.get('start_time') else time.time() - 8 * 60 * 60 * 24
+        end_time = int(params.get('end_time')) if params.get('end_time') else time.time() - 60 * 60 * 24
+        region_id = int(params.get('region_id')) if params.get('region_id') else 0
+        goods_type = int(params.get('type')) if params.get('type') else 1
+
+        if start_time and end_time:
+            if start_time < end_time < time.time():
+                pass
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+        elif not start_time and not end_time:
+            pass
+        else:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+
+        params = {
+            'start_time': start_time,
+            'end_time': end_time,
+            'region_id': region_id,
+            'goods_type': goods_type
+        }
+
+        return Response(params=params)
 
 
 class CityOrderList(object):

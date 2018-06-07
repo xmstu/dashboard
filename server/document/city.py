@@ -3,6 +3,13 @@ from flask_restplus import fields
 from server import api
 from server.status import APIStatus, FeedAPIStatus
 
+request_city_resource_balance = api.doc(params={
+    'start_time': '开始日期(时间戳),默认:8天前',
+    'end_time': '结束日期(时间戳),默认:昨天',
+    'region_id': '地区id,默认:0',
+    'goods_type': '类型:1.同城,2.跨城定价,3.跨城议价,默认:0'
+})
+
 request_order_list_param = api.doc(params={
     'goods_type': '货源类型',
     'priority': '优先级',
