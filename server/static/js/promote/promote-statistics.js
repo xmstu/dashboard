@@ -105,11 +105,11 @@ layui.use(['laydate', 'form', 'table'], function () {
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
     if (beginTime != '' && finishTime == '') {
-        layer.msg('请选择新增结束日期')
+        layer.msg('请选择新增结束日期');
         return false;
     }
     if (beginTime == '' && finishTime != '') {
-        layer.msg('请选择新增开始日期')
+        layer.msg('请选择新增开始日期');
         return false;
     }
 });
