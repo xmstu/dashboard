@@ -19,12 +19,11 @@ class UserStatistic(object):
             start_time = int(params.get('start_time')) if params.get('start_time') else time.time() - 8 * 60 * 60 * 24
             end_time = int(params.get('end_time')) if params.get('end_time') else time.time() - 60 * 60 * 24
             periods = int(params.get('periods')) if params.get('periods') else 2
-            user_type = int(params.get('user_type')) if params.get('user_type') else 0
+            user_type = int(params.get('user_type')) if params.get('user_type') else 1
             role_type = int(params.get('role_type')) if params.get('role_type') else 0
             region_id = int(params.get('region_id')) if params.get('region_id') else 0
             is_auth = int(params.get('is_auth')) if params.get('is_auth') else 0
 
-            # TODO 验证参数
             if start_time and end_time:
                 if start_time < end_time < time.time():
                     pass

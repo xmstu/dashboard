@@ -16,7 +16,7 @@ class UserStatistic(Resource):
     @staticmethod
     @doc.request_user_statistic_param
     @doc.response_user_statistic_param_success
-    @filters.UserStatistic.get_result(params=dict, data=list)
+    @filters.UserStatistic.get_result(params=dict, data=list, before_user_count=int)
     @operations.UserStatisticDecorator.get_user_statistic(params=dict)
     @verify.UserStatistic.check_params(params=dict)
     def get():

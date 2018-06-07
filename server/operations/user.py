@@ -24,7 +24,9 @@ class UserStatisticDecorator(object):
     @staticmethod
     @make_decorator
     def get_user_statistic(params):
-        # 地区
+        # 用户新增
         user_statistic = UserStatistic.get_user_statistic(db.read_bi, params)
-        return Response(params=params, data=user_statistic)
+        # 之前用户累计
+        before_user_count = UserStatistic.get_before_user_count(db.read_bi, params)
+        return Response(params=params, data=user_statistic, before_user_count=before_user_count)
 
