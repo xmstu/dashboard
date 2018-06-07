@@ -1,18 +1,22 @@
 /**
  * Created by Creazy_Run on 2018/5/30.
  */
-lineChartInit();
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
-$('#date_show_three').val();
-$('#date_show_four').val();
+layui.use('layer', function () {
+    var layer = layui.layer;
+    layer.load();
+    dataInit();
+});
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
-layui.use(['laydate', 'form', 'table'], function () {
+layui.use(['laydate', 'layer', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
     var form = layui.form;
+    var layer = layui.layer;
+
     form.on('select(is_actived)', function (data) {
         if (data.value == '1') {
             $('#select_spec_two').hide();
@@ -35,7 +39,9 @@ layui.use(['laydate', 'form', 'table'], function () {
         max: String(common.getNowFormatDate()[5]),
         calendar: true,
         done: function (val, index) {
-
+            var startTime = $('#date_show_one').val();
+            var endTime = $('#date_show_two').val();
+            common.dateInterval(endTime, startTime);
         }
     });
     laydate.render({
@@ -44,7 +50,9 @@ layui.use(['laydate', 'form', 'table'], function () {
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         done: function (val, index) {
-
+            var startTime = $('#date_show_one').val();
+            var endTime = $('#date_show_two').val();
+            common.dateInterval(endTime, startTime);
         }
     });
     laydate.render({
@@ -61,26 +69,32 @@ layui.use(['laydate', 'form', 'table'], function () {
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         done: function (val, index) {
+            if ($('#date_show_three').val() == '') {
+                $('#date_show_three').next('.date-tips').show();
+            } else {
+                $('#date_show_three').next('.date-tips').hide()
+            }
         }
     });
-    //监听工具条
-     table.render({
-    elem: '#test'
-    ,url:'/demo/table/user/'
-    ,cols: [[
-      {type:'checkbox'}
-      ,{field:'id',  title: 'ID', sort: true}
-      ,{field:'username', title: '用户名'}
-      ,{field:'sex', title: '性别', sort: true}
-      ,{field:'city',  title: '城市'}
-      ,{field:'sign', title: '签名'}
-      ,{field:'experience',  title: '积分', sort: true}
-      ,{field:'score',title: '评分', sort: true}
-      ,{field:'classify',  title: '职业'}
-      ,{field:'wealth', title: '财富', sort: true}
-    ]]
-    ,page: true
-  });
+    table.render({
+        elem: '#promote_table'
+        , url: '/promote/quality/'
+        , cols: [[
+            {field: 'id', title: 'ID', sort: true}
+            , {field: 'username', title: '用户名'}
+            , {field: 'sex', title: '性别', sort: true}
+            , {field: 'city', title: '城市'}
+            , {field: 'sign', title: '签名'}
+            , {field: 'experience', title: '积分', sort: true}
+            , {field: 'score', title: '评分', sort: true}
+            , {field: 'classify', title: '职业'}
+            , {field: 'wealth', title: '财富', sort: true}
+        ]]
+        , done: function () {
+
+        }
+        , page: true
+    });
     table.on('tool(demo)', function (obj) {
         var data = obj.data;
         if (obj.event === 'del') {
@@ -126,7 +140,41 @@ $('#add_promote_person').on('click', function (e) {
     });
 });
 
-function lineChartInit() {
+$('#search_btn').click(function (e) {
+    e.preventDefault();
+    dataInit();
+})
+
+function dataInit() {
+    var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
+    var requestEndTime = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
+    var data = {
+        start_time: requestStartTime,
+        end_time: requestEndTime,
+        periods: $('.periods>li').find('button.active').val(),
+        dimension: $('#is_actived').val(),
+        data_type: $(".select-reset").val()
+    };
+    var url = '/promote/quality/';
+    http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+        if (res.status == 100000) {
+            var len = res.data.xAxis.length;
+            var X_data = res.data.xAxis;
+            if (len >= 0 && len < 20) {
+                $('.chart-tips').css({'display': 'none'});
+                lineChartInit(res.data.xAxis, res.data.counts_series, 1, X_data[1])
+            } else if (len > 0 && len > 20 && len < 40) {
+                $('.chart-tips').css({'display': 'none'});
+                lineChartInit(res.data.xAxis, res.data.counts_series, 2, X_data[1])
+            } else if (len > 0 && len > 40 && len < 90) {
+                $('.chart-tips').css({'display': 'none'});
+                lineChartInit(res.data.xAxis, res.data.counts_series, 4, X_data[1])
+            }
+        }
+    })
+}
+
+function lineChartInit(xAxis, series, interval) {
     $('#charts_container_one').highcharts({
         tooltip: {
             shared: false,
@@ -172,7 +220,8 @@ function lineChartInit() {
             }
         },
         xAxis: {
-            categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            tickInterval: interval,
+            categories: xAxis,
             gridLineColor: '#eee',
             gridLineWidth: 1
         },
@@ -191,7 +240,7 @@ function lineChartInit() {
         },
         series: [{
             name: '人数',
-            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+            data: series
         }]
     });
 }

@@ -250,16 +250,25 @@ var common = {
         var days = date1.getTime() - date2.getTime();
         var time = parseInt(days / (1000 * 60 * 60 * 24));
         if (time < 7) {
+             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
         } else if (time > 7 && time < 31) {
+             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
+        }else if(time>90){
+            layer.msg('日期超过三个月，无法按日进行显示',function(){
+
+            })
+            $("#day_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
+             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
+            $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
         } else {
+            $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
         }
-        console.log(time)
     },
     setFavicon: function () {
         alert('test')

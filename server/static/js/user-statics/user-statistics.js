@@ -118,7 +118,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             statusCode: 100000
         },
         done: function (res, curr, count) {
-            layer.closeAll('loading')
             $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
@@ -170,7 +169,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             , {field: 'create_time', title: '注册时间', width: 104}
             , {field: 'usual_city', title: '常驻地'}
         ]]
-        
+
         , id: 'testReload'
         , page: true
     });
