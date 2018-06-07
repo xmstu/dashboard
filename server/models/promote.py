@@ -75,6 +75,8 @@ class PromoteQuality(object):
         if params.get('dimension') == 3:
             promote_quality = get_money(cursor, params)
 
+        else:
+            return []
 
         return promote_quality if promote_quality else []
 
@@ -194,7 +196,7 @@ def get_money(cursor, params):
     if params.get('type') == 1:
         command = """
             -- 用户货源总额
-            SELECT tb_inf_user.create_time, SUM(goods_price_sum)
+            SELECT tb_inf_user.create_time, SUM(goods_price_sum) as amount
             FROM tb_inf_user
             INNER JOIN tb_inf_goods ON tb_inf_user.user_id = tb_inf_goods.user_id
             AND UNIX_TIMESTAMP(tb_inf_goods.create_time) >= :start_time
@@ -206,13 +208,13 @@ def get_money(cursor, params):
             -- 推荐人
             AND reference_id IS NOT NULL
             -- 地区
-            AND (from_province_id = :region_id OR from_city_id = :region_id OR from_county_id = :region_id OR from_town_id = :region_id)
+            AND (tb_inf_user.from_province_id = :region_id OR tb_inf_user.from_city_id = :region_id OR tb_inf_user.from_county_id = :region_id OR tb_inf_user.from_town_id = :region_id)
             GROUP BY create_time;
         """
     if params.get('type') == 2:
         command = """
             -- 用户订单总额
-            SELECT tb_inf_user.create_time, SUM(order_price_sum)
+            SELECT tb_inf_user.create_time, SUM(order_price_sum) as amount
             FROM tb_inf_user
             INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
             AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
@@ -224,17 +226,14 @@ def get_money(cursor, params):
             -- 推荐人
             AND reference_id IS NOT NULL
             -- 地区
-            AND (from_province_id = :region_id OR from_city_id = :region_id OR from_county_id = :region_id OR from_town_id = :region_id)
-            -- 登录
-            -- AND last_login_time >= UNIX_TIMESTAMP('2018-04-01')
-            -- AND last_login_time < UNIX_TIMESTAMP('2018-05-01')
-            --
+            AND (tb_inf_user.from_province_id = :region_id OR tb_inf_user.from_city_id = :region_id OR tb_inf_user.from_county_id = :region_id OR tb_inf_user.from_town_id = :region_id)
+
             GROUP BY create_time;
         """
     if params.get('type') == 3:
         command = """
                 -- 用户订单完成总额
-                SELECT tb_inf_user.create_time, SUM(order_price_sum)
+                SELECT tb_inf_user.create_time, SUM(order_price_sum) as amount
                 FROM tb_inf_user
                 INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
                 AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
@@ -247,7 +246,7 @@ def get_money(cursor, params):
                 -- 推荐人
                 AND reference_id IS NOT NULL
                 -- 地区
-                AND (from_province_id = :region_id OR from_city_id = :region_id OR from_county_id = :region_id OR from_town_id = :region_id)
+                AND (tb_inf_user.from_province_id = :region_id OR tb_inf_user.from_city_id = :region_id OR tb_inf_user.from_county_id = :region_id OR tb_inf_user.from_town_id = :region_id)
                 GROUP BY create_time;
                 """
 
