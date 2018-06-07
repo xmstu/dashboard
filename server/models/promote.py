@@ -88,7 +88,7 @@ def get_new_users(cursor, params):
             FROM tb_inf_user
             -- 时间段
             WHERE UNIX_TIMESTAMP(create_time) >= :start_time
-            AND UNIX_TIMESTAMP(create_time) < :end_time
+            AND UNIX_TIMESTAMP(create_time) <= :end_time
             -- 推荐人
             AND reference_id IS NOT NULL
 
@@ -111,12 +111,12 @@ def get_user_behavior(cursor, params):
             FROM tb_inf_user
             -- 时间段
             WHERE UNIX_TIMESTAMP(create_time) >= :start_time
-            AND UNIX_TIMESTAMP(create_time) < :end_time
+            AND UNIX_TIMESTAMP(create_time) <= :end_time
             -- 推荐人
             AND reference_id IS NOT NULL
             -- 登录
             AND last_login_time >= :start_time
-            AND last_login_time < :end_time
+            AND last_login_time <= :end_time
             GROUP BY create_time;
         """
 
@@ -127,10 +127,10 @@ def get_user_behavior(cursor, params):
             FROM tb_inf_user
             INNER JOIN tb_inf_goods ON tb_inf_user.user_id = tb_inf_goods.user_id
             AND UNIX_TIMESTAMP(tb_inf_goods.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_goods.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_goods.create_time) <= :end_time
             -- 时间段
             WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_user.create_time) <= :end_time
             -- 推荐人
             AND reference_id IS NOT NULL
             GROUP BY create_time;
@@ -143,10 +143,10 @@ def get_user_behavior(cursor, params):
             FROM tb_inf_user
             INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
             AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_order.create_time) <= :end_time
             -- 时间段
             WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_user.create_time) <= :end_time
             -- 推荐人
             AND reference_id IS NOT NULL
             
@@ -160,11 +160,11 @@ def get_user_behavior(cursor, params):
             FROM tb_inf_user
             INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
             AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_order.create_time) <= :end_time
             AND tb_inf_order.`status` = 3
             -- 时间段
             WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_user.create_time) <= :end_time
             -- 推荐人
             AND reference_id IS NOT NULL
             GROUP BY create_time;
@@ -189,11 +189,11 @@ def get_money(cursor, params):
             FROM tb_inf_user
             INNER JOIN tb_inf_goods ON tb_inf_user.user_id = tb_inf_goods.user_id
             AND UNIX_TIMESTAMP(tb_inf_goods.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_goods.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_goods.create_time) <= :end_time
             
             -- 时间段
             WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_user.create_time) <= :end_time
             -- 推荐人
             AND reference_id IS NOT NULL
             GROUP BY create_time;
@@ -205,11 +205,11 @@ def get_money(cursor, params):
             FROM tb_inf_user
             INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
             AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_order.create_time) <= :end_time
             
             -- 时间段
             WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
+            AND UNIX_TIMESTAMP(tb_inf_user.create_time) <= :end_time
             -- 推荐人
             AND reference_id IS NOT NULL
             GROUP BY create_time;
@@ -221,12 +221,12 @@ def get_money(cursor, params):
                 FROM tb_inf_user
                 INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
                 AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
-                AND UNIX_TIMESTAMP(tb_inf_order.create_time) < :end_time
+                AND UNIX_TIMESTAMP(tb_inf_order.create_time) <= :end_time
                 AND tb_inf_order.`status` = 3
                 
                 -- 时间段
                 WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-                AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
+                AND UNIX_TIMESTAMP(tb_inf_user.create_time) <= :end_time
                 -- 推荐人
                 AND reference_id IS NOT NULL
                 GROUP BY create_time;

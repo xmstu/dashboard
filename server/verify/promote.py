@@ -27,7 +27,7 @@ class PromoteEffect(object):
 
             # 判断时间是否合法
             if start_time and end_time:
-                if start_time < end_time < time.time():
+                if start_time <= end_time < time.time():
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
@@ -72,7 +72,7 @@ class PromoteQuality(object):
 
             # TODO 验证参数
             if start_time and end_time:
-                if start_time < end_time < time.time():
+                if start_time <= end_time < time.time():
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
