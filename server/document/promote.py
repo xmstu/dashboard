@@ -30,8 +30,7 @@ request_promote_quality_param = api.doc(params={
     'end_time':'结束日期(时间戳)',
     'periods':'时间周期',
     'dimension':'统计维度',
-    'type':'数据类型',
-    'region_id':'地区代码'
+    'data_type':'数据类型',
     }, description='推广统计列表查询参数')
 
 response_promote_quality_param_success = api.response(200, '成功', api.model('response_success', {

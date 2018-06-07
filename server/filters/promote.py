@@ -94,7 +94,7 @@ class PromoteQuality(object):
                 end_flag += datetime.timedelta(days=1)
 
         # 累计
-        if params['dimension'] == 1 and params['type'] == 2:
+        if params['dimension'] == 1 and params['data_type'] == 2:
             series = [sum(series[: i + 1]) if i > 0 else series[i] for i in range(len(series))]
         # 新增
         else:

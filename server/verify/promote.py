@@ -30,7 +30,11 @@ class PromoteEffect(object):
                 if start_time < end_time < time.time():
                     pass
                 else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间有误'))
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+            elif not start_time and not end_time:
+                pass
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             # 构造请求参数
             params = {
@@ -64,8 +68,7 @@ class PromoteQuality(object):
             end_time = int(params.get('end_time')) if params.get('end_time') else time.time() - 60 * 60 * 24
             periods = int(params.get('periods')) if params.get('periods') else 2
             dimension = int(params.get('dimension')) if params.get('dimension') else 1
-            type = int(params.get('type')) if params.get('type') else 1
-            region_id = int(params.get('region_id')) if params.get('region_id') else 0
+            data_type = int(params.get('data_type')) if params.get('data_type') else 1
 
             # TODO 验证参数
             if start_time and end_time:
@@ -83,8 +86,7 @@ class PromoteQuality(object):
                 'end_time': end_time,
                 'periods': periods,
                 'dimension': dimension,
-                'type': type,
-                'region_id': region_id,
+                'data_type': data_type,
             }
 
             return Response(params=params)
