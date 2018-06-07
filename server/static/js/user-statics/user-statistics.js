@@ -170,6 +170,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             , {field: 'create_time', title: '注册时间', width: 104}
             , {field: 'usual_city', title: '常驻地'}
         ]]
+        
         , id: 'testReload'
         , page: true
     });
