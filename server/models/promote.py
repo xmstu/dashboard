@@ -82,7 +82,7 @@ class PromoteQuality(object):
 def get_new_users(cursor, params):
 
     command = """ 
-            SELECT create_time, COUNT(*)
+            SELECT create_time, COUNT(*) as count
             FROM tb_inf_user
             -- 时间段
             WHERE UNIX_TIMESTAMP(create_time) >= :start_time
@@ -108,7 +108,7 @@ def get_user_behavior(cursor, params):
     if params.get('type') == 1:
         command = """
             -- 用户登录
-            SELECT create_time, COUNT(*)
+            SELECT create_time, COUNT(*) as count
             FROM tb_inf_user
             -- 时间段
             WHERE UNIX_TIMESTAMP(create_time) >= :start_time
@@ -126,7 +126,7 @@ def get_user_behavior(cursor, params):
     if params.get('type') == 2:
         command = """ 
              -- 用户发货
-            SELECT tb_inf_user.create_time, COUNT(*)
+            SELECT tb_inf_user.create_time, COUNT(*) as count
             FROM tb_inf_user
             INNER JOIN tb_inf_goods ON tb_inf_user.user_id = tb_inf_goods.user_id
             AND UNIX_TIMESTAMP(tb_inf_goods.create_time) >= :start_time
@@ -137,7 +137,7 @@ def get_user_behavior(cursor, params):
             -- 推荐人
             AND reference_id IS NOT NULL
             -- 地区
-            AND (from_province_id = :region_id OR from_city_id = :region_id OR from_county_id = :region_id OR from_town_id = :region_id)
+            AND (tb_inf_user.from_province_id = :region_id OR tb_inf_user.from_city_id = :region_id OR tb_inf_user.from_county_id = :region_id OR tb_inf_user.from_town_id = :region_id)
 
             GROUP BY create_time;
          """
@@ -145,7 +145,7 @@ def get_user_behavior(cursor, params):
     if params.get('type') == 3:
         command = """
             -- 用户接单
-            SELECT tb_inf_user.create_time, COUNT(*)
+            SELECT tb_inf_user.create_time, COUNT(*) as count
             FROM tb_inf_user
             INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
             AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
@@ -156,7 +156,7 @@ def get_user_behavior(cursor, params):
             -- 推荐人
             AND reference_id IS NOT NULL
             -- 地区
-            AND (from_province_id = :region_id OR from_city_id = :region_id OR from_county_id = :region_id OR from_town_id = :region_id)
+            -- AND (from_province_id = :region_id OR from_city_id = :region_id OR from_county_id = :region_id OR from_town_id = :region_id)
             
             GROUP BY create_time;
          """
@@ -164,7 +164,7 @@ def get_user_behavior(cursor, params):
     if params.get('type') == 4:
         command = """
             -- 用户完成订单
-            SELECT tb_inf_user.create_time, COUNT(*)
+            SELECT tb_inf_user.create_time, COUNT(*) as count
             FROM tb_inf_user
             INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
             AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
