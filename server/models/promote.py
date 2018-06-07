@@ -68,11 +68,11 @@ class PromoteQuality(object):
             promote_quality = get_new_users(cursor, params)
 
         # 用户行为 - 登录 发货 接单 完成订单
-        if params.get('dimension') == 2:
+        elif params.get('dimension') == 2:
             promote_quality = get_user_behavior(cursor, params)
 
         # 金额 - 货源总额 订单总额 实际完成总额
-        if params.get('dimension') == 3:
+        elif params.get('dimension') == 3:
             promote_quality = get_money(cursor, params)
 
         else:
@@ -120,7 +120,7 @@ def get_user_behavior(cursor, params):
             GROUP BY create_time;
         """
 
-    if params.get('data_type') == 2:
+    elif params.get('data_type') == 2:
         command = """ 
              -- 用户发货
             SELECT tb_inf_user.create_time, COUNT(*) as count
@@ -136,7 +136,7 @@ def get_user_behavior(cursor, params):
             GROUP BY create_time;
          """
 
-    if params.get('data_type') == 3:
+    elif params.get('data_type') == 3:
         command = """
             -- 用户接单
             SELECT tb_inf_user.create_time, COUNT(*) as count
@@ -153,7 +153,7 @@ def get_user_behavior(cursor, params):
             GROUP BY create_time;
          """
 
-    if params.get('data_type') == 4:
+    elif params.get('data_type') == 4:
         command = """
             -- 用户完成订单
             SELECT tb_inf_user.create_time, COUNT(*) as count
@@ -169,7 +169,6 @@ def get_user_behavior(cursor, params):
             AND reference_id IS NOT NULL
             GROUP BY create_time;
         """
-
     else:
         return []
 
@@ -198,7 +197,7 @@ def get_money(cursor, params):
             AND reference_id IS NOT NULL
             GROUP BY create_time;
         """
-    if params.get('data_type') == 2:
+    elif params.get('data_type') == 2:
         command = """
             -- 用户订单总额
             SELECT tb_inf_user.create_time, SUM(order_price_sum) as amount
@@ -214,7 +213,7 @@ def get_money(cursor, params):
             AND reference_id IS NOT NULL
             GROUP BY create_time;
         """
-    if params.get('data_type') == 3:
+    elif params.get('data_type') == 3:
         command = """
                 -- 用户订单完成总额
                 SELECT tb_inf_user.create_time, SUM(order_price_sum) as amount
@@ -231,7 +230,6 @@ def get_money(cursor, params):
                 AND reference_id IS NOT NULL
                 GROUP BY create_time;
                 """
-
     else:
         return []
 
