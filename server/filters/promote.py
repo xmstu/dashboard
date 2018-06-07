@@ -1,9 +1,11 @@
 import calendar
 import datetime
+import json
 import time
 
 from server.meta.decorators import make_decorator
 from server.status import build_result, APIStatus, HTTPStatus, make_result
+from server.utils.extend import ExtendHandler
 
 
 class PromoteEffect(object):
@@ -20,14 +22,17 @@ class PromoteQuality(object):
     @staticmethod
     @make_decorator
     def get_result(params, data):
+
         # 结构化数据
         date_count = {}
         for count in data:
-            if count['create_time']:
-                date_count[count['create_time'].strftime('%Y-%m-%d')] = count.get('count', 0)
+            if count.get('create_time'):
+                if count.get('count'):
+                    date_count[count['create_time'].strftime('%Y-%m-%d')] = count.get('count', 0)
+                elif count.get('amount'):
+                    date_count[count['create_time'].strftime('%Y-%m-%d')] = count.get('amount', 0)
         # 日期补全
-        begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['start_time'])),
-                                                "%Y-%m-%d")
+        begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['start_time'])),"%Y-%m-%d")
         end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['end_time'])), "%Y-%m-%d")
 
         # 日
@@ -94,4 +99,5 @@ class PromoteQuality(object):
         # 新增
         else:
             pass
-        return make_result(APIStatus.Ok, data={'xAxis': xAxis, 'series': series}), HTTPStatus.Ok
+        series = json.loads(json.dumps(series, default=ExtendHandler.handler))
+        return make_result(APIStatus.Ok, data={'xAxis': xAxis, 'counts_series': series}), HTTPStatus.Ok
