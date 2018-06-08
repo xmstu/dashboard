@@ -1,62 +1,188 @@
 # -*- coding: utf-8 -*-
 import time
 
+from flask_restful import abort
 
-class PromoteEffetList(object):
+from server import log
+from server.status import HTTPStatus, make_result, APIStatus
+
+
+class PromoteEffectList(object):
     @staticmethod
-    def get_promote_effet_list(cursor, page, limit, params):
+    def get_promote_effect_list(cursor, page, limit, params):
 
-        # 查询字段
-        fileds = """
-            -- 名字
-            shu_user_profiles.user_name,
-            -- 手机号
-            shu_users.mobile,
-            -- 推荐人数
-            -- 唤醒人数
-            -- 发货数
-            -- 发货人数
-            -- 完成数
-            -- 货源金额
-            -- 完成金额
-        """
+        fetch_where = ' AND 1 '
 
         command = """
                 SELECT
-                    %s
+                tb_inf_user.reference_id,
+                reference_name,
+                reference_mobile,
+                --  推荐人数
+                COUNT( * ) AS user_count,
+                -- TODO 唤醒人数
+                -- 发货数
+                (
+                SELECT
+                    COUNT( * ) 
                 FROM
-                    shu_users
-                    LEFT JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
-                    LEFT JOIN shu_user_stats ON shu_users.id = shu_user_stats.user_id 
+                    tb_inf_goods 
                 WHERE
-                    shu_users.is_deleted = 0
-                -- 	ANd shu_user_profiles.user_name = '猫大'
-                -- 	AND shu_users.mobile = 15917907641
-                    -- 所属地区
-                    -- 推荐角色
-                    -- 货源类型
-                    -- 是否活跃
-                    -- 贴车贴
-                    -- AND shu_user_profiles.trust_member_type = 2 AND ad_expired_time > UNIX_TIMESTAMP()
-                    -- AND shu_user_profiles.trust_member_type != 2
-                    -- 注册日期
+                    tb_inf_goods.user_id = tb_inf_user.user_id 
+                    AND tb_inf_goods.create_time > "%(start_time)s"
+                    AND tb_inf_goods.create_time < "%(end_time)s"
+                ) AS goods_count,
+                -- 发货人数
+                (
+                SELECT
+                    COUNT( DISTINCT user_id ) 
+                FROM
+                    tb_inf_goods 
+                WHERE
+                    tb_inf_goods.user_id = tb_inf_user.user_id 
+                    AND tb_inf_goods.create_time > "%(start_time)s" 
+                    AND tb_inf_goods.create_time < "%(end_time)s"
+                ) AS goods_user_count,
+                -- 完成数
+                (
+                SELECT
+                    SUM( order_count ) 
+                FROM
+                    tb_inf_order 
+                WHERE
+                    tb_inf_user.user_id = tb_inf_order.user_id 
+                    AND tb_inf_order.`status` = 3 
+                    AND tb_inf_order.create_time > "%(start_time)s"
+                    AND tb_inf_order.create_time < "%(end_time)s"
+                ) AS order_over_count,
+                -- 货源金额
+                (
+                SELECT
+                    SUM( goods_price_sum ) 
+                FROM
+                    tb_inf_goods 
+                WHERE
+                    tb_inf_goods.user_id = tb_inf_user.user_id 
+                    AND tb_inf_goods.create_time > "%(start_time)s" 
+                    AND tb_inf_goods.create_time < "%(end_time)s"
+                ) AS goods_price,
+                -- 完成金额
+                (
+                SELECT
+                    SUM( order_price_sum ) 
+                FROM
+                    tb_inf_order 
+                WHERE
+                    tb_inf_user.user_id = tb_inf_order.user_id 
+                    AND tb_inf_order.`status` = 3 
+                    AND tb_inf_order.create_time > "%(start_time)s" 
+                    AND tb_inf_order.create_time < "%(end_time)s"
+                ) AS order_over_price 
+            FROM
+                tb_inf_user
+                INNER JOIN tb_inf_promote ON tb_inf_user.reference_id = tb_inf_promote.reference_id AND tb_inf_promote.is_deleted = 0
+                AND tb_inf_user.reference_id != 0 
+                INNER JOIN tb_inf_goods ON tb_inf_user.user_id = tb_inf_goods.user_id 
+            WHERE
+                -- 注册日期
+                tb_inf_user.create_time > "%(start_time)s"
+                AND tb_inf_user.create_time < "%(end_time)s"
+                {fetch_where}
+                -- 名字
+                -- 手机号
+                -- 推荐角色
+                -- 货源类型
+                -- 是否活跃
+                -- 贴车贴
+            GROUP BY
+                reference_name
         """
 
-        # TODO 语句需要优化
+        # 用户名
+        if params['user_name']:
+            fetch_where += """ AND tb_inf_promote.reference_name = %s """ % params['user_name']
 
-        promote_counts = cursor.query_one(command % "COUNT(*) AS promote_counts")['promote_counts']
+        # 手机号
+        if params['mobile']:
+            fetch_where += """ AND tb_inf_promote.reference_mobile = %s """ % params['mobile']
+
+        # 推荐角色
+        if params['role_type']:
+            fetch_where += """
+                AND (
+                (%(role_type)d = 0)
+                OR (%(role_type)d = 1 AND user_type = 1)
+                OR (%(role_type)d = 2 AND user_type = 2)
+                OR (%(role_type)d = 3 AND user_type = 3)
+                )
+            """ % {"role_type": params['role_type']}
+
+        # 货源类型
+        if params['goods_type']:
+            fetch_where += """ 
+                AND (
+                (%(goods_type)d = 0)
+                OR (%(goods_type)d = 1 AND haul_dist = 1)
+                OR (%(goods_type)d = 2 AND haul_dist = 2 AND goods_level = 2)
+                OR (%(goods_type)d = 3 AND haul_dist = 2 AND goods_level = 1)
+                OR (%(goods_type)d = 4 AND goods_type = 2)
+                )
+            """ % {"goods_type": params["goods_type"]}
+
+        # 是否活跃
+        if params['is_actived']:
+
+            fetch_where += """
+                AND (
+                (%(is_actived)d = 0)
+                OR (%(is_actived)d = 1 AND keep_login_days > 1)
+                OR (%(is_actived)d = 2 AND last_login_time < UNIX_TIMESTAMP() - 1 * 86400
+                AND last_login_time > UNIX_TIMESTAMP() - 3 * 86400)
+                OR (%(is_actived)d = 3 AND last_login_time < UNIX_TIMESTAMP() - 4 * 86400
+                AND last_login_time > UNIX_TIMESTAMP() - 10 * 86400)
+                OR (%(is_actived)d = 4 AND last_login_time < UNIX_TIMESTAMP() - 10 * 86400)
+                )
+            """ % {"is_actived": params['is_actived']}
+
+        # 贴车贴
+        if params['is_car_sticker']:
+            fetch_where += """
+                AND (
+                (%(is_car_sticker)d = 0)
+                OR (%(is_car_sticker)d = 1 AND is_advert = 1)
+                OR (%(is_car_sticker)d = 2 AND is_advert = 0)
+                )
+            """ % {"is_car_sticker": params['is_car_sticker']}
+
+        command = command.format(fetch_where=fetch_where)
+
+        # 查询表的条数
+        count_command = """
+                SELECT
+                    COUNT( * ) as promote_counts
+                FROM (%(command)s) as a
+        """
+
+        try:
+            start_time = time.strftime('%Y-%m-%d', time.localtime(params['start_time']))
+            end_time = time.strftime('%Y-%m-%d', time.localtime(params['end_time']))
+        except Exception as e:
+            log.error('Error:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+
+        promote_counts = cursor.query_one(count_command % {'command': command % {"start_time": start_time, "end_time": end_time}})['promote_counts']
 
         # 分页
         command += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
-        promote_effet_detail = cursor.query(command)
+        promote_effect_detail = cursor.query(command % {"start_time": start_time, "end_time": end_time})
 
-        promote_effet_list = {
-            'promote_effet_detail': promote_effet_detail if promote_effet_detail else [],
+        promote_effect_list = {
+            'promote_effect_detail': promote_effect_detail if promote_effect_detail else [],
             'count': promote_counts if promote_counts else 0,
         }
 
-        return promote_effet_list if promote_effet_list else None
+        return promote_effect_list if promote_effect_list else None
 
 
 class PromoteQuality(object):

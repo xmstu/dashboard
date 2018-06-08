@@ -9,7 +9,6 @@ from server import api
 request_promote_effect_param = api.doc(params={
     'user_name': '用户名',
     'mobile': '手机号',
-    'region_id': '所属地区',
     'role_type': '推荐人角色',
     'goods_type': '货源类型',
     'is_actived': '是否活跃',

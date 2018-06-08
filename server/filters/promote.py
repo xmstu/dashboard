@@ -13,8 +13,18 @@ class PromoteEffect(object):
     @staticmethod
     @make_decorator
     def get_result(data):
+        data = json.loads(json.dumps(data, default=ExtendHandler.handler_to_float))
+        promote_effect_detail = data['promote_effect_detail']
+        for detail in promote_effect_detail:
+            detail['user_count'] = detail.get('user_count', None) or 0
+            detail['wake_up_count'] = detail.get('wake_up_count', None) or 0
+            detail['goods_count'] = detail.get('goods_count', None) or 0
+            detail['goods_user_count'] = detail.get('goods_user_count', None) or 0
+            detail['order_over_count'] = detail.get('order_over_count', None) or 0
+            detail['goods_price'] = detail.get('goods_price', None) or 0
+            detail['order_over_price'] = detail.get('order_over_price', None) or 0
 
-        return build_result(APIStatus.Ok, count=data['count'], data=data['promote_effet_detail']), HTTPStatus.Ok
+        return build_result(APIStatus.Ok, count=data['count'], data=promote_effect_detail), HTTPStatus.Ok
 
 
 class PromoteQuality(object):
