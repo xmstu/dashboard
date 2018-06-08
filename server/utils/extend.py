@@ -11,3 +11,12 @@ class ExtendHandler(object):
         :return   : String
         """
         return obj.isoformat() if hasattr(obj, 'isoformat') else str(obj)
+
+    @staticmethod
+    def handler_to_float(obj):
+        """转换函数
+
+        :param obj: 传递的函数
+        :return   : Float
+        """
+        return obj.isoformat() if hasattr(obj, 'isoformat') else float(obj)

@@ -99,5 +99,5 @@ class PromoteQuality(object):
         # 新增
         else:
             pass
-        series = json.loads(json.dumps(series, default=ExtendHandler.handler))
+        series = json.loads(json.dumps(series, default=ExtendHandler.handler_to_float))
         return make_result(APIStatus.Ok, data={'xAxis': xAxis, 'counts_series': series}), HTTPStatus.Ok
