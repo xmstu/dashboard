@@ -12,7 +12,7 @@ class CityResourceBalance(object):
         start_time = int(params.get('start_time')) if params.get('start_time') else time.time() - 8 * 60 * 60 * 24
         end_time = int(params.get('end_time')) if params.get('end_time') else time.time() - 60 * 60 * 24
         region_id = int(params.get('region_id')) if params.get('region_id') else 0
-        goods_type = int(params.get('type')) if params.get('type') else 1
+        goods_type = int(params.get('goods_type')) if params.get('goods_type') else 1
 
         if start_time and end_time:
             if start_time < end_time < time.time():
