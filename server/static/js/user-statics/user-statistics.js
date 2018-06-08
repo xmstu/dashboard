@@ -135,13 +135,13 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                     $(this).text('未查询到该用户常驻地')
                 }
             })
-            $("[data-field='goods_count']").children().each(function () {
+            $("td[data-field='goods_count']").children().each(function () {
                 if ($(this).text() != '') {
                     var str = $(this).text();
                     $(this).html(str + '次')
                 }
             })
-            $("[data-field='order_count']").children().each(function () {
+            $("td[data-field='order_count']").children().each(function () {
                 if ($(this).text() != '') {
                     var str = $(this).text();
                     $(this).html(str + '次')
@@ -310,13 +310,13 @@ $('#user_search_box').on('click', function (e) {
                         $(this).text('未查询到该用户常驻地')
                     }
                 })
-                $("[data-field='goods_count']").children().each(function () {
+                $("td[data-field='goods_count']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         $(this).html(str + '次')
                     }
                 })
-                $("[data-field='order_count']").children().each(function () {
+                $("td[data-field='order_count']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         $(this).html(str + '次')
