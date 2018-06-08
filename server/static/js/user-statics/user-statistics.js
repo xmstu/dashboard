@@ -123,9 +123,9 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                 if ($(this).text() == 0) {
                     $(this).text('未录入')
                 } else if ($(this).text() == 1) {
-                    $(this).text('司机')
-                } else if ($(this).text() == 2) {
                     $(this).text('货主')
+                } else if ($(this).text() == 2) {
+                    $(this).text('司机')
                 } else if ($(this).text() == 3) {
                     $(this).text('物流公司')
                 }
@@ -155,19 +155,19 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             })
         }
         , cols: [[
-                 {field: 'id', title: '用户ID', sort: true, width: 76},
-            {field: 'user_name', title: '用户名', width: 76}
-            , {field: 'mobile', title: '手机号', width: 111}
-            , {field: 'user_type', title: '注册角色', width: 111}
-            , {field: 'role_auth', title: '认证', width: 111}
-            , {field: 'goods_count', title: '发货', width: 70}
-            , {field: 'order_count', title: '接单', width: 76}
-            , {field: 'order_completed', title: '完成订单', width: 76}
-            , {field: 'download_channel', title: '下载渠道', width: 101}
-            , {field: 'from_channel', title: '注册渠道', width: 126}
-            , {field: 'last_login_time', title: '最后登陆', width: 104}
-            , {field: 'create_time', title: '注册时间', width: 104}
-            , {field: 'usual_city', title: '常驻地'}
+           {field: 'id', title: '用户ID', sort: true, width: 76},
+                {field: 'user_name', title: '用户名', width: 76}
+                , {field: 'mobile', title: '手机号', width: 111}
+                , {field: 'user_type', title: '注册角色', width: 111}
+                , {field: 'role_auth', title: '认证', width: 111}
+                , {field: 'goods_count', title: '发货', width: 70}
+                , {field: 'order_count', title: '接单', width: 76}
+                , {field: 'order_completed', title: '完成订单', width: 76}
+                , {field: 'download_channel', title: '下载渠道', width: 110}
+                , {field: 'from_channel', title: '注册渠道', width: 146}
+                , {field: 'last_login_time', title: '最后登陆', width: 104}
+                , {field: 'create_time', title: '注册时间', width: 104}
+                , {field: 'usual_city', title: '常驻地'}
         ]]
 
         , id: 'testReload'
@@ -295,34 +295,51 @@ $('#user_search_box').on('click', function (e) {
                     if ($(this).text() == 0) {
                         $(this).text('未录入')
                     } else if ($(this).text() == 1) {
-                        $(this).text('司机')
-                    } else if ($(this).text() == 2) {
                         $(this).text('货主')
+                    } else if ($(this).text() == 2) {
+                        $(this).text('司机')
                     } else if ($(this).text() == 3) {
                         $(this).text('物流公司')
                     }
                 })
-
                 $("[data-field='usual_city']").children().each(function () {
                     if ($(this).text() == '') {
                         $(this).text('未查询到该用户常驻地')
                     }
                 })
+                $("[data-field='goods_count']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        $(this).html(str + '次')
+                    }
+                })
+                $("[data-field='order_count']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        $(this).html(str + '次')
+                    }
+                })
+                $("td[data-field='order_completed']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        $(this).html(str + '单')
+                    }
+                })
             }
             , cols: [[
-                 {field: 'id', title: '用户ID', sort: true, width: 76},
-            {field: 'user_name', title: '用户名', width: 76}
-            , {field: 'mobile', title: '手机号', width: 111}
-            , {field: 'user_type', title: '注册角色', width: 111}
-            , {field: 'role_auth', title: '认证', width: 111}
-            , {field: 'goods_count', title: '发货', width: 70}
-            , {field: 'order_count', title: '接单', width: 76}
-            , {field: 'order_completed', title: '完成订单', width: 76}
-            , {field: 'download_channel', title: '下载渠道', width: 101}
-            , {field: 'from_channel', title: '注册渠道', width: 126}
-            , {field: 'last_login_time', title: '最后登陆', width: 104}
-            , {field: 'create_time', title: '注册时间', width: 104}
-            , {field: 'usual_city', title: '常驻地'}
+                {field: 'id', title: '用户ID', sort: true, width: 76},
+                {field: 'user_name', title: '用户名', width: 76}
+                , {field: 'mobile', title: '手机号', width: 111}
+                , {field: 'user_type', title: '注册角色', width: 111}
+                , {field: 'role_auth', title: '认证', width: 111}
+                , {field: 'goods_count', title: '发货', width: 70}
+                , {field: 'order_count', title: '接单', width: 76}
+                , {field: 'order_completed', title: '完成订单', width: 76}
+                , {field: 'download_channel', title: '下载渠道', width: 110}
+                , {field: 'from_channel', title: '注册渠道', width: 146}
+                , {field: 'last_login_time', title: '最后登陆', width: 104}
+                , {field: 'create_time', title: '注册时间', width: 104}
+                , {field: 'usual_city', title: '常驻地'}
             ]]
             , id: 'testReload'
             , page: true
