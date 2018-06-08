@@ -200,12 +200,13 @@ $('#user_search_box').on('click', function (e) {
     var infinteTime = $.trim($('#date_show_five').val());
     var overTIme = $.trim($('#date_show_six').val());
     var provinceid = $.trim($('#area_select').attr('provinceid'));
+    var cityid =$.trim($('#area_select').attr('cityid'));
     var districtsid = $.trim($('#area_select').attr('districtsid'));
-    if (provinceid != '' && districtsid == '') {
+  /*  if (provinceid != '' && districtsid == '') {
         layer.msg('请将常驻地选择到第三级别', function () {
         });
         return false;
-    }
+    }*/
     if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
         layer.msg('请检查用户名号码长度!', function () {
 
@@ -263,7 +264,9 @@ $('#user_search_box').on('click', function (e) {
         download_ch: $.trim($('#download_ch').val()),
         from_channel: $.trim($('#register').val()),
         is_referenced: $.trim($('#is_referenced').val()),
-        home_station_id: $.trim($('#home_station_id').val()),
+        home_station_province: provinceid,
+        home_station_city:cityid,
+        home_station_county:districtsid,
         role_type: $.trim($('#role_type').val()),
         role_auth: $.trim($('#role_auth').val()),
         is_actived: $.trim($('#is_actived').val()),
@@ -277,7 +280,7 @@ $('#user_search_box').on('click', function (e) {
         limit: 10
     }
     var url = '/user/list/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&reference_mobile=' + data.reference_mobile + '&download_ch=' + data.download_ch + '&from_channel=' +
-        data.from_channel + '&is_referenced=' + data.is_referenced + '&home_station_id=' + data.home_station_id + '&role_type=' + data.role_type + '&role_auth=' + data.role_auth + '&is_actived=' + data.is_actived + '&is_used=' + data.is_used + '&is_car_sticker=' + data.is_car_sticker + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
+        data.from_channel + '&is_referenced=' + data.is_referenced + '&home_station_province=' + data.home_station_province + '&home_station_city=' + data.home_station_city+ '&home_station_county=' + data.home_station_county+ '&role_type=' + data.role_type + '&role_auth=' + data.role_auth + '&is_actived=' + data.is_actived + '&is_used=' + data.is_used + '&is_car_sticker=' + data.is_car_sticker + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
 
     layui.use('table', function () {
         var table = layui.table;
@@ -365,6 +368,7 @@ function dataInit() {
     };
     var url = '/user/statistic/'
     http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+        //console.log(res)
         if (res.status == 100000) {
             var len = res.data.xAxis.length;
             var X_data = res.data.xAxis;

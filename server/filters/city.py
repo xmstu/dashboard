@@ -23,7 +23,7 @@ class CityResourceBalance(object):
                     if i['call_count'] == 0:
                         result[vehicle_name]['待联系'] = result[vehicle_name].setdefault('待联系', 0) + 1
                     else:
-                        result[vehicle_name]['已联系'] =result[vehicle_name] .setdefault('已联系', 0)['已联系'] + 1
+                        result[vehicle_name]['已联系'] =result[vehicle_name] .setdefault('已联系', 0) + 1
         # 接单车型
         for i in vehicle:
             if i['booking_vehicle']:
@@ -36,14 +36,21 @@ class CityResourceBalance(object):
         city_result = {}
         for i in result:
             city_result[i] = [
-                {'value': result[i].get('待接单', 0), 'name': '待接单'},
-                {'value': result[i].get('已接单', 0), 'name': '已接单'},
-                {'value': result[i].get('已取消', 0), 'name': '已取消'},
-                {'value': result[i].get('已接单车辆', 0), 'name': '已接单车辆'},
-                {'value': result[i].get('待接单车辆数', 0), 'name': '待接单车辆数'},
+                # 外圈
+                [
+                    {'value': result[i].get('待接单', 0), 'name': '待接单'},
+                    {'value': result[i].get('已接单', 0), 'name': '已接单'},
+                    {'value': result[i].get('已取消', 0), 'name': '已取消'}
+                ],
+                # 内圈
+                [
+                    {'value': result[i].get('已接单车辆', 0), 'name': '已接单车辆'},
+                    {'value': result[i].get('待接单车辆数', 0), 'name': '待接单车辆数'},
+                    {'value': 0, 'name': '空白部分', 'itemStyle': 'placeHolderStyle'}
+                ]
             ]
             if params['goods_type'] == 3:
-                city_result[i].extend([
+                city_result[i][0].extend([
                     {'value': result[i].get('待联系', 0), 'name': '待联系'},
                     {'value': result[i].get('已联系', 0), 'name': '已联系'}
                 ])

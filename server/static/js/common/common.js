@@ -25,7 +25,7 @@ var common = {
 
         nav_menu.on('click', function (e) {
             e.preventDefault();
-            if ($('.layui-nav-tree').width() == '176') {
+            if ($('.layui-nav-tree').width() == '148') {
 
                 $('.layui-icon-right').animate({'opacity': 0});
 
@@ -55,11 +55,11 @@ var common = {
 
             } else if ($('.layui-nav-tree').width() == '50') {
 
-                $('.layui-nav-tree').css({'margin-left': '12px'}).animate({'width': '176'});
+                $('.layui-nav-tree').css({'margin-left': '6px'}).animate({'width': '148'});
 
                 $('.layui-icon-right').animate({'opacity': 0});
 
-                $('.main-content-right').animate({'margin-left': '200px'});
+                $('.main-content-right').animate({'margin-left': '162px'});
 
                 setTimeout(function () {
 
@@ -69,11 +69,11 @@ var common = {
 
                 }, 300);
 
-                $('.nav-header').animate({'width': '200px'});
+                $('.nav-header').animate({'width': '162px'});
 
                 $(this).css({'transform': 'rotateZ(360deg)', 'transition': 'all 0.4s'});
 
-                $('.layui-nav-item >a').animate({'width': '200px'});
+                $('.layui-nav-item >a').animate({'width': '148px'});
 
                 $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '44px'});
 
@@ -144,7 +144,7 @@ var common = {
     weather: function () {
         var this_ity;
         $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
-            this_ity = '广州';
+            this_ity = remote_ip_info.city;
             var myDate = new Date();
             var thisDate = myDate.getMonth() + 1;
             $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
