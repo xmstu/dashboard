@@ -80,15 +80,19 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#promote_table'
         , url: '/promote/quality/'
         , cols: [[
-            {field: 'id', title: 'ID', sort: true}
-            , {field: 'username', title: '用户名'}
-            , {field: 'sex', title: '性别', sort: true}
-            , {field: 'city', title: '城市'}
-            , {field: 'sign', title: '签名'}
-            , {field: 'experience', title: '积分', sort: true}
-            , {field: 'score', title: '评分', sort: true}
-            , {field: 'classify', title: '职业'}
-            , {field: 'wealth', title: '财富', sort: true}
+            {field: 'id', title: '用户ID', sort: true}
+            , {field: 'username', title: '姓名'}
+            , {field: 'sex', title: '手机号', sort: true}
+            , {field: 'city', title: '推荐人数'}
+            , {field: 'sign', title: '唤醒人数'}
+            , {field: 'experience', title: '发货数', sort: true}
+            , {field: 'score', title: '发货人数', sort: true}
+            , {field: 'classify', title: '完成数'}
+            , {field: 'wealth', title: '货源金额', sort: true}
+            , {field: 'wealth', title: '完成金额', sort: true}
+            , {field: 'wealth', title: '操作',templet: function(d){
+        return '<span class="promote-delete" style="color: #c00;">删除</span>'
+      }}
         ]]
         , done: function () {
 
@@ -129,7 +133,7 @@ $('#user_search_box').on('click', function (e) {
 });
 $('#add_promote_person').on('click', function (e) {
     e.preventDefault();
-    var str = "<p  style='position: relative;'><span class='phone-number'>输入号码</span><i class='iconfont icon-dianhua'></i><input id='add_users' type='text' placeholder='请输入添加人的号码'></p> "
+    var str = "<p  style='position: relative;'><span class='phone-number'>输入号码</span><i class='iconfont icon-dianhua'></i><input id='add_users' type='text' placeholder='请输入添加人的号码'></p> ";
     layer.confirm(str, {
         title: '新增推广人员',
         btn: ['确定添加', '取消'] //按钮
@@ -143,7 +147,7 @@ $('#add_promote_person').on('click', function (e) {
 $('#search_btn').click(function (e) {
     e.preventDefault();
     dataInit();
-})
+});
 
 function dataInit() {
     var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
