@@ -89,10 +89,10 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             , {field: 'experience', title: '发货数', sort: true}
             , {field: 'score', title: '发货人数', sort: true}
             , {field: 'classify', title: '完成数'}
-            , {field: 'wealth', title: '货源金额', sort: true}
-            , {field: 'wealth', title: '完成金额', sort: true}
+            , {field: 'money', title: '货源金额', sort: true}
+            , {field: 'complete', title: '完成金额', sort: true}
             , {
-                field: 'wealth', title: '操作', templet: function (d) {
+                field: 'wealth', title: '操作',width:86, templet: function (d) {
                     return '<button class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
                 }
             }
@@ -164,28 +164,47 @@ function dataInit() {
         data_type: $(".select-reset").val()
     };
     var url = '/promote/quality/';
-    http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-        if (res.status == 100000) {
-            var len = res.data.xAxis.length;
-            var X_data = res.data.xAxis;
-            if (len >= 0 && len < 20) {
-                $('.chart-tips').css({'display': 'none'});
-                lineChartInit(res.data.xAxis, res.data.counts_series, 1, X_data[1])
-            } else if (len > 0 && len > 20 && len < 40) {
-                $('.chart-tips').css({'display': 'none'});
-                lineChartInit(res.data.xAxis, res.data.counts_series, 2, X_data[1])
-            } else if (len > 0 && len > 40 && len < 90) {
-                $('.chart-tips').css({'display': 'none'});
-                lineChartInit(res.data.xAxis, res.data.counts_series, 4, X_data[1])
+    if (data.dimension == 3) {
+        http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+            if (res.status == 100000) {
+                var len = res.data.xAxis.length;
+                if (len >= 0 && len < 20) {
+                    $('.chart-tips').css({'display': 'none'});
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 1, '金额(元)','金额','元')
+                } else if (len > 0 && len > 20 && len < 40) {
+                    $('.chart-tips').css({'display': 'none'});
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 2, '金额(元)','金额','元')
+                } else if (len > 0 && len > 40 && len < 90) {
+                    $('.chart-tips').css({'display': 'none'});
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 4, '金额(元)','金额','元')
+                }
             }
-        }
-    })
+        })
+    } else if (data.dimension == 1 || data.dimension == 2) {
+        http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+            if (res.status == 100000) {
+                var len = res.data.xAxis.length;
+                var X_data = res.data.xAxis;
+                if (len >= 0 && len < 20) {
+                    $('.chart-tips').css({'display': 'none'});
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 1, '人数(人)','人数','人')
+                } else if (len > 0 && len > 20 && len < 40) {
+                    $('.chart-tips').css({'display': 'none'});
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 2, '人数(人)','人数','人')
+                } else if (len > 0 && len > 40 && len < 90) {
+                    $('.chart-tips').css({'display': 'none'});
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 4, '人数(人)','人数','人')
+                }
+            }
+        })
+    }
 }
 
-function lineChartInit(xAxis, series, interval) {
+function lineChartInit(xAxis, series, interval, str_title,names,units) {
     $('#charts_container_one').highcharts({
         tooltip: {
-            shared: false,
+            shared: true,
+            valueSuffix: units,
             crosshairs: [{
                 width: 1,
                 color: '#ccc'
@@ -235,7 +254,7 @@ function lineChartInit(xAxis, series, interval) {
         },
         yAxis: {
             title: {
-                text: '人数 (人)'
+                text: str_title
             }
         },
         plotOptions: {
@@ -247,7 +266,7 @@ function lineChartInit(xAxis, series, interval) {
             }
         },
         series: [{
-            name: '人数',
+            name: names,
             data: series
         }]
     });
