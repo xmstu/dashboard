@@ -67,7 +67,18 @@ class UserList(object):
 
             is_referenced = int(params.get('is_referenced')) if params.get('is_referenced') else 0
 
-            home_station_id = int(params.get('home_station_id')) if params.get('home_station_id') else 0
+            home_station_province = int(params.get('home_station_province')) if params.get('home_station_province') else 0
+            home_station_city = int(params.get('home_station_city')) if params.get('home_station_city') else 0
+            home_station_county = int(params.get('home_station_county')) if params.get('home_station_county') else 0
+
+            if home_station_county:
+                home_station_id = home_station_county
+            elif home_station_city:
+                home_station_id = home_station_city
+            elif home_station_province:
+                home_station_id = home_station_province
+            else:
+                home_station_id = 0
 
             role_type = int(params.get('role_type')) if params.get('role_type') else 0
             role_auth = int(params.get('role_auth')) if params.get('role_auth') else 0
