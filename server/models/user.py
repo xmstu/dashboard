@@ -15,7 +15,7 @@ class UserList(object):
             'home_station_id': home_station_id
         })
 
-        return  [str(i['user_id']) for i in result if i] if result else []
+        return [str(i['user_id']) for i in result if i] if result else []
 
     @staticmethod
     def get_user_list(cursor, page, limit, params, user_station=None):
