@@ -71,15 +71,6 @@ class UserList(object):
             home_station_city = int(params.get('home_station_city')) if params.get('home_station_city') else 0
             home_station_county = int(params.get('home_station_county')) if params.get('home_station_county') else 0
 
-            if home_station_county:
-                home_station_id = home_station_county
-            elif home_station_city:
-                home_station_id = home_station_city
-            elif home_station_province:
-                home_station_id = home_station_province
-            else:
-                home_station_id = 0
-
             role_type = int(params.get('role_type')) if params.get('role_type') else 0
             role_auth = int(params.get('role_auth')) if params.get('role_auth') else 0
             is_actived = int(params.get('is_actived')) if params.get('is_actived') else 0
@@ -122,7 +113,9 @@ class UserList(object):
                 'download_ch': download_ch,
                 'from_channel': from_channel,
                 'is_referenced': is_referenced,
-                'home_station_id': home_station_id,
+                'home_station_province': home_station_province,
+                'home_station_city': home_station_city,
+                'home_station_county': home_station_county,
                 'role_type': role_type,
                 'role_auth': role_auth,
                 'is_actived': is_actived,

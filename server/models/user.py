@@ -4,15 +4,17 @@ import time
 
 class UserList(object):
     @staticmethod
-    def get_user_id_by_home_station(cursor, home_station_id):
+    def get_user_id_by_home_station(cursor, params):
         """常驻地或认证获取user_id"""
         command = '''SELECT
         user_id
         FROM tb_inf_user
-        WHERE from_province_id = :home_station_id OR from_city_id = :home_station_id OR from_county_id = :home_station_id OR from_town_id = :home_station_id'''
+        WHERE from_province_id = :home_station_province AND from_city_id = :home_station_city AND from_county_id = :home_station_county'''
 
         result = cursor.query(command, {
-            'home_station_id': home_station_id
+            'home_station_province': params['home_station_province'],
+            'home_station_city': params['home_station_city'],
+            'home_station_county': params['home_station_county'],
         })
 
         return [str(i['user_id']) for i in result if i] if result else []
@@ -96,7 +98,7 @@ class UserList(object):
         elif params['is_referenced'] == 2:
             command += 'AND shu_user_profiles.reference_id = 0 '
         # 常驻地
-        if params['home_station_id'] and user_station:
+        if user_station:
             command += 'AND shu_users.id IN (%s)' % user_station
         # 注册角色
         if params['role_type'] == 1:
