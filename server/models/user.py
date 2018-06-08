@@ -97,7 +97,7 @@ class UserList(object):
             command += 'AND shu_user_profiles.reference_id = 0 '
         # 常驻地
         if params['home_station_id'] and user_station:
-            command += 'AND shu_users IN (%s)' % user_station
+            command += 'AND shu_users.id IN (%s)' % user_station
         # 注册角色
         if params['role_type'] == 1:
             command += 'AND shu_user_profiles.user_type = 1 '
