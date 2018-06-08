@@ -8,7 +8,7 @@ import server.verify.general as general_verify
 from server import api
 from server import verify, operations, filters
 from server.meta.decorators import Response
-from server.utils.request import get_all_arg, get_arg_int
+from server.utils.request import get_all_arg, get_arg_int, get_payload
 
 
 class PromoteEffect(Resource):
@@ -30,6 +30,22 @@ class PromoteEffect(Resource):
 
         return resp
 
+    @staticmethod
+    def post():
+        """新增推广人员"""
+        payload = get_payload()
+        mobile = payload.get('mobile', None) or ''
+
+        return Response(mobile=mobile)
+
+    @staticmethod
+    def delete():
+        """删除推广人员"""
+        payload = get_payload()
+        reference_id = payload.get('reference_id', None) or 0
+
+        return Response(reference_id=reference_id)
+
 
 class PromoteQuality(Resource):
     @staticmethod
@@ -46,6 +62,5 @@ class PromoteQuality(Resource):
 
 
 ns = api.namespace('promote', description='推广统计')
-# ns.add_resource(PromoteAdd, '/add/')
 ns.add_resource(PromoteQuality, '/quality/')
 ns.add_resource(PromoteEffect, '/effect/')
