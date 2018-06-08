@@ -29,12 +29,12 @@
         <section class="header-right">
             <div class="oneself-set">
                 <img width="52" height="52" style="border-radius: 50%;border: 1px dotted #ccc;"
-                     src="../static/images/Test/head-icon.gif" alt="">
+                     src="{{avatar_url}}" alt="">
                 <div>
-                    <b style="display: inline-block;margin-top:12px;margin-right:6px;color: #fff;">Hi,超级管理员</b>
+                    <b style="display: inline-block;margin-top:12px;margin-right:6px;color: #fff;">Hi,{{user_name}}</b>
                     <span id="show_hide" style="cursor:pointer;color: #fff;" class="layui-icon">&#xe61a;</span>
                     <ul class="dropdown-menu" style="display:none;">
-                        <li><a href="/password/change-password.html"><i class="iconfont icon-shezhi1"></i> <span
+                        <li><a href="/password/"><i class="iconfont icon-shezhi1"></i> <span
                                 style="border-left: 1px dashed #ccc;padding-left: 5px;">修改密码</span></a></li>
                         <li class="loginOut"><a href="#"><i class="iconfont icon-secede"></i> <span
                                 style="border-left: 1px dashed #ccc; padding-left: 5px;">退出登陆</span></a></li>
@@ -53,7 +53,7 @@
                 </section>
                 <section class="nav-content">
                     <p><i class="iconfont icon-guanliyuan"
-                          style="margin-right: 4px;"></i><span>欢迎<strong>XX管理管理员</strong></span></p>
+                          style="margin-right: 4px;"></i><span>欢迎<strong>{{user_name}}</strong></span></p>
                 </section>
             </div>
             <ul class="layui-nav layui-nav-tree" lay-filter="nav-slider">
@@ -176,7 +176,7 @@
                                     <div  class="layui-inline layui-item-spec" style="">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                            <select class="select-reset"  name="modules" lay-verify="required">
+                                            <select class="select-reset"  name="" lay-verify="">
                                                 <option value="1">货源总额</option>
                                                 <option value="2">订单总额</option>
                                                 <option value="3">实际完成总额</option>

@@ -21,16 +21,20 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         if (data.value == '1') {
             $('#select_spec_two').hide();
             $('#select_spec_three').hide();
-            $('#select_spec_one').show()
+            $('#select_spec_one').show();
+            form.render('select');
         } else if (data.value == '2') {
+             form.render('select');
             $('#select_spec_one').hide();
             $('#select_spec_three').hide();
-            $('#select_spec_two').show()
+            $('#select_spec_two').show();
 
         } else if (data.value == '3') {
+            form.render('select');
             $('#select_spec_one').hide();
             $('#select_spec_two').hide();
-            $('#select_spec_three').show()
+            $('#select_spec_three').show();
+
         }
     });
     laydate.render({
@@ -163,6 +167,7 @@ function dataInit() {
         dimension: $('#is_actived').val(),
         data_type: $(".select-reset").val()
     };
+    console.log(data.data_type)
     var url = '/promote/quality/';
     if (data.dimension == 3) {
         http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {

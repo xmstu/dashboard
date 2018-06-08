@@ -1,9 +1,6 @@
 /**
  * Created by Creazy_Run on 2018/5/30.
  */
-/**
- * Created by Creazy_Run on 2018/5/30.
- */
 $('.layui-table-cell').css({'height': 'auto!important'});
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
@@ -428,6 +425,13 @@ $('#charts_container_two').highcharts({
         backgroundColor: 'transparent',
         labelFormatter: function () {
             return this.name
+        }
+    },
+    lotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            }
         }
     },
     series: [{

@@ -101,7 +101,8 @@ layui.use(['laydate', 'form', 'table'], function () {
 
 $('#search_btn').click(function (e) {
     e.preventDefault();
-    layer.msg('success')
+    dataInit();
+    console.log($('#city_area').val())
 });
 
 function dataInit() {
@@ -129,6 +130,7 @@ function dataInit() {
           for (var i = 0; i < arr.length; i++) {
             str += '<li class="charts-container" id="charts_container_' + i + '"></li>';
         }
+        $('.part-1-bottom ul').empty();
         $('.part-1-bottom ul').append(str);
         var dataStyle = {
             normal: {
@@ -147,7 +149,6 @@ function dataInit() {
             }
         };
         $.each(res.data, function (index, val) {
-            console.log(val[1])
             if (arr.length >= 0) {
                 arr.length--;
             }
