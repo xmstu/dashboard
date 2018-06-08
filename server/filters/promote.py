@@ -21,7 +21,7 @@ class PromoteQuality(object):
 
     @staticmethod
     @make_decorator
-    def get_result(params, data):
+    def get_result(params, data, before_promote_count):
 
         # 结构化数据
         date_count = {}
@@ -95,7 +95,7 @@ class PromoteQuality(object):
 
         # 累计
         if params['dimension'] == 1 and params['data_type'] == 2:
-            series = [sum(series[: i + 1]) if i > 0 else series[i] for i in range(len(series))]
+            series = [sum(series[: i + 1]) + before_promote_count if i > 0 else series[i] + before_promote_count for i in range(len(series))]
         # 新增
         else:
             pass

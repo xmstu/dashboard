@@ -50,6 +50,8 @@ class PromoteQualityDecorator(object):
         #         user_id.extend(i['scores'])
         #     user_id = list(set(user_id))
 
+        # 新增
         promote_quality = PromoteQuality.get_promote_quality(db.read_bi, params)
-
-        return Response(params=params, data=promote_quality)
+        # 之前累计
+        before_promote_count = PromoteQuality.get_before_promote_count(db.read_bi, params)
+        return Response(params=params, data=promote_quality, before_promote_count=before_promote_count)

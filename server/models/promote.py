@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import time
 
 
 class PromoteEffetList(object):
@@ -59,6 +60,26 @@ class PromoteEffetList(object):
 
 
 class PromoteQuality(object):
+
+    @staticmethod
+    def get_before_promote_count(cursor, params):
+        command = """
+            SELECT
+                COUNT( * ) AS count 
+            FROM
+                tb_inf_user 
+            -- 时间段
+            WHERE
+              create_time <= :start_time 
+            -- 推荐人
+            AND reference_id IS NOT NULL 
+        """
+
+        before_promote_count = cursor.query_one(command,
+                            {'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time']))}
+                                                )
+
+        return before_promote_count['count'] if before_promote_count else 0
 
     @staticmethod
     def get_promote_quality(cursor, params):

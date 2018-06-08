@@ -35,7 +35,7 @@ class PromoteQuality(Resource):
     @staticmethod
     @doc.request_promote_quality_param
     @doc.response_promote_quality_param_success
-    @filters.PromoteQuality.get_result(params=dict, data=list)
+    @filters.PromoteQuality.get_result(params=dict, data=list, before_promote_count=int)
     @operations.PromoteQualityDecorator.get_promote_quality(params=dict)
     @verify.PromoteQuality.check_params(params=dict)
     def get():
