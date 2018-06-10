@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import calendar
 import datetime
 import json
@@ -13,18 +15,23 @@ class PromoteEffect(object):
     @staticmethod
     @make_decorator
     def get_result(data):
-        data = json.loads(json.dumps(data, default=ExtendHandler.handler_to_float))
         promote_effect_detail = data['promote_effect_detail']
+        result = []
         for detail in promote_effect_detail:
-            detail['user_count'] = detail.get('user_count', None) or 0
-            detail['wake_up_count'] = detail.get('wake_up_count', None) or 0
-            detail['goods_count'] = detail.get('goods_count', None) or 0
-            detail['goods_user_count'] = detail.get('goods_user_count', None) or 0
-            detail['order_over_count'] = detail.get('order_over_count', None) or 0
-            detail['goods_price'] = detail.get('goods_price', None) or 0
-            detail['order_over_price'] = detail.get('order_over_price', None) or 0
+            result.append({
+                'name': detail.get('reference_name', ''),
+                'mobile': detail.get('reference_mobile', ''),
+                'user_count': detail['user_count'] if detail['user_count'] else 0,
+                'wake_up_count': detail['wake_up_count'] if detail['wake_up_count'] else 0,
+                'goods_count': detail['goods_count'] if detail['goods_count'] else 0,
+                'goods_user_count': detail['goods_user_count'] if detail['goods_user_count'] else 0,
+                'order_over_count': detail['order_over_count'] if detail['order_over_count'] else 0,
+                'goods_price': detail['goods_price'] if detail['goods_price'] else 0,
+                'order_over_price': detail['order_over_price'] if detail['order_over_price'] else 0
+            })
 
-        return build_result(APIStatus.Ok, count=data['count'], data=promote_effect_detail), HTTPStatus.Ok
+        result = json.loads(json.dumps(result, default=ExtendHandler.handler_to_float))
+        return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok
 
 
 class PromoteQuality(object):

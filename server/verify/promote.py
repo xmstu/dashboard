@@ -17,12 +17,12 @@ class PromoteEffect(object):
             # 通过params获取参数，获取不到就赋予默认值
             user_name = params.get('user_name', '')
             mobile = params.get('mobile', '')
-            role_type = int(params.get('role_type', 0))
-            goods_type = int(params.get('goods_type', 0))
-            is_actived = int(params.get('is_actived', 0))
-            is_car_sticker = int(params.get('is_car_sticker', 0))
-            start_time = int(params.get('start_time', time.time() - 8 * 60 * 60 * 24))
-            end_time = int(params.get('end_time', time.time() - 60 * 60 * 24))
+            role_type = int(params.get('role_type')) if params.get('role_type') else 0
+            goods_type = int(params.get('goods_type')) if params.get('goods_type') else 0
+            is_actived = int(params.get('is_actived')) if params.get('is_actived') else 0
+            is_car_sticker = int(params.get('is_car_sticker')) if params.get('is_car_sticker') else 0
+            start_time = int(params.get('start_time')) if params.get('start_time') else int(time.time() - 8 * 60 * 60 * 24)
+            end_time = int(params.get('end_time')) if params.get('end_time') else int(time.time() - 60 * 60 * 24)
 
             # 判断时间是否合法
             if start_time and end_time:

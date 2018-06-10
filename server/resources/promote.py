@@ -21,7 +21,7 @@ class PromoteEffect(Resource):
     @verify.PromoteEffect.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():
-        """获取参数"""
+        """推荐人员效果"""
         resp = Response(
             page=get_arg_int('page', 1),
             limit=get_arg_int('limit', 10),
@@ -55,7 +55,7 @@ class PromoteQuality(Resource):
     @operations.PromoteQualityDecorator.get_promote_quality(params=dict)
     @verify.PromoteQuality.check_params(params=dict)
     def get():
-        """获取参数"""
+        """推荐人质量"""
         resp = Response(params=get_all_arg())
 
         return resp

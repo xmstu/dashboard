@@ -20,7 +20,7 @@ class UserStatistic(Resource):
     @operations.UserStatisticDecorator.get_user_statistic(params=dict)
     @verify.UserStatistic.check_params(params=dict)
     def get():
-
+        """用户变化趋势"""
         resp = Response(params=get_all_arg())
 
         log.info('获取用户变化趋势查询参数: [resp: {}]'.format(resp))
@@ -37,7 +37,7 @@ class UserList(Resource):
     @verify.UserList.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():
-
+        """用户列表"""
         resp = Response(page=get_arg_int('page', 1),
                         limit=get_arg_int('limit', 10),
                         params=get_all_arg())

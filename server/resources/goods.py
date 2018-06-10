@@ -20,6 +20,7 @@ class GoodsList(Resource):
     @verify.GoodsList.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():
+        """货源列表"""
         resp = Response(
             page=get_arg_int('page', 1),
             limit=get_arg_int('limit', 10),

@@ -90,5 +90,3 @@ if configs.env.deploy != "dev":
     @api.documentation
     def disable_document():
         return api.render_root()
-
-from .init_regions import init_regions
