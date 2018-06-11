@@ -155,12 +155,12 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             })
         }
         , cols: [[
-           {field: 'id', title: '用户ID', sort: true, width: 76},
-                {field: 'user_name', title: '用户名', width: 76}
+                {field: 'id', title: '用户ID', sort: true, width: 86},
+                {field: 'user_name', title: '用户名', width: 106}
                 , {field: 'mobile', title: '手机号', width: 111}
                 , {field: 'user_type', title: '注册角色', width: 111}
                 , {field: 'role_auth', title: '认证', width: 111}
-                , {field: 'goods_count', title: '发货', width: 70}
+                , {field: 'goods_count', title: '发货', width: 80}
                 , {field: 'order_count', title: '接单', width: 76}
                 , {field: 'order_completed', title: '完成订单', width: 76}
                 , {field: 'download_channel', title: '下载渠道', width: 110}
@@ -330,12 +330,12 @@ $('#user_search_box').on('click', function (e) {
                 })
             }
             , cols: [[
-                {field: 'id', title: '用户ID', sort: true, width: 76},
-                {field: 'user_name', title: '用户名', width: 76}
+                {field: 'id', title: '用户ID', sort: true, width: 86},
+                {field: 'user_name', title: '用户名', width: 106}
                 , {field: 'mobile', title: '手机号', width: 111}
                 , {field: 'user_type', title: '注册角色', width: 111}
                 , {field: 'role_auth', title: '认证', width: 111}
-                , {field: 'goods_count', title: '发货', width: 70}
+                , {field: 'goods_count', title: '发货', width: 80}
                 , {field: 'order_count', title: '接单', width: 76}
                 , {field: 'order_completed', title: '完成订单', width: 76}
                 , {field: 'download_channel', title: '下载渠道', width: 110}

@@ -58,7 +58,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             $('.nearby').on('click', function () {
                 table.render({
                     elem: '#demo'
-                    , height: 315
+                    ,width:1474
                     , url: '/demo/table/user/' //数据接口
                     , page: true //开启分页
                     , cols: [[ //表头
@@ -78,7 +78,7 @@ layui.use(['laydate', 'form', 'table'], function () {
                 });
                 layer.open({
                     type: 1,
-                    area: ['1600px', '520px'],
+                    area: ['1500px', '520px'],
                     skin: 'layui-layer-molv',
                     closeBtn: 1,
                     content: $('#popup')
