@@ -19,22 +19,18 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
 
     form.on('select(is_actived)', function (data) {
         if (data.value == '1') {
-            $('#select_spec_two').hide();
-            $('#select_spec_three').hide();
-            $('#select_spec_one').show();
-            form.render('select');
+            $('#select_spec_two').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_three').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_one').removeClass('none').addClass('area-select-options-setting');
         } else if (data.value == '2') {
-             form.render('select');
-            $('#select_spec_one').hide();
-            $('#select_spec_three').hide();
-            $('#select_spec_two').show();
+            $('#select_spec_one').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_three').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_two').removeClass('none').addClass('area-select-options-setting');
 
         } else if (data.value == '3') {
-            form.render('select');
-            $('#select_spec_one').hide();
-            $('#select_spec_two').hide();
-            $('#select_spec_three').show();
-
+            $('#select_spec_one').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_two').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_three').removeClass('none').addClass('area-select-options-setting');
         }
     });
     laydate.render({
@@ -80,64 +76,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             }
         }
     });
-    table.render({
-        elem: '#promote_table'
-        , even: true
-        , url: '../static/js/user-statics/test.json/'
-        , cols: [[
-            {field: 'id', title: '用户ID', sort: true}
-            , {field: 'username', title: '姓名'}
-            , {field: 'phone_number', title: '手机号', sort: true}
-            , {field: 'experience', title: '推荐人数'}
-            , {field: 'order_count', title: '唤醒人数'}
-            , {field: 'experience', title: '发货数', sort: true}
-            , {field: 'score', title: '发货人数', sort: true}
-            , {field: 'classify', title: '完成数'}
-            , {field: 'money', title: '货源金额', sort: true}
-            , {field: 'complete', title: '完成金额', sort: true}
-            , {
-                field: 'wealth', title: '操作',width:86, templet: function (d) {
-                    return '<button class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
-                }
-            }
-        ]]
-        , done: function (res) {
-            $('.promote-delete').on('click', function () {
-                layer.confirm('您确定删除该条用户信息吗？', {
-                    skin: 'layui-layer-molv',
-                    btn: ['确认', '取消']
-                }, function () {
-                    layer.msg('OK', {icon: 1});
-                }, function (index) {
-                    layer.close(index)
-                });
-            })
-        }
-        , page: true
-    });
 
-    var $ = layui.$, active = {
-        isAll: function () { //验证是否全选
-            var checkStatus = table.checkStatus('idTest');
-            layer.msg(checkStatus.isAll ? '全选' : '未全选')
-        }
-    };
-
-    $('.demoTable .layui-btn').on('click', function () {
-        var type = $(this).data('type');
-        active[type] ? active[type].call(this) : '';
-    });
-});
-$('#user_search_box').on('click', function (e) {
-    e.preventDefault();
-    if (beginTime != '' && finishTime == '') {
-        layer.msg('请选择新增结束日期');
-        return false;
-    }
-    if (beginTime == '' && finishTime != '') {
-        layer.msg('请选择新增开始日期');
-        return false;
-    }
 });
 $('#add_promote_person').on('click', function (e) {
     e.preventDefault();
@@ -165,9 +104,9 @@ function dataInit() {
         end_time: requestEndTime,
         periods: $('.periods>li').find('button.active').val(),
         dimension: $('#is_actived').val(),
-        data_type: $(".select-reset").val()
+        data_type: $('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value')
     };
-    console.log(data.data_type)
+    console.log(data.data_type);
     var url = '/promote/quality/';
     if (data.dimension == 3) {
         http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
@@ -175,13 +114,13 @@ function dataInit() {
                 var len = res.data.xAxis.length;
                 if (len >= 0 && len < 20) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 1, '金额(元)','金额','元')
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 1, '金额(元)', '金额', '元')
                 } else if (len > 0 && len > 20 && len < 40) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 2, '金额(元)','金额','元')
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 2, '金额(元)', '金额', '元')
                 } else if (len > 0 && len > 40 && len < 90) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 4, '金额(元)','金额','元')
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 4, '金额(元)', '金额', '元')
                 }
             }
         })
@@ -192,20 +131,20 @@ function dataInit() {
                 var X_data = res.data.xAxis;
                 if (len >= 0 && len < 20) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 1, '人数(人)','人数','人')
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 1, '人数(人)', '人数', '人')
                 } else if (len > 0 && len > 20 && len < 40) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 2, '人数(人)','人数','人')
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 2, '人数(人)', '人数', '人')
                 } else if (len > 0 && len > 40 && len < 90) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 4, '人数(人)','人数','人')
+                    lineChartInit(res.data.xAxis, res.data.counts_series, 4, '人数(人)', '人数', '人')
                 }
             }
         })
     }
 }
 
-function lineChartInit(xAxis, series, interval, str_title,names,units) {
+function lineChartInit(xAxis, series, interval, str_title, names, units) {
     $('#charts_container_one').highcharts({
         tooltip: {
             shared: true,
@@ -277,4 +216,96 @@ function lineChartInit(xAxis, series, interval, str_title,names,units) {
     });
 }
 
-var pageSet = {};
+var pageSet = {
+    tableInit: function () {
+        var that  =this;
+        layui.use(['table', 'layer'], function () {
+
+            var layer = layui.layer;
+            var requestStrat = $('#date_show_three').val();
+            var endRequest = $('#date_show_three').val();
+            if(requestStrat!=''){
+                requestStrat = common.timeTransform($('#date_show_three').val() + ' 00:00:00');
+            }
+            if(endRequest!=''){
+                endRequest = common.timeTransform($('#date_show_three').val() + ' 23:59:59');
+            }
+            var url = '/promote/effect/';
+            var data = {
+                user_name: $('#user_name').val(),
+                mobile: $('#phone_number').val(),
+                role_type: $('#is_referenced').val(),
+                goods_type: $('#goods_type').val(),
+                is_actived: $('#is_actived').val(),
+                is_car_sticker: $('#is_car_sticker').val(),
+                start_time: requestStrat,
+                end_time: endRequest
+            };
+            var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&role_type=' + data.role_type + '&goods_type=' + data.goods_type + '&is_actived=' +
+                data.is_actived + '&is_car_sticker=' + data.is_car_sticker + '&start_time=' + data.start_time + '&end_time=' + data.end_time + '&page=1&limit=10'
+            that.tableRender(url)
+        })
+    },
+    tableRender: function (url) {
+        layui.use('table', function () {
+            var table = layui.table;
+            table.render({
+                elem: '#promote_table'
+                , even: true
+                , url: url
+                , response: {
+                    statusName: 'status',
+                    statusCode: 100000
+                }
+                , cols: [[
+                    {field: 'id', title: '用户ID', sort: true}
+                    , {field: 'username', title: '姓名'}
+                    , {field: 'phone_number', title: '手机号', sort: true}
+                    , {field: 'experience', title: '推荐人数'}
+                    , {field: 'order_count', title: '唤醒人数'}
+                    , {field: 'experience', title: '发货数', sort: true}
+                    , {field: 'score', title: '发货人数', sort: true}
+                    , {field: 'classify', title: '完成数'}
+                    , {field: 'money', title: '货源金额', sort: true}
+                    , {field: 'complete', title: '完成金额', sort: true}
+                    , {
+                        field: 'wealth', title: '操作', width: 86, templet: function (d) {
+                            return '<button class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
+                        }
+                    }
+                ]]
+                , done: function (res) {
+                    $('.promote-delete').on('click', function () {
+                        layer.confirm('您确定删除该条用户信息吗？', {
+                            skin: 'layui-layer-molv',
+                            btn: ['确认', '取消']
+                        }, function () {
+                            layer.msg('OK', {icon: 1});
+                        }, function (index) {
+                            layer.close(index)
+                        });
+                    })
+                }
+                , page: true
+            });
+            var $ = layui.$, active = {
+                isAll: function () { //验证是否全选
+                    var checkStatus = table.checkStatus('idTest');
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选')
+                }
+            };
+
+            $('.demoTable .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+        })
+
+    }
+};
+pageSet.tableRender('/promote/effect/');
+$('#user_search_box').on('click',function(e){
+  e.preventDefault();
+  pageSet.tableInit();
+});
+

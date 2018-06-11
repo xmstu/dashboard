@@ -145,6 +145,7 @@ var common = {
         var this_ity;
         $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
             this_ity = remote_ip_info.city;
+            //this_ity='广州'
             var myDate = new Date();
             var thisDate = myDate.getMonth() + 1;
             $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
@@ -260,9 +261,9 @@ var common = {
         }else if(time>90){
             layer.msg('日期超过三个月，无法按日进行显示',function(){
 
-            })
-            $("#day_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
-             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
+            });
+            $("#day_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
+             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'}).addClass('active');
             $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
         } else {
             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
