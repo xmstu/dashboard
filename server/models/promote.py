@@ -13,6 +13,7 @@ class PromoteEffectList(object):
     def check_mobile(cursor, mobile):
         command = """ 
              SELECT
+                user_name,
                 user_id ,
                 (SELECT
                 reference_id 
@@ -27,20 +28,21 @@ class PromoteEffectList(object):
                 mobile = {0} 
                 AND tb_inf_user.is_deleted = 0;
          """
-        ret = cursor.query(command.format(mobile))
+        ret = cursor.query_one(command.format(mobile))
 
-        user_id = ret['user_id']
-        reference_id = ret['reference_id']
+        user_name = ret.get('user_name', None) or ''
+        user_id = ret.get('user_id', None) or 0
+        reference_id = ret.get('reference_id', None) or 0
 
-        return user_id if user_id else 0, reference_id if reference_id else 0
+        return user_name, user_id, reference_id
 
     @staticmethod
-    def add_extension_worker(cursor, mobile):
-        command = """ INSERT INTO tb_inf_promote ( reference_id, reference_mobile)
+    def add_extension_worker(cursor, user_name, user_id, mobile):
+        command = """ INSERT INTO tb_inf_promote ( reference_id, reference_name, reference_mobile, statistics_date)
                        VALUES
-                       ( 108, %s ); """
+                       ( {reference_id}, {reference_name}, {reference_mobile}, DATE_FORMAT(NOW(),'%Y-%m-%d') ); """
         try:
-            data = cursor.insert(command % mobile)
+            data = cursor.insert(command.format(reference_id=user_id, reference_name="'%s'" % user_name, reference_mobile=mobile))
         except Exception as e:
             log.error('Error:{}'.format(e))
             data = 0

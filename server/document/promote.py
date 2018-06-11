@@ -25,9 +25,10 @@ response_promote_effect_param_success = response_success = api.response(200, '�
 }))
 
 
-request_promote_effect_add_param = api.doc(params={
-    'mobile': '手机号',
-    }, description='推广统计列表删除参数')
+request_promote_effect_add_param = api.doc(body=api.model('request_promote_effect_add', {
+    'mobile': fields.String(description='手机号'),
+    }, description='推广统计列表新增推广人员参数')
+)
 
 response_promote_effect_add_param_success = api.response(200, '成功', api.model('response_success', {
     'state': fields.Integer(description=str(APIStatus.Ok)),

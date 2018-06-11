@@ -21,9 +21,9 @@ class PromoteEffectDecorator(object):
     @make_decorator
     def add_extension_worker(mobile):
         # 校验该mobile是否在user表中并且该mobile的主人现在不是推荐人
-        user_id, reference_id = PromoteEffectList.check_mobile(db.read_bi, mobile)
+        user_name, user_id, reference_id = PromoteEffectList.check_mobile(db.read_bi, mobile)
         if user_id and not reference_id:
-            data = PromoteEffectList.add_extension_worker(db.read_bi, mobile)
+            data = PromoteEffectList.add_extension_worker(db.read_bi, user_name, user_id, mobile)
         else:
             data = 0
 
