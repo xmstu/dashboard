@@ -90,9 +90,41 @@ $('#add_promote_person').on('click', function (e) {
         title: '新增推广人员',
         btn: ['确定添加', '取消']
     }, function () {
-        layer.msg('添加成功')
+        var url = '/promote/effect/';
+        var mobile = $('#add_users').val();
+        var data = {
+            "mobile": mobile
+        }
+        if (mobile == '' || mobile.length != 11) {
+            layer.msg('请检查手机号')
+            return false
+        } else {
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                beforeSend: function () {
+                    layer.load();
+                },
+                success: function (res) {
+                    if (res.status == 100000) {
+                        layer.msg('添加成功。', {icon: 6});
+                    } else {
+                        layer.msg('添加失败。', {icon: 5});
+                    }
+                },
+                complete: function (xhttp) {
+                    layer.closeAll('loading');
+                    if (xhttp.status == 400) {
+
+                    }
+                }
+            });
+        }
     }, function (index) {
-        layer.msg('取消')
+
     });
 });
 
@@ -150,7 +182,7 @@ function dataInit() {
 }
 
 function lineChartInit(xAxis, series, interval, str_title, names, units) {
-       Highcharts.setOptions({
+    Highcharts.setOptions({
         colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
     });
     $('#charts_container_one').highcharts({
@@ -278,31 +310,91 @@ var pageSet = {
                     , {field: 'order_over_price', title: '完成金额', sort: true}
                     , {
                         field: 'wealth', title: '操作', width: 96, templet: function (d) {
-                            return '<button id="d.reference_id" value="'+d.reference_id+'" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
+                            return '<button id="deleteButton_' + d.reference_id + '" value="' + d.reference_id + '" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
                         }
                     }
                 ]]
                 , done: function (res) {
+                       $("td[data-field='user_count']").children().each(function () {
+                        if ($(this).text() != '') {
+                            var str = $(this).text();
+                            $(this).html(str + '人')
+                        }
+                    })
+                      $("td[data-field='wake_up_count']").children().each(function () {
+                        if ($(this).text() != '') {
+                            var str = $(this).text();
+                            $(this).html(str + '次')
+                        }
+                    })
+                      $("td[data-field='goods_user_count']").children().each(function () {
+                        if ($(this).text() != '') {
+                            var str = $(this).text();
+                            $(this).html(str + '次')
+                        }
+                    })
+                      $("td[data-field='goods_count']").children().each(function () {
+                        if ($(this).text() != '') {
+                            var str = $(this).text();
+                            $(this).html(str + '人')
+                        }
+                    })
+                     $("td[data-field='order_over_count']").children().each(function () {
+                        if ($(this).text() != '') {
+                            var str = $(this).text();
+                            $(this).html(str + '次')
+                        }
+                    })
+
+                        $("td[data-field='goods_price']").children().each(function () {
+                        if ($(this).text() != '') {
+                            var str = $(this).text();
+                            $(this).html(str + '元')
+                        }
+                    })
+                      $("td[data-field='order_over_price']").children().each(function () {
+                        if ($(this).text() != '') {
+                            var str = $(this).text();
+                            $(this).html(str + '元')
+                        }
+                    })
                     $('.promote-delete').on('click', function (e) {
                         e.preventDefault();
+                        var current_val = $(this).val();
                         layer.confirm('您确定删除该条用户信息吗？', {
                             skin: 'layui-layer-molv',
                             btn: ['确认', '取消']
                         }, function () {
-                            layer.msg('OK', {icon: 1});
+                            var url = '/promote/effect/?reference_id=' + current_val;
+                            $.ajax({
+                                url: url,
+                                type: 'DELETE',
+                                beforeSend: function () {
+                                    layer.load();
+                                },
+                                success: function (res) {
+                                    if (res.status == 100000) {
+                                        layer.msg('已成功删除该条用户。', {icon: 1});
+                                        $('#deleteButton_' + current_val).parents('tr').css({'display': 'none'})
+                                    } else {
+                                        layer.msg('删除失败。', {icon: 5});
+                                    }
+                                },
+                                complete: function (xhttp) {
+                                    layer.closeAll('loading');
+                                    if (xhttp.status == 400) {
+                                        layer.msg('request error', {icon: 5})
+                                    }
+                                }
+                            });
                         }, function (index) {
                             layer.close(index)
                         });
-                    })
+                    });
+
                 }
                 , page: true
             });
-            var $ = layui.$, active = {
-                isAll: function () { //验证是否全选
-                    var checkStatus = table.checkStatus('idTest');
-                    layer.msg(checkStatus.isAll ? '全选' : '未全选')
-                }
-            };
 
             $('.demoTable .layui-btn').on('click', function () {
                 var type = $(this).data('type');

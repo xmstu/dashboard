@@ -305,7 +305,7 @@ $('#user_search_box').on('click', function (e) {
                         $(this).text('物流公司')
                     }
                 })
-                $("[data-field='usual_city']").children().each(function () {
+                $("td[data-field='usual_city']").children().each(function () {
                     if ($(this).text() == '') {
                         $(this).text('未查询到该用户常驻地')
                     }

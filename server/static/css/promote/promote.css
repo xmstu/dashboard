@@ -11,9 +11,9 @@
     vertical-align: top;
 }
 #add_users {
-    padding-left: 23px;
+    padding-left: 25px;
     font-size:12px;
-    font-weight: bold;
+    font-weight: normal;
     border:1px solid #ccc;
     line-height: 32px;
     border-left:none;

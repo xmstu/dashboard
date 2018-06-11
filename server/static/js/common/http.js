@@ -32,7 +32,7 @@ http.ajax.get = function (async, cache, url, data, contentType, callback) {
                 layer.msg('服务器内部错误！');
                 layer.closeAll('loading');
                 return false;
-            }else {
+            } else {
                 layer.closeAll('loading')
             }
 
@@ -89,7 +89,7 @@ http.ajax.post = function (async, cache, url, data, contentType, callback) {
                 layer.msg('服务器内部错误！');
                 layer.closeAll('loading')
                 return false;
-            }else {
+            } else {
                 layer.closeAll('loading')
             }
         },
@@ -118,10 +118,8 @@ http.ajax.post_no_loading = function (async, cache, url, data, contentType, call
         dataType: 'json',
         success: function (result) {
             if (typeof callback == 'function') {
-                if (result.success) {
-                    callback(result);
-                    return;
-                }
+                callback(result);
+                return;
             }
         }
     });
