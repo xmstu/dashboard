@@ -61,6 +61,54 @@ class PromoteEffectList(object):
         else:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法删除该推荐人，请检查参数是否有误'))
 
+    @staticmethod
+    def get_extension_worker_list(cursor, page, limit, params):
+        try:
+            fetch_where = ' AND 1 '
+            command = """ 
+                SELECT
+                    reference_id,
+                    reference_name,
+                    reference_mobile
+                FROM
+                    tb_inf_promote
+                where reference_id != 0 AND is_deleted = 0
+                {fetch_where}
+             """
+
+            # 用户名
+            if params['user_name']:
+                fetch_where += """ AND tb_inf_promote.reference_name = %s """ % params['user_name']
+
+            # 手机号
+            if params['mobile']:
+                fetch_where += """ AND tb_inf_promote.reference_mobile = %s """ % params['mobile']
+
+            command = command.format(fetch_where=fetch_where)
+
+            # 查询表的条数
+            count_command = """
+                        SELECT COUNT( * ) as promote_counts
+                        FROM (%(command)s) as a
+                        """
+
+            promote_counts = cursor.query_one(count_command % {'command': command})
+
+            # 分页
+            command += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
+
+            promote_effect_detail = cursor.query(command)
+
+            extension_worker_list = {
+                'promote_effect_detail': promote_effect_detail if promote_effect_detail else [],
+                'count': promote_counts['promote_counts'] if promote_counts else 0
+            }
+
+            return extension_worker_list if extension_worker_list else None
+
+        except Exception as e:
+            log.error('Error:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数有误'))
 
     @staticmethod
     def get_promote_effect_list(cursor, page, limit, params):

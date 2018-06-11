@@ -17,8 +17,6 @@ class CityResourceBalance(object):
         return Response(goods=goods, vehicle=vehicle, params=params)
 
 
-
-
 class CityOrderListDecorator(object):
 
     @staticmethod

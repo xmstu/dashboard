@@ -30,20 +30,53 @@ class PromoteEffect(object):
 
     @staticmethod
     @make_decorator
-    def get_result(data):
-        promote_effect_detail = data['promote_effect_detail']
-        for detail in promote_effect_detail:
-            detail['reference_name'] = detail.get('reference_name', '')
-            detail['reference_mobile'] = detail.get('reference_mobile', '')
-            detail['user_count'] = detail.get('user_count', None) or 0
-            detail['wake_up_count'] = detail.get('wake_up_count', None) or 0
-            detail['goods_count'] = detail.get('goods_count', None) or 0
-            detail['goods_user_count'] = detail.get('goods_user_count', None) or 0
-            detail['goods_price'] = detail.get('goods_price', None) or 0
-            detail['order_over_price'] = detail.get('order_over_price', None) or 0
+    def get_result(extension_worker_list, promote_effect_list, params):
 
-        promote_effect_detail = json.loads(json.dumps(promote_effect_detail, default=ExtendHandler.handler_to_float))
-        return build_result(APIStatus.Ok, count=data['count'], data=promote_effect_detail), HTTPStatus.Ok
+        # 拼接结果
+        if params.get('role_type') or params.get('goods_type') or params.get('is_actived') or params.get('is_car_sticker') or (params.get('start_time') and params.get('end_time')):
+            detail_dict_list = promote_effect_list['promote_effect_detail']
+            count = promote_effect_list['count']
+            for detail in detail_dict_list:
+                detail['reference_name'] = detail.get('reference_name', '')
+                detail['reference_mobile'] = detail.get('reference_mobile', '')
+                detail['user_count'] = detail.get('user_count', None) or 0
+                detail['wake_up_count'] = detail.get('wake_up_count', None) or 0
+                detail['goods_count'] = detail.get('goods_count', None) or 0
+                detail['goods_user_count'] = detail.get('goods_user_count', None) or 0
+                detail['goods_price'] = detail.get('goods_price', None) or 0
+                detail['order_over_price'] = detail.get('order_over_price', None) or 0
+        else:
+            ex = extension_worker_list['promote_effect_detail']
+            for i in ex:
+                i['reference_name'] = i.get('reference_name', '')
+                i['reference_mobile'] = i.get('reference_mobile', '')
+                i['user_count'] = i.get('user_count', None) or 0
+                i['wake_up_count'] = i.get('wake_up_count', None) or 0
+                i['goods_count'] = i.get('goods_count', None) or 0
+                i['goods_user_count'] = i.get('goods_user_count', None) or 0
+                i['goods_price'] = i.get('goods_price', None) or 0
+                i['order_over_price'] = i.get('order_over_price', None) or 0
+            count = extension_worker_list['count']
+
+            pr = promote_effect_list['promote_effect_detail']
+
+            if not len(ex) > len(pr):
+                return make_result(APIStatus.BadRequest), HTTPStatus.BadRequest
+
+            detail_dict_list = []
+            if ex and pr:
+                for i in ex:
+                    for j in pr:
+                        if j['reference_id'] == i['reference_id']:
+                            detail_dict_list.append(j)
+                        else:
+                            detail_dict_list.append(i)
+                count = len(detail_dict_list)
+            elif ex and not pr:
+                detail_dict_list = ex
+
+        promote_effect_detail = json.loads(json.dumps(detail_dict_list, default=ExtendHandler.handler_to_float))
+        return build_result(APIStatus.Ok, count=count, data=promote_effect_detail), HTTPStatus.Ok
 
 
 class PromoteQuality(object):

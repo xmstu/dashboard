@@ -190,7 +190,8 @@ class CityOrderListModel(object):
             command += ''' AND (SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) > 3
             AND UNIX_TIMESTAMP() - shf_goods.create_time > 300
             AND shf_goods.price_addition = 0 '''
-        # 车长
+
+        # TODO 车长
         if params['vehicle_length']:
             command += ' AND shf_goods_vehicles.attribute_value_id = 1355 '
 
@@ -215,9 +216,14 @@ class CityOrderListModel(object):
             elif params['is_addition'] == 2:
                 command += ' AND shf_goods.price_addition = 0 '
 
-        # TODO 所属网点
+        # 所属网点
         if params.get('node_id'):
-            pass
+            command += """ 
+            and (shf_goods.from_province_id = {0} 
+            or shf_goods.from_city_id= {0}  
+            or shf_goods.from_county_id= {0}  
+            or shf_goods.from_town_id= {0} ) 
+            """.format(params['node_id'])
 
         # 初次下单
         if params['spec_tag'] == 1:

@@ -76,6 +76,12 @@ class CityOrderListFilterDecorator(object):
         goods = data['goods_detail']
         goods_counts = data['goods_counts']
         result = []
+        # TODO 排序
+        # 第一层排序：优先级高→一般
+        # 第二层排序：带有“新用户“
+        # 第三层排序：now（）-发布时间 < 10分钟
+        # 第四层排序：货主等待接单中是否加过价，加价的优先
+        # 第五层排序：发布时间倒序
         for detail in goods:
             # 优先级
             if detail['goods_counts'] <= 3 or time.time() - detail['create_time'] <= 300 or detail['price_addition'] > 0:
@@ -100,7 +106,8 @@ class CityOrderListFilterDecorator(object):
                 else str(int(detail.get('weight', 0))) + '吨'
             volume = str(int(detail.get('volume', 0))) + '平米'
             # 网点
-            supplier_node = detail.get('supplier_node', '')
+            supplier_node = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
+                                                  detail.get('from_county_id', 0))
             # 出发地-目的地
             from_address = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
                                                   detail.get('from_county_id', 0)) + detail.get('from_address', '')

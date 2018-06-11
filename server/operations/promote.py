@@ -13,9 +13,14 @@ class PromoteEffectDecorator(object):
     @staticmethod
     @make_decorator
     def get_promote_effect_list(page, limit, params):
-        data = PromoteEffectList.get_promote_effect_list(db.read_bi, page, limit, params)
 
-        return Response(data=data)
+        # 查询出所有推广人员(不管有没有推荐过别人)
+        extension_worker_list = PromoteEffectList.get_extension_worker_list(db.read_bi, page, limit, params)
+
+        # 查询出所有推荐过别人的推广人员的推荐效果列表
+        promote_effect_list = PromoteEffectList.get_promote_effect_list(db.read_bi, page, limit, params)
+
+        return Response(extension_worker_list=extension_worker_list, promote_effect_list=promote_effect_list, params=params)
 
     @staticmethod
     @make_decorator

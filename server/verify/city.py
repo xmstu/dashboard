@@ -43,13 +43,13 @@ class CityOrderList(object):
         # 通过params获取参数
         try:
 
-            goods_type = int(params.get('goods_type')) if params.get('goods_type') else 0
-            priority = int(params.get('priority')) if params.get('priority') else 0
-            vehicle_length = int(params.get('vehicle_length')) if params.get('vehicle_length') else 0
-            is_called = int(params.get('is_called')) if params.get('is_called') else 0
-            is_addition = int(params.get('is_addition')) if params.get('is_addition') else 0
-            node_id = int(params.get('node_id')) if params.get('node_id') else 0
-            spec_tag = int(params.get('spec_tag')) if params.get('spec_tag') else 0
+            goods_type = int(params.get('goods_type', None) or 0)
+            priority = int(params.get('priority', None) or 0)
+            vehicle_length = int(params.get('vehicle_length', None) or 0)
+            is_called = int(params.get('is_called', None) or 0)
+            is_addition = int(params.get('is_addition', None) or 0)
+            node_id = int(params.get('node_id', None) or 0)
+            spec_tag = int(params.get('spec_tag', None) or 0)
 
             params = {
                 "goods_type": goods_type,
