@@ -17,6 +17,25 @@ class PromoteEffectDecorator(object):
 
         return Response(data=data)
 
+    @staticmethod
+    @make_decorator
+    def add_extension_worker(mobile):
+        # 校验该mobile是否在user表中并且该mobile的主人现在不是推荐人
+        user_id, reference_id = PromoteEffectList.check_mobile(db.read_bi, mobile)
+        if user_id and not reference_id:
+            data = PromoteEffectList.add_extension_worker(db.read_bi, mobile)
+        else:
+            data = 0
+
+        return Response(data=data)
+
+    @staticmethod
+    @make_decorator
+    def delete_from_tb_inf_promte(reference_id):
+        data = PromoteEffectList.delete_from_tb_inf_promte(db.read_bi, reference_id)
+        return Response(data=data)
+
+
 
 class PromoteQualityDecorator(object):
 

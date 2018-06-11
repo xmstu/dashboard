@@ -8,6 +8,58 @@ from server.status import HTTPStatus, make_result, APIStatus
 
 
 class PromoteEffectList(object):
+
+    @staticmethod
+    def check_mobile(cursor, mobile):
+        command = """ 
+             SELECT
+                user_id ,
+                (SELECT
+                reference_id 
+            FROM
+                tb_inf_promote 
+            WHERE
+                reference_mobile = {0} 
+                AND is_deleted = 0) as reference_id
+            FROM
+                tb_inf_user 
+            WHERE
+                mobile = {0} 
+                AND tb_inf_user.is_deleted = 0;
+         """
+        ret = cursor.query(command.format(mobile))
+
+        user_id = ret['user_id']
+        reference_id = ret['reference_id']
+
+        return user_id if user_id else 0, reference_id if reference_id else 0
+
+    @staticmethod
+    def add_extension_worker(cursor, mobile):
+        command = """ INSERT INTO tb_inf_promote ( reference_id, reference_mobile)
+                       VALUES
+                       ( 108, %s ); """
+        try:
+            data = cursor.insert(command % mobile)
+        except Exception as e:
+            log.error('Error:{}'.format(e))
+            data = 0
+
+        if data:
+            return data
+        else:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法删除该推荐人，请检查参数是否有误'))
+
+    @staticmethod
+    def delete_from_tb_inf_promte(cursor, reference_id):
+        command = """ UPDATE tb_inf_promote SET is_deleted = 1 WHERE reference_id = %d """
+        row_count = cursor.update(command % reference_id)
+        if row_count:
+            return row_count
+        else:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法删除该推荐人，请检查参数是否有误'))
+
+
     @staticmethod
     def get_promote_effect_list(cursor, page, limit, params):
         try:
@@ -162,6 +214,7 @@ class PromoteEffectList(object):
         except Exception as e:
             log.error('获取推荐人员效果数据异常:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数有误'))
+
 
 class PromoteQuality(object):
 

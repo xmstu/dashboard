@@ -31,6 +31,11 @@ class PromoteEffect(Resource):
         return resp
 
     @staticmethod
+    @doc.request_promote_effect_add_param
+    @doc.response_promote_effect_add_param_success
+    @filters.PromoteEffect.get_add_data(data=int)
+    @operations.PromoteEffectDecorator.add_extension_worker(mobile=str)
+    @verify.PromoteEffect.check_add_params(mobile=str)
     def post():
         """新增推广人员"""
         payload = get_payload()
@@ -39,12 +44,16 @@ class PromoteEffect(Resource):
         return Response(mobile=mobile)
 
     @staticmethod
+    @doc.request_promote_effect_delete_param
+    @doc.response_promote_effect_delete_param_success
+    @filters.PromoteEffect.get_delete_data(data=int)
+    @operations.PromoteEffectDecorator.delete_from_tb_inf_promte(reference_id=int)
+    @verify.PromoteEffect.check_delete_params(arg=dict)
     def delete():
         """删除推广人员"""
-        payload = get_payload()
-        reference_id = payload.get('reference_id', None) or 0
+        arg = get_all_arg()
 
-        return Response(reference_id=reference_id)
+        return Response(arg=arg)
 
 
 class PromoteQuality(Resource):

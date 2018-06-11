@@ -14,24 +14,36 @@ class PromoteEffect(object):
 
     @staticmethod
     @make_decorator
+    def get_add_data(data):
+        if data:
+            return make_result(APIStatus.Ok), HTTPStatus.Ok
+        else:
+            return make_result(APIStatus.BadRequest), HTTPStatus.BadRequest
+
+    @staticmethod
+    @make_decorator
+    def get_delete_data(data):
+        if data:
+            return make_result(APIStatus.Ok), HTTPStatus.Ok
+        else:
+            return make_result(APIStatus.BadRequest), HTTPStatus.BadRequest
+
+    @staticmethod
+    @make_decorator
     def get_result(data):
         promote_effect_detail = data['promote_effect_detail']
-        result = []
         for detail in promote_effect_detail:
-            result.append({
-                'name': detail.get('reference_name', ''),
-                'mobile': detail.get('reference_mobile', ''),
-                'user_count': detail['user_count'] if detail['user_count'] else 0,
-                'wake_up_count': detail['wake_up_count'] if detail['wake_up_count'] else 0,
-                'goods_count': detail['goods_count'] if detail['goods_count'] else 0,
-                'goods_user_count': detail['goods_user_count'] if detail['goods_user_count'] else 0,
-                'order_over_count': detail['order_over_count'] if detail['order_over_count'] else 0,
-                'goods_price': detail['goods_price'] if detail['goods_price'] else 0,
-                'order_over_price': detail['order_over_price'] if detail['order_over_price'] else 0
-            })
+            detail['name'] = detail.get('reference_name', '')
+            detail['mobile'] = detail.get('reference_mobile', '')
+            detail['user_count'] = detail.get('user_count', None) or 0
+            detail['wake_up_count'] = detail.get('wake_up_count', None) or 0
+            detail['goods_count'] = detail.get('goods_count', None) or 0
+            detail['goods_user_count'] = detail.get('goods_user_count', None) or 0
+            detail['goods_price'] = detail.get('goods_price', None) or 0
+            detail['order_over_price'] = detail.get('order_over_price', None) or 0
 
-        result = json.loads(json.dumps(result, default=ExtendHandler.handler_to_float))
-        return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok
+        promote_effect_detail = json.loads(json.dumps(promote_effect_detail, default=ExtendHandler.handler_to_float))
+        return build_result(APIStatus.Ok, count=data['count'], data=promote_effect_detail), HTTPStatus.Ok
 
 
 class PromoteQuality(object):
@@ -49,7 +61,8 @@ class PromoteQuality(object):
                 elif count.get('amount'):
                     date_count[count['create_time'].strftime('%Y-%m-%d')] = count.get('amount', 0)
         # 日期补全
-        begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['start_time'])),"%Y-%m-%d")
+        begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['start_time'])),
+                                                "%Y-%m-%d")
         end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['end_time'])), "%Y-%m-%d")
 
         # 日
@@ -112,7 +125,8 @@ class PromoteQuality(object):
 
         # 累计
         if params['dimension'] == 1 and params['data_type'] == 2:
-            series = [sum(series[: i + 1]) + before_promote_count if i > 0 else series[i] + before_promote_count for i in range(len(series))]
+            series = [sum(series[: i + 1]) + before_promote_count if i > 0 else series[i] + before_promote_count for i
+                      in range(len(series))]
         # 新增
         else:
             pass

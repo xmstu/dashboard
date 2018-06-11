@@ -24,6 +24,26 @@ response_promote_effect_param_success = response_success = api.response(200, '�
     'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
 }))
 
+
+request_promote_effect_add_param = api.doc(params={
+    'mobile': '手机号',
+    }, description='推广统计列表删除参数')
+
+response_promote_effect_add_param_success = api.response(200, '成功', api.model('response_success', {
+    'state': fields.Integer(description=str(APIStatus.Ok)),
+    'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
+}))
+
+request_promote_effect_delete_param = api.doc(params={
+    'reference_id': '推广id',
+}, description='推广统计列表删除参数')
+
+response_promote_effect_delete_param_success = api.response(200, '成功', api.model('response_success', {
+    'state': fields.Integer(description=str(APIStatus.Ok)),
+    'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
+}))
+
+
 request_promote_quality_param = api.doc(params={
     'start_time':'开始日期(时间戳)',
     'end_time':'结束日期(时间戳)',

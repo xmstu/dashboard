@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
-
+from server.utils.extend import Check
 
 class PromoteEffect(object):
 
@@ -52,6 +52,19 @@ class PromoteEffect(object):
         except Exception as e:
             log.error('Error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数有误'))
+            
+    @staticmethod
+    @make_decorator
+    def check_add_params(mobile):
+        if not Check.is_mobile(mobile):
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数非法'))
+        return Response(mobile=mobile)
+
+    @staticmethod
+    @make_decorator
+    def check_delete_params(arg):
+        reference_id = int(arg.get('reference_id', None) or 0)
+        return Response(reference_id=reference_id)
 
 
 class PromoteQuality(object):
