@@ -61,6 +61,11 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         calendar: true,
         max: String(common.getNowFormatDate()[5]),
         done: function (val, index) {
+            if ($('#date_show_three').val() == '') {
+                $('#date_show_three').next('.date-tips').show();
+            } else {
+                $('#date_show_three').next('.date-tips').hide()
+            }
         }
     });
     laydate.render({
@@ -69,10 +74,10 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         done: function (val, index) {
-            if ($('#date_show_three').val() == '') {
-                $('#date_show_three').next('.date-tips').show();
+            if ($('#date_show_four').val() == '') {
+                $('#date_show_four').next('.date-tips').show();
             } else {
-                $('#date_show_three').next('.date-tips').hide()
+                $('#date_show_four').next('.date-tips').hide()
             }
         }
     });
@@ -145,6 +150,9 @@ function dataInit() {
 }
 
 function lineChartInit(xAxis, series, interval, str_title, names, units) {
+       Highcharts.setOptions({
+        colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
+    });
     $('#charts_container_one').highcharts({
         tooltip: {
             shared: true,
@@ -175,13 +183,13 @@ function lineChartInit(xAxis, series, interval, str_title, names, units) {
             text: '推广统计变化趋势图'
         },
         subtitle: {
-            text: '数据来源：省省官方后台数据库'
+            text: null
         },
         legend: {
             layout: 'vertical',
             align: 'left',
             verticalAlign: 'top',
-            x: 1300,
+            x: 1100,
             y: 0,
             floating: true,
             borderWidth: 1,
@@ -218,17 +226,17 @@ function lineChartInit(xAxis, series, interval, str_title, names, units) {
 
 var pageSet = {
     tableInit: function () {
-        var that  =this;
+        var that = this;
         layui.use(['table', 'layer'], function () {
 
             var layer = layui.layer;
             var requestStrat = $('#date_show_three').val();
-            var endRequest = $('#date_show_three').val();
-            if(requestStrat!=''){
+            var endRequest = $('#date_show_four').val();
+            if (requestStrat != '') {
                 requestStrat = common.timeTransform($('#date_show_three').val() + ' 00:00:00');
             }
-            if(endRequest!=''){
-                endRequest = common.timeTransform($('#date_show_three').val() + ' 23:59:59');
+            if (endRequest != '') {
+                endRequest = common.timeTransform($('#date_show_four').val() + ' 23:59:59');
             }
             var url = '/promote/effect/';
             var data = {
@@ -236,13 +244,13 @@ var pageSet = {
                 mobile: $('#phone_number').val(),
                 role_type: $('#is_referenced').val(),
                 goods_type: $('#goods_type').val(),
-                is_actived: $('#is_actived').val(),
+                is_actived: $('#is_active_select').val(),
                 is_car_sticker: $('#is_car_sticker').val(),
                 start_time: requestStrat,
                 end_time: endRequest
             };
             var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&role_type=' + data.role_type + '&goods_type=' + data.goods_type + '&is_actived=' +
-                data.is_actived + '&is_car_sticker=' + data.is_car_sticker + '&start_time=' + data.start_time + '&end_time=' + data.end_time + '&page=1&limit=10'
+                data.is_actived + '&is_car_sticker=' + data.is_car_sticker + '&start_time=' + data.start_time + '&end_time=' + data.end_time;
             that.tableRender(url)
         })
     },
@@ -258,24 +266,25 @@ var pageSet = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field: 'id', title: '用户ID', sort: true}
-                    , {field: 'username', title: '姓名'}
-                    , {field: 'phone_number', title: '手机号', sort: true}
-                    , {field: 'experience', title: '推荐人数'}
-                    , {field: 'order_count', title: '唤醒人数'}
-                    , {field: 'experience', title: '发货数', sort: true}
-                    , {field: 'score', title: '发货人数', sort: true}
-                    , {field: 'classify', title: '完成数'}
-                    , {field: 'money', title: '货源金额', sort: true}
-                    , {field: 'complete', title: '完成金额', sort: true}
+                    {field: 'reference_id', title: '用户ID', sort: true}
+                    , {field: 'reference_name', title: '姓名'}
+                    , {field: 'reference_mobile', title: '手机号', sort: true}
+                    , {field: 'user_count', title: '推荐人数'}
+                    , {field: 'wake_up_count', title: '唤醒人数'}
+                    , {field: 'goods_count', title: '发货数', sort: true}
+                    , {field: 'goods_user_count', title: '发货人数', sort: true}
+                    , {field: 'order_over_count', title: '完成数'}
+                    , {field: 'goods_price', title: '货源金额', sort: true}
+                    , {field: 'order_over_price', title: '完成金额', sort: true}
                     , {
-                        field: 'wealth', title: '操作', width: 86, templet: function (d) {
-                            return '<button class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
+                        field: 'wealth', title: '操作', width: 96, templet: function (d) {
+                            return '<button id="d.reference_id" value="'+d.reference_id+'" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
                         }
                     }
                 ]]
                 , done: function (res) {
-                    $('.promote-delete').on('click', function () {
+                    $('.promote-delete').on('click', function (e) {
+                        e.preventDefault();
                         layer.confirm('您确定删除该条用户信息吗？', {
                             skin: 'layui-layer-molv',
                             btn: ['确认', '取消']
@@ -304,8 +313,8 @@ var pageSet = {
     }
 };
 pageSet.tableRender('/promote/effect/');
-$('#user_search_box').on('click',function(e){
-  e.preventDefault();
-  pageSet.tableInit();
+$('#user_search_box').on('click', function (e) {
+    e.preventDefault();
+    pageSet.tableInit();
 });
 

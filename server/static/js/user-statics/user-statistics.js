@@ -102,10 +102,10 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            if ($('#date_show_four').val() == '') {
-                $('#date_show_four').next('.date-tips').show();
+            if ($('#date_show_six').val() == '') {
+                $('#date_show_six').next('.date-tips').show();
             } else {
-                $('#date_show_four').next('.date-tips').hide()
+                $('#date_show_six').next('.date-tips').hide()
             }
         }
     });
@@ -424,13 +424,13 @@ function chartInit(xAxis, series, interval, x_value1) {
             text: '用户变化趋势曲线图'
         },
         subtitle: {
-            text: '数据来源：省省官方后台数据库'
+            text:null
         },
         legend: {
             layout: 'vertical',
             align: 'left',
             verticalAlign: 'top',
-            x: 1250,
+            x: 1150,
             y: 0,
             floating: true,
             borderWidth: 1,
