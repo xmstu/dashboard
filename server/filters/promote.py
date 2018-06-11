@@ -33,8 +33,8 @@ class PromoteEffect(object):
     def get_result(data):
         promote_effect_detail = data['promote_effect_detail']
         for detail in promote_effect_detail:
-            detail['name'] = detail.get('reference_name', '')
-            detail['mobile'] = detail.get('reference_mobile', '')
+            detail['reference_name'] = detail.get('reference_name', '')
+            detail['reference_mobile'] = detail.get('reference_mobile', '')
             detail['user_count'] = detail.get('user_count', None) or 0
             detail['wake_up_count'] = detail.get('wake_up_count', None) or 0
             detail['goods_count'] = detail.get('goods_count', None) or 0

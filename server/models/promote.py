@@ -48,7 +48,7 @@ class PromoteEffectList(object):
         if data:
             return data
         else:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法删除该推荐人，请检查参数是否有误'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法添加该推荐人，请检查参数是否有误'))
 
     @staticmethod
     def delete_from_tb_inf_promte(cursor, reference_id):
