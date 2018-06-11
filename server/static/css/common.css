@@ -391,7 +391,7 @@ body {
 }
 
 .layui-nav-item {
-    border-bottom: 1px dashed #ddd !important;
+    border-bottom: 1px dashed #666 !important;
 }
 
 nav.main-content-left .layui-nav-tree .layui-nav-item > a {
