@@ -128,7 +128,8 @@ class PromoteEffectList(object):
                     -- 是否活跃
                     -- 贴车贴
                 GROUP BY
-                    reference_name
+                    reference_id
+                ORDER BY reference_id
             """
 
             # 用户名
