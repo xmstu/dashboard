@@ -19,22 +19,18 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
 
     form.on('select(is_actived)', function (data) {
         if (data.value == '1') {
-            $('#select_spec_two').hide();
-            $('#select_spec_three').hide();
-            $('#select_spec_one').show();
-            form.render('select');
+             $('#select_spec_two').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_three').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_one').removeClass('none').addClass('area-select-options-setting');
         } else if (data.value == '2') {
-             form.render('select');
-            $('#select_spec_one').hide();
-            $('#select_spec_three').hide();
-            $('#select_spec_two').show();
+            $('#select_spec_one').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_three').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_two').removeClass('none').addClass('area-select-options-setting');
 
         } else if (data.value == '3') {
-            form.render('select');
-            $('#select_spec_one').hide();
-            $('#select_spec_two').hide();
-            $('#select_spec_three').show();
-
+            $('#select_spec_one').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_two').addClass('none').removeClass('area-select-options-setting');
+            $('#select_spec_three').removeClass('none').addClass('area-select-options-setting');
         }
     });
     laydate.render({
@@ -165,9 +161,9 @@ function dataInit() {
         end_time: requestEndTime,
         periods: $('.periods>li').find('button.active').val(),
         dimension: $('#is_actived').val(),
-        data_type: $(".select-reset").val()
+        data_type: $('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value')
     };
-    console.log(data.data_type)
+    console.log(data.data_type);
     var url = '/promote/quality/';
     if (data.dimension == 3) {
         http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {

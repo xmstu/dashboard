@@ -169,8 +169,10 @@ function dataInit() {
                     }
                 },
                 tooltip: {
+                    trigger:'item',
                     show: true,
-                    formatter: "{a} <br/>{b} : {c} ({d})"
+                    formatter: "{a} <br/>{b} : {c} ({d})",
+                    extraCssText:'width:160px;height:80px;background:rgba(0,0,0,.4);'
                 },
                 legend: {
                     orient: 'vertical',
@@ -191,7 +193,7 @@ function dataInit() {
                 },
                 series: [
                     {
-                        name: '1',
+                        name: '货源数',
                         type: 'pie',
                         clockWise: false,
                         radius: [100, 120],
@@ -199,7 +201,7 @@ function dataInit() {
                         data: val[0]
                     },
                     {
-                        name: '2',
+                        name: '车辆数',
                         type: 'pie',
                         clockWise: false,
                         radius: [80, 100],
