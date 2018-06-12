@@ -6,6 +6,7 @@ from server.init_regions import init_regions
 import json
 
 import time
+from operator import itemgetter
 
 class CityResourceBalance(object):
     @staticmethod
@@ -76,18 +77,29 @@ class CityOrderListFilterDecorator(object):
         goods = data['goods_detail']
         goods_counts = data['goods_counts']
         result = []
-        # TODO 排序
-        # 第一层排序：优先级高→一般
-        # 第二层排序：带有“新用户“
-        # 第三层排序：now（）-发布时间 < 10分钟
-        # 第四层排序：货主等待接单中是否加过价，加价的优先
-        # 第五层排序：发布时间倒序
         for detail in goods:
+
             # 优先级
             if detail['goods_counts'] <= 3 or time.time() - detail['create_time'] <= 300 or detail['price_addition'] > 0:
                 priority = '高'
+                priority_num = 1
             else:
                 priority = '一般'
+                priority_num = 0
+
+            # 新用户
+            if detail['goods_counts'] <= 3:
+                detail['mobile'] = detail.get('mobile', '') + '\n(新用户)'
+                new = 1
+            else:
+                new = 0
+
+            # 紧急 now（）-发布时间 < 10分钟
+            if time.time() - detail['create_time'] <= 300:
+                urgent = 1
+            else:
+                urgent = 0
+
             # 货物类型
             if detail['type'] == 2:
                 goods_type = '零担'
@@ -110,9 +122,9 @@ class CityOrderListFilterDecorator(object):
                                                   detail.get('from_county_id', 0))
             # 出发地-目的地
             from_address = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
-                                                  detail.get('from_county_id', 0)) + detail.get('from_address', '')
+                                                  detail.get('from_county_id', 0)) + detail.get('from_address', '无详细地址')
             to_address = init_regions.to_address(detail.get('to_province_id', 0), detail.get('to_city_id', 0),
-                                                  detail.get('to_county_id', 0)) + detail.get('to_address', '')
+                                                  detail.get('to_county_id', 0)) + detail.get('to_address', '无详细地址')
             mileage_total = str(int(detail['mileage_total'] * 1000)) + '米'\
                 if detail.get('mileage_total', 0) < 1 and detail.get('mileage_total', 0) > 0\
                 else str(int(detail.get('mileage_total', 0))) + '千米'
@@ -144,14 +156,30 @@ class CityOrderListFilterDecorator(object):
                 'supplier_node': supplier_node,
                 'address': '\n'.join([from_address, to_address, mileage_total]),
                 'vehicle': vehicle,
-                'price': '货主出价:%(price_expect)s元%(price_addition)s\n系统价:%(price_recommend)s元' % {
+                'price': '货主出价:%(price_expect)s元%(price_addition)s元\n系统价:%(price_recommend)s元' % {
                     'price_expect': str(detail.get('price_expect', 0)),
-                    'price_addition': '(+%s)' % str(detail['price_addition']) if detail.get('price_addition', 0) else '',
-                    'price_recommend': detail.get('price_recommend', 0)
+                    'price_addition': '(+%s)' % str(detail['price_addition']) if detail.get('price_addition', 0) else '+0',
+                    'price_recommend': str(detail.get('price_recommend', 0))
                 },
                 'mobile': detail.get('mobile', ''),
                 'call_count': detail.get('call_count', 0),
-                'goods_time': goods_time
+                'goods_time': goods_time,
+
+                # 排序条件
+                'priority_num': priority_num,
+                'new': new,
+                'urgent': urgent,
+                'price_addition': int(detail['price_addition']) if detail.get('price_addition', 0) else 0,
+                'create_time': detail['create_time']
             })
-        data = json.loads(json.dumps(result))
-        return build_result(APIStatus.Ok, count=goods_counts, data=result), HTTPStatus.Ok
+
+        # 排序
+        # 第一层排序：优先级高→一般
+        # 第二层排序：带有“新用户“
+        # 第三层排序：now（）-发布时间 < 10分钟
+        # 第四层排序：货主等待接单中是否加过价，加价的优先
+        # 第五层排序：发布时间倒序
+        ret = sorted(result, key=itemgetter('priority_num', 'new', 'urgent', 'price_addition', 'create_time'), reverse=True)
+
+        data = json.loads(json.dumps(ret))
+        return build_result(APIStatus.Ok, count=goods_counts, data=data), HTTPStatus.Ok

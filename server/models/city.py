@@ -109,7 +109,6 @@ class CityOrderListModel(object):
             shf_goods.`name`,
             shf_goods.weight,
             shf_goods.volume,
-            '' AS supplier_node,
             shf_goods.from_province_id,
             shf_goods.from_city_id,
             shf_goods.from_county_id,
