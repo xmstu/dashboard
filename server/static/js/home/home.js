@@ -15,7 +15,12 @@ layui.use(['laydate', 'form', 'table'], function () {
         calendar: true,
         max: String(common.getNowFormatDate()[4]),
         done: function (val, index) {
-
+            var startTime = common.timeTransform($('#date_show_one').val())
+            var endTime = common.timeTransform($('#date_show_two').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！')
+                return false
+            }
         }
     });
     laydate.render({
@@ -24,7 +29,12 @@ layui.use(['laydate', 'form', 'table'], function () {
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         done: function (val, index) {
-
+            var startTime = common.timeTransform($('#date_show_one').val())
+            var endTime = common.timeTransform($('#date_show_two').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
         }
     });
 });
@@ -45,16 +55,20 @@ $('#user_search_box').on('click', function (e) {
         vehicle_length: $.trim($('#vehicle_length').val()),
         node_id: $.trim($('#node_id').val()),
         spec_tag: $.trim($('#spec_tag').val()),
-        is_addition:$.trim($('#is_addition').val())
+        is_addition: $.trim($('#is_addition').val())
     };
-     var url = '/city/latest_orders/?goods_type=' + data.goods_type + '&priority=' + data.priority + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&node_id=' +
-        data.node_id + '&spec_tag=' + data.spec_tag+ '&is_addition=' + data.is_addition;
+    var url = '/city/latest_orders/?goods_type=' + data.goods_type + '&priority=' + data.priority + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&node_id=' +
+        data.node_id + '&spec_tag=' + data.spec_tag + '&is_addition=' + data.is_addition;
     tableInit(url);
 });
 
 function dataInit() {
     var start_time = $.trim($('#date_show_one').val());
     var end_time = $.trim($('#date_show_two').val());
+    if (common.timeTransform(start_time) > common.timeTransform(end_time)) {
+        layer.msg('提示：开始时间大于了结束时间！');
+        return false
+    }
     var goods_types = $.trim($('#goods_types').val());
     var region_id = $.trim($('#city_area').val());
     if (start_time != '') {
@@ -80,6 +94,12 @@ function dataInit() {
         $('.part-1-bottom ul').empty();
         $('.part-1-bottom ul').append(str);
         var dataStyle = {
+            normal: {
+                label: {show: false},
+                labelLine: {show: false}
+            }
+        };
+        var dashStyle_2 = {
             normal: {
                 label: {show: false},
                 labelLine: {show: false}
@@ -119,7 +139,7 @@ function dataInit() {
                     trigger: 'item',
                     show: true,
                     formatter: "{a} <br/>{b} : {c} ({d})",
-                    extraCssText: 'width:160px;height:80px;background:rgba(0,0,0,.4);'
+                    extraCssText: 'width:160px;height:60px;background:rgba(0,0,0,.4);'
                 },
                 legend: {
                     orient: 'vertical',
@@ -138,6 +158,8 @@ function dataInit() {
                         saveAsImage: {show: true}
                     }
                 },
+                color: ['#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#DB843D', '#A47D7C'],
+                // colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92'],
                 series: [
                     {
                         name: '货源数',
@@ -177,13 +199,13 @@ function tableInit(url) {
             },
             loading: true,
             cols: [[
-                {field: 'id', title: '货源ID', width: 82},
+                {field: 'goods_id', title: '货源ID', width: 82},
                 {field: 'priority', title: '优先级', width: 82},
                 {field: 'goods_type', title: '类型', width: 100},
                 {field: 'content', title: '货物规格', width: 120},
                 {field: 'supplier_node', title: '所属网点'},
                 {field: 'vehicle', title: '车型要求', width: 116},
-                {field: 'price', title: '运费', width: 140},
+                {field: 'price', title: '运费', width: 180},
                 {field: 'mobile', title: '货主手机', width: 110},
                 {field: 'call_count', title: '通话数', width: 82},
                 {field: 'goods_time', title: '时间', width: 200},

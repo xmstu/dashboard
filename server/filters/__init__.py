@@ -5,3 +5,4 @@ from server.filters.user import *
 from server.filters.promote import *
 from server.filters.goods import *
 from server.filters.city import *
+from server.filters.weather import *

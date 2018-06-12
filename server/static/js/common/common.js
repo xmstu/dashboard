@@ -45,11 +45,11 @@ var common = {
 
                 $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '50px'});
 
-                $('.part-2 .layui-table').css({'width':'100%'});
+                $('.part-2 .layui-table').css({'width': '100%'});
 
-                $('#charts_container_one').css({'width':'100%'});
+                $('#charts_container_one').css({'width': '100%'});
 
-                $('.highcharts-root').css({'width':'100%'});
+                $('.highcharts-root').css({'width': '100%'});
 
                 return false
 
@@ -200,7 +200,7 @@ var common = {
         date3.setTime(date3.getTime() - 8 * 24 * 60 * 60 * 1000);
         date2.setTime(date2.getTime() + 24 * 60 * 60 * 1000);
         date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
-        date5.setTime(date5.getTime()-2*24*60*60*1000);
+        date5.setTime(date5.getTime() - 2 * 24 * 60 * 60 * 1000);
         var seperator1 = "-";
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
@@ -242,8 +242,8 @@ var common = {
         var tommorwdate = date2.getFullYear() + seperator1 + monthAnother + seperator1 + dateAnother;
         var defaultdate = date3.getFullYear() + seperator1 + month_3 + seperator1 + date_3;
         var yesterdaydate = date4.getFullYear() + seperator1 + month_4 + seperator1 + date_4;
-        var beforeYesterday = date5.getFullYear()+seperator1+month_5+seperator1+date_5;
-        return [currentdate, tommorwdate, defaultdate, yesterdaydate,beforeYesterday];
+        var beforeYesterday = date5.getFullYear() + seperator1 + month_5 + seperator1 + date_5;
+        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday];
     },
     dateInterval: function (num1, num2) {
         var date1 = new Date(num1.replace(/-/g, "/"));
@@ -251,20 +251,22 @@ var common = {
         var days = date1.getTime() - date2.getTime();
         var time = parseInt(days / (1000 * 60 * 60 * 24));
         if (time < 7) {
-             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
+            $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
         } else if (time > 7 && time < 31) {
-             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
+            $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
-        }else if(time>90){
-            layer.msg('日期超过三个月，无法按日进行显示',function(){
+        } else if ($('#day_methods').hasClass('active')) {
+            if (time > 90) {
+                layer.msg('日期超过三个月，无法按日进行显示', function () {
 
-            });
-            $("#day_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
-             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'}).addClass('active');
-            $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
+                });
+                $("#day_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
+                $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'}).addClass('active');
+                $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
+            }
         } else {
             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
@@ -347,16 +349,16 @@ var common = {
         var date = new Date(str);
         return date.getTime() / 1000;
     },
-    periods:function(){
+    periods: function () {
         var lis = $('.periods li');
-        lis.on('click',function(e){
+        lis.on('click', function (e) {
             e.preventDefault();
             $(this).find('button').addClass('active').parent('li').siblings('li').find('button').removeClass('active')
             console.log($(this).find('button.active').val())
         })
     },
-    periods_val:function(val){
-        switch (val){
+    periods_val: function (val) {
+        switch (val) {
             case 1:
                 return 1;
                 break;
@@ -368,8 +370,8 @@ var common = {
                 break;
         }
     },
-    test:function(){
-        $('.laydate-btns-confirm').on('click',function(){
+    test: function () {
+        $('.laydate-btns-confirm').on('click', function () {
             layer.msg('reset')
         })
     }
@@ -391,11 +393,11 @@ setInterval(function () {
     $('#hour_now').html(common.dateNow()[1]);
 
 }, 1000);
-$(window).resize(function(){
+$(window).resize(function () {
     var $width = $('.header').width();
-    if($width<1600){
-    $('.header-right').hide()
-}else {
-     $('.header-right').show()
-}
+    if ($width < 1600) {
+        $('.header-right').hide()
+    } else {
+        $('.header-right').show()
+    }
 });

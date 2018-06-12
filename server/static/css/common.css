@@ -349,7 +349,6 @@ body {
 
 .layui-nav-item {
     line-height: 42px !important;
-    border-bottom: 1px dashed #ddd;
 }
 
 .layui-nav-item > a > i:nth-child(1) {
@@ -391,7 +390,7 @@ body {
 }
 
 .layui-nav-item {
-    border-bottom: 1px dashed #666 !important;
+    border-bottom: 1px solid rgba(107, 108, 109, 0.19) !important;
 }
 
 nav.main-content-left .layui-nav-tree .layui-nav-item > a {

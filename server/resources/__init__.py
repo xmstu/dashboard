@@ -6,3 +6,4 @@ from server.resources.user import *
 from server.resources.promote import *
 from server.resources.goods import *
 from server.resources.city import *
+from server.resources.weather import *
