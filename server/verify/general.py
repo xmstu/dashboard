@@ -13,7 +13,7 @@ class Paging(object):
         if not str(page).isdigit() or int(page) <= 0:
             abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='page参数不能为%s' % page))
 
-        if not str(limit).isdigit() or (int(limit) not in [10, 20, 30, 40, 50, 300]):
+        if not str(limit).isdigit() or (int(limit) not in [10, 20, 30, 40, 50, 60, 70, 80, 90]):
             abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='count参数不能为%s' % limit))
 
         return Response(page=int(page), limit=int(limit), **kwargs)
