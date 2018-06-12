@@ -142,26 +142,33 @@ var common = {
         })
     },
     weather: function () {
-        var this_ity;
-        $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
-            this_ity = remote_ip_info.city;
-            //this_ity='广州'
-            var myDate = new Date();
-            var thisDate = myDate.getMonth() + 1;
-            $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
-                $.ajax({
-                    type: "GET",
-                    url: "http://wthrcdn.etouch.cn/weather_mini?city=" + this_ity,
-                    dataType: "json",
-                    success: function (res) {
-                        $('#weather_now > u:nth-child(1)').html('城市：' + res.data.city);
-                        $('#weather_now > u:nth-child(2)').html('日期:' + res.data.forecast[0].date);
-                        $('#weather_now > u:nth-child(3)').html('实时温度：( ' + res.data.wendu + '℃ )&nbsp;&nbsp;&nbsp;热差:' + res.data.forecast[0].low + '~' + res.data.forecast[0].high)
-                        $('#weather_now > u:nth-child(4)').html('天气: ' + res.data.forecast[0].type)
-                    }
+        $.ajax({
+            type: "POST",
+            dataType: "jsonp",
+            url: 'http://api.map.baidu.com/location/ip?ak=ZVizfVIbcLc0qNhduvT3dSbqG8YV8YoP&ip=',
+            success: function (res) {
+                $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
+                    var this_ity = res.content.address_detail.city;
+                    //this_ity='广州'
+                    var myDate = new Date();
+                    var thisDate = myDate.getMonth() + 1;
+                    $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
+                        $.ajax({
+                            type: "GET",
+                            url: "http://wthrcdn.etouch.cn/weather_mini?city=" + this_ity,
+                            dataType: "json",
+                            success: function (res) {
+                                $('#weather_now > u:nth-child(1)').html('城市：' + res.data.city);
+                                $('#weather_now > u:nth-child(2)').html('日期:' + res.data.forecast[0].date);
+                                $('#weather_now > u:nth-child(3)').html('实时温度：( ' + res.data.wendu + '℃ )&nbsp;&nbsp;&nbsp;热差:' + res.data.forecast[0].low + '~' + res.data.forecast[0].high)
+                                $('#weather_now > u:nth-child(4)').html('天气: ' + res.data.forecast[0].type)
+                            }
+                        });
+                    });
                 });
-            });
+            }
         });
+
     },
     dateNow: function () {
         var date = new Date();
