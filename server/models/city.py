@@ -190,9 +190,9 @@ class CityOrderListModel(object):
             AND UNIX_TIMESTAMP() - shf_goods.create_time > 300
             AND shf_goods.price_addition = 0 '''
 
-        # TODO 车长
+        # 车长
         if params['vehicle_length']:
-            command += ' AND shf_goods_vehicles.attribute_value_id = 1355 '
+            command += """ AND shf_goods_vehicles.NAME = '%s' """ % params['vehicle_length']
 
         # 是否通话
         if params.get('is_called'):

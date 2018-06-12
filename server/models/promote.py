@@ -12,7 +12,7 @@ class PromoteEffectList(object):
     @staticmethod
     def check_mobile(cursor, mobile):
         command = """ 
-             SELECT
+            SELECT
                 user_name,
                 user_id ,
                 (SELECT
