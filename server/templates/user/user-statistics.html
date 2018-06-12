@@ -7,9 +7,7 @@
     <link rel="stylesheet" href="../static/layui/css/layui.css">
     <link rel="stylesheet" href="../static/css/common.css">
     <link rel="stylesheet" href="../static/css/iconfont.css">
-    <style>.layui-form-item .layui-inline {
-        margin-right: 0;
-    }</style>
+    <style>.part-2 .layui-form-item{width: 254px;}.layui-form-item .layui-inline {margin-right: 0;}</style>
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
@@ -90,13 +88,13 @@
                     </a>
                     <u></u>
                 </li>
-                 <li class="layui-nav-item">
+                <li class="layui-nav-item">
                     <a href="/potential/">
                         <i class="iconfont icon-yincang"></i>潜在货源
                     </a>
                     <u></u>
                 </li>
-                 <li class="layui-nav-item">
+                <li class="layui-nav-item">
                     <a href="/order/">
                         <i class="iconfont icon-dingdan"></i>订单统计
                     </a>
@@ -205,7 +203,7 @@
                                 </div>
                                 <button id="search_btn" style="position: relative;padding-left: 20px;"
                                         class="layui-btn"><i style=""
-                                                                              class="iconfont icon-sousuo1"></i> 搜索
+                                                             class="iconfont icon-sousuo1"></i> 搜索
                                 </button>
                             </form>
                         </div>
@@ -217,14 +215,16 @@
                     </div>
                     <div class="part-2">
                         <form action="" class="layui-form layui-form-pane">
-                            <div class="layui-form-item" style="width: 254px;">
-                                <label class="layui-form-label">用户名</label>
-                                <div class="layui-input-inline">
-                                    <input id="user_name" type="text" name="username" lay-verify="required"
-                                           placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">用户名</label>
+                                    <div class="layui-input-inline">
+                                        <input id="user_name" type="text" name="username" lay-verify="required"
+                                               placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 254px;">
+                            <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">手机号</label>
                                     <div class="layui-input-inline">
@@ -234,10 +234,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 278px;">
+                            <div class="layui-form-item" >
                                 <div class="layui-inline">
                                     <label class="layui-form-label">推荐人手机</label>
-                                    <div class="layui-input-inline">
+                                    <div class="layui-input-inline" style="width: 132px;">
                                         <input id="reference_mobile" type="tel" name="phone" maxlength="11"
                                                lay-verify="required|phone" placeholder="请输入推荐人手机" autocomplete="off"
                                                class="layui-input">
@@ -245,25 +245,28 @@
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label">下载渠道</label>
-                                <div class="layui-input-inline">
+                                <div class="layui-inline">
+                                     <label class="layui-form-label">下载渠道</label>
+                                <div class="layui-input-inline" style="width: 146px;">
                                     <input id="download_ch" type="text" name="username" lay-verify="required"
                                            placeholder="请输入下载渠道" autocomplete="off" class="layui-input">
                                 </div>
+                                </div>
+
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">注册渠道</label>
-                                    <div class="layui-input-inline">
+                                    <div class="layui-input-inline" style="width: 146px;">
                                         <input id="register" type="text" name="username" lay-verify="required"
                                                placeholder="请输入注册渠道" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 250px;">
+                            <div class="layui-form-item" style="">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">推荐注册</label>
-                                    <div class="layui-input-inline" style="width: 150px;">
+                                    <div class="layui-input-inline" style="width: 146px;">
                                         <select id="is_referenced" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">有</option>
@@ -272,7 +275,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 254px;">
+                            <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">常驻地</label>
                                     <div class="layui-input-inline">
@@ -281,7 +284,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 254px;">
+                            <div class="layui-form-item" >
                                 <div class="layui-inline">
                                     <label class="layui-form-label">注册角色</label>
                                     <div class="layui-input-inline" style="width: 146px;">
@@ -294,10 +297,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 278px;">
+                            <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">认证角色</label>
-                                    <div class="layui-input-inline" style="width: 172px;">
+                                    <div class="layui-input-inline" style="width: 146px;">
                                         <select id="role_auth" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">货主</option>
@@ -321,10 +324,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 270px;">
+                            <div class="layui-form-item" >
                                 <div class="layui-inline" style="">
                                     <label class="layui-form-label">操作过</label>
-                                    <div class="layui-input-inline" style="width: 174px;">
+                                    <div class="layui-input-inline" >
                                         <select id="is_used" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">发布货源</option>
@@ -334,10 +337,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 250px;">
+                            <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">贴车贴</label>
-                                    <div class="layui-input-inline" style="width: 164px;">
+                                    <div class="layui-input-inline">
                                         <select id="is_car_sticker" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">有</option>
@@ -368,29 +371,33 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width:250px;position: relative;">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">注册日期</label>
-                                    <div class="layui-input-block">
-                                        <i class="layui-icon layui-icon-riqi"></i>
-                                        <input style="width: 174px;" id="date_show_five" name="date_five"
-                                               autocomplete="off" lay-verify="date_show_five" class="layui-input"
-                                               type="text">
-                                        <span class="date-tips">请选择日期</span>
+                            <article style="width: auto;display: inline-block;">
+                                <div class="layui-form-item" style="width:250px;position: relative;">
+
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">注册日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input style="width: 174px;" id="date_show_five" name="date_five"
+                                                   autocomplete="off" lay-verify="date_show_five" class="layui-input"
+                                                   type="text">
+                                            <span class="date-tips">请选择日期</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <span style="display: inline-block;margin-top: 9px;">至</span>
+                                <div class="layui-form-item" style="width:268px;position: relative;">
+                                    <div class="layui-inline">
+                                        <div class="layui-input-block" style="margin-left: 10px;">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="date_show_six" name="date_six" autocomplete="off"
+                                                   lay-verify="date_show_six" class="layui-input" type="text">
+                                            <span class="date-tips">请选择日期</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <span style="display: inline-block;margin-top: 9px;">至</span>
-                            <div class="layui-form-item" style="width:268px;position: relative;">
-                                <div class="layui-inline">
-                                    <div class="layui-input-block" style="margin-left: 10px;">
-                                        <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="date_show_six" name="date_six" autocomplete="off"
-                                               lay-verify="date_show_six" class="layui-input" type="text">
-                                        <span class="date-tips">请选择日期</span>
-                                    </div>
-                                </div>
-                            </div>
+                            </article>
                             <button id="user_search_box"
                                     style="position: relative;padding-left: 20px;margin-left: 54px;"
                                     class="layui-btn "><i style="" class="iconfont icon-sousuo1"></i> 搜索
