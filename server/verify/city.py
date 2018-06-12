@@ -45,7 +45,7 @@ class CityOrderList(object):
 
             goods_type = int(params.get('goods_type', None) or 0)
             priority = int(params.get('priority', None) or 0)
-            vehicle_length = int(params.get('vehicle_length', None) or 0)
+            vehicle_length = str(params.get('vehicle_length', None) or '')
             is_called = int(params.get('is_called', None) or 0)
             is_addition = int(params.get('is_addition', None) or 0)
             node_id = int(params.get('node_id', None) or 0)
