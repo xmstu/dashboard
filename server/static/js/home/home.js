@@ -36,19 +36,19 @@ layui.use(['laydate', 'form', 'table'], function () {
         },
         loading: true,
         cols: [[
-            {field: 'id', title: '货源ID'},
-            {field: 'priority', title: '优先级'},
-            {field: 'goods_type', title: '类型'},
-            {field: 'weight', title: '货物规格'},
-            {field: 'stipple', title: '所属网点'},
-            {field: 'run_line', title: '出发地-目的地'},
-            {field: 'vehicle_order', title: '车型要求'},
-            {field: 'carriage', title: '运费'},
-            {field: 'shipper_phone', title: '货主手机'},
-            {field: 'communicate_count', title: '通话数'},
-            {field: 'time_show', title: '时间'},
+            {field: 'id', title: '货源ID', width: 82},
+            {field: 'priority', title: '优先级', width: 82},
+            {field: 'goods_type', title: '类型', width: 100},
+            {field: 'content', title: '货物规格',width:120},
+            {field: 'supplier_node', title: '所属网点'},
+            {field: 'vehicle', title: '车型要求', width: 116},
+            {field: 'price', title: '运费', width: 140},
+            {field: 'mobile', title: '货主手机', width: 110},
+            {field: 'call_count', title: '通话数', width: 82},
+            {field: 'goods_time', title: '时间', width: 200},
+            {field: 'address', title: '出发地-目的地', width: 250},
             {
-                field: 'operate', title: '操作', templet: function (d) {
+                field: 'operate', title: '操作', width: 107, templet: function (d) {
                     return '<button id="' + d.phone_number + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
                 }
             }
@@ -58,7 +58,6 @@ layui.use(['laydate', 'form', 'table'], function () {
             $('.nearby').on('click', function () {
                 table.render({
                     elem: '#demo'
-                    ,width:1474
                     , url: '/demo/table/user/' //数据接口
                     , page: true //开启分页
                     , cols: [[ //表头
@@ -78,17 +77,47 @@ layui.use(['laydate', 'form', 'table'], function () {
                 });
                 layer.open({
                     type: 1,
-                    area: ['1500px', '520px'],
+                    area: ['1400px', '520px'],
                     skin: 'layui-layer-molv',
                     closeBtn: 1,
                     content: $('#popup')
                 })
             });
-            $("td[data-field='goods_id']").children().each(function (val) {
-                var value = $(this).parent().parent('tr').attr('data-index');
-                if ($(this).text() == '') {
-                    //下面的一定要用html
-                    //$(this).html(res.data[value].user_name+'</br>'+res.data[value].goods_count)
+            $("td[data-field='price']").children().each(function () {
+                if ($(this).text() != '') {
+                    var str = $(this).text();
+                    str = str.split('\n');
+                    $(this).html(str[0] + '<br>' + str[1])
+                }
+            });
+            $("td[data-field='vehicle']").children().each(function () {
+                if ($(this).text() != '') {
+                    var str = $(this).text();
+                    str = str.split('\n');
+                    $(this).html(str[0] + '<br>' + str[1])
+                }
+            });
+            $("td[data-field='goods_time']").children().each(function () {
+                if ($(this).text() != '') {
+                    var str = $(this).text();
+                    str = str.split('\n');
+                    $(this).html(str[0] + '<br>' + str[1])
+                }
+            });
+            $("td[data-field='address']").children().each(function () {
+                if ($(this).text() != '') {
+                    var str = $(this).text();
+                    str = str.split('\n');
+                    $(this).html(str[0] + '<br>' + str[1])
+                }
+            })
+             $("td[data-field='supplier_node']").children().each(function () {
+                if ($(this).text() != '') {
+                    var str = $(this).text();
+                    str = str.split('\n');
+                    $(this).html(str[0] + '<br>' + str[1])
+                }else {
+                     $(this).html('')
                 }
             })
         }
@@ -127,7 +156,7 @@ function dataInit() {
         var arr = Object.keys(res.data);
         var str = '';
         var elemArr = [];
-          for (var i = 0; i < arr.length; i++) {
+        for (var i = 0; i < arr.length; i++) {
             str += '<li class="charts-container" id="charts_container_' + i + '"></li>';
         }
         $('.part-1-bottom ul').empty();
@@ -169,10 +198,10 @@ function dataInit() {
                     }
                 },
                 tooltip: {
-                    trigger:'item',
+                    trigger: 'item',
                     show: true,
                     formatter: "{a} <br/>{b} : {c} ({d})",
-                    extraCssText:'width:160px;height:80px;background:rgba(0,0,0,.4);'
+                    extraCssText: 'width:160px;height:80px;background:rgba(0,0,0,.4);'
                 },
                 legend: {
                     orient: 'vertical',

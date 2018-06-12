@@ -23,7 +23,8 @@
             <div class="header-content-main clearfix">
                 <p><i class="iconfont icon-rili"></i><span id="date_now"></span></p>
                 <p><i class="iconfont icon-shijian"></i> <span id="hour_now"></span></p>
-                <p><i class="iconfont icon-weathercock"></i><span id="weather_now"><u></u><u></u><u></u><u></u></span></p>
+                <p><i class="iconfont icon-weathercock"></i><span id="weather_now"><u></u><u></u><u></u><u></u></span>
+                </p>
             </div>
         </section>
         <section class="header-right">
@@ -57,7 +58,7 @@
                 </section>
             </div>
             <ul class="layui-nav layui-nav-tree" lay-filter="nav-slider">
-                <li class="layui-nav-item" >
+                <li class="layui-nav-item">
                     <a href="/admin/" class="selected-active">
                         <i class="layui-icon select-active">&#xe68e;</i>首页
                     </a>
@@ -83,12 +84,24 @@
                 </li>
                 <li class="layui-nav-item">
                     <a href="/goods/">
-                        <i class="iconfont icon-tongji" ></i>货源统计
+                        <i class="iconfont icon-tongji"></i>货源统计
+                    </a>
+                    <u></u>
+                </li>
+                 <li class="layui-nav-item">
+                    <a href="/potential/">
+                        <i class="iconfont icon-yincang"></i>潜在货源
+                    </a>
+                    <u></u>
+                </li>
+                 <li class="layui-nav-item">
+                    <a href="/order/">
+                        <i class="iconfont icon-dingdan"></i>订单统计
                     </a>
                     <u></u>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="/maps/">
+                    <a href="/map/">
                         <i class="iconfont icon-relitu"></i>热力图
                     </a>
                     <u></u>
@@ -153,127 +166,124 @@
                                 </div>
                                 <button id="search_btn" style="position: relative;padding-left: 20px;"
                                         class="layui-btn "><i style=""
-                                                                              class="iconfont icon-sousuo1"></i> 搜索
+                                                              class="iconfont icon-sousuo1"></i> 搜索
                                 </button>
                             </form>
                         </div>
                         <div class="part-1-bottom">
                             <ul class="clearfix">
                             </ul>
-                    </div>
-                    <div class="river"></div>
-                    <div class="part-2">
-                        <h2 style="font-size: 20px" ><i class="iconfont icon-xuanzhuan"></i>最新接单货源</h2>
-                        <hr>
-                        <form action="" class="layui-form layui-form-pane">
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">货源类型</label>
-                                    <div class="layui-input-inline">
-                                        <select id="goods_type" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部类型</option>
-                                            <option value="1">同城</option>
-                                            <option value="2">跨城定价</option>
-                                            <option value="3">跨城议价</option>
-                                            <option value="4">零担</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item" style="">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">优先级</label>
-                                    <div class="layui-input-inline" style="width: 158px;">
-                                        <select id="priority" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部</option>
-                                            <option value="1">高</option>
-                                            <option value="2">一般</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">是否通话</label>
-                                    <div class="layui-input-inline">
-                                        <select id="is_called" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部</option>
-                                            <option value="1">是</option>
-                                            <option value="2">否</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">车长要求</label>
-                                    <div class="layui-input-inline" style="">
-                                        <select id="vehicle_length" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部</option>
-                                            <option value="1">1.7m</option>
-                                            <option value="2">2.7m</option>
-                                            <option value="3">3m</option>
-                                            <option value="4">4.2m</option>
-                                            <option value="5">5.6m</option>
-                                            <option value="6">6.8m</option>
-                                            <option value="7">7.6m</option>
-                                            <option value="8">8.6m</option>
-                                            <option value="9">9.6m</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item" style="">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">所属网点</label>
-                                    <div class="layui-input-inline" style="width: 158px;">
-                                        <select id="belong_stipple" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部</option>
-                                            <option value="1">天河区</option>
-                                            <option value="2">越秀区</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item" style="">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">特殊标签</label>
-                                    <div class="layui-input-inline" style="width: 160px;">
-                                        <select id="new_goods_type" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部</option>
-                                            <option value="1">初次下单</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">是否加价</label>
-                                    <div class="layui-input-inline" style="">
-                                        <select id="is_addition" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">请选择</option>
-                                            <option value="1">是</option>
-                                            <option value="2">否</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <button id="user_search_box" style="position: relative;padding-left: 20px;"
-                                    class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索
-                            </button>
-                        </form>
-                        <div class="dataTable">
-                            <div class="layui-inline">
-                                <input placeholder='输入用户名或手机号' maxlength="11" class="layui-input" name="id"
-                                       id="demoReload"
-                                       autocomplete="off">
-                            </div>
-                            <button class="layui-btn" data-type="reload">搜索</button>
                         </div>
-                        <table class="layui-hide goods-table" id="LAY_table_goods" lay-filter="user"></table>
+                        <div class="river"></div>
+                        <div class="part-2">
+                            <h2 style="font-size: 20px"><i class="iconfont icon-xuanzhuan"></i>最新接单货源</h2>
+                            <hr>
+                            <form action="" class="layui-form layui-form-pane">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">货源类型</label>
+                                        <div class="layui-input-inline">
+                                            <select id="goods_type" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部类型</option>
+                                                <option value="1">同城</option>
+                                                <option value="2">跨城定价</option>
+                                                <option value="3">跨城议价</option>
+                                                <option value="4">零担</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">优先级</label>
+                                        <div class="layui-input-inline" style="width: 158px;">
+                                            <select id="priority" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">高</option>
+                                                <option value="2">一般</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">是否通话</label>
+                                        <div class="layui-input-inline">
+                                            <select id="is_called" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">是</option>
+                                                <option value="2">否</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">车长要求</label>
+                                        <div class="layui-input-inline" style="">
+                                            <select id="vehicle_length" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">1.7m</option>
+                                                <option value="2">2.7m</option>
+                                                <option value="3">3m</option>
+                                                <option value="4">4.2m</option>
+                                                <option value="5">5.6m</option>
+                                                <option value="6">6.8m</option>
+                                                <option value="7">7.6m</option>
+                                                <option value="8">8.6m</option>
+                                                <option value="9">9.6m</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">所属网点</label>
+                                        <div class="layui-input-inline" style="width: 158px;">
+                                            <select id="belong_stipple" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部</option>
+                                                {% for location in locations %}
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">特殊标签</label>
+                                        <div class="layui-input-inline" style="width: 160px;">
+                                            <select id="new_goods_type" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">初次下单</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">是否加价</label>
+                                        <div class="layui-input-inline" style="">
+                                            <select id="is_addition" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">请选择</option>
+                                                <option value="1">是</option>
+                                                <option value="2">否</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="user_search_box" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索
+                                </button>
+                            </form>
+                            <table class="layui-hide goods-table" id="LAY_table_goods" lay-filter="user"></table>
+                        </div>
                     </div>
                 </div>
-            </div>
 
         </aside>
     </article>
@@ -300,6 +310,5 @@
 <script src="../static/js/common/http.js"></script>
 <script src="../static/js/libs/jquery.address.js"></script>
 <script src="../static/js/home/home.js"></script>
-<script src=""></script>
 </body>
 </html>
