@@ -2,8 +2,9 @@ $('.layui-table-cell').css({'height': 'auto!important'});
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
+    tableInit('/city/latest_orders/');
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
-}, 100);
+}, 50);
 layui.use(['laydate', 'form', 'table'], function () {
     dataInit();
     var laydate = layui.laydate;
@@ -26,104 +27,6 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         }
     });
-    table.render({
-        elem: '#LAY_table_goods',
-        even: true
-        , url: '/city/latest_orders',
-        response: {
-            statusName: 'status',
-            statusCode: 100000
-        },
-        loading: true,
-        cols: [[
-            {field: 'id', title: '货源ID', width: 82},
-            {field: 'priority', title: '优先级', width: 82},
-            {field: 'goods_type', title: '类型', width: 100},
-            {field: 'content', title: '货物规格',width:120},
-            {field: 'supplier_node', title: '所属网点'},
-            {field: 'vehicle', title: '车型要求', width: 116},
-            {field: 'price', title: '运费', width: 140},
-            {field: 'mobile', title: '货主手机', width: 110},
-            {field: 'call_count', title: '通话数', width: 82},
-            {field: 'goods_time', title: '时间', width: 200},
-            {field: 'address', title: '出发地-目的地', width: 250},
-            {
-                field: 'operate', title: '操作', width: 107, templet: function (d) {
-                    return '<button id="' + d.phone_number + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
-                }
-            }
-        ]],
-        done: function (res, curr, count) {
-            $('[data-field]>div').css({'padding': '0 6px'});
-            $('.nearby').on('click', function () {
-                table.render({
-                    elem: '#demo'
-                    , url: '/demo/table/user/' //数据接口
-                    , page: true //开启分页
-                    , cols: [[ //表头
-                        {field: 'id', title: 'ID', sort: true, fixed: 'left'}
-                        , {field: 'username', title: '司机姓名'}
-                        , {field: 'sex', title: '手机号码'}
-                        , {field: 'city', title: '所在地'}
-                        , {field: 'sign', title: '常驻地'}
-                        , {field: 'experience', title: '车长'}
-                        , {field: 'score', title: '车型'}
-                        , {field: 'classify', title: '司机评分'}
-                        , {field: 'wealth', title: '诚信会员', sort: true}
-                        , {field: 'test', title: '接单数', sort: true}
-                        , {field: 'test123', title: '完成数', sort: true}
-                        , {field: 'test1234', title: '取消数', sort: true}
-                    ]]
-                });
-                layer.open({
-                    type: 1,
-                    area: ['1400px', '520px'],
-                    skin: 'layui-layer-molv',
-                    closeBtn: 1,
-                    content: $('#popup')
-                })
-            });
-            $("td[data-field='price']").children().each(function () {
-                if ($(this).text() != '') {
-                    var str = $(this).text();
-                    str = str.split('\n');
-                    $(this).html(str[0] + '<br>' + str[1])
-                }
-            });
-            $("td[data-field='vehicle']").children().each(function () {
-                if ($(this).text() != '') {
-                    var str = $(this).text();
-                    str = str.split('\n');
-                    $(this).html(str[0] + '<br>' + str[1])
-                }
-            });
-            $("td[data-field='goods_time']").children().each(function () {
-                if ($(this).text() != '') {
-                    var str = $(this).text();
-                    str = str.split('\n');
-                    $(this).html(str[0] + '<br>' + str[1])
-                }
-            });
-            $("td[data-field='address']").children().each(function () {
-                if ($(this).text() != '') {
-                    var str = $(this).text();
-                    str = str.split('\n');
-                    $(this).html(str[0] + '<br>' + str[1])
-                }
-            })
-             $("td[data-field='supplier_node']").children().each(function () {
-                if ($(this).text() != '') {
-                    var str = $(this).text();
-                    str = str.split('\n');
-                    $(this).html(str[0] + '<br>' + str[1])
-                }else {
-                     $(this).html('')
-                }
-            })
-        }
-        , id: 'testReload'
-        , page: true
-    });
 });
 
 /*-----------------------------------------------------------------------------*/
@@ -132,6 +35,21 @@ $('#search_btn').click(function (e) {
     e.preventDefault();
     dataInit();
     console.log($('#city_area').val())
+});
+$('#user_search_box').on('click', function (e) {
+    e.preventDefault();
+    var data = {
+        goods_type: $.trim($('#goods_type').val()),
+        priority: $.trim($('#priority').val()),
+        is_called: $.trim($('#is_called').val()),
+        vehicle_length: $.trim($('#vehicle_length').val()),
+        node_id: $.trim($('#node_id').val()),
+        spec_tag: $.trim($('#spec_tag').val()),
+        is_addition:$.trim($('#is_addition').val())
+    };
+     var url = '/city/latest_orders/?goods_type=' + data.goods_type + '&priority=' + data.priority + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&node_id=' +
+        data.node_id + '&spec_tag=' + data.spec_tag+ '&is_addition=' + data.is_addition;
+    tableInit(url);
 });
 
 function dataInit() {
@@ -244,4 +162,115 @@ function dataInit() {
             }
         })
     })
+}
+
+function tableInit(url) {
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: '#LAY_table_goods',
+            even: true
+            , url: url,
+            response: {
+                statusName: 'status',
+                statusCode: 100000
+            },
+            loading: true,
+            cols: [[
+                {field: 'id', title: '货源ID', width: 82},
+                {field: 'priority', title: '优先级', width: 82},
+                {field: 'goods_type', title: '类型', width: 100},
+                {field: 'content', title: '货物规格', width: 120},
+                {field: 'supplier_node', title: '所属网点'},
+                {field: 'vehicle', title: '车型要求', width: 116},
+                {field: 'price', title: '运费', width: 140},
+                {field: 'mobile', title: '货主手机', width: 110},
+                {field: 'call_count', title: '通话数', width: 82},
+                {field: 'goods_time', title: '时间', width: 200},
+                {field: 'address', title: '出发地-目的地', width: 250},
+                {
+                    field: 'operate', title: '操作', width: 107, templet: function (d) {
+                        return '<button id="' + d.phone_number + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
+                    }
+                }
+            ]],
+            done: function (res, curr, count) {
+                $('[data-field]>div').css({'padding': '0 6px'});
+                $('.nearby').on('click', function () {
+                    table.render({
+                        elem: '#demo'
+                        , url: '/demo/table/user/' //数据接口
+                        , page: true //开启分页
+                        , cols: [[ //表头
+                            {field: 'id', title: 'ID', sort: true, fixed: 'left'}
+                            , {field: 'username', title: '司机姓名'}
+                            , {field: 'sex', title: '手机号码'}
+                            , {field: 'city', title: '所在地'}
+                            , {field: 'sign', title: '常驻地'}
+                            , {field: 'experience', title: '车长'}
+                            , {field: 'score', title: '车型'}
+                            , {field: 'classify', title: '司机评分'}
+                            , {field: 'wealth', title: '诚信会员', sort: true}
+                            , {field: 'test', title: '接单数', sort: true}
+                            , {field: 'test123', title: '完成数', sort: true}
+                            , {field: 'test1234', title: '取消数', sort: true}
+                        ]]
+                    });
+                    layer.open({
+                        type: 1,
+                        area: ['1400px', '520px'],
+                        skin: 'layui-layer-molv',
+                        closeBtn: 1,
+                        content: $('#popup')
+                    })
+                });
+                $("td[data-field='price']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        str = str.split('\n');
+                        $(this).html(str[0] + '<br>' + str[1])
+                    }
+                });
+                $("td[data-field='vehicle']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        str = str.split('\n');
+                        $(this).html(str[0] + '<br>' + str[1])
+                    }
+                });
+                $("td[data-field='goods_time']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        str = str.split('\n');
+                        $(this).html(str[0] + '<br>' + str[1])
+                    }
+                });
+                $("td[data-field='address']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        str = str.split('\n');
+                        $(this).html(str[0] + '<br>' + str[1])
+                    }
+                })
+                $("td[data-field='supplier_node']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        str = str.split('\n');
+                        $(this).html(str[0] + '<br>' + str[1])
+                    } else {
+                        $(this).html('')
+                    }
+                })
+                $("td[data-field='call_count']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        $(this).html(str + '次')
+                    }
+                })
+            }
+            , id: 'testReload'
+            , page: true
+        });
+    })
+
 }

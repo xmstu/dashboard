@@ -729,10 +729,6 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     padding: 16px;
 }
 
-.highcharts-button {
-    transform: translate(1500px, 10px) !important;
-}
-
 .river {
     height: 10px;
     background: #f5f5f5;

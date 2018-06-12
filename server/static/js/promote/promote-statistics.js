@@ -324,19 +324,19 @@ var pageSet = {
                       $("td[data-field='wake_up_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
-                            $(this).html(str + '次')
+                            $(this).html(str + '人')
                         }
                     })
                       $("td[data-field='goods_user_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
-                            $(this).html(str + '次')
+                            $(this).html(str + '人')
                         }
                     })
                       $("td[data-field='goods_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
-                            $(this).html(str + '人')
+                            $(this).html(str + '次')
                         }
                     })
                      $("td[data-field='order_over_count']").children().each(function () {

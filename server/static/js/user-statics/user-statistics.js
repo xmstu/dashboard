@@ -438,7 +438,7 @@ function chartInit(xAxis, series, interval, x_value1) {
             layout: 'vertical',
             align: 'left',
             verticalAlign: 'top',
-            x: 1150,
+            x: 1000,
             y: 0,
             floating: true,
             borderWidth: 1,
