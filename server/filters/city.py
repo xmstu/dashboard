@@ -150,6 +150,7 @@ class CityOrderListFilterDecorator(object):
                 'loading_time': loading_time
             }
             result.append({
+                'goods_id': detail.get('id', 0),
                 'priority': priority,
                 'goods_type': goods_type,
                 'content': '\n'.join([name, weight, volume]),
