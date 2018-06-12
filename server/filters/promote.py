@@ -45,6 +45,7 @@ class PromoteEffect(object):
                 detail['goods_user_count'] = detail.get('goods_user_count', None) or 0
                 detail['goods_price'] = detail.get('goods_price', None) or 0
                 detail['order_over_price'] = detail.get('order_over_price', None) or 0
+                detail['order_over_count'] = detail.get('order_over_count', None) or 0
         else:
             ex = extension_worker_list['promote_effect_detail']
             for i in ex:
@@ -56,6 +57,7 @@ class PromoteEffect(object):
                 i['goods_user_count'] = i.get('goods_user_count', None) or 0
                 i['goods_price'] = i.get('goods_price', None) or 0
                 i['order_over_price'] = i.get('order_over_price', None) or 0
+                i['order_over_count'] = i.get('order_over_count', None) or 0
             count = extension_worker_list['count']
 
             pr = promote_effect_list['promote_effect_detail']
