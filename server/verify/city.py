@@ -65,3 +65,18 @@ class CityOrderList(object):
         except Exception as e:
             log.error('最新接单货源参数错误:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+
+
+class CityNearbyCars(object):
+
+    @staticmethod
+    @make_decorator
+    def check_params(params):
+        try:
+            goods_id = int(params.get('goods_id', None) or 0)
+            if not goods_id:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='必须要有货源id'))
+            params = {'goods_id': goods_id}
+            return Response(params=params)
+        except Exception as e:
+            log.error('Error:{}'.format(e))

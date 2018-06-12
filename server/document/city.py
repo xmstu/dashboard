@@ -26,3 +26,7 @@ response_order_list_param_success = api.response(200, '成功', api.model('respo
     'state': fields.Integer(description=str(APIStatus.Ok)),
     'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
 }))
+
+request_nearby_cars_param = api.doc(params={
+    'goods_id': '货源id',
+}, description='最新待接订单统计列表查询参数')

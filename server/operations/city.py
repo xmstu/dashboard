@@ -2,7 +2,8 @@
 from server import log
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.city import CityOrderListModel, CityResourceBalanceModel
+from server.models.city import CityOrderListModel, CityResourceBalanceModel, CityNearbyCarsModel
+
 
 class CityResourceBalance(object):
     @staticmethod
@@ -23,5 +24,16 @@ class CityOrderListDecorator(object):
     @make_decorator
     def get_data(page, limit, params):
         data = CityOrderListModel.get_data(db.read_db, page, limit, params)
-        log.info('获取最新接单货源成功: [params: %s]' % (params))
+        log.info('获取最新接单货源成功: [params: %s]' % params)
         return Response(data=data)
+
+
+class CityNearbyCars(object):
+
+    @staticmethod
+    @make_decorator
+    def get_data(params):
+        # 获取货源附近的车
+        nearby_cars_list = CityNearbyCarsModel.get_data(db.read_db, params)
+
+        return Response(data=nearby_cars_list)

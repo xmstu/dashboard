@@ -39,7 +39,21 @@ class CityLatestOpenOrderList(Resource):
         return resp
 
 
+class CityNearbyCars(Resource):
+    @staticmethod
+    @doc.request_nearby_cars_param
+    @filters.CityNearbyCars.get_result(data=dict)
+    @operations.CityNearbyCars.get_data(params=dict)
+    @verify.CityNearbyCars.check_params(params=dict)
+    def get():
+        """附近的车"""
+        resp = Response(params=get_all_arg())
+        log.info('附近的车请求参数:{}'.format(resp))
+        return resp
+
+
 ns = api.namespace('city', description='城市概况')
 ns.add_resource(CityResourceBalance, '/resource/')
 ns.add_resource(CityLatestOpenOrderList, '/latest_orders/')
+ns.add_resource(CityNearbyCars, '/nearby_cars/')
 

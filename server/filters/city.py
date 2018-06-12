@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from server.meta.decorators import make_decorator
-from server.status import build_result, HTTPStatus, APIStatus
+from server.status import build_result, HTTPStatus, APIStatus, make_result
 from server.init_regions import init_regions
 import json
 
@@ -184,3 +184,13 @@ class CityOrderListFilterDecorator(object):
 
         data = json.loads(json.dumps(ret))
         return build_result(APIStatus.Ok, count=goods_counts, data=data), HTTPStatus.Ok
+
+
+class CityNearbyCars(object):
+
+    @staticmethod
+    @make_decorator
+    def get_result(data):
+        # 构造参数
+        pass
+        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok

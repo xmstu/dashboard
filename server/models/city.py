@@ -240,3 +240,12 @@ class CityOrderListModel(object):
         }
         log.info('获取最新接单货源数据成功: [params: %s]' % params)
         return data
+
+
+class CityNearbyCarsModel(object):
+
+    @staticmethod
+    def get_data(cursor, params):
+        pass
+
+        return []
