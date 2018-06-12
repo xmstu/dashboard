@@ -7,3 +7,6 @@ from server.route.promote import *
 from server.route.admin import *
 from server.route.password import *
 from server.route.transport import *
+from server.route.map import *
+from server.route.potential import *
+from server.route.order import *

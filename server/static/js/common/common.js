@@ -367,6 +367,11 @@ var common = {
                 return 3;
                 break;
         }
+    },
+    test:function(){
+        $('.laydate-btns-confirm').on('click',function(){
+            layer.msg('reset')
+        })
     }
 };
 setTimeout(function () {

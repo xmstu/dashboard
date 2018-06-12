@@ -20,7 +20,7 @@ http.ajax.get = function (async, cache, url, data, contentType, callback) {
         contentType: contentType,
         dataType: 'json',
         beforeSend: function () {
-            layer.load(2, {offset: ['55%', '50%']});
+           layer.load(0, {shade:false,offset: ['55%', '50%']});
         },
         complete: function (response) {
             if (response.status == 400) {
@@ -77,7 +77,7 @@ http.ajax.post = function (async, cache, url, data, contentType, callback) {
         contentType: contentType,
         dataType: 'json',
         beforeSend: function () {
-            layer.load(2, {offset: ['55%', '50%']});
+            layer.load(0, {shade:false,offset: ['55%', '50%']});
         },
         complete: function (response) {
             if (response.status == 400) {

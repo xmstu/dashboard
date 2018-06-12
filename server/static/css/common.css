@@ -673,7 +673,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 .content-show {
     display: inline-block;
     width: 40%;
-    min-width: 600px;
+    min-width: 500px;
     background: #42cac0;
     border-radius: 4px;
     height: auto;
@@ -746,12 +746,14 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     padding-bottom: 14px;
     border: 1px dashed #ddd;
     display: inline-block;
+    width: 38%;
 }
 
 .chart-area-body-bottom-right {
     display: inline-block;
     margin-left: 20px;
     vertical-align: top;
+    width: 58%;
 }
 
 .chart-area-body-bottom-right > .layui-table {
@@ -763,6 +765,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 }
 
 body {
+    overflow-x: hidden;
     overflow-y: scroll;
 }
 
