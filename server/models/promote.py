@@ -14,18 +14,13 @@ class PromoteEffectList(object):
         command = """ 
             SELECT
                 user_name,
-                user_id ,
-                (SELECT
-                reference_id 
+                user_id,
+                a.reference_id,
+                a.is_deleted
             FROM
-                tb_inf_promote 
+                tb_inf_user ,( SELECT reference_id,is_deleted FROM tb_inf_promote WHERE reference_mobile = {0} ) AS a
             WHERE
-                reference_mobile = {0} 
-                AND is_deleted = 0) as reference_id
-            FROM
-                tb_inf_user 
-            WHERE
-                mobile = {0} 
+                mobile = {0}
                 AND tb_inf_user.is_deleted = 0;
          """
         ret = cursor.query_one(command.format(mobile))
@@ -33,8 +28,9 @@ class PromoteEffectList(object):
         user_name = ret.get('user_name', None) or ''
         user_id = ret.get('user_id', None) or 0
         reference_id = ret.get('reference_id', None) or 0
+        is_deleted = ret.get('is_deleted', None)
 
-        return user_name, user_id, reference_id
+        return user_name, user_id, reference_id, is_deleted
 
     @staticmethod
     def add_extension_worker(cursor, user_name, user_id, mobile):
@@ -49,6 +45,15 @@ class PromoteEffectList(object):
 
         if data:
             return data
+        else:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法添加该推荐人，请检查参数是否有误'))
+
+    @staticmethod
+    def update_is_deleted(cursor, reference_id):
+        command = """ UPDATE tb_inf_promote SET is_deleted = 0 WHERE reference_id = %d """
+        row_count = cursor.update(command % reference_id)
+        if row_count:
+            return row_count
         else:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法添加该推荐人，请检查参数是否有误'))
 

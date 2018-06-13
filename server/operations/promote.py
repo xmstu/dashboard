@@ -23,10 +23,13 @@ class PromoteEffectDecorator(object):
     @staticmethod
     @make_decorator
     def add_extension_worker(mobile):
+        user_name, user_id, reference_id, is_deleted = PromoteEffectList.check_mobile(db.read_bi, mobile)
         # 校验该mobile是否在user表中并且该mobile的主人现在不是推荐人
-        user_name, user_id, reference_id = PromoteEffectList.check_mobile(db.read_bi, mobile)
         if user_id and not reference_id:
             data = PromoteEffectList.add_extension_worker(db.read_bi, user_name, user_id, mobile)
+        # 已删除该推广人，但是重新添加回来
+        elif reference_id and is_deleted == 1:
+            data = PromoteEffectList.update_is_deleted(db.read_bi, reference_id)
         else:
             data = 0
 
