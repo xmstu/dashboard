@@ -78,7 +78,7 @@ class PromoteEffectList(object):
 
             # 用户名
             if params['user_name']:
-                fetch_where += """ AND tb_inf_promote.reference_name = %s """ % params['user_name']
+                fetch_where += """ AND tb_inf_promote.reference_name = '%s' """ % params['user_name']
 
             # 手机号
             if params['mobile']:
@@ -184,7 +184,7 @@ class PromoteEffectList(object):
 
             # 用户名
             if params['user_name']:
-                fetch_where += """ AND tb_inf_promote.reference_name = %s """ % params['user_name']
+                fetch_where += """ AND tb_inf_promote.reference_name = '%s' """ % params['user_name']
 
             # 手机号
             if params['mobile']:

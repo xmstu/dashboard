@@ -192,7 +192,7 @@ class CityOrderListModel(object):
 
         # 车长
         if params['vehicle_length']:
-            command += """ AND shf_goods_vehicles.NAME = '%s' """ % params['vehicle_length']
+            command += """ AND shf_goods_vehicles.name = '%s' """ % params['vehicle_length']
 
         # 是否通话
         if params.get('is_called'):

@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from flask_restful import abort
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.goods import GoodsList
-from server.status import HTTPStatus, make_result, APIStatus
+from server.models.goods import GoodsList, CancelReasonList
 
 
 class GoodsListDecorator(object):
@@ -14,3 +12,13 @@ class GoodsListDecorator(object):
         goods_list = GoodsList.get_goods_list(db.read_db, page, limit, params)
 
         return Response(data=goods_list)
+
+
+class CancelGoodsReason(object):
+
+    @staticmethod
+    @make_decorator
+    def get_cancel_reason_list(params):
+        cancel_reason_list = CancelReasonList.get_cancel_reason_list(db.read_db, params)
+
+        return Response(data=cancel_reason_list)

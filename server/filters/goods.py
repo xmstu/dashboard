@@ -135,3 +135,13 @@ class GoodsList(object):
         except Exception as e:
             log.error('Error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='内部服务器错误'))
+
+
+class CancelGoodsReason(object):
+
+    @staticmethod
+    @make_decorator
+    def get_result(data):
+
+        pass
+        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok

@@ -89,6 +89,8 @@ class GoodsList(object):
                     %s
                     FROM shf_goods
                     LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
+                    LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
+                    AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
                     WHERE 1=1
         """
 
@@ -158,7 +160,7 @@ class GoodsList(object):
 
         # 车长要求
         if params['vehicle_length']:
-            pass
+            command += """ AND shf_goods_vehicles.name = '%s' """ % params['vehicle_length']
 
         # 车型要求
         if params['vehicle_type']:
@@ -217,3 +219,19 @@ class GoodsList(object):
                       'goods_count': goods_count if goods_count else 0}
 
         return goods_list
+
+
+class CancelReasonList(object):
+
+    @staticmethod
+    def get_cancel_reason_list(cursor, params):
+
+        fetch_where = """ AND 1 """
+
+        command = """
+        
+        """
+
+        data = cursor.query(command)
+
+        return data

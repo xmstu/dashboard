@@ -33,7 +33,7 @@ class InitRegionModel(object):
         """ 获取省市区数据 """
 
         try:
-            command = ''' SELECT * FROM shm_regions WHERE is_deleted=0 '''
+            command = ''' SELECT id, name FROM shm_regions WHERE is_deleted=0 '''
 
             log.debug('获取省市区数据SQL语句：[sql: %s]' % command)
 

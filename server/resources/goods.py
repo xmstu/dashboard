@@ -28,6 +28,18 @@ class GoodsList(Resource):
         return resp
 
 
+class CancelGoodsReason(Resource):
+    @staticmethod
+    @filters.CancelGoodsReason.get_result(data=dict)
+    @operations.CancelGoodsReason.get_cancel_reason_list(params=dict)
+    @verify.CancelGoodsReason.check_params(params=dict)
+    def get():
+        """取消货源原因"""
+        resp = Response(params=get_all_arg())
+
+        return resp
+
+
 ns = api.namespace('goods', description='货源统计')
 ns.add_resource(GoodsList, '/list/')
 
