@@ -6,7 +6,6 @@ import server.document.goods as doc
 from server import log, verify, operations, filters, api
 from server.meta.decorators import Response
 from server.utils.request import get_all_arg, get_arg_int
-import server.filters.general as general_filters
 
 
 class GoodsList(Resource):

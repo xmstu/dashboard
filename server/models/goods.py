@@ -8,7 +8,8 @@ class GoodsList(object):
 
     @staticmethod
     def get_goods_list(cursor, page, limit, params):
-        fileds = """shf_goods.id,
+        fileds = """
+                shf_goods.id,
                 shf_goods.NAME,
                 shf_goods.weight,
                 shf_goods.volume,
@@ -205,7 +206,7 @@ class GoodsList(object):
 
         goods_count = cursor.query_one(command % "COUNT(*) as goods_count")['goods_count']
 
-        command += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        command += """ ORDER BY shf_goods.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
         log.info('sql:{}'.format(command % fileds))
         goods_detail = cursor.query(command % fileds)

@@ -100,7 +100,7 @@ class GoodsList(object):
 
                 # 发布、装货时间
                 if detail['loading_time_period_begin']:
-                    loading_time = detail['shf_goods_loading_time_period_begin']
+                    loading_time = detail['loading_time_period_begin']
                 else:
                     if detail['loading_time_period'] == 1:
                         loading_time = detail.get('loading_time_date', '') + '08:00:00'
