@@ -53,18 +53,32 @@ class PromoteEffect(object):
             return make_result(APIStatus.BadRequest), HTTPStatus.BadRequest
 
         detail_dict_list = []
-        if ex and pr:
-            for j in pr:
-                for i in ex:
-                    if j['reference_id'] == i['reference_id']:
-                        detail_dict_list.append(j)
-                    else:
-                        if i not in detail_dict_list:
-                            detail_dict_list.append(i)
-            count = len(detail_dict_list)
-        elif ex and not pr:
-            detail_dict_list = []
-            count = 0
+        if params['role_type'] or params['goods_type'] or params['is_actived'] or params['is_car_sticker']:
+            for i in pr:
+                i['reference_name'] = i.get('reference_name', '')
+                i['reference_mobile'] = i.get('reference_mobile', '')
+                i['user_count'] = i.get('user_count', None) or 0
+                i['wake_up_count'] = i.get('wake_up_count', None) or 0
+                i['goods_count'] = i.get('goods_count', None) or 0
+                i['goods_user_count'] = i.get('goods_user_count', None) or 0
+                i['goods_price'] = i.get('goods_price', None) or 0
+                i['order_over_price'] = i.get('order_over_price', None) or 0
+                i['order_over_count'] = i.get('order_over_count', None) or 0
+            detail_dict_list = pr
+            count = pr_count
+        else:
+            if ex and pr:
+                for j in pr:
+                    for i in ex:
+                        if j['reference_id'] == i['reference_id']:
+                            detail_dict_list.append(j)
+                        else:
+                            if i not in detail_dict_list:
+                                detail_dict_list.append(i)
+                count = len(detail_dict_list)
+            elif ex and not pr:
+                detail_dict_list = []
+                count = 0
 
         promote_effect_detail = json.loads(json.dumps(detail_dict_list, default=ExtendHandler.handler_to_float))
         return build_result(APIStatus.Ok, count=count, data=promote_effect_detail), HTTPStatus.Ok
