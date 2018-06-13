@@ -1,4 +1,4 @@
-import time
+import json
 
 from flask_restful import abort
 
@@ -13,10 +13,9 @@ class GoodsList(object):
     @staticmethod
     @make_decorator
     def get_result(data):
-
         goods_detail = data['goods_detail']
-        # TODO 过滤参数
         try:
+            result = []
             for detail in goods_detail:
 
                 # 构造货源状态
@@ -35,97 +34,104 @@ class GoodsList(object):
                         detail['goods_status'] = '已接单'
                     if detail.get('STATUS') == -1:
                         detail['goods_status'] = '已取消'
-
-                detail.pop('expire')
-                detail.pop('STATUS')
+                goods_status = detail['goods_status']
 
                 # 初次下单
+                mobile = detail['mobile']
                 if detail['shf_goods_counts'] == 1:
-                    detail['mobile'] = detail['mobile'] + ',初次下单'
+                    mobile = detail['mobile'] + ',初次下单'
 
                 # 构造运费
-                detail['fee'] = detail.get('price_expect', 0) + ',' + detail.get('price_addition', 0) + ',' + detail.get('price_recommend', 0)
-                detail.pop('price_expect')
-                detail.pop('price_addition')
-                detail.pop('price_recommend')
+                price = '货主出价:%(price_expect)s元%(price_addition)s元\n系统价:%(price_recommend)s元' % \
+                        {
+                            'price_expect': str(detail.get('price_expect', 0)),
+                            'price_addition': '(+%s)' % str(detail['price_addition']) if detail.get('price_addition', 0) else '+0',
+                            'price_recommend': str(detail.get('price_recommend', 0))
+                        }
 
                 # 网点
-                detail['node_id'] = detail['node_id'] if detail.get('node_id') else "未知网点"
+                node_id = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
+                                                  detail.get('from_county_id', 0))
 
                 # 货源类型
                 if detail['haul_dist'] == 1 and detail['type'] == 1:
-                    detail['goods_type'] = '同城'
+                    goods_type = '同城'
                 elif detail['haul_dist'] == 2 and detail['goods_level'] == 2 and detail['type'] == 1:
-                    detail['goods_type'] = '跨城定价'
+                    goods_type = '跨城定价'
                 elif detail['haul_dist'] == 2 and detail['goods_level'] == 1 and detail['type'] == 1:
-                    detail['goods_type'] = '跨城议价'
+                    goods_type = '跨城议价'
                 elif detail['type'] == 2:
-                    detail['goods_type'] = '零担'
+                    goods_type = '零担'
                 else:
-                    detail['goods_type'] = '未知货源类型'
-                detail.pop('haul_dist')
-                detail.pop('type')
-                detail.pop('goods_level')
+                    goods_type = '未知货源类型'
 
                 # 构造货物规格
                 goods_standard = []
                 if detail['NAME']:
                     goods_standard.append(detail['NAME'])
                 if detail['weight']:
-                    goods_standard.append(detail['weight'] + '吨')
+                    weight = str(int(detail['weight'] * 1000)) + '千克' \
+                        if detail.get('weight', 0) < 1 and detail.get('weight', 0) > 0 \
+                        else str(int(detail.get('weight', 0))) + '吨'
+                    goods_standard.append(weight)
                 if detail['volume']:
-                    goods_standard.append(detail['volume'] + 'm³')
-                detail['goods_standard'] = ','.join(goods_standard) if goods_standard else '没有规格'
-                detail.pop('NAME')
-                detail.pop('weight')
-                detail.pop('volume')
+                    volume = str(int(detail.get('volume', 0))) + '平米'
+                    goods_standard.append(volume)
 
-                # TODO 优化 构造出发地-目的地-距离
-                full_from_region_name = init_regions.to_province(
-                    detail['from_province_id']) + init_regions.to_city(detail['from_city_id']) + init_regions.to_county(
-                    detail['from_county_id']) + init_regions.to_town(detail['from_town_id']) + detail.get('from_address', '')
+                goods_standard = '\n'.join(goods_standard) if goods_standard else '没有规格'
 
-                full_to_region_name = init_regions.to_province(
-                    detail['to_province_id']) + init_regions.to_city(
-                    detail['to_city_id']) + init_regions.to_county(detail['to_county_id']) + init_regions.to_town(detail['to_town_id']) + detail.get('to_address', '')
+                # 出发地-目的地
+                from_address = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
+                                                       detail.get('from_county_id', 0)) + detail.get('from_address',
+                                                                                                     '无详细地址')
+                to_address = init_regions.to_address(detail.get('to_province_id', 0), detail.get('to_city_id', 0),
+                                                     detail.get('to_county_id', 0)) + detail.get('to_address', '无详细地址')
+                mileage_total = str(int(detail['mileage_total'] * 1000)) + '米' \
+                    if detail.get('mileage_total', 0) < 1 and detail.get('mileage_total', 0) > 0 \
+                    else str(int(detail.get('mileage_total', 0))) + '千米'
 
-                detail['from_to_dis'] = full_from_region_name + ',' + full_to_region_name + ',' + detail.get('mileage_total', 0)
+                address = '\n'.join([from_address, to_address, mileage_total])
 
-                detail.pop('from_province_id')
-                detail.pop('from_city_id')
-                detail.pop('from_county_id')
-                detail.pop('from_town_id')
-                detail.pop('from_address')
-                detail.pop('to_province_id')
-                detail.pop('to_city_id')
-                detail.pop('to_county_id')
-                detail.pop('to_town_id')
-                detail.pop('to_address')
-
-                # 构造装货时间
-                if detail['loading_time_period_begin'] == 0:
-                    loading_time_period = ''
-                    if detail['loading_time_period'] == 0:
-                        loading_time_period = '00:00:00'
-                    if detail['loading_time_period'] == 1:
-                        loading_time_period = '07:00:00'
-                    if detail['loading_time_period'] == 2:
-                        loading_time_period = '12:00:00'
-                    if detail['loading_time_period'] == 3:
-                        loading_time_period = '19:00:00'
-                    loading_time = detail['loading_time_date'] + ' ' + loading_time_period
+                # 车长、车型
+                if detail['new_vehicle_type'] and detail['new_vehicle_length']:
+                    vehicle = '\n'.join([detail['new_vehicle_type'], detail['new_vehicle_length']])
                 else:
-                    loading_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(detail['loading_time_period_begin']))
+                    vehicle = '\n'
 
-                # 构造时间
-                detail['time'] = detail.get('shf_goods_create_time', '') + ',' + loading_time
+                # 发布、装货时间
+                if detail['loading_time_period_begin']:
+                    loading_time = detail['shf_goods_loading_time_period_begin']
+                else:
+                    if detail['loading_time_period'] == 1:
+                        loading_time = detail.get('loading_time_date', '') + '08:00:00'
+                    elif detail['loading_time_period'] == 2:
+                        loading_time = detail.get('loading_time_date', '') + '13:00:00'
+                    elif detail['loading_time_period'] == 3:
+                        loading_time = detail.get('loading_time_date', '') + '19:00:00'
+                    else:
+                        loading_time = detail.get('loading_time_date', '') + '00:00:00'
+                goods_time = '发布时间:%(create_time)s\n装货时间:%(loading_time)s' % {
+                    'create_time': detail['shf_goods_create_time'],
+                    'loading_time': loading_time
+                }
 
-                detail.pop('shf_goods_create_time')
-                detail.pop('loading_time_period_begin')
-                detail.pop('loading_time_date')
-                detail.pop('loading_time_period')
+                result.append({
+                    'id': detail['id'],
+                    'mobile': mobile,
+                    'shf_goods_counts': detail['shf_goods_counts'],
+                    'call_count': detail['call_count'],
+                    'goods_status': goods_status,
+                    'price': price,
+                    'node_id': node_id,
+                    'goods_type': goods_type,
+                    'goods_standard': goods_standard,
+                    'address': address,
+                    'vehicle': vehicle,
+                    'goods_time': goods_time,
+                })
 
-            return build_result(APIStatus.Ok, count=data['goods_count'], data=goods_detail), HTTPStatus.Ok
+            result = json.loads(json.dumps(result))
+            return build_result(APIStatus.Ok, count=data['goods_count'], data=result), HTTPStatus.Ok
         except Exception as e:
             log.error('Error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='内部服务器错误'))

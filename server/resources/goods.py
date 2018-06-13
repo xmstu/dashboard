@@ -15,7 +15,6 @@ class GoodsList(Resource):
     @doc.request_goods_list_param
     @doc.response_goods_list_param_success
     @filters.GoodsList.get_result(data=dict)
-    @general_filters.General.success(data=dict)
     @operations.GoodsListDecorator.get_goods_list(page=int, limit=int, params=dict)
     @verify.GoodsList.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
