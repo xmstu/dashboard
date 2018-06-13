@@ -71,10 +71,8 @@ class PromoteEffect(object):
                 for j in pr:
                     for i in ex:
                         if j['reference_id'] == i['reference_id']:
-                            detail_dict_list.append(j)
-                        else:
-                            if i not in detail_dict_list:
-                                detail_dict_list.append(i)
+                            ex.remove(i)
+                detail_dict_list = pr + ex
                 count = len(detail_dict_list)
             elif ex and not pr:
                 detail_dict_list = []
