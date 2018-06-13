@@ -49,11 +49,7 @@ class PromoteEffect(object):
         pr = promote_effect_list['promote_effect_detail']
         pr_count = promote_effect_list['count']
 
-        if ex_count < pr_count:
-            return make_result(APIStatus.BadRequest), HTTPStatus.BadRequest
-
-        detail_dict_list = []
-        if params['role_type'] or params['goods_type'] or params['is_actived'] or params['is_car_sticker']:
+        if params['role_type'] or params['goods_type'] or params['is_actived'] or params['is_car_sticker'] or (params['start_time'] and params['end_time']):
             for i in pr:
                 i['reference_name'] = i.get('reference_name', '')
                 i['reference_mobile'] = i.get('reference_mobile', '')
@@ -67,16 +63,8 @@ class PromoteEffect(object):
             detail_dict_list = pr
             count = pr_count
         else:
-            if ex and pr:
-                for j in pr:
-                    for i in ex:
-                        if j['reference_id'] == i['reference_id']:
-                            ex.remove(i)
-                detail_dict_list = pr + ex
-                count = len(detail_dict_list)
-            elif ex and not pr:
-                detail_dict_list = []
-                count = 0
+            detail_dict_list = ex
+            count = ex_count
 
         promote_effect_detail = json.loads(json.dumps(detail_dict_list, default=ExtendHandler.handler_to_float))
         return build_result(APIStatus.Ok, count=count, data=promote_effect_detail), HTTPStatus.Ok

@@ -78,6 +78,15 @@ class PromoteEffectList(object):
                 FROM
                     tb_inf_promote
                 where reference_id != 0 AND is_deleted = 0
+                AND reference_id NOT IN (
+                SELECT
+                    tb_inf_user.reference_id 
+                FROM
+                    tb_inf_user
+                    INNER JOIN tb_inf_promote ON tb_inf_user.reference_id = tb_inf_promote.reference_id 
+                    AND tb_inf_user.is_deleted = 0 
+                    AND tb_inf_promote.is_deleted = 0 
+                ) 
                 {fetch_where}
              """
 

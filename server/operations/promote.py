@@ -12,7 +12,7 @@ class PromoteEffectDecorator(object):
     @make_decorator
     def get_promote_effect_list(page, limit, params):
 
-        # 查询出所有推广人员(不管有没有推荐过别人)
+        # 查询出所有推荐人数为0的推广人员
         extension_worker_list = PromoteEffectList.get_extension_worker_list(db.read_bi, page, limit, params)
 
         # 查询出所有推荐过别人的推广人员的推荐效果列表
