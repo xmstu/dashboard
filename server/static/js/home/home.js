@@ -274,15 +274,6 @@ function tableInit(url) {
                         $(this).html(str[0] + '<br>' + str[1])
                     }
                 })
-                $("td[data-field='supplier_node']").children().each(function () {
-                    if ($(this).text() != '') {
-                        var str = $(this).text();
-                        str = str.split('\n');
-                        $(this).html(str[0] + '<br>' + str[1])
-                    } else {
-                        $(this).html('')
-                    }
-                })
                 $("td[data-field='call_count']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();

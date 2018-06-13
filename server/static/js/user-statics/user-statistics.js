@@ -29,6 +29,10 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
             common.dateInterval(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
         }
     });
     laydate.render({
@@ -47,6 +51,10 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
             common.dateInterval(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
         }
     });
     laydate.render({
@@ -67,6 +75,12 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             } else {
                 $('#date_show_three').next('.date-tips').hide()
             }
+               var startTime = common.timeTransform($('#date_show_three').val())
+            var endTime = common.timeTransform($('#date_show_four').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
         }
     });
     laydate.render({
@@ -82,7 +96,17 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             }
         },
         done: function (val, index) {
-
+             if ($('#date_show_three').val() == '') {
+                $('#date_show_three').next('.date-tips').show();
+            } else {
+                $('#date_show_three').next('.date-tips').hide()
+            }
+            var startTime = common.timeTransform($('#date_show_three').val())
+            var endTime = common.timeTransform($('#date_show_four').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
         }
     });
     laydate.render({
@@ -99,6 +123,12 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             } else {
                 $('#date_show_five').next('.date-tips').hide()
             }
+            var startTime = common.timeTransform($('#date_show_five').val())
+            var endTime = common.timeTransform($('#date_show_six').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
         }
     });
     laydate.render({
@@ -114,6 +144,12 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                 $('#date_show_six').next('.date-tips').show();
             } else {
                 $('#date_show_six').next('.date-tips').hide()
+            }
+            var startTime = common.timeTransform($('#date_show_six').val())
+            var endTime = common.timeTransform($('#date_show_five').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
             }
         }
     });

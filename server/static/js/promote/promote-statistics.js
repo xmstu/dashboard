@@ -42,6 +42,12 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
             common.dateInterval(endTime, startTime);
+            var startTime = common.timeTransform($('#date_show_one').val())
+            var endTime = common.timeTransform($('#date_show_two').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
         }
     });
     laydate.render({
@@ -53,8 +59,16 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
             common.dateInterval(endTime, startTime);
+            var startTime = common.timeTransform($('#date_show_one').val())
+            var endTime = common.timeTransform($('#date_show_two').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
         }
-    });
+
+    })
+    ;
     laydate.render({
         elem: '#date_show_three',
         theme: '#1E9FFF',
@@ -65,6 +79,12 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                 $('#date_show_three').next('.date-tips').show();
             } else {
                 $('#date_show_three').next('.date-tips').hide()
+            }
+            var startTime = common.timeTransform($('#date_show_three').val())
+            var endTime = common.timeTransform($('#date_show_four').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
             }
         }
     });
@@ -78,6 +98,12 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                 $('#date_show_four').next('.date-tips').show();
             } else {
                 $('#date_show_four').next('.date-tips').hide()
+            }
+            var startTime = common.timeTransform($('#date_show_three').val())
+            var endTime = common.timeTransform($('#date_show_four').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
             }
         }
     });
@@ -315,44 +341,44 @@ var pageSet = {
                     }
                 ]]
                 , done: function (res) {
-                       $("td[data-field='user_count']").children().each(function () {
+                    $("td[data-field='user_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '人')
                         }
                     })
-                      $("td[data-field='wake_up_count']").children().each(function () {
+                    $("td[data-field='wake_up_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '人')
                         }
                     })
-                      $("td[data-field='goods_user_count']").children().each(function () {
+                    $("td[data-field='goods_user_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '人')
                         }
                     })
-                      $("td[data-field='goods_count']").children().each(function () {
+                    $("td[data-field='goods_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '次')
                         }
                     })
-                     $("td[data-field='order_over_count']").children().each(function () {
+                    $("td[data-field='order_over_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '次')
                         }
                     })
 
-                        $("td[data-field='goods_price']").children().each(function () {
+                    $("td[data-field='goods_price']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '元')
                         }
                     })
-                      $("td[data-field='order_over_price']").children().each(function () {
+                    $("td[data-field='order_over_price']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '元')
