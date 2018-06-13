@@ -174,11 +174,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                     $(this).text('物流公司')
                 }
             })
-            $("[data-field='usual_city']").children().each(function () {
-                if ($(this).text() == '') {
-                    $(this).text('未查询到该用户常驻地')
-                }
-            })
+
             $("td[data-field='goods_count']").children().each(function () {
                 if ($(this).text() != '') {
                     var str = $(this).text();
@@ -349,11 +345,7 @@ $('#user_search_box').on('click', function (e) {
                         $(this).text('物流公司')
                     }
                 })
-                $("td[data-field='usual_city']").children().each(function () {
-                    if ($(this).text() == '') {
-                        $(this).text('未查询到该用户常驻地')
-                    }
-                })
+
                 $("td[data-field='goods_count']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();
