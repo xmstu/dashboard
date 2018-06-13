@@ -3,10 +3,12 @@
 from server.meta.decorators import make_decorator
 from server.status import build_result, HTTPStatus, APIStatus, make_result
 from server.init_regions import init_regions
-import json
+import simplejson as json
+from functools import reduce
 
 import time
 from operator import itemgetter
+from server.utils.amap import distance
 
 class CityResourceBalance(object):
     @staticmethod
@@ -15,8 +17,8 @@ class CityResourceBalance(object):
         # 货源车型
         result = {}
         for i in goods:
-            if i['old_vehicle'] or i['new_vehicle']:
-                vehicle_name = i['old_vehicle'] if i['old_vehicle'] else i['new_vehicle']
+            if i['new_vehicle'] in ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米']:
+                vehicle_name = i['new_vehicle']
                 result.setdefault(vehicle_name, {})
                 if i['status'] == 1 or i['status'] == 2:
                     result[vehicle_name]['待接单'] = result[vehicle_name].setdefault('待接单', 0) + 1
@@ -32,7 +34,7 @@ class CityResourceBalance(object):
                         result[vehicle_name]['已联系'] =result[vehicle_name] .setdefault('已联系', 0) + 1
         # 接单车型
         for i in vehicle:
-            if i['booking_vehicle']:
+            if i['booking_vehicle'] in ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米', '不限车型']:
                 result.setdefault(i['booking_vehicle'], {})
                 if i['count']:
                     result[i['booking_vehicle']]['已接单车辆'] = result[i['booking_vehicle']].setdefault('已接单车辆', 0) + 1
@@ -52,13 +54,6 @@ class CityResourceBalance(object):
                 [
                     {'value': result[i].get('已接单车辆', 0), 'name': '已接单车辆'},
                     {'value': result[i].get('待接单车辆数', 0), 'name': '待接单车辆数'},
-                    {'value': 0, 'name': '空白部分', 'itemStyle': {
-                        'normal': {
-                            'color': 'rgba(0,0,0,0)',
-                            'label': {'show': False},
-                            'labelLine': {'show': False}},
-                        'emphasis': {'color': 'rgba(0,0,0,0)'}}
-                     }
                 ]
             ]
             if params['goods_type'] == 3:
@@ -66,6 +61,14 @@ class CityResourceBalance(object):
                     {'value': result[i].get('待联系', 0), 'name': '待联系'},
                     {'value': result[i].get('已联系', 0), 'name': '已联系'}
                 ])
+            # 内圈空缺值
+            city_result[i][1].append({'value': reduce(lambda x, y: x + y, [i['value'] for i in city_result[i][0]]) - reduce(lambda x, y: x + y, [i['value'] for i in city_result[i][1]]), 'name': '空缺', 'itemStyle': {
+                'normal': {
+                    'color': 'rgba(0,0,0,0)',
+                    'label': {'show': False},
+                    'labelLine': {'show': False}},
+                'emphasis': {'color': 'rgba(0,0,0,0)'}}
+             })
         return build_result(APIStatus.Ok, data=city_result), HTTPStatus.Ok
 
 
@@ -190,7 +193,55 @@ class CityNearbyCars(object):
 
     @staticmethod
     @make_decorator
-    def get_result(data):
-        # 构造参数
-        pass
-        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+    def get_result(data, goods_type):
+        if not data:
+            return make_result(APIStatus.Ok, data=[]), HTTPStatus.Ok
+        goods = data['goods']
+        vehicle = data['vehicle']
+
+        result = []
+        for i in vehicle:
+            # 条件一
+            if goods_type == 2 and i['inner_length'] < goods['inner_length']:
+                continue
+            # 距离
+            mileage_total = distance(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])
+            # 所在地
+            current_region = init_regions.to_address(i['province_id'], i['city_id'], i['county_id'])
+            # 常驻地
+            usual_region = init_regions.to_address(i['usual_province_id'], i['usual_city_id'], i['usual_county_id'])
+            # 诚信会员
+            is_trust_member = 0
+            if i['trust_member_type'] == 1:
+                is_trust_member = 1
+            elif i['trust_member_type'] == 2 and i['ad_expired_time'] > int(time.time()):
+                is_trust_member = 1
+            result.append({
+                'name': i['user_name'],
+                'mobile': i['mobile'],
+                'current_region': current_region + i['address'],
+                'usual_region': usual_region,
+                'vehicle_length': i['vehicle_length'],
+                'vehicle_type': i['vehicle_type'],
+                'credit_level': i['credit_level'],
+                'is_trust_member': is_trust_member,
+                'order_count': i['order_count'],
+                'order_finished': i['order_finished'],
+                'order_cancel': i['order_cancel'],
+                # 排序用
+                'inner_length': i['inner_length'],
+                'auth_driver': i['auth_driver'],
+                'mileage_total': mileage_total
+            })
+        # 1: 车长满足货源要求越优先（如货主要求4.2米，则优先排4.2米，然后是6.8米、7.6米，小面包车根本不显示）
+        # 2: 认证用户优先
+        # 3: 距离近的优先
+        # 4: 评分高的优先
+        # 5: 是否诚信会员
+        result.sort(key=lambda x: (x['inner_length'],
+                                   -x['auth_driver'],
+                                   x['mileage_total'],
+                                   -x['credit_level'],
+                                   -x['is_trust_member'])
+                    )
+        return make_result(APIStatus.Ok, data=json.loads(json.dumps(result))), HTTPStatus.Ok

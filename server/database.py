@@ -1,21 +1,27 @@
 # coding=utf-8
 # author=veficos
 
-from .meta.creators import DictModel
-from .configs import configs
-from .mysqldb import MySQLdb
-from .mysqldb import MongoLinks
-
+from server.meta.creators import DictModel
+from server.configs import configs
+from server.mysqldb import MySQLdb
+from server.mysqldb import MongoLinks
+from server.mysqldb import ExtendRedis
 
 db = DictModel({
-    'read_db': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_db.get())),
-    'write_db': MySQLdb(dict(configs.remote.bi_dashboard.mysql.write_db.get())),
+    'read_db': MySQLdb(dict(configs.remote.union.mysql.read_db.get())),
+    'write_db': MySQLdb(dict(configs.remote.union.mysql.write_db.get())),
     'read_bi': MySQLdb(dict(configs.remote.bi_dashboard.mysql.read_bi.get())),
     'write_bi': MySQLdb(dict(configs.remote.bi_dashboard.mysql.write_bi.get()))
 })
 
 mongo = DictModel({
-    'user_locations': MongoLinks(dict(configs.remote.bi_dashboard.mongo.user_locations.get()))
+    'user_locations': MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
+})
+
+pyredis = DictModel({
+    'nearby_vehicle': ExtendRedis(ip=configs.remote.union.redis.dispatcher_nearby.host,
+                                  port=configs.remote.union.redis.dispatcher_nearby.port,
+                                  db=configs.remote.union.redis.dispatcher_nearby.db)
 })
 
 # redis = DictModel({

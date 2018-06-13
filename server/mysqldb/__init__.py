@@ -3,3 +3,4 @@
 
 from server.mysqldb.db import MySQLdb
 from server.mysqldb.mongo import MongoLinks
+from server.mysqldb.redis_db import ExtendRedis

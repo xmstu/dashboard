@@ -9,8 +9,7 @@ class CityResourceBalanceModel(object):
         command = '''
         SELECT shf_goods.id, shf_goods.`status`,
         -- 车型
-        IF(old_vehicle.attribute_value_id = 0, '不限车型', (SELECT `name` FROM shm_dictionary_items WHERE id = old_vehicle.attribute_value_id)) AS old_vehicle,
-        (SELECT `name` FROM shm_dictionary_items WHERE id = new_vehicle.attribute_value_id) AS new_vehicle,
+        shf_goods_vehicles.`name` AS new_vehicle,
         -- 是否通话
         (SELECT COUNT(*)
         FROM shu_call_records
@@ -19,8 +18,7 @@ class CityResourceBalanceModel(object):
         AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) AS call_count
         
         FROM shf_goods
-        LEFT JOIN shf_goods_vehicles AS new_vehicle ON shf_goods.id = new_vehicle.goods_id AND new_vehicle.vehicle_attribute = 3
-        LEFT JOIN shf_goods_vehicles AS old_vehicle ON shf_goods.id = old_vehicle.goods_id AND old_vehicle.vehicle_attribute = 2
+        LEFT JOIN shf_goods_vehicles ON shf_goods.id = shf_goods_vehicles.goods_id AND shf_goods_vehicles.vehicle_attribute = 3
         WHERE shf_goods.create_time >= :start_time
         AND shf_goods.create_time < :end_time
         -- 地区
@@ -245,7 +243,80 @@ class CityOrderListModel(object):
 class CityNearbyCarsModel(object):
 
     @staticmethod
-    def get_data(cursor, params):
-        pass
+    def get_goods(cursor, goods_id):
+        """货源"""
+        command = '''SELECT shf_goods.id, from_province_id, from_city_id, from_county_id, 
+        from_longitude, from_latitude, shf_goods_vehicles.`name`, shf_goods_vehicles.inner_length, shf_goods.`status`
+        FROM shf_goods
+        LEFT JOIN shf_goods_vehicles ON shf_goods.id = shf_goods_vehicles.goods_id
+        AND shf_goods_vehicles.vehicle_attribute = 3
+        AND shf_goods_vehicles.is_deleted = 0
+        WHERE shf_goods.id = :goods_id
+        AND shf_goods.is_deleted = 0
+        AND shf_goods.`status` IN (1, 2)'''
 
-        return []
+        goods = cursor.query_one(command, {
+            'goods_id': goods_id
+        })
+
+        return goods if goods else {}
+
+    @staticmethod
+    def get_driver(cursor, vehicle_auth_ids):
+        """司机"""
+        command = '''SELECT 
+        CASE WHEN 
+            (SELECT auth_driver FROM shu_user_auths
+             WHERE id = shu_user_profiles.last_auth_driver_id
+             AND auth_status = 2
+             AND is_deleted != 1) = 1
+            THEN 1 ELSE 0 END AS auth_driver,
+        shu_vehicles.user_id,
+        shu_user_profiles.user_name,
+        shu_users.mobile,
+        shu_vehicle_auths.home_station_province_id AS province_id,
+        shu_vehicle_auths.home_station_city_id AS city_id,
+        shu_vehicle_auths.home_station_county_id AS county_id,
+        shu_vehicle_auths.home_station_longitude AS longitude,
+        shu_vehicle_auths.home_station_latitude AS latitude,
+        shu_vehicle_auths.home_station_address AS address,
+        (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.length_id) AS vehicle_length,
+        (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.type_id) AS vehicle_type,
+        shu_user_stats.credit_level,
+        -- 诚信会员
+        shu_user_profiles.is_trust_member,
+        shu_user_profiles.trust_member_type,
+        shu_user_profiles.ad_expired_time,
+        shu_vehicle_auths.inner_length,
+        (SELECT COUNT(*) FROM shb_orders WHERE driver_id = shu_users.id) AS order_count,
+        (SELECT COUNT(*) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = 3) AS order_finished,
+        (SELECT COUNT(*) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = -1) AS order_cancel
+        
+        FROM shu_vehicle_auths
+        INNER JOIN shu_vehicles ON shu_vehicle_auths.vehicle_id = shu_vehicles.id AND shu_vehicles.is_deleted = 0
+        INNER JOIN shu_user_profiles ON shu_user_profiles.user_id = shu_vehicles.user_id AND shu_user_profiles.is_deleted = 0 AND shu_user_profiles.`status` = 1
+        INNER JOIN shu_users ON shu_user_profiles.user_id = shu_users.id AND shu_users.is_deleted = 0
+        INNER JOIN shu_user_stats ON shu_user_profiles.user_id = shu_user_stats.user_id
+        WHERE shu_vehicle_auths.is_deleted = 0
+        AND shu_vehicle_auths.auth_status = 2
+        AND shu_vehicle_auths.id IN %s
+        LIMIT 10'''
+
+        command = command % vehicle_auth_ids
+
+        driver = cursor.query(command)
+
+        return driver if driver else []
+
+    @staticmethod
+    def get_usual_region(cursor, driver_ids):
+        """常驻地"""
+        command = '''SELECT user_id, from_province_id, from_city_id, from_county_id, from_town_id
+        FROM tb_inf_user
+        WHERE user_id IN %s '''
+
+        command = command % driver_ids
+
+        usual_regions = cursor.query(command)
+
+        return usual_regions if usual_regions else []

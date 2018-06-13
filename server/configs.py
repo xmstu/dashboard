@@ -13,23 +13,23 @@ configs = SuperConf(serialize=JsonSerialize(remote_filename=''.join([str(os.getp
                         hosts=SuperConf(JsonSerialize(), engine=Engine()).env.zookeeper.host
                         ), root='superconf')
 
-@configs.register('.bi_dashboard.mysql.read_db')
-def __read_io(conf):
+@configs.register('.union.mysql.read_db')
+def __read_db(conf):
     pass
 
 
-@configs.register('.bi_dashboard.mysql.write_db')
-def __write_io(conf):
+@configs.register('.union.mysql.write_db')
+def __write_db(conf):
     pass
 
 
-@configs.register('.bi_dashboard.log')
+@configs.register('.union.log')
 def __log(conf):
     pass
 
 
-@configs.register('.bi_dashboard.mongo.user_locations')
-def __log(conf):
+@configs.register('.union.mongo.locations')
+def __locations(conf):
     pass
 
 
@@ -40,4 +40,8 @@ def __read_bi(conf):
 
 @configs.register('.bi_dashboard.mysql.write_bi')
 def __write_bi(conf):
+    pass
+
+@configs.register('.union.redis.dispatcher_nearby')
+def __dispatcher_nearby(conf):
     pass

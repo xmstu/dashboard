@@ -28,5 +28,5 @@ response_order_list_param_success = api.response(200, '成功', api.model('respo
 }))
 
 request_nearby_cars_param = api.doc(params={
-    'goods_id': '货源id',
+    'goods_type': '货源类型,1:适应货源,2:全部货源，默认:2全部货源',
 }, description='最新待接订单统计列表查询参数')

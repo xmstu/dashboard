@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from server import log
-from server.database import db
+from server.database import db, pyredis
 from server.meta.decorators import make_decorator, Response
 from server.models.city import CityOrderListModel, CityResourceBalanceModel, CityNearbyCarsModel
+from server.status import HTTPStatus, make_result, APIStatus
+
+from flask_restful import abort
 
 
 class CityResourceBalance(object):
@@ -32,8 +35,32 @@ class CityNearbyCars(object):
 
     @staticmethod
     @make_decorator
-    def get_data(params):
-        # 获取货源附近的车
-        nearby_cars_list = CityNearbyCarsModel.get_data(db.read_db, params)
+    def get_data(goods_id, goods_type):
+        # 获取货源信息
+        goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
+        if not goods:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='货源获取错误'))
+        # 附近车辆
+        nearby_vehicle = pyredis['nearby_vehicle']
+        dispatcher_nearby = nearby_vehicle.read_georadius('dispatch.vehicle.nearby', goods['from_longitude'], goods['from_latitude'], 5, 'km')
+        if not dispatcher_nearby:
+            return Response(data={}, goods_type=goods_type)
+        # 司机信息
+        ids = '(%s)' % ', '.join([str(i) for i in set(dispatcher_nearby)])
+        vehicle = CityNearbyCarsModel.get_driver(db.read_db, ids)
+        if not vehicle:
+            return Response(data={}, goods_type=goods_type)
+        # 常驻地
+        driver_ids = [i['user_id'] for i in vehicle]
+        ids = '(%s)' % ', '.join([str(i) for i in set(driver_ids)])
+        usual_regions = CityNearbyCarsModel.get_usual_region(db.read_bi, ids)
+        for i in vehicle:
+            usual_region = [j for j in usual_regions if j['user_id'] == i['user_id']]
+            if usual_region:
+                i['usual_province_id'] = usual_region[0]['from_province_id']
+                i['usual_city_id'] = usual_region[0]['from_city_id']
+                i['usual_county_id'] = usual_region[0]['from_county_id']
+            else:
+                i['usual_province_id'] = i['usual_city_id'] = i['usual_county_id'] = 0
 
-        return Response(data=nearby_cars_list)
+        return Response(data={'goods': goods, 'vehicle': vehicle}, goods_type=goods_type)

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask_restplus import Resource
 
 from server import api, log
@@ -5,7 +7,6 @@ import server.verify.general as general_verify
 from server.meta.decorators import Response
 import server.document.city as doc
 from server import verify, operations, filters
-import server.filters.general as general_filters
 from server.utils.request import get_arg_int, get_all_arg
 
 
@@ -19,7 +20,7 @@ class CityResourceBalance(Resource):
         """供需平衡数据统计"""
         resp = Response(params=get_all_arg())
         log.info('获取供需平衡数据统计请求: [region_id: %s][goods_type: %s][start_time: %s][end_time: %s]'
-                 % (resp['params']['region_id'], resp['params']['goods_type'], resp['params']['start_time'], resp['params']['end_time']))
+                 % (resp['params'].get('region_id', 0), resp['params'].get('goods_type', 0), resp['params'].get('start_time', 0), resp['params'].get('end_time', 0)))
         return resp
 
 class CityLatestOpenOrderList(Resource):
@@ -42,18 +43,17 @@ class CityLatestOpenOrderList(Resource):
 class CityNearbyCars(Resource):
     @staticmethod
     @doc.request_nearby_cars_param
-    @filters.CityNearbyCars.get_result(data=dict)
-    @operations.CityNearbyCars.get_data(params=dict)
-    @verify.CityNearbyCars.check_params(params=dict)
-    def get():
-        """附近的车"""
-        resp = Response(params=get_all_arg())
-        log.info('附近的车请求参数:{}'.format(resp))
+    @filters.CityNearbyCars.get_result(data=dict, goods_type=int)
+    @operations.CityNearbyCars.get_data(goods_id=int, goods_type=int)
+    def get(id):
+        """货源附近的车"""
+        resp = Response(goods_id=id, goods_type=get_arg_int('goods_type', 2))
+        log.info('货源附近的车:[goods_id: {}]'.format(id))
         return resp
 
 
 ns = api.namespace('city', description='城市概况')
 ns.add_resource(CityResourceBalance, '/resource/')
 ns.add_resource(CityLatestOpenOrderList, '/latest_orders/')
-ns.add_resource(CityNearbyCars, '/nearby_cars/')
+ns.add_resource(CityNearbyCars, '/nearby_cars/<int:id>')
 
