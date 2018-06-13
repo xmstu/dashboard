@@ -11,18 +11,18 @@
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
-    <header class="header nav-fixed-to clearfix">
+     <header class="header nav-fixed-to clearfix">
         <section class="header-left">
             <a href="javascript:;">
-                <img src="../static/images/Test/logo-icon.png" alt="">
+                <img src="../static/images/logo-icon.png" alt="">
             </a>
         </section>
         <section class="header-content">
             <div class="header-tips" style="margin-right: 6px;"></div>
             <div class="header-content-main clearfix">
-                <p><i class="iconfont icon-rili"></i><span id="date_now"></span></p>
+                <p><i class="iconfont icon-kalendar"></i><span id="date_now"></span></p>
                 <p><i class="iconfont icon-shijian"></i> <span id="hour_now"></span></p>
-                <p><i class="iconfont icon-weathercock"></i><span id="weather_now"><u></u><u></u><u></u><u></u></span>
+                <p><span id="weather_now"><u></u><i class="iconfont icon-yun">&nbsp;</i><u></u><i class="iconfont icon-iconset0480">&nbsp;</i><u></u><i class="iconfont icon-weathercock"></i>&nbsp;<u></u></span>
                 </p>
             </div>
         </section>
@@ -151,7 +151,7 @@
                                 <div class="layui-form-item layui-item-spec" id="">
                                     <div class="layui-inline">
 
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">推广类型</label>
                                         <div class="layui-input-inline" style="width: 140px">
                                             <select id="is_actived" name="modules" lay-verify="required" lay-search=""  lay-filter='is_actived'>
                                                 <option value="1">拉新</option>
@@ -163,7 +163,7 @@
                                 </div>
                                 <div id="select_spec_one" class="layui-form-item select-spec area-select-options-setting">
                                     <div  class="layui-inline layui-item-spec" style="">
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">计算方式</label>
                                         <div class="layui-input-inline" style="width:140px;">
                                             <select class="select-reset"  name="modules" lay-verify="required">
                                                 <option value="1">新增</option>
@@ -174,7 +174,7 @@
                                 </div>
                                   <div id="select_spec_two"  class="layui-form-item  none">
                                     <div  class="layui-inline layui-item-spec" style="">
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">计算方式</label>
                                         <div class="layui-input-inline" style="width:140px;">
                                             <select class="select-reset"  name="modules" lay-verify="required">
                                                 <option value="1">登陆</option>
@@ -187,7 +187,7 @@
                                 </div>
                                  <div id="select_spec_three"  class="layui-form-item none">
                                     <div  class="layui-inline layui-item-spec" style="">
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">计算方式</label>
                                         <div class="layui-input-inline" style="width:140px;">
                                             <select class="select-reset"  name="" lay-verify="">
                                                 <option value="1">货源总额</option>

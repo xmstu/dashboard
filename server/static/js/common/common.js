@@ -149,7 +149,6 @@ var common = {
             success: function (res) {
                 $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
                     var this_ity = res.content.address_detail.city;
-                    //this_ity='广州'
                     var myDate = new Date();
                     var thisDate = myDate.getMonth() + 1;
                     $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
@@ -158,10 +157,11 @@ var common = {
                             url: "http://wthrcdn.etouch.cn/weather_mini?city=" + this_ity,
                             dataType: "json",
                             success: function (res) {
-                                $('#weather_now > u:nth-child(1)').html('城市：' + res.data.city);
-                                $('#weather_now > u:nth-child(2)').html('日期:' + res.data.forecast[0].date);
-                                $('#weather_now > u:nth-child(3)').html('实时温度：( ' + res.data.wendu + '℃ )&nbsp;&nbsp;&nbsp;热差:' + res.data.forecast[0].low + '~' + res.data.forecast[0].high)
-                                $('#weather_now > u:nth-child(4)').html('天气: ' + res.data.forecast[0].type)
+                                console.log(res)
+                                $('#weather_now > u:nth-of-type(1)').html( res.data.city);
+                                $('#weather_now > u:nth-of-type(3)').html('温度:' + res.data.wendu + '℃ &nbsp;(' + res.data.forecast[0].low + '-' + res.data.forecast[0].high+')');
+                                $('#weather_now > u:nth-of-type(2)').html('天气: ' + res.data.forecast[0].type)
+                                 $('#weather_now > u:nth-of-type(4)').html(res.data.forecast[0].fengxiang)
                             }
                         });
                     });
@@ -400,11 +400,3 @@ setInterval(function () {
     $('#hour_now').html(common.dateNow()[1]);
 
 }, 1000);
-$(window).resize(function () {
-    var $width = $('.header').width();
-    if ($width < 1600) {
-        $('.header-right').hide()
-    } else {
-        $('.header-right').show()
-    }
-});
