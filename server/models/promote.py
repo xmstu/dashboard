@@ -12,16 +12,16 @@ class PromoteEffectList(object):
     @staticmethod
     def check_mobile(cursor, mobile):
         command = """ 
-            SELECT
-                user_name,
-                user_id,
-                a.reference_id,
-                a.is_deleted
-            FROM
-                tb_inf_user ,( SELECT reference_id,is_deleted FROM tb_inf_promote WHERE reference_mobile = {0} ) AS a
-            WHERE
-                mobile = {0}
-                AND tb_inf_user.is_deleted = 0;
+        SELECT
+            tb_inf_user.user_name,
+            tb_inf_user.user_id,
+            a.reference_id,
+            a.is_deleted 
+        FROM
+            tb_inf_user
+            LEFT JOIN ( SELECT reference_mobile, reference_id, is_deleted FROM tb_inf_promote ) AS a ON tb_inf_user.mobile = a.reference_mobile 
+        WHERE
+            tb_inf_user.mobile = {0}
          """
         ret = cursor.query_one(command.format(mobile))
 
