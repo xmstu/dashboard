@@ -107,8 +107,8 @@ function dataInit() {
             }
         };
         $.each(res.data, function (index, val) {
-            if(val[1][2].value<0){
-                val[1][2].value=0
+            if (val[1][2].value < 0) {
+                val[1][2].value = 0
             }
             if (arr.length >= 0) {
                 arr.length--;
@@ -180,8 +180,9 @@ function dataInit() {
 }
 
 function tableInit(url) {
-    layui.use('table', function () {
+    layui.use(['table','form'], function () {
         var table = layui.table;
+        var form = layui.form;
         table.render({
             elem: '#LAY_table_goods',
             even: true
@@ -205,30 +206,39 @@ function tableInit(url) {
                 {field: 'address', title: '出发地-目的地', width: 250},
                 {
                     field: 'operate', title: '操作', width: 107, templet: function (d) {
-                        return '<button id="' + d.phone_number + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
+                        return '<button value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
                     }
                 }
             ]],
             done: function (res, curr, count) {
+                console.log(res);
                 $('[data-field]>div').css({'padding': '0 6px'});
                 $('.nearby').on('click', function () {
+                    var val = $(this).val()
+                    var url = '/city/nearby_cars/' + val;
+                    form.on('select(interest)', function (data) {
+                        console.log(data);
+                    });
                     table.render({
                         elem: '#demo'
-                        , url: '/demo/table/user/' //数据接口
-                        , page: true //开启分页
+                        , url: url //数据接口
+                        , page: false, //开启分页
+                        response: {
+                            statusName: 'status',
+                            statusCode: 100000
+                        }
                         , cols: [[ //表头
-                            {field: 'id', title: 'ID', sort: true, fixed: 'left'}
-                            , {field: 'username', title: '司机姓名'}
-                            , {field: 'sex', title: '手机号码'}
-                            , {field: 'city', title: '所在地'}
-                            , {field: 'sign', title: '常驻地'}
-                            , {field: 'experience', title: '车长'}
-                            , {field: 'score', title: '车型'}
-                            , {field: 'classify', title: '司机评分'}
-                            , {field: 'wealth', title: '诚信会员', sort: true}
-                            , {field: 'test', title: '接单数', sort: true}
-                            , {field: 'test123', title: '完成数', sort: true}
-                            , {field: 'test1234', title: '取消数', sort: true}
+                            {field: 'name', title: '司机姓名', width: 86}
+                            , {field: 'mobile', title: '手机号码', width: 110}
+                            , {field: 'usual_region', title: '常驻地', width: 210}
+                            , {field: 'vehicle_length', title: '车长', width: 166}
+                            , {field: 'vehicle_type', title: '车型', width: 110}
+                            , {field: 'credit_level', title: '司机评分', width: 96}
+                            , {field: 'is_trust_member', title: '诚信会员', width: 96}
+                            , {field: 'order_count', title: '接单数', sort: true, width: 96}
+                            , {field: 'order_finished', title: '完成数', sort: true, width: 96}
+                            , {field: 'order_cancel', title: '取消数', sort: true, width: 86}
+                            , {field: 'current_region', title: '所在地', width: 200}
                         ]]
                     });
                     layer.open({
