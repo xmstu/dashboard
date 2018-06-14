@@ -117,3 +117,39 @@ class CancelGoodsReason(object):
         except Exception as e:
             log.error('Error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+
+
+class GoodsDistributionTrend(object):
+
+    @staticmethod
+    @make_decorator
+    def check_params(params):
+        try:
+            start_time = int(params.get('start_time', None) or time.time() - 86400 * 7)
+            end_time = int(params.get('end_time', None) or time.time() - 86400)
+            periods = int(params.get('periods', None) or 2)
+            goods_type = int(params.get('goods_type', None) or 0)
+            region_id = int(params.get('region_id', None) or 0)
+
+            params = {
+                'start_time':start_time,
+                'end_time':end_time,
+                'periods':periods,
+                'goods_type':goods_type,
+                'region_id':region_id
+            }
+
+            if start_time and end_time:
+                if start_time <= end_time < time.time():
+                    pass
+                else:
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+            elif not start_time and not end_time:
+                pass
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+
+            return Response(params=params)
+        except Exception as e:
+            log.error('Error:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
