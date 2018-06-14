@@ -32,8 +32,7 @@ class Check(object):
     @staticmethod
     def is_mobile(mobile) -> bool:
         if mobile and str(mobile).isdigit():
-            return bool(re.findall('1[23456789]{1}['
-                                   '0-9]{9}', str(mobile)))
+            return bool(re.findall('1[23456789]{1}[0-9]{9}', str(mobile)))
         return False
 
 
@@ -52,7 +51,7 @@ def get_struct_data(data, params, *args, **kwargs):
     for count in data:
         if count.get('create_time'):
             create_time = count['create_time'].strftime('%Y-%m-%d') if isinstance(count['create_time'], int) else count['create_time']
-            date_count[create_time] = count.get('count', 0)
+            date_count[create_time] = count.get(args[0], 0)
     # 日期补全
     begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['start_time'])), "%Y-%m-%d")
     end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['end_time'])), "%Y-%m-%d")

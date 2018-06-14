@@ -157,14 +157,16 @@ class GoodsDistributionTrend(object):
         recv_order = data['recv_order']
         cancel_order = data['cancel_order']
 
-        xAxis, wait_order_series = get_struct_data(wait_order, params)
-        xAxis, recv_order_series = get_struct_data(recv_order, params)
-        xAxis, cancel_order_series = get_struct_data(cancel_order, params)
+        xAxis, goods_user_count_series = get_struct_data(wait_order, params, 'goods_user_count')
+        xAxis, wait_order_series = get_struct_data(wait_order, params, 'count')
+        xAxis, recv_order_series = get_struct_data(recv_order, params, 'count')
+        xAxis, cancel_order_series = get_struct_data(cancel_order, params, 'count')
 
         ret = {
             'xAxis': xAxis,
             'wait_order_series': wait_order_series,
             'recv_order_series': recv_order_series,
-            'cancel_order_series': cancel_order_series
+            'cancel_order_series': cancel_order_series,
+            'goods_user_count_series': goods_user_count_series
         }
         return make_result(APIStatus.Ok, data=ret), HTTPStatus.Ok
