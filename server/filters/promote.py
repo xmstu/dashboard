@@ -18,7 +18,7 @@ class PromoteEffect(object):
         if data:
             return make_result(APIStatus.Ok), HTTPStatus.Ok
         else:
-            return make_result(APIStatus.BadRequest), HTTPStatus.BadRequest
+            return make_result(APIStatus.BadRequest, msg="用户不存在或不能重复添加推荐人"), HTTPStatus.BadRequest
 
     @staticmethod
     @make_decorator
@@ -47,19 +47,19 @@ class PromoteEffect(object):
         ex_count = extension_worker_list['count']
 
         pr = promote_effect_list['promote_effect_detail']
+        for i in pr:
+            i['reference_name'] = i.get('reference_name', '')
+            i['reference_mobile'] = i.get('reference_mobile', '')
+            i['user_count'] = i.get('user_count', None) or 0
+            i['wake_up_count'] = i.get('wake_up_count', None) or 0
+            i['goods_count'] = i.get('goods_count', None) or 0
+            i['goods_user_count'] = i.get('goods_user_count', None) or 0
+            i['goods_price'] = i.get('goods_price', None) or 0
+            i['order_over_price'] = i.get('order_over_price', None) or 0
+            i['order_over_count'] = i.get('order_over_count', None) or 0
         pr_count = promote_effect_list['count']
 
         if params['role_type'] or params['goods_type'] or params['is_actived'] or params['is_car_sticker'] or (params['start_time'] and params['end_time']):
-            for i in pr:
-                i['reference_name'] = i.get('reference_name', '')
-                i['reference_mobile'] = i.get('reference_mobile', '')
-                i['user_count'] = i.get('user_count', None) or 0
-                i['wake_up_count'] = i.get('wake_up_count', None) or 0
-                i['goods_count'] = i.get('goods_count', None) or 0
-                i['goods_user_count'] = i.get('goods_user_count', None) or 0
-                i['goods_price'] = i.get('goods_price', None) or 0
-                i['order_over_price'] = i.get('order_over_price', None) or 0
-                i['order_over_count'] = i.get('order_over_count', None) or 0
             detail_dict_list = pr
             count = pr_count
         else:

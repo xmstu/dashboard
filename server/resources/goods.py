@@ -30,6 +30,7 @@ class GoodsList(Resource):
 
 class CancelGoodsReason(Resource):
     @staticmethod
+    @doc.request_cancel_reason_param
     @filters.CancelGoodsReason.get_result(data=dict)
     @operations.CancelGoodsReason.get_cancel_reason_list(params=dict)
     @verify.CancelGoodsReason.check_params(params=dict)

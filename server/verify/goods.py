@@ -93,7 +93,7 @@ class CancelGoodsReason(object):
             start_time = int(params.get('start_time', None) or time.time() - 86400 * 7)
             end_time = int(params.get('end_time', None) or time.time() - 86400)
             goods_type = int(params.get('goods_type', None) or 0)
-            cancel_type = int(params.get('cancel_type', None) or 0)
+            cancel_type = int(params.get('cancel_type', None) or 1)
             region_id = int(params.get('region_id', None) or 0)
 
             if start_time and end_time:

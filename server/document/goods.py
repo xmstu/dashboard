@@ -37,3 +37,13 @@ response_goods_list_param_success = response_success = api.response(200, '成功
     'state': fields.Integer(description=str(APIStatus.Ok)),
     'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
 }))
+
+request_cancel_reason_param = api.doc(params={
+
+    'start_time': '开始时间',
+    'end_time': '结束时间',
+    'goods_type': '货源类型',
+    'cancel_type': '取消原因',
+    'region_id': '地区id'
+
+}, description='取消货源原因查询参数')
