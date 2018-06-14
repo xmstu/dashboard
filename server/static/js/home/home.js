@@ -85,6 +85,7 @@ function dataInit() {
         goods_type: goods_types
     };
     http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+        //console.log(res);
         var arr = Object.keys(res.data);
         var str = '';
         var elemArr = [];
@@ -105,17 +106,10 @@ function dataInit() {
                 labelLine: {show: false}
             }
         };
-        var placeHolderStyle = {
-            normal: {
-                color: 'rgba(0,0,0,0)',
-                label: {show: false},
-                labelLine: {show: false}
-            },
-            emphasis: {
-                color: 'rgba(0,0,0,0)'
-            }
-        };
         $.each(res.data, function (index, val) {
+            if(val[1][2].value<0){
+                val[1][2].value=0
+            }
             if (arr.length >= 0) {
                 arr.length--;
             }
@@ -138,7 +132,7 @@ function dataInit() {
                 tooltip: {
                     trigger: 'item',
                     show: true,
-                    formatter: "{a} <br/>{b} : {c} ({d})",
+                    formatter: "{a} <br/>{b} : {c} ({d}%)",
                     extraCssText: 'width:160px;height:60px;background:rgba(0,0,0,.4);'
                 },
                 legend: {
@@ -159,7 +153,6 @@ function dataInit() {
                     }
                 },
                 color: ['#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#DB843D', '#A47D7C'],
-                // colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92'],
                 series: [
                     {
                         name: '货源数',

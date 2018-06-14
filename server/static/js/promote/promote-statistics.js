@@ -16,7 +16,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     var table = layui.table;
     var form = layui.form;
     var layer = layui.layer;
-
     form.on('select(is_actived)', function (data) {
         if (data.value == '1') {
             $('#select_spec_two').addClass('none').removeClass('area-select-options-setting');
@@ -122,7 +121,7 @@ $('#add_promote_person').on('click', function (e) {
             "mobile": mobile
         }
         if (mobile == '' || mobile.length != 11) {
-            layer.msg('请检查手机号')
+            layer.msg('请检查手机号');
             return false
         } else {
             $.ajax({
@@ -144,7 +143,7 @@ $('#add_promote_person').on('click', function (e) {
                 complete: function (xhttp) {
                     layer.closeAll('loading');
                     if (xhttp.status == 400) {
-
+                        layer.msg('用户名不存在或者重复添加了推荐人')
                     }
                 }
             });
@@ -402,6 +401,27 @@ var pageSet = {
                                     if (res.status == 100000) {
                                         layer.msg('已成功删除该条用户。', {icon: 1});
                                         $('#deleteButton_' + current_val).parents('tr').css({'display': 'none'})
+                                        var requestStrat = $('#date_show_three').val();
+                                        var endRequest = $('#date_show_four').val();
+                                        if (requestStrat != '') {
+                                            requestStrat = common.timeTransform($('#date_show_three').val() + ' 00:00:00');
+                                        }
+                                        if (endRequest != '') {
+                                            endRequest = common.timeTransform($('#date_show_four').val() + ' 23:59:59');
+                                        }
+                                        table.reload('dataTable', {
+                                            where: {
+                                                user_name: $('#user_name').val(),
+                                                mobile: $('#phone_number').val(),
+                                                role_type: $('#is_referenced').val(),
+                                                goods_type: $('#goods_type').val(),
+                                                is_actived: $('#is_active_select').val(),
+                                                is_car_sticker: $('#is_car_sticker').val(),
+                                                start_time: requestStrat,
+                                                end_time: endRequest
+                                            },
+                                            loading:true
+                                        });
                                     } else {
                                         layer.msg('删除失败。', {icon: 5});
                                     }
@@ -420,6 +440,7 @@ var pageSet = {
 
                 }
                 , page: true
+                ,id: 'dataTable'
             });
 
             $('.demoTable .layui-btn').on('click', function () {
