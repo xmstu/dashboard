@@ -39,7 +39,7 @@ class CityNearbyCars(object):
         # 获取货源信息
         goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
         if not goods:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='货源获取错误'))
+            return Response(data={}, goods_type=goods_type)
         # 附近车辆
         nearby_vehicle = pyredis['nearby_vehicle']
         dispatcher_nearby = nearby_vehicle.read_georadius('dispatch.vehicle.nearby', goods['from_longitude'], goods['from_latitude'], 5, 'km')
