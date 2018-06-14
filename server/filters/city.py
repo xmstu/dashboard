@@ -135,7 +135,9 @@ class CityOrderListFilterDecorator(object):
             if detail['new_vehicle_type'] and detail['new_vehicle_length']:
                 vehicle = '\n'.join([detail['new_vehicle_type'], detail['new_vehicle_length']])
             else:
-                vehicle = '\n'.join([detail.get('vehicle_type', ''), detail.get('vehicle_length', '')])
+                vehicle_type = detail['vehicle_type'] if detail['vehicle_type'] else ''
+                vehicle_length = detail['vehicle_length'] if detail['vehicle_length'] else ''
+                vehicle = '\n'.join([vehicle_type, vehicle_length])
             # 发布、装货时间
             if detail['loading_time_period_begin']:
                 loading_time = detail['shf_goods_loading_time_period_begin']
