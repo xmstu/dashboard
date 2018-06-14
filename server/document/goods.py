@@ -39,7 +39,6 @@ response_goods_list_param_success = response_success = api.response(200, '成功
 }))
 
 request_cancel_reason_param = api.doc(params={
-
     'start_time': '开始时间',
     'end_time': '结束时间',
     'goods_type': '货源类型',
@@ -47,3 +46,11 @@ request_cancel_reason_param = api.doc(params={
     'region_id': '地区id'
 
 }, description='取消货源原因查询参数')
+
+request_goods_distribution_trend_param = api.doc(params={
+    'start_time': '开始时间',
+    'end_time': '结束时间',
+    'periods': '取消原因',
+    'goods_type': '货源类型',
+    'region_id': '地区id'
+}, description='货源分布趋势查询参数')

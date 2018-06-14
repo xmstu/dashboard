@@ -40,7 +40,22 @@ class CancelGoodsReason(Resource):
 
         return resp
 
+class GoodsDistributionTrend(Resource):
+
+    @staticmethod
+    @doc.request_goods_distribution_trend_param
+    @filters.GoodsDistributionTrend.get_result(data=dict, params=dict)
+    @operations.GoodsDistributionTrend.get_goods_distribution_trend(params=dict)
+    @verify.GoodsDistributionTrend.check_params(params=dict)
+    def get():
+        """货源分布趋势"""
+        resp = Response(params=get_all_arg())
+
+        return resp
+
 
 ns = api.namespace('goods', description='货源统计')
 ns.add_resource(GoodsList, '/list/')
+ns.add_resource(CancelGoodsReason, '/cancel/')
+ns.add_resource(GoodsDistributionTrend, '/goods_distribution_trend/')
 

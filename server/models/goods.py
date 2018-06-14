@@ -129,7 +129,7 @@ class GoodsList(object):
             if params['goods_type'] == 4:
                 command += """ AND shf_goods.type = 2 """
 
-        # TODO 货源状态
+        # 货源状态
         if params['goods_status']:
             if params['goods_status'] == 2:
                 command += ' AND (shf_goods.status = 1 OR shf_goods.status = 2) AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
@@ -177,9 +177,11 @@ class GoodsList(object):
         # 急需处理
         if params['urgent_goods']:
             if params['urgent_goods'] == 1:
-                command += """ AND ({0} - shf_goods.create_time) > 0 AND ({0} - shf_goods.create_time) < 5 * 60 """.format(time.time())
+                command += """ AND ({0} - shf_goods.create_time) > 0 AND ({0} - shf_goods.create_time) < 5 * 60 """.format(
+                    time.time())
             if params['urgent_goods'] == 2:
-                command += """ AND ({0} - shf_goods.create_time) > 5 * 60 AND ({0} - shf_goods.create_time) < 10 * 60 """.format(time.time())
+                command += """ AND ({0} - shf_goods.create_time) > 5 * 60 AND ({0} - shf_goods.create_time) < 10 * 60 """.format(
+                    time.time())
             if params['urgent_goods'] == 3:
                 command += """ AND ({0} - shf_goods.create_time) > 10 * 60 """.format(time.time())
 
@@ -225,7 +227,6 @@ class CancelReasonList(object):
 
     @staticmethod
     def get_cancel_reason_list(cursor, params):
-
         fetch_where = """ AND 1 """
 
         command = """
@@ -233,5 +234,63 @@ class CancelReasonList(object):
         """
 
         data = cursor.query(command)
+
+        return data
+
+
+class GoodsDistributionTrendList(object):
+
+    @staticmethod
+    def get_goods_distribution_trend(cursor, params):
+
+        fetch_where = """ 1=1 """
+
+        command = """
+            SELECT
+                FROM_UNIXTIME(create_time, '%Y-%m-%d') as create_time,
+                COUNT( * ) AS goods_counts 
+            FROM
+                shf_goods 
+            WHERE
+                {fetch_where}
+            GROUP BY
+                FROM_UNIXTIME(create_time, '%Y-%m-%d')
+"""
+
+        # 日期
+        if params.get('start_time', 0) and params.get('end_time', 0):
+            fetch_where += """ AND create_time > {start_time} AND create_time < {end_time} """.format(
+                start_time=params['start_time'], end_time=params['end_time'])
+
+        # 货源类型
+        if params.get('goods_type'):
+            fetch_where += """ 
+            AND (({goods_type} = 0) OR
+            -- 同城
+            ({goods_type} = 1 AND haul_dist = 1) OR
+            -- 跨城
+            ({goods_type} = 2 AND haul_dist = 2) OR
+            -- 零担
+            ({goods_type} = 3 AND type = 2)) """.format(goods_type=params['goods_type'])
+
+        # 地区
+        if params.get('region_id'):
+            fetch_where += """
+            AND ( from_province_id = {region_id} OR from_city_id = {region_id} OR from_county_id = {region_id} ) 
+            """.format(region_id=params['region_id'])
+
+        wait_where = """ AND ( status = 1 OR status = 2 ) """
+        recv_where = """ AND shf_goods.STATUS = 3 """
+        cancel_where = """ AND shf_goods.STATUS = - 1 """
+
+        wait_order = cursor.query(command.format(fetch_where=fetch_where + wait_where))
+        recv_order = cursor.query(command.format(fetch_where=fetch_where + recv_where))
+        cancel_order = cursor.query(command.format(fetch_where=fetch_where + cancel_where))
+
+        data = {
+            'wait_order': wait_order,
+            'recv_order': recv_order,
+            'cancel_order': cancel_order
+        }
 
         return data
