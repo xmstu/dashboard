@@ -167,7 +167,8 @@ class CityOrderListModel(object):
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
             AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
             WHERE shf_goods.expired_timestamp > UNIX_TIMESTAMP()
-            AND shf_goods.`status` = 1
+            AND shf_goods.is_deleted = 0
+            AND shf_goods.`status` IN (1, 2)
         """
 
         # 货源类型
