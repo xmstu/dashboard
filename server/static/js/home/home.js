@@ -178,7 +178,6 @@ function dataInit() {
         })
     })
 }
-
 function tableInit(url) {
     layui.use(['table','form'], function () {
         var table = layui.table;
