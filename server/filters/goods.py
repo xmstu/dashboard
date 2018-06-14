@@ -6,7 +6,7 @@ from server import log
 from server.init_regions import init_regions
 from server.meta.decorators import make_decorator
 from server.status import build_result, APIStatus, HTTPStatus, make_result
-from server.utils.extend import get_struct_data
+from server.utils.extend import get_struct_data, get_xAxis
 
 
 class GoodsList(object):
@@ -157,10 +157,12 @@ class GoodsDistributionTrend(object):
         recv_order = data['recv_order']
         cancel_order = data['cancel_order']
 
-        xAxis, goods_user_count_series = get_struct_data(wait_order, params, 'goods_user_count')
-        xAxis, wait_order_series = get_struct_data(wait_order, params, 'count')
-        xAxis, recv_order_series = get_struct_data(recv_order, params, 'count')
-        xAxis, cancel_order_series = get_struct_data(cancel_order, params, 'count')
+        goods_user_count_series = get_struct_data(wait_order, params, 'goods_user_count')
+        wait_order_series = get_struct_data(wait_order, params, 'count')
+        recv_order_series = get_struct_data(recv_order, params, 'count')
+        cancel_order_series = get_struct_data(cancel_order, params, 'count')
+
+        xAxis = get_xAxis(params)
 
         ret = {
             'xAxis': xAxis,
