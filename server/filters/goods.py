@@ -1,7 +1,4 @@
-import calendar
-import datetime
 import json
-import time
 
 from flask_restful import abort
 
@@ -9,6 +6,7 @@ from server import log
 from server.init_regions import init_regions
 from server.meta.decorators import make_decorator
 from server.status import build_result, APIStatus, HTTPStatus, make_result
+from server.utils.extend import get_struct_data
 
 
 class GoodsList(object):
@@ -48,7 +46,8 @@ class GoodsList(object):
                 price = '货主出价:%(price_expect)s元%(price_addition)s元\n系统价:%(price_recommend)s元' % \
                         {
                             'price_expect': str(detail.get('price_expect', 0)),
-                            'price_addition': '(+%s)' % str(detail['price_addition']) if detail.get('price_addition', 0) else '+0',
+                            'price_addition': '(+%s)' % str(detail['price_addition']) if detail.get('price_addition',
+                                                                                                    0) else '+0',
                             'price_recommend': str(detail.get('price_recommend', 0))
                         }
 
@@ -145,7 +144,6 @@ class CancelGoodsReason(object):
     @staticmethod
     @make_decorator
     def get_result(data):
-
         pass
         return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
 
@@ -155,72 +153,18 @@ class GoodsDistributionTrend(object):
     @staticmethod
     @make_decorator
     def get_result(data, params):
+        wait_order = data['wait_order']
+        recv_order = data['recv_order']
+        cancel_order = data['cancel_order']
 
-        # 结构化数据
-        date_count = {}
-        for count in data:
-            if count.get('create_time'):
-                date_count[count['create_time'].strftime('%Y-%m-%d')] = count.get('count', 0)
-        # 日期补全
-        begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['start_time'])), "%Y-%m-%d")
-        end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['end_time'])), "%Y-%m-%d")
+        xAxis, wait_order_series = get_struct_data(wait_order, params)
+        xAxis, recv_order_series = get_struct_data(recv_order, params)
+        xAxis, cancel_order_series = get_struct_data(cancel_order, params)
 
-        # 日
-        xAxis = []
-        series = []
-        if params['periods'] == 2:
-            date_val = begin_date
-            while date_val <= end_date:
-                date_str = date_val.strftime("%Y-%m-%d")
-                date_count.setdefault(date_str, 0)
-                xAxis.append(date_str)
-                series.append(date_count[date_str])
-                date_val += datetime.timedelta(days=1)
-        # 周
-        elif params['periods'] == 3:
-            begin_flag = begin_date
-            end_flag = begin_date
-            count = 0
-            sum_count = 0
-            while end_flag <= end_date:
-                date_str = end_flag.strftime("%Y-%m-%d")
-                sum_count += date_count.get(date_str, 0)
-                date_count.setdefault(date_str, sum_count)
-                # 本周结束
-                if count == 6:
-                    xAxis.append(begin_flag.strftime('%Y/%m/%d') + '-' + end_flag.strftime('%Y/%m/%d'))
-                    series.append(sum_count)
-                    begin_flag = end_flag + datetime.timedelta(days=1)
-                    sum_count = 0
-                    count = 0
-                if end_flag == end_date:
-                    xAxis.append(begin_flag.strftime('%Y/%m/%d') + '-' + end_flag.strftime('%Y/%m/%d'))
-                    series.append(sum_count)
-                    begin_flag = end_flag + datetime.timedelta(days=1)
-                    sum_count = 0
-                    count = 0
-                end_flag += datetime.timedelta(days=1)
-                count += 1
-        # 月
-        elif params['periods'] == 4:
-            begin_flag = begin_date
-            end_flag = begin_date
-            sum_count = 0
-            while end_flag <= end_date:
-                date_str = end_flag.strftime("%Y-%m-%d")
-                sum_count += date_count.get(date_str, 0)
-                month_lastweek, month_lastday = calendar.monthrange(begin_flag.year, begin_flag.month)
-                # 结束日期
-                if end_flag == end_date:
-                    xAxis.append(begin_flag.strftime('%Y/%m/%d') + '-' + end_date.strftime('%Y/%m/%d'))
-                    series.append(sum_count)
-                else:
-                    # 本月结束
-                    if end_flag.day == month_lastday and end_flag.month == begin_flag.month:
-                        xAxis.append(begin_flag.strftime('%Y/%m/%d') + '-' + end_flag.strftime('%Y/%m/%d'))
-                        series.append(sum_count)
-                        begin_flag = end_flag + datetime.timedelta(days=1)
-                        sum_count = 0
-                end_flag += datetime.timedelta(days=1)
-
-        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+        ret = {
+            'xAxis': xAxis,
+            'wait_order_series': wait_order_series,
+            'recv_order_series': recv_order_series,
+            'cancel_order_series': cancel_order_series
+        }
+        return make_result(APIStatus.Ok, data=ret), HTTPStatus.Ok

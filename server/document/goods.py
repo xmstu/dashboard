@@ -50,7 +50,7 @@ request_cancel_reason_param = api.doc(params={
 request_goods_distribution_trend_param = api.doc(params={
     'start_time': '开始时间',
     'end_time': '结束时间',
-    'periods': '取消原因',
+    'periods': '时间周期,2:日，3:周，4:月，默认:2',
     'goods_type': '货源类型',
     'region_id': '地区id'
 }, description='货源分布趋势查询参数')

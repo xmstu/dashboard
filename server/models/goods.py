@@ -248,7 +248,7 @@ class GoodsDistributionTrendList(object):
         command = """
             SELECT
                 FROM_UNIXTIME(create_time, '%Y-%m-%d') as create_time,
-                COUNT( * ) AS goods_counts 
+                COUNT( * ) AS count
             FROM
                 shf_goods 
             WHERE
