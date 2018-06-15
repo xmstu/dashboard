@@ -33,7 +33,7 @@ request_goods_list_param = api.doc(params={
     'limit': '条数',
 }, description='货源统计列表查询参数')
 
-response_goods_list_param_success = response_success = api.response(200, '成功', api.model('response_success', {
+response_success = api.response(200, '成功', api.model('response_success', {
     'state': fields.Integer(description=str(APIStatus.Ok)),
     'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
 }))
