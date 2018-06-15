@@ -18,7 +18,7 @@ class Login(Resource):
     @staticmethod
     @doc.request_user_login
     @doc.response_user_login_success
-    @filters.Login.post(user_info=dict, role=int, locations=list)
+    @filters.Login.insert_session(user_info=dict, role=int, locations=list)
     @operations.LoginDecorator.common_check(user_name=str, password=str, role=int)
     @verify.LoginSetting.post(user_name=str, password=str, role=int)
     def post():

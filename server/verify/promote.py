@@ -62,12 +62,6 @@ class PromoteEffect(object):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='手机号非法'))
         return Response(user_id=user_id, mobile=mobile)
 
-    @staticmethod
-    @make_decorator
-    def check_delete_params(arg):
-        reference_id = int(arg.get('reference_id', None) or 0)
-        return Response(reference_id=reference_id)
-
 
 class PromoteQuality(object):
 

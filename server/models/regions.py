@@ -62,3 +62,16 @@ class RegionsModel(object):
 
         except Exception as e:
             log.warn('获取地区全称失败: [error: %s]' % (e,), exc_info=True)
+
+    @staticmethod
+    def get_admin_region(cursor):
+        """内部用户地区"""
+        command = """
+        SELECT id, full_short_name
+        FROM shm_regions
+        WHERE `level` = 1
+        """
+        result = cursor.query(command)
+
+        log.info('获取内部用户地区')
+        return result if result else []
