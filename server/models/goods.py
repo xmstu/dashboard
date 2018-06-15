@@ -227,13 +227,47 @@ class CancelReasonList(object):
 
     @staticmethod
     def get_cancel_reason_list(cursor, params):
-        fetch_where = """ AND 1 """
+        fetch_where = """ 1=1 """
 
         command = """
-        
+        SELECT
+            COUNT(*) as reason_count,
+            canceled_reason_text 
+        FROM
+            shf_goods 
+        WHERE
+            canceled_reason_text != ''
+            AND ( shf_goods.is_deleted = 1 OR shf_goods.STATUS = - 1 ) 
+            AND {fetch_where}
+        GROUP BY
+            canceled_reason_text
         """
 
-        data = cursor.query(command)
+        # 日期
+        if params.get('start_time', 0) and params.get('end_time', 0):
+            fetch_where += """ AND create_time > {start_time} AND create_time < {end_time} """.format(
+                start_time=params['start_time'], end_time=params['end_time'])
+
+        # 货源类型
+        if params.get('goods_type'):
+            fetch_where += """ 
+                    AND (({goods_type} = 0) OR
+                    -- 同城
+                    ({goods_type} = 1 AND haul_dist = 1) OR
+                    -- 跨城
+                    ({goods_type} = 2 AND haul_dist = 2)) """.format(goods_type=params['goods_type'])
+
+        # 地区
+        if params.get('region_id'):
+            fetch_where += """
+                    AND ( from_province_id = {region_id} OR from_city_id = {region_id} OR from_county_id = {region_id} ) 
+                    """.format(region_id=params['region_id'])
+
+        cancel_list = cursor.query(command.format(fetch_where=fetch_where))
+
+        data = {
+            'cancel_list': cancel_list
+        }
 
         return data
 
