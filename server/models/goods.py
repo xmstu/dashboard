@@ -282,7 +282,7 @@ class GoodsDistributionTrendList(object):
         command = """
             SELECT
                 FROM_UNIXTIME(create_time, '%Y-%m-%d') AS create_time,
-                COUNT( DISTINCT user_id ) AS goods_user_count,
+                IF ({flag}, COUNT( DISTINCT user_id ), 0) AS goods_user_count,
                 COUNT( * ) AS count
             FROM
                 shf_goods 
@@ -318,10 +318,10 @@ class GoodsDistributionTrendList(object):
         recv_where = """ AND shf_goods.STATUS = 3 """
         cancel_where = """ AND shf_goods.STATUS = - 1 """
 
-        all_order = cursor.query(command.format(fetch_where=fetch_where))
-        wait_order = cursor.query(command.format(fetch_where=fetch_where + wait_where))
-        recv_order = cursor.query(command.format(fetch_where=fetch_where + recv_where))
-        cancel_order = cursor.query(command.format(fetch_where=fetch_where + cancel_where))
+        all_order = cursor.query(command.format(flag=1, fetch_where=fetch_where))
+        wait_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + wait_where))
+        recv_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + recv_where))
+        cancel_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + cancel_where))
 
         data = {
             'all_order': all_order,
