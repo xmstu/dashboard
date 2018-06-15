@@ -103,16 +103,16 @@ class GoodsList(object):
             command += ' AND shu_users.mobile = %s ' % params['mobile']
 
         # 出发地
-        if params['from_dist_id']:
-            command += ' AND shf_goods.from_county_id = %s ' % params['from_dist_id']
+        if params['from_county_id']:
+            command += ' AND shf_goods.from_county_id = %s ' % params['from_county_id']
         if params['from_city_id']:
             command += ' AND shf_goods.from_city_id = %s ' % params['from_city_id']
         if params['from_province_id']:
             command += ' AND shf_goods.from_province_id = %s ' % params['from_province_id']
 
         # 目的地
-        if params['to_dist_id']:
-            command += ' AND shf_goods.to_county_id = %s ' % params['to_dist_id']
+        if params['to_county_id']:
+            command += ' AND shf_goods.to_county_id = %s ' % params['to_county_id']
         if params['to_city_id']:
             command += ' AND shf_goods.to_city_id = %s ' % params['to_city_id']
         if params['to_province_id']:
@@ -227,13 +227,47 @@ class CancelReasonList(object):
 
     @staticmethod
     def get_cancel_reason_list(cursor, params):
-        fetch_where = """ AND 1 """
+        fetch_where = """ 1=1 """
 
         command = """
-        
+        SELECT
+            COUNT(*) as reason_count,
+            canceled_reason_text 
+        FROM
+            shf_goods 
+        WHERE
+            canceled_reason_text != ''
+            AND ( shf_goods.is_deleted = 1 OR shf_goods.STATUS = - 1 ) 
+            AND {fetch_where}
+        GROUP BY
+            canceled_reason_text
         """
 
-        data = cursor.query(command)
+        # 日期
+        if params.get('start_time', 0) and params.get('end_time', 0):
+            fetch_where += """ AND create_time > {start_time} AND create_time < {end_time} """.format(
+                start_time=params['start_time'], end_time=params['end_time'])
+
+        # 货源类型
+        if params.get('goods_type'):
+            fetch_where += """ 
+                    AND (({goods_type} = 0) OR
+                    -- 同城
+                    ({goods_type} = 1 AND haul_dist = 1) OR
+                    -- 跨城
+                    ({goods_type} = 2 AND haul_dist = 2)) """.format(goods_type=params['goods_type'])
+
+        # 地区
+        if params.get('region_id'):
+            fetch_where += """
+                    AND ( from_province_id = {region_id} OR from_city_id = {region_id} OR from_county_id = {region_id} ) 
+                    """.format(region_id=params['region_id'])
+
+        cancel_list = cursor.query(command.format(fetch_where=fetch_where))
+
+        data = {
+            'cancel_list': cancel_list
+        }
 
         return data
 
@@ -248,7 +282,7 @@ class GoodsDistributionTrendList(object):
         command = """
             SELECT
                 FROM_UNIXTIME(create_time, '%Y-%m-%d') AS create_time,
-                COUNT( DISTINCT user_id ) AS goods_user_count,
+                IF ({flag}, COUNT( DISTINCT user_id ), 0) AS goods_user_count,
                 COUNT( * ) AS count
             FROM
                 shf_goods 
@@ -284,11 +318,13 @@ class GoodsDistributionTrendList(object):
         recv_where = """ AND shf_goods.STATUS = 3 """
         cancel_where = """ AND shf_goods.STATUS = - 1 """
 
-        wait_order = cursor.query(command.format(fetch_where=fetch_where + wait_where))
-        recv_order = cursor.query(command.format(fetch_where=fetch_where + recv_where))
-        cancel_order = cursor.query(command.format(fetch_where=fetch_where + cancel_where))
+        all_order = cursor.query(command.format(flag=1, fetch_where=fetch_where))
+        wait_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + wait_where))
+        recv_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + recv_where))
+        cancel_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + cancel_where))
 
         data = {
+            'all_order': all_order,
             'wait_order': wait_order,
             'recv_order': recv_order,
             'cancel_order': cancel_order
