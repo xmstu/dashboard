@@ -13,7 +13,7 @@ class Login(object):
 
     @staticmethod
     @make_decorator
-    def post(user_info, role, locations):
+    def insert_session(user_info, role, locations):
         session['login'] = {
             'user_id': user_info['id'],
             'user_name': user_info['user_name'] if user_info['user_name'] else '',

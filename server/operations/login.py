@@ -43,21 +43,27 @@ class LoginDecorator(object):
             locations = []
             # 后台
             if role == 1:
-                result = mongo.user_locations.collection.aggregate([{
-                    '$group': {'_id': {'province_id': '$province_id', 'city_id': '$city_id', 'county_id': '$county_id'}}
-                }])
+                # result = mongo.user_locations.collection.aggregate([{
+                #     '$group': {'_id': {'province_id': '$province_id', 'city_id': '$city_id', 'county_id': '$county_id'}}
+                # }])
+                # for location in result:
+                #     region_name = {}
+                #     # 存在市、区
+                #     if location['_id']['county_id']:
+                #         region_name = RegionsModel.get_region_by_code(db.read_db, location['_id']['county_id'])
+                #     elif location['_id']['city_id']:
+                #         region_name = RegionsModel.get_region_by_code(db.read_db, location['_id']['city_id'])
+                #     if region_name and region_name['full_short_name']:
+                #         locations.append({
+                #             'region_id': region_name['code'],
+                #             'name': region_name['full_short_name']
+                #         })
+                result = RegionsModel.get_admin_region(db.read_db)
                 for location in result:
-                    region_name = {}
-                    # 存在市、区
-                    if location['_id']['county_id']:
-                        region_name = RegionsModel.get_region_by_code(db.read_db, location['_id']['county_id'])
-                    elif location['_id']['city_id']:
-                        region_name = RegionsModel.get_region_by_code(db.read_db, location['_id']['city_id'])
-                    if region_name and region_name['full_short_name']:
-                        locations.append({
-                            'region_id': region_name['code'],
-                            'name': region_name['full_short_name']
-                        })
+                    locations.append({
+                        'region_id': location['id'],
+                        'name': location['full_short_name']
+                    })
             # 区镇合伙人
             elif role == 2:
                 result = RegionsModel.get_user_region(db.read_db, user_info['id'])
