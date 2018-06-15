@@ -33,13 +33,13 @@ def __locations(conf):
     pass
 
 
-@configs.register('.bi_dashboard.mysql.read_bi')
-def __read_bi(conf):
+@configs.register('.union.mysql.read_da')
+def __read_da(conf):
     pass
 
 
-@configs.register('.bi_dashboard.mysql.write_bi')
-def __write_bi(conf):
+@configs.register('.union.mysql.write_da')
+def __write_da(conf):
     pass
 
 @configs.register('.union.redis.dispatcher_nearby')

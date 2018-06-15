@@ -93,12 +93,12 @@ class UserStatistic(object):
                 month_lastweek, month_lastday = calendar.monthrange(begin_flag.year, begin_flag.month)
                 # 结束日期
                 if end_flag == end_date:
-                    xAxis.append(begin_flag.strftime('%Y/%m/%d') + '-' + end_date.strftime('%Y/%m/%d'))
+                    xAxis.append(begin_flag.strftime('%Y/%m'))
                     series.append(sum_count)
                 else:
                     # 本月结束
                     if end_flag.day == month_lastday and end_flag.month == begin_flag.month:
-                        xAxis.append(begin_flag.strftime('%Y/%m/%d') + '-' + end_flag.strftime('%Y/%m/%d'))
+                        xAxis.append(begin_flag.strftime('%Y/%m'))
                         series.append(sum_count)
                         begin_flag = end_flag + datetime.timedelta(days=1)
                         sum_count = 0
