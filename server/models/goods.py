@@ -103,16 +103,16 @@ class GoodsList(object):
             command += ' AND shu_users.mobile = %s ' % params['mobile']
 
         # 出发地
-        if params['from_dist_id']:
-            command += ' AND shf_goods.from_county_id = %s ' % params['from_dist_id']
+        if params['from_county_id']:
+            command += ' AND shf_goods.from_county_id = %s ' % params['from_county_id']
         if params['from_city_id']:
             command += ' AND shf_goods.from_city_id = %s ' % params['from_city_id']
         if params['from_province_id']:
             command += ' AND shf_goods.from_province_id = %s ' % params['from_province_id']
 
         # 目的地
-        if params['to_dist_id']:
-            command += ' AND shf_goods.to_county_id = %s ' % params['to_dist_id']
+        if params['to_county_id']:
+            command += ' AND shf_goods.to_county_id = %s ' % params['to_county_id']
         if params['to_city_id']:
             command += ' AND shf_goods.to_city_id = %s ' % params['to_city_id']
         if params['to_province_id']:
@@ -284,11 +284,13 @@ class GoodsDistributionTrendList(object):
         recv_where = """ AND shf_goods.STATUS = 3 """
         cancel_where = """ AND shf_goods.STATUS = - 1 """
 
+        all_order = cursor.query(command.format(fetch_where=fetch_where))
         wait_order = cursor.query(command.format(fetch_where=fetch_where + wait_where))
         recv_order = cursor.query(command.format(fetch_where=fetch_where + recv_where))
         cancel_order = cursor.query(command.format(fetch_where=fetch_where + cancel_where))
 
         data = {
+            'all_order': all_order,
             'wait_order': wait_order,
             'recv_order': recv_order,
             'cancel_order': cancel_order

@@ -19,16 +19,16 @@ class GoodsList(object):
 
             from_province_id = params.get('from_province_id') if params.get('from_province_id') else ''
             from_city_id = params.get('from_city_id') if params.get('from_city_id') else ''
-            from_dist_id = params.get('from_dist_id') if params.get('from_dist_id') else ''
+            from_county_id = params.get('from_county_id') if params.get('from_county_id') else ''
             to_province_id = params.get('to_province_id') if params.get('to_province_id') else ''
             to_city_id = params.get('to_city_id') if params.get('to_city_id') else ''
-            to_dist_id = params.get('to_dist_id') if params.get('to_dist_id') else ''
+            to_county_id = params.get('to_county_id') if params.get('to_county_id') else ''
 
             goods_type = int(params.get('goods_type')) if params.get('goods_type') else 0
             goods_status = int(params.get('goods_status')) if params.get('goods_status') else 0
             is_called = int(params.get('is_called')) if params.get('is_called') else 0
-            vehicle_length = int(params.get('vehicle_length')) if params.get('vehicle_length') else 0
-            vehicle_type = int(params.get('vehicle_type')) if params.get('vehicle_type') else 0
+            vehicle_length = str(params.get('vehicle_length')) if params.get('vehicle_length') else 0
+            vehicle_type = str(params.get('vehicle_type')) if params.get('vehicle_type') else 0
             node_id = int(params.get('node_id')) if params.get('node_id') else 0
             new_goods_type = int(params.get('new_goods_type')) if params.get('new_goods_type') else 0
             urgent_goods = int(params.get('urgent_goods')) if params.get('urgent_goods') else 0
@@ -39,7 +39,7 @@ class GoodsList(object):
             load_start_time = int(params.get('load_start_time')) if params.get('load_start_time') else 0
             load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else 0
 
-            # TODO 校验参数
+            # 校验参数
             if create_end_time and create_start_time:
                 if (create_start_time < create_end_time) and (create_end_time < time.time()):
                     pass
@@ -57,10 +57,10 @@ class GoodsList(object):
                 "mobile": mobile,
                 'from_province_id': from_province_id,
                 'from_city_id': from_city_id,
-                'from_dist_id': from_dist_id,
+                'from_county_id': from_county_id,
                 'to_province_id': to_province_id,
                 'to_city_id': to_city_id,
-                'to_dist_id': to_dist_id,
+                'to_county_id': to_county_id,
 
                 "goods_type": goods_type,
                 "goods_status": goods_status,

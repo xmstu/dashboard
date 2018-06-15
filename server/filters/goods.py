@@ -153,11 +153,12 @@ class GoodsDistributionTrend(object):
     @staticmethod
     @make_decorator
     def get_result(data, params):
+        all_order = data['all_order']
         wait_order = data['wait_order']
         recv_order = data['recv_order']
         cancel_order = data['cancel_order']
 
-        goods_user_count_series = get_struct_data(wait_order, params, 'goods_user_count')
+        goods_user_count_series = get_struct_data(all_order, params, 'goods_user_count')
         wait_order_series = get_struct_data(wait_order, params, 'count')
         recv_order_series = get_struct_data(recv_order, params, 'count')
         cancel_order_series = get_struct_data(cancel_order, params, 'count')
