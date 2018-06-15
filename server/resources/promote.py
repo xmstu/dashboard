@@ -2,13 +2,16 @@
 # -*- coding:utf-8 -*-
 # author=hexm
 from flask_restplus.resource import Resource
+from flask import session
+from flask_restful import abort
 
 import server.document.promote as doc
 import server.verify.general as general_verify
+from server.status import HTTPStatus, make_result, APIStatus
 from server import api
 from server import verify, operations, filters
 from server.meta.decorators import Response
-from server.utils.request import get_all_arg, get_arg_int, get_payload
+from server.utils.request import get_all_arg, get_arg_int, get_arg
 
 
 class PromoteEffect(Resource):
@@ -34,14 +37,15 @@ class PromoteEffect(Resource):
     @doc.request_promote_effect_add_param
     @doc.response_promote_effect_add_param_success
     @filters.PromoteEffect.get_add_data(data=int)
-    @operations.PromoteEffectDecorator.add_extension_worker(mobile=str)
-    @verify.PromoteEffect.check_add_params(mobile=str)
+    @operations.PromoteEffectDecorator.add_extension_worker(user_id=int, mobile=str)
+    @verify.PromoteEffect.check_add_params(user_id=int, mobile=str)
     def post():
         """新增推广人员"""
-        payload = get_payload()
-        mobile = payload.get('mobile', None) or ''
-
-        return Response(mobile=mobile)
+        if not session.get('login'):
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
+        user_id = session['login'].get('user_id', 0)
+        mobile = get_arg('mobile', '')
+        return Response(user_id=user_id, mobile=mobile)
 
     @staticmethod
     @doc.request_promote_effect_delete_param

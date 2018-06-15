@@ -10,27 +10,16 @@ from server.status import HTTPStatus, make_result, APIStatus
 class PromoteEffectList(object):
 
     @staticmethod
-    def check_mobile(cursor, mobile):
-        command = """ 
-        SELECT
-            tb_inf_user.user_name,
-            tb_inf_user.user_id,
-            a.reference_id,
-            a.is_deleted 
-        FROM
-            tb_inf_user
-            LEFT JOIN ( SELECT reference_mobile, reference_id, is_deleted FROM tb_inf_promote ) AS a ON tb_inf_user.mobile = a.reference_mobile 
-        WHERE
-            tb_inf_user.mobile = {0}
+    def check_extension_mobile(cursor, mobile):
+        """检查推广人员是否存在"""
+        command = """SELECT *
+        FROM shu_users
+        WHERE mobile = :mobile
+        AND is_deleted = 0
          """
-        ret = cursor.query_one(command.format(mobile))
+        ret = cursor.query_one(command, {'mobile': mobile})
 
-        user_name = ret.get('user_name', None) or ''
-        user_id = ret.get('user_id', None) or 0
-        reference_id = ret.get('reference_id', None) or 0
-        is_deleted = ret.get('is_deleted', None)
-
-        return user_name, user_id, reference_id, is_deleted
+        return ret['id'] if ret else 0
 
     @staticmethod
     def add_extension_worker(cursor, user_name, user_id, mobile):

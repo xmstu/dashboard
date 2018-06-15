@@ -33,13 +33,13 @@ def __locations(conf):
     pass
 
 
-@configs.register('.union.mysql.read_da')
-def __read_da(conf):
+@configs.register('.union.mysql.da_read_db')
+def __da_read_db(conf):
     pass
 
 
-@configs.register('.union.mysql.write_da')
-def __write_da(conf):
+@configs.register('.union.mysql.da_write_db')
+def __da_write_db(conf):
     pass
 
 @configs.register('.union.redis.dispatcher_nearby')

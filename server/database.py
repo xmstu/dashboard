@@ -10,8 +10,8 @@ from server.mysqldb import ExtendRedis
 db = DictModel({
     'read_db': MySQLdb(dict(configs.remote.union.mysql.read_db.get())),
     'write_db': MySQLdb(dict(configs.remote.union.mysql.write_db.get())),
-    'read_bi': MySQLdb(dict(configs.remote.union.mysql.read_da.get())),
-    'write_bi': MySQLdb(dict(configs.remote.union.mysql.write_da.get()))
+    'read_bi': MySQLdb(dict(configs.remote.union.mysql.da_read_db.get())),
+    'write_bi': MySQLdb(dict(configs.remote.union.mysql.da_write_db.get()))
 })
 
 mongo = DictModel({

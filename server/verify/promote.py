@@ -55,10 +55,12 @@ class PromoteEffect(object):
             
     @staticmethod
     @make_decorator
-    def check_add_params(mobile):
+    def check_add_params(user_id, mobile):
+        if not user_id:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='管理员id不存在'))
         if not Check.is_mobile(mobile):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='手机号非法'))
-        return Response(mobile=mobile)
+        return Response(user_id=user_id, mobile=mobile)
 
     @staticmethod
     @make_decorator

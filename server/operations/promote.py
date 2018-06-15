@@ -4,7 +4,7 @@ from flask_restful import abort
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.promote import PromoteEffectList, PromoteQuality
-
+from server.status import HTTPStatus, make_result, APIStatus
 
 class PromoteEffectDecorator(object):
 
@@ -22,18 +22,17 @@ class PromoteEffectDecorator(object):
 
     @staticmethod
     @make_decorator
-    def add_extension_worker(mobile):
-        user_name, user_id, reference_id, is_deleted = PromoteEffectList.check_mobile(db.read_bi, mobile)
-        # 校验该mobile是否在user表中并且该mobile的主人现在不是推荐人
-        if user_id and not reference_id:
-            data = PromoteEffectList.add_extension_worker(db.read_bi, user_name, user_id, mobile)
-        # 已删除该推广人，但是重新添加回来
-        elif reference_id and is_deleted == 1:
-            data = PromoteEffectList.update_is_deleted(db.read_bi, reference_id)
-        else:
-            data = 0
+    def add_extension_worker(user_id, mobile):
+        # 查询推广人员
+        promoter_id = PromoteEffectList.check_extension_mobile(db.read_db, mobile)
+        # 校验该推广人员注册且不是推荐人
+        if not promoter_id or user_id == promoter_id:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推广人员未注册或为推荐人'))
+        # 添加推广人员
 
-        return Response(data=data)
+
+
+        return Response(data={})
 
     @staticmethod
     @make_decorator
