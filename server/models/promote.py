@@ -258,8 +258,8 @@ class PromoteEffectList(object):
                     FROM (%(command)s) as a
             """
 
-            start_time = time.strftime('%Y-%m-%d', time.localtime(params['start_time']))
-            end_time = time.strftime('%Y-%m-%d', time.localtime(params['end_time']))
+            start_time = time.strftime('%Y-%m-%d', time.localtime(params['start_time'] or time.time() - 86400 * 7))
+            end_time = time.strftime('%Y-%m-%d', time.localtime(params['end_time'] or time.time() - 86400))
 
             promote_counts = cursor.query_one(count_command % {'command': command % {"start_time": start_time, "end_time": end_time}})
 
