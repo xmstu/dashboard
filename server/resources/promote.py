@@ -36,28 +36,32 @@ class PromoteEffect(Resource):
     @staticmethod
     @doc.request_promote_effect_add_param
     @doc.response_promote_effect_add_param_success
-    @filters.PromoteEffect.get_add_data(data=int)
-    @operations.PromoteEffectDecorator.add_extension_worker(user_id=int, mobile=str)
-    @verify.PromoteEffect.check_add_params(user_id=int, mobile=str)
+    @filters.PromoteEffect.get_add_data(result=int)
+    @operations.PromoteEffectDecorator.add_extension_worker(user_id=int, mobile=str, admin_type=int)
+    @verify.PromoteEffect.check_add_params(user_id=int, mobile=str, admin_type=int)
     def post():
         """新增推广人员"""
         if not session.get('login'):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
         user_id = session['login'].get('user_id', 0)
+        admin_type = session['login'].get('role', 0)
         mobile = get_arg('mobile', '')
-        return Response(user_id=user_id, mobile=mobile)
+        return Response(user_id=user_id, mobile=mobile, admin_type=admin_type)
 
+class PromoteDelete(Resource):
     @staticmethod
     @doc.request_promote_effect_delete_param
     @doc.response_promote_effect_delete_param_success
     @filters.PromoteEffect.get_delete_data(data=int)
-    @operations.PromoteEffectDecorator.delete_from_tb_inf_promte(reference_id=int)
-    @verify.PromoteEffect.check_delete_params(arg=dict)
-    def delete():
+    @operations.PromoteEffectDecorator.delete_from_tb_inf_promte(user_id=int, admin_type=int, promoter_id=int)
+    def delete(id):
         """删除推广人员"""
-        arg = get_all_arg()
-
-        return Response(arg=arg)
+        if not session.get('login'):
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
+        user_id = session['login'].get('user_id', 0)
+        admin_type = session['login'].get('role', 0)
+        promoter_id = id
+        return Response(user_id=user_id, admin_type=admin_type, promoter_id=promoter_id)
 
 
 class PromoteQuality(Resource):
@@ -77,3 +81,4 @@ class PromoteQuality(Resource):
 ns = api.namespace('promote', description='推广统计')
 ns.add_resource(PromoteQuality, '/quality/')
 ns.add_resource(PromoteEffect, '/effect/')
+ns.add_resource(PromoteDelete, '/effect/<int:id>')

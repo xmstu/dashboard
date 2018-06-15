@@ -22,50 +22,47 @@ class PromoteEffectList(object):
         return ret['id'] if ret else 0
 
     @staticmethod
-    def check_extension_mobile(cursor, mobile):
-        """检查推广人员id是否存在"""
+    def check_promote_alive(cursor, promoter_id):
+        """检查推广人员是否已存在"""
         command = """SELECT *
-        FROM shu_users
-        WHERE mobile = :mobile
-        AND is_deleted = 0
+        FROM tb_inf_promote_rules
+        WHERE promoter_id = :promoter_id AND promoter_status = 1 AND is_deleted = 0
          """
-        ret = cursor.query_one(command, {'mobile': mobile})
+        ret = cursor.query_one(command, {'promoter_id': promoter_id})
 
-        return ret['id'] if ret else 0
+        return ret if ret else {}
 
     @staticmethod
-    def add_extension_worker(cursor, user_name, user_id, mobile):
-        command = """ INSERT INTO tb_inf_promote ( reference_id, reference_name, reference_mobile, statistics_date)
-                       VALUES
-                       ( {reference_id}, {reference_name}, {reference_mobile}, DATE_FORMAT(NOW(),'%Y-%m-%d') ); """
+    def add_extension_worker(cursor, admin_id, promoter_id, admin_type):
+        """新增推广人员"""
+        command = """INSERT INTO tb_inf_promote_rules(admin_id, promoter_id, admin_type, create_time, update_time)
+        VALUES (%s, %s, %s, %s, %s)"""
         try:
-            data = cursor.insert(command.format(reference_id=user_id, reference_name="'%s'" % user_name, reference_mobile=mobile))
+            result = cursor.insert(command, {
+                'admin_id': admin_id,
+                'promoter_id': promoter_id,
+                'admin_type': admin_type,
+                'create_time': int(time.time()),
+                'update_time': int(time.time())
+            })
+            return result
         except Exception as e:
-            log.error('Error:{}'.format(e))
-            data = 0
-
-        if data:
-            return data
-        else:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法添加该推荐人，请检查参数是否有误'))
+            log.error('新增推广人员异常[error: %s]' % (e))
 
     @staticmethod
-    def update_is_deleted(cursor, reference_id):
-        command = """ UPDATE tb_inf_promote SET is_deleted = 0 WHERE reference_id = %d """
-        row_count = cursor.update(command % reference_id)
-        if row_count:
+    def delete_from_tb_inf_promte(cursor, admin_id, admin_type, promoter_id):
+        """删除推广人员"""
+        try:
+            command = """UPDATE tb_inf_promote_rules
+            SET promoter_status = 0
+            WHERE admin_id = :admin_id AND promoter_id = :promoter_id"""
+            row_count = cursor.update(command, {
+                'admin_id': admin_id,
+                'promoter_id': promoter_id
+            })
             return row_count
-        else:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法添加该推荐人，请检查参数是否有误'))
-
-    @staticmethod
-    def delete_from_tb_inf_promte(cursor, reference_id):
-        command = """ UPDATE tb_inf_promote SET is_deleted = 1 WHERE reference_id = %d """
-        row_count = cursor.update(command % reference_id)
-        if row_count:
-            return row_count
-        else:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='无法删除该推荐人，请检查参数是否有误'))
+        except Exception as e:
+            log.error('删除推广人员异常[error: %s]' % (e))
 
     @staticmethod
     def get_extension_worker_list(cursor, page, limit, params):
