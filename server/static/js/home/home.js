@@ -178,8 +178,9 @@ function dataInit() {
         })
     })
 }
+
 function tableInit(url) {
-    layui.use(['table','form'], function () {
+    layui.use(['table', 'form'], function () {
         var table = layui.table;
         var form = layui.form;
         table.render({
@@ -213,35 +214,17 @@ function tableInit(url) {
                 console.log(res);
                 $('[data-field]>div').css({'padding': '0 6px'});
                 $('.nearby').on('click', function () {
-                    var val = $(this).val()
+                    var val = $(this).val();
                     var url = '/city/nearby_cars/' + val;
-                    form.on('select(interest)', function (data) {
-                        console.log(data);
+                    form.on('select(interest)', function (res) {
+                        var value = res.value;
+                        var url_reset = '/city/nearby_cars/' + val + '?goods_type' + value;
+                        tableReset(url_reset)
                     });
-                    table.render({
-                        elem: '#demo'
-                        , url: url //数据接口
-                        , page: false, //开启分页
-                        response: {
-                            statusName: 'status',
-                            statusCode: 100000
-                        }
-                        , cols: [[ //表头
-                            {field: 'name', title: '司机姓名', width: 86}
-                            , {field: 'mobile', title: '手机号码', width: 110}
-                            , {field: 'usual_region', title: '常驻地', width: 210}
-                            , {field: 'vehicle_length', title: '车长', width: 166}
-                            , {field: 'vehicle_type', title: '车型', width: 110}
-                            , {field: 'credit_level', title: '司机评分', width: 96}
-                            , {field: 'is_trust_member', title: '诚信会员', width: 96}
-                            , {field: 'order_count', title: '接单数', sort: true, width: 96}
-                            , {field: 'order_finished', title: '完成数', sort: true, width: 96}
-                            , {field: 'order_cancel', title: '取消数', sort: true, width: 86}
-                            , {field: 'current_region', title: '所在地', width: 200}
-                        ]]
-                    });
+                    tableReset(url);
                     layer.open({
                         type: 1,
+                        title: '附近的车',
                         area: ['1400px', '520px'],
                         skin: 'layui-layer-molv',
                         closeBtn: 1,
@@ -288,4 +271,57 @@ function tableInit(url) {
         });
     })
 
+}
+
+function tableReset(url) {
+    layui.use(['table', 'form'], function () {
+        var table = layui.table;
+        var rate = layui.rate;
+        table.render({
+            elem: '#demo'
+            , url: url //数据接口
+            , page: false, //开启分页
+            response: {
+                statusName: 'status',
+                statusCode: 100000
+            }
+            , cols: [[ //表头
+                {field: 'name', title: '司机姓名', width: 86}
+                , {field: 'mobile', title: '手机号码', width: 110}
+                , {field: 'usual_region', title: '常驻地', width: 210}
+                , {field: 'vehicle_length', title: '车长', width: 166}
+                , {field: 'vehicle_type', title: '车型', width: 110}
+                , {field: 'credit_level', title: '司机评分', width: 104}
+                , {field: 'is_trust_member', title: '诚信会员', width: 86}
+                , {field: 'order_count', title: '接单数', sort: true, width: 90}
+                , {field: 'order_finished', title: '完成数', sort: true, width: 96}
+                , {field: 'order_cancel', title: '取消数', sort: true, width: 86}
+                , {field: 'current_region', title: '所在地', width: 210}
+            ]]
+            , done: function () {
+                $("td[data-field='is_trust_member']").children().each(function () {
+                    if ($(this).text() != '') {
+                        var str = $(this).text();
+                        if (str == 1) {
+                            $(this).text('是')
+                        } else if (str == 0) {
+                            $(this).text('否')
+                        }
+                    }
+                });
+                $("td[data-field='credit_level']").children().each(function () {
+                    var value_level = $(this).text();
+                    if (value_level == 1) {
+                        $(this).html('<p><i class="iconfont icon-iconfontxingxing"></i></p>')
+                    }
+                    if (value_level == 2) {
+                        $(this).html('<p><i class="iconfont icon-iconfontxingxing"></i></p>')
+                    }
+                    if (value_level == 5) {
+                        $(this).html('<p style="color: #009f95;"><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i></p>')
+                    }
+                });
+            }
+        });
+    })
 }
