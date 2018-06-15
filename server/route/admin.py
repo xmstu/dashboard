@@ -2,8 +2,8 @@
 from server import app
 from flask import render_template, session, redirect
 
-@app.route('/admin/')
-def admin():
+@app.route('/home/')
+def home():
     """货源统计页面"""
     if not session.get('login'):
         return redirect('/login/')

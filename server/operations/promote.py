@@ -28,6 +28,8 @@ class PromoteEffectDecorator(object):
         # 校验该推广人员注册且不是推荐人
         if not promoter_id or user_id == promoter_id:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推广人员未注册或为推荐人'))
+        # 是否存在
+
         # 添加推广人员
 
 

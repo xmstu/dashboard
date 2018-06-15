@@ -11,7 +11,19 @@ class PromoteEffectList(object):
 
     @staticmethod
     def check_extension_mobile(cursor, mobile):
-        """检查推广人员是否存在"""
+        """检查推广人员id是否存在"""
+        command = """SELECT *
+        FROM shu_users
+        WHERE mobile = :mobile
+        AND is_deleted = 0
+         """
+        ret = cursor.query_one(command, {'mobile': mobile})
+
+        return ret['id'] if ret else 0
+
+    @staticmethod
+    def check_extension_mobile(cursor, mobile):
+        """检查推广人员id是否存在"""
         command = """SELECT *
         FROM shu_users
         WHERE mobile = :mobile
