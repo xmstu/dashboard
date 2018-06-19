@@ -218,15 +218,14 @@ layui.use(['laydate', 'form', 'table'], function () {
     });
 });
 Highcharts.setOptions({
-    colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
+    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C','#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
 $('#charts_container_one').highcharts({
      chart: {
-        type: 'area',
-         backgroundColor:'#f3f2f2'
+        type: 'area'
     },
     title: {
-        text: '全球各大洲人口增长历史及预测'
+        text: '订单统计'
     },
     subtitle: {
         text: null
@@ -240,17 +239,19 @@ $('#charts_container_one').highcharts({
     },
     yAxis: {
         title: {
-            text: '十亿'
+            text: '订单汇总'
         },
         labels: {
             formatter: function () {
-                return this.value / 1000;
+                return this.value+'单';
             }
         }
     },
     tooltip: {
         split: true,
-        valueSuffix: ' 百万'
+        valueSuffix: '单',
+        backgroundColor:'#FFF',
+
     },
     plotOptions: {
         area: {
@@ -258,26 +259,29 @@ $('#charts_container_one').highcharts({
             lineColor: '#666666',
             lineWidth: 1,
             marker: {
+                radius:3.5,
                 lineWidth: 1,
-                lineColor: '#666666'
+                fillColor:'#fff',
+                lineColor: '#666666',
+                symbol: 'circle',
+                states:{
+                    hover:{
+                        enabled:true,
+                        radius:3.5
+                    }
+                }
             }
         }
     },
     series: [{
-        name: '亚洲',
+        name: '已完成',
         data: [502, 635, 809, 947, 1402, 3634, 5268]
     }, {
-        name: '非洲',
+        name: '进行中',
         data: [106, 107, 111, 133, 221, 767, 1766]
     }, {
-        name: '欧洲',
+        name: '已取消',
         data: [163, 203, 276, 408, 547, 729, 628]
-    }, {
-        name: '美洲',
-        data: [18, 31, 54, 156, 339, 818, 1201]
-    }, {
-        name: '大洋洲',
-        data: [2, 2, 2, 6, 13, 30, 46]
     }]
 });
 $('#charts_container_two').highcharts({
