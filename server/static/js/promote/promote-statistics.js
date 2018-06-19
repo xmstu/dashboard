@@ -264,6 +264,12 @@ function lineChartInit(xAxis, series, interval, str_title, names, units) {
         yAxis: {
             title: {
                 text: str_title
+            },
+            labels: {
+                format: '{value} 人',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
             }
         },
         plotOptions: {

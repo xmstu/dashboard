@@ -211,7 +211,7 @@ function tableInit(url) {
                 }
             ]],
             done: function (res, curr, count) {
-                console.log(res);
+
                 $('[data-field]>div').css({'padding': '0 6px'});
                 $('.nearby').on('click', function () {
                     var val = $(this).val();
@@ -284,7 +284,8 @@ function tableReset(url) {
             response: {
                 statusName: 'status',
                 statusCode: 100000
-            }
+            },
+            loading:true
             , cols: [[ //表头
                 {field: 'name', title: '司机姓名', width: 86}
                 , {field: 'mobile', title: '手机号码', width: 110}
@@ -298,7 +299,7 @@ function tableReset(url) {
                 , {field: 'order_cancel', title: '取消数', sort: true, width: 86}
                 , {field: 'current_region', title: '所在地', width: 210}
             ]]
-            , done: function () {
+            , done: function (res) {
                 $("td[data-field='is_trust_member']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();
