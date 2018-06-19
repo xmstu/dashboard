@@ -404,7 +404,6 @@ function dataInit() {
     };
     var url = '/user/statistic/'
     http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-        //console.log(res)
         if (res.status == 100000) {
             var len = res.data.xAxis.length;
             var X_data = res.data.xAxis;
@@ -417,10 +416,6 @@ function dataInit() {
             } else if (len > 0 && len > 40 && len < 90) {
                 $('.chart-tips').css({'display': 'none'})
                 chartInit(res.data.xAxis, res.data.series, 4, X_data[1])
-            } else {
-                $('#charts_container_one').html('');
-                $('.chart-tips').css({'display': 'block'})
-                return false
             }
         }
     })
@@ -494,6 +489,12 @@ function chartInit(xAxis, series, interval, x_value1) {
             ],
             title: {
                 text: '人数 (人)'
+            },
+            labels: {
+                format: '{value} 人',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
             }
         },
         plotOptions: {

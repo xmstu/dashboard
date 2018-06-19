@@ -158,10 +158,10 @@ var common = {
                             dataType: "json",
                             success: function (res) {
                                 console.log(res)
-                                $('#weather_now > u:nth-of-type(1)').html( res.data.city);
-                                $('#weather_now > u:nth-of-type(3)').html('温度:' + res.data.wendu + '℃ &nbsp;(' + res.data.forecast[0].low + '-' + res.data.forecast[0].high+')');
+                                $('#weather_now > u:nth-of-type(1)').html(res.data.city);
+                                $('#weather_now > u:nth-of-type(3)').html('温度:' + res.data.wendu + '℃ &nbsp;(' + res.data.forecast[0].low + '-' + res.data.forecast[0].high + ')');
                                 $('#weather_now > u:nth-of-type(2)').html('天气: ' + res.data.forecast[0].type)
-                                 $('#weather_now > u:nth-of-type(4)').html(res.data.forecast[0].fengxiang)
+                                $('#weather_now > u:nth-of-type(4)').html(res.data.forecast[0].fengxiang)
                             }
                         });
                     });

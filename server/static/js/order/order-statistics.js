@@ -6,15 +6,12 @@ $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_one').val(String(common.getNowFormatDate()[2]));
 $('#end_time_one').val(String(common.getNowFormatDate()[3]));
-$('#start_date_two').val(String(common.getNowFormatDate()[2]));
-$('#end_time_two').val(String(common.getNowFormatDate()[3]));
-$('#start_date_three').val(String(common.getNowFormatDate()[2]));
-$('#end_time_three').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 100);
 
 function init() {
+    $('.layui-form-item').width('250px');
     $('#from_region_id').address({
         offsetLeft: '0',
         level: 3,
@@ -67,70 +64,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         }
     });
     laydate.render({
-        elem: '#create_start_time',
-        theme: '#009688',
-        calendar: true,
-        max: String(common.getNowFormatDate()[4]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#create_start_time').val() == '') {
-                $('#create_start_time').next('.date-tips').show();
-            } else {
-                $('#create_start_time').next('.date-tips').hide()
-            }
-        }
-    });
-    laydate.render({
-        elem: '#create_end_time',
-        theme: '#009688',
-        calendar: true,
-        max: String(common.getNowFormatDate()[3]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#create_end_time').val() == '') {
-                $('#create_end_time').next('.date-tips').show();
-            } else {
-                $('#create_end_time').next('.date-tips').hide()
-            }
-        }
-    });
-    laydate.render({
-        elem: '#load_start_time',
-        theme: '#009688',
-        calendar: true,
-        max: String(common.getNowFormatDate()[4]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#load_start_time').val() == '') {
-                $('#load_start_time').next('.date-tips').show();
-            } else {
-                $('#load_start_time').next('.date-tips').hide()
-            }
-        }
-    });
-    laydate.render({
-        elem: '#load_end_time',
-        theme: '#009688',
-        calendar: true,
-        max: String(common.getNowFormatDate()[3]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#load_end_time').val() == '') {
-                $('#load_end_time').next('.date-tips').show();
-            } else {
-                $('#load_end_time').next('.date-tips').hide()
-            }
-        }
-    });
-    laydate.render({
         elem: '#start_date_one',
         theme: '#009688',
         calendar: true,
@@ -178,70 +111,6 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         }
     });
-    laydate.render({
-        elem: '#start_date_two',
-        theme: '#009688',
-        calendar: true,
-        max: String(common.getNowFormatDate()[4]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#start_date_two').val() == '') {
-                $('#start_date_two').next('.date-tips').show();
-            } else {
-                $('#start_date_two').next('.date-tips').hide()
-            }
-        }
-    });
-    laydate.render({
-        elem: '#end_time_two',
-        theme: '#009688',
-        calendar: true,
-        max: String(common.getNowFormatDate()[3]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#end_time_two').val() == '') {
-                $('#end_time_two').next('.date-tips').show();
-            } else {
-                $('#end_time_two').next('.date-tips').hide()
-            }
-        }
-    });
-    laydate.render({
-        elem: '#start_date_three',
-        theme: '#009688',
-        calendar: true,
-        max: String(common.getNowFormatDate()[4]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#start_date_two').val() == '') {
-                $('#start_date_two').next('.date-tips').show();
-            } else {
-                $('#start_date_two').next('.date-tips').hide()
-            }
-        }
-    });
-    laydate.render({
-        elem: '#end_time_three',
-        theme: '#009688',
-        calendar: true,
-        max: String(common.getNowFormatDate()[3]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#end_time_two').val() == '') {
-                $('#end_time_two').next('.date-tips').show();
-            } else {
-                $('#end_time_two').next('.date-tips').hide()
-            }
-        }
-    });
     table.render({
         elem: '#LAY_table_goods',
         even: true
@@ -284,19 +153,19 @@ layui.use(['laydate', 'form', 'table'], function () {
                     var result = $(this).text().split('\n');
                     $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span>')
                 }
-            })
+            });
             $("td[data-field='goods_time']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
                     $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
                 }
-            })
+            });
             $("td[data-field='price']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
                     $(this).html('<span>' + result[0] + '</span ></br>' + result[1] + '</span>')
                 }
-            })
+            });
             $("td[data-field='vehicle']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
@@ -308,13 +177,13 @@ layui.use(['laydate', 'form', 'table'], function () {
                         $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
                     }
                 }
-            })
+            });
             $("td[data-field='mobile']").children().each(function (val) {
                 if ($(this).text().length > 12) {
                     var result = $(this).text().split('\n');
                     $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                 }
-            })
+            });
             $("td[data-field='address']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
@@ -343,7 +212,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         }
     };
     $('#goods_search_box').on('click', function (e) {
-        e.preventDefault()
+        e.preventDefault();
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
     });
@@ -351,150 +220,67 @@ layui.use(['laydate', 'form', 'table'], function () {
 Highcharts.setOptions({
     colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
 });
-var chart = Highcharts.chart('charts_container_one', {
-    chart: {
-        type: 'funnel',
-        marginRight: 100
+$('#charts_container_one').highcharts({
+     chart: {
+        type: 'area',
+         backgroundColor:'#f3f2f2'
     },
     title: {
-        text: '货源统计漏斗',
-        x: -50
-    },
-    plotOptions: {
-        series: {
-            dataLabels: {
-                enabled: true,
-                crop: false,
-                overflow: 'none',
-                format: '<b>{point.name}</b> ({point.y:,.0f})',
-                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                softConnector: true
-            },
-            neckWidth: '0%',
-            neckHeight: '0%'
-        }
-    },
-    legend: {
-        enabled: false
-    },
-    series: [{
-        name: '用户',
-        data: [
-            ['潜在货源', 5654],
-            ['实际货源', 4064],
-            ['接单货源', 1987]
-        ]
-    }]
-});
-
-/*$('#charts_container_three').highcharts({
-    chart: {
-        type: 'line'
-    },
-    title: {
-        text: '发货/接单率趋势'
+        text: '全球各大洲人口增长历史及预测'
     },
     subtitle: {
-        text: '数据来源: 省省官方后台数据库'
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        x: 1300,
-        y: 0,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor: 'transparent',
-        labelFormatter: function () {
-            return this.name
-        }
-    },
-    tooltip: {
-        shared: true,
-        valueSuffix: '%',
-        crosshairs: [{
-            width: 1,
-            color: '#ccc'
-        }, {
-            width: 1,
-            color: '#ccc'
-        }],
-        plotOptions: {
-            spline: {
-                marker: {
-                    radius: 4,
-                    lineColor: '#666666',
-                    lineWidth: 1
-                }
-            }
-        }
+        text: null
     },
     xAxis: {
-        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-        crosshair: true,
-        gridLineColor: '#eee',
-        gridLineWidth: 1
+        categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
+        tickmarkPlacement: 'on',
+        title: {
+            enabled: false
+        }
     },
     yAxis: {
         title: {
-            text: '百分比(%)'
+            text: '十亿'
         },
         labels: {
-            format: '{value}%',
-            style: {
-                color: Highcharts.getOptions().colors[0]
+            formatter: function () {
+                return this.value / 1000;
             }
         }
     },
+    tooltip: {
+        split: true,
+        valueSuffix: ' 百万'
+    },
     plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: true
+        area: {
+            stacking: 'normal',
+            lineColor: '#666666',
+            lineWidth: 1,
+            marker: {
+                lineWidth: 1,
+                lineColor: '#666666'
+            }
         }
     },
     series: [{
-        name: '发货率',
-        data: [17.0, 16.9, 19.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 19.6]
+        name: '亚洲',
+        data: [502, 635, 809, 947, 1402, 3634, 5268]
     }, {
-        name: '接单率',
-        data: [13.9, 14.2, 15.7, 18.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 16.6, 14.8]
+        name: '非洲',
+        data: [106, 107, 111, 133, 221, 767, 1766]
+    }, {
+        name: '欧洲',
+        data: [163, 203, 276, 408, 547, 729, 628]
+    }, {
+        name: '美洲',
+        data: [18, 31, 54, 156, 339, 818, 1201]
+    }, {
+        name: '大洋洲',
+        data: [2, 2, 2, 6, 13, 30, 46]
     }]
-});*/
-var dataSet = {
-    charts_two_init: function () {
-        var url = '/goods/goods_distribution_trend';
-        var requestStartTime = common.timeTransform($('#start_date_one').val()+ ' 00:00:00');
-        var requestEndTime = common.timeTransform($('#end_time_one').val()+' 23:59:59');
-        var data = {
-            start_time: requestStartTime,
-            end_time: requestEndTime,
-            periods: $('.periods>li').find('button.active').val(),
-            goods_type: $('#goods_type_one').val(),
-            region_id: $('#region_id_one').val(),
-        }
-        layui.use('layer', function () {
-            var layer = layui.layer;
-            http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-                console.log(res);
-                var data = res.data
-                var len = res.data.xAxis.length;
-               if(len>0&&len<20){
-                   Chart_twice(data.xAxis,data.wait_order_series,data.recv_order_series,data.cancel_order_series,data.goods_user_count_series,1)
-               }else  if(len>20&&len<50){
-                   Chart_twice(data.xAxis,data.wait_order_series,data.recv_order_series,data.cancel_order_series,data.goods_user_count_series,2)
-               }else if(len>50){
-                   Chart_twice(data.xAxis,data.wait_order_series,data.recv_order_series,data.cancel_order_series,data.goods_user_count_series,5)
-               }
-                   /*if (len > 0 && len > 20 && len < 40)*/
-
-            })
-        })
-    }
-}
-$('#charts_container_four').highcharts({
+});
+$('#charts_container_two').highcharts({
     chart: {
         renderTo: 'chart'
     },
@@ -549,112 +335,6 @@ $('#charts_container_four').highcharts({
         ]
     }]
 });
-
-function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_series, goods_user_count_series,interval) {
-    $('#charts_container_two').highcharts({
-        chart: {
-            zoomType: 'xy'
-        },
-        title: {
-            text: '货源分布及发货人数趋势图'
-        },
-        subtitle: {
-            text: null
-        },
-        xAxis: [{
-             tickInterval: interval,
-            categories: xAxis,
-            crosshair: true,
-            gridLineColor: '#eee',
-            gridLineWidth: 1
-
-        }],
-        yAxis: [{ // Primary yAxis
-            labels: {
-                format: '{value}人',
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                }
-            },
-            title: {
-                text: '发货人数',
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                }
-            }
-        }, {
-            title: {
-                text: '订单统计',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            },
-            labels: {
-                format: '{value} 单',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            },
-            opposite: true
-        }],
-        tooltip: {
-            shared: true
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 1200,
-            y: 0,
-            floating: true,
-            borderWidth: 1,
-            backgroundColor: 'transparent',
-            labelFormatter: function () {
-                return this.name
-            }
-        },
-        lotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                }
-            }
-        },
-        series: [{
-            name: '待接单',
-            type: 'column',
-            yAxis: 1,
-            data: wait_order_series,
-            tooltip: {
-                valueSuffix: ' 人'
-            }
-        },
-            {
-                name: '已接单',
-                type: 'column',
-                yAxis: 1,
-                data: recv_order_series,
-                tooltip: {
-                    valueSuffix: ' 人'
-                }
-            }, {
-                name: '已取消',
-                type: 'column',
-                yAxis: 1,
-                data: cancel_order_series,
-                tooltip: {
-                    valueSuffix: ' 人'
-                }
-            }, {
-                name: '发货人数',
-                type: 'line',
-                data: goods_user_count_series,
-                tooltip: {
-                    valueSuffix: '人'
-                }
-            }]
-    });
-}
 
 $('#goods_search_box').on('click', function (e) {
     e.preventDefault();
@@ -793,5 +473,3 @@ $('#goods_search_box').on('click', function (e) {
         });
     })
 });
-dataSet.charts_two_init()
-

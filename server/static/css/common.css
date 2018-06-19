@@ -229,14 +229,14 @@ body {
     padding-top: 6px;
     background: #fff;
     width: 140px;
-    padding-left: 20px;
+    padding-left: 16px;
     box-shadow: 0 0 15px #ddd;
     padding-bottom: 14px;
     left: -20px;
 }
 
 .oneself-set > div:nth-of-type(1) > ul.dropdown-menu > li {
-    line-height: 30px;
+    line-height: 38px;
     font-size: 14px;
 }
 
@@ -248,7 +248,7 @@ body {
 .oneself-set > div:nth-of-type(1) > ul.dropdown-menu > li a {
     color: #666;
     border-bottom: 1px dashed #ccc;
-    padding: 5px;
+    padding: 5px 14px;
 }
 
 .oneself-set > div:nth-of-type(1) > span.layui-btn {
@@ -531,6 +531,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 }
 
 .layui-form-item {
+    vertical-align: top;
     display: inline-block;
 }
 
