@@ -50,7 +50,6 @@ class PromoteEffect(Resource):
 
 class PromoteDelete(Resource):
     @staticmethod
-    @doc.request_promote_effect_delete_param
     @doc.response_promote_effect_delete_param_success
     @filters.PromoteEffect.get_delete_data(data=int)
     @operations.PromoteEffectDecorator.delete_from_tb_inf_promte(user_id=int, admin_type=int, promoter_id=int)
@@ -72,7 +71,7 @@ class PromoteQuality(Resource):
     @operations.PromoteQualityDecorator.get_promote_quality(params=dict)
     @verify.PromoteQuality.check_params(params=dict)
     def get():
-        """推荐人质量"""
+        """推荐人质量统计"""
         resp = Response(params=get_all_arg())
 
         return resp

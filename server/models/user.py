@@ -73,6 +73,8 @@ class UserList(object):
             FROM shu_users
             LEFT JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
             LEFT JOIN shu_user_stats ON shu_users.id = shu_user_stats.user_id
+            LEFT JOIN shu_recommended_users AS referrer_user ON shu_users.id = referrer_user.referrer_user_id
+            LEFT JOIN shu_recommended_users AS recommended_user ON shu_users.id = recommended_user.referrer_user_id
 
             WHERE shu_users.is_deleted = 0
             """
@@ -85,7 +87,7 @@ class UserList(object):
             command += 'AND shu_users.mobile = "%s" ' % params['mobile']
         # 推荐人手机
         if params['reference_mobile']:
-            command += 'AND shu_user_profiles.reference_id = (SELECT id FROM shu_users WHERE mobile = "%s") ' % params['reference_mobile']
+            command += 'AND referrer_user.referrer_user_id = (SELECT id FROM shu_users WHERE mobile = "%s") ' % params['reference_mobile']
         # 下载渠道
         if params['download_ch']:
             command += 'AND shu_user_profiles.download_channel = "%s" ' % params['download_ch']
@@ -94,9 +96,9 @@ class UserList(object):
             command += 'AND shu_user_profiles.from_channel = "%s" ' % params['from_channel']
         # 推荐注册
         if params['is_referenced'] == 1:
-            command += 'AND shu_user_profiles.reference_id != 0 '
+            command += 'AND recommended_user.id IS NOT NULL '
         elif params['is_referenced'] == 2:
-            command += 'AND shu_user_profiles.reference_id = 0 '
+            command += 'AND recommended_user.id IS NULL '
         # 常驻地
         if user_station:
             command += 'AND shu_users.id IN (%s)' % user_station
