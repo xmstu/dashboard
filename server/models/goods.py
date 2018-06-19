@@ -79,6 +79,8 @@ class GoodsList(object):
                     AND source_id = shf_goods.id 
                     AND ( owner_id = shf_goods.user_id OR user_id = shf_goods.user_id ) 
                 ) AS call_count,
+                shf_goods.create_time,
+                (SELECT MIN(shb_orders.create_time) FROM shb_orders WHERE shb_orders.goods_id = shf_goods.id) as order_create_time,
                 FROM_UNIXTIME( shf_goods.create_time, '%Y-%m-%d %H:%I:%S' ) AS shf_goods_create_time,
                 -- 旧版装货时间
                 shf_goods.loading_time_date,

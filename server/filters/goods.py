@@ -117,6 +117,11 @@ class GoodsList(object):
                     'loading_time': loading_time
                 }
 
+                # 等待时间
+                latency_time = '等待接单'
+                if detail.get('create_time') and detail.get('order_create_time'):
+                    latency_time = "发布货源到接单用时:" + '%.2f' % ((detail.get('order_create_time') - detail.get('create_time'))/60) + "分钟"
+
                 result.append({
                     'id': detail['id'],
                     'mobile': mobile,
@@ -130,6 +135,7 @@ class GoodsList(object):
                     'address': address,
                     'vehicle': vehicle,
                     'goods_time': goods_time,
+                    'latency_time': latency_time
                 })
 
             result = json.loads(json.dumps(result))
