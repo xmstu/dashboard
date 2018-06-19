@@ -15,9 +15,16 @@ class OrdersReceivedStatistics(object):
         xAxis = get_xAxis(params)
 
         order_sum_price_series = json.loads(json.dumps(order_sum_price_series, default=ExtendHandler.handler_to_float))
+
+        if params.get('dimension') == 1:
+            series = order_count_series
+        elif params.get('dimension') == 2:
+            series = order_sum_price_series
+        else:
+            series = [0 for _ in xAxis]
+
         ret = {
             'xAxis': xAxis,
-            'order_count_series': order_count_series,
-            'order_sum_price_series': order_sum_price_series
+            'series': series
         }
         return make_result(APIStatus.Ok, data=ret), HTTPStatus.Ok

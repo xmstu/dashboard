@@ -39,10 +39,12 @@ class OrdersReceivedStatisticsList(object):
             FROM_UNIXTIME( shb_orders.create_time, '%Y-%m-%d' )
         """
 
+        # 时间
         if params.get('start_time') and params.get('end_time'):
             fetch_where += """ AND shb_orders.create_time >= {start_time} AND
             shb_orders.create_time <= {end_time} """.format(start_time=params['start_time'], end_time=params['end_time'])
 
+        # 货源类型
         if params.get('goods_type'):
             fetch_where += """ AND (
             ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
@@ -50,6 +52,13 @@ class OrdersReceivedStatisticsList(object):
             ( {goods_type}=3 AND shf_goods.type = 2)
             ) """.format(goods_type=params['goods_type'])
 
+        # 地区
+        if params.get('region_id'):
+            fetch_where += """
+                AND ( from_province_id = {region_id} OR from_city_id = {region_id} OR from_county_id = {region_id} ) 
+                """.format(region_id=params['region_id'])
+
+        # 评价类型
         if params.get('comment_type'):
             which_table += """ INNER JOIN shu_user_evaluations on shb_orders.id = shu_user_evaluations.order_id """
             fetch_where += """ AND shb_orders.owner_id = shu_user_evaluations.user_id """
@@ -60,12 +69,13 @@ class OrdersReceivedStatisticsList(object):
                 ( {comment_type}=3 AND shu_user_evaluations.`level` in (4,5))
              ) """.format(comment_type=params['comment_type'])
 
+        # 支付方式
         if params.get('pay_method'):
             fetch_where += """ 
              AND (
                 ( {pay_method}=1 AND shb_orders.pay_status = 1) OR
                 ( {pay_method}=2 AND shb_orders.`status` = 3 AND shb_orders.pay_status = 2 AND shf_goods.payment_method = 1) OR
-                ( {pay_method}=3 AND AND shb_orders.`status` = 3 AND shf_goods.payment_method = 2 AND shb_orders.paid_offline = 1)
+                ( {pay_method}=3 AND shb_orders.`status` = 3 AND shf_goods.payment_method = 2 AND shb_orders.paid_offline = 1)
              )
              """.format(pay_method=params['pay_method'])
 
