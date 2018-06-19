@@ -151,7 +151,7 @@ class CancelGoodsReason(object):
     @make_decorator
     def get_result(data):
         pass
-        return make_result(APIStatus.Ok, data=data.get('cancel_list', [])), HTTPStatus.Ok
+        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class GoodsDistributionTrend(object):

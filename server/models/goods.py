@@ -264,10 +264,19 @@ class CancelReasonList(object):
                     AND ( from_province_id = {region_id} OR from_city_id = {region_id} OR from_county_id = {region_id} ) 
                     """.format(region_id=params['region_id'])
 
-        cancel_list = cursor.query(command.format(fetch_where=fetch_where))
+        cancel_list_dict = cursor.query(command.format(fetch_where=fetch_where))
+        sum_count = 0
+        cancel_list = []
+        for i in cancel_list_dict:
+            sum_count += i.get('reason_count', None) or 0
+            cancel_list.append(list(i.values()))
+
+        for i in cancel_list_dict:
+            i.setdefault('percentage', '%.2f%%' % ((i.get('reason_count') / sum_count) * 100))
 
         data = {
-            'cancel_list': cancel_list
+            'cancel_list': cancel_list,
+            'cancel_list_dict':cancel_list_dict
         }
 
         return data
