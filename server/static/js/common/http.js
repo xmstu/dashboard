@@ -46,7 +46,7 @@ http.ajax.get = function (async, cache, url, data, contentType, callback) {
 
 };
 
-http.ajax.get_no_loading = function (async, cache, url, data, contentType, callback, returnStatus) {
+http.ajax.get_no_loading = function (async, cache, url, data, contentType, callback) {
     $.ajax({
         async: async,
         cache: cache,

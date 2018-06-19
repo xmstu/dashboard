@@ -354,7 +354,7 @@
                      </div>-->
                     <div class="charts-area-four">
                         <div class="chart-area-four-header content-header">
-                            <h2><i class="layui-icon">&#xe609;</i>取消发货原因统计</h2>
+                            <h2><i class="layui-icon">&#xe609;</i>取消货源原因统计</h2>
                             <hr>
                         </div>
                         <div class="chart-area-four-body">
@@ -379,40 +379,53 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul>
+                                 <ul class="periods_1">
                                     <li>
-                                        <button>按日</button>
+                                        <button class="active" value="2" id="day_methods_1">按日</button>
                                     </li>
                                     <li>
-                                        <button id="goods_week_methods_2">按周</button>
+                                        <button value="3" id="week_methods_1">按周</button>
                                     </li>
                                     <li>
-                                        <button id="goods_month_methods_2">按月</button>
+                                        <button value="4" id="month_methods_1">按月</button>
                                     </li>
                                 </ul>
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">取消类型</label>
                                         <div class="layui-input-inline" style="width: 140px">
                                             <select id="cancel_reason_types" name="modules" lay-verify="required"
                                                     lay-search="">
-                                                <option value="">全部</option>
+                                                <option value="">全部类型</option>
                                                 <option value="1">同城</option>
                                                 <option value="2">跨城</option>
-                                                <option value="3">零担</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 230px">
+                                        <label class="layui-form-label">取消类型</label>
+                                        <div class="layui-input-inline" style="width: 140px">
+                                            <select id="cancel_reason_roles" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="1">司机取消</option>
+                                                <option value="2">货主取消</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="layui-form-item" style="width:252px;">
                                     <div class="layui-inline" style="">
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">地区分布</label>
                                         <div class="layui-input-inline" style="width:140px;">
                                             <select id="cancel_reason_area" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部地区</option>
-                                                <option value="1">天河区</option>
-                                                <option value="2">越秀区</option>
+                                                {% for location in locations %}
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                </option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>

@@ -763,7 +763,8 @@ body {
     overflow-y: scroll;
 }
 
-.periods li > button.active {
+.periods li > button.active,
+.periods_1 li > button.active{
     background: #009688;
     color: #fff;
 }

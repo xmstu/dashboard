@@ -12,6 +12,7 @@ $('#start_date_three').val(String(common.getNowFormatDate()[2]));
 $('#end_time_three').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
+    common.dateInterval_Ano($('#start_date_three').val(),$('#end_time_three').val())
 }, 100);
 
 function init() {
@@ -141,7 +142,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         done: function (val, index) {
             var startTime = $('#start_date_one').val();
             var endTime = $('#end_time_one').val();
-            alert(12)
             common.dateInterval(endTime, startTime);
             if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
                 layer.msg('提示：开始时间大于了结束时间！');
@@ -219,10 +219,17 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            if ($('#start_date_two').val() == '') {
-                $('#start_date_two').next('.date-tips').show();
+           var startTime = $('#start_date_three').val();
+           var endTime = $('#end_time_three').val();
+            common.dateInterval_Ano(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
+            if ($('#end_time_one').val() == '') {
+                $('#end_time_one').next('.date-tips').show();
             } else {
-                $('#start_date_two').next('.date-tips').hide()
+                $('#end_time_one').next('.date-tips').hide()
             }
         }
     });
@@ -235,10 +242,17 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         },
         done: function (val, index) {
-            if ($('#end_time_two').val() == '') {
-                $('#end_time_two').next('.date-tips').show();
+            var startTime = $('#start_date_three').val();
+            var endTime = $('#end_time_three').val();
+            common.dateInterval_Ano(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
+            if ($('#end_time_one').val() == '') {
+                $('#end_time_one').next('.date-tips').show();
             } else {
-                $('#end_time_two').next('.date-tips').hide()
+                $('#end_time_one').next('.date-tips').hide()
             }
         }
     });
@@ -466,8 +480,8 @@ var chart = Highcharts.chart('charts_container_one', {
 var dataSet = {
     charts_two_init: function () {
         var url = '/goods/goods_distribution_trend';
-        var requestStartTime = common.timeTransform($('#start_date_one').val()+ ' 00:00:00');
-        var requestEndTime = common.timeTransform($('#end_time_one').val()+' 23:59:59');
+        var requestStartTime = common.timeTransform($('#start_date_one').val() + ' 00:00:00');
+        var requestEndTime = common.timeTransform($('#end_time_one').val() + ' 23:59:59');
         var data = {
             start_time: requestStartTime,
             end_time: requestEndTime,
@@ -481,76 +495,38 @@ var dataSet = {
                 console.log(res);
                 var data = res.data
                 var len = res.data.xAxis.length;
-               if(len>0&&len<20){
-                   Chart_twice(data.xAxis,data.wait_order_series,data.recv_order_series,data.cancel_order_series,data.goods_user_count_series,1)
-               }else  if(len>20&&len<50){
-                   Chart_twice(data.xAxis,data.wait_order_series,data.recv_order_series,data.cancel_order_series,data.goods_user_count_series,2)
-               }else if(len>50){
-                   Chart_twice(data.xAxis,data.wait_order_series,data.recv_order_series,data.cancel_order_series,data.goods_user_count_series,5)
-               }
-                   /*if (len > 0 && len > 20 && len < 40)*/
+                if (len > 0 && len < 20) {
+                    Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 1)
+                } else if (len > 20 && len < 50) {
+                    Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 2)
+                } else if (len > 50) {
+                    Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 5)
+                }
+                /*if (len > 0 && len > 20 && len < 40)*/
 
             })
         })
+    },
+    chart_third_init: function () {
+        var url = 'goods/cancal/';
+        var requestStartTime = common.timeTransform($('#start_date_three').val() + ' 00:00:00');
+        var requestEndTime = common.timeTransform($('#end_time_three').val() + ' 23:59:59');
+        var data = {
+            start_time: requestStartTime,
+            end_time: requestEndTime,
+            cancle_type: $('.periods_1>li').find('button.active').val(),
+            goods_type: $('#goods_type_one').val(),
+            region_id: $('#region_id_one').val(),
+        }
+        http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+            console.log(res.data.cancel_list)
+            var all_reason = res.data.cancel_list;
+            Chart_third(all_reason)
+        })
     }
 }
-$('#charts_container_four').highcharts({
-    chart: {
-        renderTo: 'chart'
-    },
-    title: {
-        text: '取消原因统计'
-    },
-    plotArea: {
-        shadow: true,
-        borderWidth: true,
-        backgroundColor: true
-    },
-    tooltip: {
-        formatter: function () {
-            return '<b>' + this.point.name + '</b>: ' + Highcharts.numberFormat(this.percentage, 1) + '% (' +
-                Highcharts.numberFormat(this.y, 0, ',') + ' 个)';
-        }
-    },
-    plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: true,
-                formatter: function () {
-                    if (this.percentage > 4) return this.point.name;
-                },
-                color: 'white',
-                style: {
-                    font: '13px Trebuchet MS, Verdana, sans-serif'
-                }
-            }
-        }
-    },
-    legend: {
-        backgroundColor: '#FFFFFF',
-        x: 0,
-        y: -30
-    },
-    credits: {
-        enabled: false
-    },
-    series: [{
-        type: 'pie',
-        name: 'Browser share',
-        data: [
-            ['装货时间不合适', 3617],
-            ['司机让我取消订单', 3436],
-            ['突发事件', 416],
-            ['运输变化有变', 200],
-            ['车型大小不合适', 1000],
-            ['其他', 5000]
-        ]
-    }]
-});
 
-function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_series, goods_user_count_series,interval) {
+function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_series, goods_user_count_series, interval) {
     $('#charts_container_two').highcharts({
         chart: {
             zoomType: 'xy'
@@ -562,7 +538,7 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
             text: null
         },
         xAxis: [{
-             tickInterval: interval,
+            tickInterval: interval,
             categories: xAxis,
             crosshair: true,
             gridLineColor: '#eee',
@@ -653,6 +629,58 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
                     valueSuffix: '人'
                 }
             }]
+    });
+}
+
+function Chart_third(dataArr) {
+    $('#charts_container_four').highcharts({
+        chart: {
+            renderTo: 'chart'
+        },
+        title: {
+            text: '取消原因统计'
+        },
+        plotArea: {
+            shadow: true,
+            borderWidth: true,
+            backgroundColor: true
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.point.name + '</b>: ' + Highcharts.numberFormat(this.percentage, 1) + '% (' +
+                    Highcharts.numberFormat(this.y, 0, ',') + ' 单)';
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        if (this.percentage > 4) return this.point.name;
+                    },
+                    color: 'white',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                        font: '13px Trebuchet MS, Verdana, sans-serif'
+                    }
+                }
+            }
+        },
+        legend: {
+            backgroundColor: '#FFFFFF',
+            x: 0,
+            y: -30
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            type: 'pie',
+            name: '货源取消汇总',
+            data: dataArr
+        }]
     });
 }
 
@@ -793,5 +821,5 @@ $('#goods_search_box').on('click', function (e) {
         });
     })
 });
-dataSet.charts_two_init()
-
+dataSet.charts_two_init();
+dataSet.chart_third_init();
