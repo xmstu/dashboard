@@ -105,7 +105,7 @@ class GoodsList(object):
 
         # 手机
         if params['mobile']:
-            fetch_where += ' AND shu_users.mobile = %s ' % params['mobile']
+            fetch_where += ' AND shu_users.mobile = "%s" ' % params['mobile']
 
         # 出发地
         if params['from_county_id']:
@@ -182,13 +182,11 @@ class GoodsList(object):
         # 急需处理
         if params['urgent_goods']:
             if params['urgent_goods'] == 1:
-                fetch_where += """ AND ({0} - shf_goods.create_time) > 0 AND ({0} - shf_goods.create_time) < 5 * 60 """.format(
-                    time.time())
+                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 0 AND (UNIX_TIMESTAMP() - shf_goods.create_time) < 5 * 60 """
             if params['urgent_goods'] == 2:
-                fetch_where += """ AND ({0} - shf_goods.create_time) > 5 * 60 AND ({0} - shf_goods.create_time) < 10 * 60 """.format(
-                    time.time())
+                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 5 * 60 AND (UNIX_TIMESTAMP() - shf_goods.create_time) < 10 * 60 """
             if params['urgent_goods'] == 3:
-                fetch_where += """ AND ({0} - shf_goods.create_time) > 10 * 60 """.format(time.time())
+                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 10 * 60 """
 
         # 是否加价
         if params['is_addition']:
@@ -204,11 +202,11 @@ class GoodsList(object):
 
         # 装货时间
         if params['load_start_time'] and params['load_end_time']:
-            fetch_where += """ AND (( UNIX_TIMESTAMP( shf_goods.loading_time_date ) > {0} 
-            AND UNIX_TIMESTAMP( shf_goods.loading_time_date ) < {1}  ) 
+            loading_time_date = time.strftime('%Y-%m-%d', time.localtime(params['load_start_time']))
+            fetch_where += """ AND ( shf_goods.loading_time_date = '{0}'
             OR -- 新版
-            ( shf_goods.loading_time_period_begin > {0} AND shf_goods.loading_time_period_begin < {1} )) """.format(
-                params['load_start_time'], params['load_end_time'])
+            ( shf_goods.loading_time_period_begin > {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
+            loading_time_date, params['load_start_time'], params['load_end_time'])
 
         goods_count = cursor.query_one(command.format(fields="COUNT(*) as goods_count", fetch_where=fetch_where))['goods_count']
 
