@@ -8,7 +8,10 @@ class GoodsList(object):
 
     @staticmethod
     def get_goods_list(cursor, page, limit, params):
-        fileds = """
+
+        fetch_where = """ 1=1 """
+
+        fields = """
                 shf_goods.id,
                 shf_goods.NAME,
                 shf_goods.weight,
@@ -86,59 +89,59 @@ class GoodsList(object):
 
         command = """
                     SELECT 
-                    %s
+                    {fields}
                     FROM shf_goods
                     LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
                     LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
                     AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
-                    WHERE 1=1
+                    WHERE {fetch_where}
         """
 
         # 货源id
         if params['goods_id']:
-            command += ' AND shf_goods.id = %s AND shf_goods.is_deleted = 0 ' % params['goods_id']
+            fetch_where += ' AND shf_goods.id = %s AND shf_goods.is_deleted = 0 ' % params['goods_id']
 
         # 手机
         if params['mobile']:
-            command += ' AND shu_users.mobile = %s ' % params['mobile']
+            fetch_where += ' AND shu_users.mobile = %s ' % params['mobile']
 
         # 出发地
         if params['from_county_id']:
-            command += ' AND shf_goods.from_county_id = %s ' % params['from_county_id']
+            fetch_where += ' AND shf_goods.from_county_id = %s ' % params['from_county_id']
         if params['from_city_id']:
-            command += ' AND shf_goods.from_city_id = %s ' % params['from_city_id']
+            fetch_where += ' AND shf_goods.from_city_id = %s ' % params['from_city_id']
         if params['from_province_id']:
-            command += ' AND shf_goods.from_province_id = %s ' % params['from_province_id']
+            fetch_where += ' AND shf_goods.from_province_id = %s ' % params['from_province_id']
 
         # 目的地
         if params['to_county_id']:
-            command += ' AND shf_goods.to_county_id = %s ' % params['to_county_id']
+            fetch_where += ' AND shf_goods.to_county_id = %s ' % params['to_county_id']
         if params['to_city_id']:
-            command += ' AND shf_goods.to_city_id = %s ' % params['to_city_id']
+            fetch_where += ' AND shf_goods.to_city_id = %s ' % params['to_city_id']
         if params['to_province_id']:
-            command += ' AND shf_goods.to_province_id = %s ' % params['to_province_id']
+            fetch_where += ' AND shf_goods.to_province_id = %s ' % params['to_province_id']
 
         # 货源类型
         if params['goods_type']:
-            if params['goods_type'] == 1:
-                command += """ AND shf_goods.haul_dist = 1 AND shf_goods.type = 1 """
-            if params['goods_type'] == 2:
-                command += """ AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 2 AND shf_goods.type = 1 """
-            if params['goods_type'] == 3:
-                command += """ AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 1 AND shf_goods.type = 1 """
-            if params['goods_type'] == 4:
-                command += """ AND shf_goods.type = 2 """
+            fetch_where += """
+                AND(
+                ( {goods_type}=1 AND shf_goods.haul_dist = 1 AND shf_goods.type = 1) OR
+                ( {goods_type}=2 AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 2 AND shf_goods.type = 1) OR
+                ( {goods_type}=3 AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 1 AND shf_goods.type = 1) OR
+                ( {goods_type}=4 AND shf_goods.type = 2)
+                )
+            """.format(goods_type=params['goods_type'])
 
         # 货源状态
         if params['goods_status']:
             if params['goods_status'] == 2:
-                command += ' AND (shf_goods.status = 1 OR shf_goods.status = 2) AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
+                fetch_where += ' AND (shf_goods.status = 1 OR shf_goods.status = 2) AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
             if params['goods_status'] == 3:
-                command += ' AND shf_goods.status = 3 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
+                fetch_where += ' AND shf_goods.status = 3 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
             if params['goods_status'] == -1:
-                command += ' AND shf_goods.status = -1 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
+                fetch_where += ' AND shf_goods.status = -1 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
             if params['goods_status'] == 4:
-                command += """ AND (shf_goods.status = 1 OR shf_goods.status = 2) 
+                fetch_where += """ AND (shf_goods.status = 1 OR shf_goods.status = 2) 
                                 AND ((shf_goods.loading_time_is_realtime = 1 AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600)
                                 OR (shf_goods.loading_time_is_realtime = 0 
                                 AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_begin)>0 
@@ -152,15 +155,15 @@ class GoodsList(object):
                             AND source_id = shf_goods.id
                             AND (owner_id = shf_goods.user_id OR user_id = shf_goods.user_id)) """
             if params['is_called'] == 1:
-                command += called_sql + '> 0 '
+                fetch_where += called_sql + '> 0 '
             if params['is_called'] == 2:
-                command += called_sql + '= 0 '
+                fetch_where += called_sql + '= 0 '
             if params['is_called'] == 3:
-                command += called_sql + '> 10 '
+                fetch_where += called_sql + '> 10 '
 
         # 车长要求
         if params['vehicle_length']:
-            command += """ AND shf_goods_vehicles.name = '%s' """ % params['vehicle_length']
+            fetch_where += """ AND shf_goods_vehicles.name = '%s' """ % params['vehicle_length']
 
         # 车型要求
         if params['vehicle_type']:
@@ -172,48 +175,44 @@ class GoodsList(object):
 
         # 是否初次下单
         if params['new_goods_type'] > 0:
-            command += """ AND ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) < 3 """
+            fetch_where += """ AND ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) < 3 """
 
         # 急需处理
         if params['urgent_goods']:
             if params['urgent_goods'] == 1:
-                command += """ AND ({0} - shf_goods.create_time) > 0 AND ({0} - shf_goods.create_time) < 5 * 60 """.format(
+                fetch_where += """ AND ({0} - shf_goods.create_time) > 0 AND ({0} - shf_goods.create_time) < 5 * 60 """.format(
                     time.time())
             if params['urgent_goods'] == 2:
-                command += """ AND ({0} - shf_goods.create_time) > 5 * 60 AND ({0} - shf_goods.create_time) < 10 * 60 """.format(
+                fetch_where += """ AND ({0} - shf_goods.create_time) > 5 * 60 AND ({0} - shf_goods.create_time) < 10 * 60 """.format(
                     time.time())
             if params['urgent_goods'] == 3:
-                command += """ AND ({0} - shf_goods.create_time) > 10 * 60 """.format(time.time())
+                fetch_where += """ AND ({0} - shf_goods.create_time) > 10 * 60 """.format(time.time())
 
         # 是否加价
         if params['is_addition']:
             if params['is_addition'] == 1:
-                command += ' AND shf_goods.price_addition > 0 '
+                fetch_where += ' AND shf_goods.price_addition > 0 '
             elif params['is_addition'] == 2:
-                command += ' AND shf_goods.price_addition = 0 '
+                fetch_where += ' AND shf_goods.price_addition = 0 '
 
         # 发布时间
         if params['create_start_time'] and params['create_end_time']:
-            command += """ AND shf_goods.create_time > %s AND shf_goods.create_time < %s """ % (
+            fetch_where += """ AND shf_goods.create_time > %s AND shf_goods.create_time < %s """ % (
                 params['create_start_time'], params['create_end_time'])
 
         # 装货时间
         if params['load_start_time'] and params['load_end_time']:
-            # load_start_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(params['load_start_time']))
-            # load_end_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(params['load_end_time']))
-
-            command += """ AND (( UNIX_TIMESTAMP( shf_goods.loading_time_date ) > {0} 
+            fetch_where += """ AND (( UNIX_TIMESTAMP( shf_goods.loading_time_date ) > {0} 
             AND UNIX_TIMESTAMP( shf_goods.loading_time_date ) < {1}  ) 
             OR -- 新版
             ( shf_goods.loading_time_period_begin > {0} AND shf_goods.loading_time_period_begin < {1} )) """.format(
                 params['load_start_time'], params['load_end_time'])
 
-        goods_count = cursor.query_one(command % "COUNT(*) as goods_count")['goods_count']
+        goods_count = cursor.query_one(command.format(fields="COUNT(*) as goods_count", fetch_where=fetch_where))['goods_count']
 
-        command += """ ORDER BY shf_goods.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        fetch_where += """ ORDER BY shf_goods.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
-        log.info('sql:{}'.format(command % fileds))
-        goods_detail = cursor.query(command % fileds)
+        goods_detail = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
         log.info('goods_detail:{}'.format(goods_detail))
 

@@ -11,4 +11,4 @@ class OrdersReceivedStatistics(object):
 
         data = OrdersReceivedStatisticsList.get_order_received_statistics_list(db.read_db, params)
 
-        return Response(data=data)
+        return Response(data=data, params=params)

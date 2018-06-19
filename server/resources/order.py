@@ -13,7 +13,7 @@ class OrdersReceivedStatistics(Resource):
 
     @staticmethod
     @doc.request_order_received_statistics_param
-    @filters.OrdersReceivedStatistics.get_result(data=dict)
+    @filters.OrdersReceivedStatistics.get_result(data=dict, params=dict)
     @operations.OrdersReceivedStatistics.get_data(params=dict)
     @verify.OrdersReceivedStatistics.check_params(params=dict)
     def get():
@@ -41,5 +41,5 @@ class OrderList(Resource):
 
 ns = api.namespace('order', description='订单接口')
 ns.add_resource(OrdersReceivedStatistics, '/statistics/')
-ns.add_resource(CancelOrderReason, 'cancel_reason')
-ns.add_resource(OrderList, 'list')
+ns.add_resource(CancelOrderReason, '/cancel_reason/')
+ns.add_resource(OrderList, '/list/')
