@@ -217,10 +217,10 @@ class CityOrderListModel(object):
         # 所属网点
         if params.get('node_id'):
             command += """ 
-            and (shf_goods.from_province_id = {0} 
-            or shf_goods.from_city_id= {0}  
-            or shf_goods.from_county_id= {0}  
-            or shf_goods.from_town_id= {0} ) 
+            AND (shf_goods.from_province_id = {0} 
+            OR shf_goods.from_city_id= {0}  
+            OR shf_goods.from_county_id= {0}  
+            OR shf_goods.from_town_id= {0} ) 
             """.format(params['node_id'])
 
         # 初次下单

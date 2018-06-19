@@ -26,6 +26,7 @@ class CityOrderListDecorator(object):
     @staticmethod
     @make_decorator
     def get_data(page, limit, params):
+        """最新接单货源"""
         data = CityOrderListModel.get_data(db.read_db, page, limit, params)
         log.info('获取最新接单货源成功: [params: %s]' % params)
         return Response(data=data)
@@ -36,6 +37,7 @@ class CityNearbyCars(object):
     @staticmethod
     @make_decorator
     def get_data(goods_id, goods_type):
+        """货源附近车辆"""
         # 获取货源信息
         goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
         if not goods:

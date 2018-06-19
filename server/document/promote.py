@@ -35,10 +35,6 @@ response_promote_effect_add_param_success = api.response(200, '成功', api.mode
     'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
 }))
 
-request_promote_effect_delete_param = api.doc(params={
-    'reference_id': '推广id',
-}, description='推广统计列表删除参数')
-
 response_promote_effect_delete_param_success = api.response(200, '成功', api.model('response_success', {
     'state': fields.Integer(description=str(APIStatus.Ok)),
     'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
