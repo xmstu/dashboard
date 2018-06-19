@@ -231,7 +231,7 @@ class PromoteEffectList(object):
                 fetch_where += """
                     AND (
                     (%(is_actived)d = 0)
-                    OR (%(is_actived)d = 1 AND keep_login_days > 1)
+                    OR (%(is_actived)d = 1 AND keep_login_days >= 7 AND last_login_time > UNIX_TIMESTAMP() - 1 * 86400)
                     OR (%(is_actived)d = 2 AND last_login_time < UNIX_TIMESTAMP() - 1 * 86400
                     AND last_login_time > UNIX_TIMESTAMP() - 3 * 86400)
                     OR (%(is_actived)d = 3 AND last_login_time < UNIX_TIMESTAMP() - 4 * 86400

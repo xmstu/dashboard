@@ -127,7 +127,7 @@ class UserList(object):
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_company = 1) > 0 '''
         # 是否活跃
         if params['is_actived'] == 1:
-            command += 'AND shu_user_stats.keep_login_days > 1 '
+            command += 'AND shu_user_stats.keep_login_days >= 7 AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
         elif params['is_actived'] == 2:
             command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 1 * 86400
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 3 * 86400 '''
