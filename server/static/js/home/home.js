@@ -88,7 +88,6 @@ function dataInit() {
         //console.log(res);
         var arr = Object.keys(res.data);
         var str = '';
-        var elemArr = [];
         for (var i = 0; i < arr.length; i++) {
             str += '<li class="charts-container" id="charts_container_' + i + '"></li>';
         }
@@ -152,7 +151,7 @@ function dataInit() {
                         saveAsImage: {show: true}
                     }
                 },
-                color: ['#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#DB843D', '#A47D7C'],
+                color: ['#fa6e7e', '#7dd4f8', '#7fcaff', '#2973a7', '#5fd779', '#56b35d'],
                 series: [
                     {
                         name: '货源数',
@@ -194,16 +193,16 @@ function tableInit(url) {
             loading: true,
             cols: [[
                 {field: 'goods_id', title: '货源ID', width: 82},
-                {field: 'priority', title: '优先级', width: 82},
-                {field: 'goods_type', title: '类型', width: 100},
+                {field: 'priority', title: '优先级', width: 72},
+                {field: 'goods_type', title: '类型', width: 60},
                 {field: 'content', title: '货物规格', width: 120},
-                {field: 'supplier_node', title: '所属网点'},
+                {field: 'supplier_node', title: '所属网点',width:200},
                 {field: 'vehicle', title: '车型要求', width: 116},
                 {field: 'price', title: '运费', width: 180},
                 {field: 'mobile', title: '货主手机', width: 110},
                 {field: 'call_count', title: '通话数', width: 82},
-                {field: 'goods_time', title: '时间', width: 200},
-                {field: 'address', title: '出发地-目的地', width: 250},
+                {field: 'goods_time', title: '时间', width: 210},
+                {field: 'address', title: '出发地-目的地'},
                 {
                     field: 'operate', title: '操作', width: 107, templet: function (d) {
                         return '<button value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
@@ -230,6 +229,12 @@ function tableInit(url) {
                         closeBtn: 1,
                         content: $('#popup')
                     })
+                });
+                  $("th[data-field='goods_id']").children().each(function () {
+                   $(this).css({'display':'none'})
+                });
+                  $("td[data-field='goods_id']").children().each(function () {
+                   $(this).css({'display':'none'})
                 });
                 $("td[data-field='price']").children().each(function () {
                     if ($(this).text() != '') {
@@ -293,11 +298,11 @@ function tableReset(url) {
                 , {field: 'vehicle_length', title: '车长', width: 166}
                 , {field: 'vehicle_type', title: '车型', width: 110}
                 , {field: 'credit_level', title: '司机评分', width: 104}
-                , {field: 'is_trust_member', title: '诚信会员', width: 86}
+                , {field: 'is_trust_member', title: '诚信会员', width: 84}
                 , {field: 'order_count', title: '接单数', sort: true, width: 90}
                 , {field: 'order_finished', title: '完成数', sort: true, width: 96}
                 , {field: 'order_cancel', title: '取消数', sort: true, width: 86}
-                , {field: 'current_region', title: '所在地', width: 210}
+                , {field: 'current_region', title: '所在地', width: 206}
             ]]
             , done: function (res) {
                 $("td[data-field='is_trust_member']").children().each(function () {

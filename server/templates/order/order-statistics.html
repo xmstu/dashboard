@@ -118,7 +118,7 @@
                     <div class="part-1">
                         <div class="part-1-top">
                             <form action="" class="layui-form layui-form-pane">
-                                <div class="layui-form-item">
+                                <div class="layui-form-item layui-form-spec">
                                     <div class="layui-inline" style="width: 210px;">
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
@@ -128,7 +128,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item">
+                                <div class="layui-form-item layui-form-spec">
                                     <div class="layui-inline" style="width: 210px;">
                                         <label class="layui-form-label">结束日期</label>
                                         <div class="layui-input-block">
@@ -138,34 +138,72 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item layui-item-spec" id="">
+                                  <ul class="periods">
+                                    <li>
+                                        <button class="active" value="2" id="day_methods">按日</button>
+                                    </li>
+                                    <li>
+                                        <button value="3" id="week_methods">按周</button>
+                                    </li>
+                                    <li>
+                                        <button value="4" id="month_methods">按月</button>
+                                    </li>
+                                </ul>
+                                <div class="layui-form-item layui-form-spec" id="">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width: 140px">
-                                            <select id="new_users" name="modules" lay-verify="required" lay-search="">
-                                                <option value="1">全部</option>
-                                                <option value="2">同城</option>
-                                                <option value="3">跨城</option>
+                                        <label class="layui-form-label">货源类型</label>
+                                        <div class="layui-input-inline" style="width: 122px">
+                                            <select id="goods_type_show" name="modules" lay-verify="required" lay-search="">
+                                                <option value="0">全部</option>
+                                                <option value="1">同城</option>
+                                                <option value="2">跨城</option>
+                                                <option value="3">零担</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline layui-item-spec" style="">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width:140px;">
-                                            <select name="modules" lay-verify="required" lay-search="">
+                                <div class="layui-form-item layui-form-spec">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">筛选类别</label>
+                                        <div class="layui-input-inline" style="width:122px;">
+                                            <select id="dimension" name="modules" lay-verify="required" lay-search="">
                                                 <option value="1">按数量</option>
                                                 <option value="2">按金额</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item">
+                                  <div class="layui-form-item layui-form-spec">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">评价级别</label>
+                                        <div class="layui-input-inline" style="width:122px;">
+                                            <select id="comment_type" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部评价</option>
+                                                <option value="1">好评</option>
+                                                <option value="2">中评</option>
+                                                <option value="3">差评</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                  <div class="layui-form-item layui-form-spec">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">支付方式</label>
+                                        <div class="layui-input-inline" style="width:122px;">
+                                            <select id="pay_method" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部支付</option>
+                                                <option value="1">未支付</option>
+                                                <option value="2">线下支付</option>
+                                                <option value="3">线上支付</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-spec">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width:140px;">
-                                            <select name="modules" lay-verify="required" lay-search="">
+                                        <label class="layui-form-label">所属地区</label>
+                                        <div class="layui-input-inline" style="width:122px;">
+                                            <select id="region_id_show" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 <option value="1">天河</option>
                                                 <option value="2">越秀</option>
@@ -214,7 +252,7 @@
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
                                         <label class="layui-form-label">取消类型</label>
-                                        <div class="layui-input-inline" style="width: 140px">
+                                        <div class="layui-input-inline" style="width: 122px">
                                             <select id="cancel_reason_types" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
@@ -227,7 +265,7 @@
                                 <div class="layui-form-item" style="width:252px;">
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">取消角色</label>
-                                        <div class="layui-input-inline" style="width:140px;">
+                                        <div class="layui-input-inline" style="width:122px;">
                                             <select id="cancel_reason_roles" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="1">司机取消</option>
@@ -239,7 +277,7 @@
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
                                         <label class="layui-form-label">地区选择</label>
-                                        <div class="layui-input-inline" style="width: 140px">
+                                        <div class="layui-input-inline" style="width: 122px">
                                             <select id="cancel_reason_area" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部地区</option>

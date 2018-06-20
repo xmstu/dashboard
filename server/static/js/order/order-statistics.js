@@ -221,8 +221,71 @@ Highcharts.setOptions({
 });
 var setAbout = {
     that: this,
-    chartRender: function (xAxis, cancel_list, cancel_reason_all) {
+    chartRender: function (xAxis, complete_series, pending_series,cancel_series) {
+        $('#charts_container_one').highcharts({
+            chart: {
+                type: 'area'
+            },
+            title: {
+                text: '订单统计'
+            },
+            subtitle: {
+                text: null
+            },
+            xAxis: {
+                categories: xAxis,
+                tickmarkPlacement: 'on',
+                title: {
+                    enabled: false
+                }
+            },
+            yAxis: {
+                title: {
+                    text: '订单汇总'
+                },
+                labels: {
+                    formatter: function () {
+                        return this.value + '单';
+                    }
+                }
+            },
+            tooltip: {
+                split: true,
+                valueSuffix: '单',
+                backgroundColor: '#FFF'
 
+            },
+            plotOptions: {
+                area: {
+                    stacking: 'normal',
+                    lineColor: '#666666',
+                    lineWidth: 1,
+                    marker: {
+                        radius: 3.5,
+                        lineWidth: 1,
+                        fillColor: '#fff',
+                        lineColor: '#666666',
+                        symbol: 'circle',
+                        states: {
+                            hover: {
+                                enabled: true,
+                                radius: 3.5
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: '已完成',
+                data: complete_series
+            }, {
+                name: '进行中',
+                data: pending_series
+            }, {
+                name: '已取消',
+                data: cancel_series
+            }]
+        });
     },
     test: function () {
         alert(1)
@@ -297,83 +360,58 @@ var setAbout = {
             var layer = layui.layer;
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var cancel_list = res.data.cancel_list;
+                var cancel_list_dict = res.data.cancel_list_dict;
+                var len = cancel_list_dict.length;
                 var str = '';
                 if (cancel_list.length == 0) {
                     str += '<span class="table-no-data">there is no data</span>';
                     $('.cancel-reason-types').html('').append(str);
-                    that.chartShow(cancel_list, '该时间段内无数据')
+                    that.chartShow(cancel_list, '图标无法显示，因该日期段无数据')
                 } else if (cancel_list.length > 0) {
-                    that.chartShow(cancel_list, '取消原因统计表')
+                    that.chartShow(cancel_list, '取消原因统计表');
+                    $('.cancel-reason-types').html('');
+                    for (var i = 0; i < len; i++) {
+                        str += '<tr>';
+                        str += '<td>' + i + '</td>';
+                        str += '<td class="cancel-reason-name-"' + i + '>' + cancel_list_dict[i].canceled_reason_text + '</td>';
+                        str += '<td class="cancel-reason-count-"' + i + '>' + cancel_list_dict[i].reason_count + '单</td>'
+                        str += '<th class="cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>'
+                        str += '<tr>'
+                        $('.cancel-reason-types').html('').append(str)
+                    }
+
                 }
             })
         })
 
+    },
+    chartRequest:function(){
+        var that = this;
+        var requestStart = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
+        var requestEnd = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
+        var url = '/order/statistics/';
+        var data = {
+            start_time: requestStart,
+            end_time: requestEnd,
+            periods:$('.periods>li').find('button.active').val(),
+            goods_type: $('#goods_type_show').val(),
+            dimension: $('#dimension').val(),
+            region_id: $('#region_id_show').val(),
+            comment_type:$('#comment_type').val(),
+            pay_method:$('#pay_method').val()
+        };
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+                var cancel_list_date = res.data.xAxis;
+                var complete_series = res.data.complete_series;
+                var cancel_series = res.cancel_series;
+                var pending_series = res.pending_series;
+                that.chartRender(cancel_list_date,complete_series,pending_series,cancel_series)
+            })
+        })
     }
 };
-$('#charts_container_one').highcharts({
-    chart: {
-        type: 'area'
-    },
-    title: {
-        text: '订单统计'
-    },
-    subtitle: {
-        text: null
-    },
-    xAxis: {
-        categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
-        tickmarkPlacement: 'on',
-        title: {
-            enabled: false
-        }
-    },
-    yAxis: {
-        title: {
-            text: '订单汇总'
-        },
-        labels: {
-            formatter: function () {
-                return this.value + '单';
-            }
-        }
-    },
-    tooltip: {
-        split: true,
-        valueSuffix: '单',
-        backgroundColor: '#FFF',
-
-    },
-    plotOptions: {
-        area: {
-            stacking: 'normal',
-            lineColor: '#666666',
-            lineWidth: 1,
-            marker: {
-                radius: 3.5,
-                lineWidth: 1,
-                fillColor: '#fff',
-                lineColor: '#666666',
-                symbol: 'circle',
-                states: {
-                    hover: {
-                        enabled: true,
-                        radius: 3.5
-                    }
-                }
-            }
-        }
-    },
-    series: [{
-        name: '已完成',
-        data: [502, 635, 809, 947, 1402, 3634, 5268]
-    }, {
-        name: '进行中',
-        data: [106, 107, 111, 133, 221, 767, 1766]
-    }, {
-        name: '已取消',
-        data: [163, 203, 276, 408, 547, 729, 628]
-    }]
-});
 
 
 $('#goods_search_box').on('click', function (e) {
@@ -468,7 +506,7 @@ $('#goods_search_box').on('click', function (e) {
                         var result = $(this).text().split('\n');
                         $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span>')
                     }
-                })
+                });
                 $("td[data-field='goods_time']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
@@ -518,3 +556,4 @@ $('#searchBox_3').on('click', function (e) {
     setAbout.chartInit()
 });
 setAbout.chartInit();
+setAbout.chartRequest();
