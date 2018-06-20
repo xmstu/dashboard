@@ -379,17 +379,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                 <ul class="periods_1">
-                                    <li>
-                                        <button class="active" value="2" id="day_methods_1">按日</button>
-                                    </li>
-                                    <li>
-                                        <button value="3" id="week_methods_1">按周</button>
-                                    </li>
-                                    <li>
-                                        <button value="4" id="month_methods_1">按月</button>
-                                    </li>
-                                </ul>
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
                                         <label class="layui-form-label">取消类型</label>
@@ -438,70 +427,21 @@
                             <div class="chart-area-four-body-bottom">
                                 <div id="charts_container_four"></div>
                                 <div class="chart-area-body-bottom-right">
-                                    <table class="layui-table" lay-skin="line">
+                                    <table class="layui-table cancel-reason-table" lay-skin="line">
                                         <colgroup>
                                             <col width="300">
                                             <col width="300">
                                             <col width="300">
                                         </colgroup>
                                         <thead>
-                                        <tr>
-                                            <th>人物</th>
-                                            <th>民族</th>
-                                            <th>比率</th>
+                                        <tr class="thead-tr" style="color: #000;">
+                                            <th>#</th>
+                                            <th>取消原因</th>
+                                            <th>取消单数</th>
+                                            <th>所占比率</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>贤心</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>张爱玲</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Helen Keller</td>
-                                            <td>拉丁美裔</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>岳飞</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>孟子</td>
-                                            <td>华夏族（汉族）</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>孟子</td>
-                                            <td>华夏族（汉族）</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>岳飞</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>孟子</td>
-                                            <td>华夏族（汉族）</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>孟子</td>
-                                            <td>华夏族（汉族）</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>岳飞</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
+                                        <tbody  class="cancel-reason-types">
                                         </tbody>
                                     </table>
                                 </div>

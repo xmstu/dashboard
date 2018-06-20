@@ -74,7 +74,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         done: function (val, index) {
             var startTime = $('#start_date_one').val();
             var endTime = $('#end_time_one').val();
-            alert(12)
             common.dateInterval(endTime, startTime);
             if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
                 layer.msg('提示：开始时间大于了结束时间！');
@@ -218,10 +217,101 @@ layui.use(['laydate', 'form', 'table'], function () {
     });
 });
 Highcharts.setOptions({
-    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C','#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
+var setAbout = {
+    that: this,
+    chartRender: function (xAxis, cancel_list, cancel_reason_all) {
+
+    },
+    test: function () {
+        alert(1)
+    },
+    chartShow: function (dataArr, title) {
+        $('#charts_container_two').highcharts({
+            chart: {
+                renderTo: 'chart',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: title
+            },
+            plotArea: {
+                shadow: true,
+                borderWidth: true,
+                backgroundColor: true
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.point.name + '</b>: ' + Highcharts.numberFormat(this.percentage, 1) + '% (' +
+                        Highcharts.numberFormat(this.y, 0, ',') + ' 个)';
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function () {
+                            if (this.percentage > 4) return this.point.name;
+                        },
+                        color: 'white',
+                        style: {
+                            font: '13px Trebuchet MS, Verdana, sans-serif'
+                        }
+                    }
+                }
+            },
+            legend: {
+                backgroundColor: '#FFFFFF',
+                x: 0,
+                y: -30
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: dataArr
+            }]
+        });
+        chart = $('#charts_container_two').highcharts();
+    },
+    chartInit: function () {
+        var that = this;
+        var requestStart = common.timeTransform($('#start_date_one').val() + ' 00:00:00');
+        var requestEnd = common.timeTransform($('#end_time_one').val() + ' 23:59:59');
+        var url = '/order/cancel_reason';
+        var data = {
+            start_time: requestStart,
+            end_time: requestEnd,
+            goods_type: $('#cancel_reason_types').val(),
+            cancel_type: $('#cancel_reason_roles').val(),
+            region_id: $('#cancel_reason_area').val()
+        };
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+                var cancel_list = res.data.cancel_list;
+                var str = '';
+                if (cancel_list.length == 0) {
+                    str += '<span class="table-no-data">there is no data</span>';
+                    $('.cancel-reason-types').html('').append(str);
+                    that.chartShow(cancel_list, '该时间段内无数据')
+                } else if (cancel_list.length > 0) {
+                    that.chartShow(cancel_list, '取消原因统计表')
+                }
+            })
+        })
+
+    }
+};
 $('#charts_container_one').highcharts({
-     chart: {
+    chart: {
         type: 'area'
     },
     title: {
@@ -243,14 +333,14 @@ $('#charts_container_one').highcharts({
         },
         labels: {
             formatter: function () {
-                return this.value+'单';
+                return this.value + '单';
             }
         }
     },
     tooltip: {
         split: true,
         valueSuffix: '单',
-        backgroundColor:'#FFF',
+        backgroundColor: '#FFF',
 
     },
     plotOptions: {
@@ -259,15 +349,15 @@ $('#charts_container_one').highcharts({
             lineColor: '#666666',
             lineWidth: 1,
             marker: {
-                radius:3.5,
+                radius: 3.5,
                 lineWidth: 1,
-                fillColor:'#fff',
+                fillColor: '#fff',
                 lineColor: '#666666',
                 symbol: 'circle',
-                states:{
-                    hover:{
-                        enabled:true,
-                        radius:3.5
+                states: {
+                    hover: {
+                        enabled: true,
+                        radius: 3.5
                     }
                 }
             }
@@ -284,61 +374,7 @@ $('#charts_container_one').highcharts({
         data: [163, 203, 276, 408, 547, 729, 628]
     }]
 });
-$('#charts_container_two').highcharts({
-    chart: {
-        renderTo: 'chart'
-    },
-    title: {
-        text: '取消原因统计'
-    },
-    plotArea: {
-        shadow: true,
-        borderWidth: true,
-        backgroundColor: true
-    },
-    tooltip: {
-        formatter: function () {
-            return '<b>' + this.point.name + '</b>: ' + Highcharts.numberFormat(this.percentage, 1) + '% (' +
-                Highcharts.numberFormat(this.y, 0, ',') + ' 个)';
-        }
-    },
-    plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: true,
-                formatter: function () {
-                    if (this.percentage > 4) return this.point.name;
-                },
-                color: 'white',
-                style: {
-                    font: '13px Trebuchet MS, Verdana, sans-serif'
-                }
-            }
-        }
-    },
-    legend: {
-        backgroundColor: '#FFFFFF',
-        x: 0,
-        y: -30
-    },
-    credits: {
-        enabled: false
-    },
-    series: [{
-        type: 'pie',
-        name: 'Browser share',
-        data: [
-            ['装货时间不合适', 3617],
-            ['司机让我取消订单', 3436],
-            ['突发事件', 416],
-            ['运输变化有变', 200],
-            ['车型大小不合适', 1000],
-            ['其他', 5000]
-        ]
-    }]
-});
+
 
 $('#goods_search_box').on('click', function (e) {
     e.preventDefault();
@@ -477,3 +513,8 @@ $('#goods_search_box').on('click', function (e) {
         });
     })
 });
+$('#searchBox_3').on('click', function (e) {
+    e.preventDefault();
+    setAbout.chartInit()
+});
+setAbout.chartInit();

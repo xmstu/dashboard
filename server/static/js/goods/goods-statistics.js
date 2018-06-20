@@ -492,7 +492,6 @@ var dataSet = {
         layui.use('layer', function () {
             var layer = layui.layer;
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-                console.log(res);
                 var data = res.data
                 var len = res.data.xAxis.length;
                 if (len > 0 && len < 20) {
@@ -508,20 +507,32 @@ var dataSet = {
         })
     },
     chart_third_init: function () {
-        var url = 'goods/cancal/';
+        var url = '/goods/cancel/';
         var requestStartTime = common.timeTransform($('#start_date_three').val() + ' 00:00:00');
         var requestEndTime = common.timeTransform($('#end_time_three').val() + ' 23:59:59');
         var data = {
             start_time: requestStartTime,
             end_time: requestEndTime,
-            cancle_type: $('.periods_1>li').find('button.active').val(),
-            goods_type: $('#goods_type_one').val(),
-            region_id: $('#region_id_one').val(),
+            cancle_type: $('#cancel_reason_roles').val(),
+            goods_type: $('#cancel_reason_types').val(),
+            region_id: $('#cancel_reason_area').val(),
         }
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-            console.log(res.data.cancel_list)
             var all_reason = res.data.cancel_list;
             Chart_third(all_reason)
+            var cancel_list_dict = res.data.cancel_list_dict;
+            var len = cancel_list_dict.length;
+            $('.cancel-reason-types').html('')
+           for(var i =0;i<len;i++){
+                var str = '';
+                str+='<tr>'
+                str+='<td>'+i+'</td>'
+                str+='<td class="cancel-reason-name-"'+i+'>'+cancel_list_dict[i].canceled_reason_text+'单</td>';
+                str+='<td class="cancel-reason-count-"'+i+'>'+cancel_list_dict[i].reason_count+'单</td>'
+                str+='<th class="cancel-reason-percentage-"'+i+'><span class="badge">'+cancel_list_dict[i].percentage+'单</span></th>'
+                str+='<tr>'
+                $('.cancel-reason-types').append(str)
+            }
         })
     }
 }
@@ -545,7 +556,7 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
             gridLineWidth: 1
 
         }],
-        yAxis: [{ // Primary yAxis
+        yAxis: [{
             labels: {
                 format: '{value}人',
                 style: {
@@ -580,7 +591,7 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
             layout: 'vertical',
             align: 'left',
             verticalAlign: 'top',
-            x: 1200,
+            x: 1100,
             y: 0,
             floating: true,
             borderWidth: 1,
@@ -631,7 +642,6 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
             }]
     });
 }
-
 function Chart_third(dataArr) {
     $('#charts_container_four').highcharts({
         chart: {
@@ -683,7 +693,6 @@ function Chart_third(dataArr) {
         }]
     });
 }
-
 $('#goods_search_box').on('click', function (e) {
     e.preventDefault();
     var create_start_time = $('#create_start_time').val();
@@ -743,8 +752,8 @@ $('#goods_search_box').on('click', function (e) {
                 statusCode: 100000
             },
             cols: [[
-                {field: 'id', title: '货源ID', width: 60},
-                {field: 'goods_standard', title: '货物规格', width: 140}
+                  {field: 'id', title: '货源ID', width: 60},
+                  {field: 'goods_standard', title: '货物规格', width: 140}
                 , {field: 'goods_type', title: '类型', width: 120}
                 , {field: 'node_id', title: '所属网点', width: 140}
                 , {field: 'address', title: '出发地-目的地', width: 250}
