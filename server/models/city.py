@@ -153,8 +153,8 @@ class CityOrderListModel(object):
             shf_goods.loading_time_date,
             shf_goods.loading_time_period,
             -- 新版装货时间
-            shf_goods.loading_time_period_begin,
-            FROM_UNIXTIME(shf_goods.loading_time_period_begin) AS shf_goods_loading_time_period_begin,
+            shf_goods.loading_time_period_end,
+            FROM_UNIXTIME(shf_goods.loading_time_period_end) AS shf_goods_loading_time_period_end,
             -- 发货次数
             (SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) AS goods_counts
         """
