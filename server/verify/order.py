@@ -60,9 +60,38 @@ class OrderList(object):
 
     @staticmethod
     @make_decorator
-    def check_params(params, **kwargs):
+    def check_params(params):
         try:
-            pass
+            params['order_id'] = int(params.get('order_id', None) or 0)
+            params['consignor_mobile'] = int(params.get('consignor_mobile', None) or 0)
+            params['driver_mobile'] = int(params.get('driver_mobile', None) or 0)
+            params['from'] = int(params.get('from', None) or 0)
+            params['to'] = int(params.get('to', None) or 0)
+            params['order_status'] = int(params.get('order_status', None) or 0)
+            params['order_type'] = int(params.get('order_type', None) or 0)
+            params['vehicle_length'] = int(params.get('vehicle_length', None) or 0)
+            params['vehicle_type'] = int(params.get('vehicle_type', None) or 0)
+            params['node_id'] = int(params.get('node_id', None) or 0)
+            params['spec_tag'] = int(params.get('spec_tag', None) or 0)
+            params['pay_status'] = int(params.get('pay_status', None) or 0)
+            params['is_change_price'] = int(params.get('is_change_price', None) or 0)
+            params['comment_type'] = int(params.get('comment_type', None) or 0)
+            params['start_order_time'] = int(params.get('start_order_time', None) or time.time() - 86400 * 7)
+            params['end_order_time'] = int(params.get('end_order_time', None) or time.time() - 86400)
+            params['start_loading_time'] = int(params.get('start_loading_time', None) or time.time() - 86400 * 7)
+            params['end_loading_time'] = int(params.get('end_loading_time', None) or time.time() - 86400)
+
+            if params['start_order_time'] <= params['end_order_time'] < time.time():
+                pass
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+
+            if params['start_loading_time'] <= params['end_loading_time'] < time.time():
+                pass
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+
+            return Response(params=params)
         except Exception as e:
             log.error('error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
