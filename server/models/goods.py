@@ -208,7 +208,7 @@ class GoodsList(object):
             ( shf_goods.loading_time_period_begin > {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
             loading_time_date, params['load_start_time'], params['load_end_time'])
 
-        goods_count = cursor.query_one(command.format(fields="COUNT(*) as goods_count", fetch_where=fetch_where))['goods_count']
+        goods_count = cursor.query_one('SELECT COUNT(*) AS goods_count FROM shf_goods WHERE %s' % fetch_where)['goods_count']
 
         fetch_where += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
