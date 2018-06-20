@@ -73,7 +73,7 @@ class OrdersReceivedStatisticsList(object):
         if params.get('pay_method'):
             fetch_where += """ 
              AND (
-                ( {pay_method}=1 AND shb_orders.pay_status = 1) OR
+                ( {pay_method}=1 AND shb_orders.pay_status = 1 AND shb_orders.paid_offline = 0) OR
                 ( {pay_method}=2 AND shb_orders.`status` = 3 AND shb_orders.pay_status = 2 AND shf_goods.payment_method = 1) OR
                 ( {pay_method}=3 AND shb_orders.`status` = 3 AND shf_goods.payment_method = 2 AND shb_orders.paid_offline = 1)
              )
@@ -82,7 +82,7 @@ class OrdersReceivedStatisticsList(object):
         complete_sql = """
         AND ((shb_orders.`status` = 3 AND shb_orders.pay_status = 2 AND shf_goods.payment_method = 1 ) OR (shb_orders.`status` = 3 AND shf_goods.payment_method = 2 AND shb_orders.paid_offline = 1))
         """
-        pending_sql = """ AND shb_orders.`status` NOT IN (3, -1) """
+        pending_sql = """ AND shb_orders.`status` IN (1, 2) """
         cancel_sql = """ AND shb_orders.`status` = -1 """
 
         complete_order = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where + complete_sql))

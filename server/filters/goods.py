@@ -6,6 +6,7 @@ from server import log
 from server.init_regions import init_regions
 from server.meta.decorators import make_decorator
 from server.status import build_result, APIStatus, HTTPStatus, make_result
+from server.utils.date_format import get_date_aggregate
 from server.utils.extend import get_struct_data, get_xAxis
 
 
@@ -40,7 +41,7 @@ class GoodsList(object):
                 # 初次下单
                 mobile = detail['mobile']
                 if detail['shf_goods_counts'] == 1:
-                    mobile = detail['mobile'] + ',初次下单'
+                    mobile = detail['mobile'] + '\n初次下单'
 
                 # 构造运费
                 price = '货主出价:%(price_expect)s元%(price_addition)s元\n系统价:%(price_recommend)s元' % \

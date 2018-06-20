@@ -92,7 +92,7 @@ class CityOrderListFilterDecorator(object):
 
             # 新用户
             if detail['goods_counts'] <= 3:
-                detail['mobile'] = detail.get('mobile', '') + '\n(新用户)'
+                detail['mobile'] = detail.get('mobile', '') + '\n新用户'
                 new = 1
             else:
                 new = 0
