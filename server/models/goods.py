@@ -263,6 +263,7 @@ class CancelReasonList(object):
                     """.format(region_id=params['region_id'])
 
         cancel_list_dict = cursor.query(command.format(fetch_where=fetch_where))
+
         sum_count = 0
         cancel_list = []
         for i in cancel_list_dict:

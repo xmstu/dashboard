@@ -27,7 +27,7 @@ class CancelOrderReason(Resource):
 
     @staticmethod
     @doc.request_cancel_order_reason_param
-    @filters.CancelOrderReason.get_result(data=dict, params=dict)
+    @filters.CancelOrderReason.get_result(data=dict)
     @operations.CancelOrderReason.get_data(params=dict)
     @verify.CancelOrderReason.check_params(params=dict)
     def get():

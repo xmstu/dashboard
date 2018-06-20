@@ -19,7 +19,7 @@ class CancelOrderReason(object):
     @staticmethod
     @make_decorator
     def get_data(params):
-        data = CancelOrderReasonModel.get_cancel_order_reason(db.read, params)
+        data = CancelOrderReasonModel.get_cancel_order_reason(db.read_db, params)
 
         return Response(data=data)
 
