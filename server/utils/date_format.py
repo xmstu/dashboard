@@ -14,7 +14,8 @@ def get_date_aggregate(start_time, end_time, periods, data, date_field='create_t
     date_count = {}
     for count in data:
         if count[date_field]:
-            date_count[count[date_field].strftime('%Y-%m-%d')] = count.get(number_field, 0)
+            create_time = count[date_field].strftime('%Y-%m-%d') if isinstance(count[date_field], int) else count['create_time']
+            date_count[create_time] = count.get(number_field, 0)
     # 初始、截止时间段
     begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
     end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")

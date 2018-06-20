@@ -103,17 +103,18 @@ class CityOrderListFilterDecorator(object):
             else:
                 urgent = 0
 
-            # 货物类型
-            if detail['type'] == 2:
-                goods_type = '零担'
-            elif detail['haul_dist'] == 1:
+            # 货源类型
+            if detail['haul_dist'] == 1 and detail['type'] == 1:
                 goods_type = '同城'
-            elif detail['haul_dist'] == 2 and detail['goods_level'] == 2:
+            elif detail['haul_dist'] == 2 and detail['goods_level'] == 2 and detail['type'] == 1:
                 goods_type = '跨城定价'
-            elif detail['haul_dist'] == 2 and detail['goods_level'] == 2:
+            elif detail['haul_dist'] == 2 and detail['goods_level'] == 1 and detail['type'] == 1:
                 goods_type = '跨城议价'
+            elif detail['type'] == 2:
+                goods_type = '零担'
             else:
-                goods_type = ''
+                goods_type = '未知货源类型'
+
             # 货物规格
             name = detail.get('name', '')
             weight = str(int(detail['weight'] * 1000)) + '千克'\
