@@ -1,6 +1,6 @@
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.order import OrdersReceivedStatisticsList, CancelOrderReasonModel
+from server.models.order import OrdersReceivedStatisticsList, CancelOrderReasonModel, OrderListmodel
 
 
 class OrdersReceivedStatistics(object):
@@ -29,7 +29,6 @@ class OrderList(object):
     @staticmethod
     @make_decorator
     def get_data(params):
-        data = model.get_data(db.read, params)
-        if not data:
-            abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound, msg='找不到数据'))
+        data = OrderListmodel.get_order_list(db.read_db, params)
+
         return Response(data=data)

@@ -64,9 +64,9 @@ class OrdersReceivedStatisticsList(object):
             fetch_where += """ AND shb_orders.owner_id = shu_user_evaluations.user_id """
             fetch_where += """ 
             AND( 
-                ( {comment_type}=1 AND shu_user_evaluations.`level` in (1,2)) OR
+                ( {comment_type}=1 AND shu_user_evaluations.`level` in (4,5)) OR
                 ( {comment_type}=2 AND shu_user_evaluations.`level` = 3) OR
-                ( {comment_type}=3 AND shu_user_evaluations.`level` in (4,5))
+                ( {comment_type}=3 AND shu_user_evaluations.`level` in (1,2))
              ) """.format(comment_type=params['comment_type'])
 
         # 支付方式
@@ -79,10 +79,20 @@ class OrdersReceivedStatisticsList(object):
              )
              """.format(pay_method=params['pay_method'])
 
-        order_received_statistics_list = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where))
+        complete_sql = """
+        AND ((shb_orders.`status` = 3 AND shb_orders.pay_status = 2 AND shf_goods.payment_method = 1 ) OR (shb_orders.`status` = 3 AND shf_goods.payment_method = 2 AND shb_orders.paid_offline = 1))
+        """
+        pending_sql = """ AND shb_orders.`status` NOT IN (3, -1) """
+        cancel_sql = """ AND shb_orders.`status` = -1 """
+
+        complete_order = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where + complete_sql))
+        pending_order = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where + pending_sql))
+        cancel_order = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where + cancel_sql))
 
         data = {
-            'data': order_received_statistics_list
+            'complete_order': complete_order,
+            'pending_order': pending_order,
+            'cancel_order': cancel_order
         }
 
         return data
@@ -154,5 +164,23 @@ class CancelOrderReasonModel(object):
             'cancel_list': cancel_list if cancel_list else [],
             'cancel_list_dict': cancel_list_dict if cancel_list_dict else [{}]
         }
+
+        return data
+
+
+class OrderListmodel(object):
+
+    @staticmethod
+    def get_order_list(cursor, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
 
         return data
