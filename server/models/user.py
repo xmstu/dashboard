@@ -159,8 +159,12 @@ class UserList(object):
             command += 'AND shu_users.create_time >= %s AND shu_users.create_time <= %s ' % (
                 params['register_start_time'], params['register_end_time'])
 
-        # 总数
-        user_count = cursor.query_one(command % 'COUNT(*) AS count')
+        # 优化初次加载速度
+        fields_value = list(filter(lambda x: x, [params[i] for i in params]))
+        if not fields_value:
+            user_count = cursor.query_one('SELECT COUNT(*) AS count FROM shu_users WHERE shu_users.is_deleted = 0')
+        else:
+            user_count = cursor.query_one(command % 'COUNT(*) AS count')
 
         # 分页
         command += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
