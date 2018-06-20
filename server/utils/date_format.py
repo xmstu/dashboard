@@ -2,7 +2,14 @@
 import datetime, time, calendar
 
 def get_date_aggregate(start_time, end_time, periods, data, date_field='create_time', number_field='count'):
-    """日期数据聚合"""
+    """日期数据聚合
+    start_time: datetime.date类型开始日期
+    end_time: datetime.date类型结束日期
+    periods: 时间周期,2:日，3:周，4:月
+    data: {日期: 数量}字典列表
+    date_field: 日期字段名称
+    number_field： 数量字段名称
+    """
     # 结构化数据
     date_count = {}
     for count in data:

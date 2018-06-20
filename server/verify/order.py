@@ -13,7 +13,7 @@ class OrdersReceivedStatistics(object):
     @make_decorator
     def check_params(params):
         try:
-            params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
+            params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 8)
             params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
             params['periods'] = int(params.get('periods', None) or 2)
             params['goods_type'] = int(params.get('goods_type', None) or 0)
