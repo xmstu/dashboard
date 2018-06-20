@@ -86,3 +86,21 @@ class OrdersReceivedStatisticsList(object):
         }
 
         return data
+
+
+class CancelOrderReasonModel(object):
+
+    @staticmethod
+    def get_cancel_order_reason(cursor, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data

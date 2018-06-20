@@ -27,14 +27,23 @@ class CancelOrderReason(Resource):
 
     @staticmethod
     @doc.request_cancel_order_reason_param
+    @filters.CancelOrderReason.get_result(data=dict, params=dict)
+    @operations.CancelOrderReason.get_data(params=dict)
+    @verify.CancelOrderReason.check_params(params=dict)
     def get():
-        pass
+
+        resp = Response(params=get_all_arg())
+
+        return resp
 
 
 class OrderList(Resource):
 
     @staticmethod
     @doc.request_order_list_param
+    @filters.OrderList.get_result(data=dict, params=dict)
+    @operations.OrderList.get_data(params=dict)
+    @verify.OrderList.check_params(params=dict)
     def get():
         pass
 

@@ -230,8 +230,8 @@ class CancelReasonList(object):
 
         command = """
         SELECT
-            COUNT(*) as reason_count,
-            canceled_reason_text 
+            canceled_reason_text,
+            COUNT(*) as reason_count
         FROM
             shf_goods 
         WHERE
