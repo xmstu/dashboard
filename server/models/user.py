@@ -163,10 +163,7 @@ class UserList(object):
         user_count = cursor.query_one(command % 'COUNT(*) AS count')
 
         # 分页
-        command += """
-                    ORDER BY shu_user_stats.last_login_time DESC 
-                    LIMIT %s, %s
-                    """ % ((page - 1) * limit, limit)
+        command += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
         # 详情
         user_detail = cursor.query(command % fields)
 

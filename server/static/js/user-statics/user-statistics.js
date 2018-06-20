@@ -422,9 +422,12 @@ function dataInit() {
 }
 
 function chartInit(xAxis, series, interval, x_value1) {
-    Highcharts.setOptions({
+  /*  Highcharts.setOptions({
         colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
-    });
+    });*/
+  Highcharts.setOptions({
+    colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
+});
     $('#charts_container_one').highcharts({
         tooltip: {
             shared: true,

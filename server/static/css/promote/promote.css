@@ -42,3 +42,37 @@
 .layui-form-spec1 {
     width: 262px !important;
 }
+.badge {
+    display: inline-block;
+    min-width: 14px;
+    padding: 4px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: #777;
+    border-radius: 10px;
+}
+.thead-tr > th{
+    font-weight: bold;
+}
+.cancel-reason-types th,
+.cancel-reason-types td {
+    color: #000;
+}
+.cancel-reason-table {
+    border:none !important;
+    color: #000;
+}
+.table-no-data {
+    color: #bbb;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 40px;
+    width: 300%;
+    display: block;
+    text-align: center;
+}

@@ -191,7 +191,6 @@ class PromoteEffectList(object):
                     -- 贴车贴
                 GROUP BY
                     reference_id
-                ORDER BY reference_id
             """
 
             # 用户名

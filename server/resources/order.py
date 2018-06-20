@@ -17,7 +17,7 @@ class OrdersReceivedStatistics(Resource):
     @operations.OrdersReceivedStatistics.get_data(params=dict)
     @verify.OrdersReceivedStatistics.check_params(params=dict)
     def get():
-
+        """订单趋势统计"""
         resp = Response(params=get_all_arg())
 
         return resp
@@ -31,7 +31,7 @@ class CancelOrderReason(Resource):
     @operations.CancelOrderReason.get_data(params=dict)
     @verify.CancelOrderReason.check_params(params=dict)
     def get():
-
+        """取消订单原因统计"""
         resp = Response(params=get_all_arg())
 
         return resp
@@ -45,6 +45,7 @@ class OrderList(Resource):
     @operations.OrderList.get_data(params=dict)
     @verify.OrderList.check_params(params=dict)
     def get():
+        """订单列表"""
         pass
 
 

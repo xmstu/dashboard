@@ -8,14 +8,14 @@ response_success = api.response(200, '成功', api.model('response_success', {
 }))
 
 request_order_received_statistics_param = api.doc(params={
-    'start_time': '开始时间',
-    'end_time': '结束时间',
-    'periods': '按日，按周，按月',
-    'goods_type': '货源类型',
-    'dimension': '维度',
-    'region_id': '地区id',
-    'comment_type': '评价',
-    'pay_method': '支付方式'
+    'start_time': '开始日期(时间戳),默认:8天前',
+    'end_time': '结束日期(时间戳),默认:昨天',
+    'periods': '时间周期,2:日，3:周，4:月，默认:2',
+    'goods_type': '货源类型,1:同城,2:跨城,3:零担,默认:0全部',
+    'dimension': '维度,1:按数量,2：按金额,默认:1',
+    'region_id': '地区id,默认:0全部',
+    'comment_type': '评价:1:好评,2:中评,3:差评,默认:0全部',
+    'pay_method': '支付方式,1:未支付,2:线上支付,3:线下支付,默认:0全部'
 }, description='订单统计请求参数')
 
 

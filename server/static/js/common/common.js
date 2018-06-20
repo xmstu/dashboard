@@ -82,7 +82,6 @@ var common = {
                 return false
 
             }
-            console.log($('.layui-nav-tree').width());
         });
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {

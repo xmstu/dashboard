@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>货源统计</title>
+    <title>订单统计</title>
     <link rel="stylesheet" href="../static/css/base.css">
     <link rel="stylesheet" href="../static/layui/css/layui.css">
     <link rel="stylesheet" href="../static/css/common.css">
@@ -175,12 +175,12 @@
                                 </div>
                                 <button id="search_btn" style="position: relative;padding-left: 20px;"
                                         class="layui-btn"><i style=""
-                                                                              class="iconfont icon-sousuo1"></i> 搜索
+                                                             class="iconfont icon-sousuo1"></i> 搜索
                                 </button>
                             </form>
                         </div>
                         <div class="part-1-bottom">
-                            <div id="charts_container_one" ></div>
+                            <div id="charts_container_one"></div>
                         </div>
                     </div>
                     <div class="river"></div>
@@ -211,17 +211,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul>
-                                    <li>
-                                        <button>按日</button>
-                                    </li>
-                                    <li>
-                                        <button id="goods_week_methods_2">按周</button>
-                                    </li>
-                                    <li>
-                                        <button id="goods_month_methods_2">按月</button>
-                                    </li>
-                                </ul>
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
                                         <label class="layui-form-label">取消类型</label>
@@ -235,11 +224,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                  <div class="layui-form-item" style="width:252px;">
+                                <div class="layui-form-item" style="width:252px;">
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">取消角色</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                            <select id="cancel_reason_area" name="modules" lay-verify="required"
+                                            <select id="cancel_reason_roles" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="1">司机取消</option>
                                                 <option value="2">货主取消</option>
@@ -247,15 +236,17 @@
                                         </div>
                                     </div>
                                 </div>
-                                  <div class="layui-form-item">
+                                <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
                                         <label class="layui-form-label">地区选择</label>
                                         <div class="layui-input-inline" style="width: 140px">
                                             <select id="cancel_reason_area" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部地区</option>
-                                                <option value="1">同城</option>
-                                                <option value="2">跨城</option>
+                                                {% for location in locations %}
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                </option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -267,72 +258,24 @@
                                 </button>
                             </form>
                             <div class="chart-area-four-body-bottom">
-                                <div id="charts_container_two" style="width:40%;max-width: 500px;display: inline-block"></div>
+                                <div id="charts_container_two"
+                                     style="width:40%;max-width: 500px;display: inline-block"></div>
                                 <div class="chart-area-body-bottom-right">
-                                    <table class="layui-table" lay-skin="line">
+                                    <table class="layui-table cancel-reason-table" lay-skin="line">
                                         <colgroup>
                                             <col width="300">
                                             <col width="300">
                                             <col width="300">
                                         </colgroup>
                                         <thead>
-                                        <tr>
-                                            <th>人物</th>
-                                            <th>民族</th>
+                                        <tr class="thead-tr">
+                                            <th>#</th>
+                                            <th>取消类型</th>
+                                            <th>取消原因</th>
                                             <th>比率</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>贤心</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>张爱玲</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>Helen Keller</td>
-                                            <td>拉丁美裔</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>岳飞</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>孟子</td>
-                                            <td>华夏族（汉族）</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>孟子</td>
-                                            <td>华夏族（汉族）</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>岳飞</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>孟子</td>
-                                            <td>华夏族（汉族）</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>孟子</td>
-                                            <td>华夏族（汉族）</td>
-                                            <th>比率</th>
-                                        </tr>
-                                        <tr>
-                                            <td>岳飞</td>
-                                            <td>汉族</td>
-                                            <th>比率</th>
-                                        </tr>
+                                        <tbody class="cancel-reason-types">
                                         </tbody>
                                     </table>
                                 </div>
@@ -535,8 +478,8 @@
                                     <label class="layui-form-label">装货时间</label>
                                     <div class="layui-input-block" style="width: 147px;">
                                         <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="create_start_time" name="create_start_time" autocomplete="off"
-                                               lay-verify="create_start_time" class="layui-input" type="text">
+                                        <input id="load_start_time" name="load_start_time" autocomplete="off"
+                                               lay-verify="load_start_time" class="layui-input" type="text">
                                         <span class="date-tips" style="right: 68px;">请选择日期</span>
                                     </div>
                                 </div>
@@ -635,6 +578,7 @@
 <script src="../static/js/common/http.js"></script>
 <script src="../static/js/libs/jquery.address.js"></script>
 <script src="../static/js/order/order-statistics.js"></script>
+
 </body>
 </html>
 <script>
