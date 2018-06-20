@@ -265,22 +265,22 @@ layui.use(['laydate', 'form', 'table'], function () {
             statusCode: 100000
         },
         cols: [[
-            {field: 'id', title: '货源ID', width: 60},
-            {field: 'goods_standard', title: '货物规格', width: 140}
-            , {field: 'goods_type', title: '类型', width: 120}
-            , {field: 'node_id', title: '所属网点', width: 140}
-            , {field: 'address', title: '出发地-目的地', width: 250}
-            , {field: 'vehicle', title: '车型要求', width: 144}
-            , {field: 'price', title: '运费', width: 210}
-            , {field: 'mobile', title: '货主手机', width: 120}
-            , {field: 'goods_status', title: '状态', width: 109}
-            , {field: 'call_count', title: '通话数', width: 60}
-            , {field: 'goods_time', title: '时间', width: 180}
-            , {
-                field: 'from_channel', title: '操作', width: 112, templet: function (d) {
-                    return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
+          {field: 'id', title: '货源ID', width: 60},
+                {field: 'goods_standard', title: '货物规格', width: 140}
+                , {field: 'goods_type', title: '类型', width: 120}
+                , {field: 'node_id', title: '所属网点', width: 140}
+                , {field: 'address', title: '出发地-目的地', width: 250}
+                , {field: 'vehicle', title: '车型要求', width: 144}
+                , {field: 'price', title: '运费', width: 210}
+                , {field: 'mobile', title: '货主手机', width: 120}
+                , {field: 'goods_status', title: '状态', width: 109}
+                , {field: 'call_count', title: '通话数', width: 60}
+                , {field: 'goods_time', title: '时间', width: 180}
+                , {
+                    field: 'from_channel', title: '操作', width: 112, templet: function (d) {
+                        return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
+                    }
                 }
-            }
         ]],
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'});
@@ -321,11 +321,14 @@ layui.use(['laydate', 'form', 'table'], function () {
                     } else if (result[2] != '' || result[2] != undefined) {
                         $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
                     }
+                }else {
+                    $(this).html('')
                 }
             })
             $("td[data-field='mobile']").children().each(function (val) {
                 if ($(this).text().length > 12) {
-                    var result = $(this).text().split('\n');
+                    var result = $(this).text().split(',');
+                    console.log(result)
                     $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                 }
             })
@@ -527,9 +530,9 @@ var dataSet = {
                 var str = '';
                 str+='<tr>'
                 str+='<td>'+i+'</td>'
-                str+='<td class="cancel-reason-name-"'+i+'>'+cancel_list_dict[i].canceled_reason_text+'单</td>';
+                str+='<td class="cancel-reason-name-"'+i+'>'+cancel_list_dict[i].canceled_reason_text+'</td>';
                 str+='<td class="cancel-reason-count-"'+i+'>'+cancel_list_dict[i].reason_count+'单</td>'
-                str+='<th class="cancel-reason-percentage-"'+i+'><span class="badge">'+cancel_list_dict[i].percentage+'单</span></th>'
+                str+='<th class="cancel-reason-percentage-"'+i+'><span class="badge">'+cancel_list_dict[i].percentage+'</span></th>'
                 str+='<tr>'
                 $('.cancel-reason-types').append(str)
             }
@@ -559,28 +562,17 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
         yAxis: [{
             labels: {
                 format: '{value}人',
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                }
             },
             title: {
                 text: '发货人数',
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                }
             }
         }, {
             title: {
                 text: '订单统计',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
+
             },
             labels: {
                 format: '{value} 单',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
             },
             opposite: true
         }],
@@ -727,10 +719,10 @@ $('#goods_search_box').on('click', function (e) {
         is_addition: $.trim($('#is_addition').val()),
         from_province_id: $('#from_region_id').attr('provinceid') == undefined ? '' : $('#from_region_id').attr('provinceid'),
         from_city_id: $('#from_region_id').attr('cityid') == undefined ? '' : $('#from_region_id').attr('cityid'),
-        from_dist_id: $('#from_region_id').attr('districtsid') == undefined ? '' : $('#from_region_id').attr('districtsid'),
+        from_country_id: $('#from_region_id').attr('districtsid') == undefined ? '' : $('#from_region_id').attr('districtsid'),
         to_province_id: $('#to_region_id').attr('provinceid') == undefined ? '' : $('#to_region_id').attr('provinceid'),
         to_city_id: $('#to_region_id').attr('cityid') == undefined ? '' : $('#to_region_id').attr('cityid'),
-        to_dist_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
+        to_country_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
         create_start_time: create_start_time,
         create_end_time: create_end_time,
         load_start_time: load_start_time,
@@ -738,9 +730,8 @@ $('#goods_search_box').on('click', function (e) {
         page: 1,
         limit: 10
     }
-    var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_dist_id=' + data.from_dist_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_dist_id=' + data.to_dist_id +
+    var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_country_id=' + data.from_country_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id +'&goods_type='+
         data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;
-
     layui.use('table', function () {
         var table = layui.table;
         table.render({
@@ -800,12 +791,19 @@ $('#goods_search_box').on('click', function (e) {
                 })
                 $("td[data-field='mobile']").children().each(function (val) {
                     if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
+                        var result = $(this).text().split(',');
+                        console.log('1324'+result)
+                        if(result[0]!=undefined||result[0]!=''){
+                           $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
+                        }else {
+                            $(this).html('<span>' + result[0] + '</span ><br>')
+                        }
+
                     }
                 })
                 $("td[data-field='vehicle']").children().each(function (val) {
                     if ($(this).text() != '') {
+                        console.log('test'+$(this).text())
                         var result = $(this).text().split('\n');
                         if (result[0] !== '') {
                             $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0])
@@ -830,5 +828,13 @@ $('#goods_search_box').on('click', function (e) {
         });
     })
 });
+$('#searchBox').on('click',function(e){
+    e.preventDefault();
+    dataSet.charts_two_init()
+})
+$('#searchBox_3').on('click',function(e){
+    e.preventDefault();
+    dataSet.chart_third_init()
+})
 dataSet.charts_two_init();
 dataSet.chart_third_init();

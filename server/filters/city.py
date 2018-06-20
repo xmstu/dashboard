@@ -163,9 +163,9 @@ class CityOrderListFilterDecorator(object):
                 'supplier_node': supplier_node,
                 'address': '\n'.join([from_address, to_address, mileage_total]),
                 'vehicle': vehicle,
-                'price': '货主出价:%(price_expect)s元%(price_addition)s元\n系统价:%(price_recommend)s元' % {
-                    'price_expect': str(detail.get('price_expect', 0)),
-                    'price_addition': '(+%s)' % str(detail['price_addition']) if detail.get('price_addition', 0) else '+0',
+                'price': '货主出价:%(price_expect)s元%(price_addition)s\n系统价:%(price_recommend)s元' % {
+                    'price_expect': str(detail.get('price_expect', 0) + detail.get('price_addition', 0)),
+                    'price_addition': '(+%s)' % str(detail['price_addition']) if detail.get('price_addition') else '',
                     'price_recommend': str(detail.get('price_recommend', 0))
                 },
                 'mobile': detail.get('mobile', ''),
