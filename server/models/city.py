@@ -239,7 +239,7 @@ class CityOrderListModel(object):
 
         goods_counts = cursor.query_one(command % "COUNT(*) as goods_counts")
 
-        command += ' LIMIT {0}, {1} '.format((page - 1) * limit, limit)
+        command += ' ORDER BY shf_goods.id DESC LIMIT {0}, {1} '.format((page - 1) * limit, limit)
 
         goods_detail = cursor.query(command % fields)
 

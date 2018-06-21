@@ -69,7 +69,7 @@ class CityResourceBalance(object):
                     'labelLine': {'show': False}},
                 'emphasis': {'color': 'rgba(0,0,0,0)'}}
              })
-        return build_result(APIStatus.Ok, data=city_result), HTTPStatus.Ok
+        return make_result(APIStatus.Ok, data=city_result), HTTPStatus.Ok
 
 
 class CityOrderListFilterDecorator(object):
@@ -82,13 +82,13 @@ class CityOrderListFilterDecorator(object):
         result = []
         for detail in goods:
 
-            # 优先级
-            if detail['goods_counts'] <= 3 or time.time() - detail['create_time'] <= 300 or detail['price_addition'] > 0:
-                priority = '高'
-                priority_num = 1
-            else:
-                priority = '一般'
-                priority_num = 0
+            # # 优先级
+            # if detail['goods_counts'] <= 3 or time.time() - detail['create_time'] <= 300 or detail['price_addition'] > 0:
+            #     priority = '高'
+            #     priority_num = 1
+            # else:
+            #     priority = '一般'
+            #     priority_num = 0
 
             # 新用户
             if detail['goods_counts'] <= 3:
@@ -97,11 +97,11 @@ class CityOrderListFilterDecorator(object):
             else:
                 new = 0
 
-            # 紧急 now（）-发布时间 < 10分钟
-            if time.time() - detail['create_time'] <= 300:
-                urgent = 1
-            else:
-                urgent = 0
+            # # 紧急 now（）-发布时间 < 10分钟
+            # if time.time() - detail['create_time'] <= 300:
+            #     urgent = 1
+            # else:
+            #     urgent = 0
 
             # 货源类型
             if detail['haul_dist'] == 1 and detail['type'] == 1:
@@ -165,7 +165,7 @@ class CityOrderListFilterDecorator(object):
             }
             result.append({
                 'goods_id': detail.get('id', 0),
-                'priority': priority,
+                # 'priority': priority,
                 'goods_type': goods_type,
                 'content': '\n'.join([name, weight, volume]),
                 'supplier_node': supplier_node,
@@ -181,20 +181,17 @@ class CityOrderListFilterDecorator(object):
                 'goods_time': goods_time,
 
                 # 排序条件
-                'priority_num': priority_num,
+                # 'priority_num': priority_num,
                 'new': new,
-                'urgent': urgent,
-                'price_addition': int(detail['price_addition']) if detail.get('price_addition', 0) else 0,
+                # 'urgent': urgent,
+                # 'price_addition': int(detail['price_addition']) if detail.get('price_addition', 0) else 0,
                 'create_time': detail['create_time']
             })
 
         # 排序
-        # 第一层排序：优先级高→一般
-        # 第二层排序：带有“新用户“
-        # 第三层排序：now（）-发布时间 < 10分钟
-        # 第四层排序：货主等待接单中是否加过价，加价的优先
-        # 第五层排序：发布时间倒序
-        ret = sorted(result, key=itemgetter('priority_num', 'new', 'urgent', 'price_addition', 'create_time'), reverse=True)
+        # 第一层排序：带有“新用户“
+        # 第二层排序：发布时间倒序
+        ret = sorted(result, key=itemgetter('new', 'create_time'), reverse=True)
 
         data = json.loads(json.dumps(ret))
         return build_result(APIStatus.Ok, count=goods_counts, data=data), HTTPStatus.Ok
