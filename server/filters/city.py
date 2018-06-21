@@ -117,9 +117,7 @@ class CityOrderListFilterDecorator(object):
 
             # 货物规格
             name = detail.get('name', '')
-            weight = str(int(detail['weight'] * 1000)) + '千克'\
-                if detail.get('weight', 0) < 1 and detail.get('weight', 0) > 0\
-                else str(int(detail.get('weight', 0))) + '吨'
+            weight = str(int(detail['weight'] * 1000)) + '千克' if 0 < detail.get('weight', 0) < 1 else str(int(detail.get('weight', 0))) + '吨'
             volume = str(int(detail.get('volume', 0))) + '平米'
             # 网点
             supplier_node = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
@@ -130,8 +128,7 @@ class CityOrderListFilterDecorator(object):
             to_address = init_regions.to_address(detail.get('to_province_id', 0), detail.get('to_city_id', 0),
                                                   detail.get('to_county_id', 0)) + detail.get('to_address', '无详细地址')
             mileage_total = str(int(detail['mileage_total'] * 1000)) + '米'\
-                if detail.get('mileage_total', 0) < 1 and detail.get('mileage_total', 0) > 0\
-                else str(int(detail.get('mileage_total', 0))) + '千米'
+                if 0 < detail.get('mileage_total', 0) < 1 else str(int(detail.get('mileage_total', 0))) + '千米'
             # 车长、车型
             if detail['new_vehicle_type'] and detail['new_vehicle_length']:
                 # TODO 车长+特殊要求

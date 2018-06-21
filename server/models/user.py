@@ -65,6 +65,7 @@ class UserList(object):
             shu_user_profiles.from_channel,
             -- 最后登录
             FROM_UNIXTIME(shu_user_stats.last_login_time, '%Y-%m-%d') AS last_login_time,
+            shu_users.create_time as shu_users_create_time,
             FROM_UNIXTIME(shu_users.create_time, '%Y-%m-%d') AS create_time'''
 
         command = """

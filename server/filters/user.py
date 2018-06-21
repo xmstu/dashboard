@@ -26,7 +26,9 @@ class UserList(object):
             detail.pop('auth_driver')
             detail.pop('auth_company')
 
-            detail['usual_city'] = detail['usual_city'] if detail['usual_city'] else ''
+            detail['usual_city'] = detail['usual_city'] if detail['usual_city'] else '未知常驻地'
+
+        user_detail.sort(key=lambda x: -x['shu_users_create_time'])
 
         return build_result(APIStatus.Ok, count=user_list['user_count'], data=user_detail), HTTPStatus.Ok
 
