@@ -152,16 +152,28 @@ function line_chart_init(){
             text: '数量 (件)'
         }
     },
-    plotOptions: {
-        line: {
-            dataLabels: {
-                // 开启数据标签
-                enabled: true
-            },
-            // 关闭鼠标跟踪，对应的提示框、点击事件会失效
-            enableMouseTracking: true
-        }
-    },
+     plotOptions: {
+            line: {
+                stacking: 'normal',
+                // lineColor: '#666666',
+                lineWidth: 1,
+                marker: {
+                    radius: 4,
+                    lineWidth: 1,
+                    //  lineColor: '#666666',
+                    symbol: 'circle',
+                    states: {
+                        hover: {
+                            enabled: true,
+                            radius: 4
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
     series: [{
         name: '东京',
         data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
