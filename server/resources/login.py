@@ -23,13 +23,12 @@ class Login(Resource):
     @verify.LoginSetting.post(user_name=str, password=str, role=int)
     def post():
         """用户登录"""
-        payload = get_payload()
-        user_name = payload.get('user_name', '')
-        password = payload.get('password', '')
-        role = payload.get('role', 1)
+        user_name = get_arg('user_name', '')
+        password = get_arg('password', '')
+        role = get_arg_int('role', 1)
         resp = Response(user_name=user_name, password=password, role=role)
 
-        log.info('获取用户登录请求参数: [user_name: %s][password: %s]' % (resp['user_name'], resp['password']))
+        log.info('获取用户登录请求参数: [user_name: %s][password: %s][resp: %s]' % (resp['user_name'], resp['password'], resp['role']))
         return resp
 
     @staticmethod

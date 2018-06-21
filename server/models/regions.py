@@ -69,7 +69,7 @@ class RegionsModel(object):
         command = """
         SELECT id, full_short_name
         FROM shm_regions
-        WHERE `level` = 1
+        WHERE `level` = 1 AND is_deleted = 0
         """
         result = cursor.query(command)
 

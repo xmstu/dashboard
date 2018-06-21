@@ -22,19 +22,34 @@ class Login(object):
         return result if result else None
 
     @staticmethod
-    def get_user_by_user(cursor, user_name, password):
-        """外部用户登录"""
+    def get_partner_user(cursor, mobile):
+        """区镇合伙人登录"""
         command = """
-            SELECT shu_users.id,
-            shu_users.mobile,
-            shu_user_profiles.user_name,
-            shu_user_profiles.avatar_url
-            
-            FROM shu_users
-            LEFT JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
-            WHERE `mobile` = :mobile AND `password` = :password AND shu_users.is_deleted = 0
-        """
-        result = cursor.query_one(command, {'mobile': user_name, 'password': password})
+        -- 区镇合伙人
+        SELECT shd_suppliers.user_id,  shu_users.mobile, shd_supplier_areas.region_id,
+        shu_user_profiles.user_name, shu_user_profiles.avatar_url, 2 AS role
+        FROM shd_suppliers
+        INNER JOIN shu_users ON shd_suppliers.user_id = shu_users.id AND shu_users.is_deleted = 0
+        INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
+        INNER JOIN shd_supplier_areas ON shd_suppliers.id = shd_supplier_areas.supplier_id AND shd_supplier_areas.is_deleted = 0
+        WHERE shd_suppliers.is_deleted = 0
+        AND shu_users.mobile = :mobile
+        UNION
+        -- 网点管理员(可见区域同区镇合伙人)
+        SELECT node_manager.id, shd_supplier_areas.region_id, node_manager.mobile,
+        node_manager.user_name, node_manager.avatar_url, 3 AS role
+        FROM shd_suppliers
+        INNER JOIN shd_supplier_areas ON shd_suppliers.id = shd_supplier_areas.supplier_id AND shd_supplier_areas.is_deleted = 0
+        INNER JOIN (SELECT shu_users.id, shd_suppliers.user_id, shu_users.mobile, shu_user_profiles.user_name, shu_user_profiles.avatar_url
+        FROM shd_supplier_nodes
+        INNER JOIN shu_users ON shd_supplier_nodes.manager_user_id = shu_users.id AND shu_users.is_deleted = 0
+        INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
+        INNER JOIN shd_suppliers ON shd_suppliers.id = shd_supplier_nodes.supplier_id AND shd_suppliers.is_deleted = 0
+        WHERE shd_supplier_nodes.is_deleted = 0
+        AND shu_users.mobile = :mobile
+        LIMIT 1) AS node_manager ON shd_suppliers.user_id = node_manager.user_id
+        WHERE shd_suppliers.is_deleted = 0"""
+        result = cursor.query(command, {'mobile': mobile})
 
-        log.info('获取外部登录用户sql参数: [user_name: %s][password: %s]' % ( user_name, password))
+        log.info('获取区镇合伙人登录sql参数: [mobile: %s]' % (mobile))
         return result if result else None

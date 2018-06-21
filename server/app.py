@@ -54,7 +54,7 @@ def cors(resp):
                      'GET,PUT,POST,DELETE,HEAD')
     return resp
 
-# 异常处理
+# flask异常处理
 @app.errorhandler(HTTPStatus.NotFound)
 def page_not_found(e):
    log.warn('访问了未知路径: [error: %s]' % (e, ), exc_info=True)

@@ -10,7 +10,8 @@ from server import api
 
 request_user_login = api.doc(body=api.model('request_user_login', {
     'user_name': fields.String(description='用户名'),
-    'password': fields.String(description='密码')
+    'password': fields.String(description='密码'),
+    'role': fields.Integer(description='角色：1管理员，4城市经理')
     }, description='用户登录请求参数')
 )
 

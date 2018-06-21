@@ -26,6 +26,9 @@ class Regions(object):
     def to_town(self, town_id):
         return self.region.get(int(town_id), {'name': ''}).get('name')
 
+    def to_full_short_name(self, region_id):
+        return self.region.get(int(region_id), {'full_short_name': ''}).get('full_short_name')
+
 
 class InitRegionModel(object):
     @staticmethod
