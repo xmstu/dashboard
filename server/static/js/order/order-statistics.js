@@ -12,6 +12,7 @@ setTimeout(function () {
 
 function init() {
     $('.layui-form-item').width('250px');
+
     $('#from_region_id').address({
         offsetLeft: '0',
         level: 3,
@@ -110,118 +111,13 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         }
     });
-    table.render({
-        elem: '#LAY_table_goods',
-        even: true
-        , url: '/goods/list/',
-        response: {
-            statusName: 'status',
-            statusCode: 100000
-        },
-        cols: [[
-            {field: 'id', title: '货源ID', width: 60},
-            {field: 'goods_standard', title: '货物规格', width: 140}
-            , {field: 'goods_type', title: '类型', width: 120}
-            , {field: 'node_id', title: '所属网点', width: 140}
-            , {field: 'address', title: '出发地-目的地', width: 250}
-            , {field: 'vehicle', title: '车型要求', width: 144}
-            , {field: 'price', title: '运费', width: 210}
-            , {field: 'mobile', title: '货主手机', width: 120}
-            , {field: 'goods_status', title: '状态', width: 109}
-            , {field: 'call_count', title: '通话数', width: 60}
-            , {field: 'goods_time', title: '时间', width: 180}
-            , {
-                field: 'from_channel', title: '操作', width: 112, templet: function (d) {
-                    return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
-                }
-            }
-        ]],
-        done: function (res, curr, count) {
-            $('[data-field]>div').css({'padding': '0 6px'});
-            $('.nearby').on('click', function () {
-                layer.open({
-                    type: 1,
-                    area: ['1620px', '520px'],
-                    skin: 'layui-layer-molv',
-                    closeBtn: 1,
-                    content: $('#popup')
-                })
-            });
-            $("td[data-field='goods_standard']").children().each(function (val) {
-                if ($(this).text() != '') {
-                    var result = $(this).text().split('\n');
-                    $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span>')
-                }
-            });
-            $("td[data-field='goods_time']").children().each(function (val) {
-                if ($(this).text() != '') {
-                    var result = $(this).text().split('\n');
-                    $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
-                }
-            });
-            $("td[data-field='price']").children().each(function (val) {
-                if ($(this).text() != '') {
-                    var result = $(this).text().split('\n');
-                    $(this).html('<span>' + result[0] + '</span ></br>' + result[1] + '</span>')
-                }
-            });
-            $("td[data-field='vehicle']").children().each(function (val) {
-                if ($(this).text() != '') {
-                    var result = $(this).text().split('\n');
-                    if (result[0] !== '') {
-                        $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0])
-                    } else if (result[1] != '' || result[1] != undefined) {
-                        $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1])
-                    } else if (result[2] != '' || result[2] != undefined) {
-                        $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
-                    }
-                }
-            });
-            $("td[data-field='mobile']").children().each(function (val) {
-                if ($(this).text().length > 12) {
-                    var result = $(this).text().split('\n');
-                    $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
-                }
-            });
-            $("td[data-field='address']").children().each(function (val) {
-                if ($(this).text() != '') {
-                    var result = $(this).text().split('\n');
-                    $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
-                }
-            })
-        }
-        , id: 'goods_reload'
-        , page: true
-    });
-    var $ = layui.$, active = {
-        reload: function () {
-            var demoReload = $('#demoReload');
-
-            //执行重载
-            table.reload('goods_reload', {
-                page: {
-                    curr: 1 //重新从第 1 页开始
-                }
-                , where: {
-                    key: {
-                        id: demoReload.val()
-                    }
-                }
-            });
-        }
-    };
-    $('#goods_search_box').on('click', function (e) {
-        e.preventDefault();
-        var type = $(this).data('type');
-        active[type] ? active[type].call(this) : '';
-    });
 });
 Highcharts.setOptions({
     colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
 var setAbout = {
     that: this,
-    chartRender: function (xAxis, complete_series, pending_series,cancel_series) {
+    chartRender: function (xAxis, complete_series, pending_series, cancel_series) {
         $('#charts_container_one').highcharts({
             chart: {
                 type: 'area'
@@ -263,7 +159,6 @@ var setAbout = {
                     marker: {
                         radius: 3.5,
                         lineWidth: 1,
-                        fillColor: '#fff',
                         lineColor: '#666666',
                         symbol: 'circle',
                         states: {
@@ -374,8 +269,8 @@ var setAbout = {
                         str += '<tr>';
                         str += '<td>' + i + '</td>';
                         str += '<td class="cancel-reason-name-"' + i + '>' + cancel_list_dict[i].canceled_reason_text + '</td>';
-                        str += '<td class="cancel-reason-count-"' + i + '>' + cancel_list_dict[i].reason_count + '单</td>'
-                        str += '<th class="cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>'
+                        str += '<td class="table-order-count cancel-reason-count-"' + i + '><span>' + cancel_list_dict[i].reason_count + '单</span></td>';
+                        str += '<th class="cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>';
                         str += '<tr>'
                         $('.cancel-reason-types').html('').append(str)
                     }
@@ -385,7 +280,7 @@ var setAbout = {
         })
 
     },
-    chartRequest:function(){
+    chartRequest: function () {
         var that = this;
         var requestStart = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
         var requestEnd = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
@@ -393,22 +288,113 @@ var setAbout = {
         var data = {
             start_time: requestStart,
             end_time: requestEnd,
-            periods:$('.periods>li').find('button.active').val(),
+            periods: $('.periods>li').find('button.active').val(),
             goods_type: $('#goods_type_show').val(),
             dimension: $('#dimension').val(),
             region_id: $('#region_id_show').val(),
-            comment_type:$('#comment_type').val(),
-            pay_method:$('#pay_method').val()
+            comment_type: $('#comment_type').val(),
+            pay_method: $('#pay_method').val()
         };
         layui.use('layer', function () {
             var layer = layui.layer;
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var cancel_list_date = res.data.xAxis;
                 var complete_series = res.data.complete_series;
-                var cancel_series = res.cancel_series;
-                var pending_series = res.pending_series;
-                that.chartRender(cancel_list_date,complete_series,pending_series,cancel_series)
+                var cancel_series = res.data.cancel_series;
+                var pending_series = res.data.pending_series;
+                that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series)
             })
+        })
+    },
+    tableRender: function (url) {
+        layui.use('table', function () {
+            var table = layui.table;
+            table.render({
+                elem: '#LAY_table_goods',
+                even: true
+                , url: url,
+                response: {
+                    statusName: 'status',
+                    statusCode: 100000
+                },
+                text:'接口还没做',
+                cols: [[
+                    {field: 'id', title: '订单ID', width: 60},
+                    {field: 'goods_standard', title: '货物规格', width: 140}
+                    , {field: 'goods_type', title: '类型', width: 120}
+                    , {field: 'node_id', title: '所属网点', width: 140}
+                    , {field: 'address', title: '出发地-目的地', width: 250}
+                    , {field: 'vehicle', title: '车型要求', width: 144}
+                    , {field: 'price', title: '运费', width: 210}
+                    , {field: 'mobile', title: '货主手机', width: 120}
+                    , {field: 'goods_status', title: '状态', width: 109}
+                    , {field: 'call_count', title: '通话数', width: 60}
+                    , {field: 'goods_time', title: '时间', width: 180}
+                    , {
+                        field: 'from_channel', title: '操作', width: 112, templet: function (d) {
+                            return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
+                        }
+                    }
+                ]],
+                done: function (res, curr, count) {
+                    $('[data-field]>div').css({'padding': '0 6px'});
+                    $('.nearby').on('click', function () {
+                        layer.open({
+                            type: 1,
+                            area: ['1620px', '520px'],
+                            skin: 'layui-layer-molv',
+                            closeBtn: 1,
+                            content: $('#popup')
+                        })
+                    });
+                    $("td[data-field='goods_standard']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span>')
+                        }
+                    });
+                    $("td[data-field='goods_time']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
+                        }
+                    })
+                    $("td[data-field='price']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            $(this).html('<span>' + result[0] + '</span >')
+                        }
+                    })
+                    $("td[data-field='mobile']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
+                        }
+                    })
+                    $("td[data-field='vehicle']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            if (result[0] !== '') {
+                                $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0])
+                            } else if (result[1] != '' || result[1] != undefined) {
+                                $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1])
+                            } else if (result[2] != '' || result[2] != undefined) {
+                                $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
+                            }
+
+                        }
+                    })
+
+                    $("td[data-field='address']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
+                        }
+                    })
+                }
+                , id: 'goods_reload'
+                , page: true
+            });
         })
     }
 };
@@ -458,98 +444,12 @@ $('#goods_search_box').on('click', function (e) {
         load_end_time: load_end_time,//23
         page: 1,
         limit: 10
-    }
-    var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_dist_id=' + data.from_dist_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_dist_id=' + data.to_dist_id +
-        data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;
+    };
+ /*   var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_dist_id=' + data.from_dist_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_dist_id=' + data.to_dist_id +
+        data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;*/
+ var url = '../static/js/user-statics/test.json';
+setAbout.tableRender(url)
 
-    layui.use('table', function () {
-        var table = layui.table;
-        table.render({
-            elem: '#LAY_table_goods',
-            even: true
-            , url: url,
-            response: {
-                statusName: 'status',
-                statusCode: 100000
-            },
-            cols: [[
-                {field: 'id', title: '货源ID', width: 60},
-                {field: 'goods_standard', title: '货物规格', width: 140}
-                , {field: 'goods_type', title: '类型', width: 120}
-                , {field: 'node_id', title: '所属网点', width: 140}
-                , {field: 'address', title: '出发地-目的地', width: 250}
-                , {field: 'vehicle', title: '车型要求', width: 144}
-                , {field: 'price', title: '运费', width: 210}
-                , {field: 'mobile', title: '货主手机', width: 120}
-                , {field: 'goods_status', title: '状态', width: 109}
-                , {field: 'call_count', title: '通话数', width: 60}
-                , {field: 'goods_time', title: '时间', width: 180}
-                , {
-                    field: 'from_channel', title: '操作', width: 112, templet: function (d) {
-                        return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
-                    }
-                }
-            ]],
-            done: function (res, curr, count) {
-                $('[data-field]>div').css({'padding': '0 6px'});
-                $('.nearby').on('click', function () {
-                    layer.open({
-                        type: 1,
-                        area: ['1620px', '520px'],
-                        skin: 'layui-layer-molv',
-                        closeBtn: 1,
-                        content: $('#popup')
-                    })
-                });
-                $("td[data-field='goods_standard']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span>')
-                    }
-                });
-                $("td[data-field='goods_time']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
-                    }
-                })
-                $("td[data-field='price']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        $(this).html('<span>' + result[0] + '</span >')
-                    }
-                })
-                $("td[data-field='mobile']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
-                    }
-                })
-                $("td[data-field='vehicle']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        if (result[0] !== '') {
-                            $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0])
-                        } else if (result[1] != '' || result[1] != undefined) {
-                            $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1])
-                        } else if (result[2] != '' || result[2] != undefined) {
-                            $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
-                        }
-
-                    }
-                })
-
-                $("td[data-field='address']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
-                    }
-                })
-            }
-            , id: 'goods_reload'
-            , page: true
-        });
-    })
 });
 $('#searchBox_3').on('click', function (e) {
     e.preventDefault();
@@ -557,3 +457,4 @@ $('#searchBox_3').on('click', function (e) {
 });
 setAbout.chartInit();
 setAbout.chartRequest();
+setAbout.tableRender('../static/js/user-statics/test.json');

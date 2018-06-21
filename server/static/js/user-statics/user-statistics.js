@@ -162,6 +162,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             statusCode: 100000
         },
         done: function (res, curr, count) {
+            layer.closeAll('loading')
             $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
@@ -403,7 +404,7 @@ function dataInit() {
         is_auth: $("#is_auth").val()
     };
     var url = '/user/statistic/'
-    http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+    http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
         if (res.status == 100000) {
             var len = res.data.xAxis.length;
             var X_data = res.data.xAxis;
@@ -420,7 +421,9 @@ function dataInit() {
         }
     })
 }
-
+Highcharts.setOptions({
+    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+});
 function chartInit(xAxis, series, interval, x_value1) {
     $('#charts_container_one').highcharts({
         tooltip: {
@@ -431,17 +434,7 @@ function chartInit(xAxis, series, interval, x_value1) {
             }, {
                 width: 1,
                 color: '#ccc'
-            }],
-            plotOptions: {
-                spline: {
-                    marker: {
-                        radius: 4,
-                        lineColor: '#666666',
-                        lineWidth: 1,
-                        symbol: 'triangle'
-                    }
-                }
-            }
+            }]
         },
         chart: {
             zoomType: 'xy'
@@ -499,9 +492,29 @@ function chartInit(xAxis, series, interval, x_value1) {
         plotOptions: {
             line: {
                 dataLabels: {
-                    enabled: false
+                    enabled: true
+                }
+            },
+             series: {
+                states: {
+                    hover: {
+                        enabled: true
+                    }
                 }
             }
+            , marker: {
+                    radius: 3.5,
+                    lineWidth: 1,
+                    //  lineColor: '#666666',
+                    symbol: 'circle',
+
+                    states: {
+                        hover: {
+                            enabled: true,
+                            radius: 3.5
+                        }
+                    }
+                },
         },
         series: [{
             name: '人数',
@@ -509,10 +522,7 @@ function chartInit(xAxis, series, interval, x_value1) {
             tooltip: {
                 valueSuffix: '人'
             },
-            data: series,
-             marker: {
-                    symbol: 'diamond'////曲线点类型："circle", "square", "diamond", "triangle","triangle-down"，默认是"circle"
-             }
+            data: series
         }]
     });
 }

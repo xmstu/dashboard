@@ -20,7 +20,7 @@ http.ajax.get = function (async, cache, url, data, contentType, callback) {
         contentType: contentType,
         dataType: 'json',
         beforeSend: function () {
-           layer.load(0, {shade:false,offset: ['55%', '50%']});
+            layer.load(0, {shade: false, offset: ['55%', '50%']});
         },
         complete: function (response) {
             if (response.status == 400) {
@@ -55,6 +55,19 @@ http.ajax.get_no_loading = function (async, cache, url, data, contentType, callb
         data: data,
         contentType: contentType,
         dataType: 'json',
+        complete: function (response) {
+            if (response.status == 400) {
+                layer.msg('请检查您输入的的数据');
+                return false;
+            }
+            if (response.status == 500) {
+                layer.msg('服务器内部错误！');
+                return false;
+            } else {
+                layer.closeAll('loading')
+            }
+
+        },
         success: function (result) {
             if (typeof callback == 'function') {
                 callback(result);
@@ -77,7 +90,7 @@ http.ajax.post = function (async, cache, url, data, contentType, callback) {
         contentType: contentType,
         dataType: 'json',
         beforeSend: function () {
-            layer.load(0, {shade:false,offset: ['55%', '50%']});
+            layer.load(0, {shade: false, offset: ['55%', '50%']});
         },
         complete: function (response) {
             if (response.status == 400) {

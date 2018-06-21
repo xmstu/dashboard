@@ -255,7 +255,6 @@ var common = {
         var date2 = new Date(num2.replace(/-/g, "/"));
         var days = date1.getTime() - date2.getTime();
         var time = parseInt(days / (1000 * 60 * 60 * 24));
-        console.log(time)
         if (time < 7) {
             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
@@ -392,7 +391,6 @@ var common = {
         lis.on('click', function (e) {
             e.preventDefault();
             $(this).find('button').addClass('active').parent('li').siblings('li').find('button').removeClass('active')
-            console.log($(this).find('button.active').val())
         })
     },
     periods_val: function (val) {

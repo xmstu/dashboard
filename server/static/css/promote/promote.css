@@ -56,6 +56,9 @@
     background-color: #777;
     border-radius: 10px;
 }
+.thead-tr {
+    border-bottom: 2px solid #ccc;
+}
 .thead-tr > th{
     font-weight: bold;
 }
@@ -75,4 +78,10 @@
     width: 300%;
     display: block;
     text-align: center;
+}
+.table-order-count > span {
+    background-color: #d9534f;
+    padding: 2px 6px;
+    color: #fff;
+    border-radius: 2px;
 }
