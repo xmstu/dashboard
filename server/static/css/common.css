@@ -495,7 +495,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 }
 
 .main-content-right {
-    padding: 12px;
+    padding: 6px;
     height: auto;
     margin-left: 162px;
     margin-top: 66px;
@@ -504,13 +504,12 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     min-width: 1430px;
     position: relative;
 }
-
 .main-content-right::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    border-width: 0 24px 24px 0;
+    border-width: 0 15px 15px 0;
     border-style: solid;
     border-color: #ffffff rgba(0, 0, 0, 0.1);
     -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 0, 0, 0.3);
@@ -521,24 +520,20 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     -ms-transform: rotate(-90deg);
     -o-transform: rotate(-90deg);
 }
-
 .main-content-right > div {
     height: 100%;
     background: #fff;
     box-shadow: 0 0 5px #ccc;
 }
-
 .layui-form-item {
     vertical-align: top;
     display: inline-block;
 }
-
 .layui-form ul {
     display: inline-block;
     width: 140px;
     vertical-align: top;
 }
-
 .layui-form ul > li {
     float: left;
     width: 33.33333%;

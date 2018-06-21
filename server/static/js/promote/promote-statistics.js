@@ -34,8 +34,8 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_one',
-        theme: '#1E9FFF',
-        max: String(common.getNowFormatDate()[5]),
+        theme: '#009688',
+        max: String(common.getNowFormatDate()[3]),
         calendar: true,
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
@@ -51,7 +51,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_two',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         done: function (val, index) {
@@ -70,9 +70,9 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     ;
     laydate.render({
         elem: '#date_show_three',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[5]),
+        max: String(common.getNowFormatDate()[3]),
         done: function (val, index) {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -89,7 +89,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_four',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         done: function (val, index) {

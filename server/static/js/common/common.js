@@ -248,6 +248,7 @@ var common = {
         var defaultdate = date3.getFullYear() + seperator1 + month_3 + seperator1 + date_3;
         var yesterdaydate = date4.getFullYear() + seperator1 + month_4 + seperator1 + date_4;
         var beforeYesterday = date5.getFullYear() + seperator1 + month_5 + seperator1 + date_5;
+
         return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday];
     },
     dateInterval: function (num1, num2) {

@@ -1,4 +1,5 @@
 $('.layui-table-cell').css({'height': 'auto!important'});
+$('.part-2 .layui-form-item').css({'width':"260px"})
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
@@ -11,7 +12,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     var table = layui.table;
     laydate.render({
         elem: '#date_show_one',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[4]),
         done: function (val, index) {
@@ -25,7 +26,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_two',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         done: function (val, index) {
@@ -50,14 +51,13 @@ $('#user_search_box').on('click', function (e) {
     e.preventDefault();
     var data = {
         goods_type: $.trim($('#goods_type').val()),
-        priority: $.trim($('#priority').val()),
         is_called: $.trim($('#is_called').val()),
         vehicle_length: $.trim($('#vehicle_length').val()),
         node_id: $.trim($('#node_id').val()),
         spec_tag: $.trim($('#spec_tag').val()),
         is_addition: $.trim($('#is_addition').val())
     };
-    var url = '/city/latest_orders/?goods_type=' + data.goods_type + '&priority=' + data.priority + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&node_id=' +
+    var url = '/city/latest_orders/?goods_type=' + data.goods_type  + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&node_id=' +
         data.node_id + '&spec_tag=' + data.spec_tag + '&is_addition=' + data.is_addition;
     tableInit(url);
 });
@@ -84,8 +84,7 @@ function dataInit() {
         region_id: region_id,
         goods_type: goods_types
     };
-    http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-        //console.log(res);
+    http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
         var arr = Object.keys(res.data);
         var str = '';
         for (var i = 0; i < arr.length; i++) {
@@ -94,12 +93,6 @@ function dataInit() {
         $('.part-1-bottom ul').empty();
         $('.part-1-bottom ul').append(str);
         var dataStyle = {
-            normal: {
-                label: {show: false},
-                labelLine: {show: false}
-            }
-        };
-        var dashStyle_2 = {
             normal: {
                 label: {show: false},
                 labelLine: {show: false}
@@ -132,7 +125,7 @@ function dataInit() {
                     trigger: 'item',
                     show: true,
                     formatter: "{a} <br/>{b} : {c} ({d}%)",
-                    extraCssText: 'width:160px;height:60px;background:rgba(0,0,0,.4);'
+                    extraCssText: 'width:auto;height:60px;background:rgba(0,0,0,.4);'
                 },
                 legend: {
                     orient: 'vertical',
@@ -151,7 +144,7 @@ function dataInit() {
                         saveAsImage: {show: true}
                     }
                 },
-                color: ['#fa6e7e', '#7dd4f8', '#7fcaff', '#2973a7', '#5fd779', '#56b35d'],
+                color: ['#7cb5ec', '#91e8e1', '#90ed7d', '#2973a7', '#5fd779', '#f45b5b'],
                 series: [
                     {
                         name: '货源数',
@@ -177,7 +170,9 @@ function dataInit() {
         })
     })
 }
-
+$(window).load(function(){
+    layer.closeAll('loading')
+})
 function tableInit(url) {
     layui.use(['table', 'form'], function () {
         var table = layui.table;
@@ -193,7 +188,7 @@ function tableInit(url) {
             loading: true,
             cols: [[
                 {field: 'goods_id', title: '货源ID', width: 82},
-                {field: 'priority', title: '优先级', width: 72},
+               /* {field: 'priority', title: '优先级', width: 72},*/
                 {field: 'goods_type', title: '类型', width: 60},
                 {field: 'content', title: '货物规格', width: 120},
                 {field: 'supplier_node', title: '所属网点',width:200},
@@ -230,12 +225,12 @@ function tableInit(url) {
                         content: $('#popup')
                     })
                 });
-                  $("th[data-field='goods_id']").children().each(function () {
+               /*   $("th[data-field='goods_id']").children().each(function () {
                    $(this).css({'display':'none'})
                 });
                   $("td[data-field='goods_id']").children().each(function () {
                    $(this).css({'display':'none'})
-                });
+                });*/
                 $("td[data-field='price']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();

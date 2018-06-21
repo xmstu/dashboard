@@ -43,25 +43,41 @@ layui.use(['laydate', 'form', 'table'], function () {
     var table = layui.table;
     laydate.render({
         elem: '#date_show_one',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
-        ready: function () {
-
-        },
         done: function (val, index) {
-
+            var startTime = $('#date_show_one').val();
+            var endTime = $('#date_show_two').val();
+            common.dateInterval(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
+            if ($('#date_show_one').val() == '') {
+                $('#date_show_one').next('.date-tips').show();
+            } else {
+                $('#date_show_one').next('.date-tips').hide()
+            }
         }
     });
     laydate.render({
         elem: '#date_show_two',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
-        ready: function () {
-
-        },
         done: function (val, index) {
-
+            var startTime = $('#date_show_one').val();
+            var endTime = $('#date_show_two').val();
+            common.dateInterval(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
+            if ($('#date_show_two').val() == '') {
+                $('#date_show_two').next('.date-tips').show();
+            } else {
+                $('#date_show_two').next('.date-tips').hide()
+            }
         }
     });
     laydate.render({
@@ -117,7 +133,7 @@ Highcharts.setOptions({
 });
 var setAbout = {
     that: this,
-    chartRender: function (xAxis, complete_series, pending_series, cancel_series) {
+    chartRender: function (xAxis, complete_series, pending_series, cancel_series, interval) {
         $('#charts_container_one').highcharts({
             chart: {
                 type: 'area'
@@ -129,6 +145,7 @@ var setAbout = {
                 text: null
             },
             xAxis: {
+                tickInterval: interval,
                 categories: xAxis,
                 tickmarkPlacement: 'on',
                 title: {
@@ -261,7 +278,7 @@ var setAbout = {
                 if (cancel_list.length == 0) {
                     str += '<span class="table-no-data">there is no data</span>';
                     $('.cancel-reason-types').html('').append(str);
-                    that.chartShow(cancel_list, '图标无法显示，因该日期段无数据')
+                    that.chartShow(cancel_list, '图表无法显示，因该日期段无数据')
                 } else if (cancel_list.length > 0) {
                     that.chartShow(cancel_list, '取消原因统计表');
                     $('.cancel-reason-types').html('');
@@ -299,10 +316,17 @@ var setAbout = {
             var layer = layui.layer;
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var cancel_list_date = res.data.xAxis;
+                var len = cancel_list_date.length;
                 var complete_series = res.data.complete_series;
                 var cancel_series = res.data.cancel_series;
                 var pending_series = res.data.pending_series;
-                that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series)
+                if (len > 0 && len < 20) {
+                    that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1)
+                } else if (len > 20 && len < 50) {
+                    that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2)
+                } else if (len > 50) {
+                    that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4)
+                }
             })
         })
     },
@@ -317,7 +341,7 @@ var setAbout = {
                     statusName: 'status',
                     statusCode: 100000
                 },
-                text:'接口还没做',
+                text: '接口还没做',
                 cols: [[
                     {field: 'id', title: '订单ID', width: 60},
                     {field: 'goods_standard', title: '货物规格', width: 140}
@@ -445,16 +469,20 @@ $('#goods_search_box').on('click', function (e) {
         page: 1,
         limit: 10
     };
- /*   var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_dist_id=' + data.from_dist_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_dist_id=' + data.to_dist_id +
-        data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;*/
- var url = '../static/js/user-statics/test.json';
-setAbout.tableRender(url)
+    /*   var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_dist_id=' + data.from_dist_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_dist_id=' + data.to_dist_id +
+           data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;*/
+    var url = '../static/js/user-statics/test.json';
+    setAbout.tableRender(url)
 
 });
 $('#searchBox_3').on('click', function (e) {
     e.preventDefault();
     setAbout.chartInit()
 });
+$('#search_btn').on('click', function (e) {
+    e.preventDefault();
+    setAbout.chartRequest();
+})
 setAbout.chartInit();
 setAbout.chartRequest();
 setAbout.tableRender('../static/js/user-statics/test.json');

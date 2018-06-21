@@ -327,7 +327,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             })
             $("td[data-field='mobile']").children().each(function (val) {
                 if ($(this).text().length > 12) {
-                    var result = $(this).text().split(',');
+                    var result = $(this).text().split('\n');
                     console.log(result)
                     $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                 }

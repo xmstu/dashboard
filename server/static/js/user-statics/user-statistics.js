@@ -19,9 +19,9 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     layer.load();
     laydate.render({
         elem: '#date_show_one',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[4]),
+        max: String(common.getNowFormatDate()[3]),
         ready: function () {
 
         },
@@ -37,7 +37,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_two',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         ready: function () {
@@ -59,9 +59,9 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_three',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[5]),
+        max: String(common.getNowFormatDate()[3]),
         ready: function () {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -85,7 +85,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_four',
-        theme: '#1E9FFF',
+        theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
         ready: function () {
@@ -111,8 +111,8 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_five',
-        theme: '#1E9FFF',
-        max: String(common.getNowFormatDate()[5]),
+        theme: '#009688',
+        max: String(common.getNowFormatDate()[3]),
         calendar: true,
         ready: function () {
 
@@ -133,7 +133,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
     laydate.render({
         elem: '#date_show_six',
-        theme: '#1E9FFF',
+        theme: '#009688',
         max: String(common.getNowFormatDate()[3]),
         calendar: true,
         ready: function () {
@@ -162,7 +162,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             statusCode: 100000
         },
         done: function (res, curr, count) {
-            layer.closeAll('loading')
             $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
@@ -186,6 +185,13 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                 if ($(this).text() != '') {
                     var str = $(this).text();
                     $(this).html(str + '次')
+                }
+            })
+            $("td[data-field='mobile']").children().each(function () {
+                if ($(this).text().length > 12) {
+                    var result = $(this).text().split('\n');
+                    console.log(result)
+                    $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                 }
             })
             $("td[data-field='order_completed']").children().each(function () {
@@ -243,11 +249,6 @@ $('#user_search_box').on('click', function (e) {
     var provinceid = $.trim($('#area_select').attr('provinceid'));
     var cityid = $.trim($('#area_select').attr('cityid'));
     var districtsid = $.trim($('#area_select').attr('districtsid'));
-    /*  if (provinceid != '' && districtsid == '') {
-          layer.msg('请将常驻地选择到第三级别', function () {
-          });
-          return false;
-      }*/
     if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
         layer.msg('请检查用户名号码长度!', function () {
 
@@ -390,6 +391,9 @@ $('#search_btn').on('click', function (e) {
     e.preventDefault();
     dataInit()
 })
+$(window).load(function () {
+    layer.closeAll('loading')
+})
 
 function dataInit() {
     var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
@@ -421,9 +425,11 @@ function dataInit() {
         }
     })
 }
+
 Highcharts.setOptions({
     colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
+
 function chartInit(xAxis, series, interval, x_value1) {
     $('#charts_container_one').highcharts({
         tooltip: {
@@ -495,7 +501,7 @@ function chartInit(xAxis, series, interval, x_value1) {
                     enabled: true
                 }
             },
-             series: {
+            series: {
                 states: {
                     hover: {
                         enabled: true
@@ -503,18 +509,18 @@ function chartInit(xAxis, series, interval, x_value1) {
                 }
             }
             , marker: {
-                    radius: 3.5,
-                    lineWidth: 1,
-                    //  lineColor: '#666666',
-                    symbol: 'circle',
+                radius: 3.5,
+                lineWidth: 1,
+                //  lineColor: '#666666',
+                symbol: 'circle',
 
-                    states: {
-                        hover: {
-                            enabled: true,
-                            radius: 3.5
-                        }
+                states: {
+                    hover: {
+                        enabled: true,
+                        radius: 3.5
                     }
-                },
+                }
+            },
         },
         series: [{
             name: '人数',

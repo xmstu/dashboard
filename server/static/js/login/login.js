@@ -5,8 +5,10 @@ $(document).keypress(function (e) {
     }
 });
 $('body').particleground({
-    dotColor: '#eef',
-    lineColor: '#eee'
+    dotColor: '#f5f5f5',
+    lineColor: '#f5f5f5',
+   particleRadius:7.5,
+    'Dot size':5
 });
 $('input[name="pwd"]').focus(function () {
     $(this).attr('type', 'password');
@@ -38,7 +40,7 @@ layui.use(['layer','form'], function () {
 });
 $('button[type="button"]').click(function () {
     var login = $('input[name="username"]').val();
-    var pwd = hex_md5($('input[name="password"]').val());
+    var pwd =   $('input[name="password"]').val();
     var role = $('[name=role]:checked').val() ? parseInt($('[name=role]:checked').val()) : 1;
     if (login == '') {
         layer.msg('对不起,您输入的账号不能为空!');
@@ -48,7 +50,7 @@ $('button[type="button"]').click(function () {
         var url = '/login/';
         var data = {
             user_name: login,
-            password: pwd,
+            password: hex_md5(pwd),
             role: role
         };
         data=JSON.stringify(data);
@@ -56,7 +58,6 @@ $('button[type="button"]').click(function () {
             if(res.msg=='电话号码有误'){
                 layer.msg('号码有误，请核对您的号码！')
             }else if(res.status=='100000'){
-                layer.msg('success');
                 window.location.href='/home/'
             }else{
                 layer.msg('服务器错误')
