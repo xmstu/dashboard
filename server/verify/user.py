@@ -25,7 +25,7 @@ class UserStatistic(object):
             is_auth = int(params.get('is_auth')) if params.get('is_auth') else 0
 
             if start_time and end_time:
-                if start_time < end_time < time.time():
+                if start_time <= end_time < time.time():
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))

@@ -156,7 +156,15 @@ class CityOrderListModel(object):
             shf_goods.loading_time_period_end,
             FROM_UNIXTIME(shf_goods.loading_time_period_end) AS shf_goods_loading_time_period_end,
             -- 发货次数
-            (SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) AS goods_counts
+            (SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) AS goods_counts,
+            shf_goods_vehicles.need_open_top,
+            shf_goods_vehicles.need_tail_board,
+            shf_goods_vehicles.need_flatbed,
+            shf_goods_vehicles.need_high_sided,
+            shf_goods_vehicles.need_box,
+            shf_goods_vehicles.need_steel,
+            shf_goods_vehicles.need_double_seat,
+            shf_goods_vehicles.need_remove_seat
         """
 
         command = """

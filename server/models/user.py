@@ -65,7 +65,6 @@ class UserList(object):
             shu_user_profiles.from_channel,
             -- 最后登录
             FROM_UNIXTIME(shu_user_stats.last_login_time, '%Y-%m-%d') AS last_login_time,
-            shu_users.create_time as shu_users_create_time,
             FROM_UNIXTIME(shu_users.create_time, '%Y-%m-%d') AS create_time'''
 
         command = """
@@ -167,8 +166,8 @@ class UserList(object):
         else:
             user_count = cursor.query_one(command % 'COUNT(*) AS count')
 
-        # 分页
-        command += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        # TODO 排序优化 分页
+        command += """ ORDER BY shu_users.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
         # 详情
         user_detail = cursor.query(command % fields)
 
@@ -215,7 +214,7 @@ class UserStatistic(object):
         SELECT create_time, COUNT(*) AS count
         FROM tb_inf_user
         WHERE create_time >= :start_time
-        AND create_time < :end_time
+        AND create_time <= :end_time
         -- 角色
         AND ((:role_type = 0)
         OR (:role_type = 1 AND user_type = 1)
