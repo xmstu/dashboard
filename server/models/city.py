@@ -175,7 +175,8 @@ class CityOrderListModel(object):
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
             AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
             WHERE shf_goods.expired_timestamp > UNIX_TIMESTAMP() 
-            AND (shf_goods.loading_time_period_end > UNIX_TIMESTAMP() OR UNIX_TIMESTAMP(shf_goods.loading_time_date) > UNIX_TIMESTAMP())
+            AND (shf_goods.loading_time_period_end > UNIX_TIMESTAMP() OR 
+            UNIX_TIMESTAMP( loading_time_date ) + (CASE loading_time_period WHEN 1 THEN 8 * 3600 WHEN 2 THEN 13 * 3600 WHEN 3 THEN 19 * 3600 ELSE 0 END))
             AND shf_goods.is_deleted = 0
             AND shf_goods.`status` IN (1, 2)
         """
