@@ -191,13 +191,13 @@ class CityOrderListModel(object):
         elif params['goods_type'] == 4:
             command += """ AND shf_goods.type = 2 """
 
-        # 优先级
-        if params['priority'] == 1:
-            command += ' AND ((SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) <= 3 OR UNIX_TIMESTAMP() - shf_goods.create_time <= 300 OR shf_goods.price_addition > 0) '
-        elif params['priority'] == 2:
-            command += ''' AND (SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) > 3
-            AND UNIX_TIMESTAMP() - shf_goods.create_time > 300
-            AND shf_goods.price_addition = 0 '''
+        # # 优先级
+        # if params['priority'] == 1:
+        #     command += ' AND ((SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) <= 3 OR UNIX_TIMESTAMP() - shf_goods.create_time <= 300 OR shf_goods.price_addition > 0) '
+        # elif params['priority'] == 2:
+        #     command += ''' AND (SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) > 3
+        #     AND UNIX_TIMESTAMP() - shf_goods.create_time > 300
+        #     AND shf_goods.price_addition = 0 '''
 
         # 车长
         if params['vehicle_length']:

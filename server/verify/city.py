@@ -44,7 +44,7 @@ class CityOrderList(object):
         try:
 
             goods_type = int(params.get('goods_type', None) or 0)
-            priority = int(params.get('priority', None) or 0)
+            # priority = int(params.get('priority', None) or 0)
             vehicle_length = str(params.get('vehicle_length', None) or '')
             is_called = int(params.get('is_called', None) or 0)
             is_addition = int(params.get('is_addition', None) or 0)
@@ -53,7 +53,7 @@ class CityOrderList(object):
 
             params = {
                 "goods_type": goods_type,
-                "priority": priority,
+                # "priority": priority,
                 "is_called": is_called,
                 "vehicle_length": vehicle_length,
                 "node_id": node_id,

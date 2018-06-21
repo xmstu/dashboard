@@ -142,11 +142,13 @@ class CityOrderListFilterDecorator(object):
             ]
             # 车长+特殊要求
             if detail['new_vehicle_type'] and detail['new_vehicle_length']:
-                vehicle = '\n'.join([detail['new_vehicle_type'], detail['new_vehicle_length']] + extra)
+                L = [detail['new_vehicle_type'], detail['new_vehicle_length']] + extra
+                vehicle = '\n'.join([i for i in L if i != ''])
             else:
                 vehicle_type = detail['vehicle_type'] if detail['vehicle_type'] else ''
                 vehicle_length = detail['vehicle_length'] if detail['vehicle_length'] else ''
-                vehicle = '\n'.join([vehicle_type, vehicle_length] + extra)
+                L = [vehicle_type, vehicle_length] + extra
+                vehicle = '\n'.join([i for i in L if i != ''])
             # 发布、装货时间
             if detail['loading_time_period_end']:
                 loading_time = detail['shf_goods_loading_time_period_end']
