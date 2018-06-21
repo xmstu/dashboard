@@ -134,6 +134,7 @@ class CityOrderListFilterDecorator(object):
                 else str(int(detail.get('mileage_total', 0))) + '千米'
             # 车长、车型
             if detail['new_vehicle_type'] and detail['new_vehicle_length']:
+                # TODO 车长+特殊要求
                 vehicle = '\n'.join([detail['new_vehicle_type'], detail['new_vehicle_length']])
             else:
                 vehicle_type = detail['vehicle_type'] if detail['vehicle_type'] else ''

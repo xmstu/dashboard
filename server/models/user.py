@@ -57,9 +57,9 @@ class UserList(object):
             -- 发货数
             (SELECT COUNT(*) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) AS goods_count,
             -- 订单数
-            (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shb_orders.id OR shb_orders.driver_id = shb_orders.id) AS order_count,
+            (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AS order_count,
             -- 订单完成
-            (SELECT COUNT(*) FROM shb_orders WHERE (shb_orders.owner_id = shb_orders.id OR shb_orders.driver_id = shb_orders.id) AND shb_orders.`status` = 3) AS order_completed,
+            (SELECT COUNT(*) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3) AS order_completed,
             -- 下载、注册渠道
             shu_user_profiles.download_channel,
             shu_user_profiles.from_channel,
