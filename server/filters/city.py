@@ -129,16 +129,7 @@ class CityOrderListFilterDecorator(object):
                                                   detail.get('to_county_id', 0)) + detail.get('to_address', '无详细地址')
             mileage_total = str(int(detail['mileage_total'] * 1000)) + '米'\
                 if 0 < detail.get('mileage_total', 0) < 1 else str(int(detail.get('mileage_total', 0))) + '千米'
-            # 车长、车型
-            # shf_goods_vehicles.need_open_top,
-            # shf_goods_vehicles.need_tail_board,
-            # shf_goods_vehicles.need_flatbed,
-            # shf_goods_vehicles.need_high_sided,
-            # shf_goods_vehicles.need_box,
-            # shf_goods_vehicles.need_steel,
-            # shf_goods_vehicles.need_double_seat,
-            # shf_goods_vehicles.need_remove_seat
-
+            # 特殊车型
             extra = [
                 '需要开顶' if detail['need_open_top'] == 1 else '',
                 '需要尾板' if detail['need_tail_board'] == 1 else '',
@@ -149,9 +140,8 @@ class CityOrderListFilterDecorator(object):
                 '需要双排座' if detail['need_double_seat'] == 1 else '',
                 '需要全拆座' if detail['need_remove_seat'] == 1 else ''
             ]
-
+            # 车长+特殊要求
             if detail['new_vehicle_type'] and detail['new_vehicle_length']:
-                # TODO 车长+特殊要求
                 vehicle = '\n'.join([detail['new_vehicle_type'], detail['new_vehicle_length']] + extra)
             else:
                 vehicle_type = detail['vehicle_type'] if detail['vehicle_type'] else ''

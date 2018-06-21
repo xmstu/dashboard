@@ -167,7 +167,7 @@ class UserList(object):
             user_count = cursor.query_one(command % 'COUNT(*) AS count')
 
         # TODO 排序优化 分页
-        command += """ ORDER BY shu_users.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        command += """ ORDER BY shu_users.id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
         # 详情
         user_detail = cursor.query(command % fields)
 
