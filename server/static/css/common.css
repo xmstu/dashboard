@@ -78,7 +78,8 @@ body {
 
 .header-left {
     float: left;
-    width: 162px;
+    width: 9.3%;
+    min-width: 140px;
     height: 100%;
     position: relative;
     border-right: 1px solid rgba(0, 0, 0, .1);
@@ -299,7 +300,7 @@ body {
     text-align: left;
     padding-left: 16px;
     color: #eee;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 30px;
     border-bottom: 1px solid #ccc;
 }
@@ -309,14 +310,12 @@ body {
     display: inline-block;
     margin-left: 14px;
 }
-
 .layui-nav {
     border-radius: 0;
 }
-
 /*--------------------------header-------------------------*/
 .main-content > .main-content-left {
-    width: 8.5%;
+    width: 9.3%;
     top: 66px;
     max-width: 165px;
     min-width: 140px;
@@ -324,13 +323,11 @@ body {
     -webkit-background-size: cover;
     background-size: cover;
 }
-
 .button-spec-one {
     height: 26px;
     line-height: 26px;
     padding: 0 10px;
 }
-
 .layui-nav-tree {
    padding: 0 0 800px 0;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
@@ -500,7 +497,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 .main-content-right {
     padding: 6px;
     height: auto;
-    margin-left: 8.5%;
+    margin-left: 9.3%;
     margin-top: 66px;
     background: #f1f1f1;
     padding-right: 0;
