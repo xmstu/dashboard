@@ -169,8 +169,7 @@ function dataInit() {
                 toolbox: {
                     show: true,
                     feature: {
-                        mark: {show: true},
-                        saveAsImage: {show: true}
+                        mark: {show: true}
                     }
                 },
                 color: ['skyblue', '#7dd4f8', '#60b2d3', '#2973a7', '#497080', '#5fd779', '#56b35d'],
