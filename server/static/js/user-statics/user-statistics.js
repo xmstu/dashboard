@@ -242,13 +242,14 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
 });
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
-    var beginTime = $.trim($('#date_show_three').val()+' 00:00:00');
-    var finishTime = $.trim($('#date_show_four').val()+' 23:59:59');
-    var infinteTime = $.trim($('#date_show_five').val()+' 00:00:00');
-    var overTIme = $.trim($('#date_show_six').val()+' 23:59:59');
+    var beginTime = $.trim($('#date_show_three').val());
+    var finishTime = $.trim($('#date_show_four').val());
+    var infinteTime = $.trim($('#date_show_five').val());
+    var overTIme = $.trim($('#date_show_six').val());
     var provinceid = $.trim($('#area_select').attr('provinceid'));
     var cityid = $.trim($('#area_select').attr('cityid'));
     var districtsid = $.trim($('#area_select').attr('districtsid'));
+
     if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
         layer.msg('请检查用户名号码长度!', function () {
 
@@ -275,16 +276,24 @@ $('#user_search_box').on('click', function (e) {
         return false;
     }
     if (beginTime != '') {
-        beginTime = common.timeTransform(beginTime)
+        beginTime = common.timeTransform(beginTime+' 00:00:00')
+    }else {
+         beginTime=beginTime
     }
     if (finishTime != '') {
-        finishTime = common.timeTransform(finishTime)
+        finishTime = common.timeTransform(finishTime+" 23:59:59")
+    }else {
+        finishTime=finishTime
     }
     if (infinteTime != '') {
-        infinteTime = common.timeTransform(infinteTime)
+        infinteTime = common.timeTransform(infinteTime+' 00:00:00')
+    }else {
+        infinteTime=infinteTime
     }
     if (overTIme != '') {
-        overTIme = common.timeTransform(overTIme)
+        overTIme = common.timeTransform(overTIme+' 23:59:59')
+    }else {
+        overTIme=overTIme
     }
     if (infinteTime !== '' && overTIme == '') {
         layer.msg('请选择注册日期的结束日期', function () {
@@ -370,7 +379,7 @@ $('#user_search_box').on('click', function (e) {
             , cols: [[
                 {field: 'id', title: '用户ID', sort: true, width: 86},
                 {field: 'user_name', title: '用户名', width: 106}
-                , {field: 'mobile', title: '手机号', width: 111}
+                , {field: 'mobile', title: '手机号', width: 106}
                 , {field: 'user_type', title: '注册角色', width: 111}
                 , {field: 'role_auth', title: '认证', width: 111}
                 , {field: 'goods_count', title: '发货', width: 80}

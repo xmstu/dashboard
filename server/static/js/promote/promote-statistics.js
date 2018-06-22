@@ -98,8 +98,8 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             } else {
                 $('#date_show_four').next('.date-tips').hide()
             }
-            var startTime = common.timeTransform($('#date_show_three').val())
-            var endTime = common.timeTransform($('#date_show_four').val())
+            var startTime = common.timeTransform($('#date_show_three').val());
+            var endTime = common.timeTransform($('#date_show_four').val());
             if (startTime > endTime) {
                 layer.msg('提示：开始时间大于了结束时间！');
                 return false;

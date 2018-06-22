@@ -48,6 +48,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#1E9FFF',
         calendar: true,
+         max: String(common.getNowFormatDate()[3]),
         ready: function () {
 
         },
@@ -71,7 +72,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#create_start_time',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[4]),
+        max: String(common.getNowFormatDate()[3]),
         ready: function () {
 
         },
@@ -103,7 +104,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#load_start_time',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[4]),
+        max: String(common.getNowFormatDate()[3]),
         ready: function () {
 
         },
@@ -267,7 +268,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         cols: [[
           {field: 'id', title: '货源ID', width: 60},
                 {field: 'goods_standard', title: '货物规格', width: 140}
-                , {field: 'goods_type', title: '类型', width: 120}
+                , {field: 'goods_type', title: '类型', width: 100}
                 , {field: 'node_id', title: '所属网点', width: 140}
                 , {field: 'address', title: '出发地-目的地', width: 250}
                 , {field: 'vehicle', title: '车型要求', width: 144}
@@ -275,7 +276,7 @@ layui.use(['laydate', 'form', 'table'], function () {
                 , {field: 'mobile', title: '货主手机', width: 120}
                 , {field: 'goods_status', title: '状态', width: 109}
                 , {field: 'call_count', title: '通话数', width: 60}
-                , {field: 'goods_time', title: '时间', width: 180}
+                , {field: 'goods_time', title: '时间', width: 200}
                 , {
                     field: 'from_channel', title: '操作', width: 112, templet: function (d) {
                         return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
@@ -687,21 +688,21 @@ function Chart_third(dataArr) {
 }
 $('#goods_search_box').on('click', function (e) {
     e.preventDefault();
-    var create_start_time = $('#create_start_time').val()+' 00:00:00';
-    var create_end_time = $('#create_end_time').val()+' 23:59:59';
-    var load_start_time = $('#load_start_time').val()+' 00:00:00';
-    var load_end_time = $('#load_end_time').val()+' 23:59:59';
+    var create_start_time = $('#create_start_time').val();
+    var create_end_time = $('#create_end_time').val();
+    var load_start_time = $('#load_start_time').val();
+    var load_end_time = $('#load_end_time').val();
     if (create_start_time != '') {
-        create_start_time = common.timeTransform(create_start_time)
+        create_start_time = common.timeTransform(create_start_time+' 00:00:00')
     }
     if (create_end_time != '') {
-        create_end_time = common.timeTransform(create_end_time)
+        create_end_time = common.timeTransform(create_end_time+' 23:59:59')
     }
     if (load_start_time != '') {
-        load_start_time = common.timeTransform(load_start_time)
+        load_start_time = common.timeTransform(load_start_time+'00:00:00')
     }
     if (load_end_time != '') {
-        load_end_time = common.timeTransform(load_end_time)
+        load_end_time = common.timeTransform(load_end_time+' 23:59:59')
     }
     var data = {
         goods_id: $.trim($('#goods_id').val()),
@@ -745,7 +746,7 @@ $('#goods_search_box').on('click', function (e) {
             cols: [[
                   {field: 'id', title: '货源ID', width: 60},
                   {field: 'goods_standard', title: '货物规格', width: 140}
-                , {field: 'goods_type', title: '类型', width: 120}
+                , {field: 'goods_type', title: '类型', width: 100}
                 , {field: 'node_id', title: '所属网点', width: 140}
                 , {field: 'address', title: '出发地-目的地', width: 250}
                 , {field: 'vehicle', title: '车型要求', width: 144}
@@ -753,7 +754,7 @@ $('#goods_search_box').on('click', function (e) {
                 , {field: 'mobile', title: '货主手机', width: 120}
                 , {field: 'goods_status', title: '状态', width: 109}
                 , {field: 'call_count', title: '通话数', width: 60}
-                , {field: 'goods_time', title: '时间', width: 180}
+                , {field: 'goods_time', title: '时间'}
                 , {
                     field: 'from_channel', title: '操作', width: 112, templet: function (d) {
                         return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
