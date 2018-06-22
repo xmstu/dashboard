@@ -17,7 +17,7 @@ class CityResourceBalance(object):
         # 货源车型
         result = {}
         for i in goods:
-            if i['new_vehicle'] in ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米']:
+            if i['new_vehicle'] in ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']:
                 vehicle_name = i['new_vehicle']
                 result.setdefault(vehicle_name, {})
                 if i['status'] == 1 or i['status'] == 2:
@@ -34,7 +34,7 @@ class CityResourceBalance(object):
                         result[vehicle_name]['已联系'] =result[vehicle_name] .setdefault('已联系', 0) + 1
         # 接单车型
         for i in vehicle:
-            if i['booking_vehicle'] in ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米']:
+            if i['booking_vehicle'] in ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']:
                 result.setdefault(i['booking_vehicle'], {})
                 if i['count']:
                     result[i['booking_vehicle']]['已接单车辆'] = result[i['booking_vehicle']].setdefault('已接单车辆', 0) + 1

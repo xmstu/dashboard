@@ -24,7 +24,7 @@ def broker():
     if session.get('login'):
         return redirect('/home/')
     # 区镇合伙人验证
-    token = request.headers.get('token', None)
+    token = request.args.get('token', None)
     if not token:
         abort(404)
     # token解码
