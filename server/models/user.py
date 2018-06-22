@@ -59,7 +59,7 @@ class UserList(object):
             -- 订单数
             (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AS order_count,
             -- 订单完成
-            (SELECT COUNT(*) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3) AS order_completed,
+            (SELECT COUNT(*) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) AS order_completed,
             -- 下载、注册渠道
             shu_user_profiles.download_channel,
             shu_user_profiles.from_channel,
@@ -142,9 +142,9 @@ class UserList(object):
         if params['is_used'] == 1:
             command += 'AND (SELECT COUNT(*) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) > 0 '
         elif params['is_used'] == 2:
-            command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shb_orders.id OR shb_orders.driver_id = shb_orders.id) > 0 '
+            command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) > 0 '
         elif params['is_used'] == 3:
-            command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shb_orders.id OR shb_orders.driver_id = shb_orders.id) > 0 '
+            command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) > 0 '
         # 贴车贴
         if params['is_car_sticker'] == 1:
             command += 'AND shu_user_profiles.trust_member_type = 2 AND ad_expired_time > UNIX_TIMESTAMP() '
