@@ -197,16 +197,16 @@ class GoodsList(object):
 
         # 发布时间
         if params['create_start_time'] and params['create_end_time']:
-            fetch_where += """ AND shf_goods.create_time > %s AND shf_goods.create_time < %s """ % (
-                params['create_start_time'], params['create_end_time'])
+            fetch_where += """ AND shf_goods.create_time >= %s AND shf_goods.create_time < %s """ % (
+                params['create_start_time'], params['create_end_time'] + 86400)
 
         # 装货时间
         if params['load_start_time'] and params['load_end_time']:
             loading_time_date = time.strftime('%Y-%m-%d', time.localtime(params['load_start_time']))
             fetch_where += """ AND ( shf_goods.loading_time_date = '{0}'
             OR -- 新版
-            ( shf_goods.loading_time_period_begin > {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
-            loading_time_date, params['load_start_time'], params['load_end_time'])
+            ( shf_goods.loading_time_period_begin >= {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
+            loading_time_date, params['load_start_time'], params['load_end_time'] + 86400)
 
         goods_count = cursor.query_one('SELECT COUNT(*) AS goods_count FROM shf_goods WHERE %s' % fetch_where)['goods_count']
 
@@ -244,8 +244,8 @@ class CancelReasonList(object):
 
         # 日期
         if params.get('start_time', 0) and params.get('end_time', 0):
-            fetch_where += """ AND create_time > {start_time} AND create_time < {end_time} """.format(
-                start_time=params['start_time'], end_time=params['end_time'])
+            fetch_where += """ AND create_time >= {start_time} AND create_time < {end_time} """.format(
+                start_time=params['start_time'], end_time=params['end_time'] + 86400)
 
         # 货源类型
         if params.get('goods_type'):
@@ -303,8 +303,8 @@ class GoodsDistributionTrendList(object):
 
         # 日期
         if params.get('start_time', 0) and params.get('end_time', 0):
-            fetch_where += """ AND create_time > {start_time} AND create_time < {end_time} """.format(
-                start_time=params['start_time'], end_time=params['end_time'])
+            fetch_where += """ AND create_time >= {start_time} AND create_time < {end_time} """.format(
+                start_time=params['start_time'], end_time=params['end_time'] + 86400)
 
         # 货源类型
         if params.get('goods_type'):

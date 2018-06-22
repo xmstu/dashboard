@@ -152,12 +152,12 @@ class UserList(object):
             command += 'AND shu_user_profiles.trust_member_type != 2 '
         # 最后登录
         if params['last_login_start_time'] and params['last_login_end_time']:
-            command += 'AND shu_user_stats.last_login_time >= %s AND shu_user_stats.last_login_time <= %s ' % (
-            params['last_login_start_time'], params['last_login_end_time'])
+            command += 'AND shu_user_stats.last_login_time >= %s AND shu_user_stats.last_login_time < %s ' % (
+            params['last_login_start_time'], params['last_login_end_time'] + 3600*24)
         # 注册日期
         if params['register_start_time'] and params['register_end_time']:
-            command += 'AND shu_users.create_time >= %s AND shu_users.create_time <= %s ' % (
-                params['register_start_time'], params['register_end_time'])
+            command += 'AND shu_users.create_time >= %s AND shu_users.create_time < %s ' % (
+                params['register_start_time'], params['register_end_time'] + 3600*24)
 
         # 优化初次加载速度
         fields_value = list(filter(lambda x: x, [params[i] for i in params]))
@@ -214,7 +214,7 @@ class UserStatistic(object):
         SELECT create_time, COUNT(*) AS count
         FROM tb_inf_user
         WHERE create_time >= :start_time
-        AND create_time <= :end_time
+        AND create_time < :end_time
         -- 角色
         AND ((:role_type = 0)
         OR (:role_type = 1 AND user_type = 1)
@@ -231,7 +231,7 @@ class UserStatistic(object):
 
         user_statistic = cursor.query(command, {
             'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
-            'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'])),
+            'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'] + 86400)),
             'role_type': params['role_type'],
             'is_auth': params['is_auth']
         })

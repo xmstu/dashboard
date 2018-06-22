@@ -42,7 +42,7 @@ class OrdersReceivedStatisticsList(object):
         # 时间
         if params.get('start_time') and params.get('end_time'):
             fetch_where += """ AND shb_orders.create_time >= {start_time} AND
-            shb_orders.create_time <= {end_time} """.format(start_time=params['start_time'], end_time=params['end_time'])
+            shb_orders.create_time < {end_time} """.format(start_time=params['start_time'], end_time=params['end_time'] + 86400)
 
         # 货源类型
         if params.get('goods_type'):
@@ -122,8 +122,8 @@ class CancelOrderReasonModel(object):
         if params.get('start_time') and params.get('end_time'):
             fetch_where += """
             AND shb_orders.create_time >= {start_time} 
-            AND shb_orders.create_time <= {end_time}
-            """.format(start_time=params['start_time'], end_time=params['end_time'])
+            AND shb_orders.create_time < {end_time}
+            """.format(start_time=params['start_time'], end_time=params['end_time'] + 86400)
 
         # 货源类型
         if params.get('goods_type'):

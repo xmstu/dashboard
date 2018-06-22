@@ -41,13 +41,13 @@ class GoodsList(object):
 
             # 校验参数
             if create_end_time and create_start_time:
-                if (create_start_time < create_end_time) and (create_end_time < time.time()):
+                if create_start_time <= create_end_time < time.time():
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='发布时间有误'))
 
             if load_start_time and load_end_time:
-                if (load_start_time < load_end_time) and (load_end_time < time.time()):
+                if load_start_time <= load_end_time < time.time():
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='装货时间有误'))
