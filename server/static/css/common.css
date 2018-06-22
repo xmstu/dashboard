@@ -723,10 +723,9 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 }
 
 .river {
-    height: 10px;
+    height: 4px;
     background: #f5f5f5;
     box-shadow: 0 0 3px #eee;
-    border-radius: 2px;
 }
 
 .chart-area-four-body-bottom > #charts_container_four {

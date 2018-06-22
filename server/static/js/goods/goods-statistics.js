@@ -287,7 +287,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             $('.nearby').on('click', function () {
                 layer.open({
                     type: 1,
-                    area: ['1620px', '520px'],
+                    area: ['1450px', '420px'],
                     skin: 'layui-layer-molv',
                     closeBtn: 1,
                     content: $('#popup')
@@ -687,10 +687,10 @@ function Chart_third(dataArr) {
 }
 $('#goods_search_box').on('click', function (e) {
     e.preventDefault();
-    var create_start_time = $('#create_start_time').val();
-    var create_end_time = $('#create_end_time').val();
-    var load_start_time = $('#load_start_time').val();
-    var load_end_time = $('#load_end_time').val();
+    var create_start_time = $('#create_start_time').val()+' 00:00:00';
+    var create_end_time = $('#create_end_time').val()+' 23:59:59';
+    var load_start_time = $('#load_start_time').val()+' 00:00:00';
+    var load_end_time = $('#load_end_time').val()+' 23:59:59';
     if (create_start_time != '') {
         create_start_time = common.timeTransform(create_start_time)
     }

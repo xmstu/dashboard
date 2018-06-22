@@ -10,3 +10,9 @@ from server.route.transport import *
 from server.route.map import *
 from server.route.potential import *
 from server.route.order import *
+from server.route.anormaly404 import *
+from server.route.anormaly401 import *
+from server.route.anormaly500 import *
+from server.route.anormaly403 import *
+from server.route.anormaly400 import *
+from server.route.anormaly503 import *

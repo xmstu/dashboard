@@ -242,10 +242,10 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
 });
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
-    var beginTime = $.trim($('#date_show_three').val());
-    var finishTime = $.trim($('#date_show_four').val());
-    var infinteTime = $.trim($('#date_show_five').val());
-    var overTIme = $.trim($('#date_show_six').val());
+    var beginTime = $.trim($('#date_show_three').val()+' 00:00:00');
+    var finishTime = $.trim($('#date_show_four').val()+' 23:59:59');
+    var infinteTime = $.trim($('#date_show_five').val()+' 00:00:00');
+    var overTIme = $.trim($('#date_show_six').val()+' 23:59:59');
     var provinceid = $.trim($('#area_select').attr('provinceid'));
     var cityid = $.trim($('#area_select').attr('cityid'));
     var districtsid = $.trim($('#area_select').attr('districtsid'));

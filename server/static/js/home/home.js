@@ -1,5 +1,5 @@
 $('.layui-table-cell').css({'height': 'auto!important'});
-$('.part-2 .layui-form-item').css({'width':"260px"})
+$('.part-2 .layui-form-item').css({'width': "260px"})
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
@@ -57,7 +57,7 @@ $('#user_search_box').on('click', function (e) {
         spec_tag: $.trim($('#spec_tag').val()),
         is_addition: $.trim($('#is_addition').val())
     };
-    var url = '/city/latest_orders/?goods_type=' + data.goods_type  + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&node_id=' +
+    var url = '/city/latest_orders/?goods_type=' + data.goods_type + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&node_id=' +
         data.node_id + '&spec_tag=' + data.spec_tag + '&is_addition=' + data.is_addition;
     tableInit(url);
 });
@@ -87,8 +87,9 @@ function dataInit() {
     http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
         var arr = Object.keys(res.data);
         var str = '';
+
         for (var i = 0; i < arr.length; i++) {
-            str += '<li class="charts-container" id="charts_container_' + i + '"></li>';
+            str += '<li class="charts-lists"><div class="charts-container" id="charts_container_' + i + '"></div><div class="data-list-container"></li>';
         }
         $('.part-1-bottom ul').empty();
         $('.part-1-bottom ul').append(str);
@@ -105,6 +106,8 @@ function dataInit() {
             if (arr.length >= 0) {
                 arr.length--;
             }
+            var result = '<span class="tip-list-show">'+JSON.stringify(val[0][0].value)+'</span>';
+            $('.data-list-container').append(result)
             var dom = document.getElementById('charts_container_' + arr.length + '');
             var myChart = echarts.init(dom, e_macarons);
             option = {
@@ -140,7 +143,6 @@ function dataInit() {
                     feature: {
                         mark: {show: true},
                         dataView: {show: true, readOnly: false},
-                        restore: {show: true},
                         saveAsImage: {show: true}
                     }
                 },
@@ -150,7 +152,7 @@ function dataInit() {
                         name: '货源数',
                         type: 'pie',
                         clockWise: false,
-                        radius: [100, 120],
+                        radius: [95, 110],
                         itemStyle: dataStyle,
                         data: val[0]
                     },
@@ -158,7 +160,7 @@ function dataInit() {
                         name: '车辆数',
                         type: 'pie',
                         clockWise: false,
-                        radius: [80, 100],
+                        radius: [80, 95],
                         itemStyle: dataStyle,
                         data: val[1]
                     }
@@ -170,9 +172,11 @@ function dataInit() {
         })
     })
 }
-$(window).load(function(){
+
+$(window).load(function () {
     layer.closeAll('loading')
 })
+
 function tableInit(url) {
     layui.use(['table', 'form'], function () {
         var table = layui.table;
@@ -188,10 +192,9 @@ function tableInit(url) {
             loading: true,
             cols: [[
                 {field: 'goods_id', title: '货源ID', width: 82},
-               /* {field: 'priority', title: '优先级', width: 72},*/
                 {field: 'goods_type', title: '类型', width: 60},
                 {field: 'content', title: '货物规格', width: 120},
-                {field: 'supplier_node', title: '所属网点',width:200},
+                {field: 'supplier_node', title: '所属网点', width: 200},
                 {field: 'vehicle', title: '车型要求', width: 116},
                 {field: 'price', title: '运费', width: 180},
                 {field: 'mobile', title: '货主手机', width: 110},
@@ -219,18 +222,18 @@ function tableInit(url) {
                     layer.open({
                         type: 1,
                         title: '附近的车',
-                        area: ['1400px', '520px'],
+                        area: ['1400px', '600px'],
                         skin: 'layui-layer-molv',
                         closeBtn: 1,
                         content: $('#popup')
                     })
                 });
-               /*   $("th[data-field='goods_id']").children().each(function () {
-                   $(this).css({'display':'none'})
-                });
-                  $("td[data-field='goods_id']").children().each(function () {
-                   $(this).css({'display':'none'})
-                });*/
+                /*   $("th[data-field='goods_id']").children().each(function () {
+                    $(this).css({'display':'none'})
+                 });
+                   $("td[data-field='goods_id']").children().each(function () {
+                    $(this).css({'display':'none'})
+                 });*/
                 $("td[data-field='price']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();
@@ -242,7 +245,11 @@ function tableInit(url) {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         str = str.split('\n');
-                        $(this).html(str[0] + '<br>' + str[1])
+                        if (str[1] == '' || str[1] == undefined) {
+                           $(this).html(str[0])
+                        } else {
+                             $(this).html(str[0] + '<br>' + str[1])
+                        }
                     }
                 });
                 $("td[data-field='goods_time']").children().each(function () {
@@ -285,11 +292,11 @@ function tableReset(url) {
                 statusName: 'status',
                 statusCode: 100000
             },
-            loading:true
+            loading: true
             , cols: [[ //表头
                 {field: 'name', title: '司机姓名', width: 86}
                 , {field: 'mobile', title: '手机号码', width: 110}
-                , {field: 'usual_region', title: '常驻地', width: 210}
+                , {field: 'usual_region', title: '常驻地', width: 204}
                 , {field: 'vehicle_length', title: '车长', width: 166}
                 , {field: 'vehicle_type', title: '车型', width: 110}
                 , {field: 'credit_level', title: '司机评分', width: 104}
