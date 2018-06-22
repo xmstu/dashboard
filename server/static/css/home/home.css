@@ -1,13 +1,13 @@
 .part-1-bottom > ul.clearfix > li {
     float: left;
     min-width: 420px;
-    width: 32.6%;
+    width: 32.8%;
     height: 280px;
     background: #fff;
-    margin-right: 6px;
+    margin-right: 0.2%;
     box-shadow:  0 0 6px #ddd;
     border-radius: 0;
-    padding: 8px;
+    padding-top: 4px;
     position: relative;
 }
 .part-1-bottom > ul.clearfix > li:nth-of-type(1){

@@ -149,7 +149,7 @@ var setAbout = {
                 categories: xAxis,
                 tickmarkPlacement: 'on',
                 title: {
-                    enabled: false
+                    enabled: true
                 }
             },
             yAxis: {
@@ -166,7 +166,6 @@ var setAbout = {
                 split: true,
                 valueSuffix: '单',
                 backgroundColor: '#FFF'
-
             },
             plotOptions: {
                 area: {
@@ -184,6 +183,9 @@ var setAbout = {
                                 radius: 3.5
                             }
                         }
+                    },
+                    dataLabels: {
+                        enabled: false
                     }
                 }
             },
