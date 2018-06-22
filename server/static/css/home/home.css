@@ -31,20 +31,30 @@
 .part-1-bottom > ul.clearfix > li >div {
     height: 100%;
 }
-.data-list-container {
+.data-list-container0,
+.data-list-container1,
+.data-list-container2,
+.data-list-container3,
+.data-list-container4,
+.data-list-container5,
+.data-list-container6,
+.data-list-container7,
+.data-list-container8,
+.data-list-container9,
+.data-list-container10,
+.data-list-container11,
+.data-list-container12,
+.data-list-container13{
     position: absolute;
-    right: 10px;
+    right: 16px;
     height: auto;
     width: auto;
-    top: 0;
-
+    top: 140px;
 }
-.tip-list-show{
+.tip-show-set{
     display: block;
     width: auto;
     line-height: 20px;
     font-size: 12px;
-    color: #000;
-    font-weight: bold;
-
+    color: #009688;
 }

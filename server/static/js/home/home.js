@@ -89,7 +89,9 @@ function dataInit() {
         var str = '';
 
         for (var i = 0; i < arr.length; i++) {
-            str += '<li class="charts-lists"><div class="charts-container" id="charts_container_' + i + '"></div><div class="data-list-container"></li>';
+            str += '<li class="charts-lists"><div class="charts-container" id="charts_container_' + i + '"></div><div class="data-list-container' + i + '"></li>';
+            $('.data-list-container0').append($('.tip-list-show0'))
+            console.log($('.tip-list-show0'))
         }
         $('.part-1-bottom ul').empty();
         $('.part-1-bottom ul').append(str);
@@ -99,6 +101,8 @@ function dataInit() {
                 labelLine: {show: false}
             }
         };
+        var result = "";
+        //$('.data-list-container').append(result)
         $.each(res.data, function (index, val) {
             if (val[1][2].value < 0) {
                 val[1][2].value = 0
@@ -106,8 +110,28 @@ function dataInit() {
             if (arr.length >= 0) {
                 arr.length--;
             }
-            var result = '<span class="tip-list-show">'+JSON.stringify(val[0][0].value)+'</span>';
-            $('.data-list-container').append(result)
+            var result = '<span class=" tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ':' + val[0][0].value + '</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ':' + val[0][1].value + '</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ':' + val[0][2].value + '</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ':' + val[1][0].value + '</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ':' + val[1][1].value + '</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ':' + val[1][2].value + '</span>';
+
+            if ($('#goods_types').val() == 1 || $('#goods_types').val() == 2) {
+                $('.data-list-container' + arr.length).html('');
+                $('.data-list-container' + arr.length).append(result)
+            } else if ($('#goods_types').val() == 3) {
+                var result_ano = '<span class=" tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ':' + val[0][0].value + '</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ':' + val[0][1].value + '</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ':' + val[0][2].value + '</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][3].name + ':' + val[0][3].value + '</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ':' + val[1][0].value + '</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ':' + val[1][1].value + '</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ':' + val[1][2].value + '</span>';
+                $('.data-list-container' + arr.length).html('');
+                $('.data-list-container' + arr.length).append(result_ano)
+            }
+
             var dom = document.getElementById('charts_container_' + arr.length + '');
             var myChart = echarts.init(dom, e_macarons);
             option = {
@@ -135,18 +159,17 @@ function dataInit() {
                     x: 'left',
                     y: 'top',
                     data: [
-                        '待接单', '已接单', '已取消', '已接单车辆', '待接单车辆数'
+                        '待接单', '已接单', '已取消', '待联系', '已联系', '已接单车辆', '待接单车辆数'
                     ]
                 },
                 toolbox: {
                     show: true,
                     feature: {
                         mark: {show: true},
-                        dataView: {show: true, readOnly: false},
                         saveAsImage: {show: true}
                     }
                 },
-                color: ['#7cb5ec', '#91e8e1', '#90ed7d', '#2973a7', '#5fd779', '#f45b5b'],
+                color: ['skyblue', '#7dd4f8', '#7fcaff', '#2973a7', '#fa6e7e', '#5fd779', '#56b35d'],
                 series: [
                     {
                         name: '货源数',
@@ -246,9 +269,9 @@ function tableInit(url) {
                         var str = $(this).text();
                         str = str.split('\n');
                         if (str[1] == '' || str[1] == undefined) {
-                           $(this).html(str[0])
+                            $(this).html(str[0])
                         } else {
-                             $(this).html(str[0] + '<br>' + str[1])
+                            $(this).html(str[0] + '<br>' + str[1])
                         }
                     }
                 });

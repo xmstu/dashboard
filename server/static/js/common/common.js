@@ -411,6 +411,16 @@ var common = {
         $('.laydate-btns-confirm').on('click', function () {
             layer.msg('reset')
         })
+    },
+    dataTransform:function(str){
+        if(str==''){
+            return ''
+        }else if(str==undefined){
+            return 'wu'
+        }else if(str!='') {
+            return str
+        }
+
     }
 };
 setTimeout(function () {

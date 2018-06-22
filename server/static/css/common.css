@@ -785,3 +785,4 @@ body {
 .layui-table-view .layui-table {
     width: 100%;
 }
+.layui-body{overflow-y: scroll;}
