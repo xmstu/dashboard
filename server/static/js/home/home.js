@@ -110,26 +110,30 @@ function dataInit() {
             if (arr.length >= 0) {
                 arr.length--;
             }
-            var result = '<span class=" tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ':' + val[0][0].value + '</span>';
-            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ':' + val[0][1].value + '</span>';
-            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ':' + val[0][2].value + '</span>';
-            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ':' + val[1][0].value + '</span>';
-            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ':' + val[1][1].value + '</span>';
-            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ':' + val[1][2].value + '</span>';
-
+            var result = '<span class=" tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ':' + val[0][0].value + '单</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ':' + val[0][1].value + '单</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ':' + val[0][2].value + '单</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ':' + val[1][0].value + '辆</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ':' + val[1][1].value + '辆</span>';
+            result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ':' + val[1][2].value + '辆</span>';
+            var all_count = '<p class="all_count">货源总数：<span>' + (val[0][0].value + val[0][1].value + val[0][2].value) + '单</span></p>'
+            var all_count_1 = '<p class="all_count_1">车辆总数：<span>' + (val[1][0].value + val[1][1].value) + '辆</span></p>'
             if ($('#goods_types').val() == 1 || $('#goods_types').val() == 2) {
                 $('.data-list-container' + arr.length).html('');
-                $('.data-list-container' + arr.length).append(result)
+                $('.data-list-container' + arr.length).append(all_count + all_count_1 + result)
             } else if ($('#goods_types').val() == 3) {
-                var result_ano = '<span class=" tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ':' + val[0][0].value + '</span>';
-                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ':' + val[0][1].value + '</span>';
-                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ':' + val[0][2].value + '</span>';
-                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][3].name + ':' + val[0][3].value + '</span>';
-                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ':' + val[1][0].value + '</span>';
-                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ':' + val[1][1].value + '</span>';
-                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ':' + val[1][2].value + '</span>';
+                var result_ano = '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ':' + val[0][0].value + '单</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ':' + val[0][1].value + '单</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ':' + val[0][2].value + '单</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][3].name + ':' + val[0][3].value + '单</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][4].name + ':' + val[0][4].value + '单</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ':' + val[1][0].value + '辆</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ':' + val[1][1].value + '辆</span>';
+                result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ':' + val[1][2].value + '辆</span>';
+                var all_count_ano = '<p class="all_count">货源总数：<span>' + (val[0][0].value + val[0][1].value + val[0][2].value + val[0][3].value + val[0][4].value) + '单</span></p>'
+                var all_count_ano_1 = '<p class="all_count_1">车辆总数：<span>' + (val[1][0].value + val[1][1].value) + '辆</span></p>'
                 $('.data-list-container' + arr.length).html('');
-                $('.data-list-container' + arr.length).append(result_ano)
+                $('.data-list-container' + arr.length).append(all_count_ano + all_count_ano_1 + result_ano)
             }
 
             var dom = document.getElementById('charts_container_' + arr.length + '');
@@ -251,14 +255,15 @@ function tableInit(url) {
                         content: $('#popup')
                     })
                 });
-                /*   $("th[data-field='goods_id']").children().each(function () {
-                    $(this).css({'display':'none'})
-                 });
-                   $("td[data-field='goods_id']").children().each(function () {
-                    $(this).css({'display':'none'})
-                 });*/
                 $("td[data-field='price']").children().each(function () {
                     if ($(this).text() != '') {
+                        var str = $(this).text();
+                        str = str.split('\n');
+                        $(this).html(str[0] + '<br>' + str[1])
+                    }
+                });
+                $("td[data-field='mobile']").children().each(function () {
+                    if ($(this).text().length > 14) {
                         var str = $(this).text();
                         str = str.split('\n');
                         $(this).html(str[0] + '<br>' + str[1])

@@ -104,7 +104,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#load_start_time',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
         ready: function () {
 
         },
@@ -120,7 +119,6 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#load_end_time',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
         ready: function () {
 
         },
@@ -313,7 +311,7 @@ layui.use(['laydate', 'form', 'table'], function () {
                 }
             })
             $("td[data-field='vehicle']").children().each(function (val) {
-                if ($(this).text() != '') {
+                if ($(this).text().length>1) {
                     var result = $(this).text().split('\n');
                     if (result[0] !== '') {
                         $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0])
@@ -329,7 +327,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             $("td[data-field='mobile']").children().each(function (val) {
                 if ($(this).text().length > 12) {
                     var result = $(this).text().split('\n');
-                    console.log(result)
+
                     $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                 }
             })
@@ -775,13 +773,13 @@ $('#goods_search_box').on('click', function (e) {
                 $("td[data-field='goods_standard']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
-                        $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span>')
+                        $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: #009688;"></i><span style="font-weight: 500;color: #009688;">' + result[0] + '</span><br><i style="font-weight: 500;color: #009688;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: #009688;">' + result[1] + '</span>')
                     }
                 })
                 $("td[data-field='goods_time']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
-                        $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
+                        $(this).html('<span style="">' + result[0] + '</span><br><span>' + result[1])
                     }
                 })
                 $("td[data-field='price']").children().each(function (val) {
@@ -791,20 +789,17 @@ $('#goods_search_box').on('click', function (e) {
                     }
                 })
                 $("td[data-field='mobile']").children().each(function (val) {
-                    if ($(this).text() != '') {
+                    if ($(this).text().length>13) {
                         var result = $(this).text().split(',');
-                        console.log('1324'+result)
                         if(result[0]!=undefined||result[0]!=''){
                            $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                         }else {
                             $(this).html('<span>' + result[0] + '</span ><br>')
                         }
-
                     }
                 })
                 $("td[data-field='vehicle']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        console.log('test'+$(this).text())
+                    if ($(this).text().length>1) {
                         var result = $(this).text().split('\n');
                         if (result[0] !== '') {
                             $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0])
@@ -814,6 +809,8 @@ $('#goods_search_box').on('click', function (e) {
                             $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
                         }
 
+                    }else{
+                        $(this).html('')
                     }
                 })
 
