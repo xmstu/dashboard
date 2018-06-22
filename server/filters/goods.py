@@ -1,4 +1,5 @@
 import json
+import time
 
 from flask_restful import abort
 
@@ -103,7 +104,7 @@ class GoodsList(object):
 
                 # 发布、装货时间
                 if detail['loading_time_period_begin']:
-                    loading_time = detail['loading_time_period_begin']
+                    loading_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(detail['loading_time_period_begin']))
                 else:
                     if detail['loading_time_period'] == 1:
                         loading_time = detail.get('loading_time_date', '') + '08:00:00'

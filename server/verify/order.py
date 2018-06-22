@@ -60,13 +60,17 @@ class OrderList(object):
 
     @staticmethod
     @make_decorator
-    def check_params(params):
+    def check_params(page, limit, params):
         try:
             params['order_id'] = int(params.get('order_id', None) or 0)
             params['consignor_mobile'] = int(params.get('consignor_mobile', None) or 0)
             params['driver_mobile'] = int(params.get('driver_mobile', None) or 0)
-            params['from'] = int(params.get('from', None) or 0)
-            params['to'] = int(params.get('to', None) or 0)
+            params['from_province_id'] = int(params.get('from', None) or 0)
+            params['from_city_id'] = int(params.get('from', None) or 0)
+            params['from_county_id'] = int(params.get('from', None) or 0)
+            params['to_province_id'] = int(params.get('to', None) or 0)
+            params['to_city_id'] = int(params.get('to', None) or 0)
+            params['to_county_id'] = int(params.get('to', None) or 0)
             params['order_status'] = int(params.get('order_status', None) or 0)
             params['order_type'] = int(params.get('order_type', None) or 0)
             params['vehicle_length'] = int(params.get('vehicle_length', None) or 0)
@@ -91,7 +95,7 @@ class OrderList(object):
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
-            return Response(params=params)
+            return Response(page=page, limit=limit, params=params)
         except Exception as e:
             log.error('error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))

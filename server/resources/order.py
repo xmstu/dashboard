@@ -6,8 +6,8 @@ from flask_restplus import Resource
 from server import log, verify, operations, filters, api
 import server.document.order as doc
 from server.meta.decorators import Response
-from server.utils.request import get_all_arg
-
+from server.utils.request import get_all_arg, get_arg_int
+import server.verify.general as general_verify
 
 class OrdersReceivedStatistics(Resource):
 
@@ -42,11 +42,18 @@ class OrderList(Resource):
     @staticmethod
     @doc.request_order_list_param
     @filters.OrderList.get_result(data=dict, params=dict)
-    @operations.OrderList.get_data(params=dict)
-    @verify.OrderList.check_params(params=dict)
+    @operations.OrderList.get_data(page=int, limit=int, params=dict)
+    @verify.OrderList.check_params(page=int, limit=int, params=dict)
+    @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():
         """订单列表"""
-        pass
+        resp = Response(
+            page=get_arg_int('page', 1),
+            limit=get_arg_int('limit', 10),
+            params=get_all_arg())
+
+        log.info('resp:{}'.format(resp))
+        return resp
 
 
 ns = api.namespace('order', description='订单接口')
