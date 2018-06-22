@@ -29,7 +29,7 @@ def broker():
         abort(404)
     # token解码
     payload = decode(token)
-    mobile = payload.get('exp')
+    mobile = payload.get('mobile')
     if not mobile:
         abort(404)
     # 查询用户区域
