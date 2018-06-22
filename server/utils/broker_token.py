@@ -10,7 +10,7 @@ from flask_restful import abort
 
 headers = b'{"alg":"HS256","typ":"JWT"}'
 datetime_fields = ['exp']
-secret_key = "js$0au05r)dkqw^8116d!@adm1)+yb(astop_-_fon96*62128"
+secret_key = "3xm7l#p+r-tadmg*03^js3@ke_uznn$2^^vxfkr3&wxmsz!&i0"
 
 def to_utc_timestamp(x):
     """datetime转时间戳"""
