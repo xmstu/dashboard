@@ -86,7 +86,15 @@ class GoodsList(object):
                 shf_goods.loading_time_date,
                 shf_goods.loading_time_period,
                 -- 新版装货时间
-                shf_goods.loading_time_period_begin
+                shf_goods.loading_time_period_begin,
+                shf_goods_vehicles.need_open_top,
+                shf_goods_vehicles.need_tail_board,
+                shf_goods_vehicles.need_flatbed,
+                shf_goods_vehicles.need_high_sided,
+                shf_goods_vehicles.need_box,
+                shf_goods_vehicles.need_steel,
+                shf_goods_vehicles.need_double_seat,
+                shf_goods_vehicles.need_remove_seat
         """
 
         command = """
@@ -168,8 +176,19 @@ class GoodsList(object):
             fetch_where += """ AND shf_goods_vehicles.name = '%s' """ % params['vehicle_length']
 
         # 车型要求
-        if params['vehicle_type']:
-            pass
+        if params.get('vehicle_type'):
+            fetch_where += """
+            AND (
+            ( {vehicle_type}=1 AND shf_goods_vehicles.need_open_top = 1) OR
+            ( {vehicle_type}=2 AND shf_goods_vehicles.need_tail_board = 1) OR
+            ( {vehicle_type}=3 AND shf_goods_vehicles.need_flatbed = 1) OR
+            ( {vehicle_type}=4 AND shf_goods_vehicles.need_high_sided = 1) OR
+            ( {vehicle_type}=5 AND shf_goods_vehicles.need_box = 1) OR
+            ( {vehicle_type}=6 AND shf_goods_vehicles.need_steel = 1) OR
+            ( {vehicle_type}=7 AND shf_goods_vehicles.need_double_seat = 1) OR
+            ( {vehicle_type}=8 AND shf_goods_vehicles.need_remove_seat = 1) 
+            )
+            """.format(vehicle_type=params['vehicle_type'])
 
         # 所属网点
         if params['node_id']:

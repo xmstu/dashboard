@@ -67,5 +67,7 @@ class OrderList(object):
     @make_decorator
     def get_result(data, params):
         # TODO 过滤参数
+
+
         data = json.loads(json.dumps(data, default=ExtendHandler.handler_to_float))
         return build_result(APIStatus.Ok, count=data['count'], data=data['order_list']), HTTPStatus.Ok

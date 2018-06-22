@@ -79,7 +79,7 @@ class GoodsList(object):
                         else str(int(detail.get('weight', 0))) + '吨'
                     goods_standard.append(weight)
                 if detail['volume']:
-                    volume = str(int(detail.get('volume', 0))) + '平米'
+                    volume = str(int(detail.get('volume', 0))) + 'm³'
                     goods_standard.append(volume)
 
                 goods_standard = '\n'.join(goods_standard) if goods_standard else '没有规格'

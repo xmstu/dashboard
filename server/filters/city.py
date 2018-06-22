@@ -118,7 +118,7 @@ class CityOrderListFilterDecorator(object):
             # 货物规格
             name = detail.get('name', '')
             weight = str(int(detail['weight'] * 1000)) + '千克' if 0 < detail.get('weight', 0) < 1 else str(int(detail.get('weight', 0))) + '吨'
-            volume = str(int(detail.get('volume', 0))) + '平米'
+            volume = str(int(detail.get('volume', 0))) + 'm³'
             # 网点
             supplier_node = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
                                                   detail.get('from_county_id', 0))
