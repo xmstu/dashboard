@@ -96,11 +96,26 @@ class GoodsList(object):
 
                 address = '\n'.join([from_address, to_address, mileage_total])
 
-                # 车长、车型
+                # 特殊车型
+                extra = [
+                    '需要开顶' if detail['need_open_top'] == 1 else '',
+                    '需要尾板' if detail['need_tail_board'] == 1 else '',
+                    '需要平板' if detail['need_flatbed'] == 1 else '',
+                    '需要高栏' if detail['need_high_sided'] == 1 else '',
+                    '需要箱式' if detail['need_box'] == 1 else '',
+                    '需要钢板车' if detail['need_steel'] == 1 else '',
+                    '需要双排座' if detail['need_double_seat'] == 1 else '',
+                    '需要全拆座' if detail['need_remove_seat'] == 1 else ''
+                ]
+                # 车长+特殊要求
                 if detail['new_vehicle_type'] and detail['new_vehicle_length']:
-                    vehicle = '\n'.join([detail['new_vehicle_type'], detail['new_vehicle_length']])
+                    L = [detail['new_vehicle_type'], detail['new_vehicle_length']] + extra
+                    vehicle = '\n'.join([i for i in L if i != ''])
                 else:
-                    vehicle = '\n'
+                    vehicle_type = detail['vehicle_type'] if detail['vehicle_type'] else ''
+                    vehicle_length = detail['vehicle_length'] if detail['vehicle_length'] else ''
+                    L = [vehicle_type, vehicle_length] + extra
+                    vehicle = '\n'.join([i for i in L if i != ''])
 
                 # 发布、装货时间
                 if detail['loading_time_period_begin']:

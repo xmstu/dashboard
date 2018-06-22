@@ -40,7 +40,19 @@ class GoodsList(object):
                 OR (shf_goods.loading_time_is_realtime = 0 
                 AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_begin)>0 
                 OR (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(shf_goods.loading_time_date))>0))) THEN 1 ELSE 0 END AS expire,
-                
+                -- 旧车型
+                (SELECT IF(shf_goods_vehicles.attribute_value_id = 0, '不限车型', GROUP_CONCAT(shm_dictionary_items.`name`))
+                FROM shf_goods_vehicles
+                LEFT JOIN shm_dictionary_items ON shf_goods_vehicles.attribute_value_id = shm_dictionary_items.id AND shm_dictionary_items.is_deleted = 0
+                WHERE shf_goods_vehicles.goods_id = shf_goods.id AND shf_goods_vehicles.vehicle_attribute = 1
+                AND shf_goods_vehicles.is_deleted = 0
+                ) AS vehicle_type,
+                (SELECT IF(shf_goods_vehicles.attribute_value_id = 0, '不限车长', GROUP_CONCAT(shm_dictionary_items.`name`))
+                FROM shf_goods_vehicles
+                LEFT JOIN shm_dictionary_items ON shf_goods_vehicles.attribute_value_id = shm_dictionary_items.id AND shm_dictionary_items.is_deleted = 0
+                WHERE shf_goods_vehicles.goods_id = shf_goods.id AND shf_goods_vehicles.vehicle_attribute = 2
+                AND shf_goods_vehicles.is_deleted = 0
+                ) AS vehicle_length,
                 -- 新车型
                 (
                 SELECT
@@ -227,7 +239,12 @@ class GoodsList(object):
             ( shf_goods.loading_time_period_begin >= {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
             loading_time_date, params['load_start_time'], params['load_end_time'])
 
-        goods_count = cursor.query_one('SELECT COUNT(*) AS goods_count FROM shf_goods WHERE %s' % fetch_where)['goods_count']
+        # 优化初次加载速度
+        fields_value = list(filter(lambda x: x, [params[i] for i in params]))
+        if not fields_value:
+            goods_count = cursor.query_one('SELECT COUNT(*) AS goods_count FROM shf_goods WHERE 1=1')['goods_count']
+        else:
+            goods_count = cursor.query_one(command.format(fields=" COUNT(*) AS goods_count ", fetch_where=fetch_where))['goods_count']
 
         fetch_where += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
