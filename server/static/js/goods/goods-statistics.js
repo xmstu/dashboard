@@ -297,13 +297,13 @@ layui.use(['laydate', 'form', 'table'], function () {
             $("td[data-field='goods_standard']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
-                    $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span>')
+                    $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: #009688;" title="货物名称"></i><span style="font-weight: 500;color: #009688;">' + result[0] + '</span><br><i style="font-weight: 500;color: #009688;" class="mr-4 iconfont icon-zhongliangweight9" title="货物重量"></i><span style="font-weight: 500;color: #009688;">' + result[1] + '</span>')
                 }
             })
             $("td[data-field='goods_time']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
-                    $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
+                    $(this).html('<span style="">' + result[0] + '</span><br>' + result[1])
                 }
             })
             $("td[data-field='price']").children().each(function (val) {
@@ -699,7 +699,7 @@ $('#goods_search_box').on('click', function (e) {
         create_end_time = common.timeTransform(create_end_time+' 23:59:59')
     }
     if (load_start_time != '') {
-        load_start_time = common.timeTransform(load_start_time+'00:00:00')
+        load_start_time = common.timeTransform(load_start_time+' 00:00:00')
     }
     if (load_end_time != '') {
         load_end_time = common.timeTransform(load_end_time+' 23:59:59')
