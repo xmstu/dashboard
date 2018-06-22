@@ -169,7 +169,7 @@ main {
     cursor: pointer;
     letter-spacing: 1px;
     border-radius: 4px;
-    color: #aaa;
+    color: #333;
 }
 .login-body  .layui-form-item > p input  {
       display: inline-block;
