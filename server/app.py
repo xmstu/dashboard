@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, jsonify, session, request, redirect
+from flask import Flask, jsonify, session, request, redirect, render_template
 from flask_restplus import Api
 from datetime import timedelta
 
@@ -58,32 +58,32 @@ def cors(resp):
 @app.errorhandler(HTTPStatus.NotFound)
 def page_not_found(e):
    log.warn('访问了未知路径: [error: %s]' % (e, ), exc_info=True)
-   return jsonify(make_result(APIStatus.NotFound)), 404
+   return render_template('/exception/404.html')
 
 
 @app.errorhandler(HTTPStatus.BadRequest)
 def bad_request(e):
    log.warn('错误的请求参数: [error: %s]' % (e, ), exc_info=True)
-   return jsonify(make_result(APIStatus.InternalServerError)), 400
+   return render_template('/exception/400.html')
 
 
 @app.errorhandler(HTTPStatus.InternalServerError)
 def internal_server_error(e):
     log.warn('内部服务发生异常: [error: %s]' % (e,), exc_info=True)
-    return jsonify(make_result(APIStatus.InternalServerError)), 500
+    return render_template('/exception/500.html')
 
 
 @api.errorhandler(Exception)
 def resource_internal_server_error(e):
    log.warn('服务发生异常: [error: %s]' % (e, ), exc_info=True)
-   return jsonify(make_result(APIStatus.InternalServerError)), 500
+   return render_template('/exception/500.html')
 
 
 @api.errorhandler(ValueError)
 @api.errorhandler(TypeError)
 def value_error(e):
     log.warn('服务发生异常: [error: %s]' % (e, ), exc_info=True)
-    return jsonify(make_result(APIStatus.InternalServerError)), 500
+    return render_template('/exception/500.html')
 
 # 接口页面展示
 if configs.env.deploy != "dev":
