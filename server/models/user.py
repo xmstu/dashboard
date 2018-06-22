@@ -153,11 +153,11 @@ class UserList(object):
         # 最后登录
         if params['last_login_start_time'] and params['last_login_end_time']:
             command += 'AND shu_user_stats.last_login_time >= %s AND shu_user_stats.last_login_time < %s ' % (
-            params['last_login_start_time'], params['last_login_end_time'] + 3600*24)
+            params['last_login_start_time'], params['last_login_end_time'])
         # 注册日期
         if params['register_start_time'] and params['register_end_time']:
             command += 'AND shu_users.create_time >= %s AND shu_users.create_time < %s ' % (
-                params['register_start_time'], params['register_end_time'] + 3600*24)
+                params['register_start_time'], params['register_end_time'])
 
         # 优化初次加载速度
         fields_value = list(filter(lambda x: x, [params[i] for i in params]))
@@ -231,7 +231,7 @@ class UserStatistic(object):
 
         user_statistic = cursor.query(command, {
             'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
-            'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'] + 86400)),
+            'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'])),
             'role_type': params['role_type'],
             'is_auth': params['is_auth']
         })

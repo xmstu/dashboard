@@ -12,7 +12,7 @@ class PromoteEffectList(object):
     @staticmethod
     def check_extension_mobile(cursor, mobile):
         """检查推广人员id是否存在"""
-        command = """SELECT *
+        command = """SELECT id
         FROM shu_users
         WHERE mobile = :mobile
         AND is_deleted = 0
@@ -258,7 +258,7 @@ class PromoteEffectList(object):
             """
 
             start_time = time.strftime('%Y-%m-%d', time.localtime(params['start_time'] or time.time() - 86400 * 7))
-            end_time = time.strftime('%Y-%m-%d', time.localtime(params['end_time'] + 86400 or time.time() - 86400))
+            end_time = time.strftime('%Y-%m-%d', time.localtime(params['end_time'] or time.time() - 86400))
 
             promote_counts = cursor.query_one(count_command % {'command': command % {"start_time": start_time, "end_time": end_time}})
 
@@ -337,7 +337,7 @@ def get_new_users(cursor, params):
 
     promote_quality = cursor.query(command, {
         'start_time': params['start_time'],
-        'end_time': params['end_time'] + 86400,
+        'end_time': params['end_time'],
     })
 
     return promote_quality
@@ -414,7 +414,7 @@ def get_user_behavior(cursor, params):
 
     promote_quality = cursor.query(command, {
         'start_time': params['start_time'],
-        'end_time': params['end_time'] + 86400,
+        'end_time': params['end_time'],
     })
 
     return promote_quality
@@ -475,7 +475,7 @@ def get_money(cursor, params):
 
     promote_quality = cursor.query(command, {
         'start_time': params['start_time'],
-        'end_time': params['end_time'] + 86400,
+        'end_time': params['end_time'],
     })
 
     return promote_quality
