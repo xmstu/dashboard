@@ -173,7 +173,7 @@ function dataInit() {
                         saveAsImage: {show: true}
                     }
                 },
-                color: ['skyblue', '#7dd4f8', '#7fcaff', '#2973a7', '#fa6e7e', '#5fd779', '#56b35d'],
+                color: ['skyblue', '#7dd4f8', '#60b2d3', '#2973a7', '#497080', '#5fd779', '#56b35d'],
                 series: [
                     {
                         name: '货源数',
