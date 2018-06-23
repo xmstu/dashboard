@@ -4,6 +4,7 @@ import time
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
+from flask import session
 
 class CityResourceBalance(object):
     @staticmethod
@@ -23,6 +24,10 @@ class CityResourceBalance(object):
             pass
         else:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+
+        # 当前权限下所有地区
+        if session['login']['role'] in (2, 3, 4) and not region_id:
+            region_id = [str(i) for i in session['login'].get('locations', [])]
 
         params = {
             'start_time': start_time,

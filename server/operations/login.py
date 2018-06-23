@@ -34,21 +34,14 @@ class LoginDecorator(object):
 
             if not user_info:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='找不到该用户'))
-
             # 地区
             locations = []
             # 后台
             if role == 1:
                 result = RegionsModel.get_admin_region(db.read_db)
-                for location in result:
-                    locations.append({
-                        'region_id': location['id'],
-                        'name': location['full_short_name']
-                    })
+                locations = [i['id'] for i in result]
             elif role == 4:
                 pass
-            # 排序
-            locations.sort(key=lambda x: x['region_id'])
 
             return Response(user_info=user_info, role=role, locations=locations)
         except Exception as e:

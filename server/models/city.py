@@ -29,7 +29,16 @@ class CityResourceBalanceModel(object):
         # 地区
         region = ''
         if params['region_id']:
-            region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s)' % {'region_id': params['region_id']}
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s)' % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                AND (
+                from_province_id IN (%(region_id)s)
+                OR from_city_id IN (%(region_id)s)
+                OR from_county_id IN (%(region_id)s)
+                OR from_town_id IN (%(region_id)s)
+                )''' % {'region_id': ','.join(params['region_id'])}
         # 同城
         goods_type = ''
         if params['goods_type'] == 1:
@@ -77,7 +86,16 @@ class CityResourceBalanceModel(object):
         # 地区
         region = ''
         if params['region_id']:
-            region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s)' % {'region_id': params['region_id']}
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s)' % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                AND (
+                from_province_id IN (%(region_id)s)
+                OR from_city_id IN (%(region_id)s)
+                OR from_county_id IN (%(region_id)s)
+                OR from_town_id IN (%(region_id)s)
+                )''' % {'region_id': ','.join(params['region_id'])}
         # 同城
         if params['goods_type'] == 1:
             goods_type = 'INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id AND enabled_short_haul = 1'
@@ -175,8 +193,6 @@ class CityOrderListModel(object):
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
             AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
             WHERE shf_goods.expired_timestamp > UNIX_TIMESTAMP() 
-            AND (shf_goods.loading_time_period_end > UNIX_TIMESTAMP() OR 
-            UNIX_TIMESTAMP( loading_time_date ) + (CASE loading_time_period WHEN 1 THEN 8 * 3600 WHEN 2 THEN 13 * 3600 WHEN 3 THEN 19 * 3600 ELSE 0 END))
             AND shf_goods.is_deleted = 0
             AND shf_goods.`status` IN (1, 2)
         """

@@ -67,9 +67,10 @@ class RegionsModel(object):
     def get_admin_region(cursor):
         """内部用户地区"""
         command = """
-        SELECT id, full_short_name
+        SELECT id
         FROM shm_regions
         WHERE `level` = 1 AND is_deleted = 0
+        ORDER BY id
         """
         result = cursor.query(command)
 

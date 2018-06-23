@@ -8,7 +8,6 @@ from server.utils.broker_token import decode
 from server.models.login import Login
 from server.database import db
 import time
-from server.init_regions import init_regions
 
 @app.route('/login/')
 def login():
@@ -44,9 +43,7 @@ def broker():
     mobile = result[0]['mobile']
     avatar_url = result[0]['avatar_url']
     role = result[0]['role']
-    locations = [{'region_id': location['region_id'],
-                  'name': init_regions.to_full_short_name(location['region_id']),
-                  }for location in result]
+    locations = [location['region_id']for location in result]
     session['login'] = {
         'user_id': user_id,
         'user_name': user_name,
