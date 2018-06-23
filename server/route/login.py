@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from server import app
-from server.status import HTTPStatus, make_result, APIStatus
+from server.logger import log
 from flask import render_template, session, redirect, request
 from flask import abort
 from server.utils.broker_token import decode
@@ -26,15 +26,18 @@ def broker():
     # 区镇合伙人验证
     token = request.args.get('token', None)
     if not token:
+        log.warn('区镇合伙人token传值错误')
         abort(404)
     # token解码
     payload = decode(token)
     mobile = payload.get('mobile')
     if not mobile:
+        log.warn('区镇合伙人无法获取mobile: [token: %s]' % token)
         abort(404)
     # 查询用户区域
     result = Login.get_partner_user(db.read_db, mobile)
     if not result:
+        log.warn('区镇合伙人查询用户区域为空: [mobile: %s]' % mobile)
         abort(404)
     user_id = result[0]['user_id']
     user_name = result[0]['user_name']
