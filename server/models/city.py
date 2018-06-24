@@ -327,7 +327,7 @@ class CityNearbyCarsModel(object):
         INNER JOIN shu_user_stats ON shu_user_profiles.user_id = shu_user_stats.user_id
         WHERE shu_vehicle_auths.is_deleted = 0
         AND shu_vehicle_auths.auth_status = 2
-        AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_FORMAT(CURRENT_DATE(), '%Y-%m-%d'))
+        AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_FORMAT(CURRENT_DATE(), '%%Y-%%m-%%d'))
         AND shu_vehicle_auths.id IN %s
         LIMIT 10'''
 
