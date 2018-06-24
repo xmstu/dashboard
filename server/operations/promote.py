@@ -3,7 +3,7 @@ from flask_restful import abort
 
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.promote import PromoteEffectList, PromoteQuality
+from server.models.promote import PromoteEffectList, get_new_users, get_user_behavior, get_money
 from server.status import HTTPStatus, make_result, APIStatus
 
 class PromoteEffectDecorator(object):
@@ -48,8 +48,16 @@ class PromoteQualityDecorator(object):
     @staticmethod
     @make_decorator
     def get_promote_quality(params):
-        # 新增
-        promote_quality = PromoteQuality.get_promote_quality(db.read_bi, params)
-        # 之前累计
-        before_promote_count = PromoteQuality.get_before_promote_count(db.read_bi, params)
+        # 数据源未更新，先用业务库
+        promote_quality = []
+        before_promote_count = 0
+        # 拉新 - 新增 累计
+        if params['dimension'] == 1:
+            promote_quality, before_promote_count = get_new_users(db.read_db, params)
+        # 用户行为 - 登录 发货 接单 完成订单
+        elif params['dimension'] == 2:
+            promote_quality = get_user_behavior(db.read_db, params)
+        # 金额
+        elif params['dimension'] == 3:
+            promote_quality = get_money(db.read_db, params)
         return Response(params=params, data=promote_quality, before_promote_count=before_promote_count)

@@ -42,11 +42,11 @@ response_promote_effect_delete_param_success = api.response(200, '成功', api.m
 
 
 request_promote_quality_param = api.doc(params={
-    'start_time':'开始日期(时间戳)',
-    'end_time':'结束日期(时间戳)',
-    'periods':'时间周期',
-    'dimension':'统计维度',
-    'data_type':'数据类型',
+    'start_time':'开始日期(时间戳),默认:8天前',
+    'end_time':'结束日期(时间戳),默认:昨天',
+    'periods':'时间周期,2:日，3:周，4:月，默认:2',
+    'dimension':'统计维度,1:拉新,2:用户行为,3:金额,默认:1',
+    'data_type':'数据类型,1,2,3...默认1',
     }, description='推广统计列表查询参数')
 
 response_promote_quality_param_success = api.response(200, '成功', api.model('response_success', {

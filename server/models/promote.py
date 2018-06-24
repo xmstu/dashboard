@@ -300,114 +300,110 @@ class PromoteQuality(object):
 
         return before_promote_count['count'] if before_promote_count else 0
 
-    @staticmethod
-    def get_promote_quality(cursor, params):
-
-        # 拉新 - 新增 累计
-        if params.get('dimension') == 1:
-            promote_quality = get_new_users(cursor, params)
-
-        # 用户行为 - 登录 发货 接单 完成订单
-        elif params.get('dimension') == 2:
-            promote_quality = get_user_behavior(cursor, params)
-
-        # 金额 - 货源总额 订单总额 实际完成总额
-        elif params.get('dimension') == 3:
-            promote_quality = get_money(cursor, params)
-
-        else:
-            return []
-
-        return promote_quality if promote_quality else []
-
-
 def get_new_users(cursor, params):
-
-    command = """ 
-            SELECT create_time, COUNT(*) as count
-            FROM tb_inf_user
-            -- 时间段
-            WHERE UNIX_TIMESTAMP(create_time) >= :start_time
-            AND UNIX_TIMESTAMP(create_time) < :end_time
-            -- 推荐人
-            AND reference_id IS NOT NULL
-
-            GROUP BY create_time;
-             """
+    """用户拉新统计"""
+    command = """
+    SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+    FROM shu_recommended_users
+    WHERE create_time >= :start_time
+    AND create_time < :end_time
+    AND is_deleted = 0
+    GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')"""
 
     promote_quality = cursor.query(command, {
         'start_time': params['start_time'],
         'end_time': params['end_time'],
     })
+    # 累计
+    before_promote_count = 0
+    if params['data_type'] == 2:
+        command = """
+        SELECT COUNT(*) AS count
+        FROM shu_recommended_users
+        WHERE create_time < :start_time
+        AND is_deleted = 0"""
 
-    return promote_quality
+        before_promote = cursor.query_one(command, {
+            'start_time': params['start_time'],
+        })
+        before_promote_count = before_promote['count'] if before_promote else 0
+
+    return promote_quality if promote_quality else [], before_promote_count
 
 
 def get_user_behavior(cursor, params):
     if params.get('data_type') == 1:
         command = """
-            -- 用户登录
-            SELECT create_time, COUNT(*) as count
-            FROM tb_inf_user
-            -- 时间段
-            WHERE UNIX_TIMESTAMP(create_time) >= :start_time
-            AND UNIX_TIMESTAMP(create_time) < :end_time
-            -- 推荐人
-            AND reference_id IS NOT NULL
-            -- 登录
-            AND last_login_time >= :start_time
-            AND last_login_time < :end_time
-            GROUP BY create_time;
+        -- 用户登录
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+        
+        FROM shu_recommended_users
+        LEFT JOIN shu_user_stats ON shu_recommended_users.recommended_user_id = shu_user_stats.user_id
+        AND shu_user_stats.last_login_time > shu_recommended_users.create_time
+        
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        AND is_deleted = 0
+        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
         """
 
     elif params.get('data_type') == 2:
         command = """ 
-             -- 用户发货
-            SELECT tb_inf_user.create_time, COUNT(*) as count
-            FROM tb_inf_user
-            INNER JOIN tb_inf_goods ON tb_inf_user.user_id = tb_inf_goods.user_id
-            AND UNIX_TIMESTAMP(tb_inf_goods.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_goods.create_time) < :end_time
-            -- 时间段
-            WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
-            -- 推荐人
-            AND reference_id IS NOT NULL
-            GROUP BY create_time;
+        -- 用户发货
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+        
+        FROM shu_recommended_users
+        
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        AND is_deleted = 0
+        AND (SELECT COUNT(*)
+        FROM shf_goods
+        WHERE shf_goods.user_id = shu_recommended_users.recommended_user_id
+        AND shf_goods.create_time > shu_recommended_users.create_time) > 0
+        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
          """
 
     elif params.get('data_type') == 3:
         command = """
-            -- 用户接单
-            SELECT tb_inf_user.create_time, COUNT(*) as count
-            FROM tb_inf_user
-            INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) < :end_time
-            -- 时间段
-            WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
-            -- 推荐人
-            AND reference_id IS NOT NULL
-            
-            GROUP BY create_time;
+        -- 用户接单
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+        
+        FROM shu_recommended_users
+        
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        AND is_deleted = 0
+        AND (SELECT COUNT(*)
+        FROM shb_orders
+        WHERE shb_orders.driver_id = shu_recommended_users.recommended_user_id
+        AND shb_orders.create_time > shu_recommended_users.create_time) > 0
+        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
          """
 
     elif params.get('data_type') == 4:
         command = """
-            -- 用户完成订单
-            SELECT tb_inf_user.create_time, COUNT(*) as count
-            FROM tb_inf_user
-            INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) < :end_time
-            AND tb_inf_order.`status` = 3
-            -- 时间段
-            WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
-            -- 推荐人
-            AND reference_id IS NOT NULL
-            GROUP BY create_time;
+        -- 用户完成订单
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+        
+        FROM shu_recommended_users
+        
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        AND is_deleted = 0
+        AND (
+        (SELECT COUNT(*)
+        FROM shb_orders
+        WHERE shb_orders.driver_id = shu_recommended_users.recommended_user_id
+        AND shb_orders.create_time > shu_recommended_users.create_time
+        AND shb_orders.`status` = 3) > 0
+        OR
+        (SELECT COUNT(*)
+        FROM shb_orders
+        WHERE shb_orders.owner_id = shu_recommended_users.recommended_user_id
+        AND shb_orders.create_time > shu_recommended_users.create_time
+        AND shb_orders.`status` = 3) > 0)
+        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
         """
     else:
         return []
@@ -417,59 +413,89 @@ def get_user_behavior(cursor, params):
         'end_time': params['end_time'],
     })
 
-    return promote_quality
+    return promote_quality if promote_quality else []
 
 
 def get_money(cursor, params):
     if params.get('data_type') == 1:
         command = """
-            -- 用户货源总额
-            SELECT tb_inf_user.create_time, SUM(goods_price_sum) as amount
-            FROM tb_inf_user
-            INNER JOIN tb_inf_goods ON tb_inf_user.user_id = tb_inf_goods.user_id
-            AND UNIX_TIMESTAMP(tb_inf_goods.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_goods.create_time) < :end_time
-            
-            -- 时间段
-            WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
-            -- 推荐人
-            AND reference_id IS NOT NULL
-            GROUP BY create_time;
+        -- 用户货源总额
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+        SUM((SELECT SUM(price_expect + price_addition)
+        FROM shf_goods
+        WHERE shf_goods.user_id = shu_recommended_users.recommended_user_id
+        AND shf_goods.create_time > shu_recommended_users.create_time)) AS count
+        
+        FROM shu_recommended_users
+        
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        AND is_deleted = 0
+        
+        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
         """
     elif params.get('data_type') == 2:
         command = """
-            -- 用户订单总额
-            SELECT tb_inf_user.create_time, SUM(order_price_sum) as amount
-            FROM tb_inf_user
-            INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_order.create_time) < :end_time
-            
-            -- 时间段
-            WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-            AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
-            -- 推荐人
-            AND reference_id IS NOT NULL
-            GROUP BY create_time;
+        -- 用户订单总额
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+        IF(SUM((SELECT SUM(price)
+        FROM shb_orders
+        WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
+        AND shb_orders.create_time > shu_recommended_users.create_time)) IS NULL, 0,
+        SUM((SELECT SUM(price)
+        FROM shb_orders
+        WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
+        AND shb_orders.create_time > shu_recommended_users.create_time))) +
+        IF(SUM((SELECT SUM(price)
+        FROM shb_orders
+        WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
+        AND shb_orders.create_time > shu_recommended_users.create_time)) IS NULL, 0,
+        SUM((SELECT SUM(price)
+        FROM shb_orders
+        WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
+        AND shb_orders.create_time > shu_recommended_users.create_time))) AS count
+        
+        FROM shu_recommended_users
+        
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        AND is_deleted = 0
+        
+        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
         """
     elif params.get('data_type') == 3:
         command = """
-                -- 用户订单完成总额
-                SELECT tb_inf_user.create_time, SUM(order_price_sum) as amount
-                FROM tb_inf_user
-                INNER JOIN tb_inf_order ON tb_inf_user.user_id = tb_inf_order.user_id
-                AND UNIX_TIMESTAMP(tb_inf_order.create_time) >= :start_time
-                AND UNIX_TIMESTAMP(tb_inf_order.create_time) < :end_time
-                AND tb_inf_order.`status` = 3
-                
-                -- 时间段
-                WHERE UNIX_TIMESTAMP(tb_inf_user.create_time) >= :start_time
-                AND UNIX_TIMESTAMP(tb_inf_user.create_time) < :end_time
-                -- 推荐人
-                AND reference_id IS NOT NULL
-                GROUP BY create_time;
-                """
+        -- 用户订单完成总额
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+        IF(SUM((SELECT SUM(price)
+        FROM shb_orders
+        WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
+        AND shb_orders.create_time > shu_recommended_users.create_time
+        AND shb_orders.`status` = 3)) IS NULL, 0,
+        SUM((SELECT SUM(price)
+        FROM shb_orders
+        WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
+        AND shb_orders.create_time > shu_recommended_users.create_time
+        AND shb_orders.`status` = 3))) +
+        IF(SUM((SELECT SUM(price)
+        FROM shb_orders
+        WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
+        AND shb_orders.create_time > shu_recommended_users.create_time
+        AND shb_orders.`status` = 3)) IS NULL, 0,
+        SUM((SELECT SUM(price)
+        FROM shb_orders
+        WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
+        AND shb_orders.create_time > shu_recommended_users.create_time
+        AND shb_orders.`status` = 3))) AS count
+        
+        FROM shu_recommended_users
+        
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        AND is_deleted = 0
+        
+        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+        """
     else:
         return []
 
@@ -478,4 +504,4 @@ def get_money(cursor, params):
         'end_time': params['end_time'],
     })
 
-    return promote_quality
+    return promote_quality if promote_quality else []
