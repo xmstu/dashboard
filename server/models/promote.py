@@ -273,6 +273,7 @@ class PromoteEffectList(object):
             }
 
             return promote_effect_list if promote_effect_list else None
+
         except Exception as e:
             log.error('获取推荐人员效果数据异常:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数有误'))
@@ -302,206 +303,218 @@ class PromoteQuality(object):
 
 def get_new_users(cursor, params):
     """用户拉新统计"""
-    command = """
-    SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
-    FROM shu_recommended_users
-    WHERE create_time >= :start_time
-    AND create_time < :end_time
-    AND is_deleted = 0
-    GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')"""
-
-    promote_quality = cursor.query(command, {
-        'start_time': params['start_time'],
-        'end_time': params['end_time'],
-    })
-    # 累计
-    before_promote_count = 0
-    if params['data_type'] == 2:
+    try:
         command = """
-        SELECT COUNT(*) AS count
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
         FROM shu_recommended_users
-        WHERE create_time < :start_time
-        AND is_deleted = 0"""
+        WHERE create_time >= :start_time
+        AND create_time < :end_time
+        AND is_deleted = 0
+        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')"""
 
-        before_promote = cursor.query_one(command, {
+        promote_quality = cursor.query(command, {
             'start_time': params['start_time'],
+            'end_time': params['end_time'],
         })
-        before_promote_count = before_promote['count'] if before_promote else 0
+        # 累计
+        before_promote_count = 0
+        if params['data_type'] == 2:
+            command = """
+            SELECT COUNT(*) AS count
+            FROM shu_recommended_users
+            WHERE create_time < :start_time
+            AND is_deleted = 0"""
 
-    return promote_quality if promote_quality else [], before_promote_count
+            before_promote = cursor.query_one(command, {
+                'start_time': params['start_time'],
+            })
+            before_promote_count = before_promote['count'] if before_promote else 0
+
+        return promote_quality if promote_quality else [], before_promote_count
+
+    except Exception as e:
+        log.error('用户拉新统计异常: [error: %s]' % e)
 
 
 def get_user_behavior(cursor, params):
-    if params.get('data_type') == 1:
-        command = """
-        -- 用户登录
-        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
-        
-        FROM shu_recommended_users
-        LEFT JOIN shu_user_stats ON shu_recommended_users.recommended_user_id = shu_user_stats.user_id
-        AND shu_user_stats.last_login_time > shu_recommended_users.create_time
-        
-        WHERE create_time >= :start_time
-        AND create_time < :end_time
-        AND is_deleted = 0
-        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
-        """
+    try:
+        if params.get('data_type') == 1:
+            command = """
+            -- 用户登录
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+            
+            FROM shu_recommended_users
+            LEFT JOIN shu_user_stats ON shu_recommended_users.recommended_user_id = shu_user_stats.user_id
+            AND shu_user_stats.last_login_time > shu_recommended_users.create_time
+            
+            WHERE create_time >= :start_time
+            AND create_time < :end_time
+            AND is_deleted = 0
+            GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+            """
 
-    elif params.get('data_type') == 2:
-        command = """ 
-        -- 用户发货
-        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
-        
-        FROM shu_recommended_users
-        
-        WHERE create_time >= :start_time
-        AND create_time < :end_time
-        AND is_deleted = 0
-        AND (SELECT COUNT(*)
-        FROM shf_goods
-        WHERE shf_goods.user_id = shu_recommended_users.recommended_user_id
-        AND shf_goods.create_time > shu_recommended_users.create_time) > 0
-        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
-         """
+        elif params.get('data_type') == 2:
+            command = """ 
+            -- 用户发货
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+            
+            FROM shu_recommended_users
+            
+            WHERE create_time >= :start_time
+            AND create_time < :end_time
+            AND is_deleted = 0
+            AND (SELECT COUNT(*)
+            FROM shf_goods
+            WHERE shf_goods.user_id = shu_recommended_users.recommended_user_id
+            AND shf_goods.create_time > shu_recommended_users.create_time) > 0
+            GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+             """
 
-    elif params.get('data_type') == 3:
-        command = """
-        -- 用户接单
-        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
-        
-        FROM shu_recommended_users
-        
-        WHERE create_time >= :start_time
-        AND create_time < :end_time
-        AND is_deleted = 0
-        AND (SELECT COUNT(*)
-        FROM shb_orders
-        WHERE shb_orders.driver_id = shu_recommended_users.recommended_user_id
-        AND shb_orders.create_time > shu_recommended_users.create_time) > 0
-        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
-         """
+        elif params.get('data_type') == 3:
+            command = """
+            -- 用户接单
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+            
+            FROM shu_recommended_users
+            
+            WHERE create_time >= :start_time
+            AND create_time < :end_time
+            AND is_deleted = 0
+            AND (SELECT COUNT(*)
+            FROM shb_orders
+            WHERE shb_orders.driver_id = shu_recommended_users.recommended_user_id
+            AND shb_orders.create_time > shu_recommended_users.create_time) > 0
+            GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+             """
 
-    elif params.get('data_type') == 4:
-        command = """
-        -- 用户完成订单
-        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
-        
-        FROM shu_recommended_users
-        
-        WHERE create_time >= :start_time
-        AND create_time < :end_time
-        AND is_deleted = 0
-        AND (
-        (SELECT COUNT(*)
-        FROM shb_orders
-        WHERE shb_orders.driver_id = shu_recommended_users.recommended_user_id
-        AND shb_orders.create_time > shu_recommended_users.create_time
-        AND shb_orders.`status` = 3) > 0
-        OR
-        (SELECT COUNT(*)
-        FROM shb_orders
-        WHERE shb_orders.owner_id = shu_recommended_users.recommended_user_id
-        AND shb_orders.create_time > shu_recommended_users.create_time
-        AND shb_orders.`status` = 3) > 0)
-        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
-        """
-    else:
-        return []
+        elif params.get('data_type') == 4:
+            command = """
+            -- 用户完成订单
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+            
+            FROM shu_recommended_users
+            
+            WHERE create_time >= :start_time
+            AND create_time < :end_time
+            AND is_deleted = 0
+            AND (
+            (SELECT COUNT(*)
+            FROM shb_orders
+            WHERE shb_orders.driver_id = shu_recommended_users.recommended_user_id
+            AND shb_orders.create_time > shu_recommended_users.create_time
+            AND shb_orders.`status` = 3) > 0
+            OR
+            (SELECT COUNT(*)
+            FROM shb_orders
+            WHERE shb_orders.owner_id = shu_recommended_users.recommended_user_id
+            AND shb_orders.create_time > shu_recommended_users.create_time
+            AND shb_orders.`status` = 3) > 0)
+            GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+            """
+        else:
+            return []
 
-    promote_quality = cursor.query(command, {
-        'start_time': params['start_time'],
-        'end_time': params['end_time'],
-    })
+        promote_quality = cursor.query(command, {
+            'start_time': params['start_time'],
+            'end_time': params['end_time'],
+        })
 
-    return promote_quality if promote_quality else []
+        return promote_quality if promote_quality else []
+
+    except Exception as e:
+        log.error('用户行为统计异常: [error: %s]' % e)
 
 
 def get_money(cursor, params):
-    if params.get('data_type') == 1:
-        command = """
-        -- 用户货源总额
-        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
-        SUM((SELECT SUM(price_expect + price_addition)
-        FROM shf_goods
-        WHERE shf_goods.user_id = shu_recommended_users.recommended_user_id
-        AND shf_goods.create_time > shu_recommended_users.create_time)) AS count
-        
-        FROM shu_recommended_users
-        
-        WHERE create_time >= :start_time
-        AND create_time < :end_time
-        AND is_deleted = 0
-        
-        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
-        """
-    elif params.get('data_type') == 2:
-        command = """
-        -- 用户订单总额
-        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
-        IF(SUM((SELECT SUM(price)
-        FROM shb_orders
-        WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
-        AND shb_orders.create_time > shu_recommended_users.create_time)) IS NULL, 0,
-        SUM((SELECT SUM(price)
-        FROM shb_orders
-        WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
-        AND shb_orders.create_time > shu_recommended_users.create_time))) +
-        IF(SUM((SELECT SUM(price)
-        FROM shb_orders
-        WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
-        AND shb_orders.create_time > shu_recommended_users.create_time)) IS NULL, 0,
-        SUM((SELECT SUM(price)
-        FROM shb_orders
-        WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
-        AND shb_orders.create_time > shu_recommended_users.create_time))) AS count
-        
-        FROM shu_recommended_users
-        
-        WHERE create_time >= :start_time
-        AND create_time < :end_time
-        AND is_deleted = 0
-        
-        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
-        """
-    elif params.get('data_type') == 3:
-        command = """
-        -- 用户订单完成总额
-        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
-        IF(SUM((SELECT SUM(price)
-        FROM shb_orders
-        WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
-        AND shb_orders.create_time > shu_recommended_users.create_time
-        AND shb_orders.`status` = 3)) IS NULL, 0,
-        SUM((SELECT SUM(price)
-        FROM shb_orders
-        WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
-        AND shb_orders.create_time > shu_recommended_users.create_time
-        AND shb_orders.`status` = 3))) +
-        IF(SUM((SELECT SUM(price)
-        FROM shb_orders
-        WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
-        AND shb_orders.create_time > shu_recommended_users.create_time
-        AND shb_orders.`status` = 3)) IS NULL, 0,
-        SUM((SELECT SUM(price)
-        FROM shb_orders
-        WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
-        AND shb_orders.create_time > shu_recommended_users.create_time
-        AND shb_orders.`status` = 3))) AS count
-        
-        FROM shu_recommended_users
-        
-        WHERE create_time >= :start_time
-        AND create_time < :end_time
-        AND is_deleted = 0
-        
-        GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
-        """
-    else:
-        return []
+    try:
+        if params.get('data_type') == 1:
+            command = """
+            -- 用户货源总额
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+            SUM((SELECT SUM(price_expect + price_addition)
+            FROM shf_goods
+            WHERE shf_goods.user_id = shu_recommended_users.recommended_user_id
+            AND shf_goods.create_time > shu_recommended_users.create_time)) AS count
+            
+            FROM shu_recommended_users
+            
+            WHERE create_time >= :start_time
+            AND create_time < :end_time
+            AND is_deleted = 0
+            
+            GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+            """
+        elif params.get('data_type') == 2:
+            command = """
+            -- 用户订单总额
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+            IF(SUM((SELECT SUM(price)
+            FROM shb_orders
+            WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
+            AND shb_orders.create_time > shu_recommended_users.create_time)) IS NULL, 0,
+            SUM((SELECT SUM(price)
+            FROM shb_orders
+            WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
+            AND shb_orders.create_time > shu_recommended_users.create_time))) +
+            IF(SUM((SELECT SUM(price)
+            FROM shb_orders
+            WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
+            AND shb_orders.create_time > shu_recommended_users.create_time)) IS NULL, 0,
+            SUM((SELECT SUM(price)
+            FROM shb_orders
+            WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
+            AND shb_orders.create_time > shu_recommended_users.create_time))) AS count
+            
+            FROM shu_recommended_users
+            
+            WHERE create_time >= :start_time
+            AND create_time < :end_time
+            AND is_deleted = 0
+            
+            GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+            """
+        elif params.get('data_type') == 3:
+            command = """
+            -- 用户订单完成总额
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+            IF(SUM((SELECT SUM(price)
+            FROM shb_orders
+            WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
+            AND shb_orders.create_time > shu_recommended_users.create_time
+            AND shb_orders.`status` = 3)) IS NULL, 0,
+            SUM((SELECT SUM(price)
+            FROM shb_orders
+            WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
+            AND shb_orders.create_time > shu_recommended_users.create_time
+            AND shb_orders.`status` = 3))) +
+            IF(SUM((SELECT SUM(price)
+            FROM shb_orders
+            WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
+            AND shb_orders.create_time > shu_recommended_users.create_time
+            AND shb_orders.`status` = 3)) IS NULL, 0,
+            SUM((SELECT SUM(price)
+            FROM shb_orders
+            WHERE shu_recommended_users.recommended_user_id = shb_orders.owner_id
+            AND shb_orders.create_time > shu_recommended_users.create_time
+            AND shb_orders.`status` = 3))) AS count
+            
+            FROM shu_recommended_users
+            
+            WHERE create_time >= :start_time
+            AND create_time < :end_time
+            AND is_deleted = 0
+            
+            GROUP BY FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+            """
+        else:
+            return []
 
-    promote_quality = cursor.query(command, {
-        'start_time': params['start_time'],
-        'end_time': params['end_time'],
-    })
+        promote_quality = cursor.query(command, {
+            'start_time': params['start_time'],
+            'end_time': params['end_time'],
+        })
 
-    return promote_quality if promote_quality else []
+        return promote_quality if promote_quality else []
+
+    except Exception as e:
+        log.error('金额统计异常: [error: %s]' % e)
