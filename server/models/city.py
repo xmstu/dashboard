@@ -234,20 +234,20 @@ class CityOrderListModel(object):
 
         # 所属网点
         if params.get('node_id'):
-            if isinstance(params['region_id'], int):
+            if isinstance(params['node_id'], int):
                 command += """ 
                 AND (shf_goods.from_province_id = {0}
                 OR shf_goods.from_city_id = {0}
                 OR shf_goods.from_county_id = {0}
                 OR shf_goods.from_town_id = {0})
                 """.format(params['node_id'])
-            elif isinstance(params['region_id'], list):
+            elif isinstance(params['node_id'], list):
                 command += """ 
-                AND (shf_goods.from_province_id IN {0}
-                OR shf_goods.from_city_id IN {0}
-                OR shf_goods.from_county_id IN {0}
-                OR shf_goods.from_town_id IN {0})
-                """.format(','.join(params['region_id']))
+                AND (shf_goods.from_province_id IN ({0})
+                OR shf_goods.from_city_id IN ({0})
+                OR shf_goods.from_county_id IN ({0})
+                OR shf_goods.from_town_id IN ({0}))
+                """.format(','.join(params['node_id']))
 
 
         # 初次下单

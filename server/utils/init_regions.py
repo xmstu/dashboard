@@ -30,7 +30,16 @@ class Regions(object):
         return self.region.get(int(region_id), {'full_short_name': ''}).get('full_short_name')
 
     def to_all_city(self):
-        return [self.region[i] for i in self.region if self.region[i].get('level', 0) in (1, 2)]
+        """获取城市级别"""
+        return [self.region[i] for i in self.region if self.region[i].get('level', 0) == 2]
+
+    def get_city_level(self, region_id):
+        """获取地区code上级到城市"""
+        result = self.region.get(int(region_id), {'level': 0})
+        if result['level'] <= 2:
+            return result
+        return self.get_city_level(result['parent_id'])
+
 
 
 class InitRegionModel(object):
@@ -39,7 +48,7 @@ class InitRegionModel(object):
         """ 获取省市区数据 """
 
         try:
-            command = '''SELECT id, `name`, short_name, full_short_name, `level` FROM shm_regions WHERE is_deleted = 0'''
+            command = '''SELECT id, `name`, short_name, full_short_name, `level`, parent_id FROM shm_regions WHERE is_deleted = 0'''
 
             log.debug('获取省市区数据SQL语句：[sql: %s]' % command)
 

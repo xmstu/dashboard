@@ -321,7 +321,10 @@ class UserStatistic(object):
         """
         region = ''
         if params['region_id']:
-            region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' %  ','.join(params['region_id'])
+            if isinstance(params['region_id'], set):
+                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' %  ','.join(params['region_id'])
+            elif isinstance(params['region_id'], str):
+                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) = %s' % params['region_id']
 
         command = command % region
 
