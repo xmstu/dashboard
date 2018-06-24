@@ -207,14 +207,6 @@ class CityOrderListModel(object):
         elif params['goods_type'] == 4:
             command += """ AND shf_goods.type = 2 """
 
-        # # 优先级
-        # if params['priority'] == 1:
-        #     command += ' AND ((SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) <= 3 OR UNIX_TIMESTAMP() - shf_goods.create_time <= 300 OR shf_goods.price_addition > 0) '
-        # elif params['priority'] == 2:
-        #     command += ''' AND (SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) > 3
-        #     AND UNIX_TIMESTAMP() - shf_goods.create_time > 300
-        #     AND shf_goods.price_addition = 0 '''
-
         # 车长
         if params['vehicle_length']:
             command += """ AND shf_goods_vehicles.name = '%s' """ % params['vehicle_length']
@@ -242,12 +234,21 @@ class CityOrderListModel(object):
 
         # 所属网点
         if params.get('node_id'):
-            command += """ 
-            AND (shf_goods.from_province_id = {0} 
-            OR shf_goods.from_city_id= {0}  
-            OR shf_goods.from_county_id= {0}  
-            OR shf_goods.from_town_id= {0} ) 
-            """.format(params['node_id'])
+            if isinstance(params['region_id'], int):
+                command += """ 
+                AND (shf_goods.from_province_id = {0}
+                OR shf_goods.from_city_id = {0}
+                OR shf_goods.from_county_id = {0}
+                OR shf_goods.from_town_id = {0})
+                """.format(params['node_id'])
+            elif isinstance(params['region_id'], list):
+                command += """ 
+                AND (shf_goods.from_province_id IN {0}
+                OR shf_goods.from_city_id IN {0}
+                OR shf_goods.from_county_id IN {0}
+                OR shf_goods.from_town_id IN {0})
+                """.format(','.join(params['region_id']))
+
 
         # 初次下单
         if params['spec_tag'] == 1:
@@ -326,6 +327,7 @@ class CityNearbyCarsModel(object):
         INNER JOIN shu_user_stats ON shu_user_profiles.user_id = shu_user_stats.user_id
         WHERE shu_vehicle_auths.is_deleted = 0
         AND shu_vehicle_auths.auth_status = 2
+        AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_FORMAT(CURRENT_DATE(), '%Y-%m-%d'))
         AND shu_vehicle_auths.id IN %s
         LIMIT 10'''
 

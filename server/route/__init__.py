@@ -5,7 +5,6 @@ from server.route.user import *
 from server.route.goods import *
 from server.route.promote import *
 from server.route.home import *
-from server.route.password import *
 from server.route.transport import *
 from server.route.map import *
 from server.route.potential import *

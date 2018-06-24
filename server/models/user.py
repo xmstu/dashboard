@@ -181,57 +181,153 @@ class UserList(object):
 
 
 class UserStatistic(object):
+
+    # @staticmethod
+    # def get_before_user_count(cursor, params):
+    #     """累计用户"""
+    #     command = """
+    #     SELECT COUNT(*) AS count
+    #     FROM tb_inf_user
+    #     WHERE create_time < :start_time
+    #     -- 角色
+    #     AND ((:role_type = 0)
+    #     OR (:role_type = 1 AND user_type = 1)
+    #     OR (:role_type = 2 AND user_type = 2)
+    #     OR (:role_type = 3 AND user_type = 3)
+    #     )
+    #     -- 认证
+    #     AND ((:is_auth = 0)
+    #     OR (:is_auth = 1 AND (goods_auth = 1 OR driver_auth = 1 OR company_auth = 1))
+    #     OR (:is_auth = 2 AND goods_auth = 0 AND driver_auth = 0 AND company_auth = 0)
+    #     )
+    #     """
+    #     before_user_count = cursor.query_one(command, {
+    #         'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
+    #         'role_type': params['role_type'],
+    #         'is_auth': params['is_auth']
+    #     })
+    #
+    #     return before_user_count['count'] if before_user_count else 0
+
+    # @staticmethod
+    # def get_user_statistic(cursor, params):
+    #     """用户新增"""
+    #     command = """
+    #     SELECT create_time, COUNT(*) AS count
+    #     FROM tb_inf_user
+    #     WHERE create_time >= :start_time
+    #     AND create_time < :end_time
+    #     -- 角色
+    #     AND ((:role_type = 0)
+    #     OR (:role_type = 1 AND user_type = 1)
+    #     OR (:role_type = 2 AND user_type = 2)
+    #     OR (:role_type = 3 AND user_type = 3)
+    #     )
+    #     -- 认证
+    #     AND ((:is_auth = 0)
+    #     OR (:is_auth = 1 AND (goods_auth = 1 OR driver_auth = 1 OR company_auth = 1))
+    #     OR (:is_auth = 2 AND goods_auth = 0 AND driver_auth = 0 AND company_auth = 0)
+    #     )
+    #     GROUP BY create_time
+    #     """
+    #
+    #     user_statistic = cursor.query(command, {
+    #         'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
+    #         'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'])),
+    #         'role_type': params['role_type'],
+    #         'is_auth': params['is_auth']
+    #     })
+    #
+    #     return user_statistic if user_statistic else []
+
     @staticmethod
-    def get_before_user_count(cursor, params):
+    def get_before_user_count_by_mobile(cursor, params):
+        """累计用户"""
         command = """
         SELECT COUNT(*) AS count
-        FROM tb_inf_user
-        WHERE create_time < :start_time
+        FROM shu_users
+        INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
+        LEFT JOIN shu_user_auths AS goods_auth ON goods_auth.id = shu_user_profiles.last_auth_goods_id AND goods_auth.auth_status = 2 AND goods_auth.is_deleted = 0
+        LEFT JOIN shu_user_auths AS driver_auth ON driver_auth.id = shu_user_profiles.last_auth_driver_id AND driver_auth.auth_status = 2 AND driver_auth.is_deleted = 0
+        LEFT JOIN shu_user_auths AS company_auth ON company_auth.id = shu_user_profiles.last_auth_company_id AND company_auth.auth_status = 2 AND company_auth.is_deleted = 0
+        
+        WHERE shu_users.is_deleted = 0
+        AND shu_users.create_time < :start_time
         -- 角色
         AND ((:role_type = 0)
-        OR (:role_type = 1 AND user_type = 1)
-        OR (:role_type = 2 AND user_type = 2)
-        OR (:role_type = 3 AND user_type = 3)
+        OR (:role_type = 1 AND shu_user_profiles.user_type = 1)
+        OR (:role_type = 2 AND shu_user_profiles.user_type = 2)
+        OR (:role_type = 3 AND shu_user_profiles.user_type = 3)
         )
         -- 认证
         AND ((:is_auth = 0)
-        OR (:is_auth = 1 AND (goods_auth = 1 OR driver_auth = 1 OR company_auth = 1))
-        OR (:is_auth = 2 AND goods_auth = 0 AND driver_auth = 0 AND company_auth = 0)
+        OR (:is_auth = 1 AND (goods_auth.auth_goods = 1 OR driver_auth.auth_driver = 1 OR company_auth.auth_company = 1))
+        OR (:is_auth = 2 AND (goods_auth.auth_goods IS NULL AND driver_auth.auth_driver IS NULL AND company_auth.auth_company IS NULL))
         )
+        %s
         """
-        before_user_count = cursor.query_one(command, {
-            'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
-            'role_type': params['role_type'],
-            'is_auth': params['is_auth']
-        })
+        # 优化查询速度
+        if not params['role_type'] and not params['region_id'] and not params['is_auth']:
+            before_user_count = cursor.query_one('''
+            SELECT COUNT(*) AS count
+            FROM shu_users
+            WHERE shu_users.is_deleted = 0 AND shu_users.create_time < :start_time
+            ''', {'start_time': params['start_time']})
+        else:
+            region = ''
+            if params['region_id']:
+                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' % ','.join(params['region_id'])
+
+            command = command % region
+
+            before_user_count = cursor.query_one(command, {
+                'start_time': params['start_time'],
+                'role_type': params['role_type'],
+                'is_auth': params['is_auth']
+            })
 
         return before_user_count['count'] if before_user_count else 0
 
     @staticmethod
-    def get_user_statistic(cursor, params):
-        """用户新增"""
+    def get_user_statistic_by_mobile(cursor, params):
+        """用户常驻地还没更新，先用手机号归属地应付一下"""
         command = """
-        SELECT create_time, COUNT(*) AS count
-        FROM tb_inf_user
-        WHERE create_time >= :start_time
-        AND create_time < :end_time
+        SELECT
+        FROM_UNIXTIME(shu_users.create_time, '%%%%Y-%%%%m-%%%%d') AS create_time,
+        COUNT(*) AS count
+        
+        FROM shu_users
+        INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
+        LEFT JOIN shu_user_auths AS goods_auth ON goods_auth.id = shu_user_profiles.last_auth_goods_id AND goods_auth.auth_status = 2 AND goods_auth.is_deleted = 0
+        LEFT JOIN shu_user_auths AS driver_auth ON driver_auth.id = shu_user_profiles.last_auth_driver_id AND driver_auth.auth_status = 2 AND driver_auth.is_deleted = 0
+        LEFT JOIN shu_user_auths AS company_auth ON company_auth.id = shu_user_profiles.last_auth_company_id AND company_auth.auth_status = 2 AND company_auth.is_deleted = 0
+        
+        WHERE shu_users.is_deleted = 0
+        AND shu_users.create_time >= :start_time
+        AND shu_users.create_time < :end_time
         -- 角色
         AND ((:role_type = 0)
-        OR (:role_type = 1 AND user_type = 1)
-        OR (:role_type = 2 AND user_type = 2)
-        OR (:role_type = 3 AND user_type = 3)
+        OR (:role_type = 1 AND shu_user_profiles.user_type = 1)
+        OR (:role_type = 2 AND shu_user_profiles.user_type = 2)
+        OR (:role_type = 3 AND shu_user_profiles.user_type = 3)
         )
         -- 认证
         AND ((:is_auth = 0)
-        OR (:is_auth = 1 AND (goods_auth = 1 OR driver_auth = 1 OR company_auth = 1))
-        OR (:is_auth = 2 AND goods_auth = 0 AND driver_auth = 0 AND company_auth = 0)
+        OR (:is_auth = 1 AND (goods_auth.auth_goods = 1 OR driver_auth.auth_driver = 1 OR company_auth.auth_company = 1))
+        OR (:is_auth = 2 AND (goods_auth.auth_goods IS NULL AND driver_auth.auth_driver IS NULL AND company_auth.auth_company IS NULL))
         )
-        GROUP BY create_time
+        %s
+        GROUP BY FROM_UNIXTIME(shu_users.create_time, '%%%%Y-%%%%m-%%%%d')
         """
+        region = ''
+        if params['region_id']:
+            region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' %  ','.join(params['region_id'])
+
+        command = command % region
 
         user_statistic = cursor.query(command, {
-            'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
-            'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'])),
+            'start_time': params['start_time'],
+            'end_time': params['end_time'],
             'role_type': params['role_type'],
             'is_auth': params['is_auth']
         })

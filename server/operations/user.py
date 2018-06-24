@@ -30,9 +30,14 @@ class UserStatisticDecorator(object):
     @staticmethod
     @make_decorator
     def get_user_statistic(params):
+        # 用户常驻地还没更新，先用手机号归属地应付一下
+        user_statistic = UserStatistic.get_user_statistic_by_mobile(db.read_db, params)
+        before_user_count = 0
+        if params['user_type'] == 2:
+            before_user_count = UserStatistic.get_before_user_count_by_mobile(db.read_db, params)
         # 用户新增
-        user_statistic = UserStatistic.get_user_statistic(db.read_bi, params)
-        # 之前用户累计
-        before_user_count = UserStatistic.get_before_user_count(db.read_bi, params)
+        # user_statistic = UserStatistic.get_user_statistic(db.read_bi, params)
+        # 用户累计
+        # before_user_count = UserStatistic.get_before_user_count(db.read_bi, params)
         return Response(params=params, data=user_statistic, before_user_count=before_user_count)
 

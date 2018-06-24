@@ -4,7 +4,7 @@
 import hashlib
 
 from flask_restful import abort
-from flask import session
+from server.meta.session_operation import sessionOperationClass
 
 from server.logger import log
 from server.meta.decorators import make_decorator, Response
@@ -16,12 +16,10 @@ from server.database import db
 
 class LoginDecorator(object):
 
-    def __init__(self):
-        pass
-
     @staticmethod
     @make_decorator
     def common_check(user_name, password, role):
+        """登录"""
         try:
             # 后台用户
             if role == 1:
@@ -43,6 +41,9 @@ class LoginDecorator(object):
             elif role == 4:
                 pass
 
-            return Response(user_info=user_info, role=role, locations=locations)
+            # 登录
+            result = sessionOperationClass.insert(user_info, role, locations)
+
+            return Response(result=result)
         except Exception as e:
             log.error('用户登录失败[error: %s]' % (e, ))

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import session
+
 from flask_restplus.resource import Resource
 
 import server.document.login as doc
@@ -7,6 +7,7 @@ from server import verify, api, document
 from server.utils.request import *
 from server.meta.decorators import Response
 from server import log, operations, filters
+from server.meta.session_operation import sessionOperationClass
 
 
 @document.response_not_found
@@ -18,7 +19,7 @@ class Login(Resource):
     @staticmethod
     @doc.request_user_login
     @doc.response_user_login_success
-    @filters.Login.insert_session(user_info=dict, role=int, locations=list)
+    @filters.Login.insert_session(result=bool)
     @operations.LoginDecorator.common_check(user_name=str, password=str, role=int)
     @verify.LoginSetting.post(user_name=str, password=str, role=int)
     def post():
@@ -35,9 +36,9 @@ class Login(Resource):
     @staticmethod
     def delete():
         """用户登出"""
-        if not session.get('login'):
+        result = sessionOperationClass.deleted()
+        if not result:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数错误'))
-        del session['login']
         return {'status': APIStatus.Ok, 'msg': '成功'}, 200
 
 

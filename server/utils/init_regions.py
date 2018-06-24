@@ -29,6 +29,9 @@ class Regions(object):
     def to_full_short_name(self, region_id):
         return self.region.get(int(region_id), {'full_short_name': ''}).get('full_short_name')
 
+    def to_all_city(self):
+        return [self.region[i] for i in self.region if self.region[i].get('level', 0) in (1, 2)]
+
 
 class InitRegionModel(object):
     @staticmethod
@@ -36,7 +39,7 @@ class InitRegionModel(object):
         """ 获取省市区数据 """
 
         try:
-            command = '''SELECT id, `name`, full_short_name FROM shm_regions WHERE is_deleted = 0'''
+            command = '''SELECT id, `name`, short_name, full_short_name, `level` FROM shm_regions WHERE is_deleted = 0'''
 
             log.debug('获取省市区数据SQL语句：[sql: %s]' % command)
 

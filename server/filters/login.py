@@ -3,35 +3,17 @@
 # author=hexm
 import time
 
-from flask import session
-
-from server.logger import log
+from flask_restful import abort
 from server.status import HTTPStatus, APIStatus, make_result
 from server.meta.decorators import make_decorator
-import simplejson as json
 
 class Login(object):
 
     @staticmethod
     @make_decorator
-    def insert_session(user_info, role, locations):
-        try:
-            session['login'] = {
-                'user_id': user_info['id'],
-                'user_name': user_info['user_name'] if user_info['user_name'] else '',
-                'mobile': user_info['mobile'],
-                'avatar_url': user_info['avatar_url'] if user_info[
-                    'avatar_url'] else 'https://mp.huitouche.com/static/images/newicon.png',
-                'login_time': time.time(),
-                'role': role,
-                'locations': locations
-            }
-            data = {
-                'user_name': user_info['user_name'] if user_info['user_name'] else '',
-                'avatar_url': user_info['avatar_url'] if user_info[
-                    'avatar_url'] else 'https://mp.huitouche.com/static/images/newicon.png'
-            }
-            return make_result(APIStatus.Ok, data=json.loads(json.dumps(data))), HTTPStatus.Ok
-        except Exception as e:
-            log.error('登录信息写入session出错 [ERROR: %s]' % e)
+    def insert_session(result):
+        if result:
+            return make_result(APIStatus.Ok), HTTPStatus.Ok
+        else:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='登录失败'))
 

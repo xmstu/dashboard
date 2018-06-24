@@ -2,11 +2,12 @@
 from server import app
 from flask import render_template, session, redirect
 from server.init_regions import init_regions
+from server.meta.session_operation import sessionOperationClass
 
 @app.route('/home/')
 def home():
     """主页"""
-    if not session.get('login'):
+    if not sessionOperationClass.check():
         return redirect('/login/')
     # 用户名，头像, 地区
     user_name = session['login'].get('user_name', '')
@@ -19,7 +20,7 @@ def home():
 @app.route('/admin/')
 def admin():
     """主页"""
-    if not session.get('login'):
+    if not sessionOperationClass.check():
         return redirect('/login/')
     # 用户名，头像, 地区
     user_name = session['login'].get('user_name', '')
