@@ -305,7 +305,7 @@ def get_new_users(cursor, params):
     """用户拉新统计"""
     try:
         command = """
-        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+        SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') AS create_time, COUNT(*) AS count
         FROM shu_recommended_users
         WHERE create_time >= :start_time
         AND create_time < :end_time
@@ -341,7 +341,7 @@ def get_user_behavior(cursor, params):
         if params.get('data_type') == 1:
             command = """
             -- 用户登录
-            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') AS create_time, COUNT(*) AS count
             
             FROM shu_recommended_users
             LEFT JOIN shu_user_stats ON shu_recommended_users.recommended_user_id = shu_user_stats.user_id
@@ -356,7 +356,7 @@ def get_user_behavior(cursor, params):
         elif params.get('data_type') == 2:
             command = """ 
             -- 用户发货
-            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') AS create_time, COUNT(*) AS count
             
             FROM shu_recommended_users
             
@@ -373,7 +373,7 @@ def get_user_behavior(cursor, params):
         elif params.get('data_type') == 3:
             command = """
             -- 用户接单
-            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') AS create_time, COUNT(*) AS count
             
             FROM shu_recommended_users
             
@@ -390,7 +390,7 @@ def get_user_behavior(cursor, params):
         elif params.get('data_type') == 4:
             command = """
             -- 用户完成订单
-            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), COUNT(*) AS count
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') AS create_time, COUNT(*) AS count
             
             FROM shu_recommended_users
             
@@ -430,7 +430,7 @@ def get_money(cursor, params):
         if params.get('data_type') == 1:
             command = """
             -- 用户货源总额
-            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') AS create_time, 
             SUM((SELECT SUM(price_expect + price_addition)
             FROM shf_goods
             WHERE shf_goods.user_id = shu_recommended_users.recommended_user_id
@@ -447,7 +447,7 @@ def get_money(cursor, params):
         elif params.get('data_type') == 2:
             command = """
             -- 用户订单总额
-            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') AS create_time, 
             IF(SUM((SELECT SUM(price)
             FROM shb_orders
             WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id
@@ -476,7 +476,7 @@ def get_money(cursor, params):
         elif params.get('data_type') == 3:
             command = """
             -- 用户订单完成总额
-            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d'), 
+            SELECT FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') AS create_time, 
             IF(SUM((SELECT SUM(price)
             FROM shb_orders
             WHERE shu_recommended_users.recommended_user_id = shb_orders.driver_id

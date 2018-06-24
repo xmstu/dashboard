@@ -110,298 +110,299 @@
             </ul>
         </nav>
         <aside class="main-content-right">
-            <div>
-                <div class="m-c-l-content">
-                    <div class="content-header">
-                        <h2><i class="iconfont icon-qushi1"></i>运力趋势统计</h2>
-                        <hr>
-                    </div>
-                    <div class="part-1">
-                        <div class="part-1-top">
-                            <form action="" class="layui-form layui-form-pane">
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
-                                        <label class="layui-form-label">开始日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_one" name="date_one" autocomplete="off"
-                                                   lay-verify="date" class="layui-input" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
-                                        <label class="layui-form-label">结束日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_two" name="date_two" autocomplete="off"
-                                                   lay-verify="date_show_two" class="layui-input" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <ul class="periods">
-                                    <li>
-                                        <button class="active" value="2" id="day_methods">按日</button>
-                                    </li>
-                                    <li>
-                                        <button value="3" id="week_methods">按周</button>
-                                    </li>
-                                    <li>
-                                        <button value="4" id="month_methods">按月</button>
-                                    </li>
-                                </ul>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width: 140px">
-                                            <select id="user_type" name="modules" lay-verify="required" lay-search="">
-                                                <option value="">全部地区</option>
-                                                <option value="1">天河区</option>
-                                                <option value="2">越秀区</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item" style="width:232px;">
-                                    <div class="layui-inline" style="">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width:140px;">
-                                            <select id="role_type_first" name="modules" lay-verify="required"
-                                                    lay-search="">
-                                                <option value="0">小面包车</option>
-                                                <option value="1">小货车</option>
-                                                <option value="2">中面包车</option>
-                                                <option value="3">4.2m</option>
-                                                <option value="4">7.6m</option>
-                                                <option value="5">9.6m</option>
-                                                <option value="6">13m</option>
-                                                <option value="7">17m</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button id="search_btn" style="position: relative;padding-left: 20px;"
-                                        class="layui-btn layui-btn-normal"><i style=""
-                                                                              class="iconfont icon-sousuo1"></i> 搜索
-                                </button>
-                            </form>
-                        </div>
-                        <div class="part-1-bottom">
-                            <div id="charts_container_one" style="height: 100%"></div>
-                            <div class="chart-tips">未查询到数据</div>
-                        </div>
-
-                    </div>
-                    <div class="part-2">
-                        <div class="part-2-top">
-                            <h2><i class="iconfont icon-leidatu"></i>运力雷达图</h2>
-                            <hr>
-                            <form action="" class="layui-form layui-form-pane">
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
-                                        <label class="layui-form-label">开始日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_three" name="date_show_three" autocomplete="off"
-                                                   lay-verify="date_show_three" class="layui-input" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
-                                        <label class="layui-form-label">结束日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_four" name="date_show_four" autocomplete="off"
-                                                   lay-verify="date_show_four" class="layui-input" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width: 140px">
-                                            <select id="city_area" name="modules" lay-verify="required" lay-search="">
-                                                <option value="">全部地区</option>
-                                                <option value="1">天河区</option>
-                                                <option value="2">越秀区</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item" style="width:232px;">
-                                    <div class="layui-inline" style="">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width:140px;">
-                                            <select id="" name="modules" lay-verify="required"
-                                                    lay-search="">
-                                                <option value="">全部业务</option>
-                                                <option value="1">同城</option>
-                                                <option value="2">跨城</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button id="search_btn" style="position: relative;padding-left: 20px;"
-                                        class="layui-btn layui-btn-normal"><i style=""
-                                                                              class="iconfont icon-sousuo1"></i> 搜索
-                                </button>
-                            </form>
-                        </div>
-                        <div class="part-2-bottom">
-                            <div id="charts_container_two" style="height: 100%;width: 600px;border: 1px dashed #ccc;"></div>
-                            <div class="chart-tips">未查询到数据</div>
-                        </div>
-                    </div>
-                    <div class="part-3">
-                        <form action="" class="layui-form layui-form-pane">
-                            <div class="layui-form-item" style="width: 254px;vertical-align: top">
-                                <label class="layui-form-label">出发地</label>
-                                <div class="layui-input-inline">
-                                    <input id="user_name" type="text" name="username" lay-verify="required"
-                                           placeholder="请选择出发地" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-form-item" style="width: 254px;">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">目的地</label>
-                                    <div class="layui-input-inline">
-                                        <input id="phone_number" type="tel" name="phone" maxlength="11"
-                                               placeholder="请选择目的地" lay-verify="required|phone" autocomplete="off"
-                                               class="layui-input">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item" style="width:232px;">
-                                <div class="layui-inline" style="">
-                                    <label class="layui-form-label">车长选择</label>
-                                    <div class="layui-input-inline" style="width:140px;">
-                                        <select id="role_type_first" name="modules" lay-verify="required"
-                                                lay-search="">
-                                            <option value="">全部</option>
-                                            <option value="0">小面包车</option>
-                                            <option value="1">小货车</option>
-                                            <option value="2">中面包车</option>
-                                            <option value="3">4.2m</option>
-                                            <option value="4">7.6m</option>
-                                            <option value="5">9.6m</option>
-                                            <option value="6">13m</option>
-                                            <option value="7">17m</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item" style="width:170px;">
-                                <div class="layui-inline" style="">
-                                    <label class="layui-form-label">接单时间</label>
-                                    <div class="layui-input-inline" style="width:84px;">
-                                        <select id="order_start" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全天</option>
-                                            <option value="0">0:00</option>
-                                            <option value="1">1:00</option>
-                                            <option value="2">2:00</option>
-                                            <option value="3">3:00</option>
-                                            <option value="4">4:00</option>
-                                            <option value="5">5:00</option>
-                                            <option value="6">6:00</option>
-                                            <option value="7">7:00</option>
-                                            <option value="8">8:00</option>
-                                            <option value="9">9:00</option>
-                                            <option value="10">10:00</option>
-                                            <option value="11">11:00</option>
-                                            <option value="12">12:00</option>
-                                            <option value="13">13:00</option>
-                                            <option value="14">14:00</option>
-                                            <option value="15">15:00</option>
-                                            <option value="16">16:00</option>
-                                            <option value="17">17:00</option>
-                                            <option value="18">18:00</option>
-                                            <option value="19">19:00</option>
-                                            <option value="20">20:00</option>
-                                            <option value="21">21:00</option>
-                                            <option value="22">22:00</option>
-                                            <option value="23">23:00</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="mr-4" style="display: inline-block;margin-top: 6px;">至</span>
-                            <div class="layui-form-item" style="width: 90px;position: relative;">
-                               <div class="layui-form-block">
-                                      <select id="end_time" name="end_time" disabled lay-verify="required"
-                                            lay-search="">
-                                        <option value="1">24:00</option>
-                                    </select>
-                               </div>
-
-                                   <!-- <button id="end_time_show"  name="end_time" disabled lay-verify="required"
-                                            lay-search="" value="1">24:00</button>-->
-                            </div>
-                            <div class="layui-form-item">
-                                <div class="layui-inline" style="width: 230px">
-                                    <label class="layui-form-label">业务类型</label>
-                                    <div class="layui-input-inline" style="width: 140px">
-                                        <select id="profession_type" name="modules" lay-verify="required"
-                                                lay-search="">
-                                            <option value="">全部业务</option>
-                                            <option value="1">同城</option>
-                                            <option value="2">跨城定价</option>
-                                            <option value="3">跨城议价</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <div class="layui-inline" style="width: 276px">
-                                    <label class="layui-form-label">里程</label>
-                                    <div class="layui-input-inline" style="width: 84px;margin-right: 0;">
-                                        <select id="distance_select" name="modules" lay-verify="required"
-                                                lay-search="">
-                                            <option value="">请选择</option>
-                                            <option value="1">大于</option>
-                                            <option value="2">小于</option>
-                                        </select>
-                                    </div>
-                                    <div class="layui-input-inline" style="width: 96px;margin-right: 0;">
-                                        <input type="text" maxlength="9" name="distance" lay-verify="required" placeholder="请输入距离"
-                                               autocomplete="off" class="layui-input">
-                                    </div>
-                                    <label class="layui-form-label">KM</label>
-                                </div>
-                            </div>
-                            <div class="layui-form-item" style="width:228px;position: relative;">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">开始时间</label>
-                                    <div class="layui-input-block">
-                                        <i class="layui-icon layui-icon-riqi"></i>
-                                        <input style="width: 148px;" id="date_show_five" name="date_show_five"
-                                               autocomplete="off" lay-verify="date_show_five" class="layui-input"
-                                               type="text">
-                                        <span class="date-tips" style="right: 64px;">请选择日期</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <span style="display: inline-block;margin-top: 9px;">至</span>
-                            <div class="layui-form-item" style="width:200px;position: relative;">
-                                <div class="layui-inline">
-                                    <div class="layui-input-block" style="margin-left: 10px;">
-                                        <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="date_show_six" name="date_show_six" autocomplete="off"
-                                               lay-verify="date_show_six" class="layui-input" type="text">
-                                        <span class="date-tips">请选择日期</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button id="user_search_box"
-                                    style="position: relative;padding-left: 20px;vertical-align: top;"
-                                    class="layui-btn layui-btn-normal"><i style="" class="iconfont icon-sousuo1"></i> 搜索
-                            </button>
-                        </form>
-                        <table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>
-
-                    </div>
-                </div>
-            </div>
+{#            <div>#}
+{#                <div class="m-c-l-content">#}
+{#                    <div class="content-header">#}
+{#                        <h2><i class="iconfont icon-qushi1"></i>运力趋势统计</h2>#}
+{#                        <hr>#}
+{#                    </div>#}
+{#                    <div class="part-1">#}
+{#                        <div class="part-1-top">#}
+{#                            <form action="" class="layui-form layui-form-pane">#}
+{#                                <div class="layui-form-item">#}
+{#                                    <div class="layui-inline" style="width: 210px;">#}
+{#                                        <label class="layui-form-label">开始日期</label>#}
+{#                                        <div class="layui-input-block">#}
+{#                                            <i class="layui-icon layui-icon-riqi"></i>#}
+{#                                            <input id="date_show_one" name="date_one" autocomplete="off"#}
+{#                                                   lay-verify="date" class="layui-input" type="text">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="layui-form-item">#}
+{#                                    <div class="layui-inline" style="width: 210px;">#}
+{#                                        <label class="layui-form-label">结束日期</label>#}
+{#                                        <div class="layui-input-block">#}
+{#                                            <i class="layui-icon layui-icon-riqi"></i>#}
+{#                                            <input id="date_show_two" name="date_two" autocomplete="off"#}
+{#                                                   lay-verify="date_show_two" class="layui-input" type="text">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <ul class="periods">#}
+{#                                    <li>#}
+{#                                        <button class="active" value="2" id="day_methods">按日</button>#}
+{#                                    </li>#}
+{#                                    <li>#}
+{#                                        <button value="3" id="week_methods">按周</button>#}
+{#                                    </li>#}
+{#                                    <li>#}
+{#                                        <button value="4" id="month_methods">按月</button>#}
+{#                                    </li>#}
+{#                                </ul>#}
+{#                                <div class="layui-form-item">#}
+{#                                    <div class="layui-inline" style="width: 230px">#}
+{#                                        <label class="layui-form-label">搜索选择</label>#}
+{#                                        <div class="layui-input-inline" style="width: 140px">#}
+{#                                            <select id="user_type" name="modules" lay-verify="required" lay-search="">#}
+{#                                                <option value="">全部地区</option>#}
+{#                                                <option value="1">天河区</option>#}
+{#                                                <option value="2">越秀区</option>#}
+{#                                            </select>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="layui-form-item" style="width:232px;">#}
+{#                                    <div class="layui-inline" style="">#}
+{#                                        <label class="layui-form-label">搜索选择</label>#}
+{#                                        <div class="layui-input-inline" style="width:140px;">#}
+{#                                            <select id="role_type_first" name="modules" lay-verify="required"#}
+{#                                                    lay-search="">#}
+{#                                                <option value="0">小面包车</option>#}
+{#                                                <option value="1">小货车</option>#}
+{#                                                <option value="2">中面包车</option>#}
+{#                                                <option value="3">4.2m</option>#}
+{#                                                <option value="4">7.6m</option>#}
+{#                                                <option value="5">9.6m</option>#}
+{#                                                <option value="6">13m</option>#}
+{#                                                <option value="7">17m</option>#}
+{#                                            </select>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <button id="search_btn" style="position: relative;padding-left: 20px;"#}
+{#                                        class="layui-btn layui-btn-normal"><i style=""#}
+{#                                                                              class="iconfont icon-sousuo1"></i> 搜索#}
+{#                                </button>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                        <div class="part-1-bottom">#}
+{#                            <div id="charts_container_one" style="height: 100%"></div>#}
+{#                            <div class="chart-tips">未查询到数据</div>#}
+{#                        </div>#}
+{##}
+{#                    </div>#}
+{#                    <div class="part-2">#}
+{#                        <div class="part-2-top">#}
+{#                            <h2><i class="iconfont icon-leidatu"></i>运力雷达图</h2>#}
+{#                            <hr>#}
+{#                            <form action="" class="layui-form layui-form-pane">#}
+{#                                <div class="layui-form-item">#}
+{#                                    <div class="layui-inline" style="width: 210px;">#}
+{#                                        <label class="layui-form-label">开始日期</label>#}
+{#                                        <div class="layui-input-block">#}
+{#                                            <i class="layui-icon layui-icon-riqi"></i>#}
+{#                                            <input id="date_show_three" name="date_show_three" autocomplete="off"#}
+{#                                                   lay-verify="date_show_three" class="layui-input" type="text">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="layui-form-item">#}
+{#                                    <div class="layui-inline" style="width: 210px;">#}
+{#                                        <label class="layui-form-label">结束日期</label>#}
+{#                                        <div class="layui-input-block">#}
+{#                                            <i class="layui-icon layui-icon-riqi"></i>#}
+{#                                            <input id="date_show_four" name="date_show_four" autocomplete="off"#}
+{#                                                   lay-verify="date_show_four" class="layui-input" type="text">#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="layui-form-item">#}
+{#                                    <div class="layui-inline" style="width: 230px">#}
+{#                                        <label class="layui-form-label">搜索选择</label>#}
+{#                                        <div class="layui-input-inline" style="width: 140px">#}
+{#                                            <select id="city_area" name="modules" lay-verify="required" lay-search="">#}
+{#                                                <option value="">全部地区</option>#}
+{#                                                <option value="1">天河区</option>#}
+{#                                                <option value="2">越秀区</option>#}
+{#                                            </select>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="layui-form-item" style="width:232px;">#}
+{#                                    <div class="layui-inline" style="">#}
+{#                                        <label class="layui-form-label">搜索选择</label>#}
+{#                                        <div class="layui-input-inline" style="width:140px;">#}
+{#                                            <select id="" name="modules" lay-verify="required"#}
+{#                                                    lay-search="">#}
+{#                                                <option value="">全部业务</option>#}
+{#                                                <option value="1">同城</option>#}
+{#                                                <option value="2">跨城</option>#}
+{#                                            </select>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <button id="search_btn" style="position: relative;padding-left: 20px;"#}
+{#                                        class="layui-btn layui-btn-normal"><i style=""#}
+{#                                                                              class="iconfont icon-sousuo1"></i> 搜索#}
+{#                                </button>#}
+{#                            </form>#}
+{#                        </div>#}
+{#                        <div class="part-2-bottom">#}
+{#                            <div id="charts_container_two" style="height: 100%;width: 600px;border: 1px dashed #ccc;"></div>#}
+{#                            <div class="chart-tips">未查询到数据</div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="part-3">#}
+{#                        <form action="" class="layui-form layui-form-pane">#}
+{#                            <div class="layui-form-item" style="width: 254px;vertical-align: top">#}
+{#                                <label class="layui-form-label">出发地</label>#}
+{#                                <div class="layui-input-inline">#}
+{#                                    <input id="user_name" type="text" name="username" lay-verify="required"#}
+{#                                           placeholder="请选择出发地" autocomplete="off" class="layui-input">#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="layui-form-item" style="width: 254px;">#}
+{#                                <div class="layui-inline">#}
+{#                                    <label class="layui-form-label">目的地</label>#}
+{#                                    <div class="layui-input-inline">#}
+{#                                        <input id="phone_number" type="tel" name="phone" maxlength="11"#}
+{#                                               placeholder="请选择目的地" lay-verify="required|phone" autocomplete="off"#}
+{#                                               class="layui-input">#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="layui-form-item" style="width:232px;">#}
+{#                                <div class="layui-inline" style="">#}
+{#                                    <label class="layui-form-label">车长选择</label>#}
+{#                                    <div class="layui-input-inline" style="width:140px;">#}
+{#                                        <select id="role_type_first" name="modules" lay-verify="required"#}
+{#                                                lay-search="">#}
+{#                                            <option value="">全部</option>#}
+{#                                            <option value="0">小面包车</option>#}
+{#                                            <option value="1">小货车</option>#}
+{#                                            <option value="2">中面包车</option>#}
+{#                                            <option value="3">4.2m</option>#}
+{#                                            <option value="4">7.6m</option>#}
+{#                                            <option value="5">9.6m</option>#}
+{#                                            <option value="6">13m</option>#}
+{#                                            <option value="7">17m</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="layui-form-item" style="width:170px;">#}
+{#                                <div class="layui-inline" style="">#}
+{#                                    <label class="layui-form-label">接单时间</label>#}
+{#                                    <div class="layui-input-inline" style="width:84px;">#}
+{#                                        <select id="order_start" name="modules" lay-verify="required" lay-search="">#}
+{#                                            <option value="">全天</option>#}
+{#                                            <option value="0">0:00</option>#}
+{#                                            <option value="1">1:00</option>#}
+{#                                            <option value="2">2:00</option>#}
+{#                                            <option value="3">3:00</option>#}
+{#                                            <option value="4">4:00</option>#}
+{#                                            <option value="5">5:00</option>#}
+{#                                            <option value="6">6:00</option>#}
+{#                                            <option value="7">7:00</option>#}
+{#                                            <option value="8">8:00</option>#}
+{#                                            <option value="9">9:00</option>#}
+{#                                            <option value="10">10:00</option>#}
+{#                                            <option value="11">11:00</option>#}
+{#                                            <option value="12">12:00</option>#}
+{#                                            <option value="13">13:00</option>#}
+{#                                            <option value="14">14:00</option>#}
+{#                                            <option value="15">15:00</option>#}
+{#                                            <option value="16">16:00</option>#}
+{#                                            <option value="17">17:00</option>#}
+{#                                            <option value="18">18:00</option>#}
+{#                                            <option value="19">19:00</option>#}
+{#                                            <option value="20">20:00</option>#}
+{#                                            <option value="21">21:00</option>#}
+{#                                            <option value="22">22:00</option>#}
+{#                                            <option value="23">23:00</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <span class="mr-4" style="display: inline-block;margin-top: 6px;">至</span>#}
+{#                            <div class="layui-form-item" style="width: 90px;position: relative;">#}
+{#                               <div class="layui-form-block">#}
+{#                                      <select id="end_time" name="end_time" disabled lay-verify="required"#}
+{#                                            lay-search="">#}
+{#                                        <option value="1">24:00</option>#}
+{#                                    </select>#}
+{#                               </div>#}
+{##}
+{#                                   <!-- <button id="end_time_show"  name="end_time" disabled lay-verify="required"#}
+{#                                            lay-search="" value="1">24:00</button>-->#}
+{#                            </div>#}
+{#                            <div class="layui-form-item">#}
+{#                                <div class="layui-inline" style="width: 230px">#}
+{#                                    <label class="layui-form-label">业务类型</label>#}
+{#                                    <div class="layui-input-inline" style="width: 140px">#}
+{#                                        <select id="profession_type" name="modules" lay-verify="required"#}
+{#                                                lay-search="">#}
+{#                                            <option value="">全部业务</option>#}
+{#                                            <option value="1">同城</option>#}
+{#                                            <option value="2">跨城定价</option>#}
+{#                                            <option value="3">跨城议价</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="layui-form-item">#}
+{#                                <div class="layui-inline" style="width: 276px">#}
+{#                                    <label class="layui-form-label">里程</label>#}
+{#                                    <div class="layui-input-inline" style="width: 84px;margin-right: 0;">#}
+{#                                        <select id="distance_select" name="modules" lay-verify="required"#}
+{#                                                lay-search="">#}
+{#                                            <option value="">请选择</option>#}
+{#                                            <option value="1">大于</option>#}
+{#                                            <option value="2">小于</option>#}
+{#                                        </select>#}
+{#                                    </div>#}
+{#                                    <div class="layui-input-inline" style="width: 96px;margin-right: 0;">#}
+{#                                        <input type="text" maxlength="9" name="distance" lay-verify="required" placeholder="请输入距离"#}
+{#                                               autocomplete="off" class="layui-input">#}
+{#                                    </div>#}
+{#                                    <label class="layui-form-label">KM</label>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="layui-form-item" style="width:228px;position: relative;">#}
+{#                                <div class="layui-inline">#}
+{#                                    <label class="layui-form-label">开始时间</label>#}
+{#                                    <div class="layui-input-block">#}
+{#                                        <i class="layui-icon layui-icon-riqi"></i>#}
+{#                                        <input style="width: 148px;" id="date_show_five" name="date_show_five"#}
+{#                                               autocomplete="off" lay-verify="date_show_five" class="layui-input"#}
+{#                                               type="text">#}
+{#                                        <span class="date-tips" style="right: 64px;">请选择日期</span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <span style="display: inline-block;margin-top: 9px;">至</span>#}
+{#                            <div class="layui-form-item" style="width:200px;position: relative;">#}
+{#                                <div class="layui-inline">#}
+{#                                    <div class="layui-input-block" style="margin-left: 10px;">#}
+{#                                        <i class="layui-icon layui-icon-riqi"></i>#}
+{#                                        <input id="date_show_six" name="date_show_six" autocomplete="off"#}
+{#                                               lay-verify="date_show_six" class="layui-input" type="text">#}
+{#                                        <span class="date-tips">请选择日期</span>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <button id="user_search_box"#}
+{#                                    style="position: relative;padding-left: 20px;vertical-align: top;"#}
+{#                                    class="layui-btn layui-btn-normal"><i style="" class="iconfont icon-sousuo1"></i> 搜索#}
+{#                            </button>#}
+{#                        </form>#}
+{#                        <table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>#}
+{##}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+            {% include '/exception/unfinished.html' %}
         </aside>
     </article>
 </article>
