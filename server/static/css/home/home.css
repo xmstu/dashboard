@@ -57,12 +57,18 @@
     line-height: 20px;
     font-size: 12px;
     color: #009688;
-    border-bottom: 1px solid #009688;
+    border-bottom: 1px dashed #009688;
 }
 .all_count,.all_count_1,
 .all_count_ano,.all_count_ano_1{
-    font-size: 13px;
-    color: #333;
+      font-size: 12px;
+    color: #009688;
+    font-weight: bold;
     line-height: 20px;
-    border-bottom: 1px solid #009688;
+    border-bottom: 1px dashed #009688;
+}
+.m-c-l-content .content-header > h2 > i,
+.m-c-l-content .part-2 > h2 > i{
+    font-size: 20px;
+    margin-right: 6px;
 }
