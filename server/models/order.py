@@ -215,6 +215,7 @@ class OrderListmodel(object):
                 so.paid_offline,
                 sg.payment_method,
                 se.`level`,
+                (so.create_time - sg.create_time) as latency_time,
                 so.create_time,
             IF
                 ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) AS complete_time,
@@ -387,7 +388,7 @@ class OrderListmodel(object):
 
         count = cursor.query_one(command.format(fields=" COUNT(*) AS total_count ", fetch_where=fetch_where))['total_count']
 
-        fetch_where += """ LIMIT {0}, {1} """.format((page - 1) * limit, limit)
+        fetch_where += """ ORDER BY id DESC LIMIT {0}, {1} """.format((page - 1) * limit, limit)
 
         order_list = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 

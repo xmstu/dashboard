@@ -186,7 +186,8 @@ class OrderList(object):
                     'order_status': order_status,
                     'evaluation': evaluation,
                     'complete_time': timestamp2date(detail['complete_time'], 2) if detail['complete_time'] else '待完成',
-                    'create_time': timestamp2date(detail['create_time'], 2) if detail['create_time'] else '未知接单时间'
+                    'create_time': timestamp2date(detail['create_time'], 2) if detail['create_time'] else '未知接单时间',
+                    'latency_time': "%.2f分钟" % (detail['latency_time'] / 60)
                 })
 
             return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok
