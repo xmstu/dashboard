@@ -6,6 +6,7 @@ from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
+from server.utils.extend import compare_time
 
 
 class GoodsList(object):
@@ -41,22 +42,19 @@ class GoodsList(object):
             is_addition = int(params.get('is_addition')) if params.get('is_addition') else 0
 
             # 校验参数
-            if create_end_time and create_start_time:
-                if create_start_time <= create_end_time < time.time():
-                    pass
-                else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='发布时间有误'))
+            if not compare_time(create_end_time, create_start_time):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
-            if load_start_time and load_end_time:
-                if load_start_time <= load_end_time < time.time():
-                    pass
-                else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='装货时间有误'))
+            if not compare_time(load_start_time, load_end_time):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             # 当前权限下所有地区
-            role, locations_id = sessionOperationClass.get_locations()
-            if role in (2, 3, 4) and not node_id:
-                node_id = locations_id
+            if sessionOperationClass.check():
+                role, locations_id = sessionOperationClass.get_locations()
+                if role in (2, 3, 4) and not node_id:
+                    node_id = locations_id
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
             params = {
                 "goods_id": goods_id,
@@ -102,14 +100,15 @@ class CancelGoodsReason(object):
             cancel_type = int(params.get('cancel_type', None) or 1)
             region_id = int(params.get('region_id', None) or 0)
 
-            if start_time and end_time:
-                if start_time <= end_time < time.time():
-                    pass
-                else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
-            elif not start_time and not end_time:
-                pass
+            # 当前权限下所有地区
+            if sessionOperationClass.check():
+                role, locations_id = sessionOperationClass.get_locations()
+                if role in (2, 3, 4) and not region_id:
+                    region_id = locations_id
             else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+
+            if not compare_time(start_time, end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             params = {
@@ -137,6 +136,9 @@ class GoodsDistributionTrend(object):
             goods_type = int(params.get('goods_type', None) or 0)
             region_id = int(params.get('region_id', None) or 0)
 
+            if not compare_time(start_time, end_time):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+
             params = {
                 'start_time':start_time,
                 'end_time':end_time,
@@ -144,16 +146,6 @@ class GoodsDistributionTrend(object):
                 'goods_type':goods_type,
                 'region_id':region_id
             }
-
-            if start_time and end_time:
-                if start_time <= end_time < time.time():
-                    pass
-                else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
-            elif not start_time and not end_time:
-                pass
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             return Response(params=params)
         except Exception as e:

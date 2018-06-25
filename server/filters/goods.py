@@ -129,7 +129,7 @@ class GoodsList(object):
                         loading_time = detail.get('loading_time_date', '') + '19:00:00'
                     else:
                         loading_time = detail.get('loading_time_date', '') + '00:00:00'
-                goods_time = '发布时间:%(create_time)s\n装货时间:%(loading_time)s' % {
+                goods_time = '%(create_time)s\n%(loading_time)s' % {
                     'create_time': detail['shf_goods_create_time'],
                     'loading_time': loading_time
                 }
@@ -186,7 +186,7 @@ class GoodsDistributionTrend(object):
         recv_order_series = get_struct_data(recv_order, params, 'count')
         cancel_order_series = get_struct_data(cancel_order, params, 'count')
 
-        xAxis = get_xAxis(params)
+        xAxis = get_xAxis(params['periods'], params['start_time'], params['end_time'])
 
         ret = {
             'xAxis': xAxis,

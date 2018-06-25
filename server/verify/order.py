@@ -4,6 +4,7 @@ from flask_restful import abort
 
 from server import log
 from server.meta.decorators import make_decorator, Response
+from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 
 
@@ -84,6 +85,14 @@ class OrderList(object):
             params['end_order_time'] = int(params.get('end_order_time', None) or time.time() - 86400)
             params['start_loading_time'] = int(params.get('start_loading_time', None) or time.time() - 86400 * 7)
             params['end_loading_time'] = int(params.get('end_loading_time', None) or time.time() - 86400)
+
+            # 当前权限下所有地区
+            if sessionOperationClass.check():
+                role, locations_id = sessionOperationClass.get_locations()
+                if role in (2, 3, 4) and not params['node_id']:
+                    params['node_id'] = locations_id
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
             if params['start_order_time'] <= params['end_order_time'] < time.time():
                 pass

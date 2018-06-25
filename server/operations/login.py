@@ -4,6 +4,8 @@
 import hashlib
 
 from flask_restful import abort
+
+from server.init_regions import init_regions
 from server.meta.session_operation import sessionOperationClass
 
 from server.logger import log
@@ -36,8 +38,9 @@ class LoginDecorator(object):
             locations = []
             # 后台
             if role == 1:
-                result = RegionsModel.get_admin_region(db.read_db)
-                locations = [i['id'] for i in result]
+                # result = RegionsModel.get_admin_region(db.read_db)
+                # locations = [i['id'] for i in result]
+                locations = [i for i in init_regions.region if init_regions.region[i]['level'] == 1]
             elif role == 4:
                 pass
 

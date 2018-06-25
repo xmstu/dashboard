@@ -161,7 +161,7 @@ class CityOrderListFilterDecorator(object):
                     loading_time = detail.get('loading_time_date', '') + '19:00:00'
                 else:
                     loading_time = detail.get('loading_time_date', '') + '00:00:00'
-            goods_time = '发布时间:%(create_time)s\n装货时间:%(loading_time)s' % {
+            goods_time = '%(create_time)s\n%(loading_time)s' % {
                 'create_time': detail['shf_goods_create_time'],
                 'loading_time': loading_time
             }

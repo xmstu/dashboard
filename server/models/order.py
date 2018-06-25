@@ -204,21 +204,7 @@ class OrderListmodel(object):
                     AND shf_goods_vehicles.vehicle_attribute = 1 
                     AND shf_goods_vehicles.is_deleted = 0 
                 ) AS vehicle_type,
-                (
-                SELECT
-                IF
-                    ( shf_goods_vehicles.attribute_value_id = 0, '不限车长', GROUP_CONCAT( shm_dictionary_items.`name` ) ) 
-                FROM
-                    shf_goods_vehicles
-                    LEFT JOIN shm_dictionary_items ON shf_goods_vehicles.attribute_value_id = shm_dictionary_items.id 
-                    AND shm_dictionary_items.is_deleted = 0 
-                WHERE
-                    shf_goods_vehicles.goods_id = sg.id 
-                    AND shf_goods_vehicles.vehicle_attribute = 2 
-                    AND shf_goods_vehicles.is_deleted = 0 
-                ) AS vehicle_length,
                 shf_goods_vehicles.`name` AS new_vehicle_type,
-                ( SELECT shm_dictionary_items.`name` FROM shm_dictionary_items WHERE shf_goods_vehicles.attribute_value_id = shm_dictionary_items.id AND shm_dictionary_items.is_deleted = 0 ) AS new_vehicle_length,
                 so.price,
                 ( SELECT shu_users.mobile FROM shu_users WHERE id = so.driver_id ) AS driver_mobile,
                 ( SELECT shu_user_profiles.user_name FROM shu_user_profiles WHERE user_id = so.driver_id ) AS driver_name,
@@ -231,7 +217,7 @@ class OrderListmodel(object):
                 se.`level`,
                 so.create_time,
             IF
-                ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, '' ) AS complete_time,
+                ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) AS complete_time,
                 (SELECT COUNT(driver_id) from shb_orders WHERE shb_orders.driver_id = so.driver_id) AS c1,
                 (SELECT COUNT(*) from shf_goods WHERE shf_goods.user_id = so.owner_id) AS c2,
                 shf_goods_vehicles.need_open_top,
@@ -341,9 +327,22 @@ class OrderListmodel(object):
             )
             """.format(vehicle_type=params['vehicle_type'])
 
-        # TODO 网点
+        # 网点
         if params.get('node_id'):
-            pass
+            if isinstance(params['node_id'], int):
+                fetch_where += """ 
+                AND (shf_goods.from_province_id = {0}
+                OR shf_goods.from_city_id = {0}
+                OR shf_goods.from_county_id = {0}
+                OR shf_goods.from_town_id = {0})
+                """.format(params['node_id'])
+            elif isinstance(params['node_id'], list):
+                fetch_where += """ 
+                AND (shf_goods.from_province_id IN ({0})
+                OR shf_goods.from_city_id IN ({0})
+                OR shf_goods.from_county_id IN ({0})
+                OR shf_goods.from_town_id IN ({0}))
+                """.format(','.join(params['node_id']))
 
         if params.get('spec_tag'):
             fetch_where += """

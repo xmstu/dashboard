@@ -119,14 +119,14 @@ def get_struct_data(data, params, *args, **kwargs):
     return series
 
 
-def get_xAxis(params):
+def get_xAxis(periods, start_time, end_time):
     # 日期补全
-    begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['start_time'])), "%Y-%m-%d")
-    end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['end_time'])), "%Y-%m-%d")
+    begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
+    end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
 
     # 日
     xAxis = []
-    if params['periods'] == 2:
+    if periods == 2:
         date_val = begin_date
         while date_val <= end_date:
             date_str = date_val.strftime("%Y-%m-%d")
@@ -134,7 +134,7 @@ def get_xAxis(params):
             date_val += datetime.timedelta(days=1)
 
     # 周
-    elif params['periods'] == 3:
+    elif periods == 3:
         begin_flag = begin_date
         end_flag = begin_date
         count = 0
@@ -153,7 +153,7 @@ def get_xAxis(params):
             count += 1
 
     # 月
-    elif params['periods'] == 4:
+    elif periods == 4:
         begin_flag = begin_date
         end_flag = begin_date
         while end_flag <= end_date:
@@ -169,3 +169,32 @@ def get_xAxis(params):
             end_flag += datetime.timedelta(days=1)
 
     return xAxis
+
+
+def compare_time(start_time, end_time) -> bool:
+    if start_time and end_time:
+        if start_time <= end_time < time.time():
+            return True
+        else:
+            return False
+    elif not start_time and not end_time:
+        return True
+    else:
+        return False
+
+
+def timestamp2date(time_stamp, accuracy=1):
+    ret = {
+        1: time.strftime('%Y-%m-%d', time.localtime(time_stamp)),
+        2: time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time_stamp)),
+    }
+    return ret[accuracy]
+
+
+def date2timestamp(date, accuracy=1):
+    ret = {
+        1: time.mktime(time.strptime(date, '%Y-%m-%d')),
+        2: time.mktime(time.strptime(date, '%Y-%m-%d %H:%M:%S'))
+    }
+
+    return ret[accuracy]
