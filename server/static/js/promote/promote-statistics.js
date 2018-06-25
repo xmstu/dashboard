@@ -72,7 +72,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#date_show_three',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+        max: String(common.getNowFormatDate()[0]),
         done: function (val, index) {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -91,7 +91,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#date_show_four',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+        max: String(common.getNowFormatDate()[0]),
         done: function (val, index) {
             if ($('#date_show_four').val() == '') {
                 $('#date_show_four').next('.date-tips').show();

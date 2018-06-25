@@ -8,6 +8,7 @@ setTimeout(function () {
 }, 50);
 layui.use(['laydate', 'form', 'table'], function () {
     dataInit();
+    layer.load();
     var laydate = layui.laydate;
     var table = layui.table;
     laydate.render({
@@ -178,7 +179,7 @@ function dataInit() {
                         name: '货源数',
                         type: 'pie',
                         clockWise: false,
-                        radius: [95, 110],
+                        radius: [90, 105],
                         itemStyle: dataStyle,
                         data: val[0]
                     },
@@ -186,7 +187,7 @@ function dataInit() {
                         name: '车辆数',
                         type: 'pie',
                         clockWise: false,
-                        radius: [80, 95],
+                        radius: [75, 90],
                         itemStyle: dataStyle,
                         data: val[1]
                     }
@@ -220,13 +221,13 @@ function tableInit(url) {
                 {field: 'goods_id', title: '货源ID', width: 82},
                 {field: 'goods_type', title: '类型', width: 60},
                 {field: 'content', title: '货物规格', width: 120},
-                {field: 'supplier_node', title: '所属网点', width: 200},
+                {field: 'address', title: '出发地-目的地'},
                 {field: 'vehicle', title: '车型要求', width: 116},
                 {field: 'price', title: '运费', width: 180},
                 {field: 'mobile', title: '货主手机', width: 110},
                 {field: 'call_count', title: '通话数', width: 82},
                 {field: 'goods_time', title: '时间', width: 210},
-                {field: 'address', title: '出发地-目的地'},
+                   {field: 'supplier_node', title: '所属网点', width: 200},
                 {
                     field: 'operate', title: '操作', width: 107, templet: function (d) {
                         return '<button value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
@@ -323,7 +324,7 @@ function tableReset(url) {
             , cols: [[ //表头
                 {field: 'name', title: '司机姓名', width: 86}
                 , {field: 'mobile', title: '手机号码', width: 110}
-                , {field: 'usual_region', title: '常驻地', width: 204}
+                , {field: 'usual_region', title: '匹配原则', width: 204}
                 , {field: 'vehicle_length', title: '车长', width: 166}
                 , {field: 'vehicle_type', title: '车型', width: 110}
                 , {field: 'credit_level', title: '司机评分', width: 104}
@@ -336,6 +337,7 @@ function tableReset(url) {
             , done: function (res) {
                 $("td[data-field='is_trust_member']").children().each(function () {
                     if ($(this).text() != '') {
+                        layer.closeAll('loading')
                         var str = $(this).text();
                         if (str == 1) {
                             $(this).text('是')
@@ -343,6 +345,9 @@ function tableReset(url) {
                             $(this).text('否')
                         }
                     }
+                });
+                 $("td[data-field='usual_region']").children().each(function () {
+                  $(this).html('最新定位')
                 });
                 $("td[data-field='credit_level']").children().each(function () {
                     var value_level = $(this).text();

@@ -61,7 +61,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#date_show_three',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+        max: String(common.getNowFormatDate()[0]),
         ready: function () {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -87,7 +87,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#date_show_four',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+        max: String(common.getNowFormatDate()[0]),
         ready: function () {
             if ($('#date_show_four').val() == '') {
                 $('#date_show_four').next('.date-tips').show();
@@ -112,7 +112,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     laydate.render({
         elem: '#date_show_five',
         theme: '#009688',
-        max: String(common.getNowFormatDate()[3]),
+        max: String(common.getNowFormatDate()[0]),
         calendar: true,
         ready: function () {
 
@@ -134,7 +134,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     laydate.render({
         elem: '#date_show_six',
         theme: '#009688',
-        max: String(common.getNowFormatDate()[3]),
+        max: String(common.getNowFormatDate()[0]),
         calendar: true,
         ready: function () {
 
@@ -163,6 +163,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         },
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'})
+            $("[data-field='usual_city']").css({'display':'none'})
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
                     $(this).text('未录入')
@@ -202,19 +203,19 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             })
         }
         , cols: [[
-            {field: 'id', title: '用户ID', sort: true, width: 86},
-            {field: 'user_name', title: '用户名', width: 106}
-            , {field: 'mobile', title: '手机号', width: 111}
-            , {field: 'user_type', title: '注册角色', width: 111}
-            , {field: 'role_auth', title: '认证', width: 111}
-            , {field: 'goods_count', title: '发货', width: 80}
-            , {field: 'order_count', title: '接单', width: 76}
-            , {field: 'order_completed', title: '完成订单', width: 76}
-            , {field: 'download_channel', title: '下载渠道', width: 110}
-            , {field: 'from_channel', title: '注册渠道', width: 146}
-            , {field: 'last_login_time', title: '最后登陆', width: 104}
-            , {field: 'create_time', title: '注册时间', width: 104}
-            , {field: 'usual_city', title: '常驻地'}
+             {field: 'id', title: '用户ID', sort: true},
+                {field: 'user_name', title: '用户名'}
+                , {field: 'mobile', title: '手机号'}
+                , {field: 'user_type', title: '注册角色'}
+                , {field: 'role_auth', title: '认证'}
+                , {field: 'goods_count', title: '发货'}
+                , {field: 'order_count', title: '接单'}
+                , {field: 'order_completed', title: '完成订单'}
+                , {field: 'download_channel', title: '下载渠道'}
+                , {field: 'from_channel', title: '注册渠道'}
+                , {field: 'last_login_time', title: '最后登陆'}
+                , {field: 'create_time', title: '注册时间'}
+                , {field: 'usual_city', title: '常驻地'}
         ]]
 
         , id: 'testReload'
@@ -377,7 +378,7 @@ $('#user_search_box').on('click', function (e) {
                 })
             }
             , cols: [[
-                {field: 'id', title: '用户ID', sort: true, width: 86},
+              /*  {field: 'id', title: '用户ID', sort: true, width: 86},
                 {field: 'user_name', title: '用户名', width: 106}
                 , {field: 'mobile', title: '手机号', width: 106}
                 , {field: 'user_type', title: '注册角色', width: 111}
@@ -389,6 +390,19 @@ $('#user_search_box').on('click', function (e) {
                 , {field: 'from_channel', title: '注册渠道', width: 146}
                 , {field: 'last_login_time', title: '最后登陆', width: 104}
                 , {field: 'create_time', title: '注册时间', width: 104}
+                , {field: 'usual_city', title: '常驻地'}*/
+                {field: 'id', title: '用户ID', sort: true},
+                {field: 'user_name', title: '用户名'}
+                , {field: 'mobile', title: '手机号'}
+                , {field: 'user_type', title: '注册角色'}
+                , {field: 'role_auth', title: '认证'}
+                , {field: 'goods_count', title: '发货'}
+                , {field: 'order_count', title: '接单'}
+                , {field: 'order_completed', title: '完成订单'}
+                , {field: 'download_channel', title: '下载渠道'}
+                , {field: 'from_channel', title: '注册渠道'}
+                , {field: 'last_login_time', title: '最后登陆'}
+                , {field: 'create_time', title: '注册时间'}
                 , {field: 'usual_city', title: '常驻地'}
             ]]
             , id: 'testReload'
@@ -403,7 +417,6 @@ $('#search_btn').on('click', function (e) {
 $(window).load(function () {
     layer.closeAll('loading')
 })
-
 function dataInit() {
     var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
     var requestEndTime = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
@@ -438,7 +451,6 @@ function dataInit() {
 Highcharts.setOptions({
     colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
-
 function chartInit(xAxis, series, interval, x_value1) {
     $('#charts_container_one').highcharts({
         tooltip: {
