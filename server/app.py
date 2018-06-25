@@ -47,9 +47,6 @@ def cors(resp):
     resp.headers.add(
         'Access-Control-Allow-Headers',
         'Origin, X-Requested-With, Content-Type, Accept, token, appVersion')
-    #resp.headers.add(
-    #    #'Access-Control-Expose-Headers',
-    #)
     resp.headers.add('Access-Control-Allow-Methods',
                      'GET,PUT,POST,DELETE,HEAD')
     return resp
@@ -58,32 +55,32 @@ def cors(resp):
 @app.errorhandler(HTTPStatus.NotFound)
 def page_not_found(e):
    log.warn('访问了未知路径: [error: %s]' % (e, ), exc_info=True)
-   return render_template('/exception/404.html')
+   return render_template('/exception/404.html', status_coder=404, title='资源未找到', content='访问了未知路径: [error: %s]' % e)
 
 
 @app.errorhandler(HTTPStatus.BadRequest)
 def bad_request(e):
    log.warn('错误的请求参数: [error: %s]' % (e, ), exc_info=True)
-   return render_template('/exception/400.html')
+   return render_template('/exception/except.html', status_coder=400, title='参数错误', content='错误的请求参数: [error: %s]' % e)
 
 
 @app.errorhandler(HTTPStatus.InternalServerError)
 def internal_server_error(e):
     log.warn('内部服务发生异常: [error: %s]' % (e,), exc_info=True)
-    return render_template('/exception/500.html')
+    return render_template('/exception/except.html', status_coder=500, title='服务器内部错误', content='内部服务发生异常: [error: %s]' % e)
 
 
 @api.errorhandler(Exception)
 def resource_internal_server_error(e):
    log.warn('服务发生异常: [error: %s]' % (e, ), exc_info=True)
-   return render_template('/exception/500.html')
+   return render_template('/exception/except.html', status_coder=500, title='服务异常', content='服务发生异常: [error: %s]' % e)
 
 
 @api.errorhandler(ValueError)
 @api.errorhandler(TypeError)
 def value_error(e):
     log.warn('服务发生异常: [error: %s]' % (e, ), exc_info=True)
-    return render_template('/exception/500.html')
+    return render_template('/exception/except.html', status_coder=500, title='服务异常', content='服务发生异常: [error: %s]' % e)
 
 # 接口页面展示
 if configs.env.deploy != "dev":

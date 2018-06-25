@@ -55,13 +55,13 @@ class UserList(object):
             AND shu_vehicle_auths.home_station_county_id = shm_regions.`code`
             LIMIT 1) AS usual_city,
             -- 发货数
-            (SELECT COUNT(*) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) AS goods_count,
+            (SELECT COUNT(1) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) AS goods_count,
            -- 订单数
-            (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id) +
-            (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.driver_id = shu_users.id) AS order_count,
+            (SELECT COUNT(1) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id) +
+            (SELECT COUNT(1) FROM shb_orders WHERE shb_orders.driver_id = shu_users.id) AS order_count,
             -- 订单完成
-            (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) +
-            (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.driver_id = shu_users.id AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) AS order_completed,
+            (SELECT COUNT(1) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) +
+            (SELECT COUNT(1) FROM shb_orders WHERE shb_orders.driver_id = shu_users.id AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) AS order_completed,
             -- 下载、注册渠道
             shu_user_profiles.download_channel,
             shu_user_profiles.from_channel,
@@ -116,17 +116,17 @@ class UserList(object):
         # 认证角色
         if params['role_auth'] == 1:
             command += '''
-            AND (SELECT COUNT(*) FROM shu_user_auths
+            AND (SELECT COUNT(1) FROM shu_user_auths
             WHERE shu_user_auths.id = shu_user_profiles.last_auth_goods_id AND shu_user_auths.auth_status = 2
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_goods = 1) > 0 '''
         elif params['role_auth'] == 2:
             command += '''
-            AND (SELECT COUNT(*) FROM shu_user_auths
+            AND (SELECT COUNT(1) FROM shu_user_auths
             WHERE shu_user_auths.id = shu_user_profiles.last_auth_driver_id AND shu_user_auths.auth_status = 2
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_driver = 1) > 0 '''
         elif params['role_auth'] == 3:
             command += '''
-            AND (SELECT COUNT(*) FROM shu_user_auths
+            AND (SELECT COUNT(1) FROM shu_user_auths
             WHERE shu_user_auths.id = shu_user_profiles.last_auth_company_id AND shu_user_auths.auth_status = 2
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_company = 1) > 0 '''
         # 是否活跃
@@ -142,11 +142,11 @@ class UserList(object):
             command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
         # 操作过
         if params['is_used'] == 1:
-            command += 'AND (SELECT COUNT(*) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) > 0 '
+            command += 'AND (SELECT COUNT(1) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) > 0 '
         elif params['is_used'] == 2:
-            command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) > 0 '
+            command += 'AND (SELECT COUNT(1) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) > 0 '
         elif params['is_used'] == 3:
-            command += 'AND (SELECT COUNT(*) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) > 0 '
+            command += 'AND (SELECT COUNT(1) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) > 0 '
         # 贴车贴
         if params['is_car_sticker'] == 1:
             command += 'AND shu_user_profiles.trust_member_type = 2 AND ad_expired_time > UNIX_TIMESTAMP() '
@@ -164,9 +164,9 @@ class UserList(object):
         # 优化初次加载速度
         fields_value = list(filter(lambda x: x, [params[i] for i in params]))
         if not fields_value:
-            user_count = cursor.query_one('SELECT COUNT(*) AS count FROM shu_users WHERE shu_users.is_deleted = 0')
+            user_count = cursor.query_one('SELECT COUNT(1) AS count FROM shu_users WHERE shu_users.is_deleted = 0')
         else:
-            user_count = cursor.query_one(command % 'COUNT(*) AS count')
+            user_count = cursor.query_one(command % 'COUNT(1) AS count')
 
         # TODO 排序优化 分页
         command += """ ORDER BY shu_users.id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
@@ -246,7 +246,7 @@ class UserStatistic(object):
     def get_before_user_count_by_mobile(cursor, params):
         """累计用户"""
         command = """
-        SELECT COUNT(*) AS count
+        SELECT COUNT(1) AS count
         FROM shu_users
         INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
         LEFT JOIN shu_user_auths AS goods_auth ON goods_auth.id = shu_user_profiles.last_auth_goods_id AND goods_auth.auth_status = 2 AND goods_auth.is_deleted = 0
@@ -271,7 +271,7 @@ class UserStatistic(object):
         # 优化查询速度
         if not params['role_type'] and not params['region_id'] and not params['is_auth']:
             before_user_count = cursor.query_one('''
-            SELECT COUNT(*) AS count
+            SELECT COUNT(1) AS count
             FROM shu_users
             WHERE shu_users.is_deleted = 0 AND shu_users.create_time < :start_time
             ''', {'start_time': params['start_time']})
@@ -296,7 +296,7 @@ class UserStatistic(object):
         command = """
         SELECT
         FROM_UNIXTIME(shu_users.create_time, '%%%%Y-%%%%m-%%%%d') AS create_time,
-        COUNT(*) AS count
+        COUNT(1) AS count
         
         FROM shu_users
         INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id

@@ -12,7 +12,7 @@ class OrdersReceivedStatisticsList(object):
         command = """
         SELECT
             FROM_UNIXTIME( shb_orders.create_time, '%Y-%m-%d' ) AS create_time,
-            COUNT( * ) AS order_counts,
+            COUNT( 1 ) AS order_counts,
             SUM( price ) AS order_sum_price 
         FROM
             `shb_orders`
@@ -108,7 +108,7 @@ class CancelOrderReasonModel(object):
         command = """
         SELECT
             shb_orders.canceled_reason_text,
-            COUNT(*) as reason_count
+            COUNT(1) as reason_count
         FROM
             `shb_orders`
             LEFT JOIN shf_goods ON shb_orders.goods_id = shf_goods.id 
@@ -220,7 +220,7 @@ class OrderListmodel(object):
             IF
                 ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) AS complete_time,
                 (SELECT COUNT(driver_id) from shb_orders WHERE shb_orders.driver_id = so.driver_id) AS c1,
-                (SELECT COUNT(*) from shf_goods WHERE shf_goods.user_id = so.owner_id) AS c2,
+                (SELECT COUNT(1) from shf_goods WHERE shf_goods.user_id = so.owner_id) AS c2,
                 shf_goods_vehicles.need_open_top,
                 shf_goods_vehicles.need_tail_board,
                 shf_goods_vehicles.need_flatbed,
@@ -349,7 +349,7 @@ class OrderListmodel(object):
             fetch_where += """
             AND(
             ( {spec_tag}=1 AND (SELECT COUNT(driver_id) from shb_orders WHERE shb_orders.driver_id = so.driver_id) < 3) OR
-            ( {spec_tag}=2 AND (SELECT COUNT(*) from shf_goods WHERE shf_goods.user_id = so.owner_id) < 3)
+            ( {spec_tag}=2 AND (SELECT COUNT(1) from shf_goods WHERE shf_goods.user_id = so.owner_id) < 3)
             )
             """.format(spec_tag=params['spec_tag'])
 
@@ -386,7 +386,7 @@ class OrderListmodel(object):
             AND ((sg.loading_time_period_end >={0} AND sg.loading_time_period_end < {1}) OR (UNIX_TIMESTAMP(sg.loading_time_date) >={0} AND UNIX_TIMESTAMP(sg.loading_time_date) < {1}))
             """.format(params.get('start_loading_time'), params.get('end_loading_time'))
 
-        count = cursor.query_one(command.format(fields=" COUNT(*) AS total_count ", fetch_where=fetch_where))['total_count']
+        count = cursor.query_one(command.format(fields=" COUNT(1) AS total_count ", fetch_where=fetch_where))['total_count']
 
         fetch_where += """ ORDER BY id DESC LIMIT {0}, {1} """.format((page - 1) * limit, limit)
 

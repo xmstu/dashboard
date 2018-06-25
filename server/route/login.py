@@ -28,18 +28,21 @@ def broker():
         token = request.args.get('token', None)
         if not token:
             log.warn('区镇合伙人token传值错误')
-            abort(404)
+            return render_template('/exception/except.html', status_coder=400, title='参数错误',
+                            content='区镇合伙人token传值错误')
         # token解码
         payload = decode(token)
         mobile = payload.get('mobile')
         if not mobile:
             log.warn('区镇合伙人无法获取mobile: [token: %s]' % token)
-            abort(404)
+            return render_template('/exception/except.html', status_coder=400, title='参数错误',
+                                   content='区镇合伙人无法获取电话')
         # 查询用户区域
         result = Login.get_partner_user(db.read_db, mobile)
         if not result:
-            log.warn('区镇合伙人查询用户区域为空: [mobile: %s]' % mobile)
-            abort(404)
+            log.warn('区镇合伙人查询区域为空: [mobile: %s]' % mobile)
+            return render_template('/exception/except.html', status_coder=400, title='参数错误',
+                                   content='区镇合伙人查询区域为空')
         user_info = {
             'id': result[0]['user_id'],
             'user_name': result[0]['user_name'],
@@ -53,6 +56,7 @@ def broker():
         if sessionOperationClass.insert(user_info, role, locations):
             return redirect('/home/')
         else:
-            abort(500)
+            return render_template('/exception/except.html', status_coder=400, title='参数错误',
+                                   content='登录写入session失败')
     except Exception as e:
         log.error('区镇合伙人登录异常: [error: %s]' % e)

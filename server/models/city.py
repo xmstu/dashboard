@@ -11,7 +11,7 @@ class CityResourceBalanceModel(object):
         -- 车型
         shf_goods_vehicles.`name` AS new_vehicle,
         -- 是否通话
-        (SELECT COUNT(*)
+        (SELECT COUNT(1)
         FROM shu_call_records
         WHERE source_type = 1
         AND source_id = shf_goods.id
@@ -72,7 +72,7 @@ class CityResourceBalanceModel(object):
         %(goods_type)s
         LEFT JOIN shm_dictionary_items ON shf_booking_settings.vehicle_length_id = shm_dictionary_items.id
         LEFT JOIN (
-        SELECT driver_id, COUNT(*) AS count
+        SELECT driver_id, COUNT(1) AS count
         FROM shb_orders
         WHERE create_time >= :start_time
         AND create_time < :end_time
@@ -150,7 +150,7 @@ class CityOrderListModel(object):
             shf_goods.price_addition,
             shu_users.mobile,
             -- 通话数
-            (SELECT COUNT(*)
+            (SELECT COUNT(1)
             FROM shu_call_records
             WHERE source_type = 1
             AND source_id = shf_goods.id
@@ -164,7 +164,7 @@ class CityOrderListModel(object):
             shf_goods.loading_time_period_end,
             FROM_UNIXTIME(shf_goods.loading_time_period_end) AS shf_goods_loading_time_period_end,
             -- 发货次数
-            (SELECT COUNT(*) FROM shf_goods WHERE user_id = shu_users.id) AS goods_counts,
+            (SELECT COUNT(1) FROM shf_goods WHERE user_id = shu_users.id) AS goods_counts,
             shf_goods_vehicles.need_open_top,
             shf_goods_vehicles.need_tail_board,
             shf_goods_vehicles.need_flatbed,
@@ -203,7 +203,7 @@ class CityOrderListModel(object):
 
         # 是否通话
         if params.get('is_called'):
-            called_sql = """ AND (SELECT COUNT(*)
+            called_sql = """ AND (SELECT COUNT(1)
                             FROM shu_call_records
                             WHERE source_type = 1
                             AND source_id = shf_goods.id
@@ -242,9 +242,9 @@ class CityOrderListModel(object):
 
         # 初次下单
         if params['spec_tag'] == 1:
-            command += ' AND ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) <= 3 '
+            command += ' AND ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) <= 3 '
 
-        goods_counts = cursor.query_one(command % "COUNT(*) as goods_counts")
+        goods_counts = cursor.query_one(command % "COUNT(1) as goods_counts")
 
         command += ' ORDER BY shf_goods.id DESC LIMIT {0}, {1} '.format((page - 1) * limit, limit)
 
@@ -306,9 +306,9 @@ class CityNearbyCarsModel(object):
         shu_user_profiles.trust_member_type,
         shu_user_profiles.ad_expired_time,
         shu_vehicle_auths.inner_length,
-        (SELECT COUNT(*) FROM shb_orders WHERE driver_id = shu_users.id) AS order_count,
-        (SELECT COUNT(*) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = 3) AS order_finished,
-        (SELECT COUNT(*) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = -1) AS order_cancel
+        (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id) AS order_count,
+        (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = 3) AS order_finished,
+        (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = -1) AS order_cancel
         
         FROM shu_vehicle_auths
         INNER JOIN shu_vehicles ON shu_vehicle_auths.vehicle_id = shu_vehicles.id AND shu_vehicles.is_deleted = 0

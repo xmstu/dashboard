@@ -53,10 +53,10 @@ class GoodsList(object):
                 shf_goods.price_expect,
                 shf_goods.price_addition,
                 shu_users.mobile,
-                ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) AS shf_goods_counts,
+                ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) AS shf_goods_counts,
                 (
                 SELECT
-                    COUNT( * ) 
+                    COUNT( 1 ) 
                 FROM
                     shu_call_records 
                 WHERE
@@ -144,7 +144,7 @@ class GoodsList(object):
 
         # 是否通话
         if params['is_called']:
-            called_sql = """ AND (SELECT COUNT(*)
+            called_sql = """ AND (SELECT COUNT(1)
                             FROM shu_call_records
                             WHERE source_type = 1
                             AND source_id = shf_goods.id
@@ -194,7 +194,7 @@ class GoodsList(object):
 
         # 是否初次下单
         if params['new_goods_type'] > 0:
-            fetch_where += """ AND ( SELECT COUNT( * ) FROM shf_goods WHERE user_id = shu_users.id ) < 3 """
+            fetch_where += """ AND ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) <= 3 """
 
         # 急需处理
         if params['urgent_goods']:
@@ -228,9 +228,9 @@ class GoodsList(object):
         # 优化初次加载速度
         fields_value = list(filter(lambda x: x, [params[i] for i in params]))
         if not fields_value:
-            goods_count = cursor.query_one('SELECT COUNT(*) AS goods_count FROM shf_goods WHERE 1=1')['goods_count']
+            goods_count = cursor.query_one('SELECT COUNT(1) AS goods_count FROM shf_goods WHERE 1=1')['goods_count']
         else:
-            goods_count = cursor.query_one(command.format(fields=" COUNT(*) AS goods_count ", fetch_where=fetch_where))['goods_count']
+            goods_count = cursor.query_one(command.format(fields=" COUNT(1) AS goods_count ", fetch_where=fetch_where))['goods_count']
 
         fetch_where += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
@@ -253,7 +253,7 @@ class CancelReasonList(object):
         command = """
         SELECT
             canceled_reason_text,
-            COUNT(*) as reason_count
+            COUNT(1) as reason_count
         FROM
             shf_goods 
         WHERE
@@ -314,7 +314,7 @@ class GoodsDistributionTrendList(object):
             SELECT
                 FROM_UNIXTIME(create_time, '%Y-%m-%d') AS create_time,
                 IF ({flag}, COUNT( DISTINCT user_id ), 0) AS goods_user_count,
-                COUNT( * ) AS count
+                COUNT( 1 ) AS count
             FROM
                 shf_goods 
             WHERE

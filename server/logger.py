@@ -7,7 +7,7 @@ from server.configs import configs
 
 
 def __create_logger(conf):
-    logger = logging.getLogger('feed-service')
+    logger = logging.getLogger('da-service')
     level = logging.getLevelName(conf.level)
     logger.setLevel(level)
 
