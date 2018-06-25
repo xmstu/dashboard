@@ -38,10 +38,12 @@ class UserStatistic(object):
     def get_result(params, data, before_user_count):
         # 日期聚合
         xAxis, series = get_date_aggregate(params['start_time'], params['end_time'], params['periods'], data, date_field='create_time', number_field='count')
-        # 新增
-        if params['user_type'] == 1:
-            pass
         # 累计
-        else:
+        if params['user_type'] != 1:
             series = [sum(series[: i+1]) + before_user_count if i > 0 else series[i] + before_user_count for i in range(len(series))]
-        return make_result(APIStatus.Ok, data={'xAxis': xAxis, 'series': series}), HTTPStatus.Ok
+        # 按月分段，返回总和
+        if params['periods'] == 4:
+            data = {'xAxis': xAxis, 'series': series, 'last_month': sum(series)}
+        else:
+            data = {'xAxis': xAxis, 'series': series}
+        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok

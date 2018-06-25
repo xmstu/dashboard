@@ -80,8 +80,11 @@ class PromoteQuality(object):
         if params['dimension'] == 1 and params['data_type'] == 2:
             series = [sum(series[: i + 1]) + before_promote_count if i > 0 else series[i] + before_promote_count for i
                       in range(len(series))]
-        # 新增
-        else:
-            pass
+
         series = json.loads(json.dumps(series, default=ExtendHandler.handler_to_float))
-        return make_result(APIStatus.Ok, data={'xAxis': xAxis, 'counts_series': series}), HTTPStatus.Ok
+        # 按月分段，返回总和
+        if params['periods'] == 4:
+            data = {'xAxis': xAxis, 'series': series, 'last_month': sum(series)}
+        else:
+            data = {'xAxis': xAxis, 'series': series}
+        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
