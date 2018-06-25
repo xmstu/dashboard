@@ -70,7 +70,6 @@ class OrderList(object):
     @staticmethod
     @make_decorator
     def get_result(data, params):
-        # TODO 过滤参数
         order_list = data['order_list']
         try:
             result = []

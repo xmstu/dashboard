@@ -308,7 +308,7 @@ class OrderListmodel(object):
             )
             """.format(order_type=params['order_type'])
 
-        if params.get('vehicle_length'):
+        if int(params.get('vehicle_length')):
             fetch_where += """
             AND shf_goods_vehicles.name = '{0}'
             """.format(params['vehicle_length'])
@@ -331,17 +331,17 @@ class OrderListmodel(object):
         if params.get('node_id'):
             if isinstance(params['node_id'], int):
                 fetch_where += """ 
-                AND (shf_goods.from_province_id = {0}
-                OR shf_goods.from_city_id = {0}
-                OR shf_goods.from_county_id = {0}
-                OR shf_goods.from_town_id = {0})
+                AND (sg.from_province_id = {0}
+                OR sg.from_city_id = {0}
+                OR sg.from_county_id = {0}
+                OR sg.from_town_id = {0})
                 """.format(params['node_id'])
             elif isinstance(params['node_id'], list):
                 fetch_where += """ 
-                AND (shf_goods.from_province_id IN ({0})
-                OR shf_goods.from_city_id IN ({0})
-                OR shf_goods.from_county_id IN ({0})
-                OR shf_goods.from_town_id IN ({0}))
+                AND (sg.from_province_id IN ({0})
+                OR sg.from_city_id IN ({0})
+                OR sg.from_county_id IN ({0})
+                OR sg.from_town_id IN ({0}))
                 """.format(','.join(params['node_id']))
 
         if params.get('spec_tag'):
@@ -357,7 +357,7 @@ class OrderListmodel(object):
             AND (
             ({pay_status}=1 AND pay_status = 1 AND paid_offline = 0) OR
             ({pay_status}=2 AND pay_status = 2) OR
-            ({pay_status}=3 AND paid_offline = 1) OR
+            ({pay_status}=3 AND paid_offline = 1)
             )
             """.format(pay_status=params['pay_status'])
 
