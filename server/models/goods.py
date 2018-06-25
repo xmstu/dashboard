@@ -47,35 +47,8 @@ class GoodsList(object):
                 WHERE shf_goods_vehicles.goods_id = shf_goods.id AND shf_goods_vehicles.vehicle_attribute = 1
                 AND shf_goods_vehicles.is_deleted = 0
                 ) AS vehicle_type,
-                (SELECT IF(shf_goods_vehicles.attribute_value_id = 0, '不限车长', GROUP_CONCAT(shm_dictionary_items.`name`))
-                FROM shf_goods_vehicles
-                LEFT JOIN shm_dictionary_items ON shf_goods_vehicles.attribute_value_id = shm_dictionary_items.id AND shm_dictionary_items.is_deleted = 0
-                WHERE shf_goods_vehicles.goods_id = shf_goods.id AND shf_goods_vehicles.vehicle_attribute = 2
-                AND shf_goods_vehicles.is_deleted = 0
-                ) AS vehicle_length,
                 -- 新车型
-                (
-                SELECT
-                    shf_goods_vehicles.NAME 
-                FROM
-                    shf_goods_vehicles 
-                WHERE
-                    shf_goods_vehicles.goods_id = shf_goods.id 
-                    AND shf_goods_vehicles.vehicle_attribute = 3 
-                    AND shf_goods_vehicles.is_deleted = 0 
-                ) AS new_vehicle_type,
-                (
-                SELECT
-                    shm_dictionary_items.NAME 
-                FROM
-                    shf_goods_vehicles
-                    LEFT JOIN shm_dictionary_items ON shf_goods_vehicles.attribute_value_id = shm_dictionary_items.id 
-                    AND shm_dictionary_items.is_deleted = 0 
-                WHERE
-                    shf_goods_vehicles.goods_id = shf_goods.id 
-                    AND shf_goods_vehicles.vehicle_attribute = 3 
-                    AND shf_goods_vehicles.is_deleted = 0 
-                ) AS new_vehicle_length,
+                shf_goods_vehicles.`name` AS new_vehicle_type,
                 shf_goods.price_recommend,
                 shf_goods.price_expect,
                 shf_goods.price_addition,
@@ -203,8 +176,21 @@ class GoodsList(object):
             """.format(vehicle_type=params['vehicle_type'])
 
         # 所属网点
-        if params['node_id']:
-            pass
+        if params.get('node_id'):
+            if isinstance(params['node_id'], int):
+                fetch_where += """ 
+                AND (shf_goods.from_province_id = {0}
+                OR shf_goods.from_city_id = {0}
+                OR shf_goods.from_county_id = {0}
+                OR shf_goods.from_town_id = {0})
+                """.format(params['node_id'])
+            elif isinstance(params['node_id'], list):
+                fetch_where += """ 
+                AND (shf_goods.from_province_id IN ({0})
+                OR shf_goods.from_city_id IN ({0})
+                OR shf_goods.from_county_id IN ({0})
+                OR shf_goods.from_town_id IN ({0}))
+                """.format(','.join(params['node_id']))
 
         # 是否初次下单
         if params['new_goods_type'] > 0:

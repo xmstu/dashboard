@@ -140,15 +140,15 @@ class CityOrderListFilterDecorator(object):
                 '需要双排座' if detail['need_double_seat'] == 1 else '',
                 '需要全拆座' if detail['need_remove_seat'] == 1 else ''
             ]
+            extra = [i for i in extra if i != '']
             # 车长+特殊要求
-            if detail['new_vehicle_type'] and detail['new_vehicle_length']:
-                L = [detail['new_vehicle_type'], detail['new_vehicle_length']] + extra
-                vehicle = '\n'.join([i for i in L if i != ''])
+            if detail['new_vehicle_type']:
+                L = [detail['new_vehicle_type']] + extra
+                vehicle = '\n'.join(L)
             else:
                 vehicle_type = detail['vehicle_type'] if detail['vehicle_type'] else ''
-                vehicle_length = detail['vehicle_length'] if detail['vehicle_length'] else ''
-                L = [vehicle_type, vehicle_length] + extra
-                vehicle = '\n'.join([i for i in L if i != ''])
+                L = [vehicle_type] + extra
+                vehicle = '\n'.join(L)
             # 发布、装货时间
             if detail['loading_time_period_end']:
                 loading_time = detail['shf_goods_loading_time_period_end']

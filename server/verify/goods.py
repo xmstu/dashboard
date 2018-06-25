@@ -4,6 +4,7 @@ from flask_restful import abort
 
 from server import log
 from server.meta.decorators import make_decorator, Response
+from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 
 
@@ -14,6 +15,11 @@ class GoodsList(object):
     def check_params(page, limit, params):
         # 通过params获取参数
         try:
+            create_start_time = int(params.get('create_start_time')) if params.get('create_start_time') else 0
+            create_end_time = int(params.get('create_end_time')) if params.get('create_end_time') else 0
+            load_start_time = int(params.get('load_start_time')) if params.get('load_start_time') else 0
+            load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else 0
+
             goods_id = params.get('goods_id') if params.get('goods_id') else ''
             mobile = params.get('mobile') if params.get('mobile') else ''
 
@@ -34,11 +40,6 @@ class GoodsList(object):
             urgent_goods = int(params.get('urgent_goods')) if params.get('urgent_goods') else 0
             is_addition = int(params.get('is_addition')) if params.get('is_addition') else 0
 
-            create_start_time = int(params.get('create_start_time')) if params.get('create_start_time') else 0
-            create_end_time = int(params.get('create_end_time')) if params.get('create_end_time') else 0
-            load_start_time = int(params.get('load_start_time')) if params.get('load_start_time') else 0
-            load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else 0
-
             # 校验参数
             if create_end_time and create_start_time:
                 if create_start_time <= create_end_time < time.time():
@@ -51,6 +52,11 @@ class GoodsList(object):
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='装货时间有误'))
+
+            # 当前权限下所有地区
+            role, locations_id = sessionOperationClass.get_locations()
+            if role in (2, 3, 4) and not node_id:
+                node_id = locations_id
 
             params = {
                 "goods_id": goods_id,
