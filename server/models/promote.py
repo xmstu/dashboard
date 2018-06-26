@@ -65,58 +65,52 @@ class PromoteEffectList(object):
             log.error('删除推广人员异常[error: %s]' % (e))
 
     @staticmethod
-    def get_extension_worker_list(cursor, page, limit, params):
+    def get_extension_info(cursor, user_id):
+        """获取城市经理手下"""
+        promote_users = {}
+        return [str(i['user_id']) for i in promote_users] if promote_users else []
+
+    @staticmethod
+    def get_extension_worker(cursor, page, limit, params, promoter=None):
+        """获取推广人员"""
         try:
-            fetch_where = ' AND 1 '
-            command = """ 
-                SELECT
-                    reference_id,
-                    reference_name,
-                    reference_mobile
-                FROM
-                    tb_inf_promote
-                where reference_id != 0 AND is_deleted = 0
-                AND reference_id NOT IN (
-                SELECT
-                    tb_inf_user.reference_id 
-                FROM
-                    tb_inf_user
-                    INNER JOIN tb_inf_promote ON tb_inf_user.reference_id = tb_inf_promote.reference_id 
-                    AND tb_inf_user.is_deleted = 0 
-                    AND tb_inf_promote.is_deleted = 0 
-                ) 
-                {fetch_where}
-             """
+            fetch_where = ''
+            command = """
+            SELECT {select_fields}
+            FROM tb_inf_user
+            WHERE mobile IN (
+            SELECT
+            DISTINCT referrer_mobile
+            FROM tb_inf_user
+            WHERE referrer_mobile != ''
+            ORDER BY user_id)
+            {fetch_where}
+            """
 
             # 用户名
             if params['user_name']:
-                fetch_where += """ AND tb_inf_promote.reference_name = '%s' """ % params['user_name']
+                fetch_where += " AND user_name = '%s' " % params['user_name']
 
             # 手机号
             if params['mobile']:
-                fetch_where += """ AND tb_inf_promote.reference_mobile = %s """ % params['mobile']
+                fetch_where += " AND mobile = '%s' " % params['mobile']
 
-            command = command.format(fetch_where=fetch_where)
+            # 城市经理筛选
+            if promoter:
+                fetch_where += ' AND user_id IN (%s) ' % ','.join(promoter)
 
-            # 查询表的条数
-            count_command = """
-                        SELECT COUNT( * ) as promote_counts
-                        FROM (%(command)s) as a
-                        """
+            fetch_where += ' LIMIT %s, %s ' % ((page - 1) * limit, limit)
 
-            promote_counts = cursor.query_one(count_command % {'command': command})
+            count_sql = command.format(fetch_where=fetch_where, select_fields='COUNT(*) AS count')
+            command = command.format(fetch_where=fetch_where, select_fields='user_id')
 
-            # 分页
-            command += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
+            count = cursor.query_one(count_sql)
+            promote_users = cursor.query(command)
 
-            promote_effect_detail = cursor.query(command)
+            promote = [str(i['user_id']) for i in promote_users] if promote_users else []
+            count = count['count'] if count else 0
 
-            extension_worker_list = {
-                'promote_effect_detail': promote_effect_detail if promote_effect_detail else [],
-                'count': promote_counts['promote_counts'] if promote_counts else 0
-            }
-
-            return extension_worker_list if extension_worker_list else None
+            return promote, count
 
         except Exception as e:
             log.error('Error:{}'.format(e))
@@ -125,77 +119,41 @@ class PromoteEffectList(object):
     @staticmethod
     def get_promote_effect_list(cursor, page, limit, params):
         try:
-            fetch_where = ' AND 1 '
+            inner_where = ''
+            fetch_where = ''
 
             command = """
-                    SELECT
-                    tb_inf_user.reference_id,
-                    reference_name,
-                    reference_mobile,
-                    -- 推荐人数
-                    COUNT(*) AS user_count,
-                    -- TODO 唤醒人数
-                    0 AS wake_up_count,
-                    -- 发货数
-                    (SELECT COUNT(*) FROM tb_inf_goods 
-                    WHERE
-                        tb_inf_goods.user_id = tb_inf_user.user_id 
-                        AND tb_inf_goods.create_time >= "%(start_time)s"
-                        AND tb_inf_goods.create_time < "%(end_time)s"
-                    ) AS goods_count,
-                    -- 发货人数
-                    (SELECT COUNT(DISTINCT user_id) FROM tb_inf_goods 
-                    WHERE
-                        tb_inf_goods.user_id = tb_inf_user.user_id 
-                        AND tb_inf_goods.create_time >= "%(start_time)s" 
-                        AND tb_inf_goods.create_time < "%(end_time)s"
-                    ) AS goods_user_count,
-                    -- 完成数
-                    (SELECT SUM(order_count) FROM tb_inf_order 
-                    WHERE
-                        tb_inf_user.user_id = tb_inf_order.user_id 
-                        AND tb_inf_order.`status` = 3 
-                        AND tb_inf_order.create_time >= "%(start_time)s"
-                        AND tb_inf_order.create_time < "%(end_time)s"
-                    ) AS order_over_count,
-                    -- 货源金额
-                    (SELECT SUM(goods_price_sum) FROM tb_inf_goods 
-                    WHERE
-                        tb_inf_goods.user_id = tb_inf_user.user_id 
-                        AND tb_inf_goods.create_time >= "%(start_time)s" 
-                        AND tb_inf_goods.create_time < "%(end_time)s"
-                    ) AS goods_price,
-                    -- 完成金额
-                    ( SELECT SUM(order_price_sum) FROM tb_inf_order 
-                    WHERE
-                        tb_inf_user.user_id = tb_inf_order.user_id 
-                        AND tb_inf_order.`status` = 3 
-                        AND tb_inf_order.create_time >= "%(start_time)s" 
-                        AND tb_inf_order.create_time < "%(end_time)s"
-                    ) AS order_over_price 
-                FROM
-                    tb_inf_user
-                    INNER JOIN tb_inf_promote ON tb_inf_user.reference_id = tb_inf_promote.reference_id AND tb_inf_promote.is_deleted = 0
-                    AND tb_inf_user.reference_id != 0 
-                    LEFT JOIN tb_inf_goods ON tb_inf_user.user_id = tb_inf_goods.user_id 
-                WHERE
-                    -- 注册日期
-                    tb_inf_user.create_time >= "%(start_time)s"
-                    AND tb_inf_user.create_time < "%(end_time)s"
-                    {fetch_where}
-                    -- 名字
-                    -- 手机号
-                    -- 推荐角色
-                    -- 货源类型
-                    -- 是否活跃
-                    -- 贴车贴
-                GROUP BY
-                    reference_id
+            SELECT
+            user_id,
+            user_name,
+            mobile,
+            (SELECT COUNT(*) FROM tb_inf_user WHERE referrer_mobile = referrer.referrer_mobile) AS user_count,
+            0 AS wake_up_count,
+            (SELECT SUM(goods_count) FROM tb_inf_user WHERE referrer_mobile = referrer.referrer_mobile) AS goods_count,
+            (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE referrer_mobile = referrer.referrer_mobile AND goods_count != 0) AS goods_user_count,
+            (SELECT SUM(order_finished_count) FROM tb_inf_user WHERE referrer_mobile = referrer.referrer_mobile) AS order_over_count,
+            (SELECT SUM(goods_price) FROM tb_inf_user WHERE referrer_mobile = referrer.referrer_mobile) AS goods_price,
+            (SELECT SUM(order_over_price) FROM tb_inf_user WHERE referrer_mobile = referrer.referrer_mobile) AS order_over_price
+            
+            FROM tb_inf_user
+            -- 推荐人员
+            INNER JOIN (
+            SELECT
+            DISTINCT referrer_mobile
+            FROM tb_inf_user
+            WHERE referrer_mobile != ''
+            %(inner_where)s
+            ORDER BY user_id
+            LIMIT :page, :count) AS referrer ON tb_inf_user.mobile = referrer.referrer_mobile
+            
+            WHERE 1 = 1
+            %(fetch_where)s
+            ORDER BY user_id
             """
 
             # 用户名
             if params['user_name']:
-                fetch_where += """ AND tb_inf_promote.reference_name = '%s' """ % params['user_name']
+                inner_where += """ AND user_name = '%s' """ % params['user_name']
 
             # 手机号
             if params['mobile']:

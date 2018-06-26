@@ -31,7 +31,7 @@ class OrdersReceivedStatistics(object):
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
-            if params['start_time'] <= params['end_time'] < time.time():
+            if params['start_time'] <= params['end_time']:
                 pass
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
@@ -62,7 +62,7 @@ class CancelOrderReason(object):
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
-            if params['start_time'] <= params['end_time'] < time.time():
+            if params['start_time'] <= params['end_time']:
                 pass
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
@@ -110,12 +110,12 @@ class OrderList(object):
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
-            if params['start_order_time'] <= params['end_order_time'] < time.time():
+            if params['start_order_time'] <= params['end_order_time']:
                 pass
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
-            if params['start_loading_time'] <= params['end_loading_time'] < time.time():
+            if params['start_loading_time'] <= params['end_loading_time']:
                 pass
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))

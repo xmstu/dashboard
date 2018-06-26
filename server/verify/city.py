@@ -18,7 +18,7 @@ class CityResourceBalance(object):
         goods_type = int(params.get('goods_type')) if params.get('goods_type') else 1
 
         if start_time and end_time:
-            if start_time <= end_time < time.time():
+            if start_time <= end_time:
                 pass
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))

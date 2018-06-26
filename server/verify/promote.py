@@ -6,6 +6,7 @@ from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.extend import Check
+from server.meta.session_operation import sessionOperationClass
 
 class PromoteEffect(object):
 
@@ -24,9 +25,12 @@ class PromoteEffect(object):
             start_time = int(params.get('start_time')) if params.get('start_time') else 0
             end_time = int(params.get('end_time')) if params.get('end_time') else 0
 
+            # 获取用户权限和身份
+            role, user_id = sessionOperationClass.get_role()
+
             # 判断时间是否合法
             if start_time and end_time:
-                if start_time <= end_time < time.time():
+                if start_time <= end_time:
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
@@ -37,6 +41,8 @@ class PromoteEffect(object):
 
             # 构造请求参数
             params = {
+                'role': role,
+                'user_id': user_id,
                 'user_name': user_name,
                 'mobile': mobile,
                 'role_type': role_type,
@@ -79,7 +85,7 @@ class PromoteQuality(object):
 
             # 验证参数
             if start_time and end_time:
-                if start_time <= end_time < time.time():
+                if start_time <= end_time:
                     pass
                 else:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))

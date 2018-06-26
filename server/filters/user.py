@@ -15,16 +15,16 @@ class UserList(object):
         for detail in user_detail:
             # 认证
             role_auth = []
-            if detail['auth_goods']:
+            if detail['goods_auth']:
                 role_auth.append('货主')
-            if detail['auth_driver']:
+            if detail['driver_auth']:
                 role_auth.append('司机')
-            if detail['auth_company']:
+            if detail['company_auth']:
                 role_auth.append('物流公司')
             detail['role_auth'] = ','.join(role_auth) if role_auth else '未认证'
-            detail.pop('auth_goods')
-            detail.pop('auth_driver')
-            detail.pop('auth_company')
+            detail.pop('goods_auth')
+            detail.pop('driver_auth')
+            detail.pop('company_auth')
 
             detail['usual_city'] = detail['usual_city'] if detail['usual_city'] else '未知常驻地'
 

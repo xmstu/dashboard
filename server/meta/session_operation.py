@@ -55,5 +55,6 @@ class sessionOperationClass(object):
     def get_role():
         """获取角色权限"""
         role = session['login']['role']
-        return role
+        user_id = session['login']['user_id']
+        return role, user_id
 

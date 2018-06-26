@@ -173,7 +173,7 @@ def get_xAxis(periods, start_time, end_time):
 
 def compare_time(start_time, end_time) -> bool:
     if start_time and end_time:
-        if start_time <= end_time < time.time():
+        if start_time <= end_time:
             return True
         else:
             return False

@@ -12,12 +12,17 @@ class PromoteEffectDecorator(object):
     @staticmethod
     @make_decorator
     def get_promote_effect_list(page, limit, params):
-
-        # 查询出所有推荐人数为0的推广人员
-        extension_worker_list = PromoteEffectList.get_extension_worker_list(db.read_bi, page, limit, params)
-
-        # 查询出所有推荐过别人的推广人员的推荐效果列表
-        promote_effect_list = PromoteEffectList.get_promote_effect_list(db.read_bi, page, limit, params)
+        # 城市经理只能查询自己手下
+        if params['role'] == 4:
+            # 城市经理手下
+            promote_users = PromoteEffectList.get_extension_info(db.read_bi, params['user_id'])
+            if not promote_users:
+                return
+            # 推广人员
+            user_id, count = PromoteEffectList.get_extension_worker(db.read_bi, page, limit, params, promote_users)
+        else:
+            # 所有推广人员
+            user_id, count = PromoteEffectList.get_extension_worker(db.read_bi, page, limit, params)
 
         return Response(extension_worker_list=extension_worker_list, promote_effect_list=promote_effect_list, params=params)
 
