@@ -4,7 +4,8 @@ var requestStart = $('#date_show_one').val() + ' 00:00:00';
 var requestEnd = $('#date_show_two').val() + ' 23:59:59';
 setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
-}, 100);
+    $('#is_used').nextSibling('div').find('input').css({'readonly':true})
+}, 30);
 $('#area_select').address({
     offsetLeft: '0',
     level: 3,
@@ -175,7 +176,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                     $(this).text('物流公司')
                 }
             })
-
             $("td[data-field='goods_count']").children().each(function () {
                 if ($(this).text() != '') {
                     var str = $(this).text();

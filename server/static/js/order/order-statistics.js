@@ -136,7 +136,7 @@ var setAbout = {
     chartRender: function (xAxis, complete_series, pending_series, cancel_series, interval) {
         $('#charts_container_one').highcharts({
             chart: {
-                type: 'area'
+                type: 'areaspline'
             },
             title: {
                 text: '订单统计'
