@@ -140,13 +140,18 @@ class UserList(object):
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 10 * 86400 '''
         elif params['is_actived'] == 4:
             command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
+
         # 操作过
-        if params['is_used'] == 1:
-            command += 'AND (SELECT COUNT(1) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) > 0 '
-        elif params['is_used'] == 2:
-            command += 'AND (SELECT COUNT(1) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) > 0 '
-        elif params['is_used'] == 3:
-            command += 'AND (SELECT COUNT(1) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) > 0 '
+        if params['is_used']:
+            pass
+
+        # if params['is_used'] == 1:
+        #     command += 'AND (SELECT COUNT(1) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) > 0 '
+        # elif params['is_used'] == 2:
+        #     command += 'AND (SELECT COUNT(1) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) > 0 '
+        # elif params['is_used'] == 3:
+        #     command += 'AND (SELECT COUNT(1) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) > 0 '
+
         # 贴车贴
         if params['is_car_sticker'] == 1:
             command += 'AND shu_user_profiles.trust_member_type = 2 AND ad_expired_time > UNIX_TIMESTAMP() '
