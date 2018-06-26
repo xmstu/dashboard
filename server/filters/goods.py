@@ -115,13 +115,13 @@ class GoodsList(object):
                     loading_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(detail['loading_time_period_begin']))
                 else:
                     if detail['loading_time_period'] == 1:
-                        loading_time = detail.get('loading_time_date', '') + '08:00:00'
+                        loading_time = detail.get('loading_time_date', '') + ' 08:00:00'
                     elif detail['loading_time_period'] == 2:
-                        loading_time = detail.get('loading_time_date', '') + '13:00:00'
+                        loading_time = detail.get('loading_time_date', '') + ' 13:00:00'
                     elif detail['loading_time_period'] == 3:
-                        loading_time = detail.get('loading_time_date', '') + '19:00:00'
+                        loading_time = detail.get('loading_time_date', '') + ' 19:00:00'
                     else:
-                        loading_time = detail.get('loading_time_date', '') + '00:00:00'
+                        loading_time = detail.get('loading_time_date', '') + ' 00:00:00'
                 goods_time = '%(create_time)s\n%(loading_time)s' % {
                     'create_time': detail['shf_goods_create_time'],
                     'loading_time': loading_time
