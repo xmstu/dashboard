@@ -22,22 +22,15 @@ class GoodsList(object):
             for detail in goods_detail:
 
                 # 构造货源状态
+                goods_status = ''
                 if detail.get('expire'):
-                    detail['goods_status'] = '已过期'
-                    if detail.get('STATUS') in (1, 2):
-                        detail['goods_status'] += ',待接单'
-                    if detail.get('STATUS') == 3:
-                        detail['goods_status'] += ',已接单'
-                    if detail.get('STATUS') == -1:
-                        detail['goods_status'] += ',已取消'
-                else:
-                    if detail.get('STATUS') in (1, 2):
-                        detail['goods_status'] = '待接单'
-                    if detail.get('STATUS') == 3:
-                        detail['goods_status'] = '已接单'
-                    if detail.get('STATUS') == -1:
-                        detail['goods_status'] = '已取消'
-                goods_status = detail['goods_status']
+                    goods_status += '已过期'
+                if detail.get('STATUS') in (1, 2):
+                    goods_status += '\n待接单'
+                if detail.get('STATUS') == 3:
+                    goods_status += '\n已接单'
+                if detail.get('STATUS') == -1:
+                    goods_status += '\n已取消'
 
                 # 初次下单
                 mobile = detail['mobile']

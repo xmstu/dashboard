@@ -22,7 +22,7 @@ class UserList(object):
     @staticmethod
     def get_user_list(cursor, page, limit, params, user_station=None):
 
-        fetch_where = """ 1=1 """
+        fetch_where = """ AND 1=1 """
 
         # 查询字段
         fields = '''
@@ -80,9 +80,26 @@ class UserList(object):
             INNER JOIN shu_user_stats ON shu_users.id = shu_user_stats.user_id
             -- 被推荐
             LEFT JOIN shu_recommended_users AS recommended_user ON shu_users.id = recommended_user.recommended_user_id
-            WHERE shu_users.is_deleted = 0 AND 
+            WHERE shu_users.is_deleted = 0
             {fetch_where}
             """
+
+        # 地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                                AND (
+                                from_province_id IN (%(region_id)s)
+                                OR from_city_id IN (%(region_id)s)
+                                OR from_county_id IN (%(region_id)s)
+                                OR from_town_id IN (%(region_id)s)
+                                ) ''' % {'region_id': ','.join(params['region_id'])}
+
+        fetch_where += region
 
         # 用户名
         if params['user_name']:
@@ -197,7 +214,6 @@ class UserList(object):
             'user_detail': user_detail if user_detail else [],
             'user_count': user_count['count'] if user_count['count'] else 0
         }
-        log.info('user_list:{}'.format(user_list))
 
         return user_list
 

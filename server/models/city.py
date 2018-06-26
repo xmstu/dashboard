@@ -185,7 +185,25 @@ class CityOrderListModel(object):
             WHERE shf_goods.expired_timestamp > UNIX_TIMESTAMP() 
             AND shf_goods.is_deleted = 0
             AND shf_goods.`status` IN (1, 2)
+            {region}
         """
+
+        # 地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
+
+        command = command.format(region=region)
 
         # 货源类型
         if params['goods_type'] == 1:
@@ -212,8 +230,6 @@ class CityOrderListModel(object):
                 command += called_sql + '> 0 '
             elif params['is_called'] == 2:
                 command += called_sql + '= 0 '
-            elif params['is_called'] == 3:
-                command += called_sql + '> 10 '
 
         # 是否加价
         if params.get('is_addition'):
@@ -221,24 +237,6 @@ class CityOrderListModel(object):
                 command += ' AND shf_goods.price_addition > 0 '
             elif params['is_addition'] == 2:
                 command += ' AND shf_goods.price_addition = 0 '
-
-        # 所属网点
-        if params.get('node_id'):
-            if isinstance(params['node_id'], int):
-                command += """ 
-                AND (shf_goods.from_province_id = {0}
-                OR shf_goods.from_city_id = {0}
-                OR shf_goods.from_county_id = {0}
-                OR shf_goods.from_town_id = {0})
-                """.format(params['node_id'])
-            elif isinstance(params['node_id'], list):
-                command += """ 
-                AND (shf_goods.from_province_id IN ({0})
-                OR shf_goods.from_city_id IN ({0})
-                OR shf_goods.from_county_id IN ({0})
-                OR shf_goods.from_town_id IN ({0}))
-                """.format(','.join(params['node_id']))
-
 
         # 初次下单
         if params['spec_tag'] == 1:

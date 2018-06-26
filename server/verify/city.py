@@ -54,19 +54,19 @@ class CityOrderList(object):
             vehicle_length = str(params.get('vehicle_length', None) or '')
             is_called = int(params.get('is_called', None) or 0)
             is_addition = int(params.get('is_addition', None) or 0)
-            node_id = int(params.get('node_id', None) or 0)
+            region_id = int(params.get('node_id', None) or 0)
             spec_tag = int(params.get('spec_tag', None) or 0)
 
             # 当前权限下所有地区
             role, locations_id = sessionOperationClass.get_locations()
-            if role in (2, 3, 4) and not node_id:
-                node_id = locations_id
+            if role in (2, 3, 4) and not region_id:
+                region_id = locations_id
 
             params = {
                 "goods_type": goods_type,
                 "is_called": is_called,
                 "vehicle_length": vehicle_length,
-                "node_id": node_id,
+                "region_id": region_id,
                 "spec_tag": spec_tag,
                 "is_addition": is_addition,
             }

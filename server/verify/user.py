@@ -9,6 +9,8 @@ from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
 from server.meta.session_operation import sessionOperationClass
 from server.init_regions import init_regions
+from server.utils.extend import compare_time
+
 
 class UserStatistic(object):
 
@@ -66,8 +68,6 @@ class UserList(object):
     def check_params(page, limit, params):
 
         try:
-            # 通过params获取请求的参数，不管参数有没有值，都会给一个默认值，避免多次检验
-
             user_name = params.get('user_name') if params.get('user_name') else ''
             mobile = params.get('mobile') if params.get('mobile') else ''
             reference_mobile = params.get('reference_mobile') if params.get('reference_mobile') else ''
@@ -93,27 +93,20 @@ class UserList(object):
             register_start_time = int(params.get('register_start_time')) if params.get('register_start_time') else 0
             register_end_time = int(params.get('register_end_time')) if params.get('register_end_time') else 0
 
+            region_id = None
+
             # 检验最后登陆时间
-            if last_login_start_time and last_login_end_time:
-                if last_login_start_time <= last_login_end_time < time.time():
-                    pass
-                else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最后登录时间有误'))
-            elif not last_login_start_time and not last_login_end_time:
-                pass
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+            if not compare_time(last_login_start_time, last_login_end_time):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最后登录时间有误'))
 
             # 检验注册时间
-            if register_start_time and register_end_time:
-                if register_start_time <= register_end_time < time.time():
-                    pass
-                else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='选择的注册时间有误'))
-            elif not register_start_time and not register_end_time:
-                pass
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+            if not compare_time(register_start_time, register_end_time):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='注册时间有误'))
+
+            # 当前权限下所有地区
+            role, locations_id = sessionOperationClass.get_locations()
+            if role in (2, 3, 4) and not region_id:
+                region_id = locations_id
 
             params = {
                 'user_name': user_name,
@@ -133,7 +126,8 @@ class UserList(object):
                 'last_login_start_time': last_login_start_time,
                 'last_login_end_time': last_login_end_time,
                 'register_start_time': register_start_time,
-                'register_end_time': register_end_time
+                'register_end_time': register_end_time,
+                'region_id': region_id
             }
 
             log.info("Response:{}".format(params))

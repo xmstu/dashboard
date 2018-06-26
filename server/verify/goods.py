@@ -136,6 +136,14 @@ class GoodsDistributionTrend(object):
             goods_type = int(params.get('goods_type', None) or 0)
             region_id = int(params.get('region_id', None) or 0)
 
+            # 当前权限下所有地区
+            if sessionOperationClass.check():
+                role, locations_id = sessionOperationClass.get_locations()
+                if role in (2, 3, 4) and not region_id:
+                    region_id = locations_id
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+
             if not compare_time(start_time, end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 

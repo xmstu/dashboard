@@ -16,11 +16,9 @@ class GoodsList(object):
                 shf_goods.NAME,
                 shf_goods.weight,
                 shf_goods.volume,
-                
                 shf_goods.type,
                 shf_goods.goods_level,
                 shf_goods.haul_dist,
-
                 shf_goods.from_province_id,
                 shf_goods.from_city_id,
                 shf_goods.from_county_id,
@@ -29,10 +27,8 @@ class GoodsList(object):
                 shf_goods.to_city_id,
                 shf_goods.to_county_id,
                 shf_goods.to_town_id,
-                
                 shf_goods.from_address,
                 shf_goods.to_address,
-                
                 shf_goods.mileage_total,
                 shf_goods.STATUS,
                 CASE WHEN
@@ -91,6 +87,23 @@ class GoodsList(object):
                     AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
                     WHERE {fetch_where}
         """
+
+        # 地区
+        region = ' AND 1=1 '
+        if params['node_id']:
+            if isinstance(params['node_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                    'region_id': params['node_id']}
+            elif isinstance(params['node_id'], list):
+                region = '''
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['node_id'])}
+
+        fetch_where += region
 
         # 货源id
         if params['goods_id']:
@@ -153,8 +166,6 @@ class GoodsList(object):
                 fetch_where += called_sql + '> 0 '
             if params['is_called'] == 2:
                 fetch_where += called_sql + '= 0 '
-            if params['is_called'] == 3:
-                fetch_where += called_sql + '> 10 '
 
         # 车长要求
         if params['vehicle_length']:
@@ -174,23 +185,6 @@ class GoodsList(object):
             ( {vehicle_type}=8 AND shf_goods_vehicles.need_remove_seat = 1) 
             )
             """.format(vehicle_type=params['vehicle_type'])
-
-        # 所属网点
-        if params.get('node_id'):
-            if isinstance(params['node_id'], int):
-                fetch_where += """ 
-                AND (shf_goods.from_province_id = {0}
-                OR shf_goods.from_city_id = {0}
-                OR shf_goods.from_county_id = {0}
-                OR shf_goods.from_town_id = {0})
-                """.format(params['node_id'])
-            elif isinstance(params['node_id'], list):
-                fetch_where += """ 
-                AND (shf_goods.from_province_id IN ({0})
-                OR shf_goods.from_city_id IN ({0})
-                OR shf_goods.from_county_id IN ({0})
-                OR shf_goods.from_town_id IN ({0}))
-                """.format(','.join(params['node_id']))
 
         # 是否初次下单
         if params['new_goods_type'] > 0:
@@ -264,6 +258,23 @@ class CancelReasonList(object):
             canceled_reason_text
         """
 
+        # 地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
+
+        fetch_where += region
+
         # 日期
         if params.get('start_time', 0) and params.get('end_time', 0):
             fetch_where += """ AND create_time >= {start_time} AND create_time < {end_time} """.format(
@@ -277,12 +288,6 @@ class CancelReasonList(object):
                     ({goods_type} = 1 AND haul_dist = 1) OR
                     -- 跨城
                     ({goods_type} = 2 AND haul_dist = 2)) """.format(goods_type=params['goods_type'])
-
-        # 地区
-        if params.get('region_id'):
-            fetch_where += """
-                    AND ( from_province_id = {region_id} OR from_city_id = {region_id} OR from_county_id = {region_id} ) 
-                    """.format(region_id=params['region_id'])
 
         cancel_list_dict = cursor.query(command.format(fetch_where=fetch_where))
 
@@ -323,6 +328,23 @@ class GoodsDistributionTrendList(object):
                 FROM_UNIXTIME(create_time, '%Y-%m-%d')
 """
 
+        # 地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
+
+        fetch_where += region
+
         # 日期
         if params.get('start_time', 0) and params.get('end_time', 0):
             fetch_where += """ AND create_time >= {start_time} AND create_time < {end_time} """.format(
@@ -338,12 +360,6 @@ class GoodsDistributionTrendList(object):
             ({goods_type} = 2 AND haul_dist = 2) OR
             -- 零担
             ({goods_type} = 3 AND type = 2)) """.format(goods_type=params['goods_type'])
-
-        # 地区
-        if params.get('region_id'):
-            fetch_where += """
-            AND ( from_province_id = {region_id} OR from_city_id = {region_id} OR from_county_id = {region_id} ) 
-            """.format(region_id=params['region_id'])
 
         wait_where = """ AND ( status = 1 OR status = 2 ) """
         recv_where = """ AND shf_goods.STATUS = 3 """

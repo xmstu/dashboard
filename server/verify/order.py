@@ -23,6 +23,14 @@ class OrdersReceivedStatistics(object):
             params['comment_type'] = int(params.get('comment_type', None) or 0)
             params['pay_method'] = int(params.get('pay_method', None) or 0)
 
+            # 当前权限下所有地区
+            if sessionOperationClass.check():
+                role, locations_id = sessionOperationClass.get_locations()
+                if role in (2, 3, 4) and not params['node_id']:
+                    params['region_id'] = locations_id
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+
             if params['start_time'] <= params['end_time'] < time.time():
                 pass
             else:
@@ -45,6 +53,14 @@ class CancelOrderReason(object):
             params['goods_type'] = int(params.get('goods_type', None) or 0)
             params['cancel_type'] = int(params.get('cancel_type',None) or 1)
             params['region_id'] = int(params.get('region_id', None) or 0)
+
+            # 当前权限下所有地区
+            if sessionOperationClass.check():
+                role, locations_id = sessionOperationClass.get_locations()
+                if role in (2, 3, 4) and not params['node_id']:
+                    params['region_id'] = locations_id
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
             if params['start_time'] <= params['end_time'] < time.time():
                 pass

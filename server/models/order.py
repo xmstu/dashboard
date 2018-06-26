@@ -39,6 +39,23 @@ class OrdersReceivedStatisticsList(object):
             FROM_UNIXTIME( shb_orders.create_time, '%Y-%m-%d' )
         """
 
+        # 地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (shb_orders.from_province_id = %(region_id)s OR shb_orders.from_city_id = %(region_id)s OR shb_orders.from_county_id = %(region_id)s OR shb_orders.from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                                AND (
+                                shb_orders.from_province_id IN (%(region_id)s)
+                                OR shb_orders.from_city_id IN (%(region_id)s)
+                                OR shb_orders.from_county_id IN (%(region_id)s)
+                                OR shb_orders.from_town_id IN (%(region_id)s)
+                                ) ''' % {'region_id': ','.join(params['region_id'])}
+
+        fetch_where += region
+
         # 时间
         if params.get('start_time') and params.get('end_time'):
             fetch_where += """ AND shb_orders.create_time >= {start_time} AND
@@ -51,12 +68,6 @@ class OrdersReceivedStatisticsList(object):
             ( {goods_type}=2 AND shf_goods.haul_dist = 2) OR
             ( {goods_type}=3 AND shf_goods.type = 2)
             ) """.format(goods_type=params['goods_type'])
-
-        # 地区
-        if params.get('region_id'):
-            fetch_where += """
-                AND ( from_province_id = {region_id} OR from_city_id = {region_id} OR from_county_id = {region_id} ) 
-                """.format(region_id=params['region_id'])
 
         # 评价类型
         if params.get('comment_type'):
@@ -118,6 +129,23 @@ class CancelOrderReasonModel(object):
             ORDER BY reason_count 
         """
 
+        # 地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (shb_orders.from_province_id = %(region_id)s OR shb_orders.from_city_id = %(region_id)s OR shb_orders.from_county_id = %(region_id)s OR shb_orders.from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                        AND (
+                        shb_orders.from_province_id IN (%(region_id)s)
+                        OR shb_orders.from_city_id IN (%(region_id)s)
+                        OR shb_orders.from_county_id IN (%(region_id)s)
+                        OR shb_orders.from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
+
+        fetch_where += region
+
         # 时间
         if params.get('start_time') and params.get('end_time'):
             fetch_where += """
@@ -142,12 +170,6 @@ class CancelOrderReasonModel(object):
             ({cancel_type}=2 AND shb_orders.canceled_user_id = shb_orders.driver_id)
             )
             """.format(cancel_type=params['cancel_type'])
-
-        # 地区
-        if params.get('region_id'):
-            fetch_where += """
-            AND (shb_orders.from_province_id = {region_id} or shb_orders.from_city_id = {region_id} or shb_orders.from_county_id = {region_id} or shb_orders.from_county_id={region_id})
-            """.format(region_id=params['region_id'])
 
         cancel_list_dict = cursor.query(command.format(fetch_where=fetch_where))
 
@@ -247,6 +269,23 @@ class OrderListmodel(object):
             {fetch_where}
         """
 
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['node_id']:
+            if isinstance(params['node_id'], int):
+                region = 'AND (so.from_province_id = %(region_id)s OR so.from_city_id = %(region_id)s OR so.from_county_id = %(region_id)s OR so.from_town_id = %(region_id)s) ' % {
+                    'region_id': params['node_id']}
+            elif isinstance(params['node_id'], list):
+                region = '''
+                        AND (
+                        so.from_province_id IN (%(region_id)s)
+                        OR so.from_city_id IN (%(region_id)s)
+                        OR so.from_county_id IN (%(region_id)s)
+                        OR so.from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['node_id'])}
+
+        fetch_where += region
+
         if params.get('order_id'):
             fetch_where += """ AND so.id = {order_id} """.format(order_id=params.get('order_id'))
 
@@ -327,23 +366,6 @@ class OrderListmodel(object):
             ( {vehicle_type}=8 AND shf_goods_vehicles.need_remove_seat = 1) 
             )
             """.format(vehicle_type=params['vehicle_type'])
-
-        # 网点
-        if params.get('node_id'):
-            if isinstance(params['node_id'], int):
-                fetch_where += """ 
-                AND (sg.from_province_id = {0}
-                OR sg.from_city_id = {0}
-                OR sg.from_county_id = {0}
-                OR sg.from_town_id = {0})
-                """.format(params['node_id'])
-            elif isinstance(params['node_id'], list):
-                fetch_where += """ 
-                AND (sg.from_province_id IN ({0})
-                OR sg.from_city_id IN ({0})
-                OR sg.from_county_id IN ({0})
-                OR sg.from_town_id IN ({0}))
-                """.format(','.join(params['node_id']))
 
         if params.get('spec_tag'):
             fetch_where += """
