@@ -13,8 +13,8 @@ configs = SuperConf(serialize=JsonSerialize(remote_filename=''.join([str(os.getp
                         hosts=SuperConf(JsonSerialize(), engine=Engine()).env.zookeeper.host
                         ), root='superconf')
 
-@configs.register('.union.mysql.read_db')
-def __read_db(conf):
+@configs.register('.union.mysql.read2_db')
+def __read2_db(conf):
     pass
 
 
