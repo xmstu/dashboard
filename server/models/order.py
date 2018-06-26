@@ -386,7 +386,7 @@ class OrderListmodel(object):
 
         if params.get('is_change_price'):
             fetch_where += """
-            AND so.price_recommend != price AND so.price_recommend != 0
+            AND so.price_recommend != so.price AND so.price_recommend != 0
             """
 
         if params.get('comment_type'):
