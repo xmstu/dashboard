@@ -196,8 +196,20 @@ class GoodsList(object):
             """.format(vehicle_type=params['vehicle_type'])
 
         # 是否初次下单
-        if params['new_goods_type'] > 0:
-            fetch_where += """ AND ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) <= 3 """
+        if params['new_goods_type'] == 1:
+            sql = """
+            SELECT
+                user_id 
+            FROM
+                shf_goods
+            GROUP BY user_id
+            HAVING COUNT(*) < 3
+            """
+            user_id = []
+            user_id_list = cursor.query(sql)
+            for i in user_id_list:
+                user_id.append(str(i['user_id']))
+            fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id)
 
         # 急需处理
         if params['urgent_goods']:

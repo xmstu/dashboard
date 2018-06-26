@@ -42,7 +42,7 @@ class GoodsList(object):
             is_addition = int(params.get('is_addition')) if params.get('is_addition') else 0
 
             # 校验参数
-            if not compare_time(create_end_time, create_start_time):
+            if not compare_time(create_start_time, create_end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             if not compare_time(load_start_time, load_end_time):

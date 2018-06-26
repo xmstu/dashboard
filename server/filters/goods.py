@@ -34,7 +34,7 @@ class GoodsList(object):
 
                 # 初次下单
                 mobile = detail['mobile']
-                if detail['shf_goods_counts'] == 1:
+                if detail['shf_goods_counts'] < 3:
                     mobile = detail['mobile'] + '\n初次下单'
 
                 # 构造运费
