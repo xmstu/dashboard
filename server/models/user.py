@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from server import log
-import time
+
 
 class UserList(object):
     @staticmethod
@@ -21,6 +21,9 @@ class UserList(object):
 
     @staticmethod
     def get_user_list(cursor, page, limit, params, user_station=None):
+
+        fetch_where = """ 1=1 """
+
         # 查询字段
         fields = '''
             shu_users.id,
@@ -71,99 +74,111 @@ class UserList(object):
 
         command = """
             SELECT
-            %s
+            {fields}
             FROM shu_users
             INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
             INNER JOIN shu_user_stats ON shu_users.id = shu_user_stats.user_id
             -- 被推荐
             LEFT JOIN shu_recommended_users AS recommended_user ON shu_users.id = recommended_user.recommended_user_id
-
-            WHERE shu_users.is_deleted = 0
+            WHERE shu_users.is_deleted = 0 AND 
+            {fetch_where}
             """
 
         # 用户名
         if params['user_name']:
-            command += 'AND shu_user_profiles.user_name = "%s" ' % params['user_name']
+            fetch_where += 'AND shu_user_profiles.user_name = "%s" ' % params['user_name']
         # 手机号
         if params['mobile']:
-            command += 'AND shu_users.mobile = "%s" ' % params['mobile']
+            fetch_where += 'AND shu_users.mobile = "%s" ' % params['mobile']
         # 推荐人手机
         if params['reference_mobile']:
-            command += '''AND shu_users.id IN (SELECT recommended_user_id
+            fetch_where += '''AND shu_users.id IN (SELECT recommended_user_id
             FROM shu_recommended_users
             WHERE referrer_user_id = (SELECT id FROM shu_users WHERE mobile = "%s"))''' % params['reference_mobile']
         # 下载渠道
         if params['download_ch']:
-            command += 'AND shu_user_profiles.download_channel = "%s" ' % params['download_ch']
+            fetch_where += 'AND shu_user_profiles.download_channel = "%s" ' % params['download_ch']
         # 注册渠道
         if params['from_channel']:
-            command += 'AND shu_user_profiles.from_channel = "%s" ' % params['from_channel']
+            fetch_where += 'AND shu_user_profiles.from_channel = "%s" ' % params['from_channel']
         # 推荐注册
         if params['is_referenced'] == 1:
-            command += 'AND recommended_user.id IS NOT NULL '
+            fetch_where += 'AND recommended_user.id IS NOT NULL '
         elif params['is_referenced'] == 2:
-            command += 'AND recommended_user.id IS NULL '
+            fetch_where += 'AND recommended_user.id IS NULL '
         # 常驻地
         if user_station:
-            command += 'AND shu_users.id IN (%s)' % user_station
+            fetch_where += 'AND shu_users.id IN (%s)' % user_station
         # 注册角色
         if params['role_type'] == 1:
-            command += 'AND shu_user_profiles.user_type = 1 '
+            fetch_where += 'AND shu_user_profiles.user_type = 1 '
         elif params['role_type'] == 2:
-            command += 'AND shu_user_profiles.user_type = 2 '
+            fetch_where += 'AND shu_user_profiles.user_type = 2 '
         elif params['role_type'] == 3:
-            command += 'AND shu_user_profiles.user_type = 3 '
+            fetch_where += 'AND shu_user_profiles.user_type = 3 '
         # 认证角色
         if params['role_auth'] == 1:
-            command += '''
+            fetch_where += '''
             AND (SELECT COUNT(1) FROM shu_user_auths
             WHERE shu_user_auths.id = shu_user_profiles.last_auth_goods_id AND shu_user_auths.auth_status = 2
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_goods = 1) > 0 '''
         elif params['role_auth'] == 2:
-            command += '''
+            fetch_where += '''
             AND (SELECT COUNT(1) FROM shu_user_auths
             WHERE shu_user_auths.id = shu_user_profiles.last_auth_driver_id AND shu_user_auths.auth_status = 2
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_driver = 1) > 0 '''
         elif params['role_auth'] == 3:
-            command += '''
+            fetch_where += '''
             AND (SELECT COUNT(1) FROM shu_user_auths
             WHERE shu_user_auths.id = shu_user_profiles.last_auth_company_id AND shu_user_auths.auth_status = 2
             AND shu_user_auths.is_deleted = 0 AND shu_user_auths.auth_company = 1) > 0 '''
         # 是否活跃
         if params['is_actived'] == 1:
-            command += 'AND shu_user_stats.keep_login_days >= 7 AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
+            fetch_where += 'AND shu_user_stats.keep_login_days >= 7 AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
         elif params['is_actived'] == 2:
-            command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 1 * 86400
+            fetch_where += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 1 * 86400
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 3 * 86400 '''
         elif params['is_actived'] == 3:
-            command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 4 * 86400
+            fetch_where += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 4 * 86400
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP() - 10 * 86400 '''
         elif params['is_actived'] == 4:
-            command += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
+            fetch_where += '''AND shu_user_stats.last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
 
         # 操作过
-        if params['is_used']:
-            pass
-
-        # if params['is_used'] == 1:
-        #     command += 'AND (SELECT COUNT(1) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) > 0 '
-        # elif params['is_used'] == 2:
-        #     command += 'AND (SELECT COUNT(1) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) > 0 '
-        # elif params['is_used'] == 3:
-        #     command += 'AND (SELECT COUNT(1) FROM shb_orders WHERE (shb_orders.owner_id = shu_users.id OR shb_orders.driver_id = shu_users.id) AND shb_orders.`status` = 3 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1)) > 0 '
+        if params['is_used'] == 1:
+            fetch_where += 'AND (SELECT COUNT(1) FROM shf_goods WHERE shf_goods.user_id = shu_users.id) > 0 '
+        elif params['is_used'] == 2:
+            fetch_where += """
+            AND (( SELECT COUNT( 1 ) FROM shb_orders WHERE shb_orders.driver_id = shu_users.id ) > 0 
+            OR ( SELECT COUNT( 1 ) FROM shb_orders WHERE shb_orders.owner_id = shu_users.id ) > 0)
+            """
+        elif params['is_used'] == 3:
+            fetch_where += """
+            AND (
+                SELECT
+                    COUNT( 1 ) 
+                FROM
+                    shb_orders 
+                WHERE
+                ( shb_orders.owner_id = shu_users.id AND shb_orders.`status` = 3 AND shb_orders.pay_status = 2 ) OR
+                ( shb_orders.owner_id = shu_users.id AND shb_orders.`status` = 3 AND shb_orders.paid_offline = 1 ) OR
+                ( shb_orders.driver_id = shu_users.id AND shb_orders.`status` = 3 AND shb_orders.pay_status = 2 ) OR
+                ( shb_orders.driver_id = shu_users.id AND shb_orders.`status` = 3 AND shb_orders.paid_offline = 1 ) 
+                ) > 0
+            """
 
         # 贴车贴
         if params['is_car_sticker'] == 1:
-            command += 'AND shu_user_profiles.trust_member_type = 2 AND ad_expired_time > UNIX_TIMESTAMP() '
+            fetch_where += 'AND shu_user_profiles.trust_member_type = 2 AND ad_expired_time > UNIX_TIMESTAMP() '
         elif params['is_car_sticker'] == 2:
-            command += 'AND shu_user_profiles.trust_member_type != 2 '
+            fetch_where += 'AND shu_user_profiles.trust_member_type != 2 '
         # 最后登录
         if params['last_login_start_time'] and params['last_login_end_time']:
-            command += 'AND shu_user_stats.last_login_time >= %s AND shu_user_stats.last_login_time < %s ' % (
-            params['last_login_start_time'], params['last_login_end_time'])
+            fetch_where += 'AND shu_user_stats.last_login_time >= %s AND shu_user_stats.last_login_time < %s ' % (
+                params['last_login_start_time'], params['last_login_end_time'])
         # 注册日期
         if params['register_start_time'] and params['register_end_time']:
-            command += 'AND shu_users.create_time >= %s AND shu_users.create_time < %s ' % (
+            fetch_where += 'AND shu_users.create_time >= %s AND shu_users.create_time < %s ' % (
                 params['register_start_time'], params['register_end_time'])
 
         # 优化初次加载速度
@@ -171,12 +186,12 @@ class UserList(object):
         if not fields_value:
             user_count = cursor.query_one('SELECT COUNT(1) AS count FROM shu_users WHERE shu_users.is_deleted = 0')
         else:
-            user_count = cursor.query_one(command % 'COUNT(1) AS count')
+            user_count = cursor.query_one(command.format(fields="COUNT(1) AS count", fetch_where=fetch_where))
 
         # TODO 排序优化 分页
-        command += """ ORDER BY shu_users.id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        fetch_where += """ ORDER BY shu_users.id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
         # 详情
-        user_detail = cursor.query(command % fields)
+        user_detail = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
         user_list = {
             'user_detail': user_detail if user_detail else [],
@@ -283,7 +298,8 @@ class UserStatistic(object):
         else:
             region = ''
             if params['region_id']:
-                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' % ','.join(params['region_id'])
+                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' % ','.join(
+                    params['region_id'])
 
             command = command % region
 
@@ -329,7 +345,8 @@ class UserStatistic(object):
         region = ''
         if params['region_id']:
             if isinstance(params['region_id'], set):
-                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' %  ','.join(params['region_id'])
+                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' % ','.join(
+                    params['region_id'])
             elif isinstance(params['region_id'], str):
                 region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) = %s' % params['region_id']
 
