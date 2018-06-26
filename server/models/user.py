@@ -92,12 +92,12 @@ class UserList(object):
                     'region_id': params['region_id']}
             elif isinstance(params['region_id'], list):
                 region = '''
-                                AND (
-                                from_province_id IN (%(region_id)s)
-                                OR from_city_id IN (%(region_id)s)
-                                OR from_county_id IN (%(region_id)s)
-                                OR from_town_id IN (%(region_id)s)
-                                ) ''' % {'region_id': ','.join(params['region_id'])}
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
 
         fetch_where += region
 
