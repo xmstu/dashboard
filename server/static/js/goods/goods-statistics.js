@@ -288,6 +288,7 @@ layui.use(['laydate', 'form', 'table'], function () {
                     skin: 'layui-layer-molv',
                     closeBtn: 1,
                     content: $('#popup')
+                    
                 })
             });
             $("td[data-field='goods_standard']").children().each(function (val) {
