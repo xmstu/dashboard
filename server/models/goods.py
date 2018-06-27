@@ -215,11 +215,11 @@ class GoodsList(object):
         # 急需处理
         if params['urgent_goods']:
             if params['urgent_goods'] == 1:
-                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 0 AND (UNIX_TIMESTAMP() - shf_goods.create_time) < 5 * 60 """
+                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 0 AND (UNIX_TIMESTAMP() - shf_goods.create_time) < 300 """
             if params['urgent_goods'] == 2:
-                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 5 * 60 AND (UNIX_TIMESTAMP() - shf_goods.create_time) < 10 * 60 """
+                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) >= 300 AND (UNIX_TIMESTAMP() - shf_goods.create_time) <= 600 """
             if params['urgent_goods'] == 3:
-                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 10 * 60 """
+                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600 """
 
         # 是否加价
         if params['is_addition']:
