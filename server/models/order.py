@@ -1,4 +1,4 @@
-from server.cache_data import fresh_owner_ids
+# from server.cache_data import fresh_owner_ids
 
 
 class OrdersReceivedStatisticsList(object):
@@ -369,12 +369,12 @@ class OrderListModel(object):
             )
             """.format(vehicle_type=params['vehicle_type'])
 
-        if params.get('spec_tag'):
-            if params['spec_tag'] == 1:
-                owner_id_list = []
-                for i in fresh_owner_ids:
-                    owner_id_list.append(str(i['user_id']))
-                fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(owner_id_list)
+        # if params.get('spec_tag'):
+        #     if params['spec_tag'] == 1:
+        #         owner_id_list = []
+        #         for i in fresh_owner_ids:
+        #             owner_id_list.append(str(i['user_id']))
+        #         fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(owner_id_list)
 
             if params['spec_tag'] == 2:
                 sql = """
