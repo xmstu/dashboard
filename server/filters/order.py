@@ -135,7 +135,7 @@ class OrderList(object):
                     vehicle = '\n'.join(L)
 
                 # 构造运费
-                freight = '{0}'.format(str(int(detail['price'])))
+                freight = '{0}元'.format(str(int(detail['price'])))
 
                 # 构造货主字段
                 cargo_owner = '\n'.join([str(detail['owner_mobile']), str(detail['owner_name']), '新货主' if detail['c2'] < 3 else ''])
