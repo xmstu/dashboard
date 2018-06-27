@@ -2,7 +2,7 @@
 
 from server import app
 from flask import render_template, session, redirect
-from server.init_regions import init_regions
+from server.cache_data import init_regions
 from server.meta.session_operation import sessionOperationClass
 
 @app.route('/promote/')

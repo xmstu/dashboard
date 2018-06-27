@@ -1,3 +1,4 @@
+from server.cache_data import fresh_owner_ids
 
 
 class OrdersReceivedStatisticsList(object):
@@ -369,20 +370,8 @@ class OrderListModel(object):
 
         if params.get('spec_tag'):
             if params['spec_tag'] == 1:
-                sql = """
-                SELECT
-                    shf_goods.user_id
-                FROM
-                    shf_goods
-                    INNER JOIN shb_orders so ON shf_goods.user_id = so.owner_id
-                    GROUP BY
-                    shf_goods.user_id
-                    HAVING
-                    COUNT(1) < 3
-                """
                 owner_id_list = []
-                ret = cursor.query(sql)
-                for i in ret:
+                for i in fresh_owner_ids:
                     owner_id_list.append(str(i['user_id']))
                 fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(owner_id_list)
 

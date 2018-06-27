@@ -2,7 +2,7 @@
 
 from server.meta.decorators import make_decorator
 from server.status import build_result, HTTPStatus, APIStatus, make_result
-from server.init_regions import init_regions
+from server.cache_data import init_regions
 import simplejson as json
 from functools import reduce
 

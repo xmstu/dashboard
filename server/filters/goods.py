@@ -4,7 +4,7 @@ import time
 from flask_restful import abort
 
 from server import log
-from server.init_regions import init_regions
+from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import build_result, APIStatus, HTTPStatus, make_result
 from server.utils.date_format import get_date_aggregate

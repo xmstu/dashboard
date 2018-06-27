@@ -5,7 +5,7 @@ import hashlib
 
 from flask_restful import abort
 
-from server.init_regions import init_regions
+from server.cache_data import init_regions
 from server.meta.session_operation import sessionOperationClass
 
 from server.logger import log

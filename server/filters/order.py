@@ -3,7 +3,7 @@ import json
 from flask_restful import abort
 
 from server import log
-from server.init_regions import init_regions
+from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus, build_result
 from server.utils.extend import ExtendHandler, get_struct_data, get_xAxis, timestamp2date

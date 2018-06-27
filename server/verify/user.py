@@ -8,7 +8,7 @@ from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
 from server.meta.session_operation import sessionOperationClass
-from server.init_regions import init_regions
+from server.cache_data import init_regions
 from server.utils.extend import compare_time
 
 
