@@ -198,6 +198,7 @@ class OrderListModel(object):
 
         fields = """
                 so.id,
+                sg.mileage_total,
                 sg.NAME,
                 sg.weight,
                 sg.volume,
@@ -292,12 +293,12 @@ class OrderListModel(object):
 
         if params.get('consignor_mobile'):
             fetch_where += """ 
-            AND ( SELECT shu_users.mobile FROM shu_users WHERE id = so.driver_id ) = {consignor_mobile} 
+            AND ( SELECT shu_users.mobile FROM shu_users WHERE id = so.owner_id ) = {consignor_mobile} 
             """.format(consignor_mobile=params['consignor_mobile'])
 
         if params.get('driver_mobile'):
             fetch_where += """
-            AND ( SELECT shu_users.mobile FROM shu_users WHERE id = so.owner_id ) = {driver_mobile}
+            AND ( SELECT shu_users.mobile FROM shu_users WHERE id = so.driver_id ) = {driver_mobile}
             """.format(driver_mobile=params['driver_mobile'])
 
         if params.get('from_province_id'):
