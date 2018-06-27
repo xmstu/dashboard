@@ -520,7 +520,7 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
                 dataLabels: {
                     enabled: true,
                     formatter: function () {
-                        return this.point.y > 0 ? this.point.y + '人' : null;
+                        return this.point.y > 0 ? this.point.y + '单' : null;
                     }
                 }
             },
