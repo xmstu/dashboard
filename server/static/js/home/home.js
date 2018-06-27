@@ -4,8 +4,10 @@ $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
     tableInit('/city/latest_orders/');
+    $('.area-menu-about>a').addClass('selected-active')
+    $('.area-menu-about>a>i').addClass('select-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
-}, 50);
+}, 10);
 layui.use(['laydate', 'form', 'table'], function () {
     dataInit();
     layer.load();
@@ -225,7 +227,7 @@ function tableInit(url) {
                 {field: 'goods_id', title: '货源ID', width: 70},
                 {field: 'goods_type', title: '类型', width: 60},
                 {field: 'content', title: '货物规格', width: 120},
-                {field: 'address', title: '出发地-目的地',width:310},
+                {field: 'address', title: '出发地-目的地', width: 310},
                 {field: 'vehicle', title: '车型要求', width: 86},
                 {field: 'price', title: '运费', width: 180},
                 {field: 'mobile', title: '货主手机', width: 96},
@@ -329,7 +331,7 @@ function tableReset(url) {
             },
             loading: true
             , cols: [[ //表头
-                  {field: 'name', title: '司机姓名', width: 86}
+                {field: 'name', title: '司机姓名', width: 86}
                 , {field: 'mobile', title: '手机号码', width: 110}
                 , {field: 'usual_region', title: '匹配原则', width: 204}
                 , {field: 'vehicle_length', title: '车长', width: 166}

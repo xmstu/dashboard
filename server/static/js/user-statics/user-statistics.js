@@ -3,9 +3,10 @@ $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 var requestStart = $('#date_show_one').val() + ' 00:00:00';
 var requestEnd = $('#date_show_two').val() + ' 23:59:59';
 setTimeout(function () {
+    $('.user-menu-about > a').addClass("selected-active")
+     $('.user-menu-about > a >i').addClass("select-active")
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
-    $('#is_used').nextSibling('div').find('input').css({'readonly':true})
-}, 30);
+}, 10);
 $('#area_select').address({
     offsetLeft: '0',
     level: 3,
@@ -195,7 +196,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                     $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                 }
             })
-            $("td[data-field='order_completed']").children().each(function () {
+            $("td[data-field='order_finished_count']").children().each(function () {
                 if ($(this).text() != '') {
                     var str = $(this).text();
                     $(this).html(str + '单')
@@ -203,14 +204,14 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             })
         }
         , cols: [[
-             {field: 'id', title: '用户ID', sort: true},
+             {field: 'user_id', title: '用户ID', sort: true},
                 {field: 'user_name', title: '用户名'}
                 , {field: 'mobile', title: '手机号'}
                 , {field: 'user_type', title: '注册角色'}
                 , {field: 'role_auth', title: '认证'}
                 , {field: 'goods_count', title: '发货'}
                 , {field: 'order_count', title: '接单'}
-                , {field: 'order_completed', title: '完成订单'}
+                , {field: 'order_finished_count', title: '完成订单'}
                 , {field: 'download_channel', title: '下载渠道'}
                 , {field: 'from_channel', title: '注册渠道'}
                 , {field: 'last_login_time', title: '最后登陆'}
@@ -352,7 +353,7 @@ $('#user_search_box').on('click', function (e) {
                         $(this).html(str + '次')
                     }
                 })
-                $("td[data-field='order_completed']").children().each(function () {
+                $("td[data-field='order_finished_count']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         $(this).html(str + '单')
@@ -360,14 +361,14 @@ $('#user_search_box').on('click', function (e) {
                 })
             }
             , cols: [[
-                {field: 'id', title: '用户ID', sort: true},
+                {field: 'user_id', title: '用户ID', sort: true},
                 {field: 'user_name', title: '用户名'}
                 , {field: 'mobile', title: '手机号'}
                 , {field: 'user_type', title: '注册角色'}
                 , {field: 'role_auth', title: '认证'}
                 , {field: 'goods_count', title: '发货'}
                 , {field: 'order_count', title: '接单'}
-                , {field: 'order_completed', title: '完成订单'}
+                , {field: 'order_finished_count', title: '完成订单'}
                 , {field: 'download_channel', title: '下载渠道'}
                 , {field: 'from_channel', title: '注册渠道'}
                 , {field: 'last_login_time', title: '最后登陆'}

@@ -296,7 +296,7 @@ var common = {
             $("#day_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods_1").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#week_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
-        }else if (time > 7 && time < 90) {
+        } else if (time > 7 && time < 90) {
             $("#day_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
@@ -412,15 +412,18 @@ var common = {
             layer.msg('reset')
         })
     },
-    dataTransform:function(str){
-        if(str==''){
-            return ''
-        }else if(str==undefined){
-            return 'wu'
-        }else if(str!='') {
-            return str
-        }
+    keyDown: function () {
+        $(document).keydown(function (event) {
+            switch (event.keyCode) {
+                case 27:
+                    alert('您按下了回车');
+                    return;
+                case 13:
+                    alert('您按下了空格');
+                    return;
 
+            }
+        });
     }
 };
 setTimeout(function () {

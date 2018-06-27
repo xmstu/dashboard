@@ -7,8 +7,10 @@ $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_one').val(String(common.getNowFormatDate()[2]));
 $('#end_time_one').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
+    $('.order-menu-about>a').addClass('selected-active');
+    $('.order-menu-about>a>i').addClass('select-active');
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
-}, 100);
+}, 10);
 
 function init() {
     $('.layui-form-item').width('250px');

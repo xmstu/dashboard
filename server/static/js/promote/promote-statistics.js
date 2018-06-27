@@ -9,8 +9,10 @@ layui.use('layer', function () {
     dataInit();
 });
 setTimeout(function () {
+    $('.promote-menu-about>a').addClass('selected-active');
+    $('.promote-menu-about>a>i').addClass('select-active');
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
-}, 100);
+}, 10);
 layui.use(['laydate', 'layer', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
