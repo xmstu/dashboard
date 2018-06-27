@@ -485,10 +485,12 @@ var setAbout = {
                             var result = $(this).text().split('\n');
                             if (result[0] !== '') {
                                 $(this).html(result[0])
-                            } else if (result[1] != '' || result[1] != undefined) {
+                            }
+                            if (result[1] != '' && result[1] != undefined) {
                                 $(this).html(result[0] + '<br>' + result[1])
-                            } else if (result[2] != '' || result[2] != undefined) {
-                                $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
+                            }
+                            if (result[2] != '' && result[2] != undefined) {
+                                $(this).html(result[0] + '<br>' + result[1] )
                             }
                         }
                     });
