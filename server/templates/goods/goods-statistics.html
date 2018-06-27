@@ -11,7 +11,7 @@
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
-     {% include '/header/header.html' %}
+    {% include '/header/header.html' %}
     <article class="main-content">
         {% include '/menu/menu.html' %}
         <aside class="main-content-right">
@@ -83,7 +83,7 @@
                                 </div>
                                 <button id="search_btn" style="position: relative;padding-left: 20px;"
                                         class="layui-btn "><i style=""
-                                                                              class="iconfont icon-sousuo1"></i> 搜索
+                                                              class="iconfont icon-sousuo1"></i> 搜索
                                 </button>
                             </form>
                         </div>
@@ -157,7 +157,8 @@
                                     <div class="layui-inline" style="width: 230px">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width: 140px">
-                                            <select id="goods_type_one" name="modules" lay-verify="required" lay-search="">
+                                            <select id="goods_type_one" name="modules" lay-verify="required"
+                                                    lay-search="">
                                                 <option value="">全部</option>
                                                 <option value="1">同城</option>
                                                 <option value="2">跨城</option>
@@ -170,7 +171,8 @@
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">搜索选择</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                           <select id="region_id_one" name="modules" lay-verify="required" lay-search="">
+                                            <select id="region_id_one" name="modules" lay-verify="required"
+                                                    lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
                                                 <option value="{{ location['region_id'] }}">{{ location['name'] }}
@@ -267,7 +269,7 @@
                                             <th>所占比率</th>
                                         </tr>
                                         </thead>
-                                        <tbody  class="cancel-reason-types">
+                                        <tbody class="cancel-reason-types">
                                         </tbody>
                                     </table>
                                 </div>
@@ -357,15 +359,15 @@
                                     <div class="layui-input-inline" style="">
                                         <select id="vehicle_length" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
-                                            <option value="1">1.7m</option>
-                                            <option value="2">2.7m</option>
-                                            <option value="3">3m</option>
-                                            <option value="4">4.2m</option>
-                                            <option value="5">5.6m</option>
-                                            <option value="6">6.8m</option>
-                                            <option value="7">7.6m</option>
-                                            <option value="8">8.6m</option>
-                                            <option value="9">9.6m</option>
+                                            <option value="小面包车">小面包车</option>
+                                            <option value="中面包车">中面包车</option>
+                                            <option value="小货车">小货车</option>
+                                            <option value="4.2米">4.2米</option>
+                                            <option value="6.8米">6.8米</option>
+                                            <option value="7.6米">7.6米</option>
+                                            <option value="9.6米">9.6米</option>
+                                            <option value="13米">13米</option>
+                                            <option value="17米">17米</option>
                                         </select>
                                     </div>
                                 </div>
@@ -376,8 +378,14 @@
                                     <div class="layui-input-inline" style="width: 162px;">
                                         <select id="vehicle_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
-                                            <option value="1">箱式尾板车</option>
-                                            <option value="2">箱式高栏车</option>
+                                            <option value="1">需要开顶</option>
+                                            <option value="2">需要尾板</option>
+                                            <option value="3">需要平板</option>
+                                            <option value="4">需要高栏</option>
+                                            <option value="5">需要箱式</option>
+                                            <option value="6">需要钢板车</option>
+                                            <option value="7">需要双排座</option>
+                                            <option value="8">需要全拆座</option>
                                         </select>
                                     </div>
                                 </div>

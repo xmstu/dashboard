@@ -432,8 +432,9 @@ var setAbout = {
                     {field: 'freight', title: '运费', width: 90},
                     {field: 'cargo_owner', title: '货主', width: 120},
                     {field: 'driver', title: '司机', width: 120},
-                    {field: 'latency_time', title: '等待时间', width: 120},
-                    {field: 'complete_time', title: '状态', width: 109},
+                    {field: 'latency_time', title: '等待时间', width: 100},
+                    {field: 'order_status', title: '状态', width: 119},
+                    {field: 'evaluation', title: '评价', width: 90},
                     {field: 'create_time', title: '时间', width: 150}
                 ]],
                 done: function (res, curr, count) {

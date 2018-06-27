@@ -277,7 +277,10 @@ function lineChartInit(xAxis, series, interval, str_title, names, units) {
         plotOptions: {
             line: {
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                     formatter: function () {
+                        return this.point.y > 0 ? this.point.y + '人' : this.point.y;
+                    }
                 },
                 enableMouseTracking: true
             }

@@ -487,7 +487,10 @@ function chartInit(xAxis, series, interval, x_value1) {
         plotOptions: {
             line: {
                 dataLabels: {
-                    enabled: true
+                    enabled: true,
+                     formatter: function () {
+                        return this.point.y + '人';
+                    }
                 }
             },
             series: {
