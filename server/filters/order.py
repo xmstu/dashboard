@@ -135,7 +135,7 @@ class OrderList(object):
                     vehicle = '\n'.join(L)
 
                 # 构造运费
-                freight = '{0}'.format(str(detail['price']))
+                freight = '{0}'.format(str(int(detail['price'])))
 
                 # 构造货主字段
                 cargo_owner = '\n'.join([str(detail['owner_mobile']), str(detail['owner_name']), '新货主' if detail['c2'] < 3 else ''])
@@ -173,6 +173,12 @@ class OrderList(object):
                 else:
                     evaluation = '未评价'
 
+                latency_time = (str(int(detail['latency_time'] / 3600)) + '小时' if int(detail['latency_time'] / 3600) > 0 else '') + \
+                               (str(int(detail['latency_time'] % 3600 / 60)) + '分钟' if int(detail['latency_time'] % 3600 / 60) > 0 else '') + \
+                               (str(int(detail['latency_time'] % 3600 % 60)) + '秒' if int(detail['latency_time'] % 3600 % 60) > 0 else '')
+
+                time_field = (timestamp2date(detail['complete_time'], 2) if detail['complete_time'] else '待完成') + '\n' + (timestamp2date(detail['create_time'], 2) if detail['create_time'] else '未知接单时间')
+
                 result.append({
                     'order_id': detail['id'],
                     'goods_standard': '\n'.join(goods_standard),
@@ -185,9 +191,8 @@ class OrderList(object):
                     'driver': driver,
                     'order_status': order_status,
                     'evaluation': evaluation,
-                    'complete_time': timestamp2date(detail['complete_time'], 2) if detail['complete_time'] else '待完成',
-                    'create_time': timestamp2date(detail['create_time'], 2) if detail['create_time'] else '未知接单时间',
-                    'latency_time': "%.2f分钟" % (detail['latency_time'] / 60)
+                    'time_field': time_field,
+                    'latency_time': latency_time
                 })
 
             return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok

@@ -40,15 +40,15 @@ class GoodsList(object):
                 # 初次下单
                 mobile = detail['mobile']
                 if detail['shf_goods_counts'] < 3:
-                    mobile = detail['mobile'] + '\n初次下单'
+                    mobile = detail['mobile'] + '\n新用户'
 
                 # 构造运费
-                price = '货主出价:%(price_expect)s元%(price_addition)s元\n系统价:%(price_recommend)s元' % \
+                price = '货主出价:%(price_expect)s元%(price_addition)s\n系统价:%(price_recommend)s元' % \
                         {
-                            'price_expect': str(detail.get('price_expect', 0)),
-                            'price_addition': '(+%s)' % str(detail['price_addition']) if detail.get('price_addition',
-                                                                                                    0) else '+0',
-                            'price_recommend': str(detail.get('price_recommend', 0))
+                            'price_expect': str(int(detail.get('price_expect', 0) + detail.get('price_addition', 0))),
+                            'price_addition': '(+%s)' % str(int(detail['price_addition'])) if detail.get('price_addition',
+                                                                                                    0) else '',
+                            'price_recommend': str(int(detail.get('price_recommend', 0)))
                         }
 
                 # 网点
@@ -135,7 +135,14 @@ class GoodsList(object):
                 # 等待时间 从发布货源到被打电话的等待时间
                 latency_time = '-'
                 if detail.get('create_time') and detail.get('called_time'):
-                    latency_time = '%.2f分钟' % ((detail.get('called_time') - detail.get('create_time'))/60)
+                    latency_time = detail.get('called_time') - detail.get('create_time')
+
+                    latency_time = (str(int(latency_time / 3600)) + '小时' if int(
+                        latency_time / 3600) > 0 else '') + \
+                               (str(int(latency_time % 3600 / 60)) + '分钟' if int(
+                                   latency_time % 3600 / 60) > 0 else '') + \
+                               (str(int(latency_time % 3600 % 60)) + '秒' if int(
+                                   latency_time % 3600 % 60) > 0 else '')
 
                 result.append({
                     'id': detail['id'],
