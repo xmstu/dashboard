@@ -58,7 +58,7 @@ input:-ms-input-placeholder {
 }
 
 body {
-    font-family: "Microsoft YaHei";
+  font-family: Arial, Helvetica, sans-serif;!important
 }
 
 .header {
