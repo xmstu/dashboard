@@ -273,7 +273,7 @@ function tableInit(url) {
                     if ($(this).text().length > 14) {
                         var str = $(this).text();
                         str = str.split('\n');
-                        $(this).html(str[0] + '<br>' + str[1])
+                        $(this).html(str[0] + '<br><span style="color: red;">' + str[1]+'</span>')
                     }
                 });
                 $("td[data-field='vehicle']").children().each(function () {
