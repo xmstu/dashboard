@@ -697,7 +697,7 @@ $('#goods_search_box').on('click', function (e) {
             {field: 'mobile', title: '货主手机', width: 100},
             {field: 'goods_status', title: '状态', width: 89},
             {field: 'call_count', title: '通话数', width: 60},
-            {field: 'latency_time', title: '发布-接单', width: 104},
+            {field: 'latency_time', title: '初次触达时间', width: 104},
             {field: 'goods_time', title: '时间', width: 190},
             {field: 'node_id', title: '所属网点'}
             ]],
