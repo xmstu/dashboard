@@ -242,7 +242,6 @@ function tableInit(url) {
             ]],
             done: function (res, curr, count) {
                 layer.closeAll('loading')
-
                 $('[data-field]>div').css({'padding': '0 6px'});
                 $('.nearby').on('click', function () {
                     var val = $(this).val();
@@ -300,7 +299,7 @@ function tableInit(url) {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         str = str.split('\n');
-                        $(this).html(str[0] + '<br>' + str[1])
+                        $(this).html(str[0] + '<br>' + str[1]+'<br>'+str[2])
                     }
                 })
                 $("td[data-field='call_count']").children().each(function () {

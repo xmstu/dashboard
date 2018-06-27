@@ -73,16 +73,14 @@ body {
     top: 0;
     z-index: 99;
 }
-
 .header-left {
     float: left;
     width: 8%;
-    min-width: 140px;
+    min-width: 120px;
     height: 100%;
     position: relative;
     border-right: 1px solid rgba(0, 0, 0, .1);
 }
-
 .header-left > a {
     display: block;
     width: 98%;
@@ -96,7 +94,7 @@ body {
 }
 
 .header-content {
-    width: 60%;
+    width: 65%;
     height: 100%;
     float: left;
     min-width: 920px;
@@ -137,10 +135,10 @@ body {
 }
 
 .header-right {
-    width: 26%;
+    width: 25%;
     float: left;
     height: 100%;
-    padding: 0 30px 0 20px;
+    padding: 0 1% 0 1%;
 }
 
 .header-right > .oneself-set {
@@ -213,7 +211,7 @@ body {
 
 .oneself-set > div:nth-of-type(1) {
     display: inline-block;
-    width: 84%;
+    width: 81%;
     padding-left: 10px;
     padding-top: 6px;
     vertical-align: top;
@@ -296,13 +294,19 @@ body {
 .nav-content {
     width: 100%;
     text-align: left;
-    padding-left: 16px;
+    padding-left: 12px;
+    padding-right: 6px;
     color: #eee;
     font-size: 13px;
     line-height: 30px;
     border-bottom: 1px solid #ccc;
 }
-
+.nav-content > p {
+    overflow: hidden;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
 .nav-header > p > span {
     font-size: 15px;
     display: inline-block;
@@ -316,7 +320,7 @@ body {
     width: 8%;
     top: 66px;
     max-width: 165px;
-    min-width: 140px;
+    min-width: 120px;
     background: #3a3a4f !important;
     -webkit-background-size: cover;
     background-size: cover;
@@ -351,9 +355,9 @@ body {
 
 .layui-nav-item > a > i:nth-child(1) {
     vertical-align: bottom;
-    margin-right: 10px;
+    margin-right: 4%;
     display: inline-block;
-    width: 44px;
+    width: 40px;
     text-align: center;
 }
 
@@ -390,15 +394,14 @@ body {
 .layui-nav-item {
     border-bottom: 1px solid rgba(107, 108, 109, 0.19) !important;
 }
-
 nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     line-height: 40px;
     height: 40px;
     text-align: left;
     padding-left: 0;
     color: #fff;
+    font-size: 13px;
 }
-
 .layui-nav-tree .layui-nav-item > a:hover {
     text-shadow: none !important;
     color: #ccc !important;
