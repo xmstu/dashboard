@@ -190,7 +190,7 @@ class CancelOrderReasonModel(object):
         return data
 
 
-class OrderListmodel(object):
+class OrderListModel(object):
 
     @staticmethod
     def get_order_list(cursor, page, limit, params):
@@ -368,12 +368,41 @@ class OrderListmodel(object):
             """.format(vehicle_type=params['vehicle_type'])
 
         if params.get('spec_tag'):
-            fetch_where += """
-            AND(
-            ( {spec_tag}=1 AND (SELECT COUNT(driver_id) from shb_orders WHERE shb_orders.driver_id = so.driver_id) < 3) OR
-            ( {spec_tag}=2 AND (SELECT COUNT(1) from shf_goods WHERE shf_goods.user_id = so.owner_id) < 3)
-            )
-            """.format(spec_tag=params['spec_tag'])
+            if params['spec_tag'] == 1:
+                sql = """
+                SELECT
+                    shf_goods.user_id
+                FROM
+                    shf_goods
+                    INNER JOIN shb_orders so ON shf_goods.user_id = so.owner_id
+                    GROUP BY
+                    shf_goods.user_id
+                    HAVING
+                    COUNT(1) < 3
+                """
+                owner_id_list = []
+                ret = cursor.query(sql)
+                for i in ret:
+                    owner_id_list.append(str(i['user_id']))
+                fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(owner_id_list)
+
+            if params['spec_tag'] == 2:
+                sql = """
+                SELECT
+                    driver_id
+                FROM
+                    shb_orders 
+                GROUP BY
+                    driver_id 
+                HAVING
+                    COUNT( 1 ) < 3
+                """
+                driver_id_list = []
+                ret = cursor.query(sql)
+                for i in ret:
+                    driver_id_list.append(str(i['driver_id']))
+
+                fetch_where += """ AND so.driver_id IN (%s) """ % ','.join(driver_id_list)
 
         if params.get('pay_status'):
             fetch_where += """

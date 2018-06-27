@@ -6,6 +6,7 @@ from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
+from server.utils.extend import compare_time
 
 
 class OrdersReceivedStatistics(object):
@@ -31,7 +32,7 @@ class OrdersReceivedStatistics(object):
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
-            if params['start_time'] <= params['end_time']:
+            if params['start_time'] <= params['end_time'] < time.time():
                 pass
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
@@ -62,7 +63,7 @@ class CancelOrderReason(object):
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
-            if params['start_time'] <= params['end_time']:
+            if params['start_time'] <= params['end_time'] < time.time():
                 pass
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
@@ -97,10 +98,10 @@ class OrderList(object):
             params['pay_status'] = int(params.get('pay_status', None) or 0)
             params['is_change_price'] = int(params.get('is_change_price', None) or 0)
             params['comment_type'] = int(params.get('comment_type', None) or 0)
-            params['start_order_time'] = int(params.get('start_order_time', None) or time.time() - 86400 * 7)
-            params['end_order_time'] = int(params.get('end_order_time', None) or time.time() - 86400)
-            params['start_loading_time'] = int(params.get('start_loading_time', None) or time.time() - 86400 * 7)
-            params['end_loading_time'] = int(params.get('end_loading_time', None) or time.time() - 86400)
+            params['start_order_time'] = int(params.get('start_order_time', None) or 0)
+            params['end_order_time'] = int(params.get('end_order_time', None) or 0)
+            params['start_loading_time'] = int(params.get('start_loading_time', None) or 0)
+            params['end_loading_time'] = int(params.get('end_loading_time', None) or 0)
 
             # 当前权限下所有地区
             if sessionOperationClass.check():
@@ -110,14 +111,10 @@ class OrderList(object):
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
-            if params['start_order_time'] <= params['end_order_time']:
-                pass
-            else:
+            if not compare_time(params['start_order_time'], params['end_order_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
-            if params['start_loading_time'] <= params['end_loading_time']:
-                pass
-            else:
+            if not compare_time(params['start_loading_time'], params['end_loading_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             return Response(page=page, limit=limit, params=params)

@@ -2,8 +2,7 @@ import json
 
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.order import OrdersReceivedStatisticsList, CancelOrderReasonModel, OrderListmodel
-from server.utils.extend import ExtendHandler
+from server.models.order import OrdersReceivedStatisticsList, CancelOrderReasonModel, OrderListModel
 
 
 class OrdersReceivedStatistics(object):
@@ -32,6 +31,6 @@ class OrderList(object):
     @staticmethod
     @make_decorator
     def get_data(page, limit, params):
-        data = OrderListmodel.get_order_list(db.read_db, page, limit, params)
+        data = OrderListModel.get_order_list(db.read_db, page, limit, params)
 
         return Response(data=data, params=params)
