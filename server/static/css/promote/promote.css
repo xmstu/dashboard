@@ -61,6 +61,7 @@
 }
 .thead-tr > th{
     font-weight: bold;
+    width: 25%;
 }
 .cancel-reason-types th,
 .cancel-reason-types td {
@@ -75,7 +76,7 @@
     font-size: 18px;
     font-weight: bold;
     line-height: 40px;
-    width: 300%;
+    width: 400%;
     display: block;
     text-align: center;
 }

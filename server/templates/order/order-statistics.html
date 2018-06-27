@@ -205,8 +205,10 @@
                                         <div class="layui-input-inline" style="width:122px;">
                                             <select id="region_id_show" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
-                                                <option value="1">天河</option>
-                                                <option value="2">越秀</option>
+                                                  {% for location in locations %}
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                </option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -335,7 +337,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货主手机</label>
                                     <div class="layui-input-inline" style="width: 147px;">
-                                        <input id="mobile" maxlength="11" type="tel" name="phone"
+                                        <input id="consignor_mobile" maxlength="11" type="tel" name="phone"
                                                placeholder="请输入手机号"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
@@ -373,7 +375,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">订单类型</label>
                                     <div class="layui-input-inline" style="width: 147px;">
-                                        <select id="goods_type" name="modules" lay-verify="required" lay-search="">
+                                        <select id="order_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部类型</option>
                                             <option value="1">同城</option>
                                             <option value="2">跨城定价</option>
@@ -387,7 +389,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">订单状态</label>
                                     <div class="layui-input-inline" style="width: 147px;">
-                                        <select id="goods_status" name="modules" lay-verify="required" lay-search="">
+                                        <select id="order_status" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="1">进行中</option>
                                             <option value="2">已完成</option>
@@ -443,7 +445,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">特殊标签</label>
                                     <div class="layui-input-inline" style="width: 147px;">
-                                        <select id="new_goods_type" name="modules" lay-verify="required" lay-search="">
+                                        <select id="spec_tag" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">新货主</option>
                                             <option value="2">新司机</option>
@@ -455,7 +457,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">支付状态</label>
                                     <div class="layui-input-inline" style="width: 147px;">
-                                        <select id="urgent_goods" name="modules" lay-verify="required" lay-search="">
+                                        <select id="pay_status" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">未支付</option>
                                             <option value="2">线下支付</option>
@@ -468,7 +470,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">是否改价</label>
                                     <div class="layui-input-inline" style="width: 147px;">
-                                        <select id="is_addition" name="modules" lay-verify="required" lay-search="">
+                                        <select id="is_change_price" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">是</option>
                                             <option value="2">否</option>
@@ -480,7 +482,7 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">评价级别</label>
                                     <div class="layui-input-inline" style="width: 147px;">
-                                        <select id="is_addition" name="modules" lay-verify="required" lay-search="">
+                                        <select id="comment_type_one" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">好评</option>
                                             <option value="2">中评</option>
@@ -543,69 +545,6 @@
             </div>
         </aside>
     </article>
-    <div class="popup" id="popup" style="display:none;">
-        <form class="layui-form layui-form-pane" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label" style="width: 130px;">选择货源类型123</label>
-                <div class="layui-input-block" style="margin-left: 130px;">
-                    <select name="interest" lay-filter="aihao">
-                        <option value="0">全部货源</option>
-                        <option value="1" selected="">适应货源</option>
-                    </select>
-                </div>
-            </div>
-        </form>
-        <div class="layui-form">
-            <table class="layui-table">
-                <colgroup>
-                    <col width="150">
-                    <col width="150">
-                    <col width="200">
-                    <col>
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>人物</th>
-                    <th>民族</th>
-                    <th>出场时间</th>
-                    <th>格言</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>贤心</td>
-                    <td>汉族</td>
-                    <td>1989-10-14</td>
-                    <td>人生似修行</td>
-                </tr>
-                <tr>
-                    <td>张爱玲</td>
-                    <td>汉族</td>
-                    <td>1920-09-30</td>
-                    <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-                </tr>
-                <tr>
-                    <td>Helen Keller</td>
-                    <td>拉丁美裔</td>
-                    <td>1880-06-27</td>
-                    <td> Life is either a daring adventure or nothing.</td>
-                </tr>
-                <tr>
-                    <td>岳飞</td>
-                    <td>汉族</td>
-                    <td>1103-北宋崇宁二年</td>
-                    <td>教科书再滥改，也抹不去“民族英雄”的事实</td>
-                </tr>
-                <tr>
-                    <td>孟子</td>
-                    <td>华夏族（汉族）</td>
-                    <td>公元前-372年</td>
-                    <td>猿强，则国强。国强，则猿更强！</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </article>
 <script src="../static/js/libs/jquery-2.1.1.min.js"></script>
 <script src="../static/js/libs/highcharts.min.js"></script>

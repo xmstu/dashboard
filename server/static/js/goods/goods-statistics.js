@@ -265,22 +265,18 @@ layui.use(['laydate', 'form', 'table'], function () {
         },
         cols: [[
             {field: 'id', title: '货源ID', width: 60},
-            {field: 'goods_standard', title: '货物规格', width: 120},
+            {field: 'goods_standard', title: '货物规格', width: 110},
             {field: 'goods_type', title: '类型', width: 76},
-            {field: 'node_id', title: '所属网点', width: 140},
-            {field: 'address', title: '出发地-目的地', width: 250},
-            {field: 'vehicle', title: '车型要求', width: 144},
-            {field: 'price', title: '运费', width: 154},
+
+            {field: 'address', title: '出发地-目的地', width: 340},
+            {field: 'vehicle', title: '车型要求', width: 114},
+            {field: 'price', title: '运费', width: 184},
             {field: 'mobile', title: '货主手机', width: 100},
             {field: 'goods_status', title: '状态', width: 109},
             {field: 'call_count', title: '通话数', width: 60},
-            {field: 'latency_time', title: '发布-接单等待时间', width: 140},
+            {field: 'latency_time', title: '发布-接单', width: 104},
             {field: 'goods_time', title: '时间', width: 170},
-            {
-                field: 'from_channel', title: '操作', width: 112, templet: function (d) {
-                    return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
-                }
-            }
+            {field: 'node_id', title: '所属网点'}
         ]],
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'});
@@ -310,24 +306,6 @@ layui.use(['laydate', 'form', 'table'], function () {
                     var result = $(this).text().split('\n');
                     $(this).html('<span>' + result[0] + '</span ></br>' + result[1] + '</span>')
                 }
-            })
-            $("td[data-field='vehicle']").children().each(function (val) {
-                /*     if ($(this).text()!='') {
-                         var result = $(this).text().split(',');
-      console.log(result[1]);
-                         if (result[0] !== ''&&result[1]==undefined) {
-                             $(this).html('<span style="color: #28a745;">'+result[0]+'</span>')
-                         }
-                         if (result[1] != '' || result[1] != undefined) {
-                              console.log(result[1]);
-                             $(this).html('<span style="color: #28a745;">'+result[0]+'</span><br><span style="color: #28a745;">'+result[1]+'</span>')
-                         }
-                         if (result[2] != '' || result[2] != undefined) {
-                             $(this).html('<span style="color: #28a745;">' + result[0] + '</span><br><span style="color: #28a745;">' + result[1] + '</span><br><span style="color: #28a745;">' + result[2]+'</span>')
-                         }
-                     }else {
-                         $(this).html('')
-                     }*/
             })
             $("td[data-field='mobile']").children().each(function (val) {
                 if ($(this).text().length > 12) {
@@ -405,83 +383,6 @@ var chart = Highcharts.chart('charts_container_one', {
         ]
     }]
 });
-
-/*$('#charts_container_three').highcharts({
-    chart: {
-        type: 'line'
-    },
-    title: {
-        text: '发货/接单率趋势'
-    },
-    subtitle: {
-        text: '数据来源: 省省官方后台数据库'
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        x: 1300,
-        y: 0,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor: 'transparent',
-        labelFormatter: function () {
-            return this.name
-        }
-    },
-    tooltip: {
-        shared: true,
-        valueSuffix: '%',
-        crosshairs: [{
-            width: 1,
-            color: '#ccc'
-        }, {
-            width: 1,
-            color: '#ccc'
-        }],
-        plotOptions: {
-            spline: {
-                marker: {
-                    radius: 4,
-                    lineColor: '#666666',
-                    lineWidth: 1
-                }
-            }
-        }
-    },
-    xAxis: {
-        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-        crosshair: true,
-        gridLineColor: '#eee',
-        gridLineWidth: 1
-    },
-    yAxis: {
-        title: {
-            text: '百分比(%)'
-        },
-        labels: {
-            format: '{value}%',
-            style: {
-                color: Highcharts.getOptions().colors[0]
-            }
-        }
-    },
-    plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true
-            },
-            enableMouseTracking: true
-        }
-    },
-    series: [{
-        name: '发货率',
-        data: [17.0, 16.9, 19.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 19.6]
-    }, {
-        name: '接单率',
-        data: [13.9, 14.2, 15.7, 18.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 16.6, 14.8]
-    }]
-});*/
 var dataSet = {
     charts_two_init: function () {
         var url = '/goods/goods_distribution_trend';
@@ -518,7 +419,6 @@ var dataSet = {
         var data = {
             start_time: requestStartTime,
             end_time: requestEndTime,
-            cancle_type: $('#cancel_reason_roles').val(),
             goods_type: $('#cancel_reason_types').val(),
             region_id: $('#cancel_reason_area').val(),
         }
@@ -526,20 +426,30 @@ var dataSet = {
             var layer = layui.layer;
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var all_reason = res.data.cancel_list;
-                Chart_third(all_reason)
-                var cancel_list_dict = res.data.cancel_list_dict;
-                var len = cancel_list_dict.length;
-                $('.cancel-reason-types').html('')
-                for (var i = 0; i < len; i++) {
-                    var str = '';
-                    str += '<tr>'
-                    str += '<td>' + i + '</td>'
-                    str += '<td class="cancel-reason-name-"' + i + '>' + cancel_list_dict[i].canceled_reason_text + '</td>';
-                    str += '<td class="cancel-reason-count-"' + i + '>' + cancel_list_dict[i].reason_count + '单</td>'
-                    str += '<th class="cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>'
-                    str += '<tr>'
-                    $('.cancel-reason-types').append(str)
+                console.log(res)
+                if (res.data.cancel_list_dict == '' && res.data.cancel_list == '') {
+                    var str = '<p style="color: #ccc; text-align: center; font-size: 24px;width: 400%;line-height: 40px;" >there is no data</p>';
+                    Chart_third(all_reason, '该时间段无数据，图表无法展示')
+                    $('#charts_container_four').css('height', '90px')
+                    $('.cancel-reason-types').html(str)
+                } else if (res.data.cancel_list != '' || res.data.cancel_list_dict != '') {
+                    $('#charts_container_four').css('height', '400px')
+                    Chart_third(all_reason, '取消原因统计')
+                    var cancel_list_dict = res.data.cancel_list_dict;
+                    var len = cancel_list_dict.length;
+                    $('.cancel-reason-types').html('')
+                    for (var i = 0; i < len; i++) {
+                        var str = '';
+                        str += '<tr>'
+                        str += '<td>' + i + '</td>'
+                        str += '<td class="cancel-reason-name-"' + i + '>' + cancel_list_dict[i].canceled_reason_text + '</td>';
+                        str += '<td class="cancel-reason-count-"' + i + '>' + cancel_list_dict[i].reason_count + '单</td>'
+                        str += '<th class="cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>'
+                        str += '<tr>'
+                        $('.cancel-reason-types').append(str)
+                    }
                 }
+
             })
         })
     }
@@ -604,13 +514,36 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
                 }
             }
         },
+        plotOptions: {
+            column: {
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        return this.point.y > 0 ? this.point.y + '人' : null;
+                    }
+                }
+            },
+            line: {
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        return this.point.y > 0 ? this.point.y + '人' : '';
+                    }
+                },
+                tooltip: {valueSuffix: '%'},
+                //曲线点类型："circle", "square", "diamond", "triangle","triangle-down"，默认是"circle"
+                marker: {
+                    radius: 5, symbol: 'circle'
+                },
+            }
+        },
         series: [{
             name: '待接单',
             type: 'column',
             yAxis: 1,
             data: wait_order_series,
             tooltip: {
-                valueSuffix: ' 人'
+                valueSuffix: ' 单'
             }
         },
             {
@@ -619,7 +552,7 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
                 yAxis: 1,
                 data: recv_order_series,
                 tooltip: {
-                    valueSuffix: ' 人'
+                    valueSuffix: ' 单'
                 }
             }, {
                 name: '已取消',
@@ -627,7 +560,7 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
                 yAxis: 1,
                 data: cancel_order_series,
                 tooltip: {
-                    valueSuffix: ' 人'
+                    valueSuffix: ' 单'
                 }
             }, {
                 name: '发货人数',
@@ -636,17 +569,19 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
                 tooltip: {
                     valueSuffix: '人'
                 }
+
             }]
     });
+
 }
 
-function Chart_third(dataArr) {
+function Chart_third(dataArr, chartsTitle) {
     $('#charts_container_four').highcharts({
         chart: {
             renderTo: 'chart'
         },
         title: {
-            text: '取消原因统计'
+            text: chartsTitle
         },
         plotArea: {
             shadow: true,
@@ -739,8 +674,10 @@ $('#goods_search_box').on('click', function (e) {
     }
     var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_country_id=' + data.from_country_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&goods_type=' +
         data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;
-    layui.use('table', function () {
+    layui.use(['table', 'layer'], function () {
         var table = layui.table;
+        var layer = layui.layer;
+        layer.load()
         table.render({
             elem: '#LAY_table_goods',
             even: true
@@ -755,20 +692,16 @@ $('#goods_search_box').on('click', function (e) {
                 {field: 'goods_type', title: '类型', width: 76},
                 {field: 'node_id', title: '所属网点', width: 140},
                 {field: 'address', title: '出发地-目的地', width: 250},
-                {field: 'vehicle', title: '车型要求', width: 144},
-                {field: 'price', title: '运费', width: 154},
+                {field: 'vehicle', title: '车型要求', width: 114},
+                {field: 'price', title: '运费', width: 184},
                 {field: 'mobile', title: '货主手机', width: 100},
                 {field: 'goods_status', title: '状态', width: 109},
                 {field: 'call_count', title: '通话数', width: 60},
                 {field: 'latency_time', title: '等待时间', width: 120},
                 {field: 'goods_time', title: '时间', width: 170},
-                {
-                    field: 'from_channel', title: '操作', width: 112, templet: function (d) {
-                        return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
-                    }
-                }
             ]],
             done: function (res, curr, count) {
+                layer.closeAll('loading')
                 $('[data-field]>div').css({'padding': '0 6px'});
                 $('.nearby').on('click', function () {
                     layer.open({
@@ -807,22 +740,6 @@ $('#goods_search_box').on('click', function (e) {
                         }
                     }
                 })
-                $("td[data-field='vehicle']").children().each(function (val) {
-                    if ($(this).text().length > 1) {
-                        var result = $(this).text().split(',');
-                        console.log(result);
-                        if (result[0] !== '') {
-                            $(this).html('<span style="color: #28a745;">' + result[0] + '</span>')
-                        } else if (result[1] != '' || result[1] != undefined) {
-                            $(this).html('<span style="color: #28a745;">' + result[0] + '</span><br><span style="color: #28a745;">' + result[1] + '</span>')
-                        } else if (result[2] != '' || result[2] != undefined) {
-                            $(this).html('<span style="color: #28a745;">' + result[0] + '</span><br><span style="color: #28a745;">' + result[1] + '</span><br><span style="color: #28a745;">' + result[2] + '</span>')
-                        }
-                    } else {
-                        $(this).html('')
-                    }
-                })
-
                 $("td[data-field='address']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');

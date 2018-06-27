@@ -165,6 +165,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='usual_city']").css({'display':'none'})
+            layer.closeAll('loading')
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
                     $(this).text('未录入')
@@ -191,7 +192,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             $("td[data-field='mobile']").children().each(function () {
                 if ($(this).text().length > 12) {
                     var result = $(this).text().split('\n');
-                    console.log(result)
                     $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                 }
             })
@@ -217,32 +217,13 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                 , {field: 'create_time', title: '注册时间'}
                 , {field: 'usual_city', title: '常驻地'}
         ]]
-
         , id: 'testReload'
         , page: true
-    });
-    var $ = layui.$, active = {
-        reload: function () {
-            var demoReload = $('#demoReload');
-            table.reload('testReload', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    key: {
-                        id: demoReload.val()
-                    }
-                }
-            });
-        }
-    };
-    $('.dataTable .layui-btn').on('click', function () {
-        var type = $(this).data('type');
-        active[type] ? active[type].call(this) : '';
     });
 });
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
+
     var beginTime = $.trim($('#date_show_three').val());
     var finishTime = $.trim($('#date_show_four').val());
     var infinteTime = $.trim($('#date_show_five').val());
@@ -250,7 +231,6 @@ $('#user_search_box').on('click', function (e) {
     var provinceid = $.trim($('#area_select').attr('provinceid'));
     var cityid = $.trim($('#area_select').attr('cityid'));
     var districtsid = $.trim($('#area_select').attr('districtsid'));
-
     if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
         layer.msg('请检查用户名号码长度!', function () {
 
@@ -333,9 +313,10 @@ $('#user_search_box').on('click', function (e) {
     }
     var url = '/user/list/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&reference_mobile=' + data.reference_mobile + '&download_ch=' + data.download_ch + '&from_channel=' +
         data.from_channel + '&is_referenced=' + data.is_referenced + '&home_station_province=' + data.home_station_province + '&home_station_city=' + data.home_station_city + '&home_station_county=' + data.home_station_county + '&role_type=' + data.role_type + '&role_auth=' + data.role_auth + '&is_actived=' + data.is_actived + '&is_used=' + data.is_used + '&is_car_sticker=' + data.is_car_sticker + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
-
-    layui.use('table', function () {
+    layui.use(['layer','table'], function () {
         var table = layui.table;
+        var layer = layui.layer;
+        layer.load()
         table.render({
             url: url
             , elem: '#LAY_table_user'
@@ -346,6 +327,7 @@ $('#user_search_box').on('click', function (e) {
             }
             , done: function () {
                 $('[data-field]>div').css({'padding': '0 6px'})
+                layer.closeAll('loading')
                 $("[data-field='user_type']").children().each(function () {
                     if ($(this).text() == 0) {
                         $(this).text('未录入')
@@ -378,19 +360,6 @@ $('#user_search_box').on('click', function (e) {
                 })
             }
             , cols: [[
-              /*  {field: 'id', title: '用户ID', sort: true, width: 86},
-                {field: 'user_name', title: '用户名', width: 106}
-                , {field: 'mobile', title: '手机号', width: 106}
-                , {field: 'user_type', title: '注册角色', width: 111}
-                , {field: 'role_auth', title: '认证', width: 111}
-                , {field: 'goods_count', title: '发货', width: 80}
-                , {field: 'order_count', title: '接单', width: 76}
-                , {field: 'order_completed', title: '完成订单', width: 76}
-                , {field: 'download_channel', title: '下载渠道', width: 110}
-                , {field: 'from_channel', title: '注册渠道', width: 146}
-                , {field: 'last_login_time', title: '最后登陆', width: 104}
-                , {field: 'create_time', title: '注册时间', width: 104}
-                , {field: 'usual_city', title: '常驻地'}*/
                 {field: 'id', title: '用户ID', sort: true},
                 {field: 'user_name', title: '用户名'}
                 , {field: 'mobile', title: '手机号'}
@@ -414,9 +383,7 @@ $('#search_btn').on('click', function (e) {
     e.preventDefault();
     dataInit()
 })
-$(window).load(function () {
-    layer.closeAll('loading')
-})
+
 function dataInit() {
     var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
     var requestEndTime = common.timeTransform($('#date_show_two').val() + ' 23:59:59');

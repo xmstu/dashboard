@@ -193,13 +193,13 @@ function dataInit() {
                 var X_data = res.data.xAxis;
                 if (len >= 0 && len < 20) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 1, '人数(人)', '人数', '人')
+                    lineChartInit(res.data.xAxis, res.data.series, 1, '人数(人)', '人数', '人')
                 } else if (len > 0 && len > 20 && len < 40) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 2, '人数(人)', '人数', '人')
+                    lineChartInit(res.data.xAxis, res.data.series, 2, '人数(人)', '人数', '人')
                 } else if (len > 0 && len > 40 && len < 90) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 4, '人数(人)', '人数', '人')
+                    lineChartInit(res.data.xAxis, res.data.series, 4, '人数(人)', '人数', '人')
                 }
             }
         })

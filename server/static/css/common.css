@@ -53,13 +53,11 @@ input:-ms-input-placeholder {
         transform: scale3d(1, 1, 1);
     }
 }
-
 .bounceIn {
     animation-name: bounceIn;
 }
 
 body {
-
     font-family: "Microsoft YaHei";
 }
 
@@ -590,7 +588,6 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 
 .main-content-right .layui-input {
     height: 30px;
-    line-height: 30px;
     background: transparent;
 }
 
@@ -624,6 +621,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 
 .highcharts-container {
     width: 100% !important;
+    height:100% !important;
 }
 
 .none {
@@ -730,16 +728,14 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 
 .chart-area-four-body-bottom > #charts_container_four {
     max-width: 800px;
-    height: 430px;
     padding-bottom: 14px;
-    border: 1px dashed #ddd;
     display: inline-block;
     width: 38%;
 }
 
 .chart-area-body-bottom-right {
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 10px;
     vertical-align: top;
     width: 58%;
 }

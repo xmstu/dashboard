@@ -27,15 +27,6 @@ function init() {
 
         }
     });
-    Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
-        return {
-            radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},
-            stops: [
-                [0, color],
-                [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
-            ]
-        };
-    });
 }
 
 layui.use(['laydate', 'form', 'table'], function () {
@@ -127,6 +118,91 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         }
     });
+     laydate.render({
+        elem: '#create_start_time',
+        theme: '#009688',
+        calendar: true,
+        done: function (val, index) {
+            var startTime = $('#create_start_time').val();
+            var endTime = $('#create_end_time').val();
+            common.dateInterval(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
+            if ($('#create_start_time').val() == '') {
+                $('#create_start_time').next('.date-tips').show();
+            } else {
+                $('#create_start_time').next('.date-tips').hide()
+            }
+        }
+    });
+      laydate.render({
+        elem: '#create_end_time',
+        theme: '#009688',
+        calendar: true,
+        done: function (val, index) {
+            var startTime = $('#create_start_time').val();
+            var endTime = $('#create_end_time').val();
+            common.dateInterval(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
+            if ($('#create_end_time').val() == '') {
+                $('#create_end_time').next('.date-tips').show();
+            } else {
+                $('#create_end_time').next('.date-tips').hide()
+            }
+            if(val!=''){
+                 $('#create_end_time').next('.date-tips').hide()
+            }
+        }
+    });
+       laydate.render({
+        elem: '#load_start_time',
+        theme: '#009688',
+        calendar: true,
+        done: function (val, index) {
+            var startTime = $('#load_start_time').val();
+            var endTime = $('#load_end_time').val();
+            common.dateInterval(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
+            if ($('#load_start_time').val() == '') {
+                $('#load_start_time').next('.date-tips').show();
+            } else {
+                $('#load_start_time').next('.date-tips').hide()
+            }
+            if(val!=''){
+                 $('#load_start_time').next('.date-tips').hide()
+            }
+        }
+    });
+        laydate.render({
+        elem: '#load_end_time',
+        theme: '#009688',
+        calendar: true,
+        done: function (val, index) {
+            var startTime = $('#load_start_time').val();
+            var endTime = $('#load_end_time').val();
+            common.dateInterval(endTime, startTime);
+            if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false
+            }
+            if ($('#load_end_time').val() == '') {
+                $('#load_end_time').next('.date-tips').show();
+            } else {
+                $('#load_end_time').next('.date-tips').hide()
+            }
+            if(val!=''){
+                 $('#load_end_time').next('.date-tips').hide()
+            }
+        }
+    });
 });
 Highcharts.setOptions({
     colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
@@ -201,9 +277,6 @@ var setAbout = {
             }]
         });
     },
-    test: function () {
-        alert(1)
-    },
     chartShow: function (dataArr, title) {
         $('#charts_container_two').highcharts({
             chart: {
@@ -235,9 +308,8 @@ var setAbout = {
                         formatter: function () {
                             if (this.percentage > 4) return this.point.name;
                         },
-                        color: 'white',
                         style: {
-                            font: '13px Trebuchet MS, Verdana, sans-serif'
+                            font: '12px Trebuchet MS, Verdana, sans-serif'
                         }
                     }
                 }
@@ -280,8 +352,11 @@ var setAbout = {
                 if (cancel_list.length == 0) {
                     str += '<span class="table-no-data">there is no data</span>';
                     $('.cancel-reason-types').html('').append(str);
+                    $('#charts_container_two').height('90px');
+                    console.log($('.highcharts-container').height());
                     that.chartShow(cancel_list, '图表无法显示，因该日期段无数据')
                 } else if (cancel_list.length > 0) {
+                    $('#charts_container_two').height('400px');
                     that.chartShow(cancel_list, '取消原因统计表');
                     $('.cancel-reason-types').html('');
                     for (var i = 0; i < len; i++) {
@@ -333,8 +408,10 @@ var setAbout = {
         })
     },
     tableRender: function (url) {
-        layui.use('table', function () {
+        layui.use(['layer', 'table'], function () {
+            var layer = layui.layer;
             var table = layui.table;
+            layer.load();
             table.render({
                 elem: '#LAY_table_goods',
                 even: true
@@ -343,40 +420,27 @@ var setAbout = {
                     statusName: 'status',
                     statusCode: 100000
                 },
-                text: '接口还没做',
                 cols: [[
-                    {field: 'id', title: '订单ID', width: 60},
-                    {field: 'goods_standard', title: '货物规格', width: 140}
-                    , {field: 'goods_type', title: '类型', width: 120}
-                    , {field: 'node_id', title: '所属网点', width: 140}
-                    , {field: 'address', title: '出发地-目的地', width: 250}
-                    , {field: 'vehicle', title: '车型要求', width: 144}
-                    , {field: 'price', title: '运费', width: 210}
-                    , {field: 'mobile', title: '货主手机', width: 120}
-                    , {field: 'goods_status', title: '状态', width: 109}
-                    , {field: 'call_count', title: '通话数', width: 60}
-                    , {field: 'goods_time', title: '时间', width: 180}
-                    , {
-                        field: 'from_channel', title: '操作', width: 112, templet: function (d) {
-                            return '<button value="' + d.id + '" id="' + d.id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
-                        }
-                    }
+                    {field: 'order_id', title: '订单ID', width: 60},
+                    {field: 'goods_standard', title: '货物规格', width: 110},
+                    {field: 'goods_type', title: '类型', width: 90},
+                    {field: 'supplier_node', title: '所属网点', width: 140},
+                    {field: 'address', title: '出发地-目的地'},
+                    {field: 'vehicle', title: '车型要求', width: 96},
+                    {field: 'freight', title: '运费', width: 90},
+                    {field: 'cargo_owner', title: '货主', width: 120},
+                    {field: 'driver', title: '司机', width: 120},
+                    {field: 'latency_time', title: '等待时间', width: 120},
+                    {field: 'complete_time', title: '状态', width: 109},
+                    {field: 'create_time', title: '时间', width: 150}
                 ]],
                 done: function (res, curr, count) {
                     $('[data-field]>div').css({'padding': '0 6px'});
-                    $('.nearby').on('click', function () {
-                        layer.open({
-                            type: 1,
-                            area: ['1620px', '520px'],
-                            skin: 'layui-layer-molv',
-                            closeBtn: 1,
-                            content: $('#popup')
-                        })
-                    });
+                    layer.closeAll('loading');
                     $("td[data-field='goods_standard']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
-                            $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: deepskyblue;"></i><span style="font-weight: 500;color: deepskyblue;">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: deepskyblue;">' + result[1] + '</span>')
+                            $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: #009688;"></i><span style="font-weight: 500;color: #009688;">' + result[0] + '</span><br><i style="font-weight: 500;color: #009688;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: #009688;">' + result[1] + '</span>')
                         }
                     });
                     $("td[data-field='goods_time']").children().each(function (val) {
@@ -385,31 +449,37 @@ var setAbout = {
                             $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
                         }
                     })
-                    $("td[data-field='price']").children().each(function (val) {
+                    $("td[data-field='driver']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
-                            $(this).html('<span>' + result[0] + '</span >')
+                            if (result[0] != '' && result[1] != '') {
+                                $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span>')
+                            }
+                            if(result[0] != '' && result[1] != ''&&result[2]!=''){
+                                 $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span><br><span style="color: red">('+result[2]+')</span>')
+                            }
                         }
                     })
-                    $("td[data-field='mobile']").children().each(function (val) {
+                    $("td[data-field='cargo_owner']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
-                            $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
+                            if (result[0] != '' && result[1] != '') {
+                                $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span>')
+                            }
                         }
-                    })
+                    });
                     $("td[data-field='vehicle']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
                             if (result[0] !== '') {
-                                $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0])
+                                $(this).html(result[0])
                             } else if (result[1] != '' || result[1] != undefined) {
-                                $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1])
+                                $(this).html(result[0] + '<br>' + result[1])
                             } else if (result[2] != '' || result[2] != undefined) {
-                                $(this).html('<i class="iconfont icon-yifahuo mr-4"></i>' + result[0] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[1] + '<br><i class="iconfont icon-yifahuo mr-4"></i>' + result[2])
+                                $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
                             }
-
                         }
-                    })
+                    });
 
                     $("td[data-field='address']").children().each(function (val) {
                         if ($(this).text() != '') {
@@ -418,64 +488,62 @@ var setAbout = {
                         }
                     })
                 }
-                , id: 'goods_reload'
+                , id: 'order_reload'
                 , page: true
             });
         })
     }
 };
 
-
 $('#goods_search_box').on('click', function (e) {
     e.preventDefault();
-    var create_start_time = $('#create_start_time').val();
-    var create_end_time = $('#create_end_time').val();
-    var load_start_time = $('#load_start_time').val();
-    var load_end_time = $('#load_end_time').val();
-    if (create_start_time != '') {
-        create_start_time = common.timeTransform(create_start_time)
-    }
-    if (create_end_time != '') {
-        create_end_time = common.timeTransform(create_end_time)
-    }
-    if (load_start_time != '') {
-        load_start_time = common.timeTransform(load_start_time)
-    }
-    if (load_end_time != '') {
-        load_end_time = common.timeTransform(load_end_time)
-    }
-    var data = {
-        goods_id: $.trim($('#goods_id').val()),
-        mobile: $.trim($('#mobile').val()),
-        from_region_id: $.trim($('#reference_mobile').val()),
-        to_region_id: $.trim($('#to_region_id').val()),
-        goods_type: $.trim($('#goods_type').val()),
-        goods_status: $.trim($('#goods_status').val()),
-        is_called: $.trim($('#is_called').val()),
-        vehicle_length: $.trim($('#vehicle_length').val()),
-        vehicle_type: $.trim($('#vehicle_type').val()),
-        node_id: $.trim($('#node_id').val()),//10
-        new_goods_type: $.trim($('#new_goods_type').val()),
-        urgent_goods: $.trim($('#urgent_goods').val()),
-        is_addition: $.trim($('#is_addition').val()),
-        from_province_id: $('#from_region_id').attr('provinceid') == undefined ? '' : $('#from_region_id').attr('provinceid'),
-        from_city_id: $('#from_region_id').attr('cityid') == undefined ? '' : $('#from_region_id').attr('cityid'),
-        from_dist_id: $('#from_region_id').attr('districtsid') == undefined ? '' : $('#from_region_id').attr('districtsid'),
-        to_province_id: $('#to_region_id').attr('provinceid') == undefined ? '' : $('#to_region_id').attr('provinceid'),
-        to_city_id: $('#to_region_id').attr('cityid') == undefined ? '' : $('#to_region_id').attr('cityid'),
-        to_dist_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
-        create_start_time: create_start_time,
-        create_end_time: create_end_time,
-        load_start_time: load_start_time,
-        load_end_time: load_end_time,//23
-        page: 1,
-        limit: 10
-    };
-    /*   var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_dist_id=' + data.from_dist_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_dist_id=' + data.to_dist_id +
-           data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;*/
-    var url = '../static/js/user-statics/test.json';
-    setAbout.tableRender(url)
-
+    layui.use(['layer', 'table'], function () {
+        var create_start_time = $('#create_start_time').val();
+        var create_end_time = $('#create_end_time').val();
+        var load_start_time = $('#load_start_time').val();
+        var load_end_time = $('#load_end_time').val();
+        if (create_start_time != '') {
+            create_start_time = common.timeTransform(create_start_time)
+        }
+        if (create_end_time != '') {
+            create_end_time = common.timeTransform(create_end_time)
+        }
+        if (load_start_time != '') {
+            load_start_time = common.timeTransform(load_start_time)
+        }
+        if (load_end_time != '') {
+            load_end_time = common.timeTransform(load_end_time)
+        }
+        var data = {
+            order_id: $.trim($('#order_id').val()),
+            consignor_mobile: $.trim($('#consignor_mobile').val()),
+            driver_mobile: $.trim($('#driver_mobile').val()),
+            order_type: $.trim($('#order_type').val()),
+            order_status: $.trim($('#order_status').val()),
+            vehicle_length: $.trim($('#vehicle_length').val()),
+            vehicle_type: $.trim($('#vehicle_type').val()),
+            node_id: $.trim($('#node_id').val()),//10
+            spec_tag: $.trim($('#spec_tag').val()),
+            pay_status: $.trim($('#pay_status').val()),
+            is_change_price: $.trim($('#is_change_price').val()),
+            comment_type: $.trim($('#comment_type_one').val()),
+            from_province_id: $('#from_region_id').attr('provinceid') == undefined ? '' : $('#from_region_id').attr('provinceid'),
+            from_city_id: $('#from_region_id').attr('cityid') == undefined ? '' : $('#from_region_id').attr('cityid'),
+            from_country_id: $('#from_region_id').attr('districtsid') == undefined ? '' : $('#from_region_id').attr('districtsid'),
+            to_province_id: $('#to_region_id').attr('provinceid') == undefined ? '' : $('#to_region_id').attr('provinceid'),
+            to_city_id: $('#to_region_id').attr('cityid') == undefined ? '' : $('#to_region_id').attr('cityid'),
+            to_country_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
+            start_order_time: create_start_time,
+            end_order_time: create_end_time,
+            start_loading_time: load_start_time,
+            end_loading_time: load_end_time,//23
+            page: 1,
+            limit: 10
+        };
+        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_country_id=' + data.from_country_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&order_type=' +
+            data.order_type + '&order_status=' + data.order_status + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&spec_tag=' + data.spec_tag + '&node_id=' + data.node_id + '&is_change_price=' + data.is_change_price + '&pay_status=' + data.pay_status  +'&comment_type=' + data.comment_type+ '&start_order_time=' + data.start_order_time + '&create_end_time=' + data.end_order_time + '&end_order_time=' + data.start_loading_time + '&start_loading_time=' + data.end_loading_time;
+        setAbout.tableRender(url)
+    });
 });
 $('#searchBox_3').on('click', function (e) {
     e.preventDefault();
@@ -487,4 +555,4 @@ $('#search_btn').on('click', function (e) {
 })
 setAbout.chartInit();
 setAbout.chartRequest();
-setAbout.tableRender('../static/js/user-statics/test.json');
+setAbout.tableRender('/order/list/');
