@@ -232,7 +232,7 @@ function tableInit(url) {
                 {field: 'price', title: '运费', width: 180},
                 {field: 'mobile', title: '货主手机', width: 96},
                 {field: 'call_count', title: '通话数', width: 60},
-                {field: 'goods_time', title: '时间', width: 146},
+                {field: 'goods_time', title: '时间', width: 186},
                 {field: 'supplier_node', title: '所属网点'},
                 {
                     field: 'operate', title: '操作', width: 107, templet: function (d) {
@@ -293,7 +293,7 @@ function tableInit(url) {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         str = str.split('\n');
-                        $(this).html(str[0] + '<br>' + str[1])
+                        $(this).html('发布:'+str[0] + '<br>装货:' + str[1])
                     }
                 });
                 $("td[data-field='address']").children().each(function () {

@@ -266,18 +266,17 @@ layui.use(['laydate', 'form', 'table'], function () {
             statusCode: 100000
         },
         cols: [[
-            {field: 'id', title: '货源ID', width: 60},
+              {field: 'id', title: '货源ID', width: 60},
             {field: 'goods_standard', title: '货物规格', width: 110},
             {field: 'goods_type', title: '类型', width: 76},
-
-            {field: 'address', title: '出发地-目的地', width: 340},
+            {field: 'address', title: '出发地-目的地', width: 360},
             {field: 'vehicle', title: '车型要求', width: 114},
-            {field: 'price', title: '运费', width: 184},
+            {field: 'price', title: '运费', width: 180},
             {field: 'mobile', title: '货主手机', width: 100},
-            {field: 'goods_status', title: '状态', width: 109},
+            {field: 'goods_status', title: '状态', width: 86},
             {field: 'call_count', title: '通话数', width: 60},
             {field: 'latency_time', title: '发布-接单', width: 104},
-            {field: 'goods_time', title: '时间', width: 170},
+            {field: 'goods_time', title: '时间', width: 190},
             {field: 'node_id', title: '所属网点'}
         ]],
         done: function (res, curr, count) {
@@ -300,7 +299,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             $("td[data-field='goods_time']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
-                    $(this).html('<i class="fahuo">发</i>：<span style="">' + result[0] + '</span><br><i class="zhuanghuo">装</i>：' + result[1])
+                    $(this).html('<i class="fahuo">发布</i>：<span style="">' + result[0] + '</span><br><i class="zhuanghuo">装货</i>：' + result[1])
                 }
             })
             $("td[data-field='price']").children().each(function (val) {
@@ -608,7 +607,7 @@ function Chart_third(dataArr, chartsTitle) {
                     color: 'white',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                        font: '13px Trebuchet MS, Verdana, sans-serif'
+                        font: '12px Trebuchet MS, Verdana, sans-serif'
                     }
                 }
             }
@@ -689,18 +688,18 @@ $('#goods_search_box').on('click', function (e) {
                 statusCode: 100000
             },
             cols: [[
-                {field: 'id', title: '货源ID', width: 60},
-                {field: 'goods_standard', title: '货物规格', width: 120},
-                {field: 'goods_type', title: '类型', width: 76},
-                {field: 'node_id', title: '所属网点', width: 140},
-                {field: 'address', title: '出发地-目的地', width: 250},
-                {field: 'vehicle', title: '车型要求', width: 114},
-                {field: 'price', title: '运费', width: 184},
-                {field: 'mobile', title: '货主手机', width: 100},
-                {field: 'goods_status', title: '状态', width: 109},
-                {field: 'call_count', title: '通话数', width: 60},
-                {field: 'latency_time', title: '等待时间', width: 120},
-                {field: 'goods_time', title: '时间', width: 170},
+               {field: 'id', title: '货源ID', width: 60},
+            {field: 'goods_standard', title: '货物规格', width: 110},
+            {field: 'goods_type', title: '类型', width: 76},
+            {field: 'address', title: '出发地-目的地', width: 340},
+            {field: 'vehicle', title: '车型要求', width: 114},
+            {field: 'price', title: '运费', width: 184},
+            {field: 'mobile', title: '货主手机', width: 100},
+            {field: 'goods_status', title: '状态', width: 89},
+            {field: 'call_count', title: '通话数', width: 60},
+            {field: 'latency_time', title: '发布-接单', width: 104},
+            {field: 'goods_time', title: '时间', width: 190},
+            {field: 'node_id', title: '所属网点'}
             ]],
             done: function (res, curr, count) {
                 layer.closeAll('loading')
@@ -723,7 +722,7 @@ $('#goods_search_box').on('click', function (e) {
                 $("td[data-field='goods_time']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
-                        $(this).html('<i class="fahuo">发</i>：<span style="">' + result[0] + '</span><br><i class="zhuanghuo">装</i>：' + result[1])
+                        $(this).html('<i class="fahuo">发布</i>：<span style="">' + result[0] + '</span><br><i class="zhuanghuo">装货</i>：' + result[1])
                     }
                 })
                 $("td[data-field='price']").children().each(function (val) {
