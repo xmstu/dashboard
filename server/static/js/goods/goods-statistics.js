@@ -318,7 +318,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             $("td[data-field='address']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
-                    $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
+                    $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
                 }
             })
         }
@@ -744,7 +744,7 @@ $('#goods_search_box').on('click', function (e) {
                 $("td[data-field='address']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
-                        $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
+                        $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
                     }
                 })
             }

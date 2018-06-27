@@ -44,7 +44,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                  <ul class="periods">
+                                <ul class="periods">
                                     <li>
                                         <button class="active" value="2" id="day_methods">按日</button>
                                     </li>
@@ -59,7 +59,8 @@
                                     <div class="layui-inline">
                                         <label class="layui-form-label">货源类型</label>
                                         <div class="layui-input-inline" style="width: 122px">
-                                            <select id="goods_type_show" name="modules" lay-verify="required" lay-search="">
+                                            <select id="goods_type_show" name="modules" lay-verify="required"
+                                                    lay-search="">
                                                 <option value="0">全部</option>
                                                 <option value="1">同城</option>
                                                 <option value="2">跨城</option>
@@ -79,11 +80,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                  <div class="layui-form-item layui-form-spec">
+                                <div class="layui-form-item layui-form-spec">
                                     <div class="layui-inline " style="">
                                         <label class="layui-form-label">评价级别</label>
                                         <div class="layui-input-inline" style="width:122px;">
-                                            <select id="comment_type" name="modules" lay-verify="required" lay-search="">
+                                            <select id="comment_type" name="modules" lay-verify="required"
+                                                    lay-search="">
                                                 <option value="">全部评价</option>
                                                 <option value="1">好评</option>
                                                 <option value="2">中评</option>
@@ -92,7 +94,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                  <div class="layui-form-item layui-form-spec">
+                                <div class="layui-form-item layui-form-spec">
                                     <div class="layui-inline " style="">
                                         <label class="layui-form-label">支付方式</label>
                                         <div class="layui-input-inline" style="width:122px;">
@@ -109,9 +111,10 @@
                                     <div class="layui-inline">
                                         <label class="layui-form-label">所属地区</label>
                                         <div class="layui-input-inline" style="width:122px;">
-                                            <select id="region_id_show" name="modules" lay-verify="required" lay-search="">
+                                            <select id="region_id_show" name="modules" lay-verify="required"
+                                                    lay-search="">
                                                 <option value="">全部地区</option>
-                                                  {% for location in locations %}
+                                                {% for location in locations %}
                                                 <option value="{{ location['region_id'] }}">{{ location['name'] }}
                                                 </option>
                                                 {% endfor %}
@@ -310,15 +313,15 @@
                                     <div class="layui-input-inline" style="width: 147px;">
                                         <select id="vehicle_length" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
-                                            <option value="1">1.7米</option>
-                                            <option value="2">2.7米</option>
-                                            <option value="3">3.0米</option>
-                                            <option value="4">4.2米</option>
-                                            <option value="5">5.6米</option>
-                                            <option value="6">6.8米</option>
-                                            <option value="7">7.6米</option>
-                                            <option value="8">8.6米</option>
-                                            <option value="9">9.6米</option>
+                                             <option value="小面包车">小面包车</option>
+                                            <option value="中面包车">中面包车</option>
+                                            <option value="小货车">小货车</option>
+                                            <option value="4.2米">4.2米</option>
+                                            <option value="6.8米">6.8米</option>
+                                            <option value="7.6米">7.6米</option>
+                                            <option value="9.6米">9.6米</option>
+                                            <option value="13米">13米</option>
+                                            <option value="17米">17米</option>
                                         </select>
                                     </div>
                                 </div>
@@ -329,8 +332,14 @@
                                     <div class="layui-input-inline" style="width: 147px;">
                                         <select id="vehicle_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
-                                            <option value="1">箱式尾板车</option>
-                                            <option value="2">箱式高栏车</option>
+                                             <option value="1">需要开顶</option>
+                                            <option value="2">需要尾板</option>
+                                            <option value="3">需要平板</option>
+                                            <option value="4">需要高栏</option>
+                                            <option value="5">需要箱式</option>
+                                            <option value="6">需要钢板车</option>
+                                            <option value="7">需要双排座</option>
+                                            <option value="8">需要全拆座</option>
                                         </select>
                                     </div>
                                 </div>
@@ -341,8 +350,10 @@
                                     <div class="layui-input-inline" style="width: 147px;">
                                         <select id="node_id" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
-                                            <option value="1">天河区</option>
-                                            <option value="2">越秀区</option>
+                                             {% for location in locations %}
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                </option>
+                                                {% endfor %}
                                         </select>
                                     </div>
                                 </div>
@@ -366,8 +377,8 @@
                                         <select id="pay_status" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">未支付</option>
-                                            <option value="2">线下支付</option>
-                                            <option value="3">线上支付</option>
+                                            <option value="2">线上支付</option>
+                                            <option value="3">线下支付</option>
                                         </select>
                                     </div>
                                 </div>
@@ -388,7 +399,8 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">评价级别</label>
                                     <div class="layui-input-inline" style="width: 147px;">
-                                        <select id="comment_type_one" name="modules" lay-verify="required" lay-search="">
+                                        <select id="comment_type_one" name="modules" lay-verify="required"
+                                                lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">好评</option>
                                             <option value="2">中评</option>
