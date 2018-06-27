@@ -42,6 +42,9 @@
 .layui-form-spec1 {
     width: 262px !important;
 }
+.layui-form-special {
+    width: 206px!important;
+}
 .badge {
     display: inline-block;
     min-width: 14px;

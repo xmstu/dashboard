@@ -432,7 +432,7 @@ var setAbout = {
                     {field: 'freight', title: '运费', width: 90},
                     {field: 'cargo_owner', title: '货主', width: 120},
                     {field: 'driver', title: '司机', width: 120},
-                    {field: 'latency_time', title: '等待时间', width: 100},
+                    {field: 'latency_time', title: '接单时间', width: 100},
                     {field: 'order_status', title: '状态', width: 119},
                     {field: 'evaluation', title: '评价', width: 90},
                     {field: 'create_time', title: '时间', width: 150}
@@ -487,7 +487,7 @@ var setAbout = {
                     $("td[data-field='address']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
-                            $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
+                            $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
                         }
                     })
                 }

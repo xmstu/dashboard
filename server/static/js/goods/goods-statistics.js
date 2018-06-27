@@ -318,7 +318,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             $("td[data-field='address']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
-                    $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
+                    $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
                 }
             })
         }
@@ -697,7 +697,7 @@ $('#goods_search_box').on('click', function (e) {
             {field: 'mobile', title: '货主手机', width: 100},
             {field: 'goods_status', title: '状态', width: 89},
             {field: 'call_count', title: '通话数', width: 60},
-            {field: 'latency_time', title: '发布-接单', width: 104},
+            {field: 'latency_time', title: '初次触达时间', width: 104},
             {field: 'goods_time', title: '时间', width: 190},
             {field: 'node_id', title: '所属网点'}
             ]],
@@ -744,7 +744,7 @@ $('#goods_search_box').on('click', function (e) {
                 $("td[data-field='address']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
-                        $(this).html('<i class="iconfont icon-qidian mr-4"></i>' + result[0] + '<br><i class="iconfont icon-zhongdian mr-4"></i>' + result[1] + '<br><i class="iconfont icon-luxian"></i>' + result[2])
+                        $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
                     }
                 })
             }
