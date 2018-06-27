@@ -333,7 +333,7 @@ class OrderListModel(object):
         if params.get('order_status'):
             fetch_where += """
             AND (
-            ( {order_status}=1 AND so.`status` not in (0, -1) AND so.pay_status = 1 AND so.paid_offline = 0) OR
+            ( {order_status}=1 AND so.`status` in (1,2,3) AND so.pay_status = 1 AND so.paid_offline = 0) OR
             ( {order_status}=2 AND so.`status` = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 )) OR
             ( {order_status}=3 AND so.`status` = -1)
             )

@@ -23,14 +23,19 @@ class GoodsList(object):
 
                 # 构造货源状态
                 goods_status = ''
-                if detail.get('expire'):
-                    goods_status += '已过期'
-                if detail.get('STATUS') in (1, 2):
-                    goods_status += '\n待接单'
-                if detail.get('STATUS') == 3:
-                    goods_status += '\n已接单'
-                if detail.get('STATUS') == -1:
-                    goods_status += '\n已取消'
+                if detail.get('expire') == 1:
+                    goods_status = '已过期'
+                    if detail.get('STATUS') == 3:
+                        goods_status = '已接单'
+                    if detail.get('STATUS') == -1:
+                        goods_status = '已取消'
+                elif detail.get('expire') == 0:
+                    if detail.get('STATUS') in (1, 2):
+                        goods_status = '待接单'
+                    if detail.get('STATUS') == 3:
+                        goods_status = '已接单'
+                    if detail.get('STATUS') == -1:
+                        goods_status = '已取消'
 
                 # 初次下单
                 mobile = detail['mobile']
