@@ -197,6 +197,7 @@ class GoodsList(object):
 
         # 是否初次下单
         if params['new_goods_type'] == 1:
+            # 先找出所有下单少于三次的用户id的结果集
             sql = """
             SELECT
                 user_id 

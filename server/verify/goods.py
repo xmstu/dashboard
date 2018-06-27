@@ -97,7 +97,6 @@ class CancelGoodsReason(object):
             start_time = int(params.get('start_time', None) or time.time() - 86400 * 7)
             end_time = int(params.get('end_time', None) or time.time() - 86400)
             goods_type = int(params.get('goods_type', None) or 0)
-            cancel_type = int(params.get('cancel_type', None) or 1)
             region_id = int(params.get('region_id', None) or 0)
 
             # 当前权限下所有地区
@@ -115,7 +114,6 @@ class CancelGoodsReason(object):
                 'start_time': start_time,
                 'end_time': end_time,
                 'goods_type': goods_type,
-                'cancel_type': cancel_type,
                 'region_id': region_id
             }
             return Response(params=params)

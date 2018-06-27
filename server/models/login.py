@@ -36,7 +36,7 @@ class Login(object):
         AND shu_users.mobile = :mobile
         UNION
         -- 网点管理员(可见区域同区镇合伙人)
-        SELECT node_manager.id, shd_supplier_areas.region_id, node_manager.mobile,
+        SELECT node_manager.id, node_manager.mobile, shd_supplier_areas.region_id,
         node_manager.user_name, node_manager.avatar_url, 3 AS role
         FROM shd_suppliers
         INNER JOIN shd_supplier_areas ON shd_suppliers.id = shd_supplier_areas.supplier_id AND shd_supplier_areas.is_deleted = 0
