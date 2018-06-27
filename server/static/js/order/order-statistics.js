@@ -432,10 +432,10 @@ var setAbout = {
                     {field: 'freight', title: '运费', width: 90},
                     {field: 'cargo_owner', title: '货主', width: 120},
                     {field: 'driver', title: '司机', width: 120},
-                    {field: 'latency_time', title: '接单时间', width: 100},
+                    {field: 'latency_time', title: '接单时间', width: 90},
                     {field: 'order_status', title: '状态', width: 119},
-                    {field: 'evaluation', title: '评价', width: 90},
-                    {field: 'create_time', title: '时间', width: 150}
+                    {field: 'evaluation', title: '评价', width: 84},
+                    {field: 'time_field', title: '时间', width: 188}
                 ]],
                 done: function (res, curr, count) {
                     $('[data-field]>div').css({'padding': '0 6px'});
@@ -452,6 +452,12 @@ var setAbout = {
                             $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
                         }
                     })
+                      $("td[data-field='time_field']").children().each(function (val) {
+                    if ($(this).text() != '') {
+                        var result = $(this).text().split('\n');
+                        $(this).html('<i class="zhuanghuo">接单</i>：' + result[1]+'<br><i class="fahuo">完成</i>：<span style="">' + result[0] + '</span>')
+                    }
+                })
                     $("td[data-field='driver']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
@@ -460,6 +466,9 @@ var setAbout = {
                             }
                             if(result[0] != '' && result[1] != ''&&result[2]!=''){
                                  $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span><br><span style="color: red">('+result[2]+')</span>')
+                            }
+                           if (result[0] != '' && result[1] == ''&&result[2]!='') {
+                                $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">' + result[2] + '</span>')
                             }
                         }
                     })
