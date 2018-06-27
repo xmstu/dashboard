@@ -54,7 +54,7 @@ class GoodsDistributionTrend(Resource):
 
 
 ns = api.namespace('goods', description='货源统计')
-ns.add_resource(GoodsList, '/list/')
-ns.add_resource(CancelGoodsReason, '/cancel/')
-ns.add_resource(GoodsDistributionTrend, '/goods_distribution_trend/')
+# ns.add_resource(GoodsList, '/list/')
+# ns.add_resource(CancelGoodsReason, '/cancel/')
+# ns.add_resource(GoodsDistributionTrend, '/goods_distribution_trend/')
 

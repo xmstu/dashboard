@@ -57,6 +57,6 @@ class OrderList(Resource):
 
 
 ns = api.namespace('order', description='订单接口')
-ns.add_resource(OrdersReceivedStatistics, '/statistics/')
-ns.add_resource(CancelOrderReason, '/cancel_reason/')
-ns.add_resource(OrderList, '/list/')
+# ns.add_resource(OrdersReceivedStatistics, '/statistics/')
+# ns.add_resource(CancelOrderReason, '/cancel_reason/')
+# ns.add_resource(OrderList, '/list/')
