@@ -151,11 +151,11 @@ class GoodsList(object):
 
         # 货源状态
         if params['goods_status']:
+            if params['goods_status'] == 1:
+                fetch_where += ' AND shf_goods.status IN (1,2) AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
             if params['goods_status'] == 2:
-                fetch_where += ' AND (shf_goods.status = 1 OR shf_goods.status = 2) AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
-            if params['goods_status'] == 3:
                 fetch_where += ' AND shf_goods.status = 3 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
-            if params['goods_status'] == -1:
+            if params['goods_status'] == 3:
                 fetch_where += ' AND shf_goods.status = -1 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
             if params['goods_status'] == 4:
                 fetch_where += """ AND (shf_goods.status = 1 OR shf_goods.status = 2) 

@@ -7,3 +7,4 @@ from server.filters.goods import *
 from server.filters.city import *
 from server.filters.weather import *
 from server.filters.order import *
+from server.filters.transport import *
