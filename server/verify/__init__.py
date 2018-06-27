@@ -9,3 +9,4 @@ from server.verify.general import *
 from server.verify.goods import *
 from server.verify.city import *
 from server.verify.order import *
+from server.verify.transport import *

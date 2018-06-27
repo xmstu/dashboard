@@ -27,12 +27,6 @@ request_user_list_param = api.doc(params={
     'limit': '条数'
     }, description='用户统计列表查询参数')
 
-response_user_list_param_success =  api.response(200, '成功', api.model('response_success', {
-    'state': fields.Integer(description=str(APIStatus.Ok)),
-    'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
-}))
-
-
 request_user_statistic_param = api.doc(params={
     'start_time': '开始日期(时间戳),默认:8天前',
     'end_time': '结束日期(时间戳),默认:昨天',
@@ -42,8 +36,3 @@ request_user_statistic_param = api.doc(params={
     'region_id': '地区id,0:全部,其他地区用行政代码(模板写入),默认:0',
     'is_auth': '认证,0:全部,1:认证,2:非认证,默认:0',
     }, description='用户变化趋势查询参数')
-
-response_user_statistic_param_success = api.response(200, '成功', api.model('response_success', {
-    'state': fields.Integer(description=str(APIStatus.Ok)),
-    'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
-}))

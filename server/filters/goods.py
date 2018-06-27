@@ -133,7 +133,7 @@ class GoodsList(object):
                 }
 
                 # 等待时间 从发布货源到被打电话的等待时间
-                latency_time = '等待接电话'
+                latency_time = '-'
                 if detail.get('create_time') and detail.get('called_time'):
                     latency_time = '%.2f分钟' % ((detail.get('called_time') - detail.get('create_time'))/60)
 
