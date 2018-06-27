@@ -51,7 +51,7 @@ def broker():
         }
         role = result[0]['role']
         locations = [location['region_id'] for location in result]
-
+        locations = list(set(locations))
         # 登录
         if sessionOperationClass.insert(user_info, role, locations):
             return redirect('/home/')

@@ -248,7 +248,7 @@ class GoodsList(object):
         else:
             goods_count = cursor.query_one(command.format(fields=" COUNT(1) AS goods_count ", fetch_where=fetch_where))['goods_count']
 
-        fetch_where += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        fetch_where += """ ORDER BY shf_goods.id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
         goods_detail = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
