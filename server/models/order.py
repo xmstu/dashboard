@@ -427,7 +427,7 @@ class OrderListModel(object):
             IF ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) >= {0}
             AND 
             IF ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) < {1}
-            """.format(params.get('start_loading_time'), params.get('end_loading_time'))
+            """.format(params.get('start_complete_time'), params.get('end_complete_time'))
 
         count = cursor.query_one(command.format(fields=" COUNT(1) AS total_count ", fetch_where=fetch_where))[
             'total_count']
