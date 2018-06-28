@@ -139,7 +139,7 @@ class GoodsList(object):
 
                     latency_time = (str(int(latency_time / 3600)) + '小时' if int(
                         latency_time / 3600) > 0 else '') + \
-                               (str(int(latency_time % 3600 / 60)) + '分钟' if int(
+                               (str(int(latency_time % 3600 / 60)) + '分' if int(
                                    latency_time % 3600 / 60) > 0 else '') + \
                                (str(int(latency_time % 3600 % 60)) + '秒' if int(
                                    latency_time % 3600 % 60) > 0 else '')

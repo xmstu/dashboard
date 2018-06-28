@@ -158,7 +158,7 @@ class GoodsList(object):
             if params['goods_status'] == 3:
                 fetch_where += ' AND shf_goods.status = -1 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
             if params['goods_status'] == 4:
-                fetch_where += """ AND (shf_goods.status = 1 OR shf_goods.status = 2) 
+                fetch_where += """ AND shf_goods.status IN (1, 2)
                                 AND ((shf_goods.loading_time_is_realtime = 1 AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600)
                                 OR (shf_goods.loading_time_is_realtime = 0 
                                 AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_begin)>0 

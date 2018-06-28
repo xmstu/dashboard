@@ -174,7 +174,7 @@ class OrderList(object):
                     evaluation = '未评价'
 
                 latency_time = (str(int(detail['latency_time'] / 3600)) + '小时' if int(detail['latency_time'] / 3600) > 0 else '') + \
-                               (str(int(detail['latency_time'] % 3600 / 60)) + '分钟' if int(detail['latency_time'] % 3600 / 60) > 0 else '') + \
+                               (str(int(detail['latency_time'] % 3600 / 60)) + '分' if int(detail['latency_time'] % 3600 / 60) > 0 else '') + \
                                (str(int(detail['latency_time'] % 3600 % 60)) + '秒' if int(detail['latency_time'] % 3600 % 60) > 0 else '')
 
                 time_field = (timestamp2date(detail['complete_time'], 2) if detail['complete_time'] else '待完成') + '\n' + (timestamp2date(detail['create_time'], 2) if detail['create_time'] else '未知接单时间')

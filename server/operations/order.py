@@ -32,8 +32,12 @@ class OrderList(object):
     @staticmethod
     @make_decorator
     def get_data(page, limit, params):
-        fresh_owner_ids = FreshOwnerModel.get_fresh_owner_id(db.read_bi, db.read_db, params.get('node_id'))
-        fresh_driver_ids = FreshDriverModel.get_fresh_driver_id(db.read_db, params.get('node_id'))
+        if params.get('spec_tag') in (1, 2):
+            fresh_owner_ids = FreshOwnerModel.get_fresh_owner_id(db.read_bi, db.read_db, params.get('node_id'))
+            fresh_driver_ids = FreshDriverModel.get_fresh_driver_id(db.read_db, params.get('node_id'))
+        else:
+            fresh_owner_ids = None
+            fresh_driver_ids = None
         data = OrderListModel.get_order_list(db.read_db, page, limit, fresh_owner_ids, fresh_driver_ids, params)
 
         return Response(data=data, params=params)
