@@ -834,7 +834,10 @@ body {
     line-height: 80px;
 }
 .layui-body{overflow-y: scroll;}
-
+.bottom_tools{position:fixed;z-index:1070;right:40px;bottom:40px;}
+.bottom_tools>*{font:0/0 a;display:block;margin-top:5px;color:transparent;border:0;background-color:transparent;text-shadow:none}
+.qr_img{position:absolute;top:-189px;left:-183px;display:none;}
+#scrollUp{width:45px;height:45px;display:none;background: red}
 @media screen and (min-width:1650px) {
   .main-content > .main-content-left{
       max-width: 178px!important;
@@ -843,7 +846,6 @@ body {
 @media screen and (max-width:1650px) {
     .header-content-main {
         font-size: 12px;
-
     }
      nav.main-content-left .layui-nav-tree .layui-nav-item > a{
             font-size: 12px;

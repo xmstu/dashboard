@@ -426,7 +426,7 @@ var setAbout = {
                     {field: 'order_id', title: '订单ID', width: 60},
                     {field: 'goods_standard', title: '货物规格', width: 80},
                     {field: 'goods_type', title: '类型', width: 70},
-                    {field: 'address', title: '出发地-目的地',width:220},
+                    {field: 'address', title: '出发地-目的地',width:240},
                     {field: 'vehicle', title: '车型要求', width: 76},
                     {field: 'freight', title: '运费', width: 90},
                     {field: 'cargo_owner', title: '货主', width: 96},
@@ -434,7 +434,7 @@ var setAbout = {
                     {field: 'latency_time', title: '接单时间', width: 90},
                     {field: 'order_status', title: '状态', width: 100},
                     {field: 'evaluation', title: '评价', width: 66},
-                    {field: 'time_field', title: '时间', width: 160},
+                    {field: 'time_field', title: '时间', width: 190},
                     {field: 'supplier_node', title: '所属网点'}
                 ]],
                 done: function (res, curr, count) {
