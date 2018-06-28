@@ -214,7 +214,7 @@ var setAbout = {
     chartRender: function (xAxis, complete_series, pending_series, cancel_series, interval) {
         $('#charts_container_one').highcharts({
             chart: {
-                type: 'areaspline'
+                type: 'area'
             },
             title: {
                 text: '订单统计'
@@ -248,17 +248,17 @@ var setAbout = {
             plotOptions: {
                 area: {
                     stacking: 'normal',
-                    lineColor: '#666666',
+                    lineColor: '#eee',
                     lineWidth: 1,
                     marker: {
-                        radius: 3.5,
+                        radius: 3,
                         lineWidth: 1,
                         lineColor: '#666666',
                         symbol: 'circle',
                         states: {
                             hover: {
                                 enabled: true,
-                                radius: 3.5
+                                radius: 3
                             }
                         }
                     },
@@ -277,6 +277,7 @@ var setAbout = {
                 name: '已取消',
                 data: cancel_series
             }]
+
         });
     },
     chartShow: function (dataArr, title) {
