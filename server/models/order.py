@@ -1,4 +1,4 @@
-from server.cache_data import fresh_owner_ids
+from server.cache_data import fresh_owner_ids, fresh_driver_ids
 
 
 class OrdersReceivedStatisticsList(object):
@@ -350,10 +350,8 @@ class OrderListModel(object):
             )
             """.format(order_type=params['order_type'])
 
-        if int(params.get('vehicle_length')):
-            fetch_where += """
-            AND shf_goods_vehicles.name = '{0}'
-            """.format(params['vehicle_length'])
+        if params.get('vehicle_length'):
+            fetch_where += """ AND shf_goods_vehicles.name = '{0}' """.format(params['vehicle_length'])
 
         if params.get('vehicle_type'):
             fetch_where += """
@@ -371,28 +369,10 @@ class OrderListModel(object):
 
         if params.get('spec_tag'):
             if params['spec_tag'] == 1:
-                owner_id_list = []
-                for i in fresh_owner_ids:
-                    owner_id_list.append(str(i['user_id']))
-                fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(owner_id_list)
+                fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(fresh_owner_ids)
 
             if params['spec_tag'] == 2:
-                sql = """
-                SELECT
-                    driver_id
-                FROM
-                    shb_orders 
-                GROUP BY
-                    driver_id 
-                HAVING
-                    COUNT( 1 ) < 3
-                """
-                driver_id_list = []
-                ret = cursor.query(sql)
-                for i in ret:
-                    driver_id_list.append(str(i['driver_id']))
-
-                fetch_where += """ AND so.driver_id IN (%s) """ % ','.join(driver_id_list)
+                fetch_where += """ AND so.driver_id IN (%s) """ % ','.join(fresh_driver_ids)
 
         if params.get('pay_status'):
             fetch_where += """

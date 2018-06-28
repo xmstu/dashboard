@@ -7,14 +7,14 @@ from server.status import APIStatus, FeedAPIStatus
 from server import api
 
 request_promote_effect_param = api.doc(params={
-    'user_name': '用户名',
-    'mobile': '手机号',
-    'role_type': '推荐人角色',
-    'goods_type': '货源类型',
-    'is_actived': '是否活跃',
-    'is_car_sticker': '贴车贴',
-    'start_time':'新增日期开始时间',
-    'end_time':'新增日期结束时间',
+    'user_name': '用户名,默认:空',
+    'mobile': '手机号,默认:空',
+    'role_type': '推荐人角色,0:全部,1:货主,2:司机,3:物流公司,默认:0',
+    'goods_type': '货源类型,0:全部,1:同城,2:跨城,默认:0',
+    'is_actived': '是否活跃,0:全部,1:活跃,2:一般,3:即将沉睡,4:沉睡,默认:0',
+    'is_car_sticker': '贴车贴,0:全部,1:有,2:无,默认:0',
+    'start_time':'新增日期开始时间,默认:空',
+    'end_time':'新增日期结束时间,默认:空',
     'page': '页数',
     'limit': '条数'
     }, description='推广统计列表查询参数')

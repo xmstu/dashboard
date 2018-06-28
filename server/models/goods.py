@@ -206,10 +206,9 @@ class GoodsList(object):
             GROUP BY user_id
             HAVING COUNT(*) < 3
             """
-            user_id = []
             user_id_list = cursor.query(sql)
-            for i in user_id_list:
-                user_id.append(str(i['user_id']))
+            user_id = [str(i['user_id']) for i in user_id_list]
+
             fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id)
 
         # 急需处理
