@@ -2,7 +2,8 @@ import json
 
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.order import OrdersReceivedStatisticsList, CancelOrderReasonModel, OrderListModel
+from server.models.order import OrdersReceivedStatisticsList, CancelOrderReasonModel, OrderListModel, FreshOwnerModel, \
+    FreshDriverModel
 
 
 class OrdersReceivedStatistics(object):
@@ -31,6 +32,8 @@ class OrderList(object):
     @staticmethod
     @make_decorator
     def get_data(page, limit, params):
-        data = OrderListModel.get_order_list(db.read_db, page, limit, params)
+        fresh_owner_ids = FreshOwnerModel.get_fresh_owner_id(db.read_bi, db.read_db)
+        fresh_driver_ids = FreshDriverModel.get_fresh_driver_id(db.read_db)
+        data = OrderListModel.get_order_list(db.read_db, page, limit, fresh_owner_ids, fresh_driver_ids, params)
 
         return Response(data=data, params=params)
