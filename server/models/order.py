@@ -20,22 +20,7 @@ class OrdersReceivedStatisticsList(object):
             INNER JOIN shf_goods ON shf_goods.id = shb_orders.goods_id 
             {which_table}
             WHERE
-            {fetch_where}
-        -- 评价 好中差
-        -- and shb_orders.owner_id = shu_user_evaluations.user_id
-        -- and shb_orders.driver_id = shu_user_evaluations.user_id
-        
-        -- AND shu_user_evaluations.`level` in (1,2)
-        -- AND shu_user_evaluations.`level` = 3
-        -- AND shu_user_evaluations.`level` in (4,5)
-        
-        -- 未支付
-        -- AND shb_orders.pay_status = 1
-        -- 线上支付
-        -- AND shb_orders.`status` = 3 AND shb_orders.pay_status = 2 AND shf_goods.payment_method = 1
-        -- 线下支付
-        -- AND shb_orders.`status` = 3 AND shf_goods.payment_method = 2 AND shb_orders.paid_offline = 1
-            
+            {fetch_where}  
         GROUP BY
             FROM_UNIXTIME( shb_orders.create_time, '%Y-%m-%d' )
         """
@@ -344,8 +329,8 @@ class OrderListModel(object):
         if params.get('order_status'):
             fetch_where += """
             AND (
-            ( {order_status}=1 AND so.`status` in (1,2,3) AND so.pay_status = 1 AND so.paid_offline = 0) OR
-            ( {order_status}=2 AND so.`status` = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 )) OR
+            ( {order_status}=1 AND so.`status` in (1,2) ) OR
+            ( {order_status}=2 AND so.`status` = 3 ) OR
             ( {order_status}=3 AND so.`status` = -1)
             )
             """.format(order_status=params['order_status'])

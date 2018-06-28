@@ -144,10 +144,10 @@ class OrderList(object):
                 driver = '\n'.join([str(detail['driver_mobile']), str(detail['driver_name']), '新司机' if detail['c1'] < 3 else ''])
 
                 # 订单状态
-                if detail['status'] not in (0, -1) and detail['pay_status'] == 1 and detail['paid_offline'] == 0:
+                if detail['status'] in (1, 2):
                     order_status = '已接单'
-                elif detail['status'] == 3 and (detail['pay_status'] == 2 or detail['paid_offline'] == 1):
-                    order_status = '已完成'
+                elif detail['status'] == 3:
+                    order_status = '已送达'
                 elif detail['status'] == -1:
                     order_status = '已取消'
                 else:
