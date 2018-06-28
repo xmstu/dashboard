@@ -90,8 +90,8 @@ class OrderList(object):
                 # 货源类型
                 if detail['haul_dist'] == 1 and detail['type'] == 1:
                     goods_type = '同城'
-                elif detail['haul_dist'] == 2 and detail['goods_level'] == 2 and detail['type'] == 1:
-                    goods_type = '跨城定价'
+                # elif detail['haul_dist'] == 2 and detail['goods_level'] == 2 and detail['type'] == 1:
+                #     goods_type = '跨城定价'
                 elif detail['haul_dist'] == 2 and detail['goods_level'] == 1 and detail['type'] == 1:
                     goods_type = '跨城议价'
                 elif detail['type'] == 2:

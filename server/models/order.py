@@ -288,49 +288,59 @@ class OrderListModel(object):
 
         fetch_where += region
 
+        # 订单id
         if params.get('order_id'):
             fetch_where += """ AND so.id = {order_id} """.format(order_id=params.get('order_id'))
 
+        # 货主手机
         if params.get('consignor_mobile'):
             fetch_where += """ 
             AND ( SELECT shu_users.mobile FROM shu_users WHERE id = so.owner_id ) = {consignor_mobile} 
             """.format(consignor_mobile=params['consignor_mobile'])
 
+        # 司机手机
         if params.get('driver_mobile'):
             fetch_where += """
             AND ( SELECT shu_users.mobile FROM shu_users WHERE id = so.driver_id ) = {driver_mobile}
             """.format(driver_mobile=params['driver_mobile'])
 
+        # 出发地省份
         if params.get('from_province_id'):
             fetch_where += """
             AND so.from_province_id = {from_province_id}
             """.format(from_province_id=params['from_province_id'])
 
+        # 出发地城市
         if params.get('from_city_id'):
             fetch_where += """
             AND so.from_city_id = {from_city_id}
             """.format(from_city_id=params['from_city_id'])
 
+        # 出发地区县
         if params.get('from_county_id'):
             fetch_where += """
             AND so.from_county_id = {from_county_id}
             """.format(from_county_id=params['from_county_id'])
 
+        # 目的地省份
         if params.get('to_province_id'):
             fetch_where += """
             AND so.to_province_id = {to_province_id} 
             """.format(to_province_id=params['to_province_id'])
 
+        # 目的地城市
         if params.get('to_city_id'):
             fetch_where += """
             AND so.to_city_id = {to_city_id}
             """.format(to_city_id=params['to_city_id'])
 
+        # 目的地区县
         if params.get('to_county_id'):
             fetch_where += """
             AND so.to_county_id = {to_county_id}
             """.format(to_county_id=params['to_county_id'])
 
+        # 订单状态
         if params.get('order_status'):
             fetch_where += """
             AND (
@@ -340,6 +350,7 @@ class OrderListModel(object):
             )
             """.format(order_status=params['order_status'])
 
+        # 订单类型
         if params.get('order_type'):
             fetch_where += """
             AND (
@@ -350,9 +361,11 @@ class OrderListModel(object):
             )
             """.format(order_type=params['order_type'])
 
+        # 车长
         if params.get('vehicle_length'):
             fetch_where += """ AND shf_goods_vehicles.name = '{0}' """.format(params['vehicle_length'])
 
+        # 车型
         if params.get('vehicle_type'):
             fetch_where += """
             AND (
@@ -367,6 +380,7 @@ class OrderListModel(object):
             )
             """.format(vehicle_type=params['vehicle_type'])
 
+        # 特殊标签
         if params.get('spec_tag'):
             if params['spec_tag'] == 1:
                 fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(fresh_owner_ids)
@@ -374,6 +388,7 @@ class OrderListModel(object):
             if params['spec_tag'] == 2:
                 fetch_where += """ AND so.driver_id IN (%s) """ % ','.join(fresh_driver_ids)
 
+        # 支付状态
         if params.get('pay_status'):
             fetch_where += """
             AND (
@@ -383,11 +398,13 @@ class OrderListModel(object):
             )
             """.format(pay_status=params['pay_status'])
 
+        # 是否改价
         if params.get('is_change_price'):
             fetch_where += """
             AND so.price_recommend != so.price AND so.price_recommend != 0
             """
 
+        # 评价级别
         if params.get('comment_type'):
             fetch_where += """
                         AND (
@@ -397,11 +414,13 @@ class OrderListModel(object):
                         )
                         """.format(comment_type=params['comment_type'])
 
+        # 订单发布时间
         if params.get('start_order_time') and params.get('end_order_time'):
             fetch_where += """
             AND so.create_time >= {0} AND so.create_time < {1}
             """.format(params['start_order_time'], params['end_order_time'])
 
+        # 装货时间
         if params.get('start_loading_time') and params.get('end_loading_time'):
             fetch_where += """
             AND ((sg.loading_time_period_end >={0} AND sg.loading_time_period_end < {1}) OR (UNIX_TIMESTAMP(sg.loading_time_date) >={0} AND UNIX_TIMESTAMP(sg.loading_time_date) < {1}))
@@ -425,7 +444,7 @@ class OrderListModel(object):
 class FreshOwnerModel(object):
 
     @staticmethod
-    def get_fresh_owner_id(bi, db):
+    def get_fresh_owner_id(bi, db, node_id):
         try:
             # 先找出所有发货小于3的user_id
             good_sql = """
@@ -435,14 +454,30 @@ class FreshOwnerModel(object):
                         tb_inf_user 
                     WHERE
                         ( goods_count_LH + goods_count_SH ) < 3 
+                        {region}
                     GROUP BY
                         user_id
             """
-            good_user_ret = bi.query(good_sql)
+
+            # 权限地区
+            region = ' AND 1=1 '
+            if node_id:
+                if isinstance(node_id, int):
+                    region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                        'region_id': node_id}
+                elif isinstance(node_id, list):
+                    region = '''
+                            AND (
+                            from_province_id IN (%(region_id)s)
+                            OR from_city_id IN (%(region_id)s)
+                            OR from_county_id IN (%(region_id)s)
+                            OR from_town_id IN (%(region_id)s)
+                            ) ''' % {'region_id': ','.join(node_id)}
+
+            good_user_ret = bi.query(good_sql.format(region=region))
             good_ret_list = [str(i['user_id']) for i in good_user_ret]
             # 再找出订单列表中发货小于3的owner_id
-            order_sql = """SELECT DISTINCT owner_id FROM shb_orders WHERE owner_id IN ( %s )""" % ','.join(
-                good_ret_list)
+            order_sql = """SELECT DISTINCT owner_id FROM shb_orders WHERE owner_id IN ( %s )""" % ','.join(good_ret_list)
             log.debug('获取新货主SQL语句：[sql: %s]' % order_sql)
             order_owner_ret = db.query(order_sql)
             ret = [str(i['owner_id']) for i in order_owner_ret]
@@ -456,20 +491,44 @@ class FreshOwnerModel(object):
 class FreshDriverModel(object):
 
     @staticmethod
-    def get_fresh_driver_id(cursor):
+    def get_fresh_driver_id(cursor, node_id):
         try:
             sql = """
                     SELECT
-                        driver_id
+                        driver_id 
                     FROM
                         shb_orders 
+                    WHERE
+                        driver_id IN (
+                        SELECT DISTINCT
+                            driver_id 
+                        FROM
+                            shb_orders 
+                        WHERE
+                            {region}
+                        ) 
                     GROUP BY
                         driver_id 
                     HAVING
-                        COUNT( 1 ) < 3
+                        COUNT( driver_id ) < 3;
                     """
-            ret = cursor.query(sql)
 
+            # 权限地区
+            region = ' 1=1 '
+            if node_id:
+                if isinstance(node_id, int):
+                    region += 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                        'region_id': node_id}
+                elif isinstance(node_id, list):
+                    region += '''
+                            AND (
+                            from_province_id IN (%(region_id)s)
+                            OR from_city_id IN (%(region_id)s)
+                            OR from_county_id IN (%(region_id)s)
+                            OR from_town_id IN (%(region_id)s)
+                            ) ''' % {'region_id': ','.join(node_id)}
+            ret = cursor.query(sql.format(region=region))
+            log.debug('获取新司机SQL语句：[sql: %s]' % sql.format(region=region))
             ret = [str(i['driver_id']) for i in ret]
 
             return ret
