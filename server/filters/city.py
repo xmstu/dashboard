@@ -127,8 +127,8 @@ class CityOrderListFilterDecorator(object):
                                                   detail.get('from_county_id', 0)) + detail.get('from_address', '无详细地址')
             to_address = init_regions.to_address(detail.get('to_province_id', 0), detail.get('to_city_id', 0),
                                                   detail.get('to_county_id', 0)) + detail.get('to_address', '无详细地址')
-            mileage_total = str(int(detail['mileage_total'] * 1000)) + '米'\
-                if 0 < detail.get('mileage_total', 0) < 1 else str(int(detail.get('mileage_total', 0))) + '千米'
+            mileage_total = str(int(detail['mileage_total'] * 1000)) + 'm'\
+                if 0 < detail.get('mileage_total', 0) < 1 else str(int(detail.get('mileage_total', 0))) + 'km'
             # 特殊车型
             extra = [
                 '需要开顶' if detail['need_open_top'] == 1 else '',
