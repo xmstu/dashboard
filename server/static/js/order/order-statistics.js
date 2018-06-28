@@ -120,7 +120,7 @@ layui.use(['laydate', 'form', 'table'], function () {
 
         }
     });
-     laydate.render({
+    laydate.render({
         elem: '#create_start_time',
         theme: '#009688',
         calendar: true,
@@ -139,7 +139,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             }
         }
     });
-      laydate.render({
+    laydate.render({
         elem: '#create_end_time',
         theme: '#009688',
         calendar: true,
@@ -156,12 +156,12 @@ layui.use(['laydate', 'form', 'table'], function () {
             } else {
                 $('#create_end_time').next('.date-tips').hide()
             }
-            if(val!=''){
-                 $('#create_end_time').next('.date-tips').hide()
+            if (val != '') {
+                $('#create_end_time').next('.date-tips').hide()
             }
         }
     });
-       laydate.render({
+    laydate.render({
         elem: '#load_start_time',
         theme: '#009688',
         calendar: true,
@@ -178,12 +178,12 @@ layui.use(['laydate', 'form', 'table'], function () {
             } else {
                 $('#load_start_time').next('.date-tips').hide()
             }
-            if(val!=''){
-                 $('#load_start_time').next('.date-tips').hide()
+            if (val != '') {
+                $('#load_start_time').next('.date-tips').hide()
             }
         }
     });
-        laydate.render({
+    laydate.render({
         elem: '#load_end_time',
         theme: '#009688',
         calendar: true,
@@ -200,8 +200,8 @@ layui.use(['laydate', 'form', 'table'], function () {
             } else {
                 $('#load_end_time').next('.date-tips').hide()
             }
-            if(val!=''){
-                 $('#load_end_time').next('.date-tips').hide()
+            if (val != '') {
+                $('#load_end_time').next('.date-tips').hide()
             }
         }
     });
@@ -211,13 +211,13 @@ Highcharts.setOptions({
 });
 var setAbout = {
     that: this,
-    chartRender: function (xAxis, complete_series, pending_series, cancel_series, interval) {
+    chartRender: function (xAxis, complete_series, pending_series, cancel_series, interval, unit, title) {
         $('#charts_container_one').highcharts({
             chart: {
                 type: 'area'
             },
             title: {
-                text: '订单统计'
+                text: title
             },
             subtitle: {
                 text: null
@@ -232,17 +232,17 @@ var setAbout = {
             },
             yAxis: {
                 title: {
-                    text: '订单汇总'
+                    text: title
                 },
                 labels: {
                     formatter: function () {
-                        return this.value + '单';
+                        return this.value + unit;
                     }
                 }
             },
             tooltip: {
                 split: true,
-                valueSuffix: '单',
+                valueSuffix: unit,
                 backgroundColor: '#FFF'
             },
             plotOptions: {
@@ -400,13 +400,25 @@ var setAbout = {
                 var complete_series = res.data.complete_series;
                 var cancel_series = res.data.cancel_series;
                 var pending_series = res.data.pending_series;
-                if (len > 0 && len < 20) {
-                    that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1)
-                } else if (len > 20 && len < 50) {
-                    that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2)
-                } else if (len > 50) {
-                    that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4)
+                var value = data.dimension;
+                if (value == 1) {
+                    if (len > 0 && len < 20) {
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1,'单','订单汇总')
+                    } else if (len > 20 && len < 50) {
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2,'单','订单汇总')
+                    } else if (len > 50) {
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4,'单','订单汇总')
+                    }
+                } else if (value == 2) {
+                    if (len > 0 && len < 20) {
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1,'元','金额汇总')
+                    } else if (len > 20 && len < 50) {
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2,'元','金额汇总')
+                    } else if (len > 50) {
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4,'元','金额汇总')
+                    }
                 }
+
             })
         })
     },
@@ -427,7 +439,7 @@ var setAbout = {
                     {field: 'order_id', title: '订单ID', width: 60},
                     {field: 'goods_standard', title: '货物规格', width: 80},
                     {field: 'goods_type', title: '类型', width: 70},
-                    {field: 'address', title: '出发地-目的地',width:240},
+                    {field: 'address', title: '出发地-目的地', width: 240},
                     {field: 'vehicle', title: '车型要求', width: 76},
                     {field: 'freight', title: '运费', width: 90},
                     {field: 'cargo_owner', title: '货主', width: 96},
@@ -453,22 +465,22 @@ var setAbout = {
                             $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
                         }
                     })
-                      $("td[data-field='time_field']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        $(this).html('<i class="zhuanghuo">接单</i>：' + result[1]+'<br><i class="fahuo">完成</i>：<span style="">' + result[0] + '</span>')
-                    }
-                })
+                    $("td[data-field='time_field']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            $(this).html('<i class="zhuanghuo">接单</i>：' + result[1] + '<br><i class="fahuo">完成</i>：<span style="">' + result[0] + '</span>')
+                        }
+                    })
                     $("td[data-field='driver']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
                             if (result[0] != '' && result[1] != '') {
                                 $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span>')
                             }
-                            if(result[0] != '' && result[1] != ''&&result[2]!=''){
-                                 $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span><br><span style="color: red">('+result[2]+')</span>')
+                            if (result[0] != '' && result[1] != '' && result[2] != '') {
+                                $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span><br><span style="color: red">(' + result[2] + ')</span>')
                             }
-                           if (result[0] != '' && result[1] == ''&&result[2]!='') {
+                            if (result[0] != '' && result[1] == '' && result[2] != '') {
                                 $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">' + result[2] + '</span>')
                             }
                         }
@@ -479,10 +491,10 @@ var setAbout = {
                             if (result[0] != '' && result[1] != '') {
                                 $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span>')
                             }
-                            if(result[0] != '' && result[1] != ''&&result[2]!=''){
-                                 $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span><br><span style="color: red">('+result[2]+')</span>')
+                            if (result[0] != '' && result[1] != '' && result[2] != '') {
+                                $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span><br><span style="color: red">(' + result[2] + ')</span>')
                             }
-                           if (result[0] != '' && result[1] == ''&&result[2]!='') {
+                            if (result[0] != '' && result[1] == '' && result[2] != '') {
                                 $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">' + result[2] + '</span>')
                             }
                         }
@@ -497,7 +509,7 @@ var setAbout = {
                                 $(this).html(result[0] + '<br>' + result[1])
                             }
                             if (result[2] != '' && result[2] != undefined) {
-                                $(this).html(result[0] + '<br>' + result[1] )
+                                $(this).html(result[0] + '<br>' + result[1])
                             }
                         }
                     });
@@ -561,8 +573,8 @@ $('#goods_search_box').on('click', function (e) {
             page: 1,
             limit: 10
         };
-        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile+ '&driver_mobile=' + data.driver_mobile  + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_country_id=' + data.from_country_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&order_type=' +
-            data.order_type + '&order_status=' + data.order_status + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&spec_tag=' + data.spec_tag + '&node_id=' + data.node_id + '&is_change_price=' + data.is_change_price + '&pay_status=' + data.pay_status  +'&comment_type=' + data.comment_type+ '&start_order_time=' + data.start_order_time + '&end_order_time=' + data.end_order_time + '&start_complete_time=' + data.start_complete_time + '&end_complete_time=' + data.end_complete_time;
+        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile + '&driver_mobile=' + data.driver_mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_country_id=' + data.from_country_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&order_type=' +
+            data.order_type + '&order_status=' + data.order_status + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&spec_tag=' + data.spec_tag + '&node_id=' + data.node_id + '&is_change_price=' + data.is_change_price + '&pay_status=' + data.pay_status + '&comment_type=' + data.comment_type + '&start_order_time=' + data.start_order_time + '&end_order_time=' + data.end_order_time + '&start_complete_time=' + data.start_complete_time + '&end_complete_time=' + data.end_complete_time;
         setAbout.tableRender(url)
     });
 });
