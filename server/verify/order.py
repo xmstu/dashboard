@@ -27,7 +27,7 @@ class OrdersReceivedStatistics(object):
             # 当前权限下所有地区
             if sessionOperationClass.check():
                 role, locations_id = sessionOperationClass.get_locations()
-                if role in (2, 3, 4) and not params['node_id']:
+                if role in (2, 3, 4) and not params['region_id']:
                     params['region_id'] = locations_id
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
@@ -58,7 +58,7 @@ class CancelOrderReason(object):
             # 当前权限下所有地区
             if sessionOperationClass.check():
                 role, locations_id = sessionOperationClass.get_locations()
-                if role in (2, 3, 4) and not params['node_id']:
+                if role in (2, 3, 4) and not params['region_id']:
                     params['region_id'] = locations_id
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
