@@ -478,6 +478,12 @@ var setAbout = {
                             if (result[0] != '' && result[1] != '') {
                                 $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span>')
                             }
+                            if(result[0] != '' && result[1] != ''&&result[2]!=''){
+                                 $(this).html('<span>' + result[0] + '</span ><br><span>' + result[1] + '</span><br><span style="color: red">('+result[2]+')</span>')
+                            }
+                           if (result[0] != '' && result[1] == ''&&result[2]!='') {
+                                $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">' + result[2] + '</span>')
+                            }
                         }
                     });
                     $("td[data-field='vehicle']").children().each(function (val) {
