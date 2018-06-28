@@ -12,7 +12,7 @@ $('#start_date_three').val(String(common.getNowFormatDate()[2]));
 $('#end_time_three').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
     $('.goods-menu-about > a').addClass('selected-active')
-     $('.goods-menu-about > a>i').addClass('select-active')
+    $('.goods-menu-about > a>i').addClass('select-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
     common.dateInterval_Ano($('#start_date_three').val(), $('#end_time_three').val())
 }, 10);
@@ -266,16 +266,16 @@ layui.use(['laydate', 'form', 'table'], function () {
             statusCode: 100000
         },
         cols: [[
-              {field: 'id', title: '货源ID', width: 60},
-            {field: 'goods_standard', title: '货物规格', width: 110},
+            {field: 'id', title: '货源ID', width: 60},
+            {field: 'goods_standard', title: '货物规格', width: 86},
             {field: 'goods_type', title: '类型', width: 76},
-            {field: 'address', title: '出发地-目的地', width: 360},
+            {field: 'address', title: '出发地-目的地', width: 300},
             {field: 'vehicle', title: '车型要求', width: 114},
-            {field: 'price', title: '运费', width: 180},
+            {field: 'price', title: '运费', width: 116},
             {field: 'mobile', title: '货主手机', width: 100},
             {field: 'goods_status', title: '状态', width: 86},
             {field: 'call_count', title: '通话数', width: 60},
-            {field: 'latency_time', title: '初次触达', width: 104},
+            {field: 'latency_time', title: '初次触达', width: 80},
             {field: 'goods_time', title: '时间', width: 190},
             {field: 'node_id', title: '所属网点'}
         ]],
@@ -689,18 +689,18 @@ $('#goods_search_box').on('click', function (e) {
                 statusCode: 100000
             },
             cols: [[
-               {field: 'id', title: '货源ID', width: 60},
-            {field: 'goods_standard', title: '货物规格', width: 110},
-            {field: 'goods_type', title: '类型', width: 76},
-            {field: 'address', title: '出发地-目的地', width: 340},
-            {field: 'vehicle', title: '车型要求', width: 114},
-            {field: 'price', title: '运费', width: 184},
-            {field: 'mobile', title: '货主手机', width: 100},
-            {field: 'goods_status', title: '状态', width: 89},
-            {field: 'call_count', title: '通话数', width: 60},
-            {field: 'latency_time', title: '初次触达时间', width: 104},
-            {field: 'goods_time', title: '时间', width: 190},
-            {field: 'node_id', title: '所属网点'}
+                {field: 'id', title: '货源ID', width: 60},
+                {field: 'goods_standard', title: '货物规格', width: 86},
+                {field: 'goods_type', title: '类型', width: 76},
+                {field: 'address', title: '出发地-目的地', width: 300},
+                {field: 'vehicle', title: '车型要求', width: 114},
+                {field: 'price', title: '运费', width: 116},
+                {field: 'mobile', title: '货主手机', width: 100},
+                {field: 'goods_status', title: '状态', width: 86},
+                {field: 'call_count', title: '通话数', width: 60},
+                {field: 'latency_time', title: '初次触达', width: 80},
+                {field: 'goods_time', title: '时间', width: 190},
+                {field: 'node_id', title: '所属网点'}
             ]],
             done: function (res, curr, count) {
                 layer.closeAll('loading')
