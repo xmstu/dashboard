@@ -83,6 +83,9 @@ class PromoteQuality(object):
             dimension = int(params.get('dimension')) if params.get('dimension') else 1
             data_type = int(params.get('data_type')) if params.get('data_type') else 1
 
+            # 获取用户权限和身份
+            role, user_id = sessionOperationClass.get_role()
+
             # 验证参数
             if start_time and end_time:
                 if start_time <= end_time:
@@ -100,6 +103,8 @@ class PromoteQuality(object):
                 'periods': periods,
                 'dimension': dimension,
                 'data_type': data_type,
+                'role': role,
+                'user_id': user_id
             }
 
             return Response(params=params)

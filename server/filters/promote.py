@@ -28,44 +28,53 @@ class PromoteEffect(object):
 
     @staticmethod
     @make_decorator
-    def get_result(extension_worker_list, promote_effect_list, params):
+    def get_result(result, count, params):
+        def filter_detail(detail):
+            """过滤详情"""
+            goods_count = 0
+            goods_user_count = 0
+            order_over_count = 0
+            goods_price = 0
+            order_over_price = 0
+            # 全部
+            if params['goods_type'] == 0:
+                goods_count = detail['goods_count_SH'] + detail['goods_count_LH']
+                goods_user_count = detail['goods_user_count']
+                order_over_count = detail['order_over_count_SH'] + detail['order_over_count_LH']
+                goods_price = detail['goods_price_SH'] + detail['goods_price_LH']
+                order_over_price = detail['order_over_price_SH'] + detail['order_over_price_LH']
+            # 同城
+            elif params['goods_type'] == 1:
+                goods_count = detail['goods_count_SH']
+                goods_user_count = detail['goods_user_count_SH']
+                order_over_count = detail['order_over_count_SH']
+                goods_price = detail['goods_price_SH']
+                order_over_price = detail['order_over_price_SH']
+            # 跨城
+            elif params['goods_type'] == 2:
+                goods_count = detail['goods_count_LH']
+                goods_user_count = detail['goods_user_count_LH']
+                order_over_count = detail['order_over_count_LH']
+                goods_price = detail['goods_price_LH']
+                order_over_price = detail['order_over_price_LH']
 
-        # 拼接结果
-        ex = extension_worker_list['promote_effect_detail']
-        for i in ex:
-            i['reference_name'] = i.get('reference_name', '')
-            i['reference_mobile'] = i.get('reference_mobile', '')
-            i['user_count'] = i.get('user_count', None) or 0
-            i['wake_up_count'] = i.get('wake_up_count', None) or 0
-            i['goods_count'] = i.get('goods_count', None) or 0
-            i['goods_user_count'] = i.get('goods_user_count', None) or 0
-            i['goods_price'] = i.get('goods_price', None) or 0
-            i['order_over_price'] = i.get('order_over_price', None) or 0
-            i['order_over_count'] = i.get('order_over_count', None) or 0
-        ex_count = extension_worker_list['count']
+            return {
+                'reference_id': detail['user_id'],
+                'reference_name': detail['user_name'],
+                'reference_mobile': detail['mobile'],
+                'user_count': detail['user_count'],
+                'wake_up_count': detail['wake_up_count'],
+                'goods_count': int(goods_count),
+                'goods_user_count': int(goods_user_count),
+                'order_over_count': int(order_over_count),
+                'goods_price': int(goods_price),
+                'order_over_price': int(order_over_price)
+            }
 
-        pr = promote_effect_list['promote_effect_detail']
-        for i in pr:
-            i['reference_name'] = i.get('reference_name', '')
-            i['reference_mobile'] = i.get('reference_mobile', '')
-            i['user_count'] = i.get('user_count', None) or 0
-            i['wake_up_count'] = i.get('wake_up_count', None) or 0
-            i['goods_count'] = i.get('goods_count', None) or 0
-            i['goods_user_count'] = i.get('goods_user_count', None) or 0
-            i['goods_price'] = i.get('goods_price', None) or 0
-            i['order_over_price'] = i.get('order_over_price', None) or 0
-            i['order_over_count'] = i.get('order_over_count', None) or 0
-        pr_count = promote_effect_list['count']
-
-        if params['role_type'] or params['goods_type'] or params['is_actived'] or params['is_car_sticker'] or (params['start_time'] and params['end_time']):
-            detail_dict_list = pr
-            count = pr_count
-        else:
-            detail_dict_list = ex
-            count = ex_count
-
-        promote_effect_detail = json.loads(json.dumps(detail_dict_list, default=ExtendHandler.handler_to_float))
-        return build_result(APIStatus.Ok, count=count, data=promote_effect_detail), HTTPStatus.Ok
+        data = []
+        for detail in result:
+            data.append(filter_detail(detail))
+        return build_result(APIStatus.Ok, count=count, data=data), HTTPStatus.Ok
 
 
 class PromoteQuality(object):

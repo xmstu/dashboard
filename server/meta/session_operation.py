@@ -57,4 +57,3 @@ class sessionOperationClass(object):
         role = session['login']['role']
         user_id = session['login']['user_id']
         return role, user_id
-
