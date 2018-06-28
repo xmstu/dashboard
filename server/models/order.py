@@ -350,10 +350,8 @@ class OrderListModel(object):
             )
             """.format(order_type=params['order_type'])
 
-        if int(params.get('vehicle_length')):
-            fetch_where += """
-            AND shf_goods_vehicles.name = '{0}'
-            """.format(params['vehicle_length'])
+        if params.get('vehicle_length'):
+            fetch_where += """ AND shf_goods_vehicles.name = '{0}' """.format(params['vehicle_length'])
 
         if params.get('vehicle_type'):
             fetch_where += """
