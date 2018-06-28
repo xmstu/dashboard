@@ -13,18 +13,29 @@ from server import verify, operations, filters
 from server.meta.decorators import Response
 from server.utils.request import get_all_arg, get_arg_int, get_arg
 
+class PromoteQuality(Resource):
+    @staticmethod
+    @doc.request_promote_quality_param
+    @doc.response_promote_quality_param_success
+    @filters.PromoteQuality.get_result(params=dict, data=list, before_promote_count=int)
+    @operations.PromoteQualityDecorator.get_promote_quality(params=dict)
+    @verify.PromoteQuality.check_params(params=dict)
+    def get():
+        """推广数据统计"""
+        resp = Response(params=get_all_arg())
+        return resp
 
 class PromoteEffect(Resource):
 
     @staticmethod
     @doc.request_promote_effect_param
     @doc.response_promote_effect_param_success
-    @filters.PromoteEffect.get_result(extension_worker_list=dict, promote_effect_list=dict, params=dict)
+    @filters.PromoteEffect.get_result(result=list, count=int, params=dict)
     @operations.PromoteEffectDecorator.get_promote_effect_list(page=int, limit=int, params=dict)
     @verify.PromoteEffect.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():
-        """推荐人员效果"""
+        """推荐人员列表"""
         resp = Response(
             page=get_arg_int('page', 1),
             limit=get_arg_int('limit', 10),
@@ -62,19 +73,6 @@ class PromoteDelete(Resource):
         promoter_id = id
         return Response(user_id=user_id, admin_type=admin_type, promoter_id=promoter_id)
 
-
-class PromoteQuality(Resource):
-    @staticmethod
-    @doc.request_promote_quality_param
-    @doc.response_promote_quality_param_success
-    @filters.PromoteQuality.get_result(params=dict, data=list, before_promote_count=int)
-    @operations.PromoteQualityDecorator.get_promote_quality(params=dict)
-    @verify.PromoteQuality.check_params(params=dict)
-    def get():
-        """推荐人质量统计"""
-        resp = Response(params=get_all_arg())
-
-        return resp
 
 
 ns = api.namespace('promote', description='推广统计')
