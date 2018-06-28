@@ -225,9 +225,9 @@ function tableInit(url) {
             loading: true,
             cols: [[
                 {field: 'goods_id', title: '货源ID', width: 70},
-                {field: 'goods_type', title: '类型', width: 60},
+                {field: 'goods_type', title: '类型', width: 70},
                 {field: 'content', title: '货物规格', width: 120},
-                {field: 'address', title: '出发地-目的地', width: 310},
+                {field: 'address', title: '出发地-目的地', width: 350},
                 {field: 'vehicle', title: '车型要求', width: 86},
                 {field: 'price', title: '运费', width: 180},
                 {field: 'mobile', title: '货主手机', width: 96},
