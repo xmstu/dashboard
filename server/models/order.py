@@ -420,10 +420,13 @@ class OrderListModel(object):
             AND so.create_time >= {0} AND so.create_time < {1}
             """.format(params['start_order_time'], params['end_order_time'])
 
-        # 装货时间
-        if params.get('start_loading_time') and params.get('end_loading_time'):
+        # 完成时间
+        if params.get('start_complete_time') and params.get('end_complete_time'):
             fetch_where += """
-            AND ((sg.loading_time_period_end >={0} AND sg.loading_time_period_end < {1}) OR (UNIX_TIMESTAMP(sg.loading_time_date) >={0} AND UNIX_TIMESTAMP(sg.loading_time_date) < {1}))
+            AND
+            IF ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) >= {0}
+            AND 
+            IF ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) < {1}
             """.format(params.get('start_loading_time'), params.get('end_loading_time'))
 
         count = cursor.query_one(command.format(fields=" COUNT(1) AS total_count ", fetch_where=fetch_where))[

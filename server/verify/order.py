@@ -100,8 +100,8 @@ class OrderList(object):
             params['comment_type'] = int(params.get('comment_type', None) or 0)
             params['start_order_time'] = int(params.get('start_order_time', None) or 0)
             params['end_order_time'] = int(params.get('end_order_time', None) or 0)
-            params['start_loading_time'] = int(params.get('start_loading_time', None) or 0)
-            params['end_loading_time'] = int(params.get('end_loading_time', None) or 0)
+            params['start_complete_time'] = int(params.get('start_complete_time', None) or 0)
+            params['end_complete_time'] = int(params.get('end_complete_time', None) or 0)
 
             # 当前权限下所有地区
             if sessionOperationClass.check():
@@ -114,7 +114,7 @@ class OrderList(object):
             if not compare_time(params['start_order_time'], params['end_order_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
-            if not compare_time(params['start_loading_time'], params['end_loading_time']):
+            if not compare_time(params['start_complete_time'], params['end_complete_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             return Response(page=page, limit=limit, params=params)

@@ -49,8 +49,8 @@ request_order_list_param = api.doc(params={
     'comment_type': '评价',
     'start_order_time': '开始接单时间',
     'end_order_time': '结束接单时间',
-    'start_loading_time': '开始装货时间',
-    'end_loading_time': '结束装货时间',
+    'start_complete_time': '开始完成时间',
+    'end_complete_time': '结束完成时间',
     'page': '页数',
     'limit': '条数'
 }, description='订单列表请求参数')
