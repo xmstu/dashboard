@@ -29,8 +29,10 @@ class CityResourceBalanceModel(object):
         # 地区
         region = ''
         if params['region_id']:
+            # 用户自选
             if isinstance(params['region_id'], int):
                 region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s)' % {'region_id': params['region_id']}
+            # 非管理员默认地区
             elif isinstance(params['region_id'], list):
                 region = '''
                 AND (
@@ -86,8 +88,10 @@ class CityResourceBalanceModel(object):
         # 地区
         region = ''
         if params['region_id']:
+            # 用户字段
             if isinstance(params['region_id'], int):
                 region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s)' % {'region_id': params['region_id']}
+            # 非管理员默认地区
             elif isinstance(params['region_id'], list):
                 region = '''
                 AND (
@@ -191,9 +195,11 @@ class CityOrderListModel(object):
         # 地区
         region = ' AND 1=1 '
         if params['region_id']:
+            # 用户自选
             if isinstance(params['region_id'], int):
                 region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
                     'region_id': params['region_id']}
+            # 非管理员默认地区
             elif isinstance(params['region_id'], list):
                 region = '''
                         AND (

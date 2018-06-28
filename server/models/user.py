@@ -4,18 +4,45 @@ from server import log
 
 class UserList(object):
     @staticmethod
-    def get_user_id_by_home_station(cursor, params):
-        """常驻地或认证获取user_id"""
-        command = '''SELECT
-        user_id
+    def get_user_home_station_by_int(cursor, region_id):
+        """常驻地查询"""
+        command = '''
+        SELECT user_id
         FROM tb_inf_user
-        WHERE from_province_id = :home_station_province AND from_city_id = :home_station_city AND from_county_id = :home_station_county'''
+        WHERE is_deleted = 0
+        AND (
+        from_province_id = :region_id
+        OR from_city_id = :region_id
+        OR from_county_id = :region_id
+        OR from_town_id = :region_id)'''
 
         result = cursor.query(command, {
-            'home_station_province': params['home_station_province'],
-            'home_station_city': params['home_station_city'],
-            'home_station_county': params['home_station_county'],
+            'from_province_id': region_id,
+            'from_city_id': region_id,
+            'from_county_id': region_id,
+            'from_town_id': region_id
         })
+
+        return [str(i['user_id']) for i in result if i] if result else []
+
+    @staticmethod
+    def get_user_home_station_by_list(cursor, region_id):
+        """常驻地查询"""
+        command = '''
+        SELECT user_id
+        FROM tb_inf_user
+        WHERE is_deleted = 0
+        AND (%s)'''
+
+        region = '''
+        from_province_id IN (%(region_id)s)
+        OR from_city_id IN (%(region_id)s)
+        OR from_county_id IN (%(region_id)s)
+        OR from_town_id IN (%(region_id)s)''' % {'region_id': ','.join(region_id)}
+
+        command = command % region
+
+        result = cursor.query(command)
 
         return [str(i['user_id']) for i in result if i] if result else []
 
@@ -33,14 +60,19 @@ class UserList(object):
         goods_auth,
         driver_auth,
         company_auth,
-        goods_count,
-        order_count,
-        order_finished_count,
+        goods_count_SH,
+        goods_count_LH,
+        order_count_SH,
+        order_count_LH,
+        order_finished_count_SH,
+        order_finished_count_LH,
         download_channel,
         from_channel,
         FROM_UNIXTIME(last_login_time, '%Y-%m-%d') AS last_login_time,
         FROM_UNIXTIME(create_time, '%Y-%m-%d') AS create_time,
-        '' AS usual_city
+        from_province_id,
+        from_city_id,
+        from_county_id
         '''
 
         command = """
@@ -53,14 +85,13 @@ class UserList(object):
             """
 
         # 地区
-        region = ' AND 1=1 '
+        region = ''
         if params['region_id']:
             if isinstance(params['region_id'], int):
                 region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
                     'region_id': params['region_id']}
             elif isinstance(params['region_id'], list):
-                region = '''
-                            AND (
+                region = '''AND (
                             from_province_id IN (%(region_id)s)
                             OR from_city_id IN (%(region_id)s)
                             OR from_county_id IN (%(region_id)s)
@@ -88,9 +119,6 @@ class UserList(object):
             fetch_where += 'AND referrer_mobile != "" '
         elif params['is_referenced'] == 2:
             fetch_where += 'AND referrer_mobile = "" '
-        # 常驻地
-        # if user_station:
-        #     fetch_where += 'AND shu_users.id IN (%s)' % user_station
         # 注册角色
         if params['role_type'] == 1:
             fetch_where += 'AND user_type = 1 '
@@ -119,11 +147,11 @@ class UserList(object):
 
         # 操作过
         if params['is_used'] == 1:
-            fetch_where += 'AND goods_count > 0 '
+            fetch_where += 'AND (goods_count_LH > 0 OR goods_count_SH > 0) '
         elif params['is_used'] == 2:
-            fetch_where += 'AND order_count > 0 '
+            fetch_where += 'AND (order_count_SH > 0 OR order_count_SH > 0) '
         elif params['is_used'] == 3:
-            fetch_where += 'AND order_finished_count > 0 '
+            fetch_where += 'AND (order_finished_count_SH > 0 OR order_finished_count_LH > 0) '
 
         # 贴车贴
         if params['is_car_sticker'] == 1:
@@ -141,8 +169,7 @@ class UserList(object):
 
         user_count = cursor.query_one(command.format(fields="COUNT(1) AS count", fetch_where=fetch_where))
 
-        # TODO 排序优化 分页
-        fetch_where += """ ORDER BY user_id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        fetch_where += """ ORDER BY id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
         # 详情
         user_detail = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
@@ -155,63 +182,6 @@ class UserList(object):
 
 
 class UserStatistic(object):
-    # @staticmethod
-    # def get_before_user_count(cursor, params):
-    #     """累计用户"""
-    #     command = """
-    #     SELECT COUNT(*) AS count
-    #     FROM tb_inf_user
-    #     WHERE create_time < :start_time
-    #     -- 角色
-    #     AND ((:role_type = 0)
-    #     OR (:role_type = 1 AND user_type = 1)
-    #     OR (:role_type = 2 AND user_type = 2)
-    #     OR (:role_type = 3 AND user_type = 3)
-    #     )
-    #     -- 认证
-    #     AND ((:is_auth = 0)
-    #     OR (:is_auth = 1 AND (goods_auth = 1 OR driver_auth = 1 OR company_auth = 1))
-    #     OR (:is_auth = 2 AND goods_auth = 0 AND driver_auth = 0 AND company_auth = 0)
-    #     )
-    #     """
-    #     before_user_count = cursor.query_one(command, {
-    #         'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
-    #         'role_type': params['role_type'],
-    #         'is_auth': params['is_auth']
-    #     })
-    #
-    #     return before_user_count['count'] if before_user_count else 0
-
-    # @staticmethod
-    # def get_user_statistic(cursor, params):
-    #     """用户新增"""
-    #     command = """
-    #     SELECT create_time, COUNT(*) AS count
-    #     FROM tb_inf_user
-    #     WHERE create_time >= :start_time
-    #     AND create_time < :end_time
-    #     -- 角色
-    #     AND ((:role_type = 0)
-    #     OR (:role_type = 1 AND user_type = 1)
-    #     OR (:role_type = 2 AND user_type = 2)
-    #     OR (:role_type = 3 AND user_type = 3)
-    #     )
-    #     -- 认证
-    #     AND ((:is_auth = 0)
-    #     OR (:is_auth = 1 AND (goods_auth = 1 OR driver_auth = 1 OR company_auth = 1))
-    #     OR (:is_auth = 2 AND goods_auth = 0 AND driver_auth = 0 AND company_auth = 0)
-    #     )
-    #     GROUP BY create_time
-    #     """
-    #
-    #     user_statistic = cursor.query(command, {
-    #         'start_time': time.strftime('%Y-%m-%d', time.localtime(params['start_time'])),
-    #         'end_time': time.strftime('%Y-%m-%d', time.localtime(params['end_time'])),
-    #         'role_type': params['role_type'],
-    #         'is_auth': params['is_auth']
-    #     })
-    #
-    #     return user_statistic if user_statistic else []
 
     @staticmethod
     def get_before_user_count_by_mobile(cursor, params):
@@ -263,8 +233,8 @@ class UserStatistic(object):
         return before_user_count['count'] if before_user_count else 0
 
     @staticmethod
-    def get_user_statistic_by_mobile(cursor, params):
-        """用户常驻地还没更新，先用手机号归属地应付一下"""
+    def get_user_statistic_by_mobile(cursor, params, user_ids=None):
+        """用户变化趋势"""
         command = """
         SELECT
         FROM_UNIXTIME(shu_users.create_time, '%%%%Y-%%%%m-%%%%d') AS create_time,
@@ -294,12 +264,8 @@ class UserStatistic(object):
         GROUP BY FROM_UNIXTIME(shu_users.create_time, '%%%%Y-%%%%m-%%%%d')
         """
         region = ''
-        if params['region_id']:
-            if isinstance(params['region_id'], set):
-                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' % ','.join(
-                    params['region_id'])
-            elif isinstance(params['region_id'], str):
-                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) = %s' % params['region_id']
+        if user_ids:
+            region = 'AND shu_users.id IN (%s)' % ','.join(user_ids)
 
         command = command % region
 

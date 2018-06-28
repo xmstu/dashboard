@@ -3,32 +3,55 @@ import json
 from server.meta.decorators import make_decorator
 from server.status import build_result, HTTPStatus, APIStatus, make_result
 from server.utils.date_format import get_date_aggregate
+from server.cache_data import init_regions
 
 class UserList(object):
 
     @staticmethod
     @make_decorator
     def get(user_list):
-        # 过滤字段
-        user_list = json.loads(json.dumps(user_list))
         user_detail = user_list['user_detail']
-        for detail in user_detail:
+
+        def filter_user_info(detail):
+            # 用户类型
+            user_type = ''
+            if detail['user_type'] == 1:
+                user_type = '货主'
+            elif detail['user_type'] == 2:
+                user_type = '司机'
+            elif detail['user_type'] == 3:
+                user_type = '公司'
             # 认证
-            role_auth = []
+            role_auth_arr = []
             if detail['goods_auth']:
-                role_auth.append('货主')
+                role_auth_arr.append('货主')
             if detail['driver_auth']:
-                role_auth.append('司机')
+                role_auth_arr.append('司机')
             if detail['company_auth']:
-                role_auth.append('物流公司')
-            detail['role_auth'] = ','.join(role_auth) if role_auth else '未认证'
-            detail.pop('goods_auth')
-            detail.pop('driver_auth')
-            detail.pop('company_auth')
+                role_auth_arr.append('物流公司')
+            role_auth = ','.join(role_auth_arr) if role_auth_arr else '未认证'
+            detail_dict = {
+                'user_id': detail['user_id'],
+                'user_name': detail['user_name'],
+                'mobile': detail['mobile'],
+                'user_type': user_type,
+                'role_auth': role_auth,
+                'goods_count': detail['goods_count_SH'] + detail['goods_count_LH'],
+                'order_count': detail['order_count_SH'] + detail['order_count_LH'],
+                'order_finished_count': detail['order_finished_count_SH'] + detail['order_finished_count_LH'],
+                'download_channel': detail['download_channel'],
+                'from_channel': detail['from_channel'],
+                'last_login_time': detail['last_login_time'],
+                'create_time': detail['create_time'],
+                'usual_city': init_regions.to_address(detail['from_province_id'], detail['from_city_id'], detail['from_county_id'])
+            }
+            return detail_dict
 
-            detail['usual_city'] = detail['usual_city'] if detail['usual_city'] else '未知常驻地'
+        result = []
+        for detail in user_detail:
+            result.append(filter_user_info(detail))
 
-        return build_result(APIStatus.Ok, count=user_list['user_count'], data=user_detail), HTTPStatus.Ok
+        return build_result(APIStatus.Ok, count=user_list['user_count'], data=result), HTTPStatus.Ok
 
 
 class UserStatistic(object):

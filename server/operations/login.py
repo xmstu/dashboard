@@ -23,12 +23,13 @@ class LoginDecorator(object):
     def common_check(user_name, password, role):
         """登录"""
         try:
+            user_info = {}
             # 后台用户
             if role == 1:
                 user_info = Login.get_user_by_admin(db.read_db, user_name, password)
-            # TODO 城市经理
+            # 城市经理
             elif role == 4:
-                pass
+                user_info = Login.get_user_by_city_manage(db.read_bi, user_name, password)
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='用户身份错误'))
 
@@ -38,11 +39,9 @@ class LoginDecorator(object):
             locations = []
             # 后台
             if role == 1:
-                # result = RegionsModel.get_admin_region(db.read_db)
-                # locations = [i['id'] for i in result]
                 locations = [i for i in init_regions.region if init_regions.region[i]['level'] == 1]
             elif role == 4:
-                pass
+                locations = [user_info['region_id']]
 
             # 登录
             result = sessionOperationClass.insert(user_info, role, locations)

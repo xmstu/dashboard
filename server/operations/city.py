@@ -53,7 +53,7 @@ class CityNearbyCars(object):
             vehicle = CityNearbyCarsModel.get_driver(db.read_db, ids)
             if not vehicle:
                 return Response(data={}, goods_type=goods_type)
-            # 常驻地
+            # 常驻地-车辆认证地址
             driver_ids = [i['user_id'] for i in vehicle]
             ids = '(%s)' % ', '.join([str(i) for i in set(driver_ids)])
             usual_regions = CityNearbyCarsModel.get_usual_region(db.read_bi, ids)

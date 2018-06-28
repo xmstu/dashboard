@@ -39,11 +39,8 @@ class UserStatistic(object):
 
             # 当前权限下所有地区
             role, locations_id = sessionOperationClass.get_locations()
-            # 选择地区或者非管理员全部地区
             if role in (2, 3, 4) and not region_id:
-                region_id = set("'"+init_regions.get_city_level(i)['short_name']+"'" for i in locations_id if init_regions.get_city_level(i)['short_name'])
-            elif region_id:
-                region_id = "'"+init_regions.get_city_level(region_id)['short_name']+"'"
+                region_id = locations_id
 
             params = {
                 'start_time': start_time,

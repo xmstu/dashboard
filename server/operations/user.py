@@ -25,8 +25,18 @@ class UserStatisticDecorator(object):
     @staticmethod
     @make_decorator
     def get_user_statistic(params):
-        # 用户常驻地还没更新，先用手机号归属地应付一下
-        user_statistic = UserStatistic.get_user_statistic_by_mobile(db.read_db, params)
+        """用户变化趋势统计"""
+        # 用户常驻地
+        user_ids = None
+        if params['region_id']:
+            # 用户自选
+            if isinstance(params['region_id'], int):
+                user_ids = UserList.get_user_home_station_by_int(db.read_bi, params['region_id'])
+            # 非管理员默认地区
+            elif isinstance(params['region_id'], list):
+                user_ids = UserList.get_user_home_station_by_list(db.read_bi, params['region_id'])
+
+        user_statistic = UserStatistic.get_user_statistic_by_mobile(db.read_db, params, user_ids)
         before_user_count = 0
         if params['user_type'] == 2:
             before_user_count = UserStatistic.get_before_user_count_by_mobile(db.read_db, params)
