@@ -258,7 +258,7 @@ class CityOrderListModel(object):
             'goods_detail': goods_detail if goods_detail else [],
             'goods_counts': goods_counts['goods_counts'] if goods_counts else 0,
         }
-        log.info('获取最新接单货源数据成功: [params: %s]' % params)
+
         return data
 
 

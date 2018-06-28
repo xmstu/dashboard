@@ -7,12 +7,7 @@ setTimeout(function () {
      $('.user-menu-about > a >i').addClass("select-active")
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);
-$('#area_select').address({
-    offsetLeft: '0',
-    level: 3,
-    onClose: function () {
-    }
-});
+
 layui.use(['laydate', 'layer', 'form', 'table'], function () {
     dataInit();
     var laydate = layui.laydate;
@@ -229,9 +224,7 @@ $('#user_search_box').on('click', function (e) {
     var finishTime = $.trim($('#date_show_four').val());
     var infinteTime = $.trim($('#date_show_five').val());
     var overTIme = $.trim($('#date_show_six').val());
-    var provinceid = $.trim($('#area_select').attr('provinceid'));
-    var cityid = $.trim($('#area_select').attr('cityid'));
-    var districtsid = $.trim($('#area_select').attr('districtsid'));
+    var region_id = $.trim($('#area_select').val());
     if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
         layer.msg('请检查用户名号码长度!', function () {
 
@@ -297,9 +290,7 @@ $('#user_search_box').on('click', function (e) {
         download_ch: $.trim($('#download_ch').val()),
         from_channel: $.trim($('#register').val()),
         is_referenced: $.trim($('#is_referenced').val()),
-        home_station_province: provinceid,
-        home_station_city: cityid,
-        home_station_county: districtsid,
+        region_id: $.trim($('#area_select').val()),
         role_type: $.trim($('#role_type').val()),
         role_auth: $.trim($('#role_auth').val()),
         is_actived: $.trim($('#is_actived').val()),

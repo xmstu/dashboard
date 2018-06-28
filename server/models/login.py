@@ -57,18 +57,21 @@ class Login(object):
     @staticmethod
     def get_user_by_city_manage(cursor, account, password):
         """城市经理登录"""
-        command = """
-        SELECT
-        id,
-        account AS mobile,
-        user_name,
-        avatar_url,
-        region_id
-        
-        FROM tb_inf_city_manager
-        WHERE account = :account AND `password` = :password AND is_deleted = 0
-        """
-        result = cursor.query_one(command, {'account': account, 'password': password})
+        try:
+            command = """
+            SELECT
+            id,
+            account AS mobile,
+            user_name,
+            avatar_url,
+            region_id
+            
+            FROM tb_inf_city_manager
+            WHERE account = :account AND `password` = :password AND is_deleted = 0
+            """
+            result = cursor.query_one(command, {'account': account, 'password': password})
 
-        log.info('获取后台登录用户sql参数: [account: %s][password: %s]' % (account, password))
-        return result if result else None
+            log.debug('获取后台登录用户sql参数: [account: %s][password: %s]' % (account, password))
+            return result if result else None
+        except Exception as e:
+            log.warn('城市经理登录失败 [error: %s]' % e)

@@ -185,8 +185,13 @@
                                 <div class="layui-inline">
                                     <label class="layui-form-label">常驻地</label>
                                     <div class="layui-input-inline">
-                                        <input id="area_select" type="tel" name="phone" placeholder="请选择地址"
-                                               autocomplete="off" class="layui-input" disabled="disabled">
+                                        <select id="area_select" name="modules" lay-verify="required" lay-search="">
+                                            <option value="">全部地区</option>
+                                            {% for location in locations %}
+                                            <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -52,7 +52,7 @@ class OrderList(Resource):
             limit=get_arg_int('limit', 10),
             params=get_all_arg())
 
-        log.info('resp:{}'.format(resp))
+        log.info('获取订单列表参数{}'.format(resp))
         return resp
 
 

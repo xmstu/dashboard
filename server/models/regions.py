@@ -74,5 +74,5 @@ class RegionsModel(object):
         """
         result = cursor.query(command)
 
-        log.info('获取内部用户地区')
+        log.debug('获取内部用户地区')
         return result if result else []

@@ -55,7 +55,7 @@ def cors(resp):
 @app.errorhandler(HTTPStatus.NotFound)
 def page_not_found(e):
    log.warn('访问了未知路径: [error: %s]' % (e, ), exc_info=True)
-   return render_template('/exception/404.html', status_coder=404, title='资源未找到', content='访问了未知路径: [error: %s]' % e)
+   return render_template('/exception/except.html', status_coder=404, title='资源未找到', content='访问了未知路径: [error: %s]' % e)
 
 
 @app.errorhandler(HTTPStatus.BadRequest)

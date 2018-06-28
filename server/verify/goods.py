@@ -80,7 +80,7 @@ class GoodsList(object):
                 "load_start_time": load_start_time,
                 "load_end_time": load_end_time,
             }
-            log.info("params:{}".format(params))
+            log.debug("货源列表验证参数{}".format(params))
             return Response(page=page, limit=limit, params=params)
 
         except Exception as e:

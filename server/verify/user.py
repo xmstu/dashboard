@@ -72,11 +72,7 @@ class UserList(object):
             from_channel = params.get('from_channel') if params.get('from_channel') else ''
 
             is_referenced = int(params.get('is_referenced')) if params.get('is_referenced') else 0
-
-            home_station_province = int(params.get('home_station_province')) if params.get('home_station_province') else 0
-            home_station_city = int(params.get('home_station_city')) if params.get('home_station_city') else 0
-            home_station_county = int(params.get('home_station_county')) if params.get('home_station_county') else 0
-
+            region_id = int(params.get('region_id')) if params.get('region_id') else 0
             role_type = int(params.get('role_type')) if params.get('role_type') else 0
             role_auth = int(params.get('role_auth')) if params.get('role_auth') else 0
             is_actived = int(params.get('is_actived')) if params.get('is_actived') else 0
@@ -89,8 +85,6 @@ class UserList(object):
 
             register_start_time = int(params.get('register_start_time')) if params.get('register_start_time') else 0
             register_end_time = int(params.get('register_end_time')) if params.get('register_end_time') else 0
-
-            region_id = None
 
             # 检验最后登陆时间
             if not compare_time(last_login_start_time, last_login_end_time):
@@ -112,9 +106,7 @@ class UserList(object):
                 'download_ch': download_ch,
                 'from_channel': from_channel,
                 'is_referenced': is_referenced,
-                'home_station_province': home_station_province,
-                'home_station_city': home_station_city,
-                'home_station_county': home_station_county,
+                'region_id': region_id,
                 'role_type': role_type,
                 'role_auth': role_auth,
                 'is_actived': is_actived,
@@ -123,14 +115,13 @@ class UserList(object):
                 'last_login_start_time': last_login_start_time,
                 'last_login_end_time': last_login_end_time,
                 'register_start_time': register_start_time,
-                'register_end_time': register_end_time,
-                'region_id': region_id
+                'register_end_time': register_end_time
             }
 
-            log.info("Response:{}".format(params))
+            log.debug("用户列表验证参数{}".format(params))
 
             return Response(page=page, limit=limit, params=params)
 
         except Exception as e:
-            log.info("Error:{}".format(e))
+            log.warn("用户列表验证参数错误{}".format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))

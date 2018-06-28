@@ -38,7 +38,7 @@ class CityResourceBalance(object):
             'region_id': region_id,
             'goods_type': goods_type
         }
-        log.info('获取供需平衡数据统计检查参数: [region_id: %s][goods_type: %s][start_time: %s][end_time: %s]'
+        log.debug('获取供需平衡数据统计检查参数: [region_id: %s][goods_type: %s][start_time: %s][end_time: %s]'
                  % (params['region_id'], params['goods_type'], params['start_time'], params['end_time']))
         return Response(params=params)
 

@@ -251,8 +251,6 @@ class GoodsList(object):
 
         goods_detail = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
-        log.info('goods_detail:{}'.format(goods_detail))
-
         goods_list = {'goods_detail': goods_detail if goods_detail else [],
                       'goods_count': goods_count if goods_count else 0}
 

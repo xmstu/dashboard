@@ -23,7 +23,7 @@ class GoodsList(Resource):
             limit=get_arg_int('limit', 10),
             params=get_all_arg())
 
-        log.info('resp:{}'.format(resp))
+        log.debug('获取货源列表请求参数{}'.format(resp))
         return resp
 
 
