@@ -25,6 +25,7 @@ input:-moz-placeholder {
 input:-ms-input-placeholder {
     color: #ccc;
 }
+
 @keyframes bounceIn {
     from, 20%, 40%, 60%, 80%, to {
         animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
@@ -88,16 +89,19 @@ body {
     position: relative;
     border-right: 1px solid rgba(0, 0, 0, .1);
 }
+
 .header-left > a {
     display: block;
     width: 98%;
     height: 100%;
     padding-left: 8px;
 }
+
 .header-left > a > img {
     margin-top: 22px;
     width: 100%;
 }
+
 .header-content {
     width: 64%;
     height: 100%;
@@ -108,6 +112,7 @@ body {
     padding-top: 10px;
     color: #fff;
 }
+
 .header-content-main {
     border-radius: 30px;
     color: #FFFFFF;
@@ -282,17 +287,15 @@ body {
 }
 
 .nav-header > p > i:nth-child(1) {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     text-align: center;
-    line-height: 30px;
+    line-height: 25px;
     color: #fff;
-    font-size: 18px;
+    font-size: 13px;
     border: 1px solid #fff;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    display: inline-block;
+    border-radius: 3px;
+    display: inline-block
 }
 
 .nav-content {
@@ -323,6 +326,17 @@ body {
     border-radius: 0;
 }
 
+.menu-line {
+    height: 364px;
+    position: absolute;
+    width: 1px;
+    background: #bbb;
+    top: -340px;
+    left: 18px;
+}
+.charts-area-three, .charts-area-four{
+    padding-top: 10px;
+}
 /*--------------------------header-------------------------*/
 .main-content > .main-content-left {
     width: 8%;
@@ -349,6 +363,7 @@ body {
     width: 94%;
     margin: 10px 4% 0 2%;
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0.1);
+    padding-top: 8%;
 }
 
 .layui-nav-tree .layui-nav-item a:hover {
@@ -360,68 +375,45 @@ body {
 }
 
 .layui-nav-item {
-    line-height: 42px !important;
+    line-height: 38px !important;
+    margin-bottom: 10px;
 }
 
-.layui-nav-item > a > i:nth-child(1) {
-    vertical-align: bottom;
-    margin-right: 4%;
-    display: inline-block;
-    width: 40px;
-    text-align: center;
-}
-
-.layui-nav-item:nth-child(4) > a > i {
-    font-size: 15px;
-}
-
-.layui-nav-item > a > i.icon-dingdan {
-    font-size: 18px;
-}
-
-.layui-nav-item > u {
-    position: absolute;
-    width: 3px;
-    background: #eee;
-    height: 44px;
-    left: -2px;
-    top: -1px;
-    display: none;
-}
-
-.layui-nav-item > u::after {
-    position: absolute;
-    width: 0;
-    height: 0;
-    box-sizing: content-box;
-    border-width: 6px;
-    border-style: solid;
-    content: '';
-    top: 20px;
-    left: 2px;
-}
-
-.layui-nav-item {
-    border-bottom: 1px solid rgba(107, 108, 109, 0.19) !important;
-}
-
-nav.main-content-left .layui-nav-tree .layui-nav-item > a {
-    line-height: 40px;
-    height: 40px;
-    text-align: left;
-    padding-left: 0;
-    color: #fff;
+.layui-nav .layui-nav-item i {
     font-size: 13px;
 }
 
+.layui-nav-item > a > i:nth-child(1) {
+    margin-right: 10%;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    border-radius: 50%;
+    background: #009688;
+    line-height: 24px;
+    margin-left: 6%;
+    position: relative;
+    z-index: 999;
+}
+.layui-nav-item:nth-child(4) > a > i {
+    font-size: 13px;
+}
+.layui-form-item {
+    margin-bottom: 10px;
+}
+nav.main-content-left .layui-nav-tree .layui-nav-item > a {
+    line-height: 38px;
+    height: 38px;
+    text-align: left;
+    padding-left: 0;
+    color: #dee;
+    font-size: 12px;
+    font-weight: bold;
+}
 .layui-nav-tree .layui-nav-item > a:hover {
     text-shadow: none !important;
     color: #ccc !important;
-}
-
-.layui-nav-tree .layui-nav-item a:hover i:nth-child(1) {
-    background: #fff !important;
-    color: #000;
 }
 
 .layui-nav-tree .layui-nav-item a i:nth-child(2) {
@@ -433,11 +425,6 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 
 .selected-active {
     color: #ccc !important;
-}
-
-.select-active {
-    background: #fff !important;
-    color: #000;
 }
 
 .layui-nav-tree .layui-nav-item a i:nth-child(2):hover {
@@ -581,7 +568,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 }
 
 .main-content .layui-form-pane .layui-input-block {
-    margin-left: 4.29rem;
+    margin-left: 66px;
 }
 
 .part-2 .layui-form-item {
@@ -601,20 +588,20 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 }
 
 .main-content .layui-form-pane .layui-form-label {
-    height: 30px;
-    line-height: 30px;
+    height: 29px;
+    line-height: 29px;
     padding: 0 8px;
-    font-size: 0.79rem;
+    font-size: 12px;
 }
 
 .main-content-right .layui-input {
-    height: 30px;
+    height: 29px;
     background: transparent;
 }
 
 .layui-btn {
-    height: 30px;
-    line-height: 30px;
+    height: 29px;
+    line-height: 29px;
     margin-left: 0;
 }
 
@@ -660,7 +647,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 .main-content-right .layui-input {
     position: relative;
     z-index: 9;
-    font-size: 0.79rem;
+    font-size: 12px;
 }
 
 .layui-form-select dl {
@@ -737,13 +724,6 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
 .content-show:nth-of-type(2) ul {
     background-color: #99c262;
 }
-
-.charts-area-two,
-.charts-area-three,
-.charts-area-four {
-    padding: 16px;
-}
-
 .river {
     height: 4px;
     background: #f5f5f5;
@@ -878,15 +858,18 @@ body {
     right: 1.4rem;
     bottom: 1.4rem;
 }
+
 #scrollUp {
     width: 3rem;
     height: 3rem;
     display: none;
 }
-#scrollUp>i {
+
+#scrollUp > i {
     font-size: 2.4rem;
     color: #009688;
 }
+
 @media screen and (min-width: 1650px) {
     .main-content > .main-content-left {
         max-width: 178px !important;

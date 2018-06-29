@@ -251,9 +251,10 @@ var setAbout = {
                     lineColor: '#eee',
                     lineWidth: 1,
                     marker: {
-                        radius: 3,
+                        radius: 2.5,
                         lineWidth: 1,
                         lineColor: '#666666',
+                        fillColor:'#fff',
                         symbol: 'circle',
                         states: {
                             hover: {
@@ -464,13 +465,19 @@ var setAbout = {
                             var result = $(this).text().split('\n');
                             $(this).html('<i class="iconfont icon-fabu mr-4"  title="发布时间" style="font-weight: 500;color: deepskyblue;"></i><span style="">' + result[0] + '</span><br><i style="font-weight: 500;color: deepskyblue;" class="mr-4 iconfont icon-huowu1" title="装货时间"></i><span>' + result[1])
                         }
-                    })
+                    });
                     $("td[data-field='time_field']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
                             $(this).html('<i class="zhuanghuo">接单</i>：' + result[1] + '<br><i class="fahuo">完成</i>：<span style="">' + result[0] + '</span>')
                         }
-                    })
+                    });
+                      $("td[data-field='order_status']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            $(this).html(result[1] + '<br>' + result[0])
+                        }
+                    });
                     $("td[data-field='driver']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');

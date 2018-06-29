@@ -347,9 +347,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         active[type] ? active[type].call(this) : '';
     });
 });
-Highcharts.setOptions({
-    colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
-});
+
 var chart = Highcharts.chart('charts_container_one', {
     chart: {
         type: 'funnel',
@@ -405,7 +403,7 @@ var dataSet = {
                 if (len > 0 && len < 20) {
                     Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 1)
                 } else if (len > 20 && len < 50) {
-                    Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 2)
+                    Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 3)
                 } else if (len > 50) {
                     Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 5)
                 }
@@ -444,9 +442,9 @@ var dataSet = {
                         var str = '';
                         str += '<tr>'
                         str += '<td>' + i + '</td>'
-                        str += '<td class="cancel-reason-name-"' + i + '>' + cancel_list_dict[i].canceled_reason_text + '</td>';
-                        str += '<td class="cancel-reason-count-"' + i + '>' + cancel_list_dict[i].reason_count + '单</td>'
-                        str += '<th class="cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>'
+                        str += '<td class=" cancel-reason-name-"' + i + '>' + cancel_list_dict[i].canceled_reason_text + '</td>';
+                        str += '<td class="table-order-count cancel-reason-count-"' + i + '><span>' + cancel_list_dict[i].reason_count + '单</span></td>'
+                        str += '<th class=" cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>'
                         str += '<tr>'
                         $('.cancel-reason-types').append(str)
                     }
@@ -458,6 +456,9 @@ var dataSet = {
 }
 
 function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_series, goods_user_count_series, interval) {
+    Highcharts.setOptions({
+    colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
+});
     $('#charts_container_two').highcharts({
         chart: {
             zoomType: 'xy'
@@ -605,7 +606,7 @@ function Chart_third(dataArr, chartsTitle) {
                     formatter: function () {
                         if (this.percentage > 4) return this.point.name;
                     },
-                    color: 'white',
+                    color: 'black',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
                         font: '12px Trebuchet MS, Verdana, sans-serif'
@@ -614,12 +615,12 @@ function Chart_third(dataArr, chartsTitle) {
             }
         },
         legend: {
-            backgroundColor: '#FFFFFF',
+            //backgroundColor: '#FFFFFF',
             x: 0,
             y: -30
         },
         credits: {
-            enabled: false
+            enabled: true
         },
         series: [{
             type: 'pie',
