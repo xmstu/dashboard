@@ -50,7 +50,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#1E9FFF',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -62,7 +62,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_two',
         theme: '#1E9FFF',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -74,7 +74,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#create_start_time',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -90,7 +90,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#create_end_time',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -136,7 +136,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#start_date_one',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[4]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -159,7 +159,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#end_time_one',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -183,7 +183,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#start_date_two',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[4]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -199,7 +199,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#end_time_two',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -215,7 +215,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#start_date_three',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[4]),
+        max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -238,7 +238,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#end_time_three',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },

@@ -22,7 +22,8 @@ var dataSet = {
             var table = layui.table;
             laydate.render({
                 elem: '#date_show_three',
-                theme: '#1E9FFF',
+                theme: '#009688',
+                max: String(common.getNowFormatDate()[0]),
                 calendar: true,
                 ready: function () {
 
@@ -37,9 +38,9 @@ var dataSet = {
             });
             laydate.render({
                 elem: '#date_show_four',
-                theme: '#1E9FFF',
+                theme: '#009688',
                 calendar: true,
-                max: String(common.getNowFormatDate()[3]),
+                max: String(common.getNowFormatDate()[0]),
                 ready: function () {
                 },
                 done: function (val, index) {
