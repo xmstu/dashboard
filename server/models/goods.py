@@ -32,10 +32,14 @@ class GoodsList(object):
                 shf_goods.mileage_total,
                 shf_goods.STATUS,
                 CASE WHEN
-                ((shf_goods.loading_time_is_realtime = 1 AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600)
-                OR (shf_goods.loading_time_is_realtime = 0 
-                AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_end)>0 
-                OR (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(shf_goods.loading_time_date))>0))) THEN 1 ELSE 0 END AS expire,
+                (
+                shf_goods.STATUS IN ( 1, 2 ) 
+                AND (
+                    ( shf_goods.loading_time_is_realtime = 1 AND ( UNIX_TIMESTAMP( ) - expired_timestamp ) > 600 ) 
+                    OR ( shf_goods.loading_time_is_realtime = 0 AND ( UNIX_TIMESTAMP( ) > expired_timestamp ) ) 
+                )
+                )
+                THEN 1 ELSE 0 END AS expire,
                 -- 旧车型
                 (SELECT IF(shf_goods_vehicles.attribute_value_id = 0, '不限车型', GROUP_CONCAT(shm_dictionary_items.`name`))
                 FROM shf_goods_vehicles
@@ -158,11 +162,13 @@ class GoodsList(object):
             if params['goods_status'] == 3:
                 fetch_where += ' AND shf_goods.status = -1 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP() '
             if params['goods_status'] == 4:
-                fetch_where += """ AND shf_goods.status IN (1, 2)
-                                AND ((shf_goods.loading_time_is_realtime = 1 AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600)
-                                OR (shf_goods.loading_time_is_realtime = 0 
-                                AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_end)>0 
-                                OR (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(shf_goods.loading_time_date))>0))) """
+                fetch_where += """ 
+                                AND shf_goods.STATUS IN ( 1, 2 ) 
+                                AND (
+                                    ( shf_goods.loading_time_is_realtime = 1 AND ( UNIX_TIMESTAMP( ) - expired_timestamp ) > 600 ) 
+                                    OR ( shf_goods.loading_time_is_realtime = 0 AND ( UNIX_TIMESTAMP( ) > expired_timestamp ) ) 
+                                )
+                                """
 
         # 是否通话
         if params['is_called']:
