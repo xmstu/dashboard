@@ -97,7 +97,6 @@ function dataInit() {
             for (var i = 0; i < arr.length; i++) {
                 str += '<li class="charts-lists"><div class="charts-container" id="charts_container_' + i + '"></div><div class="data-list-container' + i + '"></li>';
                 $('.data-list-container0').append($('.tip-list-show0'))
-                console.log($('.tip-list-show0'))
             }
             $('.part-1-bottom ul').empty();
             $('.part-1-bottom ul').append(str);

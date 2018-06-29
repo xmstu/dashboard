@@ -301,8 +301,7 @@ body {
 .nav-content {
     width: 100%;
     text-align: left;
-    padding-left: 12px;
-    padding-right: 6px;
+    padding-top: 6%;
     color: #eee;
     font-size: 13px;
     line-height: 30px;
@@ -314,12 +313,19 @@ body {
     white-space: nowrap;
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
+    text-align: center;
 }
-
-.nav-header > p > span {
+.nav-content > p > img {
+    width: 50%;
+    height: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+.nav-content > p > strong {
     font-size: 15px;
-    display: inline-block;
-    margin-left: 14px;
+    display: block;
+    text-align: center;
 }
 
 .layui-nav {
@@ -603,8 +609,14 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     height: 29px;
     line-height: 29px;
     margin-left: 0;
+    font-size: 12px;
 }
-
+.layui-btn>i{
+    vertical-align: bottom;
+}
+.layui-table-body .layui-btn>i{
+    vertical-align: middle;
+}
 .icon-caidan {
     cursor: pointer;
 
