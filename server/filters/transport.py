@@ -2,7 +2,7 @@ from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus
 
 
-class TransportTrend(object):
+class TransportRadar(object):
 
     @staticmethod
     @make_decorator
