@@ -4,21 +4,24 @@
 }
 .phone-number {
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid #dee;
     font-size:13px;
     padding:0 12px;
     line-height:32px;
     vertical-align: top;
 }
-#add_users {
+#add_users,#add_users_name {
     padding-left: 25px;
     font-size:12px;
     font-weight: normal;
-    border:1px solid #ccc;
+    border:1px solid #dee;
     line-height: 32px;
     border-left:none;
 }
-.icon-dianhua {
+#add_users{
+    margin-bottom: 10px;
+}
+.icon-dianhua,.icon-guanliyuan {
     position: absolute;
     color: #bbb;
     font-size:15px;

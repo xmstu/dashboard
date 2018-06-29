@@ -7,98 +7,15 @@
     <link rel="stylesheet" href="../static/layui/css/layui.css">
     <link rel="stylesheet" href="../static/css/common.css">
     <link rel="stylesheet" href="../static/css/iconfont.css">
-    <style>.layui-form-item .layui-inline {
-        margin-right: 0;
-    }</style>
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
     {% include '/header/header.html' %}
     <article class="main-content">
         {% include '/menu/menu.html' %}
-        <!--<aside class="main-content-right">
+        <aside class="main-content-right">
             <div>
                 <div class="m-c-l-content">
-                    <div class="content-header">
-                        <h2><i class="iconfont icon-qushi1"></i>运力趋势统计</h2>
-                        <hr>
-                    </div>
-                    <div class="part-1">
-                        <div class="part-1-top">
-                            <form action="" class="layui-form layui-form-pane">
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
-                                        <label class="layui-form-label">开始日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_one" name="date_one" autocomplete="off"
-                                                   lay-verify="date" class="layui-input" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
-                                        <label class="layui-form-label">结束日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_two" name="date_two" autocomplete="off"
-                                                   lay-verify="date_show_two" class="layui-input" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <ul class="periods">
-                                    <li>
-                                        <button class="active" value="2" id="day_methods">按日</button>
-                                    </li>
-                                    <li>
-                                        <button value="3" id="week_methods">按周</button>
-                                    </li>
-                                    <li>
-                                        <button value="4" id="month_methods">按月</button>
-                                    </li>
-                                </ul>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width: 140px">
-                                            <select id="user_type" name="modules" lay-verify="required" lay-search="">
-                                                <option value="">全部地区</option>
-                                                <option value="1">天河区</option>
-                                                <option value="2">越秀区</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item" style="width:232px;">
-                                    <div class="layui-inline" style="">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width:140px;">
-                                            <select id="role_type_first" name="modules" lay-verify="required"
-                                                    lay-search="">
-                                                <option value="0">小面包车</option>
-                                                <option value="1">小货车</option>
-                                                <option value="2">中面包车</option>
-                                                <option value="3">4.2m</option>
-                                                <option value="4">7.6m</option>
-                                                <option value="5">9.6m</option>
-                                                <option value="6">13m</option>
-                                                <option value="7">17m</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button id="search_btn" style="position: relative;padding-left: 20px;"
-                                        class="layui-btn layui-btn-normal"><i style=""
-                                                                              class="iconfont icon-sousuo1"></i> 搜索
-                                </button>
-                            </form>
-                        </div>
-                        <div class="part-1-bottom">
-                            <div id="charts_container_one" style="height: 100%"></div>
-                            <div class="chart-tips">未查询到数据</div>
-                        </div>
-
-                    </div>
                     <div class="part-2">
                         <div class="part-2-top">
                             <h2><i class="iconfont icon-leidatu"></i>运力雷达图</h2>
@@ -302,20 +219,20 @@
 
                     </div>
                 </div>
-            </div>f
-        </aside>-->
-         {% include '/exception/unfinished.html' %}
+            </div>
+        </aside>
     </article>
 </article>
 <script src="../static/js/libs/jquery-2.1.1.min.js"></script>
  <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
  <script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
  <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+ <script src="https://img.hcharts.cn/highcharts/themes/grid-light.js"></script>
 <script src="../static/js/libs/jquery.address.js"></script>
 <script src="../static/layui/layui.js"></script>
 <script src="../static/js/common/common.js"></script>
 <script src="../static/js/common/http.js"></script>
-<script src="../static/js/transport/transport.js"></script>
+<script src="../static/js/transport/transport.js?version=1.0.0"></script>
 </body>
 </html>
 

@@ -112,19 +112,29 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
 });
 $('#add_promote_person').on('click', function (e) {
     e.preventDefault();
-    var str = "<p  style='position: relative;'><span class='phone-number'>输入号码</span><i class='iconfont icon-dianhua'></i><input id='add_users' maxlength='11' type='text' placeholder='请输入添加人的号码'></p> ";
+    var str = "<p  style='position: relative;'><span class='phone-number'>人员号码</span><i class='iconfont icon-dianhua'></i><input id='add_users' maxlength='11' type='text' placeholder='请输入添加人的号码'></p> ";
+    str += "<p  style='position: relative;'><span class='phone-number'>人员姓名</span><i class='iconfont icon-guanliyuan'></i><input id='add_users_name'  type='text' placeholder='请输入推广人的姓名'></p>";
     layer.confirm(str, {
+        skin: 'layui-layer-molv',
         title: '新增推广人员',
         btn: ['确定添加', '取消']
     }, function () {
         var url = '/promote/effect/';
         var mobile = $('#add_users').val();
+        var username = $('#add_users_name').val();
         var data = {
             "mobile": mobile
         }
         if (mobile == '' || mobile.length != 11) {
-            layer.msg('请检查手机号');
-            return false
+            layer.tips('请检查您输入的的手机号码格式','#add_users', {
+                tips: [1, '#3595CC'],
+                time: 3000
+            });
+        } else if (username == '') {
+            layer.tips('请输入推广人员姓名','#add_users_name', {
+                tips: [1, '#3595CC'],
+                time: 3000
+            });
         } else {
             $.ajax({
                 url: url,
@@ -278,7 +288,7 @@ function lineChartInit(xAxis, series, interval, str_title, names, units) {
             line: {
                 dataLabels: {
                     enabled: true,
-                     formatter: function () {
+                    formatter: function () {
                         return this.point.y > 0 ? this.point.y + '人' : this.point.y;
                     }
                 },
@@ -431,7 +441,7 @@ var pageSet = {
                                                 start_time: requestStrat,
                                                 end_time: endRequest
                                             },
-                                            loading:true
+                                            loading: true
                                         });
                                     } else {
                                         layer.msg('删除失败。', {icon: 5});
@@ -451,7 +461,7 @@ var pageSet = {
 
                 }
                 , page: true
-                ,id: 'dataTable'
+                , id: 'dataTable'
             });
 
             $('.demoTable .layui-btn').on('click', function () {
