@@ -61,13 +61,30 @@ class PromoteEffect(object):
             
     @staticmethod
     @make_decorator
-    def check_add_params(user_id, mobile):
+    def check_add_params(role, user_id, payload):
+        mobile = payload.get('mobile', '')
+        user_name = payload.get('user_name', '')
+        if role != 4:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='非城市经理不能添加推广人员'))
         if not user_id:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='管理员id不存在'))
         if not Check.is_mobile(mobile):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='手机号非法'))
-        return Response(user_id=user_id, mobile=mobile)
+        if not user_name:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推广人姓名不能为空'))
+        return Response(user_id=user_id, mobile=mobile, user_name=user_name)
 
+
+    @staticmethod
+    @make_decorator
+    def check_delete_params(role, user_id, promoter_id):
+        if role != 4:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='非城市经理不能删除推广人员'))
+        if not user_id:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='管理员id不存在'))
+        if not promoter_id:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推广人员不存在'))
+        return Response(user_id=user_id, promoter_id=promoter_id)
 
 class PromoteQuality(object):
 

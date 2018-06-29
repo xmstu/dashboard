@@ -11,7 +11,8 @@ from server.status import HTTPStatus, make_result, APIStatus
 from server import api
 from server import verify, operations, filters
 from server.meta.decorators import Response
-from server.utils.request import get_all_arg, get_arg_int, get_arg
+from server.utils.request import get_all_arg, get_arg_int, get_arg, get_payload
+from server.meta.session_operation import sessionOperationClass
 
 class PromoteQuality(Resource):
     @staticmethod
@@ -48,30 +49,25 @@ class PromoteEffect(Resource):
     @doc.request_promote_effect_add_param
     @doc.response_promote_effect_add_param_success
     @filters.PromoteEffect.get_add_data(result=int)
-    @operations.PromoteEffectDecorator.add_extension_worker(user_id=int, mobile=str, admin_type=int)
-    @verify.PromoteEffect.check_add_params(user_id=int, mobile=str, admin_type=int)
+    @operations.PromoteEffectDecorator.add_extension_worker(user_id=int, mobile=str, user_name=str)
+    @verify.PromoteEffect.check_add_params(role=int, user_id=int, payload=dict)
     def post():
         """新增推广人员"""
-        if not session.get('login'):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
-        user_id = session['login'].get('user_id', 0)
-        admin_type = session['login'].get('role', 0)
-        mobile = get_arg('mobile', '')
-        return Response(user_id=user_id, mobile=mobile, admin_type=admin_type)
+        role, user_id = sessionOperationClass.get_role()
+        payload = get_payload()
+        return Response(role=role, user_id=user_id, payload=payload)
 
 class PromoteDelete(Resource):
     @staticmethod
     @doc.response_promote_effect_delete_param_success
-    @filters.PromoteEffect.get_delete_data(data=int)
-    @operations.PromoteEffectDecorator.delete_from_tb_inf_promte(user_id=int, admin_type=int, promoter_id=int)
+    @filters.PromoteEffect.get_delete_data(result=int)
+    @operations.PromoteEffectDecorator.delete_promoter(user_id=int, promoter_id=int)
+    @verify.PromoteEffect.check_delete_params(role=int, user_id=int, promoter_id=int)
     def delete(id):
         """删除推广人员"""
-        if not session.get('login'):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
-        user_id = session['login'].get('user_id', 0)
-        admin_type = session['login'].get('role', 0)
+        role, user_id = sessionOperationClass.get_role()
         promoter_id = id
-        return Response(user_id=user_id, admin_type=admin_type, promoter_id=promoter_id)
+        return Response(role=role, user_id=user_id, promoter_id=promoter_id)
 
 
 

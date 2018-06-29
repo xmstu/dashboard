@@ -21,7 +21,7 @@ class PromoteEffectDecorator(object):
         count = len(promoter_mobile)
         referrer_mobile = promoter_mobile[(page-1)*limit:page*limit+1]
         if count == 0:
-            return
+            return Response(result=[], count=0, params=params)
         # 推广列表
         result = PromoteEffectList.get_promote_list(db.read_bi, params, referrer_mobile)
 
@@ -29,13 +29,28 @@ class PromoteEffectDecorator(object):
 
     @staticmethod
     @make_decorator
-    def add_extension_worker(user_id, mobile, admin_type):
-        pass
+    def add_extension_worker(user_id, mobile, user_name):
+        """添加推广人员"""
+        try:
+            # 推广人员是否存在
+            is_alive = PromoteEffectList.check_promoter(db.read_bi, user_id, mobile)
+            if not is_alive:
+                # 添加推广人员
+                result = PromoteEffectList.add_promoter(db.read_bi, user_id, mobile, user_name)
+                return Response(result=result)
+            return Response(result=0)
+        except Exception as e:
+            log.error('添加推广人员失败: [error: %s]' % e)
 
     @staticmethod
     @make_decorator
-    def delete_from_tb_inf_promte(user_id, admin_type, promoter_id):
-        pass
+    def delete_promoter(user_id, promoter_id):
+        """删除推广人员"""
+        try:
+            result = PromoteEffectList.delete_promoter(db.read_bi, user_id, promoter_id)
+            return Response(result=result)
+        except Exception as e:
+            log.error('删除推广人员失败: [error: %s]' % e)
 
 
 class PromoteQualityDecorator(object):

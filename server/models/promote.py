@@ -121,6 +121,49 @@ class PromoteEffectList(object):
         result = cursor.query(command)
         return result if result else []
 
+    @staticmethod
+    def check_promoter(cursor, user_id, mobile):
+        """检查推广人员是否存在"""
+        command = '''
+        SELECT tb_inf_city_manager.id
+        FROM tb_inf_city_manager
+        LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
+        WHERE tb_inf_city_manager.id = :user_id AND tb_inf_city_manager.is_deleted = 0
+        AND tb_inf_promoter.mobile = :mobile '''
+
+        result = cursor.query_one(command, {'user_id': user_id, 'mobile': mobile})
+
+        return result['id'] if result['id'] else None
+
+    @staticmethod
+    def add_promoter(cursor, user_id, mobile, user_name):
+        """添加推广人员"""
+        command = '''
+        INSERT INTO tb_inf_promoter(manager_id, user_name, mobile)
+        VALUES (:manager_id, :user_name, :mobile)
+        '''
+        result = cursor.insert(command, {
+            'manager_id': user_id,
+            'mobile': mobile,
+            'user_name': user_name
+        })
+
+        return result
+
+    @staticmethod
+    def delete_promoter(cursor, user_id, promoter_id):
+        """删除推广人员"""
+        command = '''
+        UPDATE tb_inf_promoter
+        SET is_deleted = 1
+        WHERE manager_id = :user_id AND id = :promoter_id
+        '''
+        result = cursor.update(command, {
+            'user_id': user_id,
+            'promoter_id': promoter_id
+        })
+
+        return result
 
 class PromoteQuality(object):
     @staticmethod
@@ -148,12 +191,12 @@ class PromoteQuality(object):
         AND mobile IN (%s)
         """
         if mobile:
-            command = command % ','.join(mobile)
+            command = command % ','.join(["'"+i+"'" for i in mobile])
         else:
             return []
         result = cursor.query(command)
 
-        return [i['id'] for i in result] if result else []
+        return [str(i['id']) for i in result] if result else []
 
     @staticmethod
     def get_new_users(cursor, params, promoter_ids=None):
@@ -168,9 +211,13 @@ class PromoteQuality(object):
             %s
             GROUP BY FROM_UNIXTIME(create_time, '%%%%Y-%%%%m-%%%%d')"""
 
-            # 城市经理权限
-            if not promoter_ids:
+            # 城市经理且推广人员为空
+            if params['role'] == 4 and not promoter_ids:
+                command = command % 'AND referrer_user_id IN (0) '
+            # 非城市经理查看所有人
+            elif not promoter_ids:
                 command = command % ''
+            # 城市经理且有推广人员
             else:
                 referrer_user_id = 'AND referrer_user_id IN (%s) ' % ','.join(promoter_ids)
                 command = command % referrer_user_id
@@ -189,9 +236,13 @@ class PromoteQuality(object):
                 AND is_deleted = 0
                 %s """
 
-                # 城市经理权限
-                if not promoter_ids:
+                # 城市经理且推广人员为空
+                if params['role'] == 4 and not promoter_ids:
+                    command = command % 'AND referrer_user_id IN (0) '
+                # 非城市经理查看所有人
+                elif not promoter_ids:
                     command = command % ''
+                # 城市经理且有推广人员
                 else:
                     referrer_user_id = 'AND referrer_user_id IN (%s) ' % ','.join(promoter_ids)
                     command = command % referrer_user_id
@@ -291,9 +342,13 @@ class PromoteQuality(object):
             else:
                 return []
 
-            # 城市经理权限
-            if not promoter_ids:
+            # 城市经理且推广人员为空
+            if params['role'] == 4 and not promoter_ids:
+                command = command % 'AND referrer_user_id IN (0) '
+            # 非城市经理查看所有人
+            elif not promoter_ids:
                 command = command % ''
+            # 城市经理且有推广人员
             else:
                 referrer_user_id = 'AND referrer_user_id IN (%s) ' % ','.join(promoter_ids)
                 command = command % referrer_user_id
@@ -397,9 +452,13 @@ class PromoteQuality(object):
             else:
                 return []
 
-            # 城市经理权限
-            if not promoter_ids:
+            # 城市经理且推广人员为空
+            if params['role'] == 4 and not promoter_ids:
+                command = command % 'AND referrer_user_id IN (0) '
+            # 非城市经理查看所有人
+            elif not promoter_ids:
                 command = command % ''
+            # 城市经理且有推广人员
             else:
                 referrer_user_id = 'AND referrer_user_id IN (%s) ' % ','.join(promoter_ids)
                 command = command % referrer_user_id
