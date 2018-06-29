@@ -62,12 +62,17 @@
     background-color: #777;
     border-radius: 10px;
 }
-.thead-tr {
+.thead-tr,
+.thead-tr-spec >{
     border-bottom: 2px solid #ccc;
 }
 .thead-tr > th{
     font-weight: bold;
     width: 25%;
+}
+.thead-tr-spec > th{
+    font-weight: bold;
+    width: 20%;
 }
 .cancel-reason-types th,
 .cancel-reason-types td {

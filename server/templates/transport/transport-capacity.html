@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../static/layui/css/layui.css?v=1.0.1">
     <link rel="stylesheet" href="../static/css/common.css?v=1.0.1">
     <link rel="stylesheet" href="../static/css/iconfont.css?v=1.0.1">
+    <link rel="stylesheet" href="../static/css/promote/promote.css">
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
@@ -73,9 +74,35 @@
                             </form>
                         </div>
                         <div class="part-2-bottom">
-                            <div id="charts_container_two" style="height: 100%;width: 35%;min-width: 600px;border: 1px dashed #ccc;"></div>
-                            <div id="transport_lists_table" class="transport-lists-table">
-
+                            <div id="charts_container_two"
+                                 style="height: 100%;width: 35%;min-width: 500px;border: 1px dashed #ccc;display: inline-block;"></div>
+                            <div id="transport_lists_table" class="transport-lists-table" style="vertical-align:top;display: inline-block; width: 63%;min-width: 700px;">
+                                <table class="layui-table" lay-even="" style="border-width:0;margin-top: 0;" lay-skin="line">
+                                    <colgroup>
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="200">
+                                        <col>
+                                    </colgroup>
+                                    <thead>
+                                    <tr class="thead-tr-spec">
+                                        <th>车型名称</th>
+                                        <th>货源数</th>
+                                        <th>车辆数</th>
+                                        <th>实际接单数</th>
+                                        <th>所占比率</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>贤心</td>
+                                        <td>汉族</td>
+                                        <td>5678</td>
+                                        <td>1234</td>
+                                        <td>30%</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -153,9 +180,12 @@
                             </div>
                             <span class="mr-4" style="display: inline-block;margin-top: 6px;">至</span>
                             <div class="layui-form-item" style="width: 90px;position: relative;">
-                               <div class="layui-form-block">
-                                   <button id="end_time" style="border: 1px solid #ddd;cursor:not-allowed;width: 70px;height: 30px;background: #fff;color: #ccc;" disabled value="24:00">24:00</button>
-                               </div>
+                                <div class="layui-form-block">
+                                    <button id="end_time"
+                                            style="border: 1px solid #ddd;cursor:not-allowed;width: 70px;height: 30px;background: #fff;color: #ccc;"
+                                            disabled value="24:00">24:00
+                                    </button>
+                                </div>
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline" style="width: 230px">
@@ -183,7 +213,8 @@
                                         </select>
                                     </div>
                                     <div class="layui-input-inline" style="width: 96px;margin-right:-1px">
-                                        <input type="text" maxlength="9" name="distance" lay-verify="required" placeholder="请输入距离"
+                                        <input type="text" maxlength="9" name="distance" lay-verify="required"
+                                               placeholder="请输入距离"
                                                autocomplete="off" class="layui-input">
                                     </div>
                                     <label class="layui-form-label">KM</label>
@@ -226,10 +257,10 @@
     </article>
 </article>
 <script src="../static/js/libs/jquery-2.1.1.min.js?v=1.0.1"></script>
- <script src="https://img.hcharts.cn/highcharts/highcharts.js?v=1.0.1"></script>
- <script src="https://img.hcharts.cn/highcharts/highcharts-more.js?v=1.0.1"></script>
- <script src="https://img.hcharts.cn/highcharts/modules/exporting.js?v=1.0.1"></script>
- <script src="https://img.hcharts.cn/highcharts/themes/grid-light.js?v=1.0.1"></script>
+<script src="https://img.hcharts.cn/highcharts/highcharts.js?v=1.0.1"></script>
+<script src="https://img.hcharts.cn/highcharts/highcharts-more.js?v=1.0.1"></script>
+<script src="https://img.hcharts.cn/highcharts/modules/exporting.js?v=1.0.1"></script>
+<script src="https://img.hcharts.cn/highcharts/themes/grid-light.js?v=1.0.1"></script>
 <script src="../static/js/libs/jquery.address.js?v=1.0.1"></script>
 <script src="../static/layui/layui.js?v=1.0.1"></script>
 <script src="../static/js/common/common.js?v=1.0.1"></script>
