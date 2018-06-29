@@ -18,71 +18,7 @@ var common = {
         layui.use('layer', function () {
             var layer = layui.layer;
         });
-
         $('.main-content-right').addClass('animated fadeIn');
-
-        var nav_menu = $('.icon-caidan');
-
-        nav_menu.on('click', function (e) {
-            e.preventDefault();
-            if ($('.layui-nav-tree').width() == '148') {
-
-                $('.layui-icon-right').animate({'opacity': 0});
-
-                $('.nav-header >p span').css({'display': 'none'});
-
-                $('.nav-header').animate({'width': '56px'});
-
-                $('.layui-nav-tree').css({'margin-left': 0}).animate({'width': '50px'});
-
-                $('.main-content-right').animate({'margin-left': '50px'});
-
-                $(this).css({'transform': 'rotateZ(270deg)', 'transition': 'all 0.4s'});
-
-                $('.layui-nav-item >a').animate({'width': '50px'});
-
-                $('.nav-content span').fadeOut('10');
-
-                $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '50px'});
-
-                $('.part-2 .layui-table').css({'width': '100%'});
-
-                $('#charts_container_one').css({'width': '100%'});
-
-                $('.highcharts-root').css({'width': '100%'});
-
-                return false
-
-            } else if ($('.layui-nav-tree').width() == '50') {
-
-                $('.layui-nav-tree').css({'margin-left': '6px'}).animate({'width': '148'});
-
-                $('.layui-icon-right').animate({'opacity': 0});
-
-                $('.main-content-right').animate({'margin-left': '162px'});
-
-                setTimeout(function () {
-
-                    $('.nav-content span').fadeIn('10');
-
-                    $('.nav-header >p span').fadeIn('10');
-
-                }, 300);
-
-                $('.nav-header').animate({'width': '162px'});
-
-                $(this).css({'transform': 'rotateZ(360deg)', 'transition': 'all 0.4s'});
-
-                $('.layui-nav-item >a').animate({'width': '148px'});
-
-                $('.layui-nav-item > a > i:nth-child(1)').animate({'width': '44px'});
-
-                layer.closeAll('tips');
-
-                return false
-
-            }
-        });
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {
                 skin: 'layui-layer-molv',
@@ -421,14 +357,14 @@ var common = {
         });
     },
     returnTop: function () {
-      $(window).scroll(function () {
-			var scrollTop = $(window).scrollTop();
-			scrollTop > 300 ? $("#scrollUp").fadeIn(150).css("display","block") : $("#scrollUp").fadeOut(150);
-		});
-		$('#scrollUp').click(function (e) {
-			e.preventDefault();
-			$('html,body').animate({ scrollTop:0});
-		});
+        $(window).scroll(function () {
+            var scrollTop = $(window).scrollTop();
+            scrollTop > 300 ? $("#scrollUp").fadeIn(150).css("display", "block") : $("#scrollUp").fadeOut(150);
+        });
+        $('#scrollUp').click(function (e) {
+            e.preventDefault();
+            $('html,body').animate({scrollTop: 0});
+        });
     }
 };
 setTimeout(function () {
@@ -439,7 +375,7 @@ setTimeout(function () {
     common.init();
     common.setLink();
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
-}, 30);
+}, 20);
 setInterval(function () {
     $('.header-content-main').fadeIn('normal');
     $('#date_now').html('');
