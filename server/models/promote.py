@@ -68,23 +68,24 @@ class PromoteEffectList(object):
         referrer.*,
         COUNT(*) AS user_count,
         0 AS wake_up_count,
-        SUM(goods_count_SH) AS goods_count_SH,
-        SUM(goods_count_LH) AS goods_count_LH,
+        IF(SUM(goods_count_SH), SUM(goods_count_SH), 0) AS goods_count_SH,
+        IF(SUM(goods_count_LH), SUM(goods_count_LH), 0) AS goods_count_LH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile) AS goods_user_count,
-        SUM(order_finished_count_SH) AS order_over_count_SH,
-        SUM(order_finished_count_LH) AS order_over_count_LH,
-        SUM(goods_price_SH) AS goods_price_SH,
-        SUM(goods_price_LH) AS goods_price_LH,
-        SUM(order_over_price_SH) AS order_over_price_SH,
-        SUM(order_over_price_LH) AS order_over_price_LH
+        IF(SUM(order_finished_count_SH), SUM(order_finished_count_SH), 0) AS order_over_count_SH,
+        IF(SUM(order_finished_count_LH), SUM(order_finished_count_LH), 0) AS order_over_count_LH,
+        IF(SUM(goods_price_SH), SUM(goods_price_SH), 0) AS goods_price_SH,
+        IF(SUM(goods_price_LH), SUM(goods_price_LH), 0) AS goods_price_LH,
+        IF(SUM(order_over_price_SH), SUM(order_over_price_SH), 0) AS order_over_price_SH,
+        IF(SUM(order_over_price_LH), SUM(order_over_price_LH), 0) AS order_over_price_LH
         
         -- 推广人
         FROM (
-        SELECT user_id, user_name, mobile
+        SELECT user_id, IF(tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name) AS user_name, tb_inf_user.mobile
         FROM tb_inf_user
-        WHERE mobile IN (%s)) AS referrer
+		LEFT JOIN tb_inf_promoter ON tb_inf_user.mobile = tb_inf_promoter.mobile AND tb_inf_promoter.is_deleted = 0
+        WHERE tb_inf_user.mobile IN (%s)) AS referrer
         -- 推广信息
         LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
         WHERE 1=1 %s
@@ -121,6 +122,50 @@ class PromoteEffectList(object):
         result = cursor.query(command)
         return result if result else []
 
+    @staticmethod
+    def check_promoter(cursor, user_id, mobile):
+        """检查推广人员是否存在"""
+        command = '''
+        SELECT tb_inf_city_manager.id
+        FROM tb_inf_city_manager
+        LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
+        WHERE tb_inf_city_manager.id = :user_id AND tb_inf_city_manager.is_deleted = 0
+        AND tb_inf_promoter.mobile = :mobile '''
+
+        result = cursor.query_one(command, {'user_id': user_id, 'mobile': mobile})
+
+        return result['id'] if result else None
+
+    @staticmethod
+    def add_promoter(cursor, user_id, mobile, user_name):
+        """添加推广人员"""
+        command = '''
+        INSERT INTO tb_inf_promoter(manager_id, user_name, mobile)
+        VALUES (:manager_id, :user_name, :mobile)
+        '''
+        result = cursor.insert(command, {
+            'manager_id': user_id,
+            'mobile': mobile,
+            'user_name': user_name
+        })
+
+        return result
+
+    @staticmethod
+    def delete_promoter(cursor, user_id, promoter_id):
+        """删除推广人员"""
+        command = '''
+        UPDATE tb_inf_promoter, tb_inf_user
+        SET tb_inf_promoter.is_deleted = 1
+        WHERE tb_inf_promoter.manager_id = :user_id AND tb_inf_promoter.mobile = tb_inf_user.mobile
+        AND tb_inf_user.user_id = :promoter_id
+        '''
+        result = cursor.update(command, {
+            'user_id': user_id,
+            'promoter_id': promoter_id
+        })
+
+        return result
 
 class PromoteQuality(object):
     @staticmethod
@@ -148,12 +193,12 @@ class PromoteQuality(object):
         AND mobile IN (%s)
         """
         if mobile:
-            command = command % ','.join(mobile)
+            command = command % ','.join(["'"+i+"'" for i in mobile])
         else:
             return []
         result = cursor.query(command)
 
-        return [i['id'] for i in result] if result else []
+        return [str(i['id']) for i in result] if result else []
 
     @staticmethod
     def get_new_users(cursor, params, promoter_ids=None):
@@ -168,9 +213,13 @@ class PromoteQuality(object):
             %s
             GROUP BY FROM_UNIXTIME(create_time, '%%%%Y-%%%%m-%%%%d')"""
 
-            # 城市经理权限
-            if not promoter_ids:
+            # 城市经理且推广人员为空
+            if params['role'] == 4 and not promoter_ids:
+                command = command % 'AND referrer_user_id IN (0) '
+            # 非城市经理查看所有人
+            elif not promoter_ids:
                 command = command % ''
+            # 城市经理且有推广人员
             else:
                 referrer_user_id = 'AND referrer_user_id IN (%s) ' % ','.join(promoter_ids)
                 command = command % referrer_user_id
@@ -189,9 +238,13 @@ class PromoteQuality(object):
                 AND is_deleted = 0
                 %s """
 
-                # 城市经理权限
-                if not promoter_ids:
+                # 城市经理且推广人员为空
+                if params['role'] == 4 and not promoter_ids:
+                    command = command % 'AND referrer_user_id IN (0) '
+                # 非城市经理查看所有人
+                elif not promoter_ids:
                     command = command % ''
+                # 城市经理且有推广人员
                 else:
                     referrer_user_id = 'AND referrer_user_id IN (%s) ' % ','.join(promoter_ids)
                     command = command % referrer_user_id
@@ -291,9 +344,13 @@ class PromoteQuality(object):
             else:
                 return []
 
-            # 城市经理权限
-            if not promoter_ids:
+            # 城市经理且推广人员为空
+            if params['role'] == 4 and not promoter_ids:
+                command = command % 'AND referrer_user_id IN (0) '
+            # 非城市经理查看所有人
+            elif not promoter_ids:
                 command = command % ''
+            # 城市经理且有推广人员
             else:
                 referrer_user_id = 'AND referrer_user_id IN (%s) ' % ','.join(promoter_ids)
                 command = command % referrer_user_id
@@ -397,9 +454,13 @@ class PromoteQuality(object):
             else:
                 return []
 
-            # 城市经理权限
-            if not promoter_ids:
+            # 城市经理且推广人员为空
+            if params['role'] == 4 and not promoter_ids:
+                command = command % 'AND referrer_user_id IN (0) '
+            # 非城市经理查看所有人
+            elif not promoter_ids:
                 command = command % ''
+            # 城市经理且有推广人员
             else:
                 referrer_user_id = 'AND referrer_user_id IN (%s) ' % ','.join(promoter_ids)
                 command = command % referrer_user_id

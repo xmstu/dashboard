@@ -12,19 +12,19 @@ class PromoteEffect(object):
 
     @staticmethod
     @make_decorator
-    def get_add_data(data):
-        if data:
+    def get_add_data(result):
+        if result:
             return make_result(APIStatus.Ok), HTTPStatus.Ok
         else:
-            return make_result(APIStatus.BadRequest, msg="用户不存在或不能重复添加推荐人"), HTTPStatus.BadRequest
+            return make_result(APIStatus.BadRequest, msg="添加推广人员失败"), HTTPStatus.BadRequest
 
     @staticmethod
     @make_decorator
-    def get_delete_data(data):
-        if data:
+    def get_delete_data(result):
+        if result:
             return make_result(APIStatus.Ok), HTTPStatus.Ok
         else:
-            return make_result(APIStatus.BadRequest), HTTPStatus.BadRequest
+            return make_result(APIStatus.BadRequest, msg="删除推广人员失败"), HTTPStatus.BadRequest
 
     @staticmethod
     @make_decorator

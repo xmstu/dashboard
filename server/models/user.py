@@ -48,137 +48,139 @@ class UserList(object):
 
     @staticmethod
     def get_user_list(cursor, page, limit, params):
+        try:
+            fetch_where = ''''''
 
-        fetch_where = ''''''
+            # 查询字段
+            fields = '''
+            user_id,
+            user_name,
+            mobile,
+            user_type,
+            goods_auth,
+            driver_auth,
+            company_auth,
+            goods_count_SH,
+            goods_count_LH,
+            order_count_SH,
+            order_count_LH,
+            order_finished_count_SH,
+            order_finished_count_LH,
+            download_channel,
+            from_channel,
+            FROM_UNIXTIME(last_login_time, '%Y-%m-%d') AS last_login_time,
+            FROM_UNIXTIME(create_time, '%Y-%m-%d') AS create_time,
+            from_province_id,
+            from_city_id,
+            from_county_id
+            '''
 
-        # 查询字段
-        fields = '''
-        user_id,
-        user_name,
-        mobile,
-        user_type,
-        goods_auth,
-        driver_auth,
-        company_auth,
-        goods_count_SH,
-        goods_count_LH,
-        order_count_SH,
-        order_count_LH,
-        order_finished_count_SH,
-        order_finished_count_LH,
-        download_channel,
-        from_channel,
-        FROM_UNIXTIME(last_login_time, '%Y-%m-%d') AS last_login_time,
-        FROM_UNIXTIME(create_time, '%Y-%m-%d') AS create_time,
-        from_province_id,
-        from_city_id,
-        from_county_id
-        '''
+            command = """
+                SELECT
+                {fields}
+                FROM tb_inf_user
+    
+                WHERE is_deleted = 0
+                {fetch_where}
+                """
 
-        command = """
-            SELECT
-            {fields}
-            FROM tb_inf_user
+            # 地区
+            region = ''
+            if params['region_id']:
+                if isinstance(params['region_id'], int):
+                    region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                        'region_id': params['region_id']}
+                elif isinstance(params['region_id'], list):
+                    region = '''AND (
+                                from_province_id IN (%(region_id)s)
+                                OR from_city_id IN (%(region_id)s)
+                                OR from_county_id IN (%(region_id)s)
+                                OR from_town_id IN (%(region_id)s)
+                                ) ''' % {'region_id': ','.join(params['region_id'])}
+            fetch_where += region
 
-            WHERE is_deleted = 0
-            {fetch_where}
-            """
+            # 用户名
+            if params['user_name']:
+                fetch_where += 'AND user_name = "%s" ' % params['user_name']
+            # 手机号
+            if params['mobile']:
+                fetch_where += 'AND mobile = "%s" ' % params['mobile']
+            # 推荐人手机
+            if params['reference_mobile']:
+                fetch_where += 'AND referrer_mobile = "%s" ' % params['reference_mobile']
+            # 下载渠道
+            if params['download_ch']:
+                fetch_where += 'AND download_channel = "%s" ' % params['download_ch']
+            # 注册渠道
+            if params['from_channel']:
+                fetch_where += 'AND from_channel = "%s" ' % params['from_channel']
+            # 推荐注册
+            if params['is_referenced'] == 1:
+                fetch_where += 'AND referrer_mobile != "" '
+            elif params['is_referenced'] == 2:
+                fetch_where += 'AND referrer_mobile = "" '
+            # 注册角色
+            if params['role_type'] == 1:
+                fetch_where += 'AND user_type = 1 '
+            elif params['role_type'] == 2:
+                fetch_where += 'AND user_type = 2 '
+            elif params['role_type'] == 3:
+                fetch_where += 'AND user_type = 3 '
+            # 认证角色
+            if params['role_auth'] == 1:
+                fetch_where += 'AND goods_auth = 1 '
+            elif params['role_auth'] == 2:
+                fetch_where += 'AND driver_auth = 1 '
+            elif params['role_auth'] == 3:
+                fetch_where += 'AND company_auth = 1 '
+            # 是否活跃
+            if params['is_actived'] == 1:
+                fetch_where += 'AND keep_login_days >= 7 AND last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
+            elif params['is_actived'] == 2:
+                fetch_where += '''AND last_login_time < UNIX_TIMESTAMP() - 1 * 86400
+                AND last_login_time > UNIX_TIMESTAMP() - 3 * 86400 '''
+            elif params['is_actived'] == 3:
+                fetch_where += '''AND last_login_time < UNIX_TIMESTAMP() - 4 * 86400
+                AND last_login_time > UNIX_TIMESTAMP() - 10 * 86400 '''
+            elif params['is_actived'] == 4:
+                fetch_where += '''AND last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
 
-        # 地区
-        region = ''
-        if params['region_id']:
-            if isinstance(params['region_id'], int):
-                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
-                    'region_id': params['region_id']}
-            elif isinstance(params['region_id'], list):
-                region = '''AND (
-                            from_province_id IN (%(region_id)s)
-                            OR from_city_id IN (%(region_id)s)
-                            OR from_county_id IN (%(region_id)s)
-                            OR from_town_id IN (%(region_id)s)
-                            ) ''' % {'region_id': ','.join(params['region_id'])}
-        fetch_where += region
+            # 操作过
+            if params['is_used'] == 1:
+                fetch_where += 'AND (goods_count_LH > 0 OR goods_count_SH > 0) '
+            elif params['is_used'] == 2:
+                fetch_where += 'AND (order_count_SH > 0 OR order_count_SH > 0) '
+            elif params['is_used'] == 3:
+                fetch_where += 'AND (order_finished_count_SH > 0 OR order_finished_count_LH > 0) '
 
-        # 用户名
-        if params['user_name']:
-            fetch_where += 'AND user_name = "%s" ' % params['user_name']
-        # 手机号
-        if params['mobile']:
-            fetch_where += 'AND mobile = "%s" ' % params['mobile']
-        # 推荐人手机
-        if params['reference_mobile']:
-            fetch_where += 'AND referrer_mobile = "%s" ' % params['reference_mobile']
-        # 下载渠道
-        if params['download_ch']:
-            fetch_where += 'AND download_channel = "%s" ' % params['download_ch']
-        # 注册渠道
-        if params['from_channel']:
-            fetch_where += 'AND from_channel = "%s" ' % params['from_channel']
-        # 推荐注册
-        if params['is_referenced'] == 1:
-            fetch_where += 'AND referrer_mobile != "" '
-        elif params['is_referenced'] == 2:
-            fetch_where += 'AND referrer_mobile = "" '
-        # 注册角色
-        if params['role_type'] == 1:
-            fetch_where += 'AND user_type = 1 '
-        elif params['role_type'] == 2:
-            fetch_where += 'AND user_type = 2 '
-        elif params['role_type'] == 3:
-            fetch_where += 'AND user_type = 3 '
-        # 认证角色
-        if params['role_auth'] == 1:
-            fetch_where += 'AND goods_auth = 1 '
-        elif params['role_auth'] == 2:
-            fetch_where += 'AND driver_auth = 1 '
-        elif params['role_auth'] == 3:
-            fetch_where += 'AND company_auth = 1 '
-        # 是否活跃
-        if params['is_actived'] == 1:
-            fetch_where += 'AND keep_login_days >= 7 AND last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
-        elif params['is_actived'] == 2:
-            fetch_where += '''AND last_login_time < UNIX_TIMESTAMP() - 1 * 86400
-            AND last_login_time > UNIX_TIMESTAMP() - 3 * 86400 '''
-        elif params['is_actived'] == 3:
-            fetch_where += '''AND last_login_time < UNIX_TIMESTAMP() - 4 * 86400
-            AND last_login_time > UNIX_TIMESTAMP() - 10 * 86400 '''
-        elif params['is_actived'] == 4:
-            fetch_where += '''AND last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
+            # 贴车贴
+            if params['is_car_sticker'] == 1:
+                fetch_where += 'AND is_sticker > 0 '
+            elif params['is_car_sticker'] == 2:
+                fetch_where += 'AND is_sticker = 0 '
+            # 最后登录
+            if params['last_login_start_time'] and params['last_login_end_time']:
+                fetch_where += 'AND last_login_time >= %s AND last_login_time < %s ' % (
+                    params['last_login_start_time'], params['last_login_end_time'])
+            # 注册日期
+            if params['register_start_time'] and params['register_end_time']:
+                fetch_where += 'AND create_time >= %s AND create_time < %s ' % (
+                    params['register_start_time'], params['register_end_time'])
 
-        # 操作过
-        if params['is_used'] == 1:
-            fetch_where += 'AND (goods_count_LH > 0 OR goods_count_SH > 0) '
-        elif params['is_used'] == 2:
-            fetch_where += 'AND (order_count_SH > 0 OR order_count_SH > 0) '
-        elif params['is_used'] == 3:
-            fetch_where += 'AND (order_finished_count_SH > 0 OR order_finished_count_LH > 0) '
+            user_count = cursor.query_one(command.format(fields="COUNT(1) AS count", fetch_where=fetch_where))
 
-        # 贴车贴
-        if params['is_car_sticker'] == 1:
-            fetch_where += 'AND is_sticker > 0 '
-        elif params['is_car_sticker'] == 2:
-            fetch_where += 'AND is_sticker = 0 '
-        # 最后登录
-        if params['last_login_start_time'] and params['last_login_end_time']:
-            fetch_where += 'AND last_login_time >= %s AND last_login_time < %s ' % (
-                params['last_login_start_time'], params['last_login_end_time'])
-        # 注册日期
-        if params['register_start_time'] and params['register_end_time']:
-            fetch_where += 'AND create_time >= %s AND create_time < %s ' % (
-                params['register_start_time'], params['register_end_time'])
+            fetch_where += """ ORDER BY id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
+            # 详情
+            user_detail = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
-        user_count = cursor.query_one(command.format(fields="COUNT(1) AS count", fetch_where=fetch_where))
+            user_list = {
+                'user_detail': user_detail if user_detail else [],
+                'user_count': user_count['count'] if user_count['count'] else 0
+            }
 
-        fetch_where += """ ORDER BY id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
-        # 详情
-        user_detail = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
-
-        user_list = {
-            'user_detail': user_detail if user_detail else [],
-            'user_count': user_count['count'] if user_count['count'] else 0
-        }
-
-        return user_list
+            return user_list
+        except Exception as e:
+            log.error(e)
 
 
 class UserStatistic(object):

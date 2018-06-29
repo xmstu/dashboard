@@ -18,7 +18,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -36,7 +36,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#date_show_two',
         theme: '#009688',
         calendar: true,
-        max: String(common.getNowFormatDate()[3]),
+         max: String(common.getNowFormatDate()[0]),
         ready: function () {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -406,7 +406,6 @@ function dataInit() {
         }
     })
 }
-
 Highcharts.setOptions({
     colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });

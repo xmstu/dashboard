@@ -1,235 +1,155 @@
-$('#date_show_one').val(String(common.getNowFormatDate()[2]));
-$('#date_show_two').val(String(common.getNowFormatDate()[3]));
-var requestStart = $('#date_show_one').val() + ' 00:00:00';
-var requestEnd = $('#date_show_two').val() + ' 23:59:59';
-setTimeout(function () {
-    line_chart_init();
-    radar_chart_init();
-    common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
-}, 100);
-$('#area_select').address({
-    offsetLeft: '0',
-    level: 3,
-    onClose: function () {
-    }
-});
-layui.use(['laydate', 'form', 'table'], function () {
-    var laydate = layui.laydate;
-    var table = layui.table;
-    laydate.render({
-        elem: '#date_show_one',
-        theme: '#1E9FFF',
-        calendar: true,
-        max: String(common.getNowFormatDate()[4]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            var startTime = $('#date_show_one').val();
-            var endTime = $('#date_show_two').val();
-            common.dateInterval(endTime, startTime);
-        }
-    });
-    laydate.render({
-        elem: '#date_show_two',
-        theme: '#1E9FFF',
-        calendar: true,
-        max: String(common.getNowFormatDate()[3]),
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            var startTime = $('#date_show_one').val();
-            var endTime = $('#date_show_two').val();
-            common.dateInterval(endTime, startTime);
-        }
-    });
-    laydate.render({
-        elem: '#date_show_three',
-        theme: '#1E9FFF',
-        calendar: true,
-        ready: function () {
-
-        },
-        done: function (val, index) {
-            if ($('#date_show_three').val() == '') {
-                $('#date_show_three').next('.date-tips').show();
-            } else {
-                $('#date_show_three').next('.date-tips').hide()
+var dataSet = {
+    init: function () {
+        var that = this;
+        $('#date_show_three').val(String(common.getNowFormatDate()[2]));
+        $('#date_show_four').val(String(common.getNowFormatDate()[3]));
+        setTimeout(function () {
+            $('.layui-form-item .layui-inline ').css({'margin-right': 0});
+            $('.part-2').css({'padding-top': '0px', 'border-top': 0});
+            that.radar_chart_init();
+            that.dateRender();
+        }, 10);
+        $('#area_select').address({
+            offsetLeft: '0',
+            level: 3,
+            onClose: function () {
             }
-        }
-    });
-    laydate.render({
-        elem: '#date_show_four',
-        theme: '#1E9FFF',
-        calendar: true,
-        max: String(common.getNowFormatDate()[3]),
-        ready: function () {
-        },
-        done: function (val, index) {
-            if ($('#date_show_four').val() == '') {
-                $('#date_show_four').next('.date-tips').show();
-            } else {
-                $('#date_show_four').next('.date-tips').hide()
-            }
-        }
-    });
-    table.render({
-        elem: '#LAY_table_user'
-        , url: '/user/list/',
-        even: true,
-        response: {
-            statusName: 'status',
-            statusCode: 100000
-        },
-        done: function (res, curr, count) {
+        });
+    },
+    dateRender: function () {
+        layui.use(['laydate', 'form', 'table'], function () {
+            var laydate = layui.laydate;
+            var table = layui.table;
+            laydate.render({
+                elem: '#date_show_three',
+                theme: '#009688',
+                max: String(common.getNowFormatDate()[0]),
+                calendar: true,
+                ready: function () {
 
-        }
-        , cols: [[
-              {field: 'id', title: '业务类型',  sort: true},
-                 {field: 'user_name', title: '出发地',width:350}
-                , {field: 'mobile', title: '目的地',width:350}
-                , {field: 'user_type', title: '里程'}
-                , {field: 'role_auth', title: '货源量'}
-                , {field: 'usual_city', title: '车辆数'}
-                , {field: 'goods_count', title: '接单量'}
-                , {field: 'order_count', title: '图表'}
-        ]]
-        , id: 'testReload'
-        , page: true
-    });
-    var $ = layui.$, active = {
-        reload: function () {
-            var demoReload = $('#demoReload');
-            table.reload('testReload', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    key: {
-                        id: demoReload.val()
+                },
+                done: function (val, index) {
+                    if ($('#date_show_three').val() == '') {
+                        $('#date_show_three').next('.date-tips').show();
+                    } else {
+                        $('#date_show_three').next('.date-tips').hide()
                     }
                 }
             });
-        }
-    };
-    $('.dataTable .layui-btn').on('click', function () {
-        var type = $(this).data('type');
-        active[type] ? active[type].call(this) : '';
-    });
-});
-function line_chart_init(){
-    $('#charts_container_one').highcharts({
-        chart: {
-        type: 'line'
-    },
-         legend: {
-        layout: 'vertical',
-        align: 'left',
-        verticalAlign: 'top',
-        x: 1300,
-        y: 0,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor: 'transparent',
-        labelFormatter: function () {
-            return this.name
-        }
-    },
-    title: {
-        text: '运力趋势统计'
-    },
-    subtitle: {
-        text: '省省官方后台数据库'
-    },
-    xAxis: {
-        categories: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-         gridLineColor: '#eee',
-        gridLineWidth: 1
-    },
-    yAxis: {
-        title: {
-            text: '数量 (件)'
-        }
-    },
-     plotOptions: {
-            line: {
-                stacking: 'normal',
-                // lineColor: '#666666',
-                lineWidth: 1,
-                marker: {
-                    radius: 4,
-                    lineWidth: 1,
-                    //  lineColor: '#666666',
-                    symbol: 'circle',
-                    states: {
-                        hover: {
-                            enabled: true,
-                            radius: 4
-                        }
-                    }
+            laydate.render({
+                elem: '#date_show_four',
+                theme: '#009688',
+                calendar: true,
+                max: String(common.getNowFormatDate()[0]),
+                ready: function () {
                 },
-                dataLabels: {
-                    enabled: true
+                done: function (val, index) {
+                    if ($('#date_show_four').val() == '') {
+                        $('#date_show_four').next('.date-tips').show();
+                    } else {
+                        $('#date_show_four').next('.date-tips').hide()
+                    }
                 }
-            }
-        },
-    series: [{
-        name: '东京',
-        data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-    }, {
-        name: '伦敦',
-        data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-    }, {
-        name: '实际接单',
-        data: [6.9, 8.2, 4.7, 12.5, 1.9, 11.2, 12.0, 6.6, 9.2, 7.3, 16.6, 14.8]
-    }]
-    })
-}
-function radar_chart_init(){
-    $('#charts_container_two').highcharts({
-        chart: {
-				polar: true,
-				type: 'line'
-		},
-		title: {
-				text: '运力雷达图',
-				x: -80
-		},
-		pane: {
-				size: '80%'
-		},
-		xAxis: {
-				categories: ['小面包车', '17M', '13M', '9.6M',
-										 '7.6M', '6.8M', '4.2M', '中面包车','小货车'],
-				tickmarkPlacement: 'on',
-				lineWidth: 0
-		},
-		yAxis: {
-				gridLineInterpolation: 'polygon',
-				lineWidth: 0,
-				min: 0
-		},
-		tooltip: {
-				shared: true,
-				pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}辆</b><br/>'
-		},
-		legend: {
-				align: 'left',
-				verticalAlign: 'top',
-				y: 70,
-				layout: 'vertical'
-		},
-		series: [{
-				name: '货源量',
-				data: [43000, 19000, 60000, 35000, 17000, 10000,19000, 60000, 35000, 17000, 10000],
-				pointPlacement: 'on',
-                type:'area'
-		}, {
-				name: '车辆数',
-				data: [50000, 39000, 42000, 31000, 26000, 14000,19000, 60000, 35000, 17000, 10000],
-				pointPlacement: 'on',
-                type:'line'
-		}]
-    })
-}
+            });
+            table.render({
+                elem: '#LAY_table_user'
+                , url: '/user/list/',
+                even: true,
+                response: {
+                    statusName: 'status',
+                    statusCode: 100000
+                },
+                done: function (res, curr, count) {
+
+                }
+                , cols: [[
+                    {field: 'id', title: '业务类型', sort: true},
+                    {field: 'user_name', title: '出发地', width: 350}
+                    , {field: 'mobile', title: '目的地', width: 350}
+                    , {field: 'user_type', title: '里程'}
+                    , {field: 'role_auth', title: '货源量'}
+                    , {field: 'usual_city', title: '车辆数'}
+                    , {field: 'goods_count', title: '接单量'}
+                    , {field: 'order_count', title: '图表'}
+                ]]
+                , id: 'testReload'
+                , page: true
+            });
+            var $ = layui.$, active = {
+                reload: function () {
+                    var demoReload = $('#demoReload');
+                    table.reload('testReload', {
+                        page: {
+                            curr: 1
+                        }
+                        , where: {
+                            key: {
+                                id: demoReload.val()
+                            }
+                        }
+                    });
+                }
+            };
+            $('.dataTable .layui-btn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+        });
+    },
+    radar_chart_init: function () {
+        Highcharts.setOptions({
+            colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+        });
+        $('#charts_container_two').highcharts({
+            chart: {
+                polar: true,
+                type: 'line'
+            },
+            title: {
+                text: '运力雷达图',
+                x: -80
+            },
+            pane: {
+                size: '80%'
+            },
+            xAxis: {
+                categories: ['小面包车', '17M', '13M', '9.6M',
+                    '7.6M', '6.8M', '4.2M', '中面包车', '小货车'],
+                tickmarkPlacement: 'on',
+                lineWidth: 0
+            },
+            yAxis: {
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0
+            },
+            tooltip: {
+                shared: true,
+                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}辆</b><br/>'
+            },
+            legend: {
+                align: 'left',
+                verticalAlign: 'top',
+                y: 70,
+                layout: 'vertical'
+            },
+            series: [{
+                name: '车辆数',
+                data: [50000, 39000, 42000, 31000, 26000, 14000, 19000, 60000, 35000, 17000, 10000],
+                pointPlacement: 'on',
+                type: 'area'
+            }, {
+                name: '车辆数',
+                data: [60000, 59000, 52000, 41000, 66000, 24000, 29000, 70000, 45000, 27000, 20000],
+                pointPlacement: 'on',
+                type: 'line'
+            }, {
+                name: '货源量',
+                data: [43000, 19000, 60000, 35000, 17000, 10000, 19000, 60000, 35000, 17000, 10000],
+                pointPlacement: 'on',
+                type: 'area'
+            }]
+        })
+    }
+};
+dataSet.init();
