@@ -123,8 +123,9 @@ $('#add_promote_person').on('click', function (e) {
         var mobile = $('#add_users').val();
         var username = $('#add_users_name').val();
         var data = {
-            "mobile": mobile
-        }
+            "mobile": mobile,
+            "user_name": username
+        };
         if (mobile == '' || mobile.length != 11) {
             layer.tips('请检查您输入的的手机号码格式','#add_users', {
                 tips: [1, '#3595CC'],
@@ -411,7 +412,7 @@ var pageSet = {
                             skin: 'layui-layer-molv',
                             btn: ['确认', '取消']
                         }, function () {
-                            var url = '/promote/effect/?reference_id=' + current_val;
+                            var url = '/promote/effect/' + current_val;
                             $.ajax({
                                 url: url,
                                 type: 'DELETE',

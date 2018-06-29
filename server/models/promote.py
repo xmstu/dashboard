@@ -68,23 +68,24 @@ class PromoteEffectList(object):
         referrer.*,
         COUNT(*) AS user_count,
         0 AS wake_up_count,
-        SUM(goods_count_SH) AS goods_count_SH,
-        SUM(goods_count_LH) AS goods_count_LH,
+        IF(SUM(goods_count_SH), SUM(goods_count_SH), 0) AS goods_count_SH,
+        IF(SUM(goods_count_LH), SUM(goods_count_LH), 0) AS goods_count_LH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile) AS goods_user_count,
-        SUM(order_finished_count_SH) AS order_over_count_SH,
-        SUM(order_finished_count_LH) AS order_over_count_LH,
-        SUM(goods_price_SH) AS goods_price_SH,
-        SUM(goods_price_LH) AS goods_price_LH,
-        SUM(order_over_price_SH) AS order_over_price_SH,
-        SUM(order_over_price_LH) AS order_over_price_LH
+        IF(SUM(order_finished_count_SH), SUM(order_finished_count_SH), 0) AS order_over_count_SH,
+        IF(SUM(order_finished_count_LH), SUM(order_finished_count_LH), 0) AS order_over_count_LH,
+        IF(SUM(goods_price_SH), SUM(goods_price_SH), 0) AS goods_price_SH,
+        IF(SUM(goods_price_LH), SUM(goods_price_LH), 0) AS goods_price_LH,
+        IF(SUM(order_over_price_SH), SUM(order_over_price_SH), 0) AS order_over_price_SH,
+        IF(SUM(order_over_price_LH), SUM(order_over_price_LH), 0) AS order_over_price_LH
         
         -- 推广人
         FROM (
-        SELECT user_id, user_name, mobile
+        SELECT user_id, IF(tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name) AS user_name, tb_inf_user.mobile
         FROM tb_inf_user
-        WHERE mobile IN (%s)) AS referrer
+		LEFT JOIN tb_inf_promoter ON tb_inf_user.mobile = tb_inf_promoter.mobile AND tb_inf_promoter.is_deleted = 0
+        WHERE tb_inf_user.mobile IN (%s)) AS referrer
         -- 推广信息
         LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
         WHERE 1=1 %s
@@ -133,7 +134,7 @@ class PromoteEffectList(object):
 
         result = cursor.query_one(command, {'user_id': user_id, 'mobile': mobile})
 
-        return result['id'] if result['id'] else None
+        return result['id'] if result else None
 
     @staticmethod
     def add_promoter(cursor, user_id, mobile, user_name):
@@ -154,9 +155,10 @@ class PromoteEffectList(object):
     def delete_promoter(cursor, user_id, promoter_id):
         """删除推广人员"""
         command = '''
-        UPDATE tb_inf_promoter
-        SET is_deleted = 1
-        WHERE manager_id = :user_id AND id = :promoter_id
+        UPDATE tb_inf_promoter, tb_inf_user
+        SET tb_inf_promoter.is_deleted = 1
+        WHERE tb_inf_promoter.manager_id = :user_id AND tb_inf_promoter.mobile = tb_inf_user.mobile
+        AND tb_inf_user.user_id = :promoter_id
         '''
         result = cursor.update(command, {
             'user_id': user_id,
