@@ -161,7 +161,7 @@ class GoodsList(object):
                 fetch_where += """ AND shf_goods.status IN (1, 2)
                                 AND ((shf_goods.loading_time_is_realtime = 1 AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600)
                                 OR (shf_goods.loading_time_is_realtime = 0 
-                                AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_begin)>0 
+                                AND ((UNIX_TIMESTAMP() - shf_goods.loading_time_period_end)>0 
                                 OR (UNIX_TIMESTAMP() - UNIX_TIMESTAMP(shf_goods.loading_time_date))>0))) """
 
         # 是否通话
