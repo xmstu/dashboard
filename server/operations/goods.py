@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.goods import GoodsList, CancelReasonList, GoodsDistributionTrendList
+from server.models.goods import GoodsList, CancelReasonList, GoodsDistributionTrendList, FreshConsignor
 
 
 class GoodsListDecorator(object):
@@ -9,7 +9,12 @@ class GoodsListDecorator(object):
     @staticmethod
     @make_decorator
     def get_goods_list(page, limit, params):
-        goods_list = GoodsList.get_goods_list(db.read_db, page, limit, params)
+        if params.get('new_goods_type') == 1:
+            user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('node_id'))
+        else:
+            user_id_list = ['0']
+
+        goods_list = GoodsList.get_goods_list(db.read_db, page, limit, user_id_list, params)
 
         return Response(data=goods_list)
 

@@ -7,7 +7,7 @@ from server import log
 class GoodsList(object):
 
     @staticmethod
-    def get_goods_list(cursor, page, limit, params):
+    def get_goods_list(cursor, page, limit, user_id_list, params):
 
         fetch_where = """ 1=1 """
 
@@ -197,19 +197,7 @@ class GoodsList(object):
 
         # 是否初次下单
         if params['new_goods_type'] == 1:
-            # 先找出所有下单少于三次的用户id的结果集
-            sql = """
-            SELECT
-                user_id 
-            FROM
-                shf_goods
-            GROUP BY user_id
-            HAVING COUNT(*) < 3
-            """
-            user_id_list = cursor.query(sql)
-            user_id = [str(i['user_id']) for i in user_id_list]
-
-            fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id)
+            fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id_list)
 
         # 急需处理
         if params['urgent_goods']:
@@ -255,6 +243,53 @@ class GoodsList(object):
                       'goods_count': goods_count if goods_count else 0}
 
         return goods_list
+
+
+class FreshConsignor(object):
+
+    @staticmethod
+    def get_user_id_list(cursor, node_id):
+        try:
+            # 先找出所有下单少于三次的用户id的结果集
+            sql = """
+                    SELECT
+                        user_id 
+                    FROM
+                        shf_goods 
+                    WHERE
+                        user_id IN (
+                        SELECT DISTINCT
+                            user_id 
+                        FROM
+                            shf_goods 
+                        WHERE
+                            {region}
+                        ) 
+                    GROUP BY
+                        user_id 
+                    HAVING
+                        COUNT( * ) < 3;
+                    """
+            # 地区
+            region = ' 1=1 '
+            if node_id:
+                if isinstance(node_id, int):
+                    region += 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                        'region_id': node_id}
+                elif isinstance(node_id, list):
+                    region += '''
+                            AND (
+                            from_province_id IN (%(region_id)s)
+                            OR from_city_id IN (%(region_id)s)
+                            OR from_county_id IN (%(region_id)s)
+                            OR from_town_id IN (%(region_id)s)
+                            ) ''' % {'region_id': ','.join(node_id)}
+            ret = cursor.query(sql.format(region=region))
+            user_id_list = [str(i['user_id']) for i in ret]
+            return user_id_list
+        except Exception as e:
+            log.error('Error:{}'.format(e))
+            return ['0']
 
 
 class CancelReasonList(object):
