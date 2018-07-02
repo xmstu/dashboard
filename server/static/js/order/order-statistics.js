@@ -77,7 +77,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#start_date_one',
         theme: '#009688',
         calendar: true,
-         max: String(common.getNowFormatDate()[0]),
+        max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -100,7 +100,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#end_time_one',
         theme: '#009688',
         calendar: true,
-         max: String(common.getNowFormatDate()[0]),
+        max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -123,6 +123,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     laydate.render({
         elem: '#create_start_time',
         theme: '#009688',
+        max: String(common.getNowFormatDate()[0]),
         calendar: true,
         done: function (val, index) {
             var startTime = $('#create_start_time').val();
@@ -142,6 +143,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     laydate.render({
         elem: '#create_end_time',
         theme: '#009688',
+        max: String(common.getNowFormatDate()[0]),
         calendar: true,
         done: function (val, index) {
             var startTime = $('#create_start_time').val();
@@ -164,6 +166,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     laydate.render({
         elem: '#load_start_time',
         theme: '#009688',
+        max: String(common.getNowFormatDate()[0]),
         calendar: true,
         done: function (val, index) {
             var startTime = $('#load_start_time').val();
@@ -186,6 +189,7 @@ layui.use(['laydate', 'form', 'table'], function () {
     laydate.render({
         elem: '#load_end_time',
         theme: '#009688',
+        max: String(common.getNowFormatDate()[0]),
         calendar: true,
         done: function (val, index) {
             var startTime = $('#load_start_time').val();
@@ -254,7 +258,7 @@ var setAbout = {
                         radius: 2.5,
                         lineWidth: 1,
                         lineColor: '#666666',
-                        fillColor:'#fff',
+                        fillColor: '#fff',
                         symbol: 'circle',
                         states: {
                             hover: {
@@ -404,19 +408,19 @@ var setAbout = {
                 var value = data.dimension;
                 if (value == 1) {
                     if (len > 0 && len < 20) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1,'单','订单汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1, '单', '订单汇总')
                     } else if (len > 20 && len < 50) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2,'单','订单汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2, '单', '订单汇总')
                     } else if (len > 50) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4,'单','订单汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4, '单', '订单汇总')
                     }
                 } else if (value == 2) {
                     if (len > 0 && len < 20) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1,'元','金额汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1, '元', '金额汇总')
                     } else if (len > 20 && len < 50) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2,'元','金额汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2, '元', '金额汇总')
                     } else if (len > 50) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4,'元','金额汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4, '元', '金额汇总')
                     }
                 }
 
@@ -472,7 +476,7 @@ var setAbout = {
                             $(this).html('<i class="zhuanghuo">接单</i>：' + result[1] + '<br><i class="fahuo">完成</i>：<span style="">' + result[0] + '</span>')
                         }
                     });
-                      $("td[data-field='order_status']").children().each(function (val) {
+                    $("td[data-field='order_status']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
                             $(this).html(result[1] + '<br>' + result[0])
