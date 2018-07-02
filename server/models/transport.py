@@ -7,23 +7,21 @@ class TransportRadarModel(object):
 
         goods_cmd = """
         SELECT
-            COUNT( 1 ) 
+            COUNT( 1 ) goods_count
         FROM
             shf_goods
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id 
             AND shf_goods_vehicles.vehicle_attribute = 3 
             AND shf_goods_vehicles.is_deleted = 0 
-            AND shf_goods.create_time >= :start_time
-            AND shf_goods.create_time < :end_time 
+            AND shf_goods.create_time >= :start_time 
+            AND shf_goods.create_time < :end_time
         WHERE
             {goods_sql}
-        GROUP BY
-            FROM_UNIXTIME( shf_goods.create_time, "%Y-%m-%d" );
         """
 
         vehicle_cmd = """
         SELECT
-            COUNT( 1 ) 
+            COUNT( 1 ) vehicle_count
         FROM
             shf_booking_settings -- 在时间段内有登录过的用户
             INNER JOIN shu_user_stats ON shf_booking_settings.user_id = shu_user_stats.user_id 
@@ -34,13 +32,11 @@ class TransportRadarModel(object):
             AND shf_booking_settings.is_deleted = 0 
         WHERE
             {vehicle_sql}
-        GROUP BY
-            FROM_UNIXTIME( shf_booking_settings.create_time, '%Y-%m-%d' );
         """
 
         order_cmd = """
         SELECT
-            COUNT( 1 ) 
+            COUNT( 1 ) order_count
         FROM
             shb_orders INNER JOIN shf_goods ON shf_goods.id = shb_orders.goods_id
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shb_orders.goods_id 
@@ -50,8 +46,6 @@ class TransportRadarModel(object):
             AND shb_orders.create_time < :end_time
         WHERE
             {order_sql}
-        GROUP BY
-            FROM_UNIXTIME( shb_orders.create_time, "%Y-%m-%d" );
         """
 
         goods_sql = """ 1=1 """
@@ -111,29 +105,36 @@ class TransportRadarModel(object):
             )
             """.format(params['business'])
 
-        # 车型
-        goods_sql += """"""
-        vehicle_sql += """"""
-        order_sql += """"""
-
         kwargs = {
             'start_time': params.get('start_time'),
             'end_time': params.get('end_time')
         }
 
-        vehicle_name = ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米']
+        vehicle_name_list = ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米']
 
-        vehicle_sql1 = """ AND shf_goods_vehicles.NAME = '%s' """
-        vehicle_sql2 = """ AND shm_dictionary_items.`name` = '%s' """
+        # 车型
+        goods_ret = []
+        vehicles_ret = []
+        orders_ret = []
 
-        goods = cursor.query(goods_sql, kwargs)
-        vehicles = cursor.query(vehicle_sql, kwargs)
-        orders = cursor.query(order_sql, kwargs)
+        goods_sql += """ AND shf_goods_vehicles.NAME = '%s' """
+        vehicle_sql += """ AND shm_dictionary_items.`name` = '%s' """
+        order_sql += """ AND shf_goods_vehicles.NAME = '%s' """
+
+        for i in vehicle_name_list:
+            goods_count = cursor.query_one(goods_cmd.format(goods_sql=goods_sql % i), kwargs)['goods_count']
+            vehicle_count = cursor.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql % i), kwargs)['vehicle_count']
+            order_count = cursor.query_one(order_cmd.format(order_sql=order_sql % i), kwargs)['order_count']
+
+            goods_ret.append(goods_count if goods_count else 0)
+            vehicles_ret.append(vehicle_count if vehicle_count else 0)
+            orders_ret.append(order_count if order_count else 0)
 
         data = {
-            'goods': goods,
-            'vehicles': vehicles,
-            'orders': orders
+            'vehicle_name_list': vehicle_name_list,
+            'goods_ret': goods_ret,
+            'vehicles_ret': vehicles_ret,
+            'orders_ret': orders_ret
         }
 
         return data

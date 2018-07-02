@@ -11,7 +11,7 @@ class TransportRadar(Resource):
 
     @staticmethod
     @doc.transport_radar_param
-    @filters.TransportRadar.get_result()
+    @filters.TransportRadar.get_result(data=dict)
     @operations.TransportRadar.get_trend(params=dict)
     @verify.TransportRadar.check_params(params=dict)
     def get():

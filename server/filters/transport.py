@@ -9,4 +9,4 @@ class TransportRadar(object):
     def get_result(data):
         # TODO 过滤参数
 
-        return make_result(APIStatus.Ok), HTTPStatus.Ok
+        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
