@@ -98,10 +98,10 @@ class OrderList(object):
             params['pay_status'] = int(params.get('pay_status', None) or 0)
             params['is_change_price'] = int(params.get('is_change_price', None) or 0)
             params['comment_type'] = int(params.get('comment_type', None) or 0)
-            params['start_order_time'] = int(params.get('start_order_time', None) or 0)
-            params['end_order_time'] = int(params.get('end_order_time', None) or 0)
-            params['start_complete_time'] = int(params.get('start_complete_time', None) or 0)
-            params['end_complete_time'] = int(params.get('end_complete_time', None) or 0)
+            params['start_order_time'] = int(params.get('start_order_time', None) or time.time() - 86400 * 7)
+            params['end_order_time'] = int(params.get('end_order_time', None) or time.time())
+            params['start_complete_time'] = int(params.get('start_complete_time', None) or time.time() - 86400 * 7)
+            params['end_complete_time'] = int(params.get('end_complete_time', None) or time.time())
 
             # 当前权限下所有地区
             if sessionOperationClass.check():
