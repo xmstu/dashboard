@@ -184,17 +184,27 @@ def compare_time(start_time, end_time) -> bool:
 
 
 def timestamp2date(time_stamp, accuracy=1):
-    ret = {
-        1: time.strftime('%Y-%m-%d', time.localtime(time_stamp)),
-        2: time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time_stamp)),
-    }
-    return ret[accuracy]
+    if accuracy == 1:
+        return time.strftime('%Y-%m-%d', time.localtime(time_stamp))
+    if accuracy == 2:
+        return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time_stamp))
 
 
 def date2timestamp(date, accuracy=1):
-    ret = {
-        1: time.mktime(time.strptime(date, '%Y-%m-%d')),
-        2: time.mktime(time.strptime(date, '%Y-%m-%d %H:%M:%S'))
-    }
+    if accuracy == 1:
+        return time.mktime(time.strptime(date, '%Y-%m-%d'))
+    if accuracy == 2:
+        return time.mktime(time.strptime(date, '%Y-%m-%d %H:%M:%S'))
 
-    return ret[accuracy]
+
+def date_to_timestamp(start_date, end_date):
+
+    if not isinstance(start_date, str) and not isinstance(end_date, str):
+        return start_date, end_date
+
+    start_timestamp = date2timestamp(start_date, accuracy=1)
+    end_timestamp = date2timestamp(end_date, accuracy=1)
+
+    if start_timestamp != end_timestamp:
+        return start_timestamp, end_timestamp
+    return start_timestamp, end_timestamp + 86399
