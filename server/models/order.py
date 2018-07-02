@@ -179,7 +179,7 @@ class CancelOrderReasonModel(object):
 class OrderListModel(object):
 
     @staticmethod
-    def get_order_list(cursor, page, limit, fresh_owner_ids, fresh_driver_ids, params):
+    def get_order_list(cursor, page, limit, fresh_ids, params):
 
         fields = """
                 so.id,
@@ -368,10 +368,10 @@ class OrderListModel(object):
         # 特殊标签
         if params.get('spec_tag'):
             if params['spec_tag'] == 1:
-                fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(fresh_owner_ids)
+                fetch_where += """ AND so.owner_id IN (%s) """ % ','.join(fresh_ids)
 
             if params['spec_tag'] == 2:
-                fetch_where += """ AND so.driver_id IN (%s) """ % ','.join(fresh_driver_ids)
+                fetch_where += """ AND so.driver_id IN (%s) """ % ','.join(fresh_ids)
 
         # 支付状态
         if params.get('pay_status'):

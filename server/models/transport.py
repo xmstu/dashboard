@@ -138,3 +138,21 @@ class TransportRadarModel(object):
         }
 
         return data
+
+
+class TransportListModel(object):
+
+    @staticmethod
+    def get_data(cursor, page, limit, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data

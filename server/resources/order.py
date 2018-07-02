@@ -9,6 +9,7 @@ from server.meta.decorators import Response
 from server.utils.request import get_all_arg, get_arg_int
 import server.verify.general as general_verify
 
+
 class OrdersReceivedStatistics(Resource):
 
     @staticmethod
