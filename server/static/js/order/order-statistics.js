@@ -342,7 +342,7 @@ var setAbout = {
         var that = this;
         var requestStart = common.timeTransform($('#start_date_one').val() + ' 00:00:00');
         var requestEnd = common.timeTransform($('#end_time_one').val() + ' 23:59:59');
-        var url = '/order/cancel_reason';
+        var url = '/order/cancel_reason/';
         var data = {
             start_time: requestStart,
             end_time: requestEnd,

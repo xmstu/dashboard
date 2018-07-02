@@ -11,7 +11,7 @@ transport_list_param = api.doc(params={
     "from_province_id": "出发地省份id",
     "from_city_id": "出发地城市id",
     "from_county_id": "出发地区县id",
-    "from_town_id": "出发地区县id",
+    "from_town_id": "出发地城镇id",
     "to_province_id": "目的地省份id",
     "to_city_id": "目的地城市id",
     "to_county_id": "目的地区县id",
