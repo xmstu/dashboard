@@ -393,9 +393,10 @@
                                     <label class="layui-form-label">所属网点</label>
                                     <div class="layui-input-inline" style="width: 158px;">
                                         <select id="node_id" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部</option>
-                                            <option value="1">天河区</option>
-                                            <option value="2">越秀区</option>
+                                            {% for location in locations %}
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                </option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                 </div>

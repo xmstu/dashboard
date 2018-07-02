@@ -21,12 +21,12 @@ class TransportRadar(object):
             params['business'] = int(params.get('business', None) or 0)
 
             # 当前权限下所有地区
-            # if sessionOperationClass.check():
-            #     role, locations_id = sessionOperationClass.get_locations()
-            #     if role in (2, 3, 4) and not params['region_id']:
-            #         params['region_id'] = locations_id
-            # else:
-            #     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+            if sessionOperationClass.check():
+                role, locations_id = sessionOperationClass.get_locations()
+                if role in (2, 3, 4) and not params['region_id']:
+                    params['region_id'] = locations_id
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
             if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
