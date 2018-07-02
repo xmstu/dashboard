@@ -6,17 +6,26 @@ from server.logger import log
 from server.meta.decorators import make_decorator, Response
 from server.models.promote import PromoteQuality, PromoteEffectList
 from server.status import HTTPStatus, make_result, APIStatus
+from server.cache_data import init_regions
 
 class PromoteEffectDecorator(object):
 
     @staticmethod
     @make_decorator
     def get_promote_effect_list(page, limit, params):
+        promoter_mobile = []
         # 城市经理
         if params['role'] == 4:
             promoter_mobile = PromoteEffectList.get_promoter_mobile_by_city_manage(db.read_bi, params)
+        # 管理员
+        elif params['role'] == 1:
+            promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi)
+        # 区镇合伙人
+        elif params['role'] in (2, 3):
+            city_region = set([init_regions.get_city_level(i)['id'] for i in params['regions']])
+            promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region)
         else:
-            promoter_mobile = PromoteEffectList.get_promoter_mobile_by_admin(db.read_bi, params)
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='当前登录人员身份错误'))
         # 推广人员数量即为总数
         count = len(promoter_mobile)
         referrer_mobile = promoter_mobile[(page-1)*limit:page*limit+1]
@@ -64,8 +73,19 @@ class PromoteQualityDecorator(object):
             promote_quality = []
             # 城市经理
             if params['role'] == 4:
-                promoter_mobile = PromoteQuality.get_promoter_mobile(db.read_bi, params['user_id'])
+                promoter_mobile = PromoteQuality.get_promoter_mobile_by_city_manager(db.read_bi, params['user_id'])
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
+            # 管理员
+            elif params['role'] == 1:
+                promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi)
+                promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
+            # 区镇合伙人
+            elif params['role'] in (2, 3):
+                city_region = set([init_regions.get_city_level(i)['id'] for i in params['regions']])
+                promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region)
+                promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='当前登录人员身份错误'))
             # 拉新 - 新增 累计
             if params['dimension'] == 1:
                 promote_quality, before_promote_count = PromoteQuality.get_new_users(db.read_db, params, promoter_ids)

@@ -38,7 +38,7 @@ class UserList(object):
                 'role_auth': role_auth,
                 'goods_count': detail['goods_count_SH'] + detail['goods_count_LH'],
                 'order_count': detail['order_count_SH'] + detail['order_count_LH'],
-                'order_finished_count': detail['order_finished_count_SH'] + detail['order_finished_count_LH'],
+                'order_finished_count': detail['order_finished_count_SH_online'] + detail['order_finished_count_SH_unline'] + detail['order_finished_count_LH_online'] + detail['order_finished_count_LH_unline'],
                 'download_channel': detail['download_channel'],
                 'from_channel': detail['from_channel'],
                 'last_login_time': detail['last_login_time'],

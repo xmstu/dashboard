@@ -73,18 +73,22 @@ class PromoteEffectList(object):
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile) AS goods_user_count,
-        IF(SUM(order_finished_count_SH), SUM(order_finished_count_SH), 0) AS order_over_count_SH,
-        IF(SUM(order_finished_count_LH), SUM(order_finished_count_LH), 0) AS order_over_count_LH,
+        IF(SUM(order_finished_count_SH_online), SUM(order_finished_count_SH_online), 0) AS order_over_count_SH_online,
+        IF(SUM(order_finished_count_SH_unline), SUM(order_finished_count_SH_unline), 0) AS order_over_count_SH_unline,
+        IF(SUM(order_finished_count_LH_online), SUM(order_finished_count_LH_online), 0) AS order_over_count_LH_online,
+        IF(SUM(order_finished_count_LH_unline), SUM(order_finished_count_LH_unline), 0) AS order_over_count_LH_unline,
         IF(SUM(goods_price_SH), SUM(goods_price_SH), 0) AS goods_price_SH,
         IF(SUM(goods_price_LH), SUM(goods_price_LH), 0) AS goods_price_LH,
-        IF(SUM(order_over_price_SH), SUM(order_over_price_SH), 0) AS order_over_price_SH,
-        IF(SUM(order_over_price_LH), SUM(order_over_price_LH), 0) AS order_over_price_LH
+        IF(SUM(order_over_price_SH_online), SUM(order_over_price_SH_online), 0) AS order_over_price_SH_online,
+        IF(SUM(order_over_price_SH_unline), SUM(order_over_price_SH_unline), 0) AS order_over_price_SH_unline,
+        IF(SUM(order_over_price_LH_online), SUM(order_over_price_LH_online), 0) AS order_over_price_LH_online,
+        IF(SUM(order_over_price_LH_unline), SUM(order_over_price_LH_unline), 0) AS order_over_price_LH_unline
         
         -- 推广人
         FROM (
         SELECT user_id, IF(tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name) AS user_name, tb_inf_user.mobile
         FROM tb_inf_user
-		LEFT JOIN tb_inf_promoter ON tb_inf_user.mobile = tb_inf_promoter.mobile AND tb_inf_promoter.is_deleted = 0
+        LEFT JOIN tb_inf_promoter ON tb_inf_user.mobile = tb_inf_promoter.mobile AND tb_inf_promoter.is_deleted = 0
         WHERE tb_inf_user.mobile IN (%s)) AS referrer
         -- 推广信息
         LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
@@ -169,8 +173,8 @@ class PromoteEffectList(object):
 
 class PromoteQuality(object):
     @staticmethod
-    def get_promoter_mobile(cursor, user_id):
-        """推广人员信息"""
+    def get_promoter_mobile_by_city_manager(cursor, user_id):
+        """城市经理获取推广人员信息"""
         command = """
         SELECT tb_inf_promoter.mobile
         FROM tb_inf_city_manager
@@ -180,6 +184,35 @@ class PromoteQuality(object):
         AND tb_inf_city_manager.is_deleted = 0
         """
         result = cursor.query(command, {'user_id': user_id})
+
+        return [i['mobile'] for i in result if i['mobile']] if result else []
+
+    @staticmethod
+    def get_promoter_mobile_by_admin(cursor):
+        """管理员获取推广人员信息"""
+        command = """
+        SELECT mobile
+        FROM tb_inf_promoter
+        WHERE is_deleted = 0
+        """
+        result = cursor.query(command)
+
+        return [i['mobile'] for i in result if i['mobile']] if result else []
+
+    @staticmethod
+    def get_promoter_mobile_by_suppliers(cursor, city_region):
+        """区镇合伙人获取推广人员信息"""
+        if not city_region:
+            return []
+        command = """
+        SELECT tb_inf_promoter.mobile
+        FROM tb_inf_city_manager
+        INNER JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
+        WHERE tb_inf_city_manager.is_deleted = 0
+        AND tb_inf_city_manager.region_id IN (%s)
+        """
+        command = command % ','.join([str(i) for i in city_region])
+        result = cursor.query(command)
 
         return [i['mobile'] for i in result if i['mobile']] if result else []
 

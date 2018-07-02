@@ -27,6 +27,7 @@ class PromoteEffect(object):
 
             # 获取用户权限和身份
             role, user_id = sessionOperationClass.get_role()
+            regions = sessionOperationClass.get_user_locations()
 
             # 判断时间是否合法
             if start_time and end_time:
@@ -42,6 +43,7 @@ class PromoteEffect(object):
             # 构造请求参数
             params = {
                 'role': role,
+                'regions': regions,
                 'user_id': user_id,
                 'user_name': user_name,
                 'mobile': mobile,
@@ -102,6 +104,7 @@ class PromoteQuality(object):
 
             # 获取用户权限和身份
             role, user_id = sessionOperationClass.get_role()
+            regions = sessionOperationClass.get_user_locations()
 
             # 验证参数
             if start_time and end_time:
@@ -121,7 +124,8 @@ class PromoteQuality(object):
                 'dimension': dimension,
                 'data_type': data_type,
                 'role': role,
-                'user_id': user_id
+                'user_id': user_id,
+                'regions': regions
             }
 
             return Response(params=params)

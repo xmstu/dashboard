@@ -57,3 +57,9 @@ class sessionOperationClass(object):
         role = session['login']['role']
         user_id = session['login']['user_id']
         return role, user_id
+
+    @staticmethod
+    def get_user_locations():
+        """获取地区权限"""
+        region_id = [str(i) for i in session['login'].get('locations', [])]
+        return region_id

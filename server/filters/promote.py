@@ -33,30 +33,38 @@ class PromoteEffect(object):
             """过滤详情"""
             goods_count = 0
             goods_user_count = 0
-            order_over_count = 0
+            order_over_count_online = 0
+            order_over_count_unline = 0
             goods_price = 0
-            order_over_price = 0
+            order_over_price_online = 0
+            order_over_price_unline = 0
             # 全部
             if params['goods_type'] == 0:
                 goods_count = detail['goods_count_SH'] + detail['goods_count_LH']
                 goods_user_count = detail['goods_user_count']
-                order_over_count = detail['order_over_count_SH'] + detail['order_over_count_LH']
+                order_over_count_online = detail['order_over_count_SH_online'] + detail['order_over_count_LH_online']
+                order_over_count_unline = detail['order_over_count_SH_unline'] + detail['order_over_count_LH_unline']
                 goods_price = detail['goods_price_SH'] + detail['goods_price_LH']
-                order_over_price = detail['order_over_price_SH'] + detail['order_over_price_LH']
+                order_over_price_online = detail['order_over_price_SH_online'] + detail['order_over_price_LH_online']
+                order_over_price_unline = detail['order_over_price_SH_unline'] + detail['order_over_price_LH_unline']
             # 同城
             elif params['goods_type'] == 1:
                 goods_count = detail['goods_count_SH']
                 goods_user_count = detail['goods_user_count_SH']
-                order_over_count = detail['order_over_count_SH']
+                order_over_count_online = detail['order_over_count_SH_online']
+                order_over_count_unline = detail['order_over_count_SH_unline']
                 goods_price = detail['goods_price_SH']
-                order_over_price = detail['order_over_price_SH']
+                order_over_price_online = detail['order_over_price_SH_online']
+                order_over_price_unline = detail['order_over_price_SH_unline']
             # 跨城
             elif params['goods_type'] == 2:
                 goods_count = detail['goods_count_LH']
                 goods_user_count = detail['goods_user_count_LH']
-                order_over_count = detail['order_over_count_LH']
+                order_over_count_online = detail['order_over_count_LH_online']
+                order_over_count_unline = detail['order_over_count_LH_unline']
                 goods_price = detail['goods_price_LH']
-                order_over_price = detail['order_over_price_LH']
+                order_over_price_online = detail['order_over_price_LH_online']
+                order_over_price_unline = detail['order_over_price_LH_unline']
 
             return {
                 'reference_id': detail['user_id'],
@@ -66,9 +74,11 @@ class PromoteEffect(object):
                 'wake_up_count': detail['wake_up_count'],
                 'goods_count': int(goods_count),
                 'goods_user_count': int(goods_user_count),
-                'order_over_count': int(order_over_count),
+                'order_over_count_online': int(order_over_count_online),
+                'order_over_count_unline': int(order_over_count_unline),
                 'goods_price': int(goods_price),
-                'order_over_price': int(order_over_price)
+                'order_over_price_online': int(order_over_price_online),
+                'order_over_price_unline': int(order_over_price_unline)
             }
 
         data = []
