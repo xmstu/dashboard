@@ -105,6 +105,48 @@ class TransportRadarModel(object):
             )
             """.format(params['business'])
 
+        # 出发地
+        if params.get('from_province_id'):
+            goods_sql += """ AND from_province_id = %d """ % params.get('from_province_id')
+            vehicle_sql += """ AND from_province_id = %d """ % params.get('from_province_id')
+            order_sql += """ AND shb_orders.from_province_id = %d """ % params.get('from_province_id')
+
+        if params.get('from_city_id'):
+            goods_sql += """ AND from_city_id = %d """ % params.get('from_city_id')
+            vehicle_sql += """ AND from_city_id = %d """ % params.get('from_city_id')
+            order_sql += """ AND shb_orders.from_city_id = %d """ % params.get('from_city_id')
+
+        if params.get('from_county_id'):
+            goods_sql += """ AND from_county_id = %d """ % params.get('from_county_id')
+            vehicle_sql += """ AND from_county_id = %d """ % params.get('from_county_id')
+            order_sql += """ AND shb_orders.from_county_id = %d """ % params.get('from_county_id')
+
+        if params.get('from_town_id'):
+            goods_sql += """ AND from_town_id = %d """ % params.get('from_town_id')
+            vehicle_sql += """ AND from_town_id = %d """ % params.get('from_town_id')
+            order_sql += """ AND shb_orders.from_town_id = %d """ % params.get('from_town_id')
+
+        # 目的地
+        if params.get('to_province_id'):
+            goods_sql += """ AND to_province_id = %d """ % params.get('to_province_id')
+            vehicle_sql += """ AND to_province_id = %d """ % params.get('to_province_id')
+            order_sql += """ AND shb_orders.to_province_id = %d """ % params.get('to_province_id')
+
+        if params.get('to_city_id'):
+            goods_sql += """ AND to_city_id = %d """ % params.get('to_city_id')
+            vehicle_sql += """ AND to_city_id = %d """ % params.get('to_city_id')
+            order_sql += """ AND shb_orders.to_city_id = %d """ % params.get('to_city_id')
+
+        if params.get('to_county_id'):
+            goods_sql += """ AND to_county_id = %d """ % params.get('to_county_id')
+            vehicle_sql += """ AND to_county_id = %d """ % params.get('to_county_id')
+            order_sql += """ AND shb_orders.to_county_id = %d """ % params.get('to_county_id')
+
+        if params.get('to_town_id'):
+            goods_sql += """ AND to_town_id = %d """ % params.get('to_town_id')
+            vehicle_sql += """ AND to_town_id = %d """ % params.get('to_town_id')
+            order_sql += """ AND shb_orders.to_town_id = %d """ % params.get('to_town_id')
+
         kwargs = {
             'start_time': params.get('start_time'),
             'end_time': params.get('end_time')
