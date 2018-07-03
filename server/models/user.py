@@ -153,7 +153,7 @@ class UserList(object):
             elif params['is_used'] == 2:
                 fetch_where += 'AND (order_count_SH > 0 OR order_count_SH > 0) '
             elif params['is_used'] == 3:
-                fetch_where += 'AND (order_finished_count_SH > 0 OR order_finished_count_LH > 0) '
+                fetch_where += 'AND ( order_finished_count_SH_online > 0 OR order_finished_count_SH_unline > 0 OR order_finished_count_LH_online > 0 OR order_finished_count_LH_unline > 0 ) '
 
             # 贴车贴
             if params['is_car_sticker'] == 1:
