@@ -202,6 +202,9 @@ def date_to_timestamp(start_date, end_date):
     if not isinstance(start_date, str) and not isinstance(end_date, str):
         return start_date, end_date
 
+    if isinstance(eval(start_date), int) and isinstance(eval(end_date), int):
+        return start_date, end_date
+
     start_timestamp = date2timestamp(start_date, accuracy=1)
     end_timestamp = date2timestamp(end_date, accuracy=1)
 
