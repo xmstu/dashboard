@@ -70,6 +70,7 @@
 .thead-tr > th{
     font-weight: bold;
     width: 25%;
+    font-size: 12px;
 }
 .thead-tr-spec > th{
     font-weight: bold;
@@ -78,6 +79,7 @@
 .cancel-reason-types th,
 .cancel-reason-types td {
     color: #000;
+    font-size: 12px;
 }
 .cancel-reason-table {
     border:none !important;
