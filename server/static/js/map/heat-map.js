@@ -1,19 +1,3 @@
-var setAbout = {
-  init:function(){
-      $('.map-menu-about>a').addClass('selected-active');
-      $('.map-menu-about>a>i').addClass('select-active');
-      layui.use(['form','table','layer','element'],function(){
-          var form = layui.form;
-          var table = layui.table;
-          var layer = layui.layer;
-          var element = layui.element;
-      })
-  }
-};
-$('#search_btn').click(function(e){
-    e.preventDefault();
-});
-setAbout.init();
 var provinces = {
     //23个省
     "台湾": "taiwan",
@@ -87,13 +71,10 @@ var toolTipData = [
 var geoCoordMap = {};
 var max = 480,
     min = 9; // todo
-var maxSize4Pin = 50,
-    minSize4Pin = 20;
-
 //直辖市和特别行政区-只有二级地图，没有三级地图
 var special = ["北京", "天津", "上海", "重庆", "香港", "澳门"];
 var mapdata = [];
-var data_ano = []
+var data_ano = [];
 var data_reset = [
     {name: "北京", value: 177},
     {name: "天津", value: 42},
@@ -125,34 +106,27 @@ var data_reset = [
     {name: "新疆", value: 67},
     {name: "广东", value: 13},
     {name: "广西", value: 59},
-    {name: "海南", value: 14},
+    {name: "海南", value: 14}
 ];
 var ynameMap = [];
-for (var i = 0; i < data_reset.length; i++) {
+for (var i = 0; i < data_reset.length - 5; i++) {
     ynameMap.push(data_reset[i].name);
 }
-
+console.log(ynameMap)
 var chart = echarts.init(document.getElementById('map_container'));
 var option = {
-    backgroundColor: '#fff',
-    activeArea: []
-    , title: {
+    backgroundColor: '#f6f6f6',
+    title: {
         text: '数据统计地图'
         , subtext: null
         , link: null
-        , left: 'center'
+        , left: '30%'
         , textStyle: {
-            color: '#fff',
             fontSize: 14,
             fontWeight: 'normal',
             fontFamily: "Microsoft YaHei"
         }
-        , subtextStyle: {
-            color: '#ccc'
-            , fontSize: 13
-            , fontWeight: 'normal'
-            , fontFamily: "Microsoft YaHei"
-        }
+        , subtextStyle: null
     }
     , tooltip: {
         trigger: 'item',
@@ -181,24 +155,6 @@ var option = {
                 return toolTiphtml;
             }
         }
-    }
-    , toolbox: {
-        show: true
-        , orient: 'vertical'
-        , left: 'right'
-        , top: 'center'
-        , feature: {
-            dataView: {
-                readOnly: false
-            }
-            , restore: {}
-            , saveAsImage: {}
-        }
-        , iconStyle: {
-            normal: {
-                color: '#fff'
-            }
-        }
     },
     visualMap: {
         show: true,
@@ -207,50 +163,47 @@ var option = {
         left: 'left',
         top: 'bottom',
         seriesIndex: [1],
-        text: ['高', '低'],
+        text: ['high', 'low'],
         calculable: true,
-        colorLightness: [0.2, 100],
-        color: ['#c05050', '#e5cf0d', '#5ab1ef'],
+        seriesIndex: [1],
+        color: ['#00467F', '#A5CC82', '#ffc0cb']
     },
     xAxis: {
         gridIndex: 0,
         axisTick: {
-            show: false
-        },
-        axisLabel: {
-            show: false
-        },
-        splitLine: {
-            show: false
-        },
-        axisLine: {
-            show: false
-        }
-    },
-    yAxis: {
-        gridIndex: 0,
-        interval: 0,
-        data: ynameMap,
-        axisTick: {
-            show: false
+            show: true
         },
         axisLabel: {
             show: true
         },
         splitLine: {
-            show: false
+            show: true
         },
         axisLine: {
-            show: false,
+            show: true
+        }
+    },
+    yAxis: {
+        data: ynameMap,
+        axisTick: {
+            show: true
+        },
+        axisLabel: {
+            show: true
+        },
+        splitLine: {
+            show: true
+        },
+        axisLine: {
+
             lineStyle: {
-                color: "#00effc"
+                color: "#2F4554"
             }
         }
     },
     grid: {
         right: 20,
-        top: 100,
-        bottom: 40,
+        top: 0,
         width: '24%'
     },
     animationDuration: 1000,
@@ -316,9 +269,55 @@ var pageSet = {
                         })
                     })
                 });
-                console.log(geoCoordMap)
             }
+        });
+        $('#date_show_one').val(String(common.getNowFormatDate()[2]));
+        $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+        $('.map-menu-about>a').addClass('selected-active');
+        $('.map-menu-about>a>i').addClass('select-active');
+        layui.use(['laydate', 'layer', 'form', 'table'], function () {
+            var form = layui.form;
+            var table = layui.table;
+            var layer = layui.layer;
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#date_show_one',
+                theme: '#009688',
+                calendar: true,
+                max: String(common.getNowFormatDate()[0]),
+                ready: function () {
+
+                },
+                done: function (val, index) {
+                    var startTime = $('#date_show_one').val();
+                    var endTime = $('#date_show_two').val();
+                    common.dateInterval(endTime, startTime);
+                    if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                        layer.msg('提示：开始时间大于了结束时间！');
+                        return false
+                    }
+                }
+            });
+            laydate.render({
+                elem: '#date_show_two',
+                theme: '#009688',
+                calendar: true,
+                max: String(common.getNowFormatDate()[0]),
+                ready: function () {
+
+                },
+                done: function (val, index) {
+                    var startTime = $('#date_show_one').val();
+                    var endTime = $('#date_show_two').val();
+                    common.dateInterval(endTime, startTime);
+                    if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                        layer.msg('提示：开始时间大于了结束时间！');
+                        return false
+                    }
+                }
+            });
         })
+
     },
     renderMap: function (map, data) {
         data = data_reset;
@@ -329,18 +328,12 @@ var pageSet = {
                 type: 'scatter',
                 coordinateSystem: 'geo',
                 label: {
-                    normal: {
-                        formatter: '{b}',
-                        position: 'center',
-                        show: true
-                    },
-                    emphasis: {
-                        show: true
-                    }
+                    normal: {},
+                    emphasis: {}
                 },
                 itemStyle: {
                     normal: {
-                        color: '#05C3F9'
+                        color: '#009688'
                     }
                 }
             },
@@ -349,11 +342,12 @@ var pageSet = {
                 , type: 'map'
                 , mapType: map
                 , roam: false,
-                aspectScale: 0.70,
+                borderWidth: 1.6,
+                aspectScale: 0.68,
                 geoIndex: 0,
                 left: '1%',
                 top: 10,
-                width: '64%',
+                width: '72%',
                 height: '90%',
                 nameMap: {
                     'china': '中国'
@@ -369,15 +363,15 @@ var pageSet = {
                     , emphasis: {
                         show: true
                         , textStyle: {
-                            color: '#fff'
+                            color: '#333'
                             , fontSize: 13
                         }
                     }
                 }
                 , itemStyle: {
                     normal: {
-                        areaColor: '#323c48'
-                        , borderColor: 'dodgerblue'
+                        areaColor: '#009688'
+                        , borderColor: 'skublue'
                     }
                     , emphasis: {
                         areaColor: 'darkorange'
@@ -387,37 +381,38 @@ var pageSet = {
             },
             {
                 name: '数量排名',
-                type: 'bar',
-                top: 10,
-                right: 'right',
+                zlevel: 2,
                 xAxisIndex: 0,
                 yAxisIndex: 0,
-                barWidth: '35%',
-                itemStyle: {
-                    normal: {
-                        color: '#00effc'
-                    }
-                },
+                type: 'bar',
+                barMaxWidth: 20,
                 label: {
                     normal: {
                         show: true,
-                        position: "bottom",
-                        textStyle: {
-                            color: "#00effc"
-                        }
+                        position: 'right'
+                    },
+                    emphasis: {
+                        show: true
                     }
                 },
-                data: data_reset
-            },
+                itemStyle: {
+                    emphasis: {
+                        color: "rgb(254,153,78)"
+                    }
 
+                },
+                data: data_reset
+            }
         ];
         chart.setOption(option);
+    },
+    tab: function () {
+        var lis = $('.heat-maps-tabs > li');
+        lis.click(function () {
+            $(this).addClass('active').siblings('li').removeClass('active')
+        })
     }
 };
-
-function chartsRender(data) {
-
-}
 
 function converData(data) {
     pageSet.init();
@@ -425,7 +420,6 @@ function converData(data) {
     for (var i = 0; i < data.length; i++) {
         var geoCoord = geoCoordMap[data[i].name];
         if (geoCoord) {
-            console.log('success')
             res.push({
                 name: data[i].name,
                 value: geoCoord.concat(data[i].value)
@@ -436,5 +430,8 @@ function converData(data) {
     return res;
 }
 
-pageSet.init()
-console.log(converData(JSON.stringify(data_reset)));
+pageSet.init();
+pageSet.tab();
+$('#search_btn').click(function (e) {
+    e.preventDefault();
+});

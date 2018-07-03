@@ -107,3 +107,19 @@
 .thead-tr-spec tr {
     font-size: 13px;
 }
+.heat-maps-tabs >li {
+    width: 33.3%;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    color: purple;
+    cursor: pointer;
+}
+.heat-maps-tabs >li.active{
+    border-bottom: 2px solid #f40;
+}
+#map_container {
+    margin-top: 10px;
+}
