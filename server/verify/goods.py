@@ -18,8 +18,8 @@ class GoodsList(object):
         try:
             create_start_time = int(params.get('create_start_time')) if params.get('create_start_time') else time.time() - 86400 * 7
             create_end_time = int(params.get('create_end_time')) if params.get('create_end_time') else time.time()
-            load_start_time = int(params.get('load_start_time')) if params.get('load_start_time') else time.time() - 86400 * 7
-            load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else time.time()
+            load_start_time = int(params.get('load_start_time')) if params.get('load_start_time') else 0
+            load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else 0
 
             goods_id = params.get('goods_id') if params.get('goods_id') else ''
             mobile = params.get('mobile') if params.get('mobile') else ''
