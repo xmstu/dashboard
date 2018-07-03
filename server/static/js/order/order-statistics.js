@@ -547,16 +547,16 @@ $('#goods_search_box').on('click', function (e) {
         var load_start_time = $('#load_start_time').val();
         var load_end_time = $('#load_end_time').val();
         if (create_start_time != '') {
-            create_start_time = common.timeTransform(create_start_time)
+            create_start_time = common.timeTransform(create_start_time+' 00:00:00')
         }
         if (create_end_time != '') {
-            create_end_time = common.timeTransform(create_end_time)
+            create_end_time = common.timeTransform(create_end_time+' 23:59:59')
         }
         if (load_start_time != '') {
-            load_start_time = common.timeTransform(load_start_time)
+            load_start_time = common.timeTransform(load_start_time+' 00:00:00')
         }
         if (load_end_time != '') {
-            load_end_time = common.timeTransform(load_end_time)
+            load_end_time = common.timeTransform(load_end_time+' 23:59:59' )
         }
         var data = {
             order_id: $.trim($('#order_id').val()),
