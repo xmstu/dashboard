@@ -101,3 +101,9 @@
 #transport_lists_table tbody>tr{
     color: #000;
 }
+#transport_lists_table tbody>tr td {
+    font-size: 12px;
+}
+.thead-tr-spec tr {
+    font-size: 13px;
+}

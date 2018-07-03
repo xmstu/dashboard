@@ -14,7 +14,7 @@
     {% include '/header/header.html' %}
     <article class="main-content">
         {% include '/menu/menu.html' %}
-        <aside class="main-content-right">
+        <!--<aside class="main-content-right">
             <div>
                 <div class="m-c-l-content">
                     <div class="content-header">
@@ -81,26 +81,25 @@
                                     <li>认证数（&nbsp;<span>45678</span>&nbsp;）</li>
                                     <li>活跃数（&nbsp;<span>56789</span>&nbsp;）</li>
                                 </ul>
-                                <div class="layui-tab-content" style="height: 100px;">
-                                    <div class="layui-tab-item layui-show">默认宽度是相对于父元素100%适应的，你也可以固定宽度。</div>
-                                    <div class="layui-tab-item">2</div>
-                                    <div class="layui-tab-item">3</div>
+                                <div class="layui-tab-content">
+                                    <div class="layui-tab-item layui-show"><div id="map_container" style="width: 100%;height:800px;"></div></div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-        </aside>
-        <!--{% include '/exception/unfinished.html' %}-->
+        </aside>-->
+        {% include '/exception/unfinished.html' %}
     </article>
 </article>
 <span style="display: none!important">
         <script src="https://s95.cnzz.com/z_stat.php?id=1260774712&web_id=1260774712" language="JavaScript"></script>
 </span>
 <script src="../static/js/libs/jquery-2.1.1.min.js?v=1.0.1"></script>
-<script src="../static/js/libs/highcharts.min.js?v=1.0.1"></script>
-<script src="../static/js/libs/highcharts-exporting.js?v=1.0.1"></script>
+<script src="../static/js/libs/echarts.min.js?v=1.0.1"></script>
+<script src="../static/js/libs/citymap.js?v=1.0.1"></script>
 <script src="../static/layui/layui.js?v=1.0.1"></script>
 <script src="../static/js/common/common.js?version=1.0.1"></script>
 <script src="../static/js/common/http.js?v=1.0.1"></script>
