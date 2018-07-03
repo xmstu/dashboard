@@ -322,6 +322,20 @@ layui.use(['laydate', 'form', 'table'], function () {
                     $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
                 }
             })
+          $("td[data-field='goods_type']").children().each(function () {
+                    if ($(this).text() == '跨城定价') {
+                        $(this).html('<span style="color: #01AAED;">跨城定价</span>')
+                    }
+                     if ($(this).text() == '跨城议价') {
+                        $(this).html('<span style="color: #f40;">跨城议价</span>')
+                    }
+                    if ($(this).text() == '同城') {
+                        $(this).html('<span style="color: green;">同城</span>')
+                    }
+                    if ($(this).text() == '零担') {
+                        $(this).html('<span style="color: #393D49;">零担</span>')
+                    }
+                })
         }
         , id: 'goods_reload'
         , page: true
@@ -747,6 +761,20 @@ $('#goods_search_box').on('click', function (e) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
                         $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
+                    }
+                })
+                  $("td[data-field='goods_type']").children().each(function () {
+                    if ($(this).text() == '跨城定价') {
+                        $(this).html('<span style="color: #01AAED;">跨城定价</span>')
+                    }
+                     if ($(this).text() == '跨城议价') {
+                        $(this).html('<span style="color: #f40;">跨城议价</span>')
+                    }
+                    if ($(this).text() == '同城') {
+                        $(this).html('<span style="color: green;">同城</span>')
+                    }
+                    if ($(this).text() == '零担') {
+                        $(this).html('<span style="color: #393D49;">零担</span>')
                     }
                 })
             }

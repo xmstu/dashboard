@@ -298,13 +298,24 @@ function tableInit(url) {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         str = str.split('\n');
-                        $(this).html(str[0] + '<br>' + str[1]+'<br>'+str[2])
+                        $(this).html('<span style="color: purple;">'+str[0] + '</span><br>' + str[1]+'<br>'+str[2])
                     }
                 })
                 $("td[data-field='call_count']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         $(this).html(str + '次')
+                    }
+                })
+                  $("td[data-field='goods_type']").children().each(function () {
+                    if ($(this).text() == '跨城定价') {
+                        $(this).html('<span style="color: #01AAED;">跨城定价</span>')
+                    }
+                     if ($(this).text() == '跨城议价') {
+                        $(this).html('<span style="color: #f40;">跨城议价</span>')
+                    }
+                    if ($(this).text() == '同城') {
+                        $(this).html('<span style="color: green;">同城</span>')
                     }
                 })
             }

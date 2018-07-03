@@ -6,7 +6,7 @@ var dataSet = {
         setTimeout(function () {
             $('.layui-form-item .layui-inline ').css({'margin-right': 0});
             $('.part-2').css({'padding-top': '0px', 'border-top': 0});
-            $('.transport-menu-about>a').addClass('selected-active')
+            $('.transport-menu-about>a').addClass('selected-active');
             that.radar_chart_init();
             that.dateRender();
         }, 10);
@@ -78,7 +78,7 @@ var dataSet = {
             });
         });
     },
-    radar_chart_init: function (categories,order_ret,vehicles_ret,goods_ret) {
+    radar_chart_init: function (categories, order_ret, vehicles_ret, goods_ret) {
         Highcharts.setOptions({
             colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
         });
@@ -89,6 +89,9 @@ var dataSet = {
             },
             title: {
                 text: '运力雷达图',
+            },
+            marker: {
+                enabled: false
             },
             pane: {
                 size: '80%'
@@ -113,37 +116,46 @@ var dataSet = {
                 y: 70,
                 layout: 'vertical'
             },
-            series: [{
-                name: '实际接单',
-                data: order_ret,
-                pointPlacement: 'on',
-                type: 'area'
-            }, {
-                name: '车辆数',
-                data:vehicles_ret,
-                pointPlacement: 'on',
-                type: 'line'
-            }, {
-                name: '货源量',
-                data: goods_ret,
-                pointPlacement: 'on',
-                type: 'area'
-            }]
+            plotOptions: {
+                marker: {
+                    enabled: false
+                }
+            },
+            series: [
+                {
+                    name: '实际接单',
+                    data: order_ret,
+                    pointPlacement: 'on',
+                    type: 'area'
+                },
+                {
+                    name: '车辆数',
+                    data: vehicles_ret,
+                    pointPlacement: 'on',
+                    type: 'line'
+                },
+                {
+                    name: '货源量',
+                    data: goods_ret,
+                    pointPlacement: 'on',
+                    type: 'line'
+                }
+            ]
         })
     },
     chart_request: function () {
         var that = this;
         var url = '/transport/radar/';
-        var start_time =  $('#date_show_three').val();
+        var start_time = $('#date_show_three').val();
         var end_time = $('#date_show_four').val();
-        if(start_time!=''){
-            start_time=common.timeTransform(start_time+' 00:00:00')
+        if (start_time != '') {
+            start_time = common.timeTransform(start_time + ' 00:00:00')
         }
-        if(end_time!=''){
-            end_time=common.timeTransform(end_time+' 00:00:00')
+        if (end_time != '') {
+            end_time = common.timeTransform(end_time + ' 00:00:00')
         }
         var data = {
-            start_time:start_time,
+            start_time: start_time,
             end_time: end_time,
             region_id: $('#region_id').val(),
             business: $('#business').val()
@@ -155,36 +167,39 @@ var dataSet = {
                 var goods_ret = res.data.goods_ret;
                 var orders_ret = res.data.orders_ret;
                 var vehicle_name_list = res.data.vehicle_name_list;
-                if(vehicle_name_list.length>0){
-                  that.radar_chart_init(vehicle_name_list,orders_ret,vehicles_ret,goods_ret);
-                  for(var i =0;i<vehicle_name_list.length;i++){
-                      var str='<tr>';
-                      str+='<td>'+vehicle_name_list[i]+'</td>';
-                      str+='<td>'+goods_ret[i]+'单</td>';
-                      str+='<td>'+vehicles_ret[i]+'辆</td>';
-                      str+='<td style="color: #44c660;font-weight: bold;">'+orders_ret[i]+'单</td>';
-                      str+='<td style="color: #f40;font-weight: bold;">'+that.transition(goods_ret[i],orders_ret[i])+'</td>';
-                      str+='<tr>';
-                      $('.transport-tbody').append(str)
-                  }
+                if (vehicle_name_list.length > 0) {
+                    that.radar_chart_init(vehicle_name_list, orders_ret, vehicles_ret, goods_ret);
+                    for (var i = 0; i < vehicle_name_list.length; i++) {
+                        var str = '<tr>';
+                        str += '<td>' + vehicle_name_list[i] + '</td>';
+                        str += '<td>' + goods_ret[i] + '单</td>';
+                        str += '<td>' + vehicles_ret[i] + '辆</td>';
+                        str += '<td style="color: #44c660;font-weight: bold;">' + orders_ret[i] + '单</td>';
+                        str += '<td style="color: #f40;font-weight: bold;">' + that.transition(goods_ret[i], orders_ret[i]) + '</td>';
+                        str += '<tr>';
+                        $('.transport-tbody').append(str)
+                    }
 
-                }else {
+                } else {
                     return false;
                 }
             })
         });
 
     },
-    transition:function(val1,val2){
-        if(val1>0){
-            var result = (val2/val1*100).toFixed(2)+'%'
+    transition: function (val1, val2) {
+        if (val1 > 0) {
+            var result = (val2 / val1 * 100).toFixed(2) + '%'
         }
-        if(val1==0||val2==0) {
-            result=0;
+        if (val1 == 0 || val2 == 0) {
+            result = 0;
         }
         return result
     }
 
 };
-dataSet.init()
-dataSet.chart_request()
+dataSet.init();
+dataSet.chart_request();
+$('#search_btn').on('click', function (e) {
+    e.preventDefault();
+})

@@ -164,13 +164,13 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             layer.closeAll('loading')
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
-                    $(this).text('未录入')
+                    $(this).html('<span style="color: #f40;">未录入</span>')
                 } else if ($(this).text() == 1) {
-                    $(this).text('货主')
+                    $(this).html('货主')
                 } else if ($(this).text() == 2) {
-                    $(this).text('司机')
+                    $(this).html('司机')
                 } else if ($(this).text() == 3) {
-                    $(this).text('物流公司')
+                    $(this).html('物流公司')
                 }
             })
             $("td[data-field='goods_count']").children().each(function () {
@@ -183,12 +183,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                 if ($(this).text() != '') {
                     var str = $(this).text();
                     $(this).html(str + '次')
-                }
-            })
-            $("td[data-field='mobile']").children().each(function () {
-                if ($(this).text().length > 12) {
-                    var result = $(this).text().split('\n');
-                    $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
                 }
             })
             $("td[data-field='order_finished_count']").children().each(function () {
