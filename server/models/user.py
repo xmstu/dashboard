@@ -188,7 +188,7 @@ class UserList(object):
 class UserStatistic(object):
 
     @staticmethod
-    def get_before_user_count_by_mobile(cursor, params):
+    def get_before_user_count_by_mobile(cursor, params, user_ids):
         """累计用户"""
         command = """
         SELECT COUNT(1) AS count
@@ -213,18 +213,32 @@ class UserStatistic(object):
         )
         %s
         """
+
+        # 地区限制
+        region = ''
+        if user_ids:
+            region = 'AND shu_users.id IN (%s)' % ','.join(user_ids)
+
         # 优化查询速度
-        if not params['role_type'] and not params['region_id'] and not params['is_auth']:
-            before_user_count = cursor.query_one('''
+        if not params['role_type'] and not params['is_auth']:
+            cmd = """
             SELECT COUNT(1) AS count
             FROM shu_users
             WHERE shu_users.is_deleted = 0 AND shu_users.create_time < :start_time
-            ''', {'start_time': params['start_time']})
+            %s
+            """
+            cmd = cmd % region
+            before_user_count = cursor.query_one(cmd, {'start_time': params['start_time']})
         else:
+            # 地区限制
             region = ''
-            if params['region_id']:
-                region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' % ','.join(
-                    params['region_id'])
+            if user_ids:
+                region = 'AND shu_users.id IN (%s)' % ','.join(user_ids)
+
+            # region = ''
+            # if params['region_id']:
+            #     region = 'AND SUBSTRING_INDEX(shu_user_profiles.mobile_area, " ", -1) IN (%s)' % ','.join(
+            #         params['region_id'])
 
             command = command % region
 
