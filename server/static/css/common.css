@@ -492,7 +492,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 }
 
 .main-content-right {
-	padding: 6px;
+	padding: 0.2%;
 	height: auto;
 	margin-left: 8%;
 	margin-top: 66px;
@@ -507,16 +507,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	position: absolute;
 	top: 0;
 	left: 0;
-	border-width: 0 15px 15px 0;
-	border-style: solid;
-	border-color: #fff rgba(0,0,0,.1);
-	-webkit-box-shadow: 0 0 0 rgba(0,0,0,.4),0 0 10px rgba(0,0,0,.3);
-	-moz-box-shadow: 0 0 0 rgba(0,0,0,.4),0 0 10px rgba(0,0,0,.3);
-	box-shadow: 0 0 0 rgba(0,0,0,.4),0 0 10px rgba(0,0,0,.3);
-	-webkit-transform: rotate(-90deg);
-	-moz-transform: rotate(-90deg);
-	-ms-transform: rotate(-90deg);
-	-o-transform: rotate(-90deg)
+	height: 0;
 }
 
 .main-content-right>div {

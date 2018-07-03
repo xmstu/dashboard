@@ -29,7 +29,7 @@
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_one" name="date_one" autocomplete="off"
+                                            <input id="date_show_one" name="date_show_one" autocomplete="off"
                                                    lay-verify="date_show_one" class="layui-input" type="text">
                                         </div>
                                     </div>
@@ -74,16 +74,14 @@
                                 </button>
                             </form>
                         </div>
-                        <div class="part-1-bottom">
-                            <div class="layui-tab layui-tab-card">
-                                <ul class="layui-tab-title">
-                                    <li class="layui-this">用户数（&nbsp;<span>12345</span>&nbsp;）</li>
+                        <div class="">
+                            <div class="">
+                                <ul class="heat-maps-tabs clearfix">
+                                    <li class="active">用户数（&nbsp;<span>12345</span>&nbsp;）</li>
                                     <li>认证数（&nbsp;<span>45678</span>&nbsp;）</li>
-                                    <li>活跃数（&nbsp;<span>56789</span>&nbsp;）</li>
+                                    <li>活跃数123（&nbsp;<span>56789</span>&nbsp;）</li>
                                 </ul>
-                                <div class="layui-tab-content">
-                                    <div class="layui-tab-item layui-show"><div id="map_container" style="width: 100%;height:800px;"></div></div>
-                                </div>
+                                <div class=""><div id="map_container" style="width: 100%;height: 900px;"></div></div>
                             </div>
 
                         </div>
@@ -94,9 +92,9 @@
         {% include '/exception/unfinished.html' %}
     </article>
 </article>
-<span style="display: none!important">
+<!--<span style="display: none!important">
         <script src="https://s95.cnzz.com/z_stat.php?id=1260774712&web_id=1260774712" language="JavaScript"></script>
-</span>
+</span>-->
 <script src="../static/js/libs/jquery-2.1.1.min.js?v=1.0.1"></script>
 <script src="../static/js/libs/echarts.min.js?v=1.0.1"></script>
 <script src="../static/js/libs/citymap.js?v=1.0.1"></script>
