@@ -44,21 +44,23 @@
                                 </div>
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">区域选择</label>
                                         <div class="layui-input-inline" style="width: 140px">
-                                            <select id="city_area" name="modules" lay-verify="required" lay-search="">
+                                            <select id="region_id" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
-                                                <option value="1">天河区</option>
-                                                <option value="2">越秀区</option>
+                                                  {% for location in locations %}
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                </option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="layui-form-item" style="width:232px;">
                                     <div class="layui-inline" style="">
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">业务类别</label>
                                         <div class="layui-input-inline" style="width:140px;">
-                                            <select id="" name="modules" lay-verify="required"
+                                            <select id="business" name="business" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部业务</option>
                                                 <option value="1">同城</option>
@@ -68,7 +70,7 @@
                                     </div>
                                 </div>
                                 <button id="search_btn" style="position: relative;padding-left: 20px;"
-                                        class="layui-btn layui-btn-normal"><i style=""
+                                        class="layui-btn"><i style=""
                                                                               class="iconfont icon-sousuo1"></i> 搜索
                                 </button>
                             </form>
@@ -90,17 +92,11 @@
                                         <th>货源数</th>
                                         <th>车辆数</th>
                                         <th>实际接单数</th>
-                                        <th>所占比率</th>
+                                        <th>接单比率</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>贤心</td>
-                                        <td>汉族</td>
-                                        <td>5678</td>
-                                        <td>1234</td>
-                                        <td>30%</td>
-                                    </tr>
+                                    <tbody class="transport-tbody">
+
                                     </tbody>
                                 </table>
                             </div>
@@ -245,7 +241,7 @@
                             </div>
                             <button id="user_search_box"
                                     style="position: relative;padding-left: 20px;vertical-align: top;"
-                                    class="layui-btn layui-btn-normal"><i style="" class="iconfont icon-sousuo1"></i> 搜索
+                                    class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索
                             </button>
                         </form>
                         <table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>
@@ -256,6 +252,9 @@
         </aside>
     </article>
 </article>
+<span style="display: none!important">
+        <script src="https://s95.cnzz.com/z_stat.php?id=1260774712&web_id=1260774712" language="JavaScript"></script>
+</span>
 <script src="../static/js/libs/jquery-2.1.1.min.js?v=1.0.1"></script>
 <script src="https://img.hcharts.cn/highcharts/highcharts.js?v=1.0.1"></script>
 <script src="https://img.hcharts.cn/highcharts/highcharts-more.js?v=1.0.1"></script>
