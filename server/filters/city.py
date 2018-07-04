@@ -92,9 +92,10 @@ class CityOrderListFilterDecorator(object):
 
             # 新用户
             if detail['goods_counts'] <= 3:
-                detail['mobile'] = detail.get('mobile', '') + '\n新用户'
+                detail['mobile'] = detail.get('mobile', '') + '\n' + detail.get('user_name', '') + '\n新用户'
                 new = 1
             else:
+                detail['mobile'] = detail.get('mobile', '') + '\n' + detail.get('user_name', '')
                 new = 0
 
             # # 紧急 now（）-发布时间 < 10分钟

@@ -40,7 +40,9 @@ class GoodsList(object):
                 # 初次下单
                 mobile = detail['mobile']
                 if detail['shf_goods_counts'] < 3:
-                    mobile = detail['mobile'] + '\n新用户'
+                    mobile = detail['mobile'] + '\n' + detail.get('user_name', '') + '\n新用户'
+                else:
+                    mobile = detail['mobile'] + '\n' + detail.get('user_name', '')
 
                 # 构造运费
                 price = '货主出价:%(price_expect)s元%(price_addition)s\n系统价:%(price_recommend)s元' % \

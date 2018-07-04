@@ -15,6 +15,7 @@
     <article class="main-content">
         {% include '/menu/menu.html' %}
         <aside class="main-content-right">
+            <section class="main-content-right-header"><span>统计中心</span> / <span>数据统计</span> / <span>推广统计</span></section>
             <div>
                 <div class="m-c-l-content">
                     <div class="content-header">
@@ -114,6 +115,7 @@
                             <div id="charts_container_one" style="height: 100%"></div>
                         </div>
                     </div>
+                    <div class="river"></div>
                     <div class="part-2">
                         <form action="" class="layui-form layui-form-pane">
                             <div class="layui-form-item">
@@ -213,25 +215,6 @@
                             </button>
                         </form>
                         <table class="layui-hide" id="promote_table"></table>
-                        <!--<table class="layui-table"
-                               lay-data="{ height:332, url:'../static/js/user-statics/test.json', page:true, id:'idTest',even:true}"
-                               lay-filter="demo">
-                            <thead>
-                            <tr>
-                                <th lay-data="{field:'id', width:140, fixed: true}">ID</th>
-                                <th lay-data="{field:'user_name', width:180}">用户名</th>
-                                <th lay-data="{field:'mobile', width:180}">手机号</th>
-                                <th lay-data="{field:'user_type', width:125}">推荐人数</th>
-                                <th lay-data="{field:'role_auth', width:150}">发货数</th>
-                                <th lay-data="{field:'experience', width:150}">完成数</th>
-                                <th lay-data="{field:'classify', width:120}">货源金额</th>
-                                <th lay-data="{field:'classify', width:120}">订单金额</th>
-                                <th lay-data="{field:'wealth', width:120}">完成金额</th>
-                                <th lay-data="{field:'score', width:180, fixed: 'right'}">下载渠道</th>
-                                <th lay-data="{fixed: 'right', width:130, align:'center', toolbar: '#barDemo'}">操作</th>
-                            </tr>
-                            </thead>
-                        </table>-->
                         <script type="text/html" id="barDemo">
                             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                         </script>

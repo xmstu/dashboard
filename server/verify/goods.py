@@ -27,9 +27,11 @@ class GoodsList(object):
             from_province_id = params.get('from_province_id') if params.get('from_province_id') else ''
             from_city_id = params.get('from_city_id') if params.get('from_city_id') else ''
             from_county_id = params.get('from_county_id') if params.get('from_county_id') else ''
+            from_town_id = params.get('from_town_id') if params.get('from_town_id') else ''
             to_province_id = params.get('to_province_id') if params.get('to_province_id') else ''
             to_city_id = params.get('to_city_id') if params.get('to_city_id') else ''
             to_county_id = params.get('to_county_id') if params.get('to_county_id') else ''
+            to_town_id = params.get('to_town_id') if params.get('to_town_id') else ''
 
             goods_type = int(params.get('goods_type')) if params.get('goods_type') else 0
             goods_status = int(params.get('goods_status')) if params.get('goods_status') else 0
@@ -62,10 +64,11 @@ class GoodsList(object):
                 'from_province_id': from_province_id,
                 'from_city_id': from_city_id,
                 'from_county_id': from_county_id,
+                'from_town_id': from_town_id,
                 'to_province_id': to_province_id,
                 'to_city_id': to_city_id,
                 'to_county_id': to_county_id,
-
+                'to_town_id': to_town_id,
                 "goods_type": goods_type,
                 "goods_status": goods_status,
                 "is_called": is_called,

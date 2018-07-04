@@ -307,6 +307,12 @@ class OrderListModel(object):
             AND so.from_county_id = {from_county_id}
             """.format(from_county_id=params['from_county_id'])
 
+        # 出发地城镇
+        if params.get('from_town_id'):
+            fetch_where += """
+                AND so.from_town_id = {from_town_id}
+                """.format(from_town_id=params['from_town_id'])
+
         # 目的地省份
         if params.get('to_province_id'):
             fetch_where += """
@@ -324,6 +330,12 @@ class OrderListModel(object):
             fetch_where += """
             AND so.to_county_id = {to_county_id}
             """.format(to_county_id=params['to_county_id'])
+
+        # 目的地城镇
+        if params.get('to_town_id'):
+            fetch_where += """
+                AND so.to_town_id = {to_town_id}
+                """.format(to_town_id=params['to_town_id'])
 
         # 订单状态
         if params.get('order_status'):
