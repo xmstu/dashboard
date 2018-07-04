@@ -13,7 +13,7 @@ setTimeout(function () {
 }, 10);
 
 function init() {
-    $('.layui-form-item').width('250px');
+    $('.layui-form-item').width('236px');
 
     $('#from_region_id').address({
         offsetLeft: '0',

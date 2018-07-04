@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../static/layui/css/layui.css?v=1.0.3">
     <link rel="stylesheet" href="../static/css/common.css?v=1.0.3">
     <link rel="stylesheet" href="../static/css/iconfont.css?v=1.0.3">
-    <link rel="stylesheet" href="../static/css/promote/promote.css?v=1.0.3">
+    <link rel="stylesheet" href="../static/css/promote/promote.css?v=1.0.4">
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
@@ -45,7 +45,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul class="periods">
+                                <ul class="periods" style="margin-right: 22px">
                                     <li>
                                         <button class="active" value="2" id="day_methods">按日</button>
                                     </li>
@@ -120,7 +120,7 @@
                         <form action="" class="layui-form layui-form-pane">
                             <div class="layui-form-item">
                                 <label class="layui-form-label">用户名</label>
-                                <div class="layui-input-inline" style="width: 172px">
+                                <div class="layui-input-inline" style="width: 154px">
                                     <input id="user_name" type="text" name="username" lay-verify="required"
                                            placeholder="请输入用户名" autocomplete="off" class="layui-input">
                                 </div>
@@ -128,7 +128,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">手机号</label>
-                                    <div class="layui-input-inline" style="width: 172px">
+                                    <div class="layui-input-inline" style="width: 154px">
                                         <input maxlength="11" id="phone_number" type="tel" name="phone" placeholder="请输入手机号"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
@@ -137,7 +137,7 @@
                             <div class="layui-form-item" style="width: 250px;">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">推荐角色</label>
-                                    <div class="layui-input-inline" style="width: 150px;">
+                                    <div class="layui-input-inline" style="width: 142px;">
                                         <select id="is_referenced" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="1">货主</option>
@@ -150,7 +150,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货源类型</label>
-                                    <div class="layui-input-inline">
+                                    <div class="layui-input-inline" style="width: 140px;">
                                         <select id="goods_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部类型</option>
                                             <option value="1">同城</option>
@@ -162,7 +162,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">活跃</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 140px;">
                                         <select id="is_active_select" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">活跃(每天登录)</option>
@@ -176,7 +176,7 @@
                             <div class="layui-form-item" style="">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">提车贴</label>
-                                    <div class="layui-input-inline" style="width: 172px;">
+                                    <div class="layui-input-inline" style="width: 154px;">
                                         <select id="is_car_sticker" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">有</option>
@@ -185,13 +185,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width:240px ;">
+                            <article style="width: auto;display: inline-block;">
+                                <div class="layui-form-item register-time">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">注册日期</label>
                                     <div class="layui-input-block">
                                         <i class="layui-icon layui-icon-riqi"></i>
                                         <input id="date_show_three" name="date_three" autocomplete="off"
-                                               lay-verify="date_show_three" class="layui-input" type="text">
+                                               lay-verify="date_show_three" class="layui-input" type="text" style="width: 142px;">
                                         <span class="date-tips">请选择日期</span>
                                     </div>
                                 </div>
@@ -199,7 +200,7 @@
                             <span style="display: inline-block;margin-top: 9px;">至</span>
                             <div class="layui-form-item" style="width:240px ;">
                                 <div class="layui-inline">
-                                    <div class="layui-input-block" style="margin-left: 10px;">
+                                    <div class="layui-input-block" style="margin-left: 4px;">
                                         <i class="layui-icon layui-icon-riqi"></i>
                                         <input id="date_show_four" name="date_four" autocomplete="off"
                                                lay-verify="date_show_four" class="layui-input" type="text">
@@ -207,10 +208,11 @@
                                     </div>
                                 </div>
                             </div>
+                            </article>
                             <button id="user_search_box" style="position: relative;padding-left: 20px;"
                                     class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索
                             </button>
-                            <button id="add_promote_person" style="padding-left: 10px;margin-left:500px;"
+                            <button id="add_promote_person" style="padding-left: 10px;margin-left:20%;"
                                     class="layui-btn"><i style="" class="layui-icon">&#xe614;</i> 新增推广人员
                             </button>
                         </form>

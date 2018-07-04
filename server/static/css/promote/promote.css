@@ -46,7 +46,10 @@
     width: 262px !important;
 }
 .layui-form-special {
-    width: 206px!important;
+    width: 202px!important;
+}
+.layui-form-spec {
+    width: 218px!important;
 }
 .badge {
     display: inline-block;
@@ -124,4 +127,13 @@
 }
 #map_container {
     margin-top: 10px;
+}
+.register-time{
+    width:208px!important;
+}
+.fabushijian{
+    width: 214px!important;
+}
+.chart-area-four-body{
+    padding-left: 10px;
 }

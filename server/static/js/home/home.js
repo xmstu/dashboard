@@ -1,5 +1,5 @@
 $('.layui-table-cell').css({'height': 'auto!important'});
-$('.part-2 .layui-form-item').css({'width': "260px"})
+$('.part-2 .layui-form-item').css({'width': "246px"})
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
