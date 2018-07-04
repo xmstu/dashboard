@@ -17,7 +17,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#009688',
         calendar: true,
-         max: String(common.getNowFormatDate()[0]),
+        max: String(common.getNowFormatDate()[0]),
         done: function (val, index) {
             var startTime = common.timeTransform($('#date_show_one').val())
             var endTime = common.timeTransform($('#date_show_two').val())
@@ -31,7 +31,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_two',
         theme: '#009688',
         calendar: true,
-         max: String(common.getNowFormatDate()[0]),
+        max: String(common.getNowFormatDate()[0]),
         done: function (val, index) {
             var startTime = common.timeTransform($('#date_show_one').val())
             var endTime = common.timeTransform($('#date_show_two').val())
@@ -56,7 +56,7 @@ $('#user_search_box').on('click', function (e) {
         goods_type: $.trim($('#goods_type').val()),
         is_called: $.trim($('#is_called').val()),
         vehicle_length: $.trim($('#vehicle_length').val()),
-        node_id: $.trim($('#node_id').val()),
+        node_id: $.trim($('#node_id').val()) == '' ? common.role_area_show($('#super_manager_area_one')) : $.trim($('#node_id').val()),
         spec_tag: $.trim($('#spec_tag').val()),
         is_addition: $.trim($('#is_addition').val())
     };
@@ -66,7 +66,6 @@ $('#user_search_box').on('click', function (e) {
 });
 
 function dataInit() {
-
     layui.use('layer', function () {
         var layer = layui.layer;
         var start_time = $.trim($('#date_show_one').val());
@@ -76,7 +75,7 @@ function dataInit() {
             return false
         }
         var goods_types = $.trim($('#goods_types').val());
-        var region_id = $.trim($('#city_area').val());
+        var region_id = $.trim($('#city_area').val())==''?common.role_area_show($('#super_manager_area_zero')):$.trim($('#city_area').val());
         if (start_time != '') {
             start_time = common.timeTransform(start_time + ' 00:00:00')
         }
@@ -272,7 +271,7 @@ function tableInit(url) {
                     if ($(this).text().length > 14) {
                         var str = $(this).text();
                         str = str.split('\n');
-                        $(this).html(str[0] + '<br><span style="color: red;">' + str[1]+'</span>')
+                        $(this).html(str[0] + '<br><span style="color: red;">' + str[1] + '</span>')
                     }
                 });
                 $("td[data-field='vehicle']").children().each(function () {
@@ -291,14 +290,14 @@ function tableInit(url) {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         str = str.split('\n');
-                        $(this).html('发布:'+str[0] + '<br>装货:' + str[1])
+                        $(this).html('发布:' + str[0] + '<br>装货:' + str[1])
                     }
                 });
                 $("td[data-field='address']").children().each(function () {
                     if ($(this).text() != '') {
                         var str = $(this).text();
                         str = str.split('\n');
-                        $(this).html('<span style="color: purple;">'+str[0] + '</span><br>' + str[1]+'<br>'+str[2])
+                        $(this).html('<span style="color: purple;">' + str[0] + '</span><br>' + str[1] + '<br>' + str[2])
                     }
                 })
                 $("td[data-field='call_count']").children().each(function () {
@@ -307,11 +306,11 @@ function tableInit(url) {
                         $(this).html(str + '次')
                     }
                 })
-                  $("td[data-field='goods_type']").children().each(function () {
+                $("td[data-field='goods_type']").children().each(function () {
                     if ($(this).text() == '跨城定价') {
                         $(this).html('<span style="color: #01AAED;">跨城定价</span>')
                     }
-                     if ($(this).text() == '跨城议价') {
+                    if ($(this).text() == '跨城议价') {
                         $(this).html('<span style="color: #f40;">跨城议价</span>')
                     }
                     if ($(this).text() == '同城') {
@@ -323,7 +322,6 @@ function tableInit(url) {
             , page: true
         });
     })
-
 }
 
 function tableReset(url) {
@@ -383,3 +381,26 @@ function tableReset(url) {
         });
     })
 }
+
+function area_select() {
+    var auth_role = $('#user-info').attr('data-role')
+    if (!!auth_role && auth_role == 1) {
+        $('#super_manager_area').css({'display': 'block'})
+        $('#super_manager_area_two').css({'display': 'block'})
+        $('#super_manager_area_one').address({
+            level: 3
+        });
+          $('#super_manager_area_zero').address({
+            level: 3
+        });
+    } else {
+        $('#super_manager_area').css({'display': 'none'})
+        $('#city_manager_area_one').css({'display': 'block'})
+        $('#super_manager_area_two').css({'display': 'none'})
+        $('#city_manager_two').css({'display': 'block'})
+
+    }
+}
+
+console.log($.trim($('#city_area').val()));
+area_select()

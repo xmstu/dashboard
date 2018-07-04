@@ -64,7 +64,7 @@ body {
 
 .header {
 	min-width: 1550px;
-	height: 66px;
+	height: 56px;
 	background: #47475c;
 	-webkit-background-size: cover;
 	background-size: cover;
@@ -92,12 +92,12 @@ body {
 }
 
 .header-left>a>img {
-	margin-top: 22px;
+	margin-top: 18px;
 	width: 100%
 }
 
 .header-content {
-	width: 64%;
+	width: 60%;
 	height: 100%;
 	float: left;
 	min-width: 920px;
@@ -110,8 +110,7 @@ body {
 .header-content-main {
 	border-radius: 30px;
 	color: #FFF;
-	margin: 6px;
-	padding: 10px 15px 6px 20px;
+	padding: 4px 15px 6px 20px;
 	width: 90%;
 	margin-left: 2%;
 	display: none;
@@ -138,12 +137,17 @@ body {
 }
 
 .header-right {
-	width: 28%;
+	width: 32%;
 	float: left;
 	height: 100%;
 	padding: 0 1% 0 1%
 }
-
+.user_name_icon{
+	display: inline-block;
+	margin-top:12px;
+	margin-right:6px;
+	color: #fff;
+}
 .header-right>.oneself-set {
 	height: 100%;
 	padding-top: 4px
@@ -185,9 +189,9 @@ body {
 #page_area .menu-lists-content>p>a {
 	display: block;
 	width: 100%;
-	height: 40px;
-	line-height: 40px;
-	font-size: 14px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 13px;
 	color: #666!important;
 	text-decoration: blink;
 	padding-left: 42px;
@@ -208,9 +212,8 @@ body {
 
 .oneself-set>div:nth-of-type(1) {
 	display: inline-block;
-	width: 81%;
-	padding-left: 10px;
-	padding-top: 6px;
+	width: 86%;
+	padding-left: 8px;
 	vertical-align: top;
 	position: relative
 }
@@ -218,7 +221,7 @@ body {
 .oneself-set>div:nth-of-type(1)>ul.dropdown-menu {
 	position: absolute;
 	height: auto;
-	top: 65px;
+	top: 51px;
 	border-top: 2px solid red;
 	padding-top: 6px;
 	background: #fff;
@@ -247,8 +250,9 @@ body {
 
 .oneself-set>div:nth-of-type(1)>span.layui-btn {
 	float: right;
-	line-height: 40px;
-	height: 40px
+	line-height: 34px;
+	height: 34px;
+	margin-top: 6px;
 }
 
 .dropdown-menu .icon-xiaoxi {
@@ -337,7 +341,7 @@ body {
 
 .main-content>.main-content-left {
 	width: 8%;
-	top: 66px;
+	top: 56px;
 	max-width: 165px;
 	min-width: 120px;
 	background: #3a3a4f!important;
@@ -359,27 +363,22 @@ body {
 	border-radius: 6px;
 	width: 94%;
 	margin: 10px 4% 0 2%;
-	background: none repeat scroll 0 0 rgba(0,0,0,.1);
+	background: none repeat scroll 0 0 rgba(0,0,0,.2);
 	padding-top: 8%
 }
-
 .layui-nav-tree .layui-nav-item a:hover {
 	background: 0 0!important
 }
-
 .layui-nav-item>a {
 	padding-left: 30px
 }
-
 .layui-nav-item {
 	line-height: 38px!important;
 	margin-bottom: 10px
 }
-
 .layui-nav .layui-nav-item i {
 	font-size: 13px
 }
-
 .layui-nav-item>a>i:nth-child(1) {
 	margin-right: 10%;
 	display: inline-block;
@@ -393,15 +392,12 @@ body {
 	position: relative;
 	z-index: 999
 }
-
 .layui-nav-item:nth-child(4)>a>i {
 	font-size: 13px
 }
-
 .layui-form-item {
 	margin-bottom: 10px
 }
-
 nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	line-height: 38px;
 	height: 38px;
@@ -411,36 +407,30 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	font-size: 12px;
 	font-weight: 700
 }
-
 .layui-nav-tree .layui-nav-item>a:hover {
 	text-shadow: none!important;
 	color: skyblue!important;
 	text-decoration: underline
 }
-
 .layui-nav-tree .layui-nav-item a i:nth-child(2) {
 	position: absolute;
 	right: 5px;
 	width: 64px;
 	text-align: right
 }
-
 .selected-active {
 	color: skyblue!important;
 	text-decoration: underline
 }
-
 .layui-nav-tree .layui-nav-item a:hover i:nth-child(2) {
 	font-weight: 700
 }
-
 .nav-search {
 	background: 0 0;
 	width: 214px;
 	height: 42px;
 	border: none
 }
-
 .nav-search>div {
 	background: rgba(0,0,0,.3);
 	margin: 14px 12px 0 12px;
@@ -450,7 +440,6 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	border-radius: 4px;
 	position: relative
 }
-
 .nav-search>div>input {
 	background: 0 0;
 	width: 210px;
@@ -459,49 +448,46 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	padding-left: 32px;
 	color: #cdd
 }
-
 .nav-search .icon-sousuo1 {
 	position: absolute;
 	left: 11px;
 	top: 14px;
 	color: #eee
 }
-
 .m-c-l-content {
 	padding: 10px;
 	padding-right: 0;
+	padding-left: 0;
 	border: 1px solid #ddd
 }
-
 .m-c-l-content .content-header>h2 {
-	font-size: 20px;
-	color: inherit;
+	font-size: 15px;
+	color: #333;
 	font-weight: 600
 }
-
 .m-c-l-content .content-header>h2>i {
 	margin-right: 4px
 }
-
+.m-c-l-content .content-header,
+.part-1-top,.part-1-bottom,.part-2{
+	padding-left: 8px;
+}
 .m-c-l-content-header {
 	padding-bottom: 2px
 }
-
 .setting-about {
 	padding: 16px 0 0 20px
 }
-
 .main-content-right {
 	padding: 0.2%;
 	height: auto;
 	margin-left: 8%;
-	margin-top: 66px;
+	margin-top: 56px;
 	background: #f1f1f1;
 	padding-right: 0;
 	min-width: 1360px;
 	position: relative
 }
-
 .main-content-right::after {
 	content: '';
 	position: absolute;
@@ -509,24 +495,66 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	left: 0;
 	height: 0;
 }
-
 .main-content-right>div {
 	height: 100%;
 	background: #fff;
 	box-shadow: 0 0 5px #ccc
 }
+.main-content-right-header{
+	height: 34px;
+	background: #fff;
+	margin:0 0 6px 0;
+	padding-left: 10px;
+	line-height: 34px;
+}
+.main-content-right-header>ol li{
+	float: left;
+}
+.main-content-right-header>ol li:nth-child(1){
+	width: 90%;
+}
+.main-content-right-header>ol li:nth-child(2){
+	width: 10%;
+}
+p.message-center {
+	color: #f5f5f5;
+	font-size: 14px;
+	position: relative;
+	display: inline-block;
+	margin-left: 4%;
+}
+p.message-center  i {
+	position: absolute;
+	right: -24px;
+}
+.layui-badge{
+	right: -30px;
+	font-size: 12px;
 
+}
+.main-content-right-header span{
+	color: #aaa;
+	font-size: 16px;
+	font-weight: bold;
+}
+.main-content-right-header span:nth-child(1){
+	color: #455;
+}
+.main-content-right-header span:nth-child(2){
+	color: #009688;
+}
+.main-content-right-header span:nth-child(3){
+	color: #aaa;
+}
 .layui-form-item {
 	vertical-align: top;
 	display: inline-block
 }
-
 .layui-form ul {
 	display: inline-block;
 	width: 140px;
 	vertical-align: top
 }
-
 .layui-form ul>li {
 	float: left;
 	width: 33.33333%;
@@ -536,11 +564,9 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	text-align: center;
 	height: 30px
 }
-
 .layui-form ul>li:last-child {
 	border-right: 1px solid #F6F6F6
 }
-
 .layui-form ul>li>button {
 	background: 0 0;
 	display: block;
@@ -549,88 +575,70 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	line-height: 30px;
 	cursor: pointer
 }
-
 .main-content .layui-form-pane .layui-form-label {
 	padding: 6px 10px;
 	width: auto
 }
-
 .main-content .layui-form-pane .layui-input-block {
 	margin-left: 66px
 }
-
 .part-2 .layui-form-item {
 	vertical-align: top;
 	width: 270px
 }
-
 .layui-icon-riqi {
 	position: absolute;
 	top: 3px;
 	right: 6px;
 	font-size: 20px
 }
-
 #LAY_table_user {
 	overflow-x: hidden
 }
-
 .main-content .layui-form-pane .layui-form-label {
 	height: 29px;
 	line-height: 29px;
 	padding: 0 8px;
 	font-size: 12px
 }
-
 .main-content-right .layui-input {
 	height: 29px;
 	background: 0 0
 }
-
 .layui-btn {
 	height: 29px;
 	line-height: 29px;
 	margin-left: 0;
 	font-size: 12px
 }
-
 .layui-btn>i {
 	vertical-align: bottom
 }
-
 .layui-table-body .layui-btn>i {
 	vertical-align: middle
 }
-
 .icon-caidan {
 	cursor: pointer
 }
-
 .highcharts-credits {
 	display: none!important
 }
-
 #charts_container_one {
 	min-width: 100%
 }
-
 .layui-form-item .layui-input-inline {
 	width: 160px
 }
-
 .charts-area-two .layui-form-item,.part-1-top .layui-form-item {
 	vertical-align: top
 }
-
 .highcharts-container {
 	width: 100%!important;
 	height: 100%!important
 }
-
 .none {
 	display: none!important
 }
-
 .date-tips {
 	position: absolute;
 	color: #ccc;
@@ -638,13 +646,11 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	right: 78px;
 	top: 6px
 }
-
 .main-content-right .layui-input {
 	position: relative;
 	z-index: 9;
 	font-size: 12px
 }
-
 .layui-form-select dl {
 	z-index: 99999
 }
@@ -659,7 +665,6 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 }
 
 .part-2,.part-3 {
-	border-top: 1px dashed #cdd;
 	padding-top: 16px
 }
 
@@ -710,20 +715,17 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	font-weight: 700;
 	margin-top: 47px
 }
-
 .content-show:nth-of-type(2) {
 	background-color: #a6d669;
 	margin-bottom: 18px
 }
-
 .content-show:nth-of-type(2) ul {
 	background-color: #99c262
 }
-
 .river {
-	height: 4px;
-	background: #f5f5f5;
-	box-shadow: 0 0 3px #eee
+	height: 8px;
+	background: #f1f1f1;
+	position: relative;
 }
 
 .chart-area-four-body-bottom>#charts_container_four {

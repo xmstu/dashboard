@@ -573,7 +573,7 @@ $('#goods_search_box').on('click', function (e) {
             comment_type: $.trim($('#comment_type_one').val()),
             from_province_id: $('#from_region_id').attr('provinceid') == undefined ? '' : $('#from_region_id').attr('provinceid'),
             from_city_id: $('#from_region_id').attr('cityid') == undefined ? '' : $('#from_region_id').attr('cityid'),
-            from_country_id: $('#from_region_id').attr('districtsid') == undefined ? '' : $('#from_region_id').attr('districtsid'),
+            from_county_id: $('#from_region_id').attr('districtsid') == undefined ? '' : $('#from_region_id').attr('districtsid'),
             to_province_id: $('#to_region_id').attr('provinceid') == undefined ? '' : $('#to_region_id').attr('provinceid'),
             to_city_id: $('#to_region_id').attr('cityid') == undefined ? '' : $('#to_region_id').attr('cityid'),
             to_country_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
@@ -584,7 +584,7 @@ $('#goods_search_box').on('click', function (e) {
             page: 1,
             limit: 10
         };
-        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile + '&driver_mobile=' + data.driver_mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_country_id=' + data.from_country_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&order_type=' +
+        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile + '&driver_mobile=' + data.driver_mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&order_type=' +
             data.order_type + '&order_status=' + data.order_status + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&spec_tag=' + data.spec_tag + '&node_id=' + data.node_id + '&is_change_price=' + data.is_change_price + '&pay_status=' + data.pay_status + '&comment_type=' + data.comment_type + '&start_order_time=' + data.start_order_time + '&end_order_time=' + data.end_order_time + '&start_complete_time=' + data.start_complete_time + '&end_complete_time=' + data.end_complete_time;
         setAbout.tableRender(url)
     });

@@ -16,10 +16,10 @@
         </section>
         <section class="header-right">
             <div class="oneself-set">
-                <img width="52" height="52" style="border-radius: 50%;border: 1px dotted #ccc;"
+                <img width="44" height="44" style="border-radius: 50%;border: 1px dotted #ccc;"
                      src="{{avatar_url}}" alt="">
                 <div>
-                    <b style="display: inline-block;margin-top:12px;margin-right:6px;color: #fff;" id="user-info" data-role="{{ role }}" data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}">Hi,{{ user_name }}</b>
+                    <b class="user_name_icon" style="" id="user-info" data-role="{{ role }}" data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}">Hi,{{ user_name }}</b>
                     <span id="show_hide" style="cursor:pointer;color: #fff;" class="layui-icon">&#xe61a;</span>
                     <ul class="dropdown-menu" style="display:none;">
                         <li><a href="/password/"><i class="iconfont icon-shezhi1"></i> <span
@@ -27,8 +27,9 @@
                         <li class="loginOut"><a href="#"><i class="iconfont icon-secede"></i> <span
                                 style="border-left: 1px dashed #ccc; padding-left: 5px;">退出登陆</span></a></li>
                     </ul>
-                    <span id="project_introduce" class="layui-btn"
-                          style="background: none;border: 1px dashed #009688;color: #fff;"><i class="layui-icon">&#xe62e;</i><a style="color: #fff" target="_blank" href="/introduce/">统计中心介绍</a></span>
+                      <p class="message-center">消息<i class="iconfont icon-xiaoxi1"></i></p><b class="layui-badge">99+</b>
+                    <span id="project_introduce" class="layui-btn layui-btn-sm"
+                          style="background: none;border: 1px dashed #009688;color: #fff;"><i class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank" href="/introduce/">统计中心介绍</a></span>
                 </div>
             </div>
         </section>

@@ -3,15 +3,16 @@ var common = {
         elem.css({'display': 'none'})
     },
     showData: function (elem, elem2) {
-        $(elem).click(function () {
+        $(elem).mouseenter(function () {
             if ($(elem2).is(':hidden')) {
                 $(elem2).slideDown(100);
                 $(elem).html('&#xe619;')
-            } else {
-                $(elem2).slideUp(100);
-                $(elem).html('&#xe61a;');
-                return false
             }
+        });
+        $(elem2).mouseleave(function () {
+            $(elem2).slideUp(100);
+            $(elem).html('&#xe61a;');
+            return false
         })
     },
     init: function () {
@@ -365,6 +366,20 @@ var common = {
             e.preventDefault();
             $('html,body').animate({scrollTop: 0});
         });
+    },
+    role_area_show:function(elem){
+        var province_id = $.trim(elem.attr('provinceid'));
+        var city_id = $.trim(elem.attr('cityid'));
+        var region_id = $.trim(elem.attr('regionid'));
+        if(region_id!=''){
+            return region_id
+        }else if(province_id!=''&&city_id==''){
+            return province_id
+        }else if(province_id==''&&city_id!=''){
+            return city_id
+        }else if(province_id==''&&city_id==''&&region_id!=''){
+            return region_id
+        }
     }
 };
 setTimeout(function () {
