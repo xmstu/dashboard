@@ -49,6 +49,7 @@ class GoodsList(object):
                 shf_goods.price_expect,
                 shf_goods.price_addition,
                 shu_users.mobile,
+                shu_user_profiles.user_name,
                 ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) AS shf_goods_counts,
                 (
                 SELECT
@@ -91,6 +92,7 @@ class GoodsList(object):
                     SELECT 
                     {fields}
                     FROM shf_goods
+                    LEFT JOIN shu_user_profiles USING(user_id)
                     LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
                     LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
                     AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
