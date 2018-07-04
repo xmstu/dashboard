@@ -19,7 +19,7 @@
                 <img width="52" height="52" style="border-radius: 50%;border: 1px dotted #ccc;"
                      src="{{avatar_url}}" alt="">
                 <div>
-                    <b style="display: inline-block;margin-top:12px;margin-right:6px;color: #fff;">Hi,{{user_name}}</b>
+                    <b style="display: inline-block;margin-top:12px;margin-right:6px;color: #fff;" id="user-info" data-role="{{ role }}" data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}">Hi,{{ user_name }}</b>
                     <span id="show_hide" style="cursor:pointer;color: #fff;" class="layui-icon">&#xe61a;</span>
                     <ul class="dropdown-menu" style="display:none;">
                         <li><a href="/password/"><i class="iconfont icon-shezhi1"></i> <span
