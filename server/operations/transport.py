@@ -18,6 +18,6 @@ class TransportList(object):
     @staticmethod
     @make_decorator
     def get_list(page, limit, params):
-        data = TransportListModel.get_data(db.read, page, limit, params)
+        data = TransportListModel.get_data(db.read_db, page, limit, params)
 
         return Response(data=data)

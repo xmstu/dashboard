@@ -54,8 +54,10 @@ class TransportList(object):
             # 当前权限下所有地区
             if sessionOperationClass.check():
                 role, locations_id = sessionOperationClass.get_locations()
-                if role in (2, 3, 4) and not params['region_id']:
+                if role in (2, 3, 4) and not params.get('region_id'):
                     params['region_id'] = locations_id
+                elif role == 1:
+                    params['region_id'] = 0
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
@@ -70,8 +72,6 @@ class TransportList(object):
             params['to_town_id'] = int(params.get('to_county_id', None) or 0)
             params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
             params['business'] = int(params.get('business', None) or 0)
-            params['compare'] = int(params.get('compare', None) or 0)
-            params['mileage'] = int(params.get('mileage', None) or 0)
             params['filter'] = int(params.get('filter', None) or 0)
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
             params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)

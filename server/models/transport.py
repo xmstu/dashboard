@@ -207,14 +207,138 @@ class TransportListModel(object):
     @staticmethod
     def get_data(cursor, page, limit, params):
 
-        fields = """"""
+        inner_good_order_fetch_where = """ 1=1 """
+        inner_vehicle_fetch_where = """ 1=1 """
+        outer_fetch_where = """ 1=1 """
 
-        which_table = """"""
+        command = """
+        SELECT
+            * 
+        FROM
+        (-- 货源和订单查询
+            SELECT
+            FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") as create_time,
+            haul_dist,
+            sg.from_province_id,
+            sg.from_city_id,
+            sg.from_county_id,
+            sg.from_town_id,
+            sg.to_province_id,
+            sg.to_city_id,
+            sg.to_county_id,
+            sg.to_town_id,
+            shf_goods_vehicles.`name`,
+            AVG(mileage_total) AS avg_mileage_total,
+            COUNT( 1 ) AS goods_count,
+            COUNT(so.id) AS order_count
+        FROM
+            shf_goods sg
+            LEFT JOIN shb_orders so ON sg.id = so.goods_id
+            LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = sg.id 
+            AND shf_goods_vehicles.vehicle_attribute = 3 
+            AND shf_goods_vehicles.is_deleted = 0 
+            -- 时间
+            AND sg.create_time >= :start_time 
+            AND sg.create_time < :end_time
+        WHERE
+            {inner_good_order_fetch_where}
+            GROUP BY FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") DESC
+            ) as a LEFT JOIN
+            (
+            SELECT
+            FROM_UNIXTIME(shf_booking_settings.create_time,"%%Y-%%m-%%d") create_time,
+            COUNT( 1 ) vehicle_count 
+        FROM
+            shu_vehicle_auths
+            INNER JOIN shu_vehicles ON shu_vehicle_auths.vehicle_id = shu_vehicles.id
+            INNER JOIN shf_booking_settings ON shf_booking_settings.user_id = shu_vehicles.user_id
+            INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id
+            INNER JOIN shm_dictionary_items ON shm_dictionary_items.id = shu_vehicle_auths.length_id
+            -- 线路创建的时间
+            AND shf_booking_settings.create_time >= :start_time 
+            AND shf_booking_settings.create_time < :end_time 
+            AND shu_vehicle_auths.is_deleted = 0 
+            AND shu_vehicle_auths.auth_status = 2 
+        WHERE
+            {inner_vehicle_fetch_where}
+            GROUP BY FROM_UNIXTIME(create_time, "%%Y-%%m-%%d") DESC 
+            ) as b ON a.create_time = b.create_time 
+            -- 货源 车辆 比较大小
+            WHERE {outer_fetch_where}
+        """
 
-        fetch_where = """"""
+        # 地区权限
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
 
-        command = """"""
+        inner_good_order_fetch_where += region
+        inner_vehicle_fetch_where += region
 
-        data = cursor.query(command)
+        # 出发地
+        if params['from_town_id']:
+            inner_good_order_fetch_where += ' AND sg.from_town_id = %d ' % params['from_town_id']
+            inner_vehicle_fetch_where += ' AND from_town_id = %d ' % params['from_town_id']
+        if params['from_county_id']:
+            inner_good_order_fetch_where += ' AND sg.from_county_id = %d ' % params['from_county_id']
+            inner_vehicle_fetch_where += ' AND from_county_id = %d ' % params['from_county_id']
+        if params['from_city_id']:
+            inner_good_order_fetch_where += ' AND sg.from_city_id = %d ' % params['from_city_id']
+            inner_vehicle_fetch_where += ' AND from_city_id = %d ' % params['from_city_id']
+        if params['from_province_id']:
+            inner_good_order_fetch_where += ' AND sg.from_province_id = %d ' % params['from_province_id']
+            inner_vehicle_fetch_where += ' AND from_province_id = %d ' % params['from_province_id']
+
+        # 目的地
+        if params['to_town_id']:
+            inner_good_order_fetch_where += ' AND sg.to_town_id = %d ' % params['to_town_id']
+            inner_vehicle_fetch_where += ' AND to_town_id = %d ' % params['to_town_id']
+        if params['to_county_id']:
+            inner_good_order_fetch_where += ' AND sg.to_county_id = %d ' % params['to_county_id']
+            inner_vehicle_fetch_where += ' AND to_county_id = %d ' % params['to_county_id']
+        if params['to_city_id']:
+            inner_good_order_fetch_where += ' AND sg.to_city_id = %d ' % params['to_city_id']
+            inner_vehicle_fetch_where += ' AND to_city_id = %d ' % params['to_city_id']
+        if params['to_province_id']:
+            inner_good_order_fetch_where += ' AND sg.to_province_id = %d ' % params['to_province_id']
+            inner_vehicle_fetch_where += ' AND to_province_id = %d ' % params['to_province_id']
+
+        # 车长要求
+        if params['vehicle_length']:
+            inner_good_order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
+            inner_vehicle_fetch_where += """ AND shm_dictionary_items.`name` = '%s' """ % params['vehicle_length']
+
+        # 业务类型
+        if params['business']:
+            inner_good_order_fetch_where += """ AND (({business}=1 AND haul_dist = 1) OR ({business}=2 AND haul_dist = 2)) """.format(business=params['business'])
+            inner_vehicle_fetch_where += """ AND (({business}=1 AND shf_booking_basis.enabled_long_haul = 1) OR ({business}=2 AND shf_booking_basis.enabled_short_haul = 1)) """.format(business=params['business'])
+
+        # 筛选条件
+        if params['filter']:
+            outer_fetch_where += """ AND (({filter}=1 AND a.goods_count > b.vehicle_count) OR ({filter}=2 AND a.goods_count < b.vehicle_count)) """.format(filter=params['filter'])
+
+        outer_fetch_where += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
+
+        # 时间
+        kwargs = {
+            'start_time': params.get('start_time', 0),
+            'end_time': params.get('end_time', 0)
+        }
+
+        transport_list = cursor.query(command.format(inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)
+
+        data = {
+            "transport_list": transport_list
+        }
 
         return data

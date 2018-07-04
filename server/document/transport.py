@@ -18,8 +18,6 @@ transport_list_param = api.doc(params={
     "to_town_id": "目的地城镇id",
     "vehicle_length": "车长要求",
     "business": "业务类型:1.同城;2.跨城",
-    "compare": "比较:1.大于输入的里程;2.小于输入的里程",
-    "mileage": "里程km",
     "filter": "筛选条件:1.货源>车辆;2.货源<车辆;",
     "start_time": "开始时间",
     "end_time": "结束时间",
