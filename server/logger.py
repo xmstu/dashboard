@@ -2,7 +2,8 @@
 # author=veficos
 
 import logging
-from fluent import handler
+from fluent.asynchandler import FluentHandler
+from fluent.handler import FluentRecordFormatter
 from server.configs import configs
 
 
@@ -11,9 +12,9 @@ def __create_logger(conf):
     level = logging.getLevelName(conf.level)
     logger.setLevel(level)
 
-    __handler = handler.FluentHandler(conf.fluent.tag, conf.fluent.host, conf.fluent.port)
+    __handler = FluentHandler(conf.fluent.tag, conf.fluent.host, conf.fluent.port)
 
-    __handler.setFormatter(handler.FluentRecordFormatter(fmt={
+    __handler.setFormatter(FluentRecordFormatter(fmt={
         'level': '%(levelname)s',
         'sys_host': '%(hostname)s',
         'sys_name': '%(name)s',

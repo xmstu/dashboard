@@ -13,7 +13,7 @@ setTimeout(function () {
 }, 10);
 
 function init() {
-    $('.layui-form-item').width('250px');
+    $('.layui-form-item').width('236px');
 
     $('#from_region_id').address({
         offsetLeft: '0',
@@ -348,7 +348,7 @@ var setAbout = {
             end_time: requestEnd,
             goods_type: $('#cancel_reason_types').val(),
             cancel_type: $('#cancel_reason_roles').val(),
-            region_id: $('#cancel_reason_area').val()
+            region_id: $('#cancel_reason_area').val()==''?common.role_area_show($('#super_manager_area_select_one')):$.trim($('#cancel_reason_area').val())
         };
         layui.use('layer', function () {
             var layer = layui.layer;
@@ -393,7 +393,7 @@ var setAbout = {
             periods: $('.periods>li').find('button.active').val(),
             goods_type: $('#goods_type_show').val(),
             dimension: $('#dimension').val(),
-            region_id: $('#region_id_show').val(),
+            region_id: $.trim($('#region_id_show').val())==''?common.role_area_show($('#super_manager_area_select_zero')):$.trim($('#region_id_show').val()),
             comment_type: $('#comment_type').val(),
             pay_method: $('#pay_method').val()
         };
@@ -566,7 +566,7 @@ $('#goods_search_box').on('click', function (e) {
             order_status: $.trim($('#order_status').val()),
             vehicle_length: $.trim($('#vehicle_length').val()),
             vehicle_type: $.trim($('#vehicle_type').val()),
-            node_id: $.trim($('#node_id').val()),//10
+            node_id: $.trim($('#node_id').val())==''?common.role_area_show($('#super_manager_area_select_two')):$.trim($('#node_id').val()),//10
             spec_tag: $.trim($('#spec_tag').val()),
             pay_status: $.trim($('#pay_status').val()),
             is_change_price: $.trim($('#is_change_price').val()),
@@ -589,6 +589,32 @@ $('#goods_search_box').on('click', function (e) {
         setAbout.tableRender(url)
     });
 });
+function area_select() {
+    var auth_role = $('#user-info').attr('data-role')
+    if (!!auth_role && auth_role == 1) {
+        $('#super_manager_area').css({'display': 'block'})
+        $('#super_manager_area_select_zero').address({
+            level: 3,
+            offsetLeft:'-50px'
+        });
+        $('#super_manager_area_one').css({'display': 'block'})
+        $('#super_manager_area_select_one').address({
+            level: 3
+        });
+         $('#super_manager_area_two').css({'display': 'block'})
+        $('#super_manager_area_select_two').address({
+            level: 3
+        });
+    } else {
+        $('#super_manager_area').css({'display': 'none'});
+        $('#super_manager_area_one').css({'display': 'none'});
+        $('#super_manager_area_two').css({'display': 'none'});
+        $('#city_manager_one').css({'display': 'block'});
+        $('#city_manager_two').css({'display': 'block'});
+    $('#city_manager_three').css({'display': 'block'})
+    }
+}
+area_select()
 $('#searchBox_3').on('click', function (e) {
     e.preventDefault();
     setAbout.chartInit()

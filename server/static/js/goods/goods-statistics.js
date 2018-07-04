@@ -2,6 +2,7 @@
  * Created by Creazy_Run on 2018/5/30.
  */
 $('.layui-table-cell').css({'height': 'auto!important'});
+$('.layui-form-item').css({'width':'234px'})
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_one').val(String(common.getNowFormatDate()[2]));
@@ -399,7 +400,7 @@ var chart = Highcharts.chart('charts_container_one', {
 });
 var dataSet = {
     charts_two_init: function () {
-        var url = '/goods/goods_distribution_trend';
+        var url = '/goods/goods_distribution_trend/';
         var requestStartTime = common.timeTransform($('#start_date_one').val() + ' 00:00:00');
         var requestEndTime = common.timeTransform($('#end_time_one').val() + ' 23:59:59');
         var data = {
@@ -407,7 +408,7 @@ var dataSet = {
             end_time: requestEndTime,
             periods: $('.periods>li').find('button.active').val(),
             goods_type: $('#goods_type_one').val(),
-            region_id: $('#region_id_one').val(),
+            region_id: $('#region_id').val()==''?common.role_area_show($('#super_manager_area_select_zero')):$.trim($('#region_id').val()),
         }
         layui.use('layer', function () {
             var layer = layui.layer;
@@ -434,7 +435,7 @@ var dataSet = {
             start_time: requestStartTime,
             end_time: requestEndTime,
             goods_type: $('#cancel_reason_types').val(),
-            region_id: $('#cancel_reason_area').val(),
+            region_id: $('#area_select').val()==''?common.role_area_show($('#super_manager_area_select_one')):$.trim($('#area_select').val()),
         }
         layui.use('layer', function () {
             var layer = layui.layer;
@@ -672,7 +673,7 @@ $('#goods_search_box').on('click', function (e) {
         is_called: $.trim($('#is_called').val()),
         vehicle_length: $.trim($('#vehicle_length').val()),
         vehicle_type: $.trim($('#vehicle_type').val()),
-        node_id: $.trim($('#node_id').val()),//10
+        node_id: $.trim($('#node_id').val())==''?common.role_area_show($('#super_manager_area_select_two')):$.trim($('#node_id').val()),//10
         new_goods_type: $.trim($('#new_goods_type').val()),
         urgent_goods: $.trim($('#urgent_goods').val()),
         is_addition: $.trim($('#is_addition').val()),
@@ -791,5 +792,30 @@ $('#searchBox_3').on('click', function (e) {
     e.preventDefault();
     dataSet.chart_third_init()
 })
+function area_select() {
+    var auth_role = $('#user-info').attr('data-role')
+    if (!!auth_role && auth_role == 1) {
+        $('#super_manager_area').css({'display': 'block'})
+        $('#super_manager_area_select_zero').address({
+            level: 3
+        });
+        $('#super_manager_area_one').css({'display': 'block'})
+        $('#super_manager_area_select_one').address({
+            level: 3
+        });
+         $('#super_manager_area_two').css({'display': 'block'})
+        $('#super_manager_area_select_two').address({
+            level: 3
+        });
+    } else {
+        $('#super_manager_area').css({'display': 'none'})
+        $('#super_manager_area_one').css({'display': 'none'})
+        $('#super_manager_area_two').css({'display': 'none'})
+        $('#city_manager_one').css({'display': 'block'})
+        $('#city_manager_two').css({'display': 'block'})
+    $('#city_manager_three').css({'display': 'block'})
+    }
+}
+area_select()
 dataSet.charts_two_init();
 dataSet.chart_third_init();

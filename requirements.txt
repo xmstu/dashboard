@@ -5,3 +5,4 @@ fluent-logger
 pymysql
 redis
 pymongo
+fluent-logger==0.9.3

@@ -4,7 +4,7 @@ var requestStart = $('#date_show_one').val() + ' 00:00:00';
 var requestEnd = $('#date_show_two').val() + ' 23:59:59';
 setTimeout(function () {
     $('.user-menu-about > a').addClass("selected-active")
-     $('.user-menu-about > a >i').addClass("select-active")
+    $('.user-menu-about > a >i').addClass("select-active")
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);
 
@@ -18,7 +18,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#009688',
         calendar: true,
-         max: String(common.getNowFormatDate()[0]),
+        max: String(common.getNowFormatDate()[0]),
         ready: function () {
 
         },
@@ -36,7 +36,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         elem: '#date_show_two',
         theme: '#009688',
         calendar: true,
-         max: String(common.getNowFormatDate()[0]),
+        max: String(common.getNowFormatDate()[0]),
         ready: function () {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -160,7 +160,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         },
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'})
-            $("[data-field='usual_city']").css({'display':'none'})
+            $("[data-field='usual_city']").css({'display': 'none'})
             layer.closeAll('loading')
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
@@ -193,19 +193,19 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             })
         }
         , cols: [[
-             {field: 'user_id', title: '用户ID', sort: true},
-                {field: 'user_name', title: '用户名'}
-                , {field: 'mobile', title: '手机号'}
-                , {field: 'user_type', title: '注册角色'}
-                , {field: 'role_auth', title: '认证'}
-                , {field: 'goods_count', title: '发货'}
-                , {field: 'order_count', title: '接单'}
-                , {field: 'order_finished_count', title: '完成订单'}
-                , {field: 'download_channel', title: '下载渠道'}
-                , {field: 'from_channel', title: '注册渠道'}
-                , {field: 'last_login_time', title: '最后登陆'}
-                , {field: 'create_time', title: '注册时间'}
-                , {field: 'usual_city', title: '常驻地'}
+            {field: 'user_id', title: '用户ID', sort: true},
+            {field: 'user_name', title: '用户名'}
+            , {field: 'mobile', title: '手机号'}
+            , {field: 'user_type', title: '注册角色'}
+            , {field: 'role_auth', title: '认证'}
+            , {field: 'goods_count', title: '发货'}
+            , {field: 'order_count', title: '接单'}
+            , {field: 'order_finished_count', title: '完成订单'}
+            , {field: 'download_channel', title: '下载渠道'}
+            , {field: 'from_channel', title: '注册渠道'}
+            , {field: 'last_login_time', title: '最后登陆'}
+            , {field: 'create_time', title: '注册时间'}
+            , {field: 'usual_city', title: '常驻地'}
         ]]
         , id: 'testReload'
         , page: true
@@ -213,12 +213,10 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
 });
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
-
     var beginTime = $.trim($('#date_show_three').val());
     var finishTime = $.trim($('#date_show_four').val());
     var infinteTime = $.trim($('#date_show_five').val());
     var overTIme = $.trim($('#date_show_six').val());
-    var region_id = $.trim($('#area_select').val());
     if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
         layer.msg('请检查用户名号码长度!', function () {
 
@@ -245,24 +243,24 @@ $('#user_search_box').on('click', function (e) {
         return false;
     }
     if (beginTime != '') {
-        beginTime = common.timeTransform(beginTime+' 00:00:00')
-    }else {
-         beginTime=beginTime
+        beginTime = common.timeTransform(beginTime + ' 00:00:00')
+    } else {
+        beginTime = beginTime
     }
     if (finishTime != '') {
-        finishTime = common.timeTransform(finishTime+" 23:59:59")
-    }else {
-        finishTime=finishTime
+        finishTime = common.timeTransform(finishTime + " 23:59:59")
+    } else {
+        finishTime = finishTime
     }
     if (infinteTime != '') {
-        infinteTime = common.timeTransform(infinteTime+' 00:00:00')
-    }else {
-        infinteTime=infinteTime
+        infinteTime = common.timeTransform(infinteTime + ' 00:00:00')
+    } else {
+        infinteTime = infinteTime
     }
     if (overTIme != '') {
-        overTIme = common.timeTransform(overTIme+' 23:59:59')
-    }else {
-        overTIme=overTIme
+        overTIme = common.timeTransform(overTIme + ' 23:59:59')
+    } else {
+        overTIme = overTIme
     }
     if (infinteTime !== '' && overTIme == '') {
         layer.msg('请选择注册日期的结束日期', function () {
@@ -284,7 +282,7 @@ $('#user_search_box').on('click', function (e) {
         download_ch: $.trim($('#download_ch').val()),
         from_channel: $.trim($('#register').val()),
         is_referenced: $.trim($('#is_referenced').val()),
-        region_id: $.trim($('#area_select').val()),
+        region_id: $.trim($('#area_select').val())==''?common.role_area_show($('#super_manager_area_select_one')):$.trim($('#area_select').val()),
         role_type: $.trim($('#role_type').val()),
         role_auth: $.trim($('#role_auth').val()),
         is_actived: $.trim($('#is_actived').val()),
@@ -298,8 +296,8 @@ $('#user_search_box').on('click', function (e) {
         limit: 10
     }
     var url = '/user/list/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&reference_mobile=' + data.reference_mobile + '&download_ch=' + data.download_ch + '&from_channel=' +
-        data.from_channel + '&is_referenced=' + data.is_referenced + '&home_station_province=' + data.home_station_province + '&home_station_city=' + data.home_station_city + '&home_station_county=' + data.home_station_county + '&role_type=' + data.role_type + '&role_auth=' + data.role_auth + '&is_actived=' + data.is_actived + '&is_used=' + data.is_used + '&is_car_sticker=' + data.is_car_sticker + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
-    layui.use(['layer','table'], function () {
+        data.from_channel + '&is_referenced=' + data.is_referenced + '&home_station_province=' + data.home_station_province + '&home_station_city=' + data.home_station_city + '&home_station_county=' + data.home_station_county+ '&region_id=' + data.region_id + '&role_type=' + data.role_type + '&role_auth=' + data.role_auth + '&is_actived=' + data.is_actived + '&is_used=' + data.is_used + '&is_car_sticker=' + data.is_car_sticker + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
+    layui.use(['layer', 'table'], function () {
         var table = layui.table;
         var layer = layui.layer;
         layer.load()
@@ -379,7 +377,7 @@ function dataInit() {
         periods: $('.periods>li').find('button.active').val(),
         user_type: $('#user_type').val(),
         role_type: $('#role_type_first').val(),
-        region_id: $('#region_id').val(),
+        region_id: $('#region_id').val()==''?common.role_area_show($('#super_manager_area_select_zero')):$('#region_id').val(),
         is_auth: $("#is_auth").val()
     };
     var url = '/user/statistic/'
@@ -400,9 +398,11 @@ function dataInit() {
         }
     })
 }
+
 Highcharts.setOptions({
     colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
+
 function chartInit(xAxis, series, interval, x_value1) {
     $('#charts_container_one').highcharts({
         tooltip: {
@@ -472,7 +472,7 @@ function chartInit(xAxis, series, interval, x_value1) {
             line: {
                 dataLabels: {
                     enabled: true,
-                     formatter: function () {
+                    formatter: function () {
                         return this.point.y + '人';
                     }
                 }
@@ -507,4 +507,27 @@ function chartInit(xAxis, series, interval, x_value1) {
             data: series
         }]
     });
+}
+
+function area_select() {
+    var auth_role = $('#user-info').attr('data-role')
+    if (!!auth_role && auth_role == 1) {
+        $('#super_manager_area').css({'display': 'block'})
+        $('#super_manager_area_select_zero').address({
+            level: 3
+        });
+        $('#super_manager_area_one').css({'display': 'block'})
+        $('#super_manager_area_select_one').address({
+            level: 3
+        });
+    } else {
+        $('#super_manager_area').css({'display': 'none'})
+        $('#super_manager_area_two').css({'display': 'none'})
+        $('#city_manager_one').css({'display': 'block'})
+        $('#city_manager_two').css({'display': 'block'})
+
+    }
+}
+area_select()
+if($('#region_id').val()==''){
 }

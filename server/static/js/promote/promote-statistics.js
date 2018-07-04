@@ -7,6 +7,7 @@ layui.use('layer', function () {
     var layer = layui.layer;
     layer.load();
     dataInit();
+    $('.layui-form-item').css({width:'230px'})
 });
 setTimeout(function () {
     $('.promote-menu-about>a').addClass('selected-active');

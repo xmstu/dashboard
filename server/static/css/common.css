@@ -506,6 +506,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	margin:0 0 6px 0;
 	padding-left: 10px;
 	line-height: 34px;
+	display: none;
 }
 .main-content-right-header>ol li{
 	float: left;
@@ -584,7 +585,7 @@ p.message-center  i {
 }
 .part-2 .layui-form-item {
 	vertical-align: top;
-	width: 270px
+	width: 232px
 }
 .layui-icon-riqi {
 	position: absolute;
@@ -642,7 +643,7 @@ p.message-center  i {
 .date-tips {
 	position: absolute;
 	color: #ccc;
-	font-size: 14px;
+	font-size: 12px;
 	right: 78px;
 	top: 6px
 }
@@ -669,7 +670,7 @@ p.message-center  i {
 }
 
 .part-3,.part-4 {
-	margin-top: 16px
+	padding-left: 10px;
 }
 
 .content-show {
