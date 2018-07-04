@@ -123,6 +123,8 @@ class GoodsList(object):
             fetch_where += ' AND shu_users.mobile = "%s" ' % params['mobile']
 
         # 出发地
+        if params['from_town_id']:
+            fetch_where += ' AND shf_goods.from_town_id = %s ' % params['from_town_id']
         if params['from_county_id']:
             fetch_where += ' AND shf_goods.from_county_id = %s ' % params['from_county_id']
         if params['from_city_id']:
@@ -131,6 +133,8 @@ class GoodsList(object):
             fetch_where += ' AND shf_goods.from_province_id = %s ' % params['from_province_id']
 
         # 目的地
+        if params['to_town_id']:
+            fetch_where += ' AND shf_goods.to_town_id = %s ' % params['to_town_id']
         if params['to_county_id']:
             fetch_where += ' AND shf_goods.to_county_id = %s ' % params['to_county_id']
         if params['to_city_id']:
