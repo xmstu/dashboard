@@ -379,6 +379,8 @@ var common = {
             return city_id
         }else if(province_id==''&&city_id==''&&region_id!=''){
             return region_id
+        }else if(province_id==''&&city_id==''&&region_id==''){
+            return '';
         }
     }
 };

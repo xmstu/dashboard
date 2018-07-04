@@ -154,7 +154,7 @@
                                 </ul>
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
-                                        <label class="layui-form-label">搜索选择</label>
+                                        <label class="layui-form-label">货源类型</label>
                                         <div class="layui-input-inline" style="width: 140px">
                                             <select id="goods_type_one" name="modules" lay-verify="required"
                                                     lay-search="">
@@ -168,16 +168,23 @@
                                 </div>
                                 <div class="layui-form-item" style="width:252px;">
                                     <div class="layui-inline" style="">
-                                        <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width:140px;">
-                                            <select id="region_id_one" name="modules" lay-verify="required"
-                                                    lay-search="">
+                                        <label class="layui-form-label">地区选择</label>
+                                        <div id="city_manager_one" class="layui-input-inline"
+                                             style="width:140px;display: none;">
+                                            <select id="region_id" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
                                                 <option value="{{ location['region_id'] }}">{{ location['name'] }}
                                                 </option>
                                                 {% endfor %}
                                             </select>
+                                        </div>
+                                        <div id="super_manager_area" class="layui-input-inline"
+                                             style="width:140px;display: none;">
+                                            <input id="super_manager_area_select_zero" placeholder="请选择地区"
+                                                   name="super_manager_area_select_zero" autocomplete="off"
+                                                   lay-verify="super_manager_area_select_zero" class="layui-input"
+                                                   type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -233,15 +240,21 @@
                                 <div class="layui-form-item" style="width:252px;">
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">地区分布</label>
-                                        <div class="layui-input-inline" style="width:140px;">
-                                            <select id="cancel_reason_area" name="modules" lay-verify="required"
-                                                    lay-search="">
+                                        <div id="city_manager_two" class="layui-input-inline" style="display:none;">
+                                            <select id="area_select" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
                                                 <option value="{{ location['region_id'] }}">{{ location['name'] }}
                                                 </option>
                                                 {% endfor %}
                                             </select>
+                                        </div>
+                                        <div id="super_manager_area_one" class="layui-input-inline"
+                                             style="width:140px;display: none;">
+                                            <input id="super_manager_area_select_one" placeholder="请选择地区"
+                                                   name="super_manager_area_select_one" autocomplete="off"
+                                                   lay-verify="super_manager_area_select_one" class="layui-input"
+                                                   type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -391,15 +404,23 @@
                             <div class="layui-form-item" style="">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">所属网点</label>
-                                    <div class="layui-input-inline" style="width: 158px;">
-                                        <select id="node_id" name="modules" lay-verify="required" lay-search="">
+                                    <div id="city_manager_three" class="layui-input-inline" style="display:none;">
+                                        <select id="node_id" name="node_id" lay-verify="required" lay-search="">
                                             <option value="">全部地区</option>
                                             {% for location in locations %}
-                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
-                                                </option>
+                                            <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                            </option>
                                             {% endfor %}
                                         </select>
                                     </div>
+                                    <div id="super_manager_area_two" class="layui-input-inline"
+                                         style="width:140px;display: none;">
+                                        <input id="super_manager_area_select_two" placeholder="请选择地区"
+                                               name="super_manager_area_select_two" autocomplete="off"
+                                               lay-verify="super_manager_area_select_two" class="layui-input"
+                                               type="text">
+                                    </div>
+                                    <!----------------->
                                 </div>
                             </div>
                             <div class="layui-form-item" style="">
@@ -490,7 +511,7 @@
                     </div>
                 </div>
             </div>
-           <!-- {% include '/exception/unfinished.html' %}-->
+            <!-- {% include '/exception/unfinished.html' %}-->
         </aside>
     </article>
 </article>
@@ -512,5 +533,6 @@
 </body>
 </html>
 <script>
-    init();$('.counter').countUp();
+    init();
+    $('.counter').countUp();
 </script>

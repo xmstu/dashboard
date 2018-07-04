@@ -506,6 +506,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	margin:0 0 6px 0;
 	padding-left: 10px;
 	line-height: 34px;
+	display: none;
 }
 .main-content-right-header>ol li{
 	float: left;
