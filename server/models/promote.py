@@ -143,17 +143,20 @@ class PromoteEffectList(object):
     @staticmethod
     def add_promoter(cursor, user_id, mobile, user_name):
         """添加推广人员"""
-        command = '''
-        INSERT INTO tb_inf_promoter(manager_id, user_name, mobile)
-        VALUES (:manager_id, :user_name, :mobile)
-        '''
-        result = cursor.insert(command, {
-            'manager_id': user_id,
-            'mobile': mobile,
-            'user_name': user_name
-        })
+        try:
+            command = '''
+            INSERT INTO tb_inf_promoter(manager_id, user_name, mobile)
+            VALUES (:manager_id, :user_name, :mobile)
+            '''
+            result = cursor.insert(command, {
+                'manager_id': user_id,
+                'mobile': mobile,
+                'user_name': user_name
+            })
 
-        return result
+            return result
+        except Exception as e:
+            log.error('添加推广人员失败: [error: %s]' % e, exc_info=True)
 
     @staticmethod
     def delete_promoter(cursor, user_id, promoter_id):
