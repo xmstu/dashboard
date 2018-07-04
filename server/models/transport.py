@@ -207,13 +207,15 @@ class TransportListModel(object):
     @staticmethod
     def get_data(cursor, page, limit, params):
 
+        filelds = """*"""
+
         inner_good_order_fetch_where = """ 1=1 """
         inner_vehicle_fetch_where = """ 1=1 """
         outer_fetch_where = """ 1=1 """
 
         command = """
         SELECT
-            * 
+            {filelds} 
         FROM
         (-- 货源和订单查询
             SELECT
@@ -227,7 +229,6 @@ class TransportListModel(object):
             sg.to_city_id,
             sg.to_county_id,
             sg.to_town_id,
-            shf_goods_vehicles.`name`,
             AVG(mileage_total) AS avg_mileage_total,
             COUNT( 1 ) AS goods_count,
             COUNT(so.id) AS order_count
@@ -335,10 +336,12 @@ class TransportListModel(object):
             'end_time': params.get('end_time', 0)
         }
 
-        transport_list = cursor.query(command.format(inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)
+        count = cursor.query_one(command.format(filelds=""" COUNT(1) AS count """, inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)['count']
+        transport_list = cursor.query(command.format(filelds=filelds, inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)
 
         data = {
-            "transport_list": transport_list
+            "count": count if count else 0,
+            "transport_list": transport_list if transport_list else []
         }
 
         return data
