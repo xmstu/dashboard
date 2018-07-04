@@ -207,19 +207,19 @@ class CityNearbyCars(object):
         if not data:
             return make_result(APIStatus.Ok, data=[]), HTTPStatus.Ok
         goods = data['goods']
-        vehicle = data['vehicle']
+        driver = data['driver']
 
         result = []
-        for i in vehicle:
+        for i in driver:
             # 条件一
             if goods_type == 2 and i['inner_length'] < goods['inner_length']:
                 continue
             # 距离
-            mileage_total = distance(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])
+            mileage_total = 0
+            if i['longitude'] and i['latitude'] and goods['from_longitude'] and goods['from_latitude']:
+                mileage_total = distance(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])
             # 所在地
             current_region = init_regions.to_address(i['province_id'], i['city_id'], i['county_id'])
-            # 常驻地
-            usual_region = init_regions.to_address(i['usual_province_id'], i['usual_city_id'], i['usual_county_id'])
             # 诚信会员
             is_trust_member = 0
             if i['trust_member_type'] == 1:
@@ -230,18 +230,18 @@ class CityNearbyCars(object):
                 'name': i['user_name'],
                 'mobile': i['mobile'],
                 'current_region': current_region + i['address'],
-                'usual_region': usual_region,
-                'vehicle_length': i['vehicle_length'],
-                'vehicle_type': i['vehicle_type'],
+                'vehicle_length': i['vehicle_length'] if i['vehicle_length'] else '不限车长',
+                'vehicle_type': i['vehicle_type'] if i['vehicle_type'] else '不限车型',
                 'credit_level': i['credit_level'],
                 'is_trust_member': is_trust_member,
                 'order_count': i['order_count'],
                 'order_finished': i['order_finished'],
                 'order_cancel': i['order_cancel'],
+                'match_type': i['match_type'],
                 # 排序用
                 'inner_length': i['inner_length'],
                 'auth_driver': i['auth_driver'],
-                'mileage_total': mileage_total
+                'mileage_total': mileage_total,
             })
         # 1: 车长满足货源要求越优先（如货主要求4.2米，则优先排4.2米，然后是6.8米、7.6米，小面包车根本不显示）
         # 2: 认证用户优先

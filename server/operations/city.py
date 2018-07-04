@@ -42,29 +42,22 @@ class CityNearbyCars(object):
             goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
             if not goods:
                 return Response(data={}, goods_type=goods_type)
-            # 附近车辆
+            # 附近车辆-司机定位
             nearby_vehicle = pyredis['nearby_vehicle']
             dispatcher_nearby = nearby_vehicle.read_georadius('dispatch.vehicle.nearby', goods['from_longitude'], goods['from_latitude'], 5, 'km')
             if not dispatcher_nearby:
                 return Response(data={}, goods_type=goods_type)
-            # 司机信息
+            # 附近司机(限制10条)
             ids = '(%s)' % ', '.join([str(i) for i in set(dispatcher_nearby)])
-            vehicle = CityNearbyCarsModel.get_driver(db.read_db, ids)
-            if not vehicle:
+            nearby_driver = CityNearbyCarsModel.get_driver_by_position(db.read_db, ids)
+            if not nearby_driver:
                 return Response(data={}, goods_type=goods_type)
-            # 常驻地-车辆认证地址
-            driver_ids = [i['user_id'] for i in vehicle]
-            ids = '(%s)' % ', '.join([str(i) for i in set(driver_ids)])
-            usual_regions = CityNearbyCarsModel.get_usual_region(db.read_bi, ids)
-            for i in vehicle:
-                usual_region = [j for j in usual_regions if j['user_id'] == i['user_id']]
-                if usual_region:
-                    i['usual_province_id'] = usual_region[0]['from_province_id']
-                    i['usual_city_id'] = usual_region[0]['from_city_id']
-                    i['usual_county_id'] = usual_region[0]['from_county_id']
-                else:
-                    i['usual_province_id'] = i['usual_city_id'] = i['usual_county_id'] = 0
 
-            return Response(data={'goods': goods, 'vehicle': vehicle}, goods_type=goods_type)
+            # 附近车辆-接单线路
+            booking_driver = CityNearbyCarsModel.get_driver_by_booking(db.read_db, goods_id)
+            driver = nearby_driver + booking_driver
+
+
+            return Response(data={'goods': goods, 'driver': driver}, goods_type=goods_type)
         except Exception as e:
             log.error('获取货源附近车辆报错: [error: %s]' % e)

@@ -17,10 +17,7 @@ class UserList(object):
         OR from_town_id = :region_id)'''
 
         result = cursor.query(command, {
-            'from_province_id': region_id,
-            'from_city_id': region_id,
-            'from_county_id': region_id,
-            'from_town_id': region_id
+            'region_id': region_id
         })
 
         return [str(i['user_id']) for i in result if i] if result else []
