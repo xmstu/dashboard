@@ -388,7 +388,7 @@ setTimeout(function () {
     common.returnTop();
     common.periods();
     common.cookieSet();
-    common.weather();
+    //common.weather();
     common.init();
     common.setLink();
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
