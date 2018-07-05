@@ -86,10 +86,12 @@ class PromoteEffectList(object):
         
         -- 推广人
         FROM (
-        SELECT user_id, IF(tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name) AS user_name, tb_inf_user.mobile
-        FROM tb_inf_user
-        LEFT JOIN tb_inf_promoter ON tb_inf_user.mobile = tb_inf_promoter.mobile AND tb_inf_promoter.is_deleted = 0
-        WHERE tb_inf_user.mobile IN (%s)) AS referrer
+        SELECT user_id, IF(tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name) AS user_name, tb_inf_promoter.mobile
+        FROM tb_inf_promoter
+        LEFT JOIN tb_inf_user ON tb_inf_user.mobile = tb_inf_promoter.mobile
+        AND tb_inf_promoter.is_deleted = 0
+        AND tb_inf_user.is_deleted = 0
+        WHERE tb_inf_promoter.mobile IN (%s)) AS referrer
         -- 推广信息
         LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
         WHERE 1=1 %s

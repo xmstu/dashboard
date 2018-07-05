@@ -45,7 +45,7 @@ class PromoteEffectDecorator(object):
             is_alive = PromoteEffectList.check_promoter(db.read_bi, user_id, mobile)
             if not is_alive:
                 # 添加推广人员
-                result = PromoteEffectList.add_promoter(db.read_bi, user_id, mobile, user_name)
+                result = PromoteEffectList.add_promoter(db.write_bi, user_id, mobile, user_name)
                 return Response(result=result)
             return Response(result=0)
         except Exception as e:
@@ -56,7 +56,7 @@ class PromoteEffectDecorator(object):
     def delete_promoter(user_id, promoter_id):
         """删除推广人员"""
         try:
-            result = PromoteEffectList.delete_promoter(db.read_bi, user_id, promoter_id)
+            result = PromoteEffectList.delete_promoter(db.write_bi, user_id, promoter_id)
             return Response(result=result)
         except Exception as e:
             log.error('删除推广人员失败: [error: %s]' % e)
