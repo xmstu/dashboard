@@ -507,7 +507,8 @@ class PromoteQuality(object):
             })
 
             for i in promote_quality:
-                i['count'] = i.get('count', None) or 0
+                if not i['count']:
+                    i['count'] = 0
 
             return promote_quality if promote_quality else []
 
