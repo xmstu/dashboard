@@ -320,7 +320,7 @@ var pageSet = {
 
     },
     renderMap: function (map, data) {
-        data = data_reset;
+       // data = data_reset;
         option.title.subtext = map;
         option.series = [
             {

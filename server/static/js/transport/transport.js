@@ -75,7 +75,7 @@ var dataSet = {
                 ,
                 done: function (res, curr, count) {
                     $('.radar-btn').on('click',function(){
-                        layer.msg('success')
+                        console.log($(this))
                     })
                 }
                 , id: 'testReload'
