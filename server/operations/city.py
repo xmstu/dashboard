@@ -55,8 +55,8 @@ class CityNearbyCars(object):
 
             # 附近车辆-接单线路
             booking_driver = CityNearbyCarsModel.get_driver_by_booking(db.read_db, goods_id)
-            driver = nearby_driver + booking_driver
 
+            driver = nearby_driver + booking_driver
 
             return Response(data={'goods': goods, 'driver': driver}, goods_type=goods_type)
         except Exception as e:

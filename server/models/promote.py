@@ -156,7 +156,7 @@ class PromoteEffectList(object):
 
             return result
         except Exception as e:
-            log.error('添加推广人员失败: [error: %s]' % e, exc_info=True)
+            log.error('添加推广人员失败: [user_id: %s][user_name: %s][mobile: %s][error: %s]' % (user_id, user_name, mobile, e), exc_info=True)
 
     @staticmethod
     def delete_promoter(cursor, user_id, promoter_id):
