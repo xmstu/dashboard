@@ -22,9 +22,11 @@ class TransportRadar(object):
             params['from_province_id'] = int(params.get('from_province_id', None) or 0)
             params['from_city_id'] = int(params.get('from_city_id', None) or 0)
             params['from_county_id'] = int(params.get('from_county_id', None) or 0)
+            params['from_town_id'] = int(params.get('from_town_id', None) or 0)
             params['to_province_id'] = int(params.get('to_province_id', None) or 0)
             params['to_city_id'] = int(params.get('to_city_id', None) or 0)
             params['to_county_id'] = int(params.get('to_county_id', None) or 0)
+            params['to_town_id'] = int(params.get('to_town_id', None) or 0)
 
             # 当前权限下所有地区
             if sessionOperationClass.check():

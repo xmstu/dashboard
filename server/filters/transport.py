@@ -45,7 +45,7 @@ class TransportList(object):
                     detail.get('to_town_id', 0))
 
                 result.append({
-                    'business': business,
+                    'business_field': business,
                     'from_address': from_address,
                     'to_address': to_address,
                     'mileage': "%.2fkm" % detail.get('avg_mileage_total', 0.0),
@@ -54,7 +54,7 @@ class TransportList(object):
                     'vehicle_count': detail.get('vehicle_count', None) or 0,
                     'create_time': detail.get('create_time', '时间不详'),
                     # 前端要用的字段
-                    'haul_dist': detail.get('haul_dist'),
+                    'business': detail.get('haul_dist'),
                     'from_province_id': detail.get('from_province_id', 0),
                     'from_city_id': detail.get('from_city_id', 0),
                     'from_county_id': detail.get('from_county_id', 0),
@@ -63,7 +63,7 @@ class TransportList(object):
                     'to_city_id': detail.get('to_city_id', 0),
                     'to_county_id': detail.get('to_county_id', 0),
                     'to_town_id': detail.get('to_town_id', 0),
-                    'begin_time': date2timestamp(detail['create_time']),
+                    'start_time': date2timestamp(detail['create_time']),
                     'end_time': date2timestamp(detail['create_time']) + 86399
                 })
 
