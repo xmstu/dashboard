@@ -95,7 +95,7 @@ class CityOrderListFilterDecorator(object):
                 detail['mobile'] = detail.get('mobile', '') + '\n' + detail.get('user_name', '') + '\n新用户'
                 new = 1
             else:
-                detail['mobile'] = detail.get('mobile', '') + '\n' + detail.get('user_name', '')
+                detail['mobile'] = detail.get('mobile', '') + '\n' + detail.get('user_name', '') + '\n'
                 new = 0
 
             # # 紧急 now（）-发布时间 < 10分钟
