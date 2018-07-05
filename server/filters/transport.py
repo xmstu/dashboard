@@ -63,8 +63,8 @@ class TransportList(object):
                     'to_city_id': detail.get('to_city_id', 0),
                     'to_county_id': detail.get('to_county_id', 0),
                     'to_town_id': detail.get('to_town_id', 0),
-                    'begin_time': date2timestamp(detail['create_time'], accuracy=2),
-                    'end_time': date2timestamp(detail['create_time'], accuracy=2) + 86399
+                    'begin_time': date2timestamp(detail['create_time']),
+                    'end_time': date2timestamp(detail['create_time']) + 86399
                 })
 
             return build_result(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok
