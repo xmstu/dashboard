@@ -59,20 +59,25 @@ var dataSet = {
                 response: {
                     statusName: 'status',
                     statusCode: 100000
-                },
-                done: function (res, curr, count) {
-
                 }
                 , cols: [[
-                    {field: 'id', title: '业务类型', sort: true},
-                    {field: 'user_name', title: '出发地', width: 350}
-                    , {field: 'mobile', title: '目的地', width: 350}
-                    , {field: 'user_type', title: '里程'}
-                    , {field: 'role_auth', title: '货源量'}
-                    , {field: 'usual_city', title: '车辆数'}
-                    , {field: 'goods_count', title: '接单量'}
-                    , {field: 'order_count', title: '图表'}
+                    {field: 'business', title: '业务类型'},
+                    {field: 'from_address', title: '出发地'}
+                    , {field: 'to_address', title: '目的地'}
+                    , {field: 'mileage', title: '里程'}
+                    , {field: 'goods_count', title: '货源量'}
+                    , {field: 'order_count', title: '车辆数'}
+                    , {field: 'vehicle_count', title: '接单量'}
+                    , {field: 'operate', title: '操作', width: 107, templet: function (d) {
+                        return '<button class="layui-btn layui-btn-small radar-btn" style="padding: 0 8px;"><i class="iconfont icon-leidatu" style="margin-right: 2px"></i>雷达图</button>'
+                    }}
                 ]]
+                ,
+                done: function (res, curr, count) {
+                    $('.radar-btn').on('click',function(){
+                        layer.msg('success')
+                    })
+                }
                 , id: 'testReload'
                 , page: true
             });

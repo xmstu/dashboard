@@ -182,7 +182,6 @@ function dataInit() {
         dimension: $('#is_actived').val(),
         data_type: $('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value')
     };
-    console.log(data.data_type);
     var url = '/promote/quality/';
     if (data.dimension == 3) {
         http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
@@ -190,13 +189,13 @@ function dataInit() {
                 var len = res.data.xAxis.length;
                 if (len >= 0 && len < 20) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 1, '金额(元)', '金额', '元')
+                    lineChartInit(res.data.xAxis, res.data.series, 1, '金额(元)', '金额', '元')
                 } else if (len > 0 && len > 20 && len < 40) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 2, '金额(元)', '金额', '元')
+                    lineChartInit(res.data.xAxis, res.data.series, 2, '金额(元)', '金额', '元')
                 } else if (len > 0 && len > 40 && len < 90) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.counts_series, 4, '金额(元)', '金额', '元')
+                    lineChartInit(res.data.xAxis, res.data.series, 4, '金额(元)', '金额', '元')
                 }
             }
         })
