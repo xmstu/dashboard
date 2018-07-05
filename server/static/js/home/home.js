@@ -75,7 +75,7 @@ function dataInit() {
             return false
         }
         var goods_types = $.trim($('#goods_types').val());
-        var region_id = $.trim($('#city_area').val())==''?common.role_area_show($('#super_manager_area_zero')):$.trim($('#city_area').val());
+        var region_id = $.trim($('#city_area').val()) == '' ? common.role_area_show($('#super_manager_area_zero')) : $.trim($('#city_area').val());
         if (start_time != '') {
             start_time = common.timeTransform(start_time + ' 00:00:00')
         }
@@ -268,11 +268,21 @@ function tableInit(url) {
                     }
                 });
                 $("td[data-field='mobile']").children().each(function () {
-                    if ($(this).text().length > 14) {
-                        var str = $(this).text();
+                    layer.closeAll('loading')
+                    var str = $(this).text();
+                    if (str != '') {
                         str = str.split('\n');
-                        $(this).html(str[0] + '<br><span style="color: red;">' + str[1] + '</span>')
+                        console.log(str)
+                        if(str[0]==''){
+                             $(this).html(str[0])
+                        }else if(str[0]!=''&&str[1] != ''&&str[2] != '') {
+                            $(this).html(str[0] + '<br>' + str[1])
+                        } else if(str[0] != '' && str[1] != '' && str[2] != '') {
+                            $(this).html(str[0] + '<br>' + str[1] + '<br><span style="color: #000;font-weight: bold;">(' + str[2] + ')</span>')
+                        }
+
                     }
+
                 });
                 $("td[data-field='vehicle']").children().each(function () {
                     if ($(this).text() != '') {
@@ -340,7 +350,7 @@ function tableReset(url) {
             , cols: [[ //表头
                 {field: 'name', title: '司机姓名', width: 86}
                 , {field: 'mobile', title: '手机号码', width: 108}
-                , {field: 'usual_region', title: '匹配原则', width: 120}
+                , {field: 'match_type', title: '匹配原则', width: 120}
                 , {field: 'vehicle_length', title: '车长', width: 144}
                 , {field: 'vehicle_type', title: '车型', width: 110}
                 , {field: 'credit_level', title: '司机评分', width: 100}
@@ -361,9 +371,6 @@ function tableReset(url) {
                             $(this).text('否')
                         }
                     }
-                });
-                $("td[data-field='usual_region']").children().each(function () {
-                    $(this).html('最新定位')
                 });
                 $("td[data-field='credit_level']").children().each(function () {
                     var value_level = $(this).text();
@@ -390,7 +397,7 @@ function area_select() {
         $('#super_manager_area_one').address({
             level: 3
         });
-          $('#super_manager_area_zero').address({
+        $('#super_manager_area_zero').address({
             level: 3
         });
     } else {
