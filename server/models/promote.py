@@ -66,13 +66,13 @@ class PromoteEffectList(object):
         SELECT
         
         referrer.*,
-        COUNT(*) AS user_count,
+        COUNT(DISTINCT users.user_id) AS user_count,
         0 AS wake_up_count,
-        IF(SUM(goods_count_SH), SUM(goods_count_SH), 0) AS goods_count_SH,
-        IF(SUM(goods_count_LH), SUM(goods_count_LH), 0) AS goods_count_LH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile) AS goods_user_count,
+        COALESCE(SUM(goods_count_SH), 0) AS goods_count_SH,
+        COALESCE(SUM(goods_count_LH), 0) AS goods_count_LH,
+        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile %(create_time)s) AS goods_user_count_SH,
+        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile %(create_time)s) AS goods_user_count_LH,
+        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile %(create_time)s) AS goods_user_count,
         COALESCE(SUM(order_finished_count_SH_online), 0) AS order_over_count_SH_online,
         COALESCE(SUM(order_finished_count_SH_unline), 0) AS order_over_count_SH_unline,
         COALESCE(SUM(order_finished_count_LH_online), 0) AS order_over_count_LH_online,
@@ -84,21 +84,24 @@ class PromoteEffectList(object):
         COALESCE(SUM(order_over_price_LH_online), 0) AS order_over_price_LH_online,
         COALESCE(SUM(order_over_price_LH_unline), 0) AS order_over_price_LH_unline
         
-        -- 推广人
+        -- 推广人信息
         FROM (
         SELECT user_id, IF(tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name) AS user_name, tb_inf_promoter.mobile
         FROM tb_inf_promoter
         LEFT JOIN tb_inf_user ON tb_inf_user.mobile = tb_inf_promoter.mobile
         AND tb_inf_promoter.is_deleted = 0
         AND tb_inf_user.is_deleted = 0
-        WHERE tb_inf_promoter.mobile IN (%s)) AS referrer
-        -- 推广信息
-        LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
-        WHERE 1=1 %s
+        WHERE tb_inf_promoter.mobile IN (%(promote_mobile)s)) AS referrer
+        -- 用户信息
+        LEFT JOIN (
+        SELECT *
+        FROM tb_inf_user
+        WHERE 1=1 %(fetch_where)s
+        ) AS users ON referrer.mobile = users.referrer_mobile
         GROUP BY referrer.mobile
         '''
 
-        mobile = ','.join(["'"+i+"'" for i in referrer_mobile])
+        promote_mobile = ','.join(["'"+i+"'" for i in referrer_mobile])
         fetch_where = ''
         # 推荐角色
         if params['role_type']:
@@ -120,10 +123,16 @@ class PromoteEffectList(object):
         elif params['is_car_sticker'] == 2:
             fetch_where += 'AND tb_inf_user.is_sticker = 0 '
         # 注册日期
+        create_time = ''
         if params['start_time'] and params['end_time']:
             fetch_where += 'AND tb_inf_user.create_time > %s AND tb_inf_user.create_time <= %s ' % (params['start_time'], params['end_time'])
+            create_time = 'AND tb_inf_user.create_time > %s AND tb_inf_user.create_time <= %s ' % (params['start_time'], params['end_time'])
 
-        command = command % (mobile, fetch_where)
+        command = command % {
+            'promote_mobile': promote_mobile,
+            'fetch_where': fetch_where,
+            'create_time': create_time
+        }
 
         result = cursor.query(command)
         return result if result else []
