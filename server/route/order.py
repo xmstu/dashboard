@@ -4,8 +4,10 @@ from server import app
 from flask import render_template, session, redirect
 from server.cache_data import init_regions
 from server.meta.session_operation import sessionOperationClass
+from server.meta.login_record import visitor_record
 
-@app.route('/order/')
+@app.route('/order/', endpoint='order')
+@visitor_record
 def order():
     """推广统计页面"""
     if not sessionOperationClass.check():
@@ -17,3 +19,5 @@ def order():
                  session['login'].get('locations', [])]
     role = session['login'].get('role', 0)
     return render_template('/order/order-statistics.html', user_name=user_name, avatar_url=avatar_url, locations=locations, role=role)
+
+# app.add_url_rule('/order/', 'order', order)

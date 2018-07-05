@@ -4,8 +4,10 @@ from server import app
 from flask import render_template, session, redirect
 from server.cache_data import init_regions
 from server.meta.session_operation import sessionOperationClass
+from server.meta.login_record import visitor_record
 
-@app.route('/goods/')
+@app.route('/goods/', endpoint='goods')
+@visitor_record
 def goods():
     """货源统计页面"""
     if not sessionOperationClass.check():
@@ -16,3 +18,5 @@ def goods():
     locations = [{'region_id': i, 'name': init_regions.to_full_short_name(i)} for i in session['login'].get('locations', [])]
     role = session['login'].get('role', 0)
     return render_template('/goods/goods-statistics.html', user_name=user_name, avatar_url=avatar_url, locations=locations, role=role)
+
+# app.add_url_rule('/goods/', 'goods', goods)

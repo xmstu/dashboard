@@ -4,8 +4,10 @@ from server import app
 from flask import render_template, session, redirect
 from server.cache_data import init_regions
 from server.meta.session_operation import sessionOperationClass
+from server.meta.login_record import visitor_record
 
-@app.route('/map/')
+@app.route('/map/', endpoint='map')
+@visitor_record
 def map():
     """热力图"""
     if not sessionOperationClass.check():

@@ -4,8 +4,10 @@ from server import app
 from flask import render_template, session, redirect
 from server.cache_data import init_regions
 from server.meta.session_operation import sessionOperationClass
+from server.meta.login_record import visitor_record
 
-@app.route('/user/')
+@app.route('/user/', endpoint='user')
+@visitor_record
 def user():
     """用户统计页面"""
     if not sessionOperationClass.check():
