@@ -3,7 +3,7 @@ import json
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus, build_result
-from server.utils.extend import ExtendHandler
+from server.utils.extend import ExtendHandler, date2timestamp
 
 
 class TransportRadar(object):
@@ -34,9 +34,11 @@ class TransportList(object):
 
             # 出发地-目的地
             from_address = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
-                                                   detail.get('from_county_id', 0)) + init_regions.to_town(detail.get('from_town_id', 0))
+                                                   detail.get('from_county_id', 0)) + init_regions.to_town(
+                detail.get('from_town_id', 0))
             to_address = init_regions.to_address(detail.get('to_province_id', 0), detail.get('to_city_id', 0),
-                                                 detail.get('to_county_id', 0)) + init_regions.to_town(detail.get('to_town_id', 0))
+                                                 detail.get('to_county_id', 0)) + init_regions.to_town(
+                detail.get('to_town_id', 0))
 
             result.append({
                 'business': business,
@@ -49,14 +51,16 @@ class TransportList(object):
                 'create_time': detail.get('create_time', '时间不详'),
                 # 前端要用的字段
                 'haul_dist': detail.get('haul_dist'),
-                'from_province_id': detail.get('from_province_id'),
-                'from_city_id': detail.get('from_city_id'),
-                'from_county_id': detail.get('from_county_id'),
-                'from_town_id': detail.get('from_town_id'),
-                'to_province_id': detail.get('to_province_id'),
-                'to_city_id': detail.get('to_city_id'),
-                'to_county_id': detail.get('to_county_id'),
-                'to_town_id': detail.get('to_town_id')
+                'from_province_id': detail.get('from_province_id', 0),
+                'from_city_id': detail.get('from_city_id', 0),
+                'from_county_id': detail.get('from_county_id', 0),
+                'from_town_id': detail.get('from_town_id', 0),
+                'to_province_id': detail.get('to_province_id', 0),
+                'to_city_id': detail.get('to_city_id', 0),
+                'to_county_id': detail.get('to_county_id', 0),
+                'to_town_id': detail.get('to_town_id', 0),
+                'begin_time': date2timestamp(detail['create_time'], accuracy=2),
+                'end_time': date2timestamp(detail['create_time'], accuracy=2) + 86399
             })
 
         return build_result(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok
