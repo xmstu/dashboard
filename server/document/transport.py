@@ -21,4 +21,6 @@ transport_list_param = api.doc(params={
     "filter": "筛选条件:1.货源>车辆;2.货源<车辆;",
     "start_time": "开始时间",
     "end_time": "结束时间",
+    "page": "页数",
+    "limit": "条数",
 }, description='运力列表查询参数')

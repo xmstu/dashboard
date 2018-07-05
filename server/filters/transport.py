@@ -21,7 +21,6 @@ class TransportList(object):
     @staticmethod
     @make_decorator
     def get_result(data):
-        # TODO 过滤参数
         data = json.loads(json.dumps(data, default=ExtendHandler.handler_to_float))
         transport_list = data['transport_list']
         result = []

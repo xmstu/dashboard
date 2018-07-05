@@ -10,3 +10,4 @@ from server.operations.city import *
 from server.operations.weather import *
 from server.operations.order import *
 from server.operations.transport import *
+from server.operations.heat_map import *

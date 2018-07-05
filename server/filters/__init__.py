@@ -8,3 +8,4 @@ from server.filters.city import *
 from server.filters.weather import *
 from server.filters.order import *
 from server.filters.transport import *
+from server.filters.heat_map import *

@@ -328,8 +328,6 @@ class TransportListModel(object):
         if params['filter']:
             outer_fetch_where += """ AND (({filter}=1 AND a.goods_count > b.vehicle_count) OR ({filter}=2 AND a.goods_count < b.vehicle_count)) """.format(filter=params['filter'])
 
-        outer_fetch_where += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
-
         # 时间
         kwargs = {
             'start_time': params.get('start_time', 0),
@@ -337,6 +335,9 @@ class TransportListModel(object):
         }
 
         count = cursor.query_one(command.format(filelds=""" COUNT(1) AS count """, inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)['count']
+
+        outer_fetch_where += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
+
         transport_list = cursor.query(command.format(filelds=filelds, inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)
 
         data = {
