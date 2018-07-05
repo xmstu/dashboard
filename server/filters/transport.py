@@ -47,7 +47,17 @@ class TransportList(object):
                 'goods_count': detail.get('goods_count', None) or 0,
                 'order_count': detail.get('order_count', None) or 0,
                 'vehicle_count': detail.get('vehicle_count', None) or 0,
-                'create_time': detail.get('create_time', '时间不详')
+                'create_time': detail.get('create_time', '时间不详'),
+                # 前端要用的字段
+                'haul_dist': detail.get('haul_dist'),
+                'from_province_id': detail.get('from_province_id'),
+                'from_city_id': detail.get('from_city_id'),
+                'from_county_id': detail.get('from_county_id'),
+                'from_town_id': detail.get('from_town_id'),
+                'to_province_id': detail.get('to_province_id'),
+                'to_city_id': detail.get('to_city_id'),
+                'to_county_id': detail.get('to_county_id'),
+                'to_town_id': detail.get('to_town_id')
             })
 
         return build_result(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok
