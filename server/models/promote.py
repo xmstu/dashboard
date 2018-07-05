@@ -73,16 +73,16 @@ class PromoteEffectList(object):
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile) AS goods_user_count_SH,
         (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile) AS goods_user_count,
-        IF(SUM(order_finished_count_SH_online), SUM(order_finished_count_SH_online), 0) AS order_over_count_SH_online,
-        IF(SUM(order_finished_count_SH_unline), SUM(order_finished_count_SH_unline), 0) AS order_over_count_SH_unline,
-        IF(SUM(order_finished_count_LH_online), SUM(order_finished_count_LH_online), 0) AS order_over_count_LH_online,
-        IF(SUM(order_finished_count_LH_unline), SUM(order_finished_count_LH_unline), 0) AS order_over_count_LH_unline,
-        IF(SUM(goods_price_SH), SUM(goods_price_SH), 0) AS goods_price_SH,
-        IF(SUM(goods_price_LH), SUM(goods_price_LH), 0) AS goods_price_LH,
-        IF(SUM(order_over_price_SH_online), SUM(order_over_price_SH_online), 0) AS order_over_price_SH_online,
-        IF(SUM(order_over_price_SH_unline), SUM(order_over_price_SH_unline), 0) AS order_over_price_SH_unline,
-        IF(SUM(order_over_price_LH_online), SUM(order_over_price_LH_online), 0) AS order_over_price_LH_online,
-        IF(SUM(order_over_price_LH_unline), SUM(order_over_price_LH_unline), 0) AS order_over_price_LH_unline
+        COALESCE(SUM(order_finished_count_SH_online), 0) AS order_over_count_SH_online,
+        COALESCE(SUM(order_finished_count_SH_unline), 0) AS order_over_count_SH_unline,
+        COALESCE(SUM(order_finished_count_LH_online), 0) AS order_over_count_LH_online,
+        COALESCE(SUM(order_finished_count_LH_unline), 0) AS order_over_count_LH_unline,
+        COALESCE(SUM(goods_price_SH), 0) AS goods_price_SH,
+        COALESCE(SUM(goods_price_LH), 0) AS goods_price_LH,
+        COALESCE(SUM(order_over_price_SH_online), 0) AS order_over_price_SH_online,
+        COALESCE(SUM(order_over_price_SH_unline), 0) AS order_over_price_SH_unline,
+        COALESCE(SUM(order_over_price_LH_online), 0) AS order_over_price_LH_online,
+        COALESCE(SUM(order_over_price_LH_unline), 0) AS order_over_price_LH_unline
         
         -- 推广人
         FROM (
@@ -95,7 +95,7 @@ class PromoteEffectList(object):
         -- 推广信息
         LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
         WHERE 1=1 %s
-        GROUP BY referrer.user_id
+        GROUP BY referrer.mobile
         '''
 
         mobile = ','.join(["'"+i+"'" for i in referrer_mobile])
