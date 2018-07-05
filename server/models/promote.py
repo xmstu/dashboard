@@ -506,6 +506,9 @@ class PromoteQuality(object):
                 'end_time': params['end_time'],
             })
 
+            for i in promote_quality:
+                i['count'] = i.get('count', None) or 0
+
             return promote_quality if promote_quality else []
 
         except Exception as e:

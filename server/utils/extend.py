@@ -27,6 +27,15 @@ class ExtendHandler(object):
         """
         return obj.isoformat() if hasattr(obj, 'isoformat') else float(obj)
 
+    @staticmethod
+    def handler_to_int(obj):
+        """转换函数
+
+        :param obj: 传递的函数
+        :return   : Int
+        """
+        return obj.isoformat() if hasattr(obj, 'isoformat') else int(obj)
+
 
 class Check(object):
     @staticmethod
