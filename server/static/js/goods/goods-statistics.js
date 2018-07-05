@@ -310,13 +310,24 @@ layui.use(['laydate', 'form', 'table'], function () {
                     $(this).html('<span>' + result[0] + '</span ></br>' + result[1] + '</span>')
                 }
             })
-            $("td[data-field='mobile']").children().each(function (val) {
-                if ($(this).text().length > 12) {
-                    var result = $(this).text().split('\n');
-
-                    $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
-                }
-            })
+              $("td[data-field='mobile']").children().each(function () {
+                    layer.closeAll('loading')
+                    var str = $(this).text();
+                    if (str != '') {
+                        str = str.split('\n');
+                        console.log(str)
+                        if(str[0]==''){
+                             $(this).html(str[0])
+                        }else if(str[0]!=''&&str[1] == ''&&str[2] != '') {
+                            $(this).html(str[0] +'<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
+                        }else if(str[0]!=''&&str[1] != ''&&str[2] == '') {
+                            $(this).html(str[0] +'<br>'+str[1])
+                        }
+                        else if(str[0] != '' && str[1] != '' && str[2] != '') {
+                            $(this).html(str[0] + '<br>' + str[1] + '<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
+                        }
+                    }
+                });
             $("td[data-field='address']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
@@ -748,16 +759,22 @@ $('#goods_search_box').on('click', function (e) {
                         $(this).html('<span>' + result[0] + '</span >')
                     }
                 })
-                $("td[data-field='mobile']").children().each(function (val) {
-                    if ($(this).text().length > 13) {
-                        var result = $(this).text().split('\n');
-                        if (result[0] != undefined || result[0] != '') {
-                            $(this).html('<span>' + result[0] + '</span ><br><span style="color: #f40;">(' + result[1] + ')</span>')
-                        } else {
-                            $(this).html('<span>' + result[0] + '</span ><br>')
+                $("td[data-field='mobile']").children().each(function () {
+                    layer.closeAll('loading')
+                    var str = $(this).text();
+                    if (str != '') {
+                        str = str.split('\n');
+                        console.log(str)
+                        if(str[0]==''){
+                             $(this).html(str[0])
+                        }else if(str[0]!=''&&str[1] == ''&&str[2] != '') {
+                            $(this).html(str[0] +'<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
+                        }
+                        else if(str[0] != '' && str[1] != '' && str[2] != '') {
+                            $(this).html(str[0] + '<br>' + str[1] + '<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
                         }
                     }
-                })
+                });
                 $("td[data-field='address']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');

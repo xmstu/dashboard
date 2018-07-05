@@ -275,14 +275,15 @@ function tableInit(url) {
                         console.log(str)
                         if(str[0]==''){
                              $(this).html(str[0])
-                        }else if(str[0]!=''&&str[1] != ''&&str[2] != '') {
-                            $(this).html(str[0] + '<br>' + str[1])
-                        } else if(str[0] != '' && str[1] != '' && str[2] != '') {
-                            $(this).html(str[0] + '<br>' + str[1] + '<br><span style="color: #000;font-weight: bold;">(' + str[2] + ')</span>')
+                        }else if(str[0]!=''&&str[1]==''){
+                            $(this).html(str[0])
+                        }else if(str[0]!=''&&str[1] == ''&&str[2] != '') {
+                            $(this).html(str[0] +'<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
                         }
-
+                        else if(str[0] != '' && str[1] != '' && str[2] != '') {
+                            $(this).html(str[0] + '<br>' + str[1] + '<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
+                        }
                     }
-
                 });
                 $("td[data-field='vehicle']").children().each(function () {
                     if ($(this).text() != '') {
@@ -347,18 +348,18 @@ function tableReset(url) {
                 statusCode: 100000
             },
             loading: true
-            , cols: [[ //表头
-                {field: 'name', title: '司机姓名', width: 86}
-                , {field: 'mobile', title: '手机号码', width: 108}
-                , {field: 'match_type', title: '匹配原则', width: 120}
-                , {field: 'vehicle_length', title: '车长', width: 144}
-                , {field: 'vehicle_type', title: '车型', width: 110}
-                , {field: 'credit_level', title: '司机评分', width: 100}
-                , {field: 'is_trust_member', title: '诚信会员', width: 84}
-                , {field: 'order_count', title: '接单数', sort: true, width: 86}
-                , {field: 'order_finished', title: '完成数', sort: true, width: 86}
-                , {field: 'order_cancel', title: '取消数', sort: true, width: 86}
-                , {field: 'current_region', title: '所在地', width: 330}
+            , cols: [[
+                {field: 'name', title: '司机姓名', width: 86},
+                {field: 'mobile', title: '手机号码', width: 108},
+                {field: 'vehicle_length', title: '车长', width: 144},
+                {field: 'vehicle_type', title: '车型', width: 110},
+                {field: 'credit_level', title: '司机评分', width: 100},
+                {field: 'is_trust_member', title: '诚信会员', width: 84},
+                {field: 'order_count', title: '接单数', sort: true, width: 86},
+                {field: 'order_finished', title: '完成数', sort: true, width: 86},
+                {field: 'order_cancel', title: '取消数', sort: true, width: 86},
+                {field: 'match_type', title: '匹配原则', width: 120},
+                {field: 'current_region', title: '所在地', width: 330}
             ]]
             , done: function (res) {
                 $("td[data-field='is_trust_member']").children().each(function () {
