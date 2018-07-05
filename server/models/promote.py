@@ -70,9 +70,9 @@ class PromoteEffectList(object):
         0 AS wake_up_count,
         COALESCE(SUM(goods_count_SH), 0) AS goods_count_SH,
         COALESCE(SUM(goods_count_LH), 0) AS goods_count_LH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile %(create_time)s) AS goods_user_count_SH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile %(create_time)s) AS goods_user_count_LH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile %(create_time)s) AS goods_user_count,
+        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile %(fetch_where)s) AS goods_user_count_SH,
+        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile %(fetch_where)s) AS goods_user_count_LH,
+        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile %(fetch_where)s) AS goods_user_count,
         COALESCE(SUM(order_finished_count_SH_online), 0) AS order_over_count_SH_online,
         COALESCE(SUM(order_finished_count_SH_unline), 0) AS order_over_count_SH_unline,
         COALESCE(SUM(order_finished_count_LH_online), 0) AS order_over_count_LH_online,
@@ -116,22 +116,21 @@ class PromoteEffectList(object):
             fetch_where += '''AND tb_inf_user.last_login_time < UNIX_TIMESTAMP() - 4 * 86400
             AND tb_inf_user.last_login_time > UNIX_TIMESTAMP() - 10 * 86400 '''
         elif params['is_actived'] == 4:
-            fetch_where += '''AND tb_inf_user.last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
+            fetch_where += 'AND tb_inf_user.last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '
+        elif params['is_actived'] == 5:
+            fetch_where += 'AND tb_inf_user.last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
         # 贴车贴
         if params['is_car_sticker'] == 1:
             fetch_where += 'AND tb_inf_user.is_sticker = 1 '
         elif params['is_car_sticker'] == 2:
             fetch_where += 'AND tb_inf_user.is_sticker = 0 '
         # 注册日期
-        create_time = ''
         if params['start_time'] and params['end_time']:
             fetch_where += 'AND tb_inf_user.create_time > %s AND tb_inf_user.create_time <= %s ' % (params['start_time'], params['end_time'])
-            create_time = 'AND tb_inf_user.create_time > %s AND tb_inf_user.create_time <= %s ' % (params['start_time'], params['end_time'])
 
         command = command % {
             'promote_mobile': promote_mobile,
             'fetch_where': fetch_where,
-            'create_time': create_time
         }
 
         result = cursor.query(command)

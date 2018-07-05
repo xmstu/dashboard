@@ -142,8 +142,9 @@ class UserList(object):
                 fetch_where += '''AND last_login_time < UNIX_TIMESTAMP() - 4 * 86400
                 AND last_login_time > UNIX_TIMESTAMP() - 10 * 86400 '''
             elif params['is_actived'] == 4:
-                fetch_where += '''AND last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '''
-
+                fetch_where += 'AND last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '
+            elif params['is_actived'] == 5:
+                fetch_where += 'AND last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
             # 操作过
             if params['is_used'] == 1:
                 fetch_where += 'AND (goods_count_LH > 0 OR goods_count_SH > 0) '
