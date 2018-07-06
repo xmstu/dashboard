@@ -8,54 +8,49 @@
     border:none;
     border-top:1px solid #ddd;
 }
-@keyframes bounceIn {
-  from, 20%, 40%, 60%, 80%, to {
-    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-  }
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
 
-  0% {
-    opacity: 0;
-    transform: scale3d(.3, .3, .3);
-  }
-
-  20% {
-    transform: scale3d(1.1, 1.1, 1.1);
-  }
-
-  40% {
-    transform: scale3d(.9, .9, .9);
-  }
-
-  60% {
-    opacity: 1;
-    transform: scale3d(1.03, 1.03, 1.03);
-  }
-
-  80% {
-    transform: scale3d(.97, .97, .97);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale3d(1, 1, 1);
-  }
+    /*30% {
+        opacity: 0.3;
+    }
+    60% {
+        opacity: 0.6;
+    }*/
+    100% {
+        opacity: 1;
+    }
 }
-@keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale3d(.3, .3, .3);
-  }
-
-  50% {
-    opacity: 1;
-  }
+@keyframes fadeBigIn {
+    0% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 0.3;
+    }
+    60% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
 }
-
-.zoomIn {
-  animation-name: zoomIn;
+.delay{
+    animation-delay: 0.7s;
 }
-.bounceIn {
-  animation-name: bounceIn;
+.fadeIn {
+    animation-name: fadeIn;
+}
+.animated.fadeIn {
+    animation-duration:1.6s;
+}
+.fadeBigIn {
+    animation-name: fadeIn;
+}
+.animated.fadeBigIn {
+    animation-duration:0.5s;
 }
 .iconfont{font-size:20px;color:#fff;}
 body {
@@ -135,6 +130,8 @@ main {
     margin-left: -270px;
     padding-top: 30px;
     border-radius: 8px;
+    border: 1px solid #eee;
+    opacity: 0;
 }
 .login-page-header > h1 {
     font-size: 18px;
@@ -170,6 +167,7 @@ main {
     letter-spacing: 1px;
     border-radius: 4px;
     color: #333;
+    border: 1px solid #eee;
 }
 .login-body  .layui-form-item > p input  {
       display: inline-block;

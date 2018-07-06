@@ -78,29 +78,33 @@ var common = {
         })
     },
     weather: function () {
+        var that  = this;
         $.ajax({
             type: "POST",
             dataType: "jsonp",
             url: 'http://api.map.baidu.com/location/ip?ak=ZVizfVIbcLc0qNhduvT3dSbqG8YV8YoP&ip=',
             success: function (res) {
-                $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
-                    var this_ity = res.content.address_detail.city;
-                    var myDate = new Date();
-                    var thisDate = myDate.getMonth() + 1;
-                    $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
-                        $.ajax({
-                            type: "GET",
-                            url: "http://wthrcdn.etouch.cn/weather_mini?city=" + this_ity,
-                            dataType: "json",
-                            success: function (res) {
-                                $('#weather_now > u:nth-of-type(1)').html(res.data.city);
-                                $('#weather_now > u:nth-of-type(3)').html('温度:' + res.data.wendu + '℃ &nbsp;(' + res.data.forecast[0].low + '-' + res.data.forecast[0].high + ')');
-                                $('#weather_now > u:nth-of-type(2)').html('天气: ' + res.data.forecast[0].type)
-                                $('#weather_now > u:nth-of-type(4)').html(res.data.forecast[0].fengxiang)
-                            }
-                        });
-                    });
-                });
+                var url = "http://restapi.amap.com/v3/weather/weatherInfo";
+                var postData = {
+                    key: "dfb9a576fbcb2c9a13a65ab736e47004",
+                    city: res.content.address_detail.city,
+                    extensions: "all"
+                };
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: postData,
+                    success: function (status, data) {
+                        var weatherData = status.forecasts[0].casts;
+                        $('#weather_now >u:nth-of-type(1)').html('星期' + that.week_transition(weatherData[0].week))
+                        $('#weather_now >u:nth-of-type(2)').html(status.forecasts[0].city);
+                        $('#weather_now >u:nth-of-type(3)').html(weatherData[0].dayweather);
+                        $('#weather_now >u:nth-of-type(4)').html(weatherData[0].daytemp + '℃');
+                        $('#weather_now >u:nth-of-type(5)').html(weatherData[0].daywind);
+                    },
+                    error: function (status) {
+                    }
+                })
             }
         });
 
@@ -367,20 +371,44 @@ var common = {
             $('html,body').animate({scrollTop: 0});
         });
     },
-    role_area_show:function(elem){
+    role_area_show: function (elem) {
         var province_id = $.trim(elem.attr('provinceid'));
         var city_id = $.trim(elem.attr('cityid'));
         var region_id = $.trim(elem.attr('regionid'));
-        if(region_id!=''){
+        if (region_id != '') {
             return region_id
-        }else if(province_id!=''&&city_id==''){
+        } else if (province_id != '' && city_id == '') {
             return province_id
-        }else if(province_id==''&&city_id!=''){
+        } else if (province_id == '' && city_id != '') {
             return city_id
-        }else if(province_id==''&&city_id==''&&region_id!=''){
+        } else if (province_id == '' && city_id == '' && region_id != '') {
             return region_id
-        }else if(province_id==''&&city_id==''&&region_id==''){
+        } else if (province_id == '' && city_id == '' && region_id == '') {
             return '';
+        }
+    },
+    week_transition: function (val) {
+        if(val==1){
+            val='一';
+            return val
+        }else if(val==2){
+            val='二';
+            return val
+        }else if(val==3){
+            val='三';
+            return val
+        }else if(val==4){
+            val='四';
+            return val
+        }else if(val==5){
+            val='五';
+            return val
+        }else if(val==6){
+            val='六';
+            return val
+        }else if(val==7){
+            val='天';
+            return val
         }
     }
 };
@@ -388,7 +416,7 @@ setTimeout(function () {
     common.returnTop();
     common.periods();
     common.cookieSet();
-    //common.weather();
+    common.weather();
     common.init();
     common.setLink();
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');

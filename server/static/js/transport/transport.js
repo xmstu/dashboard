@@ -345,6 +345,7 @@ var dataSet = {
     }
 };
 dataSet.area_select();
+dataSet.dataRender();
 dataSet.init();
 dataSet.chart_request();
 $('#search_btn').on('click', function (e) {
