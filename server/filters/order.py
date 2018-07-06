@@ -196,12 +196,10 @@ class OrderList(object):
                     'cargo_owner': cargo_owner,
                     'driver': driver,
                     'order_status': order_status,
-                    'driver_evaluation': driver_evaluation,
-                    'owner_evaluation': owner_evaluation,
+                    'evaluation': driver_evaluation + '\n' + owner_evaluation,
                     'time_field': time_field,
                     'latency_time': latency_time,
-                    'driver_rate_comment': detail.get('driver_rate_comment', None) or '',
-                    'owner_rate_comment': detail.get('owner_rate_comment', None) or ''
+                    'comment': (detail.get('driver_rate_comment', None) or '') + '\n' + (detail.get('owner_rate_comment', None) or ''),
                 })
 
             return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok

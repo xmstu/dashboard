@@ -28,6 +28,7 @@ class HeatMap(object):
             params['field'] = int(params.get('field', None) or 0)
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400*7)
             params['end_time'] = int(params.get('end_time', None) or time.time())
+            params['region_name'] = int(params.get('end_time', None) or time.time())
 
             if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))

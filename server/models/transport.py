@@ -18,7 +18,7 @@ class TransportRadarModel(object):
             AND shf_goods.create_time < :end_time
         WHERE
             {goods_sql}
-            AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米', '17.5米')
+            AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
             GROUP BY shf_goods_vehicles.NAME
         """
 
@@ -38,7 +38,7 @@ class TransportRadarModel(object):
             AND shu_vehicle_auths.is_deleted = 0 AND shu_vehicle_auths.auth_status = 2 
         WHERE
             {vehicle_sql}
-            AND shm_dictionary_items.`name` IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米', '17.5米')
+            AND shm_dictionary_items.`name` IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
             GROUP BY shm_dictionary_items.`name`
         """
 
@@ -55,7 +55,7 @@ class TransportRadarModel(object):
             AND shb_orders.create_time < :end_time
         WHERE
             {order_sql}
-            AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米', '17.5米')
+            AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
             GROUP BY shf_goods_vehicles.name
         """
 
@@ -163,7 +163,7 @@ class TransportRadarModel(object):
             'end_time': params.get('end_time')
         }
 
-        vehicle_name_list = ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17米', '17.5米']
+        vehicle_name_list = ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']
 
         goods_count = cursor.query(goods_cmd.format(goods_sql=goods_sql), kwargs)
         vehicle_count = cursor.query(vehicle_cmd.format(vehicle_sql=vehicle_sql), kwargs)
