@@ -12,7 +12,7 @@ def visitor_record(f):
         if session.get('login'):
             visit_data = {
                 'url': request.url if request.url else '',
-                'ip': request.remote_addr if request.remote_addr else '',
+                'ip': request.headers.get('X-Real-IP', request.remote_addr),
                 'user_agent': request.headers.get('User-Agent', ''),
                 'user_id': session['login'].get('user_id', 0),
                 'user_name': session['login'].get('user_name', ''),

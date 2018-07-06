@@ -53,10 +53,10 @@ class PromoteEffectDecorator(object):
 
     @staticmethod
     @make_decorator
-    def delete_promoter(user_id, promoter_id):
+    def delete_promoter(user_id, promoter_mobile):
         """删除推广人员"""
         try:
-            result = PromoteEffectList.delete_promoter(db.write_bi, user_id, promoter_id)
+            result = PromoteEffectList.delete_promoter(db.write_bi, user_id, promoter_mobile)
             return Response(result=result)
         except Exception as e:
             log.error('删除推广人员失败: [error: %s]' % e)

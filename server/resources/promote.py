@@ -61,17 +61,17 @@ class PromoteDelete(Resource):
     @staticmethod
     @doc.response_promote_effect_delete_param_success
     @filters.PromoteEffect.get_delete_data(result=int)
-    @operations.PromoteEffectDecorator.delete_promoter(user_id=int, promoter_id=int)
-    @verify.PromoteEffect.check_delete_params(role=int, user_id=int, promoter_id=int)
-    def delete(id):
+    @operations.PromoteEffectDecorator.delete_promoter(user_id=int, promoter_mobile=str)
+    @verify.PromoteEffect.check_delete_params(role=int, user_id=int, promoter_mobile=str)
+    def delete(mobile):
         """删除推广人员"""
         role, user_id = sessionOperationClass.get_role()
-        promoter_id = id
-        return Response(role=role, user_id=user_id, promoter_id=promoter_id)
+        promoter_mobile = mobile
+        return Response(role=role, user_id=user_id, promoter_mobile=promoter_mobile)
 
 
 
 ns = api.namespace('promote', description='推广统计')
 ns.add_resource(PromoteQuality, '/quality/')
 ns.add_resource(PromoteEffect, '/effect/')
-ns.add_resource(PromoteDelete, '/effect/<int:id>')
+ns.add_resource(PromoteDelete, '/effect/<string:mobile>')

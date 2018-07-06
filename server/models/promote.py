@@ -169,17 +169,16 @@ class PromoteEffectList(object):
             log.error('添加推广人员失败: [user_id: %s][user_name: %s][mobile: %s][error: %s]' % (user_id, user_name, mobile, e), exc_info=True)
 
     @staticmethod
-    def delete_promoter(cursor, user_id, promoter_id):
+    def delete_promoter(cursor, user_id, promoter_mobile):
         """删除推广人员"""
         command = '''
-        UPDATE tb_inf_promoter, tb_inf_user
-        SET tb_inf_promoter.is_deleted = 1
-        WHERE tb_inf_promoter.manager_id = :user_id AND tb_inf_promoter.mobile = tb_inf_user.mobile
-        AND tb_inf_user.user_id = :promoter_id
+        UPDATE tb_inf_promoter
+        SET is_deleted = 1
+        WHERE manager_id = :user_id AND mobile = :promoter_mobile
         '''
         result = cursor.update(command, {
             'user_id': user_id,
-            'promoter_id': promoter_id
+            'promoter_mobile': promoter_mobile
         })
 
         return result

@@ -79,14 +79,14 @@ class PromoteEffect(object):
 
     @staticmethod
     @make_decorator
-    def check_delete_params(role, user_id, promoter_id):
+    def check_delete_params(role, user_id, promoter_mobile):
         if role != 4:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='非城市经理不能删除推广人员'))
         if not user_id:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='管理员id不存在'))
-        if not promoter_id:
+        if not promoter_mobile:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推广人员不存在'))
-        return Response(user_id=user_id, promoter_id=promoter_id)
+        return Response(user_id=user_id, promoter_mobile=promoter_mobile)
 
 class PromoteQuality(object):
 
