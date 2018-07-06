@@ -192,7 +192,8 @@ class OrderList(object):
                     'order_status': order_status,
                     'evaluation': evaluation,
                     'time_field': time_field,
-                    'latency_time': latency_time
+                    'latency_time': latency_time,
+                    'comment': detail.get('comment', None) or ''
                 })
 
             return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok

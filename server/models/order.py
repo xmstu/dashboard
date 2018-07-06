@@ -57,13 +57,15 @@ class OrdersReceivedStatisticsList(object):
 
         # 评价类型
         if params.get('comment_type'):
-            which_table += """ INNER JOIN shu_user_evaluations on shb_orders.id = shu_user_evaluations.order_id """
-            fetch_where += """ AND shb_orders.owner_id = shu_user_evaluations.user_id """
+            which_table += """ LEFT JOIN shu_user_evaluations se on shb_orders.id = se.order_id """
             fetch_where += """ 
             AND( 
-                ( {comment_type}=1 AND shu_user_evaluations.`level` in (4,5)) OR
-                ( {comment_type}=2 AND shu_user_evaluations.`level` = 3) OR
-                ( {comment_type}=3 AND shu_user_evaluations.`level` in (1,2))
+                ( {comment_type}=1 AND se.rater_id = shb_orders.driver_id AND se.user_id = shb_orders.owner_id AND se.`level` in (4,5)) OR
+                ( {comment_type}=2 AND se.rater_id = shb_orders.driver_id AND se.user_id = shb_orders.owner_id AND se.`level` = 3) OR
+                ( {comment_type}=3 AND se.rater_id = shb_orders.driver_id AND se.user_id = shb_orders.owner_id AND se.`level` in (1,2)) OR
+                ( {comment_type}=4 AND se.rater_id = shb_orders.owner_id AND se.user_id = shb_orders.driver_id AND se.`level` in (4,5)) OR
+                ( {comment_type}=5 AND se.rater_id = shb_orders.owner_id AND se.user_id = shb_orders.driver_id AND se.`level` = 3) OR
+                ( {comment_type}=6 AND se.rater_id = shb_orders.owner_id AND se.user_id = shb_orders.driver_id AND se.`level` in (1,2))
              ) """.format(comment_type=params['comment_type'])
 
         # 支付方式
@@ -224,6 +226,7 @@ class OrderListModel(object):
                 so.paid_offline,
                 sg.payment_method,
                 se.`level`,
+                se.`comment`,
                 (so.create_time - sg.create_time) as latency_time,
                 so.create_time,
             IF
@@ -405,9 +408,12 @@ class OrderListModel(object):
         if params.get('comment_type'):
             fetch_where += """
                         AND (
-                        ({comment_type}=1 AND se.`level` IN (4,5)) OR
-                        ({comment_type}=2 AND se.`level` = 3) OR
-                        ({comment_type}=3 AND se.`level` IN (1,2))
+                        ({comment_type}=1 AND se.rater_id = so.driver_id AND se.user_id = so.owner_id AND se.`level` IN (4,5)) OR
+                        ({comment_type}=2 AND se.rater_id = so.driver_id AND se.user_id = so.owner_id AND se.`level` = 3) OR
+                        ({comment_type}=3 AND se.rater_id = so.driver_id AND se.user_id = so.owner_id AND se.`level` IN (1,2)) OR
+                        ({comment_type}=4 AND se.rater_id = so.owner_id AND se.user_id = so.driver_id AND se.`level` IN (4,5)) OR
+                        ({comment_type}=5 AND se.rater_id = so.owner_id AND se.user_id = so.driver_id AND se.`level` = 3) OR
+                        ({comment_type}=6 AND se.rater_id = so.owner_id AND se.user_id = so.driver_id AND se.`level` IN (1,2))
                         )
                         """.format(comment_type=params['comment_type'])
 
