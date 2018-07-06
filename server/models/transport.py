@@ -244,7 +244,7 @@ class TransportListModel(object):
         WHERE
             {inner_good_order_fetch_where}
             GROUP BY FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") DESC
-            ) as a LEFT JOIN
+            ) as a INNER JOIN
             (
             SELECT
             FROM_UNIXTIME(shf_booking_settings.create_time,"%%Y-%%m-%%d") create_time,
