@@ -89,9 +89,9 @@ class PromoteEffectList(object):
         SELECT user_id, IF(tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name) AS user_name, tb_inf_promoter.mobile
         FROM tb_inf_promoter
         LEFT JOIN tb_inf_user ON tb_inf_user.mobile = tb_inf_promoter.mobile
-        AND tb_inf_promoter.is_deleted = 0
         AND tb_inf_user.is_deleted = 0
-        WHERE tb_inf_promoter.mobile IN (%(promote_mobile)s)) AS referrer
+        WHERE tb_inf_promoter.is_deleted = 0
+        AND tb_inf_promoter.mobile IN (%(promote_mobile)s)) AS referrer
         -- 用户信息
         LEFT JOIN (
         SELECT *
