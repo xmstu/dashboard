@@ -20,14 +20,16 @@ class CityResourceBalance(object):
             if i['new_vehicle'] in ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']:
                 vehicle_name = i['new_vehicle']
                 result.setdefault(vehicle_name, {})
-                if i['status'] == 1 or i['status'] == 2:
-                    result[vehicle_name]['待接单'] = result[vehicle_name].setdefault('待接单', 0) + 1
-                elif i['status'] == 3:
+                if i['status'] == 3:
                     result[vehicle_name]['已接单'] = result[vehicle_name].setdefault('已接单', 0) + 1
                 elif i['status'] == -1:
                     result[vehicle_name]['已取消'] = result[vehicle_name].setdefault('已取消', 0) + 1
+                # 同城
+                if params['goods_type'] == 1:
+                    if i['status'] == 1 or i['status'] == 2:
+                        result[vehicle_name]['待接单'] = result[vehicle_name].setdefault('待接单', 0) + 1
                 # 跨城议价
-                if params['goods_type'] == 3:
+                elif params['goods_type'] == 3:
                     if i['call_count'] == 0:
                         result[vehicle_name]['待联系'] = result[vehicle_name].setdefault('待联系', 0) + 1
                     else:
@@ -46,7 +48,6 @@ class CityResourceBalance(object):
             city_result[i] = [
                 # 外圈
                 [
-                    {'value': result[i].get('待接单', 0), 'name': '待接单'},
                     {'value': result[i].get('已接单', 0), 'name': '已接单'},
                     {'value': result[i].get('已取消', 0), 'name': '已取消'}
                 ],
@@ -56,7 +57,9 @@ class CityResourceBalance(object):
                     {'value': result[i].get('待接单车辆数', 0), 'name': '待接单车辆数'},
                 ]
             ]
-            if params['goods_type'] == 3:
+            if params['goods_type'] == 1:
+                city_result[i][0].extend([{'value': result[i].get('待接单', 0), 'name': '待接单'},])
+            elif params['goods_type'] == 3:
                 city_result[i][0].extend([
                     {'value': result[i].get('待联系', 0), 'name': '待联系'},
                     {'value': result[i].get('已联系', 0), 'name': '已联系'}
