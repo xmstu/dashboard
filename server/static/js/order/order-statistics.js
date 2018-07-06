@@ -348,7 +348,7 @@ var setAbout = {
             end_time: requestEnd,
             goods_type: $('#cancel_reason_types').val(),
             cancel_type: $('#cancel_reason_roles').val(),
-            region_id: $('#cancel_reason_area').val()==''?common.role_area_show($('#super_manager_area_select_one')):$.trim($('#cancel_reason_area').val())
+            region_id: $('#cancel_reason_area').val() == '' ? common.role_area_show($('#super_manager_area_select_one')) : $.trim($('#cancel_reason_area').val())
         };
         layui.use('layer', function () {
             var layer = layui.layer;
@@ -376,7 +376,8 @@ var setAbout = {
                         str += '<tr>'
                         $('.cancel-reason-types').html('').append(str)
                     }
-
+                    var string = '<tr class="cancel_reason_total"><td>取消总数：<span>'+res.data.sum_count+'单</span></td></tr>';
+                    $('.cancel-reason-types').append(string)
                 }
             })
         })
@@ -393,7 +394,7 @@ var setAbout = {
             periods: $('.periods>li').find('button.active').val(),
             goods_type: $('#goods_type_show').val(),
             dimension: $('#dimension').val(),
-            region_id: $.trim($('#region_id_show').val())==''?common.role_area_show($('#super_manager_area_select_zero')):$.trim($('#region_id_show').val()),
+            region_id: $.trim($('#region_id_show').val()) == '' ? common.role_area_show($('#super_manager_area_select_zero')) : $.trim($('#region_id_show').val()),
             comment_type: $('#comment_type').val(),
             pay_method: $('#pay_method').val()
         };
@@ -452,8 +453,8 @@ var setAbout = {
                     {field: 'latency_time', title: '接单时间', width: 90},
                     {field: 'order_status', title: '状态', width: 86},
                     {field: 'time_field', title: '时间', width: 180},
-                    {field: 'evaluation', title: '货主司机互评', width:92},
-                    {field: 'comment', title: '双方互评内容'}
+                    {field: 'evaluation', title: '互评', width: 92},
+                    {field: 'comment', title: '互评内容'}
                 ]],
                 done: function (res, curr, count) {
                     $('[data-field]>div').css({'padding': '0 6px'});
@@ -482,17 +483,17 @@ var setAbout = {
                             $(this).html(result[1] + '<br>' + result[0])
                         }
                     });
-                     $("td[data-field='evaluation']").children().each(function (val) {
+                    $("td[data-field='evaluation']").children().each(function (val) {
 
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
-                            $(this).html(result[0] +'<br><i class="iconfont icon-huxiangguanzhu" style="margin-left: 8px;"></i><br>'+result[1])
+                            $(this).html('<span style="">司机:' + result[0] + '</span><br><span style="">货主:' + result[1] + '</span>')
                         }
                     });
-                       $("td[data-field='comment']").children().each(function (val) {
-                        if ($(this).text() .length>2) {
+                    $("td[data-field='comment']").children().each(function (val) {
+                        if ($(this).text().length > 2) {
                             var result = $(this).text().split('\n');
-                            $(this).html(result[0] +'<br><i class="iconfont icon-huxiangguanzhu"></i><br>'+result[1])
+                            $(this).html('<span style="">司机:' + result[0] + '</span><br><span style="">货主:' + result[1] + '</span>')
                         }
                     });
                     $("td[data-field='driver']").children().each(function (val) {
@@ -560,16 +561,16 @@ $('#goods_search_box').on('click', function (e) {
         var load_start_time = $('#load_start_time').val();
         var load_end_time = $('#load_end_time').val();
         if (create_start_time != '') {
-            create_start_time = common.timeTransform(create_start_time+' 00:00:00')
+            create_start_time = common.timeTransform(create_start_time + ' 00:00:00')
         }
         if (create_end_time != '') {
-            create_end_time = common.timeTransform(create_end_time+' 23:59:59')
+            create_end_time = common.timeTransform(create_end_time + ' 23:59:59')
         }
         if (load_start_time != '') {
-            load_start_time = common.timeTransform(load_start_time+' 00:00:00')
+            load_start_time = common.timeTransform(load_start_time + ' 00:00:00')
         }
         if (load_end_time != '') {
-            load_end_time = common.timeTransform(load_end_time+' 23:59:59' )
+            load_end_time = common.timeTransform(load_end_time + ' 23:59:59')
         }
         var data = {
             order_id: $.trim($('#order_id').val()),
@@ -579,7 +580,7 @@ $('#goods_search_box').on('click', function (e) {
             order_status: $.trim($('#order_status').val()),
             vehicle_length: $.trim($('#vehicle_length').val()),
             vehicle_type: $.trim($('#vehicle_type').val()),
-            node_id: $.trim($('#node_id').val())==''?common.role_area_show($('#super_manager_area_select_two')):$.trim($('#node_id').val()),//10
+            node_id: $.trim($('#node_id').val()) == '' ? common.role_area_show($('#super_manager_area_select_two')) : $.trim($('#node_id').val()),//10
             spec_tag: $.trim($('#spec_tag').val()),
             pay_status: $.trim($('#pay_status').val()),
             is_change_price: $.trim($('#is_change_price').val()),
@@ -602,19 +603,20 @@ $('#goods_search_box').on('click', function (e) {
         setAbout.tableRender(url)
     });
 });
+
 function area_select() {
     var auth_role = $('#user-info').attr('data-role')
     if (!!auth_role && auth_role == 1) {
         $('#super_manager_area').css({'display': 'block'})
         $('#super_manager_area_select_zero').address({
             level: 3,
-            offsetLeft:'-50px'
+            offsetLeft: '-50px'
         });
         $('#super_manager_area_one').css({'display': 'block'})
         $('#super_manager_area_select_one').address({
             level: 3
         });
-         $('#super_manager_area_two').css({'display': 'block'})
+        $('#super_manager_area_two').css({'display': 'block'})
         $('#super_manager_area_select_two').address({
             level: 3
         });
@@ -624,9 +626,10 @@ function area_select() {
         $('#super_manager_area_two').css({'display': 'none'});
         $('#city_manager_one').css({'display': 'block'});
         $('#city_manager_two').css({'display': 'block'});
-    $('#city_manager_three').css({'display': 'block'})
+        $('#city_manager_three').css({'display': 'block'})
     }
 }
+
 area_select()
 $('#searchBox_3').on('click', function (e) {
     e.preventDefault();
