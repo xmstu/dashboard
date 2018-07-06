@@ -111,7 +111,7 @@ class CancelOrderReasonModel(object):
         FROM
             `shb_orders`
             LEFT JOIN shf_goods ON shb_orders.goods_id = shf_goods.id 
-        WHERE shb_orders.status = -1
+        WHERE shb_orders.status = -1 AND canceled_user_id != 0
             {fetch_where}
             GROUP BY canceled_reason_text
             ORDER BY reason_count 
