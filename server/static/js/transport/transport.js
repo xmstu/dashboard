@@ -196,6 +196,14 @@ var dataSet = {
                 ,
                 done: function (res, curr, count) {
                     layer.closeAll('loading')
+                     $("td[data-field='business']").children().each(function () {
+                    if($(this).text()==1){
+                        $(this).text('同城')
+                    }
+                     if($(this).text()==2){
+                        $(this).text('跨城')
+                    }
+                });
                     $('.radar-btn').on('click', function () {
                         layer.load();
                         var url = '/transport/radar/';
