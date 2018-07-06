@@ -99,10 +99,6 @@ class OrderList(object):
                 else:
                     goods_type = '未知货源类型'
 
-                # 网点
-                supplier_node = init_regions.to_address(detail.get('from_province_id', 0),
-                                                        detail.get('from_city_id', 0),
-                                                        detail.get('from_county_id', 0))
                 # 出发地-目的地
                 from_address = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
                                                        detail.get('from_county_id', 0)) + detail.get('from_address',
@@ -194,7 +190,6 @@ class OrderList(object):
                     'order_id': detail['id'],
                     'goods_standard': '\n'.join(goods_standard),
                     'goods_type': goods_type,
-                    'supplier_node': supplier_node,
                     'address': address,
                     'vehicle': vehicle,
                     'freight': freight,
