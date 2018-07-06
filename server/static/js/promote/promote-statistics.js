@@ -352,8 +352,8 @@ var pageSet = {
                     , {field: 'wake_up_count', title: '唤醒人数'}
                     , {field: 'goods_count', title: '发货数', sort: true}
                     , {field: 'goods_user_count', title: '发货人数', sort: true}
-                    , {field: 'order_over_count_online', title: '线上完成'}
-                    , {field: 'order_over_count_unline', title: '线下完成数'}
+                    , {field: 'order_over_count_online', title: '线上支付'}
+                    , {field: 'order_over_count_unline', title: '线下支付'}
                     , {field: 'goods_price', title: '货源金额', sort: true}
                     , {field: 'order_over_price_online', title: '线上完成金额', sort: true}
                     , {field: 'order_over_price_unline', title: '线下完成金额', sort: true}

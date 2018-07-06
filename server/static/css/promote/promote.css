@@ -166,3 +166,6 @@
 .layui-layer-title {
     text-align: center;
 }
+.order-item-spec {
+    width: 214px!important;
+}
