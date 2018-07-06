@@ -204,7 +204,7 @@ class OrderList(object):
 
             return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.error('Error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
 
 

@@ -60,4 +60,4 @@ class CityNearbyCars(object):
 
             return Response(data={'goods': goods, 'driver': driver}, goods_type=goods_type)
         except Exception as e:
-            log.error('获取货源附近车辆报错: [error: %s]' % e)
+            log.error('获取货源附近车辆报错: [error: %s]' % e, exc_info=True)

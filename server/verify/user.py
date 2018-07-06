@@ -54,7 +54,7 @@ class UserStatistic(object):
 
             return Response(params=params)
         except Exception as e:
-            log.warn('Error:{}'.format(e))
+            log.warn('Error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数非法'))
 
 
@@ -123,5 +123,5 @@ class UserList(object):
             return Response(page=page, limit=limit, params=params)
 
         except Exception as e:
-            log.warn("用户列表验证参数错误{}".format(e))
+            log.warn("用户列表验证参数错误{}".format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))

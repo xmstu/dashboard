@@ -59,4 +59,4 @@ def broker():
             return render_template('/exception/except.html', status_coder=400, title='参数错误',
                                    content='登录写入session失败')
     except Exception as e:
-        log.error('区镇合伙人登录异常: [error: %s]' % e)
+        log.error('区镇合伙人登录异常: [error: %s]' % e, exc_info=True)

@@ -22,5 +22,5 @@ class WeatherDecorator(object):
                         return Response(data=r.json())
                 return Response(data={})
             except Exception as e:
-                log.warn('请求百度接口异常: [error: %s]' % e)
+                log.warn('请求百度接口异常: [error: %s]' % e, exc_info=True)
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数有误'))

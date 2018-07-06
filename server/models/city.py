@@ -442,4 +442,4 @@ class CityNearbyCarsModel(object):
             return driver_info if driver_info else []
 
         except Exception as e:
-            log.error('接单线路获取司机信息出错: [error: %s]' % e)
+            log.error('接单线路获取司机信息出错: [error: %s]' % e, exc_info=True)

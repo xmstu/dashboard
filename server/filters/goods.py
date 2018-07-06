@@ -165,7 +165,7 @@ class GoodsList(object):
             result = json.loads(json.dumps(result))
             return build_result(APIStatus.Ok, count=data['goods_count'], data=result), HTTPStatus.Ok
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.error('Error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='内部服务器错误'))
 
 

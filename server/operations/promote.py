@@ -49,7 +49,7 @@ class PromoteEffectDecorator(object):
                 return Response(result=result)
             return Response(result=0)
         except Exception as e:
-            log.error('添加推广人员失败: [error: %s]' % e)
+            log.error('添加推广人员失败: [error: %s]' % e, exc_info=True)
 
     @staticmethod
     @make_decorator
@@ -59,7 +59,7 @@ class PromoteEffectDecorator(object):
             result = PromoteEffectList.delete_promoter(db.write_bi, user_id, promoter_mobile)
             return Response(result=result)
         except Exception as e:
-            log.error('删除推广人员失败: [error: %s]' % e)
+            log.error('删除推广人员失败: [error: %s]' % e, exc_info=True)
 
 
 class PromoteQualityDecorator(object):
@@ -97,4 +97,4 @@ class PromoteQualityDecorator(object):
                 promote_quality = PromoteQuality.get_money(db.read_db, params, promoter_ids)
             return Response(params=params, data=promote_quality, before_promote_count=before_promote_count)
         except Exception as e:
-            log.error('推荐人质量统计异常: [error: %s]' % e)
+            log.error('推荐人质量统计异常: [error: %s]' % e, exc_info=True)

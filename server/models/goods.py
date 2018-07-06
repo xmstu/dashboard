@@ -293,7 +293,7 @@ class FreshConsignor(object):
             user_id_list = [str(i['user_id']) for i in ret]
             return user_id_list
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.error('Error:{}'.format(e), exc_info=True)
             return ['0']
 
 

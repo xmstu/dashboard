@@ -83,4 +83,4 @@ def get_date_aggregate(start_time, end_time, periods, data, date_field='create_t
         return xAxis, series
 
     except Exception as e:
-        log.error('日期数据聚合异常: [error: %s]' % e)
+        log.error('日期数据聚合异常: [error: %s]' % e, exc_info=True)

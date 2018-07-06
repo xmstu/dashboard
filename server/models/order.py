@@ -491,7 +491,7 @@ class FreshOwnerModel(object):
             ret = [str(i['owner_id']) for i in order_owner_ret]
             return ret
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.error('Error:{}'.format(e), exc_info=True)
 
         return ['0']
 
@@ -541,6 +541,6 @@ class FreshDriverModel(object):
 
             return ret
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.error('Error:{}'.format(e), exc_info=True)
 
         return ['0']

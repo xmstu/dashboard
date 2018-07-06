@@ -34,5 +34,5 @@ class HeatMap(object):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
 
         except Exception as e:
-            log.error('error:{}'.format(e))
+            log.error('error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))

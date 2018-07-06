@@ -74,4 +74,4 @@ class Login(object):
             log.debug('获取后台登录用户sql参数: [account: %s][password: %s]' % (account, password))
             return result if result else None
         except Exception as e:
-            log.warn('城市经理登录失败 [error: %s]' % e)
+            log.warn('城市经理登录失败 [error: %s]' % e, exc_info=True)
