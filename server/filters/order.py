@@ -164,14 +164,25 @@ class OrderList(object):
                 else:
                     order_status += ''
 
-                if detail['level'] in (1, 2):
-                    evaluation = '差评'
-                elif detail['level'] == 3:
-                    evaluation = '中评'
-                elif detail['level'] in (4, 5):
-                    evaluation = '好评'
+                # 司机对货主评价
+                if detail['driver_rate_level'] in (1, 2):
+                    driver_evaluation = '差评'
+                elif detail['driver_rate_level'] == 3:
+                    driver_evaluation = '中评'
+                elif detail['driver_rate_level'] in (4, 5):
+                    driver_evaluation = '好评'
                 else:
-                    evaluation = '未评价'
+                    driver_evaluation = '未评价'
+
+                # 货主对司机评价
+                if detail['owner_rate_level'] in (1, 2):
+                    owner_evaluation = '差评'
+                elif detail['owner_rate_level'] == 3:
+                    owner_evaluation = '中评'
+                elif detail['owner_rate_level'] in (4, 5):
+                    owner_evaluation = '好评'
+                else:
+                    owner_evaluation = '未评价'
 
                 latency_time = (str(int(detail['latency_time'] / 3600)) + '小时' if int(detail['latency_time'] / 3600) > 0 else '') + \
                                (str(int(detail['latency_time'] % 3600 / 60)) + '分' if int(detail['latency_time'] % 3600 / 60) > 0 else '') + \
@@ -190,10 +201,12 @@ class OrderList(object):
                     'cargo_owner': cargo_owner,
                     'driver': driver,
                     'order_status': order_status,
-                    'evaluation': evaluation,
+                    'driver_evaluation': driver_evaluation,
+                    'owner_evaluation': owner_evaluation,
                     'time_field': time_field,
                     'latency_time': latency_time,
-                    'comment': detail.get('comment', None) or ''
+                    'driver_rate_comment': detail.get('driver_rate_comment', None) or '',
+                    'owner_rate_comment': detail.get('owner_rate_comment', None) or ''
                 })
 
             return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok

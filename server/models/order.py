@@ -225,8 +225,10 @@ class OrderListModel(object):
                 so.pay_status,
                 so.paid_offline,
                 sg.payment_method,
-                se.`level`,
-                se.`comment`,
+                (SELECT level FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.driver_id AND shu_user_evaluations.user_id = so.owner_id AND shu_user_evaluations.order_id = so.id) AS driver_rate_level,
+                (SELECT level FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id) AS owner_rate_level,
+                (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id) AS driver_rate_comment,
+                (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id) AS owner_rate_comment,
                 (so.create_time - sg.create_time) as latency_time,
                 so.create_time,
             IF
