@@ -310,11 +310,11 @@ class CancelReasonList(object):
         FROM
             shf_goods 
         WHERE
-            canceled_reason_text != ''
+            1=1
             AND ( shf_goods.is_deleted = 1 OR shf_goods.STATUS = - 1 ) 
             AND {fetch_where}
-        GROUP BY
-            canceled_reason_text
+        GROUP BY canceled_reason_text
+        ORDER BY reason_count
         """
 
         # 地区
@@ -353,6 +353,8 @@ class CancelReasonList(object):
         sum_count = 0
         cancel_list = []
         for i in cancel_list_dict:
+            if i.get('canceled_reason_text') == '':
+                i['canceled_reason_text'] = '未填写取消原因'
             sum_count += i.get('reason_count', None) or 0
             cancel_list.append(list(i.values()))
 
@@ -361,7 +363,8 @@ class CancelReasonList(object):
 
         data = {
             'cancel_list': cancel_list,
-            'cancel_list_dict':cancel_list_dict
+            'cancel_list_dict':cancel_list_dict,
+            'sum_count':sum_count
         }
 
         return data

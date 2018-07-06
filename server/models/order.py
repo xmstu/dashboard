@@ -111,7 +111,7 @@ class CancelOrderReasonModel(object):
         FROM
             `shb_orders`
             LEFT JOIN shf_goods ON shb_orders.goods_id = shf_goods.id 
-        WHERE shb_orders.canceled_user_id != 0 AND shb_orders.canceled_reason_id != 0 
+        WHERE shb_orders.status = -1
             {fetch_where}
             GROUP BY canceled_reason_text
             ORDER BY reason_count 
@@ -164,6 +164,8 @@ class CancelOrderReasonModel(object):
         sum_count = 0
         cancel_list = []
         for i in cancel_list_dict:
+            if i.get('canceled_reason_text') == '':
+                i['canceled_reason_text'] = '未填写取消原因'
             sum_count += i.get('reason_count', None) or 0
             cancel_list.append(list(i.values()))
 
@@ -172,7 +174,8 @@ class CancelOrderReasonModel(object):
 
         data = {
             'cancel_list': cancel_list if cancel_list else [],
-            'cancel_list_dict': cancel_list_dict if cancel_list_dict else [{}]
+            'cancel_list_dict': cancel_list_dict if cancel_list_dict else [{}],
+            'sum_count': sum_count
         }
 
         return data
@@ -227,7 +230,7 @@ class OrderListModel(object):
                 sg.payment_method,
                 (SELECT level FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.driver_id AND shu_user_evaluations.user_id = so.owner_id AND shu_user_evaluations.order_id = so.id) AS driver_rate_level,
                 (SELECT level FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id) AS owner_rate_level,
-                (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id) AS driver_rate_comment,
+                (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.driver_id AND shu_user_evaluations.user_id = so.owner_id AND shu_user_evaluations.order_id = so.id) AS driver_rate_comment,
                 (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id) AS owner_rate_comment,
                 (so.create_time - sg.create_time) as latency_time,
                 so.create_time,
