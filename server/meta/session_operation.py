@@ -23,7 +23,7 @@ class sessionOperationClass(object):
 
             return True
         except Exception as e:
-            log.error('登录信息写入session出错 [ERROR: %s]' % e)
+            log.error('登录信息写入session出错 [ERROR: %s]' % e, exc_info=True)
             return False
 
     @staticmethod
@@ -35,7 +35,7 @@ class sessionOperationClass(object):
             session.pop('login')
             return True
         except Exception as e:
-            log.error('session登出出错 [ERROR: %s]' % e)
+            log.error('session登出出错 [ERROR: %s]' % e, exc_info=True)
 
     @staticmethod
     def check():

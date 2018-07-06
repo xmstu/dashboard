@@ -39,7 +39,7 @@ class OrdersReceivedStatistics(object):
 
             return Response(params=params)
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.error('Error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
 
 
@@ -70,7 +70,7 @@ class CancelOrderReason(object):
 
             return Response(params=params)
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.error('Error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
 
 
@@ -124,5 +124,5 @@ class OrderList(object):
 
             return Response(page=page, limit=limit, params=params)
         except Exception as e:
-            log.error('error:{}'.format(e))
+            log.error('error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))

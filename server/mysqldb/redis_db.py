@@ -26,4 +26,4 @@ class ExtendRedis(object):
                 return
             return data
         except Exception as e:
-            log.warn('read_georadius_failed: %s' % e)
+            log.warn('read_georadius_failed: %s' % e, exc_info=True)

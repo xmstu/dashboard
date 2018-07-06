@@ -48,4 +48,4 @@ class LoginDecorator(object):
 
             return Response(result=result)
         except Exception as e:
-            log.error('用户登录失败[error: %s]' % (e, ))
+            log.error('用户登录失败[error: %s]' % (e, ), exc_info=True)

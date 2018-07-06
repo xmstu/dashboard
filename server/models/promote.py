@@ -302,7 +302,7 @@ class PromoteQuality(object):
             return promote_quality if promote_quality else [], before_promote_count
 
         except Exception as e:
-            log.error('用户拉新统计异常: [error: %s]' % e)
+            log.error('用户拉新统计异常: [error: %s]' % e, exc_info=True)
 
     @staticmethod
     def get_user_behavior(cursor, params, promoter_ids=None):
@@ -408,7 +408,7 @@ class PromoteQuality(object):
             return promote_quality if promote_quality else []
 
         except Exception as e:
-            log.error('用户行为统计异常: [error: %s]' % e)
+            log.error('用户行为统计异常: [error: %s]' % e, exc_info=True)
 
     @staticmethod
     def get_money(cursor, params, promoter_ids=None):
@@ -522,5 +522,5 @@ class PromoteQuality(object):
             return promote_quality if promote_quality else []
 
         except Exception as e:
-            log.error('用户金额统计异常: [error: %s]' % e)
+            log.error('用户金额统计异常: [error: %s]' % e, exc_info=True)
 

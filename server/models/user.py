@@ -180,7 +180,32 @@ class UserList(object):
 
             return user_list
         except Exception as e:
-            log.error(e)
+            log.error(e, exc_info=True)
+
+    @staticmethod
+    def get_company_name(cursor, user_ids):
+        """获取认证公司名称"""
+        try:
+            command = '''
+            SELECT user_id, company_name
+            FROM shu_user_auths
+            WHERE id IN (
+            SELECT MAX(id)
+            FROM shu_user_auths
+            WHERE user_id IN (%s)
+            AND auth_company = 1
+            AND auth_status = 2
+            AND is_deleted = 0
+            AND company_name != ''
+            GROUP BY user_id)
+            '''
+
+            command = command % user_ids
+
+            result = cursor.query(command)
+            return result if result else []
+        except Exception as e:
+            log.error('获取认证公司名称异常: [error: %s]' % e, exc_info=True)
 
 
 class UserStatistic(object):

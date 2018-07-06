@@ -69,6 +69,6 @@ class TransportList(object):
 
             return build_result(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok
         except Exception as e:
-            log.error('TransportListFilter Error:{}'.format(e))
+            log.error('TransportListFilter Error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='过滤参数时有误'))
 
