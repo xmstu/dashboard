@@ -451,9 +451,9 @@ var setAbout = {
                     {field: 'driver', title: '司机', width: 96},
                     {field: 'latency_time', title: '接单时间', width: 90},
                     {field: 'order_status', title: '状态', width: 100},
-                    {field: 'evaluation', title: '评价', width: 66},
                     {field: 'time_field', title: '时间', width: 190},
-                    {field: 'supplier_node', title: '所属网点'}
+                    {field: 'evaluation', title: '评价', width: 66},
+                    {field: 'comment', title: '评价内容'}
                 ]],
                 done: function (res, curr, count) {
                     $('[data-field]>div').css({'padding': '0 6px'});
@@ -480,6 +480,12 @@ var setAbout = {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
                             $(this).html(result[1] + '<br>' + result[0])
+                        }
+                    });
+                     $("td[data-field='evaluation']").children().each(function (val) {
+                        if ($(this).text() != '') {
+                            var result = $(this).text().split('\n');
+                            $(this).html('<span>货主:'+result[0] + '</span><br><span>司机:' + result[1]+'</span>')
                         }
                     });
                     $("td[data-field='driver']").children().each(function (val) {

@@ -359,7 +359,7 @@ var pageSet = {
                     , {field: 'order_over_price_unline', title: '线下完成金额', sort: true}
                     , {
                         field: 'wealth', title: '操作', width: 96, templet: function (d) {
-                            return '<button id="deleteButton_' + d.reference_id + '" value="' + d.reference_id + '" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
+                            return '<button id="deleteButton_' + d.reference_id + '" value="' + d.reference_mobile + '" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
                         }
                     }
                 ]]
