@@ -14,11 +14,11 @@ class TransportRadarModel(object):
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id 
             AND shf_goods_vehicles.vehicle_attribute = 3 
             AND shf_goods_vehicles.is_deleted = 0 
-            AND shf_goods.create_time >= :start_time 
-            AND shf_goods.create_time < :end_time
         WHERE
             {goods_sql}
             AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
+            AND shf_goods.create_time >= :start_time 
+            AND shf_goods.create_time < :end_time
             GROUP BY shf_goods_vehicles.NAME
         """
 
@@ -51,11 +51,11 @@ class TransportRadarModel(object):
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shb_orders.goods_id 
             AND shf_goods_vehicles.vehicle_attribute = 3 
             AND shf_goods_vehicles.is_deleted = 0 
-            AND shb_orders.create_time >= :start_time
-            AND shb_orders.create_time < :end_time
         WHERE
             {order_sql}
             AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
+            AND shb_orders.create_time >= :start_time
+            AND shb_orders.create_time < :end_time
             GROUP BY shf_goods_vehicles.name
         """
 
@@ -238,13 +238,13 @@ class TransportListModel(object):
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = sg.id 
             AND shf_goods_vehicles.vehicle_attribute = 3 
             AND shf_goods_vehicles.is_deleted = 0 
+        WHERE
+            {inner_good_order_fetch_where}
             -- 时间
             AND sg.create_time >= :start_time 
             AND sg.create_time < :end_time
-        WHERE
-            {inner_good_order_fetch_where}
             GROUP BY FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") DESC
-            ) as a INNER JOIN
+            ) as a LEFT JOIN
             (
             SELECT
             FROM_UNIXTIME(shf_booking_settings.create_time,"%%Y-%%m-%%d") create_time,
