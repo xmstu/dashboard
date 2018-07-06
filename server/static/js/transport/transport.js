@@ -184,8 +184,8 @@ var dataSet = {
                     , {field: 'to_address', title: '目的地', width: 300}
                     , {field: 'mileage', title: '里程'}
                     , {field: 'goods_count', title: '货源量'}
-                    , {field: 'order_count', title: '车辆数'}
-                    , {field: 'vehicle_count', title: '接单量'}
+                    , {field: 'order_count', title: '接单量'}
+                    , {field: 'vehicle_count', title: '车辆数'}
                     , {field: 'create_time', title: '统计时间'}
                     , {
                         field: 'operate', title: '操作', width: 107, templet: function (d) {

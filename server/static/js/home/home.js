@@ -2,6 +2,8 @@ $('.layui-table-cell').css({'height': 'auto!important'});
 $('.part-2 .layui-form-item').css({'width': "246px"})
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+var dataArr1 = ['待接单', '已接单', '已取消', '已接单车辆', '待接单车辆数'];
+var dataArr2 = ['待联系', '已联系', '已接单','已取消', '已接单车辆', '待接单车辆数'];
 setTimeout(function () {
     tableInit('/city/latest_orders/');
     $('.area-menu-about>a').addClass('selected-active')
@@ -9,7 +11,7 @@ setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);
 layui.use(['laydate', 'form', 'table'], function () {
-    dataInit();
+    dataInit(dataArr2);
     layer.load();
     var laydate = layui.laydate;
     var table = layui.table;
@@ -42,12 +44,16 @@ layui.use(['laydate', 'form', 'table'], function () {
         }
     });
 });
-
 /*-----------------------------------------------------------------------------*/
-
 $('#search_btn').click(function (e) {
     e.preventDefault();
-    dataInit();
+    var current_val = $('#goods_types').val();
+    console.log(current_val);
+    if(current_val==3){
+         dataInit(dataArr2);
+    }else if(current_val==1){
+        dataInit(dataArr1)
+    }
     console.log($('#city_area').val())
 });
 $('#user_search_box').on('click', function (e) {
@@ -65,7 +71,7 @@ $('#user_search_box').on('click', function (e) {
     tableInit(url);
 });
 
-function dataInit() {
+function dataInit(dataArrSet) {
     layui.use('layer', function () {
         var layer = layui.layer;
         var start_time = $.trim($('#date_show_one').val());
@@ -92,7 +98,6 @@ function dataInit() {
         http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             var arr = Object.keys(res.data);
             var str = '';
-
             for (var i = 0; i < arr.length; i++) {
                 str += '<li class="charts-lists"><div class="charts-container" id="charts_container_' + i + '"></div><div class="data-list-container' + i + '"></li>';
                 $('.data-list-container0').append($('.tip-list-show0'))
@@ -106,7 +111,6 @@ function dataInit() {
                 }
             };
             var result = "";
-            //$('.data-list-container').append(result)
             $.each(res.data, function (index, val) {
                 if (val[1][2].value < 0) {
                     val[1][2].value = 0
@@ -130,11 +134,11 @@ function dataInit() {
                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ':' + val[0][1].value + '单</span>';
                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ':' + val[0][2].value + '单</span>';
                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][3].name + ':' + val[0][3].value + '单</span>';
-                    result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][4].name + ':' + val[0][4].value + '单</span>';
+                   /* result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][4].name + ':' + val[0][4].value + '单</span>';*/
                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ':' + val[1][0].value + '辆</span>';
                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ':' + val[1][1].value + '辆</span>';
                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ':' + val[1][2].value + '辆</span>';
-                    var all_count_ano = '<p class="all_count">货源数：<span>' + (val[0][0].value + val[0][1].value + val[0][2].value + val[0][3].value + val[0][4].value) + '单</span></p>'
+                    var all_count_ano = '<p class="all_count">货源数：<span>' + (val[0][0].value + val[0][1].value + val[0][2].value + val[0][3].value ) + '单</span></p>'
                     var all_count_ano_1 = '<p class="all_count_1">车辆数：<span>' + (val[1][0].value + val[1][1].value) + '辆</span></p>'
                     $('.data-list-container' + arr.length).html('');
                     $('.data-list-container' + arr.length).append(all_count_ano + all_count_ano_1 + result_ano)
@@ -167,9 +171,7 @@ function dataInit() {
                         orient: 'vertical',
                         x: 'left',
                         y: 'top',
-                        data: [
-                            '待接单', '已接单', '已取消', '待联系', '已联系', '已接单车辆', '待接单车辆数'
-                        ]
+                        data:dataArrSet
                     },
                     toolbox: {
                         show: true,
@@ -276,10 +278,12 @@ function tableInit(url) {
                              $(this).html(str[0])
                         }else if(str[0]!=''&&str[1] == ''&&str[2] != '') {
                             $(this).html(str[0] +'<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
-                        }
-                        else if(str[0] != '' && str[1] != '' && str[2] != '') {
+                        }else if(str[0] != '' && str[1] != '' && str[2] == ''){
+                             $(this).html(str[0] + '<br>' + str[1])
+                        }else if(str[0] != '' && str[1] != '' && str[2] != '') {
                             $(this).html(str[0] + '<br>' + str[1] + '<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
                         }
+
                     }
                 });
                 $("td[data-field='vehicle']").children().each(function () {

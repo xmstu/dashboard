@@ -446,14 +446,14 @@ var setAbout = {
                     {field: 'goods_type', title: '类型', width: 70},
                     {field: 'address', title: '出发地-目的地', width: 240},
                     {field: 'vehicle', title: '车型要求', width: 76},
-                    {field: 'freight', title: '运费', width: 90},
+                    {field: 'freight', title: '运费', width: 80},
                     {field: 'cargo_owner', title: '货主', width: 96},
                     {field: 'driver', title: '司机', width: 96},
                     {field: 'latency_time', title: '接单时间', width: 90},
-                    {field: 'order_status', title: '状态', width: 100},
-                    {field: 'time_field', title: '时间', width: 190},
-                    {field: 'evaluation', title: '评价', width: 66},
-                    {field: 'comment', title: '评价内容'}
+                    {field: 'order_status', title: '状态', width: 86},
+                    {field: 'time_field', title: '时间', width: 180},
+                    {field: 'evaluation', title: '货主司机互评', width:92},
+                    {field: 'comment', title: '双方互评内容'}
                 ]],
                 done: function (res, curr, count) {
                     $('[data-field]>div').css({'padding': '0 6px'});
@@ -483,9 +483,16 @@ var setAbout = {
                         }
                     });
                      $("td[data-field='evaluation']").children().each(function (val) {
+
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
-                            $(this).html('<span>货主:'+result[0] + '</span><br><span>司机:' + result[1]+'</span>')
+                            $(this).html(result[0] +'<br><i class="iconfont icon-huxiangguanzhu" style="margin-left: 8px;"></i><br>'+result[1])
+                        }
+                    });
+                       $("td[data-field='comment']").children().each(function (val) {
+                        if ($(this).text() .length>2) {
+                            var result = $(this).text().split('\n');
+                            $(this).html(result[0] +'<br><i class="iconfont icon-huxiangguanzhu"></i><br>'+result[1])
                         }
                     });
                     $("td[data-field='driver']").children().each(function (val) {
