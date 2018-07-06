@@ -277,6 +277,8 @@ function tableInit(url) {
                              $(this).html(str[0])
                         }else if(str[0]!=''&&str[1]==''){
                             $(this).html(str[0])
+                        }else if(str[0]!=''&&str[1] != ''&&str[2] == ''){
+                             $(this).html(str[0] +'<br>'+str[1])
                         }else if(str[0]!=''&&str[1] == ''&&str[2] != '') {
                             $(this).html(str[0] +'<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
                         }

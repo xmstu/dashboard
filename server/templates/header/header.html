@@ -1,39 +1,54 @@
 <header class="header nav-fixed-to clearfix">
-        <section class="header-left">
-            <a href="javascript:;">
-                <img src="../static/images/logo-icon.png" alt="">
-            </a>
-        </section>
-        <section class="header-content">
-            <div class="header-tips" style="margin-right: 6px;"></div>
-            <div class="header-content-main clearfix">
-                <p><i class="iconfont icon-kalendar"></i><span id="date_now"></span></p>
-                <p><i class="iconfont icon-shijian"></i> <span id="hour_now"></span></p>
-                <p><span id="weather_now"><u></u><i class="iconfont icon-yun">&nbsp;</i><u></u><i
-                        class="iconfont icon-iconset0480">&nbsp;</i><u></u><i class="iconfont icon-weathercock"></i>&nbsp;<u></u></span>
-                </p>
+    <section class="header-left">
+        <a href="javascript:;">
+            <img src="../static/images/logo-icon.png" alt="">
+        </a>
+    </section>
+    <section class="header-content">
+        <div class="header-tips" style="margin-right: 6px;"></div>
+        <div class="header-content-main clearfix">
+            <p><i class="iconfont icon-kalendar"></i><span id="date_now"></span></p>
+            <p><i class="iconfont icon-shijian"></i> <span id="hour_now"></span></p>
+            <p>
+                <span id="weather_now">
+                    <u></u>
+                    <i class="iconfont icon-location"></i>
+                    <u></u>
+                    <i class="iconfont icon-yun"></i>
+                    <u></u>
+                    <i class="iconfont icon-iconset0480"></i>
+                    <u></u>
+                    <i class="iconfont icon-weathercock"></i>&nbsp;
+                    <u></u>
+                </span>
+            </p>
+        </div>
+    </section>
+    <section class="header-right">
+        <div class="oneself-set">
+            <img width="44" height="44" style="border-radius: 50%;border: 1px dotted #ccc;"
+                 src="{{avatar_url}}" alt="">
+            <div>
+                <b class="user_name_icon" style="" id="user-info" data-role="{{ role }}"
+                   data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}">Hi,{{
+                    user_name }}</b>
+                <span id="show_hide" style="cursor:pointer;color: #fff;" class="layui-icon">&#xe61a;</span>
+                <ul class="dropdown-menu" style="display:none;">
+                    <li><a href="/password/"><i class="iconfont icon-shezhi1"></i> <span
+                            style="border-left: 1px dashed #ccc;padding-left: 5px;">修改密码</span></a></li>
+                    <li class="loginOut"><a href="#"><i class="iconfont icon-secede"></i> <span
+                            style="border-left: 1px dashed #ccc; padding-left: 5px;">退出登陆</span></a></li>
+                </ul>
+                <p style="display: none;" class="message-center">消息<i class="iconfont icon-xiaoxi1"></i><b
+                        class="layui-badge">99+</b></p>
+                <span id="project_introduce" class="layui-btn layui-btn-sm"
+                      style="background: none;border: 1px dashed #009688;color: #fff;"><i
+                        class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank"
+                                                           href="/introduce/">统计中心介绍</a></span>
             </div>
-        </section>
-        <section class="header-right">
-            <div class="oneself-set">
-                <img width="44" height="44" style="border-radius: 50%;border: 1px dotted #ccc;"
-                     src="{{avatar_url}}" alt="">
-                <div>
-                    <b class="user_name_icon" style="" id="user-info" data-role="{{ role }}" data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}">Hi,{{ user_name }}</b>
-                    <span id="show_hide" style="cursor:pointer;color: #fff;" class="layui-icon">&#xe61a;</span>
-                    <ul class="dropdown-menu" style="display:none;">
-                        <li><a href="/password/"><i class="iconfont icon-shezhi1"></i> <span
-                                style="border-left: 1px dashed #ccc;padding-left: 5px;">修改密码</span></a></li>
-                        <li class="loginOut"><a href="#"><i class="iconfont icon-secede"></i> <span
-                                style="border-left: 1px dashed #ccc; padding-left: 5px;">退出登陆</span></a></li>
-                    </ul>
-                      <p style="display: none;" class="message-center">消息<i class="iconfont icon-xiaoxi1"></i><b class="layui-badge">99+</b></p>
-                    <span id="project_introduce" class="layui-btn layui-btn-sm"
-                          style="background: none;border: 1px dashed #009688;color: #fff;"><i class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank" href="/introduce/">统计中心介绍</a></span>
-                </div>
-            </div>
-        </section>
-    </header>
+        </div>
+    </section>
+</header>
 <div class="bottom_tools">
-  <a id="scrollUp" href="javascript:;" title="飞回顶部"><i class="iconfont icon-huojianxianxing"></i></a>
+    <a id="scrollUp" href="javascript:;" title="飞回顶部"><i class="iconfont icon-huojianxianxing"></i></a>
 </div>

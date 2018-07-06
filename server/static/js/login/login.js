@@ -1,4 +1,5 @@
-$('.login-page').addClass('animated zoomIn')
+$('.login-page').addClass('animated fadeIn');
+$('.role-select').addClass('animated fadeBigIn delay');
 $(document).keypress(function (e) {
     if (e.which == 13) {
         $('input[type="button"]').click();
