@@ -224,11 +224,9 @@ class TransportListModel(object):
             sg.from_province_id,
             sg.from_city_id,
             sg.from_county_id,
-            sg.from_town_id,
             sg.to_province_id,
             sg.to_city_id,
             sg.to_county_id,
-            sg.to_town_id,
             AVG(mileage_total) AS avg_mileage_total,
             COUNT( 1 ) AS goods_count,
             COUNT(so.id) AS order_count
@@ -243,11 +241,22 @@ class TransportListModel(object):
             -- 时间
             AND sg.create_time >= :start_time 
             AND sg.create_time < :end_time
-            GROUP BY FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") DESC
+            GROUP BY 
+            from_province_id,
+            from_city_id,
+            from_county_id,
+            to_province_id,
+            to_city_id,
+            to_county_id
             ) as a LEFT JOIN
             (
             SELECT
-            FROM_UNIXTIME(shf_booking_settings.create_time,"%%Y-%%m-%%d") create_time,
+            from_province_id,
+            from_city_id,
+            from_county_id,
+            to_province_id,
+            to_city_id,
+            to_county_id,
             COUNT( 1 ) vehicle_count 
         FROM
             shu_vehicle_auths
@@ -262,8 +271,21 @@ class TransportListModel(object):
             AND shu_vehicle_auths.auth_status = 2 
         WHERE
             {inner_vehicle_fetch_where}
-            GROUP BY FROM_UNIXTIME(create_time, "%%Y-%%m-%%d") DESC 
-            ) as b ON a.create_time = b.create_time 
+            GROUP BY 
+            from_province_id,
+            from_city_id,
+            from_county_id,
+            to_province_id,
+            to_city_id,
+            to_county_id
+            ) as b USING(
+            from_province_id,
+            from_city_id,
+            from_county_id,
+            to_province_id,
+            to_city_id,
+            to_county_id
+            )
             -- 货源 车辆 比较大小
             WHERE {outer_fetch_where}
         """
@@ -326,7 +348,7 @@ class TransportListModel(object):
 
         # 筛选条件
         if params['filter']:
-            outer_fetch_where += """ AND (({filter}=1 AND a.goods_count > b.vehicle_count) OR ({filter}=2 AND a.goods_count < b.vehicle_count)) """.format(filter=params['filter'])
+            outer_fetch_where += """ AND (({filter}=1 AND goods_count > vehicle_count) OR ({filter}=2 AND goods_count < vehicle_count)) """.format(filter=params['filter'])
 
         # 时间
         kwargs = {
@@ -336,7 +358,7 @@ class TransportListModel(object):
 
         count = cursor.query_one(command.format(filelds=""" COUNT(1) AS count """, inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)['count']
 
-        outer_fetch_where += """ LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        outer_fetch_where += """ ORDER BY a.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
         transport_list = cursor.query(command.format(filelds=filelds, inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)
 
