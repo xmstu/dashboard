@@ -90,6 +90,7 @@
 .cancel-reason-table {
     border:none !important;
     color: #000;
+    position: relative;
 }
 .table-no-data {
     color: #bbb;
@@ -168,4 +169,18 @@
 }
 .order-item-spec {
     width: 214px!important;
+}
+.cancel_reason_total {
+    position: absolute;
+    right: 0;
+}
+.cancel_reason_total > td {
+    text-align: right;
+}
+.cancel_reason_total > td > span {
+    border: none;
+    background: #fff;
+    font-weight: bold;
+    color: #f40;
+    font-size: 16px;
 }
