@@ -207,7 +207,7 @@ class TransportListModel(object):
     @staticmethod
     def get_data(cursor, page, limit, params):
 
-        filelds = """*"""
+        filelds = """a.*, IFNULL(b.vehicle_count, 0) vehicle_count"""
 
         inner_good_order_fetch_where = """ 1=1 """
         inner_vehicle_fetch_where = """ 1=1 """
@@ -348,7 +348,7 @@ class TransportListModel(object):
 
         # 筛选条件
         if params['filter']:
-            outer_fetch_where += """ AND (({filter}=1 AND goods_count > vehicle_count) OR ({filter}=2 AND goods_count < vehicle_count)) """.format(filter=params['filter'])
+            outer_fetch_where += """ AND (({filter}=1 AND a.goods_count > IFNULL( b.vehicle_count, 0 )) OR ({filter}=2 AND a.goods_count < b.vehicle_count)) """.format(filter=params['filter'])
 
         # 时间
         kwargs = {
