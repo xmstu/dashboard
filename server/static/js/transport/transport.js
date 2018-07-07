@@ -164,6 +164,8 @@ var dataSet = {
                 }
             ]
         })
+        layer.closeAll('loading');
+        $('.main-content-right').addClass('animated fadeIn');
     },
     tableRender:function(table_url){
         var that = this;
@@ -195,8 +197,6 @@ var dataSet = {
                 ]]
                 ,
                 done: function (res, curr, count) {
-                    layer.closeAll('loading');
-                    $('.main-content-right').addClass('animated fadeIn');
                      $("td[data-field='business']").children().each(function () {
                     if($(this).text()==1){
                         $(this).text('同城')
@@ -259,6 +259,7 @@ var dataSet = {
                                     str += '<td style="color: #f40;font-weight: bold;">' + that.transition(goods_ret[i], orders_ret[i]) + '</td>';
                                     str += '<tr>';
                                     $('.popup-tbody').append(str)
+
                                 }
                                 if ($('.popup-tbody').html() != '') {
                                     layer.open({

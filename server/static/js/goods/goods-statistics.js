@@ -281,6 +281,8 @@ layui.use(['laydate', 'form', 'table'], function () {
             {field: 'node_id', title: '所属网点'}
         ]],
         done: function (res, curr, count) {
+             layer.closeAll('loading')
+            $('.main-content-right').addClass('animated fadeIn');
             $('[data-field]>div').css({'padding': '0 6px'});
             $('.nearby').on('click', function () {
                 layer.open({
@@ -311,8 +313,7 @@ layui.use(['laydate', 'form', 'table'], function () {
                 }
             })
               $("td[data-field='mobile']").children().each(function () {
-                    layer.closeAll('loading')
-                    $('.main-content-right').addClass('animated fadeIn');
+
                     var str = $(this).text();
                     if (str != '') {
                         str = str.split('\n');

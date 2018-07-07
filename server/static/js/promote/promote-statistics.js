@@ -364,10 +364,10 @@ var pageSet = {
                     }
                 ]]
                 , done: function (res) {
+                     layer.closeAll('loading')
+                     $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='user_count']").children().each(function () {
                         if ($(this).text() != '') {
-                            layer.closeAll('loading')
-                            $('.main-content-right').addClass('animated fadeIn');
                             var str = $(this).text();
                             $(this).html(str + '人')
                         }

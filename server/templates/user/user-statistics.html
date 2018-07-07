@@ -197,7 +197,7 @@
                             <div class="layui-form-item">
                                 <div  class="layui-inline">
                                     <label class="layui-form-label">常驻地</label>
-                                    <div id="city_manager_two" class="layui-input-inline" style="display:none;">
+                                    <div id="city_manager_two" class="layui-input-inline" style="width: 140px; display:none;">
                                         <select id="area_select" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部地区</option>
                                             {% for location in locations %}
@@ -250,6 +250,7 @@
                                             <option value="2">一般（1-3天未登录）</option>
                                             <option value="3">即将沉睡（4-10天未登录）</option>
                                             <option value="4">沉睡（10天以上未登录）</option>
+                                            <option value="5">今日登陆</option>
                                         </select>
                                     </div>
                                 </div>
