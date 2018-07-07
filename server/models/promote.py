@@ -22,10 +22,10 @@ class PromoteEffectList(object):
         """
         fetch_where = ''
         # 用户名
-        if params['user_name']:
+        if params.get('user_name'):
             fetch_where += "AND tb_inf_promoter.user_name = '%s' " % params['user_name']
         # 手机号
-        if params['mobile']:
+        if params.get('mobile'):
             fetch_where += "AND tb_inf_promoter.mobile = '%s' " % params['mobile']
 
         command = command % fetch_where
@@ -200,19 +200,29 @@ class PromoteQuality(object):
         return [i['mobile'] for i in result if i['mobile']] if result else []
 
     @staticmethod
-    def get_promoter_mobile_by_admin(cursor):
+    def get_promoter_mobile_by_admin(cursor, params):
         """管理员获取推广人员信息"""
         command = """
         SELECT mobile
         FROM tb_inf_promoter
         WHERE is_deleted = 0
+        %s
         """
+        fetch_where = ''
+        # 用户名
+        if params.get('user_name'):
+            fetch_where += "AND tb_inf_promoter.user_name = '%s' " % params['user_name']
+        # 手机号
+        if params.get('mobile'):
+            fetch_where += "AND tb_inf_promoter.mobile = '%s' " % params['mobile']
+
+        command = command % fetch_where
         result = cursor.query(command)
 
         return [i['mobile'] for i in result if i['mobile']] if result else []
 
     @staticmethod
-    def get_promoter_mobile_by_suppliers(cursor, city_region):
+    def get_promoter_mobile_by_suppliers(cursor, city_region, params):
         """区镇合伙人获取推广人员信息"""
         if not city_region:
             return []
@@ -222,8 +232,17 @@ class PromoteQuality(object):
         INNER JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
         WHERE tb_inf_city_manager.is_deleted = 0
         AND tb_inf_city_manager.region_id IN (%s)
+        %s
         """
-        command = command % ','.join([str(i) for i in city_region])
+        fetch_where = ''
+        # 用户名
+        if params.get('user_name'):
+            fetch_where += "AND tb_inf_promoter.user_name = '%s' " % params['user_name']
+        # 手机号
+        if params.get('mobile'):
+            fetch_where += "AND tb_inf_promoter.mobile = '%s' " % params['mobile']
+
+        command = command % (','.join([str(i) for i in city_region]), fetch_where)
         result = cursor.query(command)
 
         return [i['mobile'] for i in result if i['mobile']] if result else []
