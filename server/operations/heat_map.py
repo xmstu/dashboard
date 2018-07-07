@@ -1,3 +1,4 @@
+from server.cache_data import init_regions
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.heat_map import HeatMapModel
@@ -8,9 +9,16 @@ class HeatMap(object):
     @staticmethod
     @make_decorator
     def get_data(params):
+
+        # 获取城市级别
+        if params.get("role_region_id") == '0':
+            level = 1
+        else:
+            level = init_regions.get_city_level(params.get('region_id'))
+
         # 按用户
         if params.get('dimension') == 1:
-            data = HeatMapModel.get_user(db.read_bi, params)
+            data = HeatMapModel.get_user(db.read_bi, params, level)
         # 按货源
         elif params.get('dimension') == 2:
             data = HeatMapModel.get_goods(db.read_db, params)

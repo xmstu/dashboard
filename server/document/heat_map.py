@@ -6,4 +6,5 @@ heat_map_param = api.doc(params={
     "field": "用户:1.用户数/2.认证数/3.活跃数;货源:1.货源数/2.货源金额/3.订单数/4.订单金额;车型:1.货源所需/2.车辆数/3.实际接单",
     "start_time": "开始时间",
     "end_time": "开始时间",
+    "region_id": "地区id"
 }, description='运力趋势查询参数')

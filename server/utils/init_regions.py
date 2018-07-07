@@ -36,8 +36,8 @@ class Regions(object):
     def get_city_level(self, region_id):
         """获取地区code上级到城市"""
         result = self.region.get(int(region_id), {'level': 0})
-        if result['level'] <= 2:
-            return result
+        if result['level'] <= 3:
+            return result['level']
         return self.get_city_level(result['parent_id'])
 
 

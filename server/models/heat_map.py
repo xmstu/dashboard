@@ -4,14 +4,14 @@ import time
 class HeatMapModel(object):
 
     @staticmethod
-    def get_user(cursor, params):
+    def get_user(cursor, params, level):
         fields = """"""
 
         fetch_where = """ 1=1 """
 
         command = """
         SELECT
-            from_city_id,
+            :region_group,
             COUNT( 1 ) 
         FROM
             `tb_inf_user` 
@@ -19,26 +19,9 @@ class HeatMapModel(object):
             {fetch_where} 
             AND create_time >= :start_time 
             AND create_time < :end_time
-            AND from_province_id = 440000 AND from_city_id != 0
             GROUP BY
-                from_city_id
+              :group_condition
         """
-        # 地区
-        region = ' AND 1=1 '
-        if params['region_id']:
-            if isinstance(params['region_id'], int):
-                region = 'AND (tb_inf_user.from_province_id = %(region_id)s OR tb_inf_user.from_city_id = %(region_id)s OR tb_inf_user.from_county_id = %(region_id)s OR tb_inf_user.from_town_id = %(region_id)s) ' % {
-                    'region_id': params['region_id']}
-            elif isinstance(params['region_id'], list):
-                region = '''
-                        AND (
-                        tb_inf_user.from_province_id IN (%(region_id)s)
-                        OR tb_inf_user.from_city_id IN (%(region_id)s)
-                        OR tb_inf_user.from_county_id IN (%(region_id)s)
-                        OR tb_inf_user.from_town_id IN (%(region_id)s)
-                        ) ''' % {'region_id': ','.join(params['region_id'])}
-
-        fetch_where += region
 
         # 角色
         if params.get('filter'):
@@ -80,12 +63,34 @@ class HeatMapModel(object):
                 AND keep_login_days >= 7 AND last_login_time > UNIX_TIMESTAMP() - 86400
                 """
 
+        # 根据级别分组数据
+        if level == 1:
+            group_condition = 'from_province_id'
+            region_group = 'from_province_id'
+        elif level == 2:
+            group_condition = 'from_province_id'
+            region_group = 'from_city_id'
+        elif level == 3:
+            group_condition = 'from_city_id'
+            region_group = 'from_county_id'
+        else:
+            group_condition = ''
+            region_group = ''
+
+        # 根据地区id获取数据
+        if int(params.get('region_id')):
+            fetch_where += """ AND {group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+
+        fetch_where += """ AND {group_condition} != 0 """.format(group_condition=group_condition)
+
         kwargs = {
             "start_time": params.get('start_time', time.time() - 86400*7),
-            "end_time": params.get('end_time', time.time() - 86400)
+            "end_time": params.get('end_time', time.time() - 86400),
+            "group_condition": group_condition,
+            "region_group": region_group
         }
 
-        data = cursor.query(command, kwargs)
+        data = cursor.query(command.format(fetch_where=fetch_where), kwargs)
 
         return data
 
