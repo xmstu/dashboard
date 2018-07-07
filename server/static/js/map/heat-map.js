@@ -112,7 +112,6 @@ var ynameMap = [];
 for (var i = 0; i < data_reset.length - 5; i++) {
     ynameMap.push(data_reset[i].name);
 }
-console.log(ynameMap)
 var chart = echarts.init(document.getElementById('map_container'));
 var option = {
     backgroundColor: '#f6f6f6',
@@ -162,7 +161,6 @@ var option = {
         max: 200,
         left: 'left',
         top: 'bottom',
-        seriesIndex: [1],
         text: ['high', 'low'],
         calculable: true,
         seriesIndex: [1],
@@ -204,7 +202,7 @@ var option = {
     grid: {
         right: 20,
         top: 0,
-        width: '24%'
+        width: '20%'
     },
     animationDuration: 1000,
     animationEasing: 'cubicOut',
@@ -222,6 +220,7 @@ $.getJSON('/static/map/china.json', function (data) {
     pageSet.renderMap('china', d);
 });
 chart.on('click', function (params) {
+    console.log(params)
     if (params.name in provinces) {
         $.getJSON('/static/map/province/' + provinces[params.name] + '.json', function (data) {
             echarts.registerMap(params.name, data);
@@ -321,6 +320,7 @@ var pageSet = {
     },
     renderMap: function (map, data) {
        // data = data_reset;
+        console.log(data);
         option.title.subtext = map;
         option.series = [
             {
@@ -345,9 +345,9 @@ var pageSet = {
                 borderWidth: 1.6,
                 aspectScale: 0.68,
                 geoIndex: 0,
-                left: '1%',
+                left: '4%',
                 top: 10,
-                width: '72%',
+                width: '68%',
                 height: '90%',
                 nameMap: {
                     'china': '中国'

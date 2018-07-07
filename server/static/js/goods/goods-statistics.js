@@ -312,6 +312,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             })
               $("td[data-field='mobile']").children().each(function () {
                     layer.closeAll('loading')
+                    $('.main-content-right').addClass('animated fadeIn');
                     var str = $(this).text();
                     if (str != '') {
                         str = str.split('\n');
@@ -760,7 +761,6 @@ $('#goods_search_box').on('click', function (e) {
                     }
                 })
                 $("td[data-field='mobile']").children().each(function () {
-                    layer.closeAll('loading')
                     var str = $(this).text();
                     if (str != '') {
                         str = str.split('\n');

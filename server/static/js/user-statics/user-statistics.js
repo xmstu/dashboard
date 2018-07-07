@@ -162,6 +162,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='usual_city']").css({'display': 'none'})
             layer.closeAll('loading')
+            $('.main-content-right').addClass('animated fadeIn');
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
                     $(this).html('<span style="color: #f40;">未录入</span>')

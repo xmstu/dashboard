@@ -459,6 +459,7 @@ var setAbout = {
                 done: function (res, curr, count) {
                     $('[data-field]>div').css({'padding': '0 6px'});
                     layer.closeAll('loading');
+                    $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='goods_standard']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
@@ -484,16 +485,17 @@ var setAbout = {
                         }
                     });
                     $("td[data-field='evaluation']").children().each(function (val) {
-
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
                             $(this).html('<span style="">司机:' + result[0] + '</span><br><span style="">货主:' + result[1] + '</span>')
                         }
                     });
                     $("td[data-field='comment']").children().each(function (val) {
-                        if ($(this).text().length > 2) {
+                        if ($(this).text().length >= 2) {
                             var result = $(this).text().split('\n');
                             $(this).html('<span style="">司机:' + result[0] + '</span><br><span style="">货主:' + result[1] + '</span>')
+                        }else if($(this).text().length<2){
+                             $(this).html('<span style="">司机:该司机未对货主进行评价,您可以点击上方条件进行筛选</span><br><span style="">货主:该货主未对司机进行评价，您可以点击上方条件进行筛选</span>')
                         }
                     });
                     $("td[data-field='driver']").children().each(function (val) {

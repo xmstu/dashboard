@@ -19,7 +19,6 @@ var common = {
         layui.use('layer', function () {
             var layer = layui.layer;
         });
-        $('.main-content-right').addClass('animated fadeIn');
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {
                 skin: 'layui-layer-molv',

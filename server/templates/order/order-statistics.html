@@ -5,9 +5,9 @@
     <title>订单统计-省省统计中心</title>
     <link rel="stylesheet" href="../static/css/base.css">
     <link rel="stylesheet" href="../static/layui/css/layui.css">
-    <link rel="stylesheet" href="../static/css/common.css?v=1.0.6.1">
+    <link rel="stylesheet" href="../static/css/common.css?v=1.0.7">
     <link rel="stylesheet" href="../static/css/iconfont.css">
-    <link rel="stylesheet" href="../static/css/promote/promote.css?v=1.0.6.1">
+    <link rel="stylesheet" href="../static/css/promote/promote.css?v=1.0.7">
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
@@ -87,9 +87,12 @@
                                             <select id="comment_type" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部评价</option>
-                                                <option value="1">好评</option>
-                                                <option value="2">中评</option>
-                                                <option value="3">差评</option>
+                                                <option value="1">司机：好评</option>
+                                                <option value="2">司机：中评</option>
+                                                <option value="3">司机：差评</option>
+                                                <option value="4">货主：好评</option>
+                                                <option value="5">货主：中评</option>
+                                                <option value="6">货主：差评</option>
                                             </select>
                                         </div>
                                     </div>
@@ -428,66 +431,67 @@
                                         <select id="comment_type_one" name="modules" lay-verify="required"
                                                 lay-search="">
                                             <option value="">请选择</option>
-                                           <option value="1">司机：好评</option>
-                                                <option value="2">司机：中评</option>
-                                                <option value="3">司机：差评</option>
-                                                <option value="4">货主：好评</option>
-                                                <option value="5">货主：中评</option>
-                                                <option value="6">货主：差评</option>
+                                            <option value="1">司机：好评</option>
+                                            <option value="2">司机：中评</option>
+                                            <option value="3">司机：差评</option>
+                                            <option value="4">货主：好评</option>
+                                            <option value="5">货主：中评</option>
+                                            <option value="6">货主：差评</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <article style="display: inline-block;width: auto;">
                                 <div class="layui-form-item order-item-spec">
-                                <div class="layui-inline" style="margin-right: 0;">
-                                    <label class="layui-form-label">发布时间</label>
-                                    <div class="layui-input-block" style="width: 147px;">
-                                        <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="create_start_time" name="create_start_time" autocomplete="off"
-                                               lay-verify="create_start_time" class="layui-input" type="text">
-                                        <span class="date-tips" style="right: 68px;">请选择日期</span>
+                                    <div class="layui-inline" style="margin-right: 0;">
+                                        <label class="layui-form-label">发布时间</label>
+                                        <div class="layui-input-block" style="width: 147px;">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="create_start_time" name="create_start_time" autocomplete="off"
+                                                   lay-verify="create_start_time" class="layui-input" type="text">
+                                            <span class="date-tips" style="right: 68px;">请选择日期</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <span style="display: inline-block;margin-top: 9px;">至</span>
-                            <div class="layui-form-item ">
-                                <div class="layui-inline">
-                                    <div class="layui-input-block" style="margin-left: 6px;">
-                                        <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="create_end_time" name="create_end_time" autocomplete="off"
-                                               lay-verify="create_end_time" class="layui-input" type="text">
-                                        <span class="date-tips">请选择日期</span>
+                                <span style="display: inline-block;margin-top: 9px;">至</span>
+                                <div class="layui-form-item ">
+                                    <div class="layui-inline">
+                                        <div class="layui-input-block" style="margin-left: 6px;">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="create_end_time" name="create_end_time" autocomplete="off"
+                                                   lay-verify="create_end_time" class="layui-input" type="text">
+                                            <span class="date-tips">请选择日期</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             </article>
                             <article style="display:inline-block; width: auto;">
                                 <div class="layui-form-item layui-form-spec" style="width:222px !important;">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">完成时间</label>
-                                    <div class="layui-input-block" style="width: 147px;">
-                                        <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="load_start_time" name="load_start_time" autocomplete="off"
-                                               lay-verify="load_start_time" class="layui-input" type="text">
-                                        <span class="date-tips" style="right: 68px;">请选择日期</span>
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">完成时间</label>
+                                        <div class="layui-input-block" style="width: 147px;">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="load_start_time" name="load_start_time" autocomplete="off"
+                                                   lay-verify="load_start_time" class="layui-input" type="text">
+                                            <span class="date-tips" style="right: 68px;">请选择日期</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <span style="display: inline-block;margin-top: 9px;">至</span>
-                            <div class="layui-form-item" style="width:240px ;">
-                                <div class="layui-inline">
-                                    <div class="layui-input-block" style="margin-left: 6px;">
-                                        <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="load_end_time" name="load_end_time" autocomplete="off"
-                                               lay-verify="load_end_time" class="layui-input" type="text">
-                                        <span class="date-tips">请选择日期</span>
+                                <span style="display: inline-block;margin-top: 9px;">至</span>
+                                <div class="layui-form-item" style="width:240px ;">
+                                    <div class="layui-inline">
+                                        <div class="layui-input-block" style="margin-left: 6px;">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="load_end_time" name="load_end_time" autocomplete="off"
+                                                   lay-verify="load_end_time" class="layui-input" type="text">
+                                            <span class="date-tips">请选择日期</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             </article>
 
-                            <button id="goods_search_box" style="position: relative;padding-left: 20px;vertical-align: top"
+                            <button id="goods_search_box"
+                                    style="position: relative;padding-left: 20px;vertical-align: top"
                                     class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索
                             </button>
                         </form>
@@ -502,14 +506,14 @@
 <span style="display: none!important">
        <script src="https://s22.cnzz.com/z_stat.php?id=1274088436&web_id=1274088436" language="JavaScript"></script>
 </span>
-<script src="../static/js/libs/jquery-2.1.1.min.js?v=1.0.6.1"></script>
-<script src="../static/js/libs/highcharts.min.js?v=1.0.6.1"></script>
-<script src="../static/js/libs/highcharts-exporting.js?v=1.0.6.1"></script>
-<script src="../static/layui/layui.js?v=1.0.6.1"></script>
-<script src="../static/js/common/common.js?v=1.0.6.1"></script>
-<script src="../static/js/common/http.js?v=1.0.6.1"></script>
-<script src="../static/js/libs/jquery.address.js?v=1.0.6.1"></script>
-<script src="../static/js/order/order-statistics.js?v=1.0.6.1"></script>
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=1.0.7"></script>
+<script src="../static/js/libs/highcharts.min.js?v=1.0.7"></script>
+<script src="../static/js/libs/highcharts-exporting.js?v=1.0.7"></script>
+<script src="../static/layui/layui.js?v=1.0.7"></script>
+<script src="../static/js/common/common.js?v=1.0.7"></script>
+<script src="../static/js/common/http.js?v=1.0.7"></script>
+<script src="../static/js/libs/jquery.address.js?v=1.0.7"></script>
+<script src="../static/js/order/order-statistics.js?v=1.0.7"></script>
 </body>
 </html>
 <script>
