@@ -309,9 +309,9 @@ class TransportListModel(object):
         inner_vehicle_fetch_where += region
 
         # 出发地
-        if params['from_town_id']:
-            inner_good_order_fetch_where += ' AND sg.from_town_id = %d ' % params['from_town_id']
-            inner_vehicle_fetch_where += ' AND from_town_id = %d ' % params['from_town_id']
+        # if params['from_town_id']:
+        #     inner_good_order_fetch_where += ' AND sg.from_town_id = %d ' % params['from_town_id']
+        #     inner_vehicle_fetch_where += ' AND from_town_id = %d ' % params['from_town_id']
         if params['from_county_id']:
             inner_good_order_fetch_where += ' AND sg.from_county_id = %d ' % params['from_county_id']
             inner_vehicle_fetch_where += ' AND from_county_id = %d ' % params['from_county_id']
@@ -323,9 +323,9 @@ class TransportListModel(object):
             inner_vehicle_fetch_where += ' AND from_province_id = %d ' % params['from_province_id']
 
         # 目的地
-        if params['to_town_id']:
-            inner_good_order_fetch_where += ' AND sg.to_town_id = %d ' % params['to_town_id']
-            inner_vehicle_fetch_where += ' AND to_town_id = %d ' % params['to_town_id']
+        # if params['to_town_id']:
+        #     inner_good_order_fetch_where += ' AND sg.to_town_id = %d ' % params['to_town_id']
+        #     inner_vehicle_fetch_where += ' AND to_town_id = %d ' % params['to_town_id']
         if params['to_county_id']:
             inner_good_order_fetch_where += ' AND sg.to_county_id = %d ' % params['to_county_id']
             inner_vehicle_fetch_where += ' AND to_county_id = %d ' % params['to_county_id']

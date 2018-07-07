@@ -38,11 +38,9 @@ class TransportList(object):
 
                 # 出发地-目的地
                 from_address = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
-                                                       detail.get('from_county_id', 0)) + init_regions.to_town(
-                    detail.get('from_town_id', 0))
+                                                       detail.get('from_county_id', 0))
                 to_address = init_regions.to_address(detail.get('to_province_id', 0), detail.get('to_city_id', 0),
-                                                     detail.get('to_county_id', 0)) + init_regions.to_town(
-                    detail.get('to_town_id', 0))
+                                                     detail.get('to_county_id', 0))
 
                 result.append({
                     'business_field': business,
