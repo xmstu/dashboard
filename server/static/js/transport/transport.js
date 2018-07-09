@@ -11,19 +11,20 @@ var dataSet = {
             that.tableRender('/transport/list/');
         }, 10);
         $('#area_select').address({
-            offsetLeft: '0',
+             offsetLeft: '-124px',
             level: 3,
+
             onClose: function () {
             }
         });
         $('#start_place').address({
-            offsetLeft: '0',
+             offsetLeft: '-124px',
             level: 3,
             onClose: function () {
             }
         });
         $('#end_place').address({
-            offsetLeft: '0',
+             offsetLeft: '-124px',
             level: 3,
             onClose: function () {
             }
@@ -347,7 +348,8 @@ var dataSet = {
         if (!!auth_role && auth_role == 1) {
             $('#super_manager_area').css({'display': 'block'})
             $('#super_manager_area_select_zero').address({
-                level: 3
+                level: 3,
+                 offsetLeft: '-124px',
             });
         } else {
             $('#super_manager_area').css({'display': 'none'});
