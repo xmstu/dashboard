@@ -4,13 +4,13 @@ import pymongo
 
 class MongoLinks(object):
 
-    def __init__(self, config, collection, user=None, password=None):
+    def __init__(self, config, collection):
         self.host = config['host']
         self.port = config['port']
         self.db = config['db']
         self.collection_name = collection
-        self.user = user
-        self.password = password
+        self.user = config.get('user', '')
+        self.password = config.get('password', '')
         self.conn = pymongo.MongoClient(host=self.host, port=self.port)
 
         if self.user and self.password:
