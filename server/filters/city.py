@@ -223,7 +223,10 @@ class CityNearbyCars(object):
             if i['longitude'] and i['latitude'] and goods['from_longitude'] and goods['from_latitude']:
                 mileage_total = distance(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])
             # 所在地
-            current_region = init_regions.to_address(i['province_id'], i['city_id'], i['county_id'])
+            current_region = i['locations'].get('province_name', '') +\
+                             i['locations'].get('city_name', '') +\
+                             i['locations'].get('county_name', '') +\
+                             i['locations'].get('address', '')
             # 诚信会员
             is_trust_member = 0
             if i['trust_member_type'] == 1:
@@ -233,7 +236,7 @@ class CityNearbyCars(object):
             result.append({
                 'name': i['user_name'],
                 'mobile': i['mobile'],
-                'current_region': current_region + i['address'],
+                'current_region': current_region,
                 'vehicle_length': i['vehicle_length'] if i['vehicle_length'] else '不限车长',
                 'vehicle_type': i['vehicle_type'] if i['vehicle_type'] else '不限车型',
                 'credit_level': i['credit_level'],
