@@ -16,8 +16,15 @@ var common = {
         })
     },
     init: function () {
-        layui.use('layer', function () {
+        layui.use(['layer', 'form'], function () {
             var layer = layui.layer;
+            var form = layui.form;
+            var clearBtn = $('.clear-select');
+            clearBtn.on('click', function () {
+                $('#is_called').val("");
+                $('#select').reset()
+            })
+
         });
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {
@@ -77,7 +84,7 @@ var common = {
         })
     },
     weather: function () {
-        var that  = this;
+        var that = this;
         $.ajax({
             type: "POST",
             dataType: "jsonp",
@@ -387,28 +394,32 @@ var common = {
         }
     },
     week_transition: function (val) {
-        if(val==1){
-            val='一';
+        if (val == 1) {
+            val = '一';
             return val
-        }else if(val==2){
-            val='二';
+        } else if (val == 2) {
+            val = '二';
             return val
-        }else if(val==3){
-            val='三';
+        } else if (val == 3) {
+            val = '三';
             return val
-        }else if(val==4){
-            val='四';
+        } else if (val == 4) {
+            val = '四';
             return val
-        }else if(val==5){
-            val='五';
+        } else if (val == 5) {
+            val = '五';
             return val
-        }else if(val==6){
-            val='六';
+        } else if (val == 6) {
+            val = '六';
             return val
-        }else if(val==7){
-            val='天';
+        } else if (val == 7) {
+            val = '天';
             return val
         }
+    },
+    clearSelect: function (element) {
+
+
     }
 };
 setTimeout(function () {

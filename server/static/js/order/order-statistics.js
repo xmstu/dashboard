@@ -495,7 +495,7 @@ var setAbout = {
                             var result = $(this).text().split('\n');
                             $(this).html('<span style="">司机:' + result[0] + '</span><br><span style="">货主:' + result[1] + '</span>')
                         }else if($(this).text().length<2){
-                             $(this).html('<span style="">司机:该司机未对货主进行评价,您可以点击上方条件进行筛选</span><br><span style="">货主:该货主未对司机进行评价，您可以点击上方条件进行筛选</span>')
+                             $(this).html('<span style="">司机:该司机未对货主进行评价</span><br><span style="">货主:该货主未对司机进行评价</span>')
                         }
                     });
                     $("td[data-field='driver']").children().each(function (val) {
