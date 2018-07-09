@@ -5,7 +5,6 @@ class HeatMapModel(object):
 
     @staticmethod
     def get_user(cursor, params, level):
-        fields = """"""
 
         fetch_where = """ 1=1 """
 
@@ -81,12 +80,11 @@ class HeatMapModel(object):
         if int(params.get('region_id')):
             fetch_where += """ AND {group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
 
-        fetch_where += """ AND {group_condition} != 0 """.format(group_condition=group_condition)
+        fetch_where += """ AND {group_condition} != 0 AND {region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
 
         kwargs = {
             "start_time": params.get('start_time', time.time() - 86400*7),
             "end_time": params.get('end_time', time.time() - 86400),
-            "group_condition": group_condition,
             "region_group": region_group
         }
 
@@ -95,37 +93,70 @@ class HeatMapModel(object):
         return data
 
     @staticmethod
-    def get_goods(cursor, params):
+    def get_goods(cursor, params, level):
 
-        fields = """"""
-
-        which_table = """"""
-
-        fetch_where = """"""
+        fetch_where = """ 1=1 """
 
         command = """
         SELECT
-            sg.from_city_id,
-            COUNT( 1 ),
-            COALESCE ( SUM( price_expect + price_addition ), 0 ),
-            COUNT( so.id ),
-            COALESCE ( SUM( so.price ), 0 ) 
+            {region_group},
+            IF({level}=1 OR {field}=1, COUNT( 1 ), 0) goods_count,
+            IF({level}=1 OR {field}=2, COALESCE ( SUM( price_expect + price_addition ), 0 ), 0) goods_price,
+            IF({level}=1 OR {field}=3, COUNT( so.id ), 0) orders_count,
+            IF({level}=1 OR {field}=4, COALESCE ( SUM( so.price ), 0 ), 0) orders_price
         FROM
             shf_goods sg
             LEFT JOIN shb_orders so ON so.goods_id = sg.id 
         WHERE
-            1 = 1 
-        -- 业务类型
-        -- 	AND haul_dist = 1
-            AND haul_dist = 2 
-            AND sg.create_time >= 1395244800 
-            AND sg.create_time < 1530633600 
-            AND sg.from_province_id = 440000
+            {fetch_where}
+            AND sg.create_time >= :start_time
+            AND sg.create_time <  :end_time
         GROUP BY
-            sg.from_city_id;
+            {region_group};
         """
 
-        data = cursor.query(command)
+        # 按业务类型分
+        if params.get('filter') == 1:
+            fetch_where += """
+            AND (
+            ({filter}=1 AND haul_dist = 1) OR
+            ({filter}=2 AND haul_dist = 2)
+            )
+            """.format(filter=params['filter'])
+
+        # 根据级别分组数据
+        if level == 1:
+            group_condition = 'sg.from_province_id'
+            region_group = 'sg.from_province_id'
+        elif level == 2:
+            group_condition = 'sg.from_province_id'
+            region_group = 'sg.from_city_id'
+        elif level == 3:
+            group_condition = 'sg.from_city_id'
+            region_group = 'sg.from_county_id'
+        else:
+            group_condition = ''
+            region_group = ''
+
+        # 根据地区id获取数据
+        if int(params.get('region_id')):
+            fetch_where += """ AND {group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+
+        fetch_where += """ AND {group_condition} != 0 AND {region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
+
+        # 时间
+        kwargs = {
+            "start_time": params.get("start_time", time.time() - 86400*7),
+            "end_time": params.get("end_time", time.time()),
+            "region_group": region_group
+        }
+
+        goods_list = cursor.query(command.format(region_group=region_group, level=level, field=params['field'], fetch_where=fetch_where), kwargs)
+
+        data = {
+            "goods_list": goods_list,
+            "region_group": region_group
+        }
 
         return data
 

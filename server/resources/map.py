@@ -10,7 +10,7 @@ class HeatMap(Resource):
 
     @staticmethod
     @doc.heat_map_param
-    @filters.HeatMap.get_result(data=dict)
+    @filters.HeatMap.get_result(params=dict, data=dict)
     @operations.HeatMap.get_data(params=dict)
     @verify.HeatMap.check_params(params=dict)
     def get():
