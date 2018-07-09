@@ -3,7 +3,7 @@
 class TransportRadarModel(object):
 
     @staticmethod
-    def get_data(cursor, params):
+    def get_data(cursor1, cursor2, params):
 
         goods_cmd = """
         SELECT
@@ -24,22 +24,16 @@ class TransportRadarModel(object):
 
         vehicle_cmd = """
         SELECT
-            shm_dictionary_items.name,
-            COUNT( 1 ) vehicle_count
+            COUNT(1) vehicle_count
         FROM
-            shu_vehicle_auths
-            INNER JOIN shu_vehicles ON shu_vehicle_auths.vehicle_id = shu_vehicles.id 
-            INNER JOIN shf_booking_settings ON shf_booking_settings.user_id = shu_vehicles.user_id
-            INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id
-            INNER JOIN shm_dictionary_items ON shm_dictionary_items.id = shu_vehicle_auths.length_id 
-            -- 	接单线路创建时间
-            AND shf_booking_settings.create_time >=:start_time
-            AND shf_booking_settings.create_time < :end_time
-            AND shu_vehicle_auths.is_deleted = 0 AND shu_vehicle_auths.auth_status = 2 
+            tb_inf_user
+            INNER JOIN tb_inf_user_login USING ( user_id ) 
         WHERE
             {vehicle_sql}
-            AND shm_dictionary_items.`name` IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
-            GROUP BY shm_dictionary_items.`name`
+            AND tb_inf_user_login.last_login_time >= :start_time 
+            AND tb_inf_user_login.last_login_time < :end_time
+            AND tb_inf_user.vehicle_length_id != ''
+            AND vehicle_length_id LIKE "%%{vehicle_id}%%"
         """
 
         order_cmd = """
@@ -100,13 +94,13 @@ class TransportRadarModel(object):
             )
             """.format(params['business'])
 
-            vehicle_sql += """
-            AND
-            (
-            ( {0}=1 AND shf_booking_basis.enabled_long_haul = 1) OR
-            ( {0}=2 AND shf_booking_basis.enabled_short_haul = 1)
-            )
-            """.format(params['business'])
+            # vehicle_sql += """
+            # AND
+            # (
+            # ( {0}=1 AND shf_booking_basis.enabled_long_haul = 1) OR
+            # ( {0}=2 AND shf_booking_basis.enabled_short_haul = 1)
+            # )
+            # """.format(params['business'])
 
             order_sql += """ 
             AND 
@@ -164,32 +158,32 @@ class TransportRadarModel(object):
         }
 
         vehicle_name_list = ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']
+        vehicle_id_list = ['118', '119', '274', '18', '20', '21', '23', '31', '25']
 
-        goods_count = cursor.query(goods_cmd.format(goods_sql=goods_sql), kwargs)
-        vehicle_count = cursor.query(vehicle_cmd.format(vehicle_sql=vehicle_sql), kwargs)
-        order_count = cursor.query(order_cmd.format(order_sql=order_sql), kwargs)
+        # 获取每种常用车型的数量
+        vehicles_ret = []
+        for i in vehicle_id_list:
+            vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)['vehicle_count']
+            vehicles_ret.append(vehicle_count)
+
+        goods_count = cursor1.query(goods_cmd.format(goods_sql=goods_sql), kwargs)
+        order_count = cursor1.query(order_cmd.format(order_sql=order_sql), kwargs)
 
         goods_dict = {}
-        vehicles_dict = {}
         orders_dict ={}
 
         for i in goods_count:
             goods_dict[i.get('name')] = i.get('goods_count')
 
-        for i in vehicle_count:
-            vehicles_dict[i.get('name')] = i.get('vehicle_count')
-
         for i in order_count:
             orders_dict[i.get('name')] = i.get('order_count')
 
         goods_ret = []
-        vehicles_ret = []
         orders_ret = []
 
         # 车型
         for i in vehicle_name_list:
             goods_ret.append(goods_dict.get(i, 0))
-            vehicles_ret.append(vehicles_dict.get(i, 0))
             orders_ret.append(orders_dict.get(i, 0))
 
         data = {

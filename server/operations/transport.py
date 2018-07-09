@@ -8,7 +8,7 @@ class TransportRadar(object):
     @staticmethod
     @make_decorator
     def get_trend(params):
-        data = TransportRadarModel.get_data(db.read_db, params)
+        data = TransportRadarModel.get_data(db.read_db, db.read_bi, params)
 
         return Response(data=data)
 
