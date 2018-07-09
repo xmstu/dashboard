@@ -612,15 +612,17 @@ function area_select() {
         $('#super_manager_area').css({'display': 'block'})
         $('#super_manager_area_select_zero').address({
             level: 3,
-            offsetLeft: '-50px'
+             offsetLeft: '-124px'
         });
         $('#super_manager_area_one').css({'display': 'block'})
         $('#super_manager_area_select_one').address({
-            level: 3
+            level: 3,
+             offsetLeft: '-124px'
         });
         $('#super_manager_area_two').css({'display': 'block'})
         $('#super_manager_area_select_two').address({
-            level: 3
+            level: 3,
+             offsetLeft: '-124px'
         });
     } else {
         $('#super_manager_area').css({'display': 'none'});
