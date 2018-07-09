@@ -20,7 +20,7 @@ class HeatMapModel(object):
             AND create_time >= :start_time 
             AND create_time < :end_time
             GROUP BY
-              :group_condition
+              :region_group
         """
 
         # 角色
@@ -103,7 +103,27 @@ class HeatMapModel(object):
 
         fetch_where = """"""
 
-        command = """"""
+        command = """
+        SELECT
+            sg.from_city_id,
+            COUNT( 1 ),
+            COALESCE ( SUM( price_expect + price_addition ), 0 ),
+            COUNT( so.id ),
+            COALESCE ( SUM( so.price ), 0 ) 
+        FROM
+            shf_goods sg
+            LEFT JOIN shb_orders so ON so.goods_id = sg.id 
+        WHERE
+            1 = 1 
+        -- 业务类型
+        -- 	AND haul_dist = 1
+            AND haul_dist = 2 
+            AND sg.create_time >= 1395244800 
+            AND sg.create_time < 1530633600 
+            AND sg.from_province_id = 440000
+        GROUP BY
+            sg.from_city_id;
+        """
 
         data = cursor.query(command)
 

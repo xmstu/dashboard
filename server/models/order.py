@@ -228,10 +228,10 @@ class OrderListModel(object):
                 so.pay_status,
                 so.paid_offline,
                 sg.payment_method,
-                (SELECT level FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.driver_id AND shu_user_evaluations.user_id = so.owner_id AND shu_user_evaluations.order_id = so.id) AS driver_rate_level,
-                (SELECT level FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id) AS owner_rate_level,
-                (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.driver_id AND shu_user_evaluations.user_id = so.owner_id AND shu_user_evaluations.order_id = so.id) AS driver_rate_comment,
-                (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id) AS owner_rate_comment,
+                (SELECT level FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.driver_id AND shu_user_evaluations.user_id = so.owner_id AND shu_user_evaluations.order_id = so.id LIMIT 1) AS driver_rate_level,
+                (SELECT level FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id LIMIT 1) AS owner_rate_level,
+                (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.driver_id AND shu_user_evaluations.user_id = so.owner_id AND shu_user_evaluations.order_id = so.id LIMIT 1) AS driver_rate_comment,
+                (SELECT comment FROM shu_user_evaluations WHERE shu_user_evaluations.rater_id = so.owner_id AND shu_user_evaluations.user_id = so.driver_id AND shu_user_evaluations.order_id = so.id LIMIT 1) AS owner_rate_comment,
                 (so.create_time - sg.create_time) as latency_time,
                 so.create_time,
             IF
@@ -437,10 +437,12 @@ class OrderListModel(object):
             IF ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) < {1}
             """.format(params.get('start_complete_time'), params.get('end_complete_time'))
 
-        count = cursor.query_one(command.format(fields=" COUNT(1) AS total_count ", fetch_where=fetch_where))[
-            'total_count']
+        fetch_where += """ GROUP BY so.id """
 
-        fetch_where += """ ORDER BY id DESC LIMIT {0}, {1} """.format((page - 1) * limit, limit)
+        ret = cursor.query(command.format(fields=" COUNT(1) AS count ", fetch_where=fetch_where))
+        count = len(ret)
+
+        fetch_where += """ DESC LIMIT {0}, {1} """.format((page - 1) * limit, limit)
 
         order_list = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
