@@ -254,22 +254,22 @@ function tableInit(url) {
             {
                 field: "address",
                 title: "出发地-目的地",
-                width: 334
+                width: 296
             },
             {
                 field: "vehicle",
                 title: "车型要求",
-                width: 86
+                width: 80
             },
             {
                 field: "price",
                 title: "运费",
-                width: 180
+                width: 100
             },
             {
                 field: "mobile",
                 title: "货主手机",
-                width: 96
+                width: 90
             },
             {
                 field: "call_count",
@@ -279,7 +279,7 @@ function tableInit(url) {
             {
                 field: "goods_time",
                 title: "时间",
-                width: 186
+                width: 154
             },
             {
                 field: "supplier_node",
@@ -288,7 +288,7 @@ function tableInit(url) {
             {
                 field: "operate",
                 title: "操作",
-                width: 107,
+                width: 100,
                 templet: function(d) {
                     return '<button value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
                 }
@@ -312,7 +312,7 @@ function tableInit(url) {
                     layer.open({
                         type: 1,
                         title: "附近的车",
-                        area: ["1400px", "600px"],
+                        area: ["1300px", "600px"],
                         skin: "layui-layer-molv",
                         closeBtn: 1,
                         content: $("#popup")
@@ -436,30 +436,30 @@ function tableReset(url) {
             {
                 field: "is_trust_member",
                 title: "诚信会员",
-                width: 84
+                width: 80
             },
             {
                 field: "order_count",
                 title: "接单数",
                 sort: true,
-                width: 86
+                width: 80
             },
             {
                 field: "order_finished",
                 title: "完成数",
                 sort: true,
-                width: 86
+                width: 80
             },
             {
                 field: "order_cancel",
                 title: "取消数",
                 sort: true,
-                width: 86
+                width: 70
             },
             {
                 field: "match_type",
                 title: "匹配原则",
-                width: 120
+                width: 100
             },
             {
                 field: "current_region",
