@@ -164,8 +164,7 @@ var dataSet = {
                 }
             ]
         })
-        layer.closeAll('loading');
-        $('.main-content-right').addClass('animated fadeIn');
+
     },
     tableRender:function(table_url){
         var that = this;
@@ -197,6 +196,7 @@ var dataSet = {
                 ]]
                 ,
                 done: function (res, curr, count) {
+                     $('.main-content-right').addClass('animated fadeIn');
                      $("td[data-field='business']").children().each(function () {
                     if($(this).text()==1){
                         $(this).text('同城')
@@ -277,6 +277,7 @@ var dataSet = {
                             },
                             complete: function () {
                                 layer.closeAll('loading')
+
                             }
                         })
 

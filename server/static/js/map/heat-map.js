@@ -71,6 +71,7 @@ var toolTipData = [
 var geoCoordMap = {};
 var max = 480,
     min = 9; // todo
+$('.main-content-right').addClass('animated fadeIn')
 //直辖市和特别行政区-只有二级地图，没有三级地图
 var special = ["北京", "天津", "上海", "重庆", "香港", "澳门"];
 var mapdata = [];
@@ -209,6 +210,7 @@ var option = {
     animationDurationUpdate: 1000
 };
 $.getJSON('/static/map/china.json', function (data) {
+    console.log(data)
     d = [];
     for (var i = 0; i < data.features.length; i++) {
         d.push({
@@ -220,9 +222,9 @@ $.getJSON('/static/map/china.json', function (data) {
     pageSet.renderMap('china', d);
 });
 chart.on('click', function (params) {
-    console.log(params)
     if (params.name in provinces) {
         $.getJSON('/static/map/province/' + provinces[params.name] + '.json', function (data) {
+            console.log(provinces[params.name])
             echarts.registerMap(params.name, data);
             var d = [];
             for (var i = 0; i < data.features.length; i++) {
@@ -237,6 +239,8 @@ chart.on('click', function (params) {
             pageSet.renderMap('china', mapdata);
         } else {
             $.getJSON('/static/map/city/' + cityMap[params.name] + '.json', function (data) {
+
+                console.log(cityMap[params.name])
                 echarts.registerMap(params.name, data);
                 var d = [];
                 for (var i = 0; i < data.features.length; i++) {
@@ -319,8 +323,9 @@ var pageSet = {
 
     },
     renderMap: function (map, data) {
+        console.log()
        // data = data_reset;
-        console.log(data);
+       // console.log(data);
         option.title.subtext = map;
         option.series = [
             {
