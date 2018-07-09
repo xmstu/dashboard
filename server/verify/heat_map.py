@@ -16,8 +16,8 @@ class HeatMap(object):
     def check_params(params):
         try:
             params['dimension'] = int(params.get('dimension', None) or 1)
-            params['filter'] = int(params.get('filter', None) or 1)
-            params['field'] = int(params.get('field', None) or 0)
+            params['filter'] = int(params.get('filter', None) or 0)
+            params['field'] = int(params.get('field', None) or 1)
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400*7)
             params['end_time'] = int(params.get('end_time', None) or time.time())
             params['region_id'] = str(params.get('region_id', None) or 0)
