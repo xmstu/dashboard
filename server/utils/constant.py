@@ -10,7 +10,13 @@ vehicle = {
     '9': '17.5米',
 }
 
-d = {
+d_user = {
+    1: '用户数',
+    2: '认证数',
+    3: '活跃数',
+}
+
+d_goods = {
     1: 'goods_count',
     2: 'goods_price',
     3: 'orders_count',

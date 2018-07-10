@@ -73,14 +73,12 @@ class OrdersReceivedStatisticsList(object):
             fetch_where += """ 
              AND (
                 ( {pay_method}=1 AND shb_orders.pay_status = 1 AND shb_orders.paid_offline = 0) OR
-                ( {pay_method}=2 AND shb_orders.`status` = 3 AND shb_orders.pay_status = 2 AND shf_goods.payment_method = 1) OR
-                ( {pay_method}=3 AND shb_orders.`status` = 3 AND shf_goods.payment_method = 2 AND shb_orders.paid_offline = 1)
+                ( {pay_method}=2 AND shb_orders.pay_status = 2) OR
+                ( {pay_method}=3 AND shb_orders.paid_offline = 1)
              )
              """.format(pay_method=params['pay_method'])
 
-        complete_sql = """
-        AND ((shb_orders.`status` = 3 AND shb_orders.pay_status = 2 AND shf_goods.payment_method = 1 ) OR (shb_orders.`status` = 3 AND shf_goods.payment_method = 2 AND shb_orders.paid_offline = 1))
-        """
+        complete_sql = """ AND shb_orders.`status` = 3 """
         pending_sql = """ AND shb_orders.`status` IN (1, 2) """
         cancel_sql = """ AND shb_orders.`status` = -1 """
 
