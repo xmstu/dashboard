@@ -50,7 +50,7 @@ var common = {
                     }
                 });
             });
-        })
+        });
     },
     fullScreen: function () {
         var full_screen = $('#fullScreen');

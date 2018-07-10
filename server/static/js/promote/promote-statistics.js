@@ -192,10 +192,10 @@ function dataInit() {
                     lineChartInit(res.data.xAxis, res.data.series, 1, '金额(元)', '金额', '元')
                 } else if (len > 0 && len > 20 && len < 40) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.series, 2, '金额(元)', '金额', '元')
+                    lineChartInit(res.data.xAxis, res.data.series, 3, '金额(元)', '金额', '元')
                 } else if (len > 0 && len > 40 && len < 90) {
                     $('.chart-tips').css({'display': 'none'});
-                    lineChartInit(res.data.xAxis, res.data.series, 4, '金额(元)', '金额', '元')
+                    lineChartInit(res.data.xAxis, res.data.series, 5, '金额(元)', '金额', '元')
                 }
             }
         })
@@ -334,8 +334,10 @@ var pageSet = {
         })
     },
     tableRender: function (url) {
-        layui.use('table', function () {
+        layui.use(['layer','table'], function () {
             var table = layui.table;
+            var layer = layui.layer;
+            layer.load()
             table.render({
                 elem: '#promote_table'
                 , even: true

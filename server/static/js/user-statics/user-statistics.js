@@ -391,10 +391,10 @@ function dataInit() {
                 chartInit(res.data.xAxis, res.data.series, 1, X_data[1])
             } else if (len > 0 && len > 20 && len < 40) {
                 $('.chart-tips').css({'display': 'none'})
-                chartInit(res.data.xAxis, res.data.series, 2, X_data[1])
+                chartInit(res.data.xAxis, res.data.series, 3, X_data[1])
             } else if (len > 0 && len > 40 && len < 90) {
                 $('.chart-tips').css({'display': 'none'})
-                chartInit(res.data.xAxis, res.data.series, 4, X_data[1])
+                chartInit(res.data.xAxis, res.data.series, 5, X_data[1])
             }
         }
     })
