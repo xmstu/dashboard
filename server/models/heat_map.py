@@ -10,8 +10,8 @@ class HeatMapModel(object):
 
         command = """
         SELECT
-            :region_group,
-            COUNT( 1 ) 
+            {region_group},
+            COUNT( 1 ) count
         FROM
             `tb_inf_user` 
         WHERE
@@ -19,7 +19,7 @@ class HeatMapModel(object):
             AND create_time >= :start_time 
             AND create_time < :end_time
             GROUP BY
-              :region_group
+              {region_group}
         """
 
         # 角色
@@ -84,11 +84,15 @@ class HeatMapModel(object):
 
         kwargs = {
             "start_time": params.get('start_time', time.time() - 86400*7),
-            "end_time": params.get('end_time', time.time() - 86400),
-            "region_group": region_group
+            "end_time": params.get('end_time', time.time() - 86400)
         }
 
-        data = cursor.query(command.format(fetch_where=fetch_where), kwargs)
+        user_list = cursor.query(command.format(fetch_where=fetch_where, region_group=region_group), kwargs)
+
+        data = {
+            "user_list": user_list if user_list else [],
+            "region_group": region_group
+        }
 
         return data
 
@@ -147,14 +151,13 @@ class HeatMapModel(object):
         # 时间
         kwargs = {
             "start_time": params.get("start_time", time.time() - 86400*7),
-            "end_time": params.get("end_time", time.time()),
-            "region_group": region_group
+            "end_time": params.get("end_time", time.time())
         }
 
         goods_list = cursor.query(command.format(region_group=region_group, level=level, field=params['field'], fetch_where=fetch_where), kwargs)
 
         data = {
-            "goods_list": goods_list,
+            "goods_list": goods_list if goods_list else [],
             "region_group": region_group
         }
 

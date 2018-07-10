@@ -16,6 +16,7 @@ class TransportRadarModel(object):
             AND shf_goods_vehicles.is_deleted = 0 
         WHERE
             {goods_sql}
+            AND shf_goods.is_deleted = 0
             AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
             AND shf_goods.create_time >= :start_time 
             AND shf_goods.create_time < :end_time
@@ -47,6 +48,7 @@ class TransportRadarModel(object):
             AND shf_goods_vehicles.is_deleted = 0 
         WHERE
             {order_sql}
+            AND shb_orders.is_deleted = 0
             AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
             AND shb_orders.create_time >= :start_time
             AND shb_orders.create_time < :end_time
