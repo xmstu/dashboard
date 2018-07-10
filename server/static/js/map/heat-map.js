@@ -88,26 +88,7 @@ var data_reset = [
     {name: "上海", value: 24},
     {name: "江苏", value: 92},
     {name: "浙江", value: 14},
-    {name: "安徽", value: 19},
-    {name: "福建", value: 16},
-    {name: "江西", value: 91},
-    {name: "山东", value: 119},
-    {name: "河南", value: 137},
-    {name: "湖北", value: 116},
-    {name: "湖南", value: 114},
-    {name: "重庆", value: 91},
-    {name: "四川", value: 125},
-    {name: "贵州", value: 62},
-    {name: "云南", value: 83},
-    {name: "西藏", value: 92},
-    {name: "陕西", value: 80},
-    {name: "甘肃", value: 56},
-    {name: "青海", value: 10},
-    {name: "宁夏", value: 18},
-    {name: "新疆", value: 67},
-    {name: "广东", value: 13},
-    {name: "广西", value: 59},
-    {name: "海南", value: 14}
+    {name: "安徽", value: 19}
 ];
 var ynameMap = [];
 for (var i = 0; i < data_reset.length - 5; i++) {
@@ -211,12 +192,14 @@ var option = {
 };
 $.getJSON('/static/map/china.json', function (data) {
     console.log(data)
+
     d = [];
     for (var i = 0; i < data.features.length; i++) {
         d.push({
             name: data.features[i].properties.name
         })
     }
+   /* data=data_reset*/
     mapdata = d;
     echarts.registerMap('china', data);
     pageSet.renderMap('china', d);
@@ -324,7 +307,7 @@ var pageSet = {
     },
     renderMap: function (map, data) {
         console.log()
-       // data = data_reset;
+        data = data_reset;
        // console.log(data);
         option.title.subtext = map;
         option.series = [

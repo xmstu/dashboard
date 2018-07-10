@@ -198,7 +198,7 @@ var common = {
 
         return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday];
     },
-    dateInterval: function (num1, num2) {
+    dateInterval: function (num1, num2,dayLength) {
         var date1 = new Date(num1.replace(/-/g, "/"));
         var date2 = new Date(num2.replace(/-/g, "/"));
         var days = date1.getTime() - date2.getTime();
@@ -207,23 +207,25 @@ var common = {
             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
-        } else if (time > 7 && time < 31) {
+        } else if (time > 7 && time < 30) {
             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
-        } else if (time > 7 && time < 90) {
+        } else if (time > 30 && time < 60) {
             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
         } else if ($('#day_methods').hasClass('active')) {
-            if (time > 90) {
-                layer.msg('日期超过三个月，无法按日进行显示', function () {
+            if (time > 60) {
+                layer.msg('日期超过两个月，无法按日进行显示', function () {
 
                 });
                 $("#day_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
                 $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'}).addClass('active');
                 $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             }
+        }else if(time>60){
+            $("#day_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
         } else {
             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'});
@@ -239,17 +241,17 @@ var common = {
             $("#day_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#week_methods_1").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#month_methods_1").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
-        } else if (time > 7 && time < 31) {
+        } else if (time > 7 && time < 30) {
             $("#day_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods_1").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#week_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
-        } else if (time > 7 && time < 90) {
-            $("#day_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
+        } else if (time>30) {
+            $("#day_methods_1").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
             $("#week_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
         } else if ($('#day_methods').hasClass('active')) {
-            if (time > 90) {
-                layer.msg('日期超过三个月，无法按日进行显示', function () {
+            if (time > 30) {
+                layer.msg('日期超过30天，无法按日进行显示', function () {
                 });
                 $("#day_methods_1").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
                 $("#week_methods_1").removeAttr('disabled').css({'cursor': 'pointer'}).addClass('active');

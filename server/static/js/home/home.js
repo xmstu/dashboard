@@ -12,7 +12,7 @@ setTimeout(function () {
         tableInit("/city/latest_orders/");
         $(".area-menu-about>a").addClass("selected-active");
         $(".area-menu-about>a>i").addClass("select-active");
-        common.dateInterval($("#date_show_one").val(), $("#date_show_one").val())
+      /*  common.dateInterval($("#date_show_one").val(), $("#date_show_one").val())*/
     },
     10);
 layui.use(["laydate", "form", "table"],
