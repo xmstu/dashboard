@@ -24,7 +24,7 @@ class HeatMap(object):
             data = HeatMapModel.get_goods(db.read_db, params, level)
         # 按车型
         elif params.get('dimension') == 3:
-            data = HeatMapModel.get_vehicle(db.read_db, params)
+            data = HeatMapModel.get_vehicle(db.read_db, db.read_bi, params, level)
         else:
             data = {}
 

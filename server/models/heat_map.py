@@ -1,5 +1,7 @@
 import time
 
+from server.utils.constant import vehicle_id_name, vehicle_name
+
 
 class HeatMapModel(object):
 
@@ -103,20 +105,21 @@ class HeatMapModel(object):
 
         command = """
         SELECT
-            {region_group},
-            IF({level}=1 OR {field}=1, COUNT( 1 ), 0) goods_count,
-            IF({level}=1 OR {field}=2, COALESCE ( SUM( price_expect + price_addition ), 0 ), 0) goods_price,
-            IF({level}=1 OR {field}=3, COUNT( so.id ), 0) orders_count,
-            IF({level}=1 OR {field}=4, COALESCE ( SUM( so.price ), 0 ), 0) orders_price
+            sg.{region_group},
+            IF({field}=1, COUNT( 1 ), 0) goods_count,
+            IF({field}=2, COALESCE ( SUM( price_expect + price_addition ), 0 ), 0) goods_price,
+            IF({field}=3, COUNT( so.id ), 0) orders_count,
+            IF({field}=4, COALESCE ( SUM( so.price ), 0 ), 0) orders_price
         FROM
             shf_goods sg
             LEFT JOIN shb_orders so ON so.goods_id = sg.id 
         WHERE
             {fetch_where}
+            AND sg.is_deleted = 0 AND so.is_deleted = 0 AND so.`status` != -1
             AND sg.create_time >= :start_time
             AND sg.create_time <  :end_time
         GROUP BY
-            {region_group};
+            sg.{region_group};
         """
 
         # 按业务类型分
@@ -130,23 +133,23 @@ class HeatMapModel(object):
 
         # 根据级别分组数据
         if level == 1:
-            group_condition = 'sg.from_province_id'
-            region_group = 'sg.from_province_id'
+            group_condition = 'from_province_id'
+            region_group = 'from_province_id'
         elif level == 2:
-            group_condition = 'sg.from_province_id'
-            region_group = 'sg.from_city_id'
+            group_condition = 'from_province_id'
+            region_group = 'from_city_id'
         elif level == 3:
-            group_condition = 'sg.from_city_id'
-            region_group = 'sg.from_county_id'
+            group_condition = 'from_city_id'
+            region_group = 'from_county_id'
         else:
             group_condition = ''
             region_group = ''
 
         # 根据地区id获取数据
         if int(params.get('region_id')):
-            fetch_where += """ AND {group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+            fetch_where += """ AND sg.{group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
 
-        fetch_where += """ AND {group_condition} != 0 AND {region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
+        fetch_where += """ AND sg.{group_condition} != 0 AND sg.{region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
 
         # 时间
         kwargs = {
@@ -154,7 +157,7 @@ class HeatMapModel(object):
             "end_time": params.get("end_time", time.time())
         }
 
-        goods_list = cursor.query(command.format(region_group=region_group, level=level, field=params['field'], fetch_where=fetch_where), kwargs)
+        goods_list = cursor.query(command.format(region_group=region_group, field=params['field'], fetch_where=fetch_where), kwargs)
 
         data = {
             "goods_list": goods_list if goods_list else [],
@@ -164,33 +167,107 @@ class HeatMapModel(object):
         return data
 
     @staticmethod
-    def get_vehicle(cursor, params):
+    def get_vehicle(cursor1, cursor2, params, level):
         fields = """"""
 
-        which_table = """"""
+        fetch_where1 = """ 1=1 """
+        fetch_where2 = """ 1=1 """
 
-        fetch_where = """ 1=1 """
-
-        vehicle_sql = """
+        cmd1 = """
         SELECT
-            shf_goods.from_city_id,
-            COUNT( shf_goods.id ) goods_vehicle_count,
-            COUNT( shb_orders.id ) order_vehicle_count 
+          *
+        FROM
+        (SELECT
+            shf_goods.{region_group},
+            IF({field}=1, COUNT( shf_goods.id ), 0) goods_vehicle_count,
+            IF({field}=3, COUNT( shb_orders.id ), 0) order_vehicle_count 
         FROM
             shf_goods
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
             LEFT JOIN shb_orders ON shb_orders.goods_id = shf_goods_vehicles.goods_id 
         WHERE
-            1=1
+            {fetch_where1}
             AND shf_goods.is_deleted = 0 
-            AND shf_goods.create_time >= 1530374400 
-            AND shf_goods.create_time < 1530633600 
-            AND shf_goods_vehicles.`name` = '4.2米'
-            AND shf_goods.from_province_id = 440000
+            AND shb_orders.is_deleted = 0 AND shb_orders.`status` != -1
+            AND shf_goods.create_time >= :start_time 
+            AND shf_goods.create_time < :end_time 
         GROUP BY
-            shf_goods.from_city_id
+            shf_goods.{region_group}) AS a 
+        LEFT JOIN
+        (
+        SELECT
+            {region_group},
+            IF({field}=2, COUNT( 1 ), 0) vehicle_count 
+        FROM
+            bi_uat.tb_inf_user
+            INNER JOIN bi_uat.tb_inf_user_login USING ( user_id ) 
+        WHERE
+            {fetch_where2}
+            AND tb_inf_user_login.last_login_time >= :start_time 
+            AND tb_inf_user_login.last_login_time < :end_time
+            AND tb_inf_user.vehicle_length_id != '' 
+        GROUP BY
+            {region_group}
+        ) AS b ON a.{region_group} = b.{region_group}
         """
 
-        data = cursor.query(vehicle_sql)
+        # cmd2 = """
+        # SELECT
+        #     {region_group},
+        #     IF({field=3}, COUNT( 1 ), 0) vehicle_count
+        # FROM
+        #     tb_inf_user
+        #     INNER JOIN tb_inf_user_login USING ( user_id )
+        # WHERE
+        #     {fetch_where2}
+        #     AND tb_inf_user_login.last_login_time >= :start_time
+        #     AND tb_inf_user_login.last_login_time < :end_time
+        #     AND tb_inf_user.vehicle_length_id != ''
+        # GROUP BY
+        #     {region_group}
+        # """
+
+        # 车长
+        if params.get('filter'):
+            f = str(params.get('filter'))
+            fetch_where1 += """ AND shf_goods_vehicles.`name` = '%s' """ % vehicle_name.get(f, '小面包车')
+            fetch_where2 += """ AND vehicle_length_id LIKE "%%%s%%"  """ % vehicle_id_name.get(vehicle_name.get(f, '小面包车'), '')
+
+        # 根据级别分组数据
+        if level == 1:
+            group_condition = 'from_province_id'
+            region_group = 'from_province_id'
+        elif level == 2:
+            group_condition = 'from_province_id'
+            region_group = 'from_city_id'
+        elif level == 3:
+            group_condition = 'from_city_id'
+            region_group = 'from_county_id'
+        else:
+            group_condition = ''
+            region_group = ''
+
+        # 根据地区id获取数据
+        if int(params.get('region_id')):
+            fetch_where1 += """ AND shf_goods.{group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+            fetch_where2 += """ AND {group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+
+        fetch_where1 += """ AND shf_goods.{group_condition} != 0 AND shf_goods.{region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
+        fetch_where2 += """ AND {group_condition} != 0 AND {region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
+
+        # 时间
+        kwargs = {
+            "start_time": params.get("start_time", time.time() - 86400 * 7),
+            "end_time": params.get("end_time", time.time())
+        }
+
+        ret1 = cursor1.query(cmd1.format(region_group=region_group, field=params.get('field', 1), fetch_where1=fetch_where1, fetch_where2=fetch_where2), kwargs)
+        # ret2 = cursor2.query(cmd2.format(region_group=region_group, field=params.get('field', 1), fetch_where2=fetch_where2), kwargs)
+
+        data = {
+            'vehicle_list': ret1,
+            'region_group': region_group,
+            # 'ret2': ret2
+        }
 
         return data

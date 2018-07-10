@@ -1,4 +1,4 @@
-vehicle = {
+vehicle_name = {
     '1': '小面包车',
     '2': '中面包车',
     '3': '小货车',
@@ -29,3 +29,28 @@ d_name = {
     'orders_count': '订单数',
     'orders_price': '订单金额',
 }
+
+d_vehicle = {
+    1: 'goods_vehicle_count',
+    2: 'vehicle_count',
+    3: 'order_vehicle_count',
+}
+
+d_vehicle_name = {
+    'goods_vehicle_count': '货源所需',
+    'vehicle_count': '车辆数',
+    'order_vehicle_count': '实际接单',
+}
+
+vehicle_id_name = {
+    '小面包车': '118',
+    '中面包车': '119',
+    '小货车': '274',
+    '4.2米': '18',
+    '6.8米': '20',
+    '7.6米': '21',
+    '9.6米': '23',
+    '13米': '31',
+    '17.5米': '25',
+}
+
