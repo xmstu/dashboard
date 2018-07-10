@@ -7,5 +7,19 @@ vehicle = {
     '6': '7.6米',
     '7': '9.6米',
     '8': '13米',
-    '9': '17米',
+    '9': '17.5米',
+}
+
+d = {
+    1: 'goods_count',
+    2: 'goods_price',
+    3: 'orders_count',
+    4: 'orders_price',
+}
+
+d_name = {
+    'goods_count': '货源数',
+    'goods_price': '货源金额',
+    'orders_count': '订单数',
+    'orders_price': '订单金额',
 }

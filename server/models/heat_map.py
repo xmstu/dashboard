@@ -169,10 +169,28 @@ class HeatMapModel(object):
 
         which_table = """"""
 
-        fetch_where = """"""
+        fetch_where = """ 1=1 """
 
-        command = """"""
+        vehicle_sql = """
+        SELECT
+            shf_goods.from_city_id,
+            COUNT( shf_goods.id ) goods_vehicle_count,
+            COUNT( shb_orders.id ) order_vehicle_count 
+        FROM
+            shf_goods
+            LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
+            LEFT JOIN shb_orders ON shb_orders.goods_id = shf_goods_vehicles.goods_id 
+        WHERE
+            1=1
+            AND shf_goods.is_deleted = 0 
+            AND shf_goods.create_time >= 1530374400 
+            AND shf_goods.create_time < 1530633600 
+            AND shf_goods_vehicles.`name` = '4.2米'
+            AND shf_goods.from_province_id = 440000
+        GROUP BY
+            shf_goods.from_city_id
+        """
 
-        data = cursor.query(command)
+        data = cursor.query(vehicle_sql)
 
         return data

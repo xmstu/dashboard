@@ -3,6 +3,7 @@ import json
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus
+from server.utils.constant import d, d_name
 from server.utils.extend import ExtendHandler
 
 
@@ -18,9 +19,9 @@ class HeatMap(object):
             if user_list:
                 for detail in user_list:
                     detail['name'] = init_regions.to_region(detail[region_group])
-                map_data = json.loads(json.dumps(user_list, default=ExtendHandler.handler_to_float))
-                map_data = sorted(map_data, key=lambda i: i['count'])
-                max_value, min_value = map_data[-1]['count'], map_data[0]['count'] if len(map_data) > 0 else (0, 0)
+                all_data = json.loads(json.dumps(user_list, default=ExtendHandler.handler_to_float))
+                all_data = sorted(all_data, key=lambda i: i['count'])
+                max_value, min_value = all_data[-1]['count'], all_data[0]['count'] if len(all_data) > 0 else (0, 0)
             else:
                 max_value, min_value = (0, 0)
 
@@ -30,25 +31,42 @@ class HeatMap(object):
             for detail in goods_list:
                 detail['name'] = init_regions.to_region(detail[region_group])
 
-            map_data = json.loads(json.dumps(goods_list, default=ExtendHandler.handler_to_float))
+            all_data = json.loads(json.dumps(goods_list, default=ExtendHandler.handler_to_float))
             # 根据点击的字段排序,获取最大最小值
-            if params['field'] == 1:
-                map_data = sorted(map_data, key=lambda i: i['goods_count'])
-                max_value, min_value = map_data[-1]['goods_count'], map_data[0]['goods_count'] if len(map_data) > 0 else (0, 0)
-            elif params['field'] == 2:
-                map_data = sorted(map_data, key=lambda i: i['goods_price'])
-                max_value, min_value = map_data[-1]['goods_price'], map_data[0]['goods_price'] if len(map_data) > 0 else (0, 0)
-            elif params['field'] == 3:
-                map_data = sorted(map_data, key=lambda i: i['orders_count'])
-                max_value, min_value = map_data[-1]['orders_count'], map_data[0]['orders_count'] if len(map_data) > 0 else (0, 0)
-            elif params['field'] == 4:
-                map_data = sorted(map_data, key=lambda i: i['orders_price'])
-                max_value, min_value = map_data[-1]['orders_price'], map_data[0]['orders_price'] if len(map_data) > 0 else (0, 0)
+            value = ''
+            value = d.get(params['field'])
+
+            all_data = sorted(all_data, key=lambda i: i[value])
+            max_value, min_value = all_data[-1][value], all_data[0][value] if len(all_data) > 0 else (0, 0)
+
+            # 构造map_data
+            map_data = []
+            toolTipData = []
+            for i in all_data:
+                map_data.append({
+                    'name': i['name'],
+                    'value': i[value]
+                })
+                toolTipData.append({
+                    "name": i['name'],
+                    "value": [{
+                        "name": d_name[value],
+                        "value": i[value]
+                    }]
+                })
 
         elif params['dimension'] == 3:
             pass
 
         else:
-            map_data = [{}]
+            all_data = [{}]
 
-        return make_result(APIStatus.Ok, data={"map_data ": map_data, "max_value": max_value, "min_value": min_value}), HTTPStatus.Ok
+        data = {
+            "all_data ": all_data,
+            "map_data": map_data,
+            "toolTipData": toolTipData,
+            "max_value": max_value,
+            "min_value": min_value
+        }
+
+        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
