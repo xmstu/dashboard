@@ -306,9 +306,7 @@ var pageSet = {
 
     },
     renderMap: function (map, data) {
-        console.log()
         data = data_reset;
-       // console.log(data);
         option.title.subtext = map;
         option.series = [
             {

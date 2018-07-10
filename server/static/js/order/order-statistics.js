@@ -411,17 +411,17 @@ var setAbout = {
                     if (len > 0 && len < 20) {
                         that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1, '单', '订单汇总')
                     } else if (len > 20 && len < 50) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2, '单', '订单汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 3, '单', '订单汇总')
                     } else if (len > 50) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4, '单', '订单汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 5, '单', '订单汇总')
                     }
                 } else if (value == 2) {
                     if (len > 0 && len < 20) {
                         that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 1, '元', '金额汇总')
                     } else if (len > 20 && len < 50) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 2, '元', '金额汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 3, '元', '金额汇总')
                     } else if (len > 50) {
-                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 4, '元', '金额汇总')
+                        that.chartRender(cancel_list_date, complete_series, pending_series, cancel_series, 5, '元', '金额汇总')
                     }
                 }
 
