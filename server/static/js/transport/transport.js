@@ -13,7 +13,6 @@ var dataSet = {
         $('#area_select').address({
              offsetLeft: '-124px',
             level: 3,
-
             onClose: function () {
             }
         });
@@ -298,7 +297,7 @@ var dataSet = {
             start_time = common.timeTransform(start_time + ' 00:00:00')
         }
         if (end_time != '') {
-            end_time = common.timeTransform(end_time + ' 00:00:00')
+            end_time = common.timeTransform(end_time + ' 23:59:59')
         }
         var data = {
             start_time: start_time,
