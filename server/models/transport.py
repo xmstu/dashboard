@@ -48,7 +48,7 @@ class TransportRadarModel(object):
             AND shf_goods_vehicles.is_deleted = 0 
         WHERE
             {order_sql}
-            AND shb_orders.is_deleted = 0
+            AND shb_orders.is_deleted = 0 AND shb_orders.`status` != -1
             AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
             AND shb_orders.create_time >= :start_time
             AND shb_orders.create_time < :end_time
@@ -234,6 +234,7 @@ class TransportListModel(object):
             AND shf_goods_vehicles.is_deleted = 0 
         WHERE
             {inner_good_order_fetch_where}
+            AND sg.is_deleted = 0 AND so.is_deleted = 0 AND so.`status` != -1
             -- 时间
             AND sg.create_time >= :start_time 
             AND sg.create_time < :end_time
@@ -246,7 +247,7 @@ class TransportListModel(object):
             to_county_id
             ) as a LEFT JOIN
             (
-            SELECT
+        SELECT
             from_province_id,
             from_city_id,
             from_county_id,
@@ -305,9 +306,6 @@ class TransportListModel(object):
         inner_vehicle_fetch_where += region
 
         # 出发地
-        # if params['from_town_id']:
-        #     inner_good_order_fetch_where += ' AND sg.from_town_id = %d ' % params['from_town_id']
-        #     inner_vehicle_fetch_where += ' AND from_town_id = %d ' % params['from_town_id']
         if params['from_county_id']:
             inner_good_order_fetch_where += ' AND sg.from_county_id = %d ' % params['from_county_id']
             inner_vehicle_fetch_where += ' AND from_county_id = %d ' % params['from_county_id']
@@ -319,9 +317,6 @@ class TransportListModel(object):
             inner_vehicle_fetch_where += ' AND from_province_id = %d ' % params['from_province_id']
 
         # 目的地
-        # if params['to_town_id']:
-        #     inner_good_order_fetch_where += ' AND sg.to_town_id = %d ' % params['to_town_id']
-        #     inner_vehicle_fetch_where += ' AND to_town_id = %d ' % params['to_town_id']
         if params['to_county_id']:
             inner_good_order_fetch_where += ' AND sg.to_county_id = %d ' % params['to_county_id']
             inner_vehicle_fetch_where += ' AND to_county_id = %d ' % params['to_county_id']
