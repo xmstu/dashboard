@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from server import log
-from server.database import db, pyredis, mongo
+from server.database import db, pyredis
 from server.meta.decorators import make_decorator, Response
 from server.models.city import CityOrderListModel, CityResourceBalanceModel, CityNearbyCarsModel
-from server.status import HTTPStatus, make_result, APIStatus
-
-from flask_restful import abort
+from server.mysqldb import MongoLinks
+from server.configs import configs
 
 
 class CityResourceBalance(object):
@@ -42,33 +41,40 @@ class CityNearbyCars(object):
             goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
             if not goods:
                 return Response(data={}, goods_type=goods_type)
-            # 1.附近车辆-司机定位
-            nearby_vehicle = pyredis['nearby_vehicle']
-            dispatcher_nearby = nearby_vehicle.read_georadius('dispatch.vehicle.nearby', goods['from_longitude'], goods['from_latitude'], 5, 'km')
-            if not dispatcher_nearby:
-                return Response(data={}, goods_type=goods_type)
-            # 附近司机(限制10条)
-            ids = '(%s)' % ', '.join([str(i) for i in set(dispatcher_nearby)])
-            nearby_driver = CityNearbyCarsModel.get_driver_by_position(db.read_db, ids)
+            # 1.附近车辆-常驻地
+            usual_driver = CityNearbyCarsModel.get_usual_region(db.read_bi, goods['from_city_id'], goods['from_county_id'])
+            driver_id = [str(i['user_id']) for i in usual_driver]
+            if not driver_id:
+                pass
+            else:
+                driver_info = CityNearbyCarsModel.get_driver_info(db.read_db, driver_id)
+                if driver_info:
+                    for i in usual_driver:
+                        result = [j for j in driver_info if j['user_id'] == i['user_id']]
+                        if result:
+                            i.update(result[0])
             # 2.附近车辆-接单线路
             booking_driver = CityNearbyCarsModel.get_driver_by_booking(db.read_db, goods_id)
 
-            driver = nearby_driver + booking_driver
+            driver = usual_driver + booking_driver
 
-            # 司机定位
+            # 司机定位, 新建mongodb连接
             driver_id = [i.get('user_id') for i in driver]
+            user_locations = MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
             locations = {}
             for i in set(driver_id):
-                result = mongo.user_locations.collection.find(
+                result = user_locations.collection.find(
                     {'user_id': i},
-                    {'province_name': 1, 'city_name': 1, 'county_name': 1, 'address': 1}
+                    {'province_name': 1, 'city_name': 1, 'county_name': 1, 'address': 1, 'longitude': 1, 'latitude': 1, 'user_id': 1}
                 ).sort([('_id', -1)]).limit(1)
                 result = [j for j in result]
                 locations[i] = result[0] if result else {
                         'province_name': '',
                         'city_name': '',
                         'county_name': '',
-                        'address': ''
+                        'address': '',
+                        'longitude': 0,
+                        'latitude': 0
                     }
 
             for i in driver:
@@ -79,7 +85,9 @@ class CityNearbyCars(object):
                         'province_name': '',
                         'city_name': '',
                         'county_name': '',
-                        'address': ''
+                        'address': '',
+                        'longitude': 0,
+                        'latitude': 0
                     }
 
 

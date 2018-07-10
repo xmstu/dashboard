@@ -84,15 +84,6 @@ class CityOrderListFilterDecorator(object):
         goods_counts = data['goods_counts']
         result = []
         for detail in goods:
-
-            # # 优先级
-            # if detail['goods_counts'] <= 3 or time.time() - detail['create_time'] <= 300 or detail['price_addition'] > 0:
-            #     priority = '高'
-            #     priority_num = 1
-            # else:
-            #     priority = '一般'
-            #     priority_num = 0
-
             # 新用户
             if detail['goods_counts'] <= 3:
                 detail['mobile'] = detail.get('mobile', '') + '\n' + detail.get('user_name', '') + '\n新用户'
@@ -216,12 +207,12 @@ class CityNearbyCars(object):
         result = []
         for i in driver:
             # 条件一
-            if goods_type == 2 and i['inner_length'] < goods['inner_length']:
-                continue
+            # if goods_type == 2 and i['inner_length'] < goods['inner_length']:
+            #     continue
             # 距离
             mileage_total = 0
-            if i['longitude'] and i['latitude'] and goods['from_longitude'] and goods['from_latitude']:
-                mileage_total = distance(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])
+            if i['locations']['longitude'] and i['locations']['latitude'] and goods['from_longitude'] and goods['from_latitude']:
+                mileage_total = distance(i['locations']['longitude'], i['locations']['latitude'], goods['from_longitude'], goods['from_latitude'])
             # 所在地
             current_region = i['locations'].get('province_name', '') +\
                              i['locations'].get('city_name', '') +\

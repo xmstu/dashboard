@@ -297,63 +297,77 @@ class CityNearbyCarsModel(object):
 
         return goods if goods else {}
 
+
+
     @staticmethod
-    def get_driver_by_position(cursor, vehicle_auth_ids):
-        """附近位置获取司机信息"""
-        command = '''SELECT 
-        CASE WHEN 
-            (SELECT auth_driver FROM shu_user_auths
-             WHERE id = shu_user_profiles.last_auth_driver_id
-             AND auth_status = 2
-             AND is_deleted != 1) = 1
-            THEN 1 ELSE 0 END AS auth_driver,
-        shu_vehicles.user_id,
-        shu_user_profiles.user_name,
-        shu_users.mobile,
-        shu_vehicle_auths.home_station_longitude AS longitude,
-        shu_vehicle_auths.home_station_latitude AS latitude,
-        (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.length_id) AS vehicle_length,
-        (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.type_id) AS vehicle_type,
-        shu_user_stats.credit_level,
-        -- 诚信会员
-        shu_user_profiles.is_trust_member,
-        shu_user_profiles.trust_member_type,
-        shu_user_profiles.ad_expired_time,
-        shu_vehicle_auths.inner_length,
-        (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id) AS order_count,
-        (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = 3) AS order_finished,
-        (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = -1) AS order_cancel,
-        '司机定位' AS match_type
+    def get_usual_region(cursor, from_city_id, from_county_id):
+        """常驻地"""
+        command = '''
+        SELECT
+        user_id,
+        user_name,
+        from_province_id,
+        from_city_id,
+        from_county_id,
+        from_town_id,
+        driver_auth AS auth_driver,
+        mobile,
+        order_count_SH + order_count_LH AS order_count,
+        order_finished_count_SH_online + order_finished_count_SH_unline + order_finished_count_LH_online + order_finished_count_LH_unline AS order_finished,
         
-        FROM shu_vehicle_auths
-        INNER JOIN shu_vehicles ON shu_vehicle_auths.vehicle_id = shu_vehicles.id AND shu_vehicles.is_deleted = 0
-        INNER JOIN shu_user_profiles ON shu_user_profiles.user_id = shu_vehicles.user_id AND shu_user_profiles.is_deleted = 0 AND shu_user_profiles.`status` = 1
-        INNER JOIN shu_users ON shu_user_profiles.user_id = shu_users.id AND shu_users.is_deleted = 0
-        INNER JOIN shu_user_stats ON shu_user_profiles.user_id = shu_user_stats.user_id
-        WHERE shu_vehicle_auths.is_deleted = 0
-        AND shu_vehicle_auths.auth_status = 2
-        AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_FORMAT(CURRENT_DATE(), '%%Y-%%m-%%d'))
-        AND shu_vehicle_auths.id IN %s
+        '常驻地' AS match_type
+        
+        FROM tb_inf_user
+        WHERE from_city_id = :from_city_id AND from_county_id = :from_county_id
+        AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 2 DAY))
+        AND driver_auth = 1
         LIMIT 10'''
 
-        command = command % vehicle_auth_ids
 
-        driver = cursor.query(command)
-
-        return driver if driver else []
-
-    @staticmethod
-    def get_usual_region(cursor, driver_ids):
-        """常驻地"""
-        command = '''SELECT user_id, from_province_id, from_city_id, from_county_id, from_town_id
-        FROM tb_inf_user
-        WHERE user_id IN %s '''
-
-        command = command % driver_ids
-
-        usual_regions = cursor.query(command)
+        usual_regions = cursor.query(command, {
+            'from_city_id': from_city_id,
+            'from_county_id': from_county_id
+        })
 
         return usual_regions if usual_regions else []
+
+    @staticmethod
+    def get_driver_info(cursor, ids):
+        """获取司机信息"""
+        try:
+            command = """
+            SELECT
+
+            shu_user_profiles.user_id,
+            (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.length_id) AS vehicle_length,
+            (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.type_id) AS vehicle_type,
+            shu_user_stats.credit_level,
+            -- 诚信会员
+            shu_user_profiles.is_trust_member,
+            shu_user_profiles.trust_member_type,
+            shu_user_profiles.ad_expired_time,
+            0 AS inner_length,
+            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_user_profiles.user_id) AS order_count,
+            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_user_profiles.user_id AND shb_orders.`status` = 3) AS order_finished,
+            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_user_profiles.user_id AND shb_orders.`status` = -1) AS order_cancel
+            
+            FROM shu_user_profiles
+            INNER JOIN shu_user_stats ON shu_user_profiles.user_id = shu_user_stats.user_id
+            LEFT JOIN shu_vehicles ON shu_vehicles.user_id = shu_user_profiles.user_id
+            LEFT JOIN shu_vehicle_auths ON shu_vehicles.last_auth_id = shu_vehicle_auths.id AND shu_vehicle_auths.auth_status = 2 AND shu_vehicle_auths.is_deleted = 0
+            
+            WHERE shu_user_profiles.user_id IN (%s)
+            GROUP BY shu_user_profiles.user_id
+            """
+
+            command = command % ','.join(ids)
+
+            result = cursor.query(command)
+            return result if result else []
+        except Exception as e:
+            log.error('获取司机信息出错: [error: %s]' % e, exc_info=True)
+
+
 
     @staticmethod
     def get_driver_by_booking(cursor, goods_id):
@@ -370,8 +384,6 @@ class CityNearbyCarsModel(object):
             shf_booking_settings.user_id,
             shu_user_profiles.user_name,
             shu_users.mobile,
-            0 AS longitude,
-            0 AS latitude,
             (SELECT `name` FROM shm_dictionary_items WHERE id = shf_booking_settings.vehicle_length_id) AS vehicle_length,
             '' AS vehicle_type,
             shu_user_stats.credit_level,
@@ -425,6 +437,7 @@ class CityNearbyCarsModel(object):
             AND goods.from_county_id != 0
             AND goods.to_town_id != 0))
             AND shu_user_profiles.user_id = shf_booking_settings.user_id AND shu_user_profiles.is_deleted = 0 AND shu_user_profiles.`status` = 1
+            AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
             LIMIT 30 '''
 
             driver_info = cursor.query(command, {

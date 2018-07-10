@@ -12,8 +12,6 @@ from server.logger import log
 from server.meta.decorators import make_decorator, Response
 from server.models.login import Login
 from server.status import make_result, HTTPStatus, APIStatus
-from server.database import mongo
-from server.models import RegionsModel
 from server.database import db
 
 class LoginDecorator(object):

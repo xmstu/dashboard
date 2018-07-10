@@ -13,10 +13,10 @@ db = DictModel({
     'read_bi': MySQLdb(dict(configs.remote.union.mysql.da_read_db.get())),
     'write_bi': MySQLdb(dict(configs.remote.union.mysql.da_write_db.get()))
 })
-
-mongo = DictModel({
-    'user_locations': MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
-})
+# 不创建全局对象, 节省资源
+# mongo = DictModel({
+#     'user_locations': MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
+# })
 
 pyredis = DictModel({
     'nearby_vehicle': ExtendRedis(ip=configs.remote.union.redis.dispatcher_nearby.host,

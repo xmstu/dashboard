@@ -4,9 +4,6 @@ from flask_restful import abort
 
 from server.meta.decorators import make_decorator, Response
 from server.models.user import UserList,UserStatistic
-from server.status import HTTPStatus, make_result, APIStatus
-from server.database import mongo
-from server.models import RegionsModel
 from server.database import db
 
 
