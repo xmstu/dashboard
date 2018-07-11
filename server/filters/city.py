@@ -201,7 +201,7 @@ class CityNearbyCars(object):
     def get_result(data, goods_type):
         if not data:
             return make_result(APIStatus.Ok, data=[]), HTTPStatus.Ok
-        goods = data['goods']
+        # goods = data['goods']
         driver = data['driver']
 
         result = []
@@ -209,12 +209,12 @@ class CityNearbyCars(object):
             if len(result) >= 10:
                 break
             # 距离
-            mileage_total = 0
-            if i['locations']['longitude'] and i['locations']['latitude'] and goods['from_longitude'] and goods['from_latitude']:
-                mileage_total = distance(i['locations']['longitude'], i['locations']['latitude'], goods['from_longitude'], goods['from_latitude'])
+            # mileage_total = 0
+            # if i['locations']['longitude'] and i['locations']['latitude'] and goods['from_longitude'] and goods['from_latitude']:
+            #     mileage_total = distance(i['locations']['longitude'], i['locations']['latitude'], goods['from_longitude'], goods['from_latitude'])
 
-            if mileage_total > 5:
-                continue
+            # if mileage_total > 5:
+            #     continue
             # 诚信会员
             is_trust_member = 0
             if i['trust_member_type'] == 1:
@@ -223,8 +223,8 @@ class CityNearbyCars(object):
                 is_trust_member = 1
 
             # 时间间隔
-            now_time = (time.time())
-            create_time = time.mktime(i['locations']['time'].timetuple()) if i['locations']['time'] else 0
+            now_time = int(time.time())
+            create_time = i['last_login_time']
             delta = ''
             if not create_time:
                 pass
@@ -241,15 +241,17 @@ class CityNearbyCars(object):
             elif (now_time - create_time) // 60 > 0:
                 delta = '%d分钟前' % ((now_time - create_time) // 60)
 
-            milleage_str = ''
-            if not mileage_total:
-                milleage_str = ''
-            elif mileage_total > 1:
-                milleage_str = '%.2f公里' % mileage_total
-            elif mileage_total < 1:
-                milleage_str = '%d米' % (mileage_total * 1000)
+            # milleage_str = ''
+            # if not mileage_total:
+            #     milleage_str = ''
+            # elif mileage_total > 1:
+            #     milleage_str = '%.2f公里' % mileage_total
+            # elif mileage_total < 1:
+            #     milleage_str = '%d米' % (mileage_total * 1000)
 
-            locations = i['locations']['address'] + ', ' + milleage_str + ', ' + delta
+            # locations = i['locations']['address'] + ', ' + milleage_str + ', ' + delta
+            address = init_regions.to_address(i['from_province_id'], i['from_city_id'], i['from_county_id'])
+            locations = address + ', ' + delta
             # 常驻地
             if goods_type == 2:
                 result.append({
