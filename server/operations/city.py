@@ -56,7 +56,7 @@ class CityNearbyCars(object):
                 }},
                 {'$group': {'_id': '$user_id'}},
                 {'$sort': {'_id': -1}},
-                {'$limit': 100}
+                {'$limit': 30}
             ])
             user_location = [i['_id'] for i in user_location if i['_id']]
             if not user_location:
