@@ -206,6 +206,8 @@ class CityNearbyCars(object):
 
         result = []
         for i in driver:
+            if len(result) >= 10:
+                break
             # 条件一
             # if goods_type == 2 and i['inner_length'] < goods['inner_length']:
             #     continue
@@ -213,6 +215,9 @@ class CityNearbyCars(object):
             mileage_total = 0
             if i['locations']['longitude'] and i['locations']['latitude'] and goods['from_longitude'] and goods['from_latitude']:
                 mileage_total = distance(i['locations']['longitude'], i['locations']['latitude'], goods['from_longitude'], goods['from_latitude'])
+
+            if mileage_total > 5:
+                continue
             # 所在地
             current_region = i['locations'].get('province_name', '') +\
                              i['locations'].get('city_name', '') +\
@@ -224,6 +229,26 @@ class CityNearbyCars(object):
                 is_trust_member = 1
             elif i['trust_member_type'] == 2 and i['ad_expired_time'] > int(time.time()):
                 is_trust_member = 1
+
+            # 时间间隔
+            now_time = (time.time())
+            create_time = time.mktime(i['locations']['time'].timetuple())
+            delta = ''
+            if not create_time:
+                pass
+            elif (now_time - create_time) // 31536000 > 0:
+                delta = '%d年前' % ((now_time - create_time) // 31536000)
+            elif (now_time - create_time) // 2592000 > 0:
+                delta = '%d个月前' % ((now_time - create_time) // 2592000)
+            elif (now_time - create_time) // 604800 > 0:
+                delta = '%d周前' % ((now_time - create_time) // 604800)
+            elif (now_time - create_time) // 86400 > 0:
+                delta = '%d天前' % ((now_time - create_time) // 86400)
+            elif (now_time - create_time) // 3600 > 0:
+                delta = '%d小时前' % ((now_time - create_time) // 3600)
+            elif (now_time - create_time) // 60 > 0:
+                delta = '%d分钟前' % ((now_time - create_time) // 60)
+
             result.append({
                 'name': i['user_name'],
                 'mobile': i['mobile'],
@@ -240,6 +265,7 @@ class CityNearbyCars(object):
                 'inner_length': i['inner_length'],
                 'auth_driver': i['auth_driver'],
                 'mileage_total': mileage_total,
+                'delta': delta
             })
         # 1: 车长满足货源要求越优先（如货主要求4.2米，则优先排4.2米，然后是6.8米、7.6米，小面包车根本不显示）
         # 2: 认证用户优先

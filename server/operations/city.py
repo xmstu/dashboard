@@ -65,17 +65,18 @@ class CityNearbyCars(object):
             for i in set(driver_id):
                 result = user_locations.collection.find(
                     {'user_id': i},
-                    {'province_name': 1, 'city_name': 1, 'county_name': 1, 'address': 1, 'longitude': 1, 'latitude': 1, 'user_id': 1}
+                    {'province_name': 1, 'city_name': 1, 'county_name': 1, 'address': 1, 'longitude': 1, 'latitude': 1, 'user_id': 1, 'time': 1}
                 ).sort([('_id', -1)]).limit(1)
                 result = [j for j in result]
                 locations[i] = result[0] if result else {
-                        'province_name': '',
-                        'city_name': '',
-                        'county_name': '',
-                        'address': '',
-                        'longitude': 0,
-                        'latitude': 0
-                    }
+                    'province_name': '',
+                    'city_name': '',
+                    'county_name': '',
+                    'address': '',
+                    'longitude': 0,
+                    'latitude': 0,
+                    'time': 0
+                }
 
             for i in driver:
                 if locations.get(i.get('user_id', 0)):
