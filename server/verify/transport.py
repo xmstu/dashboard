@@ -74,7 +74,7 @@ class TransportList(object):
             # params['to_town_id'] = int(params.get('to_town_id', None) or 0)
             params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
             params['business'] = int(params.get('business', None) or 0)
-            params['filter'] = int(params.get('filter', None) or 0)
+            # params['filter'] = int(params.get('filter', None) or 0)
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
             params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
 
