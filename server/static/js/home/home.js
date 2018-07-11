@@ -4,7 +4,7 @@ $(".layui-table-cell").css({
 $(".part-2 .layui-form-item").css({
     "width": "246px"
 });
-$("#date_show_one").val(String(common.getNowFormatDate()[2]));
+$("#date_show_one").val(String(common.getNowFormatDate()[3]));
 $("#date_show_two").val(String(common.getNowFormatDate()[3]));
 var dataArr1 = ["待接单", "已接单", "已取消", "已接单车辆", "待接单车辆数"];
 var dataArr2 = ["待联系", "已联系", "已接单", "已取消", "已接单车辆", "待接单车辆数"];
@@ -103,6 +103,11 @@ function dataInit(dataArrSet) {
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2,
                 function (res) {
                     var arr = Object.keys(res.data);
+                    /*if(arr.length==0){
+                        var results_ ='<li style="font-size: 13px;color: #ccc;text-align: center;line-height: 22px;">该条件下无数据</li>'
+                        console.log(results_)
+                        $('.part-1-bottom').text(1234)
+                    }*/
                     var str = "";
                     for (var i = 0; i < arr.length; i++) {
                         str += '<li class="charts-lists"><div class="charts-container" id="charts_container_' + i + '"></div><div class="data-list-container' + i + '"></li>';
@@ -544,18 +549,15 @@ function popupRender(url) {
                 loading: true,
                 cols: [[{
                     field: "name",
-                    title: "司机姓名",
-                    width: 86
+                    title: "司机姓名"
                 },
                     {
                         field: "mobile",
-                        title: "手机号码",
-                        width: 108
+                        title: "手机号码"
                     },
                     {
                         field: "usual_region",
-                        title: "常驻地",
-                        width:120
+                        title: "常驻地"
                     },
                     {
                         field: "locations",
@@ -563,31 +565,26 @@ function popupRender(url) {
                     },
                     {
                         field: "vehicle_length",
-                        title: "车长",
-                        width: 80
+                        title: "车长"
                     },
                     {
                         field: "is_trust_member",
-                        title: "诚信会员",
-                        width: 80
+                        title: "诚信会员"
                     },
                     {
                         field: "order_count",
                         title: "接单数",
-                        sort: true,
-                        width: 80
+                        sort: true
                     },
                     {
                         field: "order_finished",
                         title: "完成数",
-                        sort: true,
-                        width: 80
+                        sort: true
                     },
                     {
                         field: "order_cancel",
                         title: "取消数",
-                        sort: true,
-                        width: 80
+                        sort: true
                     }]],
                 done: function (res) {
                     $("td[data-field='is_trust_member']").children().each(function () {

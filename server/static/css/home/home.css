@@ -271,3 +271,6 @@
 #layui-layer-shade5{
     z-index: 999999999990!important;
 }
+.layui-layer-loading {
+    z-index: 999999999999!important;
+}
