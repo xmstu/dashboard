@@ -64,7 +64,7 @@ target/
 *.zip
 *.7z
 *.sln
-*.json
+*-superconf.json
 
 # IDE configuration
 .vs

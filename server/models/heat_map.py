@@ -6,7 +6,7 @@ from server.utils.constant import vehicle_id_name, vehicle_name
 class HeatMapModel(object):
 
     @staticmethod
-    def get_user(cursor, params, level):
+    def get_user(cursor, params, region_level):
 
         fetch_where = """ 1=1 """
 
@@ -65,15 +65,18 @@ class HeatMapModel(object):
                 """
 
         # 根据级别分组数据
-        if level == 1:
+        if region_level == 0:
             group_condition = 'from_province_id'
             region_group = 'from_province_id'
-        elif level == 2:
+        elif region_level == 1:
             group_condition = 'from_province_id'
             region_group = 'from_city_id'
-        elif level == 3:
+        elif region_level == 2:
             group_condition = 'from_city_id'
             region_group = 'from_county_id'
+        elif region_level == 3:
+            group_condition = 'from_county_id'
+            region_group = 'from_town_id'
         else:
             group_condition = ''
             region_group = ''
@@ -99,7 +102,7 @@ class HeatMapModel(object):
         return data
 
     @staticmethod
-    def get_goods(cursor, params, level):
+    def get_goods(cursor, params, region_level):
 
         fetch_where = """ 1=1 """
 
@@ -132,15 +135,18 @@ class HeatMapModel(object):
             """.format(filter=params['filter'])
 
         # 根据级别分组数据
-        if level == 1:
+        if region_level == 0:
             group_condition = 'from_province_id'
             region_group = 'from_province_id'
-        elif level == 2:
+        elif region_level == 1:
             group_condition = 'from_province_id'
             region_group = 'from_city_id'
-        elif level == 3:
+        elif region_level == 2:
             group_condition = 'from_city_id'
             region_group = 'from_county_id'
+        elif region_level == 3:
+            group_condition = 'from_county_id'
+            region_group = 'from_town_id'
         else:
             group_condition = ''
             region_group = ''
@@ -167,7 +173,7 @@ class HeatMapModel(object):
         return data
 
     @staticmethod
-    def get_vehicle(cursor1, cursor2, params, level):
+    def get_vehicle(cursor1, cursor2, params, region_level):
         fields = """"""
 
         fetch_where1 = """ 1=1 """
@@ -234,15 +240,18 @@ class HeatMapModel(object):
             fetch_where2 += """ AND vehicle_length_id LIKE "%%%s%%"  """ % vehicle_id_name.get(vehicle_name.get(f, '小面包车'), '')
 
         # 根据级别分组数据
-        if level == 1:
+        if region_level == 0:
             group_condition = 'from_province_id'
             region_group = 'from_province_id'
-        elif level == 2:
+        elif region_level == 1:
             group_condition = 'from_province_id'
             region_group = 'from_city_id'
-        elif level == 3:
+        elif region_level == 2:
             group_condition = 'from_city_id'
             region_group = 'from_county_id'
+        elif region_level == 3:
+            group_condition = 'from_county_id'
+            region_group = 'from_town_id'
         else:
             group_condition = ''
             region_group = ''

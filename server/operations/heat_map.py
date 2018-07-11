@@ -11,20 +11,17 @@ class HeatMap(object):
     def get_data(params):
 
         # 获取城市级别
-        if '0' in params.get("role_region_id"):
-            level = 1
-        else:
-            level = init_regions.get_city_level(params.get('region_id'))
+        region_level = init_regions.get_city_level(params.get('region_id'))
 
         # 按用户
         if params.get('dimension') == 1:
-            data = HeatMapModel.get_user(db.read_bi, params, level)
+            data = HeatMapModel.get_user(db.read_bi, params, region_level)
         # 按货源
         elif params.get('dimension') == 2:
-            data = HeatMapModel.get_goods(db.read_db, params, level)
+            data = HeatMapModel.get_goods(db.read_db, params, region_level)
         # 按车型
         elif params.get('dimension') == 3:
-            data = HeatMapModel.get_vehicle(db.read_db, db.read_bi, params, level)
+            data = HeatMapModel.get_vehicle(db.read_db, db.read_bi, params, region_level)
         else:
             data = {}
 
