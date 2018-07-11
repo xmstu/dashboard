@@ -291,7 +291,7 @@ function tableInit(url) {
                         title: "附近的车",
                         width: 100,
                         templet: function (d) {
-                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-suozaichengshi" style="margin-right: 2px"></i>常驻地</button> <p class="display-content" style="display: none">'+d.address+'</p>'
+                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-suozaichengshi" style="margin-right: 2px"></i>常驻地</button> <p class="display-content" style="display: none">' + d.address + '</p>'
                         }
                     }]],
                 done: function (res, curr, count) {
@@ -302,9 +302,9 @@ function tableInit(url) {
                     $(".nearby-one").on("click", function (e) {
                         e.preventDefault();
                         var content_title = $(this).siblings('p.display-content').text()
-                        if(content_title!=''){
+                        if (content_title != '') {
                             var result_title = content_title.split('\n')
-                            result_title = '<p>'+result_title[0]+'&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;'+result_title[1]+'</p'
+                            result_title = '<p>' + result_title[0] + '&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;' + result_title[1] + '</p'
                         }
                         layer.load();
                         var val = $(this).val();
@@ -330,19 +330,21 @@ function tableInit(url) {
                     });
                     $(".nearby-two").on('click', function (e) {
                         e.preventDefault()
+                        var content_title = $(this).siblings('p.display-content').text()
+                        if (content_title != '') {
+                            var result_title = content_title.split('\n')
+                            result_title = '<p>' + result_title[0] + '&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;' + result_title[1] + '</p'
+                        }
                         var val = $(this).val();
                         var goods_type = $(this).attr('data-type')
                         var url = "/city/nearby_cars/" + val + '?goods_type=' + goods_type;
                         layer.open({
                             type: 1,
-                            title: "<p>出发地&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;目的地</p>",
+                            title: result_title,
                             area: ["1300px", "600px"],
                             skin: "layui-layer-molv",
                             closeBtn: 1,
-                            content: $("#popup_one"),
-                              end:function(){
-                                layer.closeAll('loading')
-                            }
+                            content: $("#popup_one")
                         })
                         layer.load();
                         popupRender(url)
@@ -460,10 +462,9 @@ function tableReset(url) {
                         title: "设置时间",
                         width: 100
                     },
-                     {
+                    {
                         field: "locations",
                         title: "最新定位",
-                        sort: true,
                         width: 80
                     },
                     {
@@ -484,17 +485,20 @@ function tableReset(url) {
                         width: 70
                     },
                     {
-                        field: "接单数",
-                        title: "order_count",
+                        field: "order_count",
+                        title: "接单数",
+                        sort: true,
                         width: 100
                     },
                     {
                         field: "order_finished",
                         title: "完成数",
+                        sort: true,
                         width: 110
                     },
                     {
                         field: "order_cancel",
+                        sort: true,
                         title: "取消数"
                     }]],
                 done: function (res) {
