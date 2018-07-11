@@ -251,7 +251,7 @@ class CityNearbyCars(object):
 
             locations = i['locations']['address'] + ', ' + milleage_str + ', ' + delta
             # 常驻地
-            if goods_type == 1:
+            if goods_type == 2:
                 result.append({
                     'name': i['user_name'],
                     'mobile': i['mobile'],

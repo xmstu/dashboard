@@ -454,8 +454,7 @@ function tableReset(url) {
                     },
                     {
                         field: "booking_line",
-                        title: "接单线路",
-                        width: 144
+                        title: "接单线路"
                     },
                     {
                         field: "booking_time",
@@ -465,7 +464,7 @@ function tableReset(url) {
                     {
                         field: "locations",
                         title: "最新定位",
-                        width: 80
+                        width: 300
                     },
                     {
                         field: "vehicel_length",
@@ -473,33 +472,28 @@ function tableReset(url) {
                         width: 80
                     },
                     {
+                        field: "is_trust_member",
+                        title: "诚信会员",
+                        sort: true,
+                        width: 90
+                    },
+                    {
+                        field: "order_count",
+                        title: "接单数",
+                        sort: true,
+                        width: 80
+                    },
+                    {
                         field: "order_finished",
                         title: "完成数",
                         sort: true,
                         width: 80
                     },
                     {
-                        field: "is_trust_member",
-                        title: "诚信会员",
-                        sort: true,
-                        width: 70
-                    },
-                    {
-                        field: "order_count",
-                        title: "接单数",
-                        sort: true,
-                        width: 100
-                    },
-                    {
-                        field: "order_finished",
-                        title: "完成数",
-                        sort: true,
-                        width: 110
-                    },
-                    {
                         field: "order_cancel",
                         sort: true,
-                        title: "取消数"
+                        title: "取消数",
+                        width:80
                     }]],
                 done: function (res) {
                     $("td[data-field='is_trust_member']").children().each(function () {
@@ -560,7 +554,8 @@ function popupRender(url) {
                     },
                     {
                         field: "usual_region",
-                        title: "所在地"
+                        title: "常驻地",
+                        width:120
                     },
                     {
                         field: "locations",
@@ -569,7 +564,7 @@ function popupRender(url) {
                     {
                         field: "vehicle_length",
                         title: "车长",
-                        width: 144
+                        width: 80
                     },
                     {
                         field: "is_trust_member",
@@ -592,12 +587,7 @@ function popupRender(url) {
                         field: "order_cancel",
                         title: "取消数",
                         sort: true,
-                        width: 70
-                    },
-                    {
-                        field: "match_type",
-                        title: "匹配原则",
-                        width: 100
+                        width: 80
                     }]],
                 done: function (res) {
                     $("td[data-field='is_trust_member']").children().each(function () {
