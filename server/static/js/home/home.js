@@ -557,14 +557,15 @@ function popupRender(url) {
                         title: "手机号码",
                         width:108
                     },
-                    {
-                        field: "usual_region",
-                        title: "常驻地",
-                        width:300
-                    },
+                    // {
+                    //     field: "usual_region",
+                    //     title: "常驻地",
+                    //     width:300
+                    // },
                     {
                         field: "locations",
-                        title: "最新定位"
+                        title: "最新定位",
+                        width:300
                     },
                     {
                         field: "vehicle_length",
