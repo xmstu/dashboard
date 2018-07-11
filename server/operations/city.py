@@ -48,17 +48,17 @@ class CityNearbyCars(object):
             # 货源5公里内用户
             user_location = user_locations.collection.aggregate([
                 {'$geoNear': {
-                    'near': [float(goods['from_longitude']), float(goods['from_latitude'])],
+                    'near': {'type': "Point", 'coordinates': [float(goods['from_longitude']), float(goods['from_latitude'])]},
                     'maxDistance': 5000,
                     'distanceField': 'distance',
-                    'spherical': True
+                    'spherical': True,
+                    'query': {
+                        'time': {'$gt': datetime.datetime.today() - datetime.timedelta(days=1)},
+                        'province_id': goods['from_province_id'],
+                        'city_id': goods['from_city_id'],
+                        'county_id': goods['from_county_id']
+                    }
                 }},
-                {'$match': {
-                    'time': {'$gt':  datetime.datetime.today() - datetime.timedelta(days=1)},
-                    'province_id': goods['from_province_id'],
-                    'city_id': goods['from_city_id'],
-                    'county_id': goods['from_county_id']
-                 }},
                  {'$group': {'_id': '$user_id', 'time': {'$max': '$time'}}}
             ])
             user_location = [(i['_id'], i['time']) for i in user_location]
