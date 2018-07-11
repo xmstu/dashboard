@@ -137,22 +137,22 @@ class TransportRadarModel(object):
         # 目的地
         if params.get('to_province_id'):
             goods_sql += """ AND to_province_id = %d """ % params.get('to_province_id')
-            vehicle_sql += """ AND to_province_id = %d """ % params.get('to_province_id')
+            # vehicle_sql += """ AND to_province_id = %d """ % params.get('to_province_id')
             order_sql += """ AND shb_orders.to_province_id = %d """ % params.get('to_province_id')
 
         if params.get('to_city_id'):
             goods_sql += """ AND to_city_id = %d """ % params.get('to_city_id')
-            vehicle_sql += """ AND to_city_id = %d """ % params.get('to_city_id')
+            # vehicle_sql += """ AND to_city_id = %d """ % params.get('to_city_id')
             order_sql += """ AND shb_orders.to_city_id = %d """ % params.get('to_city_id')
 
         if params.get('to_county_id'):
             goods_sql += """ AND to_county_id = %d """ % params.get('to_county_id')
-            vehicle_sql += """ AND to_county_id = %d """ % params.get('to_county_id')
+            # vehicle_sql += """ AND to_county_id = %d """ % params.get('to_county_id')
             order_sql += """ AND shb_orders.to_county_id = %d """ % params.get('to_county_id')
 
         if params.get('to_town_id'):
             goods_sql += """ AND to_town_id = %d """ % params.get('to_town_id')
-            vehicle_sql += """ AND to_town_id = %d """ % params.get('to_town_id')
+            # vehicle_sql += """ AND to_town_id = %d """ % params.get('to_town_id')
             order_sql += """ AND shb_orders.to_town_id = %d """ % params.get('to_town_id')
 
         kwargs = {
@@ -238,12 +238,12 @@ class TransportListModel(object):
             AND sg.create_time >= :start_time 
             AND sg.create_time < :end_time
             GROUP BY 
-            from_province_id,
-            from_city_id,
-            from_county_id,
-            to_province_id,
-            to_city_id,
-            to_county_id
+            sg.from_province_id,
+            sg.from_city_id,
+            sg.from_county_id,
+            sg.to_province_id,
+            sg.to_city_id,
+            sg.to_county_id
         """
 
         cmd2 = """
@@ -260,10 +260,11 @@ class TransportListModel(object):
             AND tb_inf_user_login.last_login_time >= :start_time 
             AND tb_inf_user_login.last_login_time < :end_time
             AND tb_inf_user.vehicle_length_id != ''
+            AND from_province_id != 0 AND from_city_id != 0 AND from_county_id != 0
             GROUP BY 
             from_province_id,
             from_city_id,
-            from_county_id,
+            from_county_id
         """
 
         # 地区权限
@@ -326,12 +327,13 @@ class TransportListModel(object):
             'end_time': params.get('end_time', 0)
         }
 
-        count = cursor1.query_one(cmd1.format(filelds=""" COUNT(1) AS count """, inner_good_order_fetch_where=inner_good_order_fetch_where), kwargs)['count']
+        ret = cursor1.query(cmd1.format(filelds=""" COUNT(1) AS count """, inner_good_order_fetch_where=inner_good_order_fetch_where), kwargs)
+        count = len(ret)
 
-        cmd1 += """ ORDER BY a.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        cmd1 += """ ORDER BY create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
         transport_list = cursor1.query(cmd1.format(filelds=filelds, inner_good_order_fetch_where=inner_good_order_fetch_where), kwargs)
-        vehicle_list = cursor2.query(cmd2.format(inner_vehicle_fetch_where=inner_vehicle_fetch_where))
+        vehicle_list = cursor2.query(cmd2.format(inner_vehicle_fetch_where=inner_vehicle_fetch_where), kwargs)
         for i in transport_list:
             vehicle_count = [j['vehicle_count'] for j in vehicle_list if
                              i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id'] and i['from_county_id'] == j['from_county_id']]
