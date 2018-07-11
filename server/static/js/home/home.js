@@ -554,7 +554,8 @@ function popupRender(url) {
                     },
                     {
                         field: "usual_region",
-                        title: "常驻地"
+                        title: "常驻地",
+                        width:120
                     },
                     {
                         field: "locations",
