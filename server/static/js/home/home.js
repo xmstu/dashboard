@@ -291,7 +291,7 @@ function tableInit(url) {
                         title: "附近的车",
                         width: 100,
                         templet: function (d) {
-                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-suozaichengshi" style="margin-right: 2px"></i>常驻地</button>'
+                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-suozaichengshi" style="margin-right: 2px"></i>常驻地</button> <p class="display-content" style="display: none">'+d.address+'</p>'
                         }
                     }]],
                 done: function (res, curr, count) {
@@ -301,10 +301,15 @@ function tableInit(url) {
                     });
                     $(".nearby-one").on("click", function (e) {
                         e.preventDefault();
+                        var content_title = $(this).siblings('p.display-content').text()
+                        if(content_title!=''){
+                            var result_title = content_title.split('\n')
+                            result_title = '<p>'+result_title[0]+'&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;'+result_title[1]+'</p'
+                        }
                         layer.load();
                         var val = $(this).val();
                         var goods_type = $(this).attr('data-type')
-                        var url = "/city/nearby_cars/" + val + '?goods_id=' + goods_type;
+                        var url = "/city/nearby_cars/" + val + '?goods_type=' + goods_type;
                         /*
                            首页表格按钮框点击弹出的遮罩层筛选
                          form.on("select(interest)",
@@ -316,7 +321,7 @@ function tableInit(url) {
                         tableReset(url);
                         layer.open({
                             type: 1,
-                            title: "<p class='title_set'>出发地&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;目的地</p>",
+                            title: result_title,
                             area: ["1300px", "600px"],
                             skin: "layui-layer-molv",
                             closeBtn: 1,
@@ -327,7 +332,7 @@ function tableInit(url) {
                         e.preventDefault()
                         var val = $(this).val();
                         var goods_type = $(this).attr('data-type')
-                        var url = "/city/nearby_cars/" + val + '?goods_id=' + goods_type;
+                        var url = "/city/nearby_cars/" + val + '?goods_type=' + goods_type;
                         layer.open({
                             type: 1,
                             title: "<p>出发地&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;目的地</p>",
