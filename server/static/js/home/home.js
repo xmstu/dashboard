@@ -291,7 +291,7 @@ function tableInit(url) {
                         title: "附近的车",
                         width: 100,
                         templet: function (d) {
-                            return '<button value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-suozaichengshi" style="margin-right: 2px"></i>常驻地</button>'
+                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-suozaichengshi" style="margin-right: 2px"></i>常驻地</button>'
                         }
                     }]],
                 done: function (res, curr, count) {
@@ -299,10 +299,12 @@ function tableInit(url) {
                     $("[data-field]>div").css({
                         "padding": "0 6px"
                     });
-                    $(".nearby-one").on("click", function () {
+                    $(".nearby-one").on("click", function (e) {
+                        e.preventDefault();
                         layer.load();
                         var val = $(this).val();
-                        var url = "/city/nearby_cars/" + val;
+                        var goods_type = $(this).attr('data-type')
+                        var url = "/city/nearby_cars/" + val + '?goods_id=' + goods_type;
                         /*
                            首页表格按钮框点击弹出的遮罩层筛选
                          form.on("select(interest)",
@@ -314,7 +316,7 @@ function tableInit(url) {
                         tableReset(url);
                         layer.open({
                             type: 1,
-                            title: "<p>出发地&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;目的地</p>",
+                            title: "<p class='title_set'>出发地&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;目的地</p>",
                             area: ["1300px", "600px"],
                             skin: "layui-layer-molv",
                             closeBtn: 1,
@@ -323,16 +325,22 @@ function tableInit(url) {
                     });
                     $(".nearby-two").on('click', function (e) {
                         e.preventDefault()
-                        layer.msg('success')
+                        var val = $(this).val();
+                        var goods_type = $(this).attr('data-type')
+                        var url = "/city/nearby_cars/" + val + '?goods_id=' + goods_type;
                         layer.open({
                             type: 1,
                             title: "<p>出发地&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;目的地</p>",
                             area: ["1300px", "600px"],
                             skin: "layui-layer-molv",
                             closeBtn: 1,
-                            content: $("#popup_one")
+                            content: $("#popup_one"),
+                              end:function(){
+                                layer.closeAll('loading')
+                            }
                         })
-                        popupRender()
+                        layer.load();
+                        popupRender(url)
                     })
                     $("td[data-field='price']").children().each(function () {
                         if ($(this).text() != "") {
@@ -412,10 +420,11 @@ function tableInit(url) {
 }
 
 function tableReset(url) {
-    layui.use(["table", "form"],
+    layui.use(["table", 'layer', "form"],
         function () {
+            var layer = layui.layer;
             var table = layui.table;
-            var rate = layui.rate;
+            layer.load()
             table.render({
                 elem: "#demo",
                 url: url,
@@ -437,24 +446,24 @@ function tableReset(url) {
                         width: 108
                     },
                     {
-                        field: "vehicle_length",
-                        title: "车长",
+                        field: "booking_line",
+                        title: "接单线路",
                         width: 144
                     },
                     {
-                        field: "credit_level",
-                        title: "司机评分",
+                        field: "booking_time",
+                        title: "设置时间",
                         width: 100
                     },
-                    {
-                        field: "is_trust_member",
-                        title: "诚信会员",
+                     {
+                        field: "locations",
+                        title: "最新定位",
+                        sort: true,
                         width: 80
                     },
                     {
-                        field: "order_count",
-                        title: "接单数",
-                        sort: true,
+                        field: "vehicel_length",
+                        title: "车长",
                         width: 80
                     },
                     {
@@ -464,27 +473,26 @@ function tableReset(url) {
                         width: 80
                     },
                     {
-                        field: "order_cancel",
-                        title: "取消数",
+                        field: "is_trust_member",
+                        title: "诚信会员",
                         sort: true,
                         width: 70
                     },
                     {
-                        field: "match_type",
-                        title: "匹配原则",
+                        field: "接单数",
+                        title: "order_count",
                         width: 100
                     },
                     {
-                        field: "delta",
-                        title: "匹配时间",
+                        field: "order_finished",
+                        title: "完成数",
                         width: 110
                     },
                     {
-                        field: "current_region",
-                        title: "所在地"
+                        field: "order_cancel",
+                        title: "取消数"
                     }]],
                 done: function (res) {
-                    layer.closeAll('loading')
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
@@ -509,15 +517,18 @@ function tableReset(url) {
                             $(this).html('<p style="color: #009f95;"><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i></p>')
                         }
                     })
+                    layer.closeAll('loading')
                 }
             })
         })
 }
 
 function popupRender(url) {
-  layui.use(["table", "form"],
+    layui.use(["table", 'layer', "form"],
         function () {
             var table = layui.table;
+            var layer = layui.layer;
+            layer.load()
             table.render({
                 elem: "#demo_one",
                 url: url,
@@ -539,14 +550,17 @@ function popupRender(url) {
                         width: 108
                     },
                     {
+                        field: "usual_region",
+                        title: "所在地"
+                    },
+                    {
+                        field: "locations",
+                        title: "最新定位"
+                    },
+                    {
                         field: "vehicle_length",
                         title: "车长",
                         width: 144
-                    },
-                    {
-                        field: "credit_level",
-                        title: "司机评分",
-                        width: 100
                     },
                     {
                         field: "is_trust_member",
@@ -575,18 +589,8 @@ function popupRender(url) {
                         field: "match_type",
                         title: "匹配原则",
                         width: 100
-                    },
-                    {
-                        field: "delta",
-                        title: "匹配时间",
-                        width: 110
-                    },
-                    {
-                        field: "current_region",
-                        title: "所在地"
                     }]],
                 done: function (res) {
-                    layer.closeAll('loading')
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
@@ -611,6 +615,7 @@ function popupRender(url) {
                             $(this).html('<p style="color: #009f95;"><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i></p>')
                         }
                     })
+                    layer.closeAll('loading')
                 }
             })
         })

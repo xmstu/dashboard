@@ -82,6 +82,9 @@
 .popup-thead-tr>th{
     width: 20%;
 }
+.popup-one{
+    display: none;
+}
 .cancel-reason-types th,
 .cancel-reason-types td {
     color: #000;

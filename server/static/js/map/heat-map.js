@@ -142,7 +142,7 @@ function dataInit() {
                         },
                         axisLine: {
                             lineStyle: {
-                                color: "#fff"
+                                color: "#009688"
                             }
                         }
                     },
@@ -174,19 +174,22 @@ function dataInit() {
                         field: $.trim($('.heat-maps-tabs > li.active').attr('data-value')),
                         region_id: provinces[params.name]
                     };
-                   /* http.ajax.get(true, false, url,data_province,http.ajax.CONTENT_TYPE_2,function(res){
-                        console.log(res.data)
-                    });*/
+                   http.ajax.get(true, false, url,data_province,http.ajax.CONTENT_TYPE_2,function(res){
+                        if(res.status==100000){
+                            // var map
+                        }
+                    });
                     if (params.name in provinces) {
                         $.getJSON('/static/map/province/' + provinces[params.name] + '.json', function (data) {
                             echarts.registerMap(params.name, data);
-                            console.log(data)
+                            //console.log(data)
                             var d = [];
                             for (var i = 0; i < data.features.length; i++) {
                                 d.push({
                                     name: data.features[i].properties.name
                                 })
                             }
+                            console.log(d)
                             pageSet.renderMap(params.name, d);
                         });
                     } else if (params.seriesName in provinces) {
@@ -292,7 +295,7 @@ function dataInit() {
                                 },
                                 itemStyle: {
                                     normal: {
-                                        color: '#fff'
+                                        color: '#009688'
                                     }
                                 }
                             },

@@ -50,7 +50,7 @@
                                         <div class="layui-input-inline" style="width: 102px">
                                             <select id="dimension" name="modules" lay-verify="required"
                                                     lay-search="">
-                                                <option value="1">按用户</option>
+                                                <option value="1" >按用户</option>
                                                 <option value="2" selected>按货源</option>
                                                 <option value="3">按车型</option>
                                             </select>
@@ -68,10 +68,39 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="layui-form-item layui-form-special">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">业务类型</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select id="role_select" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部业务</option>
+                                                <option value="1">同城</option>
+                                                <option value="2">跨城</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-special">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">车型选择</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select id="vehicle_select" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部车型</option>
+                                                <option value="小面包车">小面包车</option>
+                                                <option value="中面包车">中面包车</option>
+                                                <option value="小货车">小货车</option>
+                                                <option value="4.2米">4.2米</option>
+                                                <option value="6.8米">6.8米</option>
+                                                <option value="7.6米">7.6米</option>
+                                                <option value="9.6米">9.6米</option>
+                                                <option value="13米">13米</option>
+                                                <option value="17.5米">17.5米</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <button id="search_btn" style="position: relative;padding-left: 20px;"
-                                        class="layui-btn"><i style=""
-                                                             class="iconfont icon-sousuo1"></i> 搜索
-                                </button>
+                                        class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索</button>
                             </form>
                         </div>
                         <div class="">
@@ -81,7 +110,8 @@
                                     <li data-value="2">认证数</li>
                                     <li data-value="3">活跃数</li>
                                 </ul>
-                                <div class="" style="width: 100%;margin: 0 auto;padding: 0 6%;background: #dee;height: 700px">
+                                <div class=""
+                                     style="width: 100%;margin: 0 auto;padding: 0 6%;background: #dee;height: 700px">
                                     <div id="map_container" style="width: 100%;height: 100%;padding-right: 1%;"></div>
                                 </div>
                             </div>
