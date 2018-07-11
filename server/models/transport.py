@@ -1,3 +1,4 @@
+from server.utils.constant import vehicle_id_name
 
 
 class TransportRadarModel(object):
@@ -201,20 +202,9 @@ class TransportRadarModel(object):
 class TransportListModel(object):
 
     @staticmethod
-    def get_data(cursor, page, limit, params):
+    def get_data(cursor1, cursor2, page, limit, params):
 
-        filelds = """a.*, IFNULL(b.vehicle_count, 0) vehicle_count"""
-
-        inner_good_order_fetch_where = """ 1=1 """
-        inner_vehicle_fetch_where = """ 1=1 """
-        outer_fetch_where = """ 1=1 """
-
-        command = """
-        SELECT
-            {filelds} 
-        FROM
-        (-- 货源和订单查询
-            SELECT
+        filelds = """
             FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") as create_time,
             haul_dist,
             sg.from_province_id,
@@ -226,6 +216,15 @@ class TransportListModel(object):
             AVG(mileage_total) AS avg_mileage_total,
             COUNT( 1 ) AS goods_count,
             COUNT(so.id) AS order_count
+        """
+
+        inner_good_order_fetch_where = """ 1=1 """
+        inner_vehicle_fetch_where = """ 1=1 """
+
+        cmd1 = """ 
+            -- 货源和订单查询
+        SELECT
+            {filelds}
         FROM
             shf_goods sg
             LEFT JOIN shb_orders so ON sg.id = so.goods_id
@@ -245,46 +244,26 @@ class TransportListModel(object):
             to_province_id,
             to_city_id,
             to_county_id
-            ) as a LEFT JOIN
-            (
+        """
+
+        cmd2 = """
         SELECT
             from_province_id,
             from_city_id,
             from_county_id,
-            to_province_id,
-            to_city_id,
-            to_county_id,
-            COUNT( 1 ) vehicle_count 
+            COUNT(1) vehicle_count
         FROM
-            shu_vehicle_auths
-            INNER JOIN shu_vehicles ON shu_vehicle_auths.vehicle_id = shu_vehicles.id
-            INNER JOIN shf_booking_settings ON shf_booking_settings.user_id = shu_vehicles.user_id
-            INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id
-            INNER JOIN shm_dictionary_items ON shm_dictionary_items.id = shu_vehicle_auths.length_id
-            -- 线路创建的时间
-            AND shf_booking_settings.create_time >= :start_time 
-            AND shf_booking_settings.create_time < :end_time 
-            AND shu_vehicle_auths.is_deleted = 0 
-            AND shu_vehicle_auths.auth_status = 2 
+            tb_inf_user
+            INNER JOIN tb_inf_user_login USING ( user_id ) 
         WHERE
             {inner_vehicle_fetch_where}
+            AND tb_inf_user_login.last_login_time >= :start_time 
+            AND tb_inf_user_login.last_login_time < :end_time
+            AND tb_inf_user.vehicle_length_id != ''
             GROUP BY 
             from_province_id,
             from_city_id,
             from_county_id,
-            to_province_id,
-            to_city_id,
-            to_county_id
-            ) as b USING(
-            from_province_id,
-            from_city_id,
-            from_county_id,
-            to_province_id,
-            to_city_id,
-            to_county_id
-            )
-            -- 货源 车辆 比较大小
-            WHERE {outer_fetch_where}
         """
 
         # 地区权限
@@ -319,27 +298,27 @@ class TransportListModel(object):
         # 目的地
         if params['to_county_id']:
             inner_good_order_fetch_where += ' AND sg.to_county_id = %d ' % params['to_county_id']
-            inner_vehicle_fetch_where += ' AND to_county_id = %d ' % params['to_county_id']
+            # inner_vehicle_fetch_where += ' AND to_county_id = %d ' % params['to_county_id']
         if params['to_city_id']:
             inner_good_order_fetch_where += ' AND sg.to_city_id = %d ' % params['to_city_id']
-            inner_vehicle_fetch_where += ' AND to_city_id = %d ' % params['to_city_id']
+            # inner_vehicle_fetch_where += ' AND to_city_id = %d ' % params['to_city_id']
         if params['to_province_id']:
             inner_good_order_fetch_where += ' AND sg.to_province_id = %d ' % params['to_province_id']
-            inner_vehicle_fetch_where += ' AND to_province_id = %d ' % params['to_province_id']
+            # inner_vehicle_fetch_where += ' AND to_province_id = %d ' % params['to_province_id']
 
         # 车长要求
         if params['vehicle_length']:
             inner_good_order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
-            inner_vehicle_fetch_where += """ AND shm_dictionary_items.`name` = '%s' """ % params['vehicle_length']
+            inner_vehicle_fetch_where += """ AND vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_id_name.get(params['vehicle_length'], '小面包车'))
 
         # 业务类型
         if params['business']:
             inner_good_order_fetch_where += """ AND (({business}=1 AND haul_dist = 1) OR ({business}=2 AND haul_dist = 2)) """.format(business=params['business'])
-            inner_vehicle_fetch_where += """ AND (({business}=1 AND shf_booking_basis.enabled_long_haul = 1) OR ({business}=2 AND shf_booking_basis.enabled_short_haul = 1)) """.format(business=params['business'])
+            # inner_vehicle_fetch_where += """ AND (({business}=1 AND shf_booking_basis.enabled_long_haul = 1) OR ({business}=2 AND shf_booking_basis.enabled_short_haul = 1)) """.format(business=params['business'])
 
-        # 筛选条件
-        if params['filter']:
-            outer_fetch_where += """ AND (({filter}=1 AND a.goods_count > IFNULL( b.vehicle_count, 0 )) OR ({filter}=2 AND a.goods_count < b.vehicle_count)) """.format(filter=params['filter'])
+        # # 筛选条件
+        # if params['filter']:
+        #     outer_fetch_where += """ AND (({filter}=1 AND a.goods_count > IFNULL( b.vehicle_count, 0 )) OR ({filter}=2 AND a.goods_count < b.vehicle_count)) """.format(filter=params['filter'])
 
         # 时间
         kwargs = {
@@ -347,11 +326,19 @@ class TransportListModel(object):
             'end_time': params.get('end_time', 0)
         }
 
-        count = cursor.query_one(command.format(filelds=""" COUNT(1) AS count """, inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)['count']
+        count = cursor1.query_one(cmd1.format(filelds=""" COUNT(1) AS count """, inner_good_order_fetch_where=inner_good_order_fetch_where), kwargs)['count']
 
-        outer_fetch_where += """ ORDER BY a.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
+        cmd1 += """ ORDER BY a.create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
-        transport_list = cursor.query(command.format(filelds=filelds, inner_good_order_fetch_where=inner_good_order_fetch_where, inner_vehicle_fetch_where=inner_vehicle_fetch_where, outer_fetch_where=outer_fetch_where), kwargs)
+        transport_list = cursor1.query(cmd1.format(filelds=filelds, inner_good_order_fetch_where=inner_good_order_fetch_where), kwargs)
+        vehicle_list = cursor2.query(cmd2.format(inner_vehicle_fetch_where=inner_vehicle_fetch_where))
+        for i in transport_list:
+            vehicle_count = [j['vehicle_count'] for j in vehicle_list if
+                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id'] and i['from_county_id'] == j['from_county_id']]
+            if vehicle_count:
+                i['vehicle_count'] = vehicle_count[0]
+            else:
+                i['vehicle_count'] = 0
 
         data = {
             "count": count if count else 0,

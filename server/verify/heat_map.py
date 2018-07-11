@@ -28,7 +28,7 @@ class HeatMap(object):
                 if role in (2, 3, 4):
                     params['role_region_id'] = locations_id
                 elif role == 1:
-                    params['role_region_id'] = '0'
+                    params['role_region_id'] = locations_id + ['0']
                 else:
                     params['role_region_id'] = ''
             else:
