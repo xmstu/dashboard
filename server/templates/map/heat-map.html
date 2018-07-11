@@ -14,7 +14,7 @@
     {% include '/header/header.html' %}
     <article class="main-content">
         {% include '/menu/menu.html' %}
-      <aside class="main-content-right">
+        <aside class="main-content-right">
             <div>
                 <div class="m-c-l-content">
                     <div class="content-header">
@@ -48,10 +48,10 @@
                                     <div class="layui-inline">
                                         <label class="layui-form-label">筛选方式</label>
                                         <div class="layui-input-inline" style="width: 102px">
-                                            <select id="goods_type_show" name="modules" lay-verify="required"
+                                            <select id="dimension" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="1">按用户</option>
-                                                <option value="2">按货源</option>
+                                                <option value="2" selected>按货源</option>
                                                 <option value="3">按车型</option>
                                             </select>
                                         </div>
@@ -61,7 +61,7 @@
                                     <div class="layui-inline " style="">
                                         <label class="layui-form-label">角色选择</label>
                                         <div class="layui-input-inline" style="width:112px;">
-                                            <select id="dimension" name="modules" lay-verify="required" lay-search="">
+                                            <select id="filter" name="modules" lay-verify="required" lay-search="">
                                                 <option value="1">司机</option>
                                                 <option value="2">货主</option>
                                             </select>
@@ -77,14 +77,63 @@
                         <div class="">
                             <div class="">
                                 <ul class="heat-maps-tabs clearfix">
-                                    <li class="active">用户数（&nbsp;<span>12345</span>&nbsp;）</li>
-                                    <li>认证数（&nbsp;<span>45678</span>&nbsp;）</li>
-                                    <li>活跃数123（&nbsp;<span>56789</span>&nbsp;）</li>
+                                    <li data-value="1" class="active">用户数</li>
+                                    <li data-value="2">认证数</li>
+                                    <li data-value="3">活跃数</li>
                                 </ul>
-                                <div class=""><div id="map_container" style="width: 100%;height: 900px;"></div></div>
+                                <div class="" style="width: 100%;margin: 0 auto;padding: 0 6%;background: #dee;height: 700px">
+                                    <div id="map_container" style="width: 100%;height: 100%;padding-right: 1%;"></div>
+                                </div>
                             </div>
-
                         </div>
+                        <table class="layui-table" lay-even="" lay-skin="row">
+                            <colgroup>
+                                <col width="150">
+                                <col width="150">
+                                <col width="200">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>人物</th>
+                                <th>民族</th>
+                                <th>出场时间</th>
+                                <th>格言</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>贤心</td>
+                                <td>汉族</td>
+                                <td>1989-10-14</td>
+                                <td>人生似修行</td>
+                            </tr>
+                            <tr>
+                                <td>张爱玲</td>
+                                <td>汉族</td>
+                                <td>1920-09-30</td>
+                                <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
+                            </tr>
+                            <tr>
+                                <td>Helen Keller</td>
+                                <td>拉丁美裔</td>
+                                <td>1880-06-27</td>
+                                <td> Life is either a daring adventure or nothing.</td>
+                            </tr>
+                            <tr>
+                                <td>岳飞</td>
+                                <td>汉族</td>
+                                <td>1103-北宋崇宁二年</td>
+                                <td>教科书再滥改，也抹不去“民族英雄”的事实</td>
+                            </tr>
+                            <tr>
+                                <td>孟子</td>
+                                <td>华夏族（汉族）</td>
+                                <td>公元前-372年</td>
+                                <td>猿强，则国强。国强，则猿更强！</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

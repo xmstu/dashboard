@@ -130,6 +130,8 @@
 }
 .heat-maps-tabs >li.active{
     border-bottom: 2px solid #f40;
+    color: #f40;
+    font-weight: bold;
 }
 #map_container {
     margin-top: 10px;

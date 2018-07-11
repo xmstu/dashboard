@@ -12,7 +12,6 @@ setTimeout(function () {
         tableInit("/city/latest_orders/");
         $(".area-menu-about>a").addClass("selected-active");
         $(".area-menu-about>a>i").addClass("select-active");
-      /*  common.dateInterval($("#date_show_one").val(), $("#date_show_one").val())*/
     },
     10);
 layui.use(["laydate", "form", "table"],
@@ -75,7 +74,6 @@ $("#user_search_box").on("click",
         var url = "/city/latest_orders/?goods_type=" + data.goods_type + "&is_called=" + data.is_called + "&vehicle_length=" + data.vehicle_length + "&node_id=" + data.node_id + "&spec_tag=" + data.spec_tag + "&is_addition=" + data.is_addition;
         tableInit(url)
     });
-
 function dataInit(dataArrSet) {
     layui.use("layer",
         function () {
@@ -406,6 +404,7 @@ function tableReset(url) {
                 elem: "#demo",
                 url: url,
                 page: false,
+                width:1272,
                 response: {
                     statusName: "status",
                     statusCode: 100000
@@ -425,11 +424,6 @@ function tableReset(url) {
                         field: "vehicle_length",
                         title: "车长",
                         width: 144
-                    },
-                    {
-                        field: "vehicle_type",
-                        title: "车型",
-                        width: 110
                     },
                     {
                         field: "credit_level",
@@ -465,9 +459,13 @@ function tableReset(url) {
                         width: 100
                     },
                     {
+                       field: "delta",
+                       title: "匹配时间",
+                       width: 110
+                    },
+                    {
                         field: "current_region",
-                        title: "所在地",
-                        width: 330
+                        title: "所在地"
                     }]],
                 done: function (res) {
                     $("td[data-field='is_trust_member']").children().each(function () {
