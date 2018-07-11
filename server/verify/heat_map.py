@@ -6,7 +6,7 @@ from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
-from server.utils.extend import compare_time
+from server.utils.extend import compare_time, check_region_id
 
 
 class HeatMap(object):
@@ -28,13 +28,13 @@ class HeatMap(object):
                 if role in (2, 3, 4):
                     params['role_region_id'] = locations_id
                 elif role == 1:
-                    params['role_region_id'] = params['region_id']
+                    params['role_region_id'] = locations_id + ['0']
                 else:
                     params['role_region_id'] = ''
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
-            if params['region_id'] not in params['role_region_id']:
+            if not check_region_id(params['region_id'], params['role_region_id']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='地区参数非法'))
 
             if not compare_time(params['start_time'], params['end_time']):

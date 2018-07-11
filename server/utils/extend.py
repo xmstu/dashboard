@@ -3,6 +3,8 @@ import datetime
 import re
 import time
 
+from server.cache_data import init_regions
+
 
 class ExtendHandler(object):
     """扩展类
@@ -220,3 +222,12 @@ def date_to_timestamp(start_date, end_date):
     if start_timestamp != end_timestamp:
         return start_timestamp, end_timestamp
     return start_timestamp, end_timestamp + 86399
+
+
+def check_region_id(region_id, locations_id):
+    if region_id == 0:
+        return False
+    if str(region_id) in locations_id:
+        return True
+    parent_id = init_regions.get_parent_id(region_id)
+    return check_region_id(parent_id, locations_id)

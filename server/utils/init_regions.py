@@ -43,6 +43,9 @@ class Regions(object):
             return result['level']
         return self.get_city_level(result['parent_id'])
 
+    def get_parent_id(self, region_id):
+        """获取地区code的上级城市code"""
+        return self.region.get(int(region_id), {'parent_id': 0})['parent_id']
 
 
 class InitRegionModel(object):
