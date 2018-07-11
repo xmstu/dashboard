@@ -44,39 +44,34 @@ class CityNearbyCars(object):
             if not goods:
                 return Response(data={}, goods_type=goods_type)
             # 新建mongo连接, 省内存
-            user_locations = MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
+            user_locations = MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_location_last')
+            user_info = MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
             # 货源5公里内用户
-            log.info('xxx-用户聚合')
             user_location = user_locations.collection.aggregate([
                 {'$geoNear': {
                     'near': {'type': "Point", 'coordinates': [float(goods['from_longitude']), float(goods['from_latitude'])]},
                     'maxDistance': 5000,
                     'distanceField': 'distance',
                     'spherical': True,
-                    'query': {
-                        'time': {'$gte': datetime.datetime.today() - datetime.timedelta(days=1)}
-                    }
                 }},
-                {'$group': {'_id': '$user_id'}}
+                {'$group': {'_id': '$user_id'}},
+                {'$sort': {'_id': -1}},
+                {'$limit': 100}
             ])
-            user_location = [i['_id'] for i in user_location]
+            user_location = [i['_id'] for i in user_location if i['_id']]
             if not user_location:
                 return Response(data={}, goods_type=goods_type)
             # 获取用户信息
-            log.info('xxx-用户信息')
             locations = {}
-            for i in user_location:
-                result = user_locations.collection.find({
-                    'user_id': i,
-                }, {'user_id': 1, 'time': 1, 'address': 1, 'longitude': 1, 'latitude': 1}).sort([('_id', -1)]).limit(1)
-                result = [j for j in result]
-                locations[i] = result[0] if result else {
-                    'address': '',
-                    'longitude': 0,
-                    'latitude': 0,
-                    'time': 0
-                }
-            log.info('xxx-查询完毕')
+            result = user_info.collection.aggregate([
+                {'$match': {'user_id': {'$in': user_location},
+                            'time': {'$gte': datetime.datetime.today() - datetime.timedelta(days=1)}}},
+                {'$group': {'_id': '$user_id', 'time': {'$max': '$time'}, 'address': {'$first': '$address'},
+                            'longitude': {'$first': '$longitude'}, 'latitude': {'$first': '$latitude'}}}
+            ])
+            result = [j for j in result]
+            for i in result:
+                locations[i['_id']] = i
             # 1.附近车辆-常驻地
             if goods_type == 2:
                 driver = CityNearbyCarsModel.get_usual_region(db.read_bi,
