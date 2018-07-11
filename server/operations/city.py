@@ -46,6 +46,7 @@ class CityNearbyCars(object):
             # 新建mongo连接, 省内存
             user_locations = MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
             # 货源5公里内用户
+            log.info('xxx-用户聚合')
             user_location = user_locations.collection.aggregate([
                 {'$geoNear': {
                     'near': {'type': "Point", 'coordinates': [float(goods['from_longitude']), float(goods['from_latitude'])]},
@@ -62,6 +63,7 @@ class CityNearbyCars(object):
             if not user_location:
                 return Response(data={}, goods_type=goods_type)
             # 获取用户信息
+            log.info('xxx-用户信息')
             locations = {}
             for i in user_location:
                 result = user_locations.collection.find({
@@ -74,7 +76,7 @@ class CityNearbyCars(object):
                     'latitude': 0,
                     'time': 0
                 }
-
+            log.info('xxx-查询完毕')
             # 1.附近车辆-常驻地
             if goods_type == 2:
                 driver = CityNearbyCarsModel.get_usual_region(db.read_bi,
