@@ -150,10 +150,10 @@
     max-width: 40%;
 }
 #radar_charts_container{
-    width: 560px;
+    width: 500px;
 }
 .popup-right{
-    width: 810px;
+    width: 754px;
     display: inline-block;
     vertical-align: top;
 }
