@@ -338,7 +338,7 @@ class TransportListModel(object):
             vehicle_count = [j['vehicle_count'] for j in vehicle_list if
                              i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id'] and i['from_county_id'] == j['from_county_id']]
             if vehicle_count:
-                i['vehicle_count'] = vehicle_count[0]
+                i['vehicle_count'] = sum(vehicle_count)
             else:
                 i['vehicle_count'] = 0
 
