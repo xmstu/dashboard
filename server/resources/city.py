@@ -47,7 +47,7 @@ class CityNearbyCars(Resource):
     @operations.CityNearbyCars.get_data(goods_id=int, goods_type=int)
     def get(id):
         """货源附近的车"""
-        resp = Response(goods_id=id, goods_type=get_arg_int('goods_type', 2))
+        resp = Response(goods_id=id, goods_type=get_arg_int('goods_type', 1))
         log.info('货源附近的车:[goods_id: {}]'.format(id))
         return resp
 

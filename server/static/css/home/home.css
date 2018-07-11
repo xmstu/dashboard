@@ -1,3 +1,191 @@
+.layui-item-spec dl.layui-anim  {
+    padding-top:0px;
+    margin-top:4px;
+}
+.phone-number {
+    display: inline-block;
+    border: 1px solid #dee;
+    font-size:13px;
+    padding:0 12px;
+    line-height:32px;
+    vertical-align: top;
+}
+#add_users,#add_users_name {
+    padding-left: 25px;
+    font-size:12px;
+    font-weight: normal;
+    border:1px solid #dee;
+    line-height: 32px;
+    border-left:none;
+}
+#add_users{
+    margin-bottom: 10px;
+}
+.icon-dianhua,.icon-guanliyuan {
+    position: absolute;
+    color: #bbb;
+    font-size:15px;
+    left:86px;
+    top:4px;
+}
+.layui-layer-btn{
+    text-align: center;
+}
+
+.part-2 .layui-table-body .layui-table-cell {
+    height: auto !important;
+    line-height: 24px;
+}
+.area-select-options-setting{
+
+}
+.layui-form-spec {
+    width: 220px!important;
+}
+.layui-form-spec1 {
+    width: 262px !important;
+}
+.layui-form-special {
+    width: 202px!important;
+}
+.layui-form-spec {
+    width: 218px!important;
+}
+.badge {
+    display: inline-block;
+    min-width: 14px;
+    padding: 4px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: #777;
+    border-radius: 10px;
+}
+.thead-tr,
+.thead-tr-spec{
+    border-bottom: 2px solid #ccc;
+    color: #000;
+}
+.thead-tr > th,.popup-thead-tr>th{
+    font-weight: bold;
+    width: 25%;
+    font-size: 12px;
+}
+.thead-tr-spec > th{
+    font-weight: bold;
+    width: 20%;
+}
+.popup-thead-tr>th{
+    width: 20%;
+}
+.cancel-reason-types th,
+.cancel-reason-types td {
+    color: #000;
+    font-size: 12px;
+}
+.cancel-reason-table {
+    border:none !important;
+    color: #000;
+    position: relative;
+}
+.table-no-data {
+    color: #bbb;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 40px;
+    width: 400%;
+    display: block;
+    text-align: center;
+}
+.table-order-count > span {
+    background-color: #d9534f;
+    padding: 2px 6px;
+    color: #fff;
+    border-radius: 2px;
+}
+#transport_lists_table tbody>tr,
+#transport_popup_table tbody>tr{
+    color: #000;
+}
+#transport_lists_table tbody>tr td,
+#transport_popup_table tbody > tr td{
+    font-size: 12px;
+}
+.thead-tr-spec tr {
+    font-size: 13px;
+}
+.heat-maps-tabs >li {
+    width: 33.3%;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    text-align: center;
+    font-size: 14px;
+    color: purple;
+    cursor: pointer;
+}
+.heat-maps-tabs >li.active{
+    border-bottom: 2px solid #f40;
+    color: #f40;
+    font-weight: bold;
+}
+#map_container {
+    margin-top: 10px;
+}
+.register-time{
+    width:208px!important;
+}
+.fabushijian{
+    width: 214px!important;
+}
+.chart-area-four-body{
+    padding-left: 10px;
+}
+
+.popup-left {
+    width: 560px;
+    min-height: 50px;
+    display: inline-block;
+    max-width: 40%;
+}
+#radar_charts_container{
+    width: 560px;
+}
+.popup-right{
+    width: 810px;
+    display: inline-block;
+    vertical-align: top;
+}
+.popup-thead-tr {
+    font-size: 13px;
+    font-weight: bold;
+    background: #f5f5f5;
+    border-bottom: 2px solid #ddd;
+}
+.layui-layer-title {
+    text-align: center;
+}
+.order-item-spec {
+    width: 214px!important;
+}
+.cancel_reason_total {
+    position: absolute;
+    right: 0;
+}
+.cancel_reason_total > td {
+    text-align: right;
+}
+.cancel_reason_total > td > span {
+    border: none;
+    background: #fff;
+    font-weight: bold;
+    color: #f40;
+    font-size: 16px;
+}
 .part-1-bottom > ul.clearfix > li {
     float: left;
     min-width: 394px;
@@ -59,4 +247,21 @@
 }
 .layui-form-item {
     width: 230px;
+}
+.admin-table-button{
+    display: block;
+    width: 80px;
+    margin-right: 0!important;
+    padding:0 6px!important;
+}
+.layui-btn+.layui-btn{
+    margin-left: 0;
+    margin-top: 6px;
+    text-align: left;
+}
+.part-2 .layui-table-body td[data-field="operate"] .layui-table-cell{
+    height: 66px!important;
+}
+.layui-table-body .layui-btn>i{
+    vertical-align: bottom;   
 }
