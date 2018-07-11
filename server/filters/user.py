@@ -28,7 +28,7 @@ class UserList(object):
             if detail['driver_auth']:
                 role_auth_arr.append('司机')
             if detail['company_auth']:
-                role_auth_arr.append('物流公司')
+                role_auth_arr.append('公司')
             role_auth = ','.join(role_auth_arr) if role_auth_arr else '未认证'
             detail_dict = {
                 'user_id': detail['user_id'],

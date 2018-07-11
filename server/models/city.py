@@ -300,7 +300,7 @@ class CityNearbyCarsModel(object):
 
 
     @staticmethod
-    def get_usual_region(cursor, from_city_id, from_county_id):
+    def get_usual_region(cursor, from_city_id, from_county_id, user_ids):
         """常驻地"""
         command = '''
         SELECT
@@ -314,15 +314,19 @@ class CityNearbyCarsModel(object):
         mobile,
         order_count_SH + order_count_LH AS order_count,
         order_finished_count_SH_online + order_finished_count_SH_unline + order_finished_count_LH_online + order_finished_count_LH_unline AS order_finished,
-        
         '常驻地' AS match_type
         
         FROM tb_inf_user
         WHERE from_city_id = :from_city_id AND from_county_id = :from_county_id
+        %s
         AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 2 DAY))
         AND driver_auth = 1
         LIMIT 10'''
 
+        if user_ids:
+            command = command % ('AND tb_inf_user.user_id IN (%s) '% ','.join(user_ids))
+        else:
+            command = command % ''
 
         usual_regions = cursor.query(command, {
             'from_city_id': from_city_id,
@@ -340,8 +344,6 @@ class CityNearbyCarsModel(object):
 
             shu_user_profiles.user_id,
             (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.length_id) AS vehicle_length,
-            (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.type_id) AS vehicle_type,
-            shu_user_stats.credit_level,
             -- 诚信会员
             shu_user_profiles.is_trust_member,
             shu_user_profiles.trust_member_type,
@@ -370,7 +372,7 @@ class CityNearbyCarsModel(object):
 
 
     @staticmethod
-    def get_driver_by_booking(cursor, goods_id):
+    def get_driver_by_booking(cursor, goods_id, user_ids):
         """接单线路获取司机信息"""
         try:
             command = '''
@@ -385,8 +387,6 @@ class CityNearbyCarsModel(object):
             shu_user_profiles.user_name,
             shu_users.mobile,
             (SELECT `name` FROM shm_dictionary_items WHERE id = shf_booking_settings.vehicle_length_id) AS vehicle_length,
-            '' AS vehicle_type,
-            shu_user_stats.credit_level,
             -- 诚信会员
             shu_user_profiles.is_trust_member,
             shu_user_profiles.trust_member_type,
@@ -395,6 +395,13 @@ class CityNearbyCarsModel(object):
             (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id) AS order_count,
             (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = 3) AS order_finished,
             (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = -1) AS order_cancel,
+            shf_booking_settings.from_province_id,
+            shf_booking_settings.from_county_id,
+            shf_booking_settings.from_town_id,
+            shf_booking_settings.to_province_id,
+            shf_booking_settings.to_county_id,
+            shf_booking_settings.to_town_id,
+            FROM_UNIXTIME(shf_booking_settings.create_time, '%%%%Y-%%%%m-%%%%d') AS create_time,
             '接单线路' AS match_type
             
             FROM shf_booking_settings, (
@@ -411,6 +418,7 @@ class CityNearbyCarsModel(object):
             
             WHERE
             shf_booking_settings.is_deleted = 0
+            %s
             AND (
             -- 镇到镇
             (goods.from_town_id = shf_booking_settings.from_town_id
@@ -438,7 +446,12 @@ class CityNearbyCarsModel(object):
             AND goods.to_town_id != 0))
             AND shu_user_profiles.user_id = shf_booking_settings.user_id AND shu_user_profiles.is_deleted = 0 AND shu_user_profiles.`status` = 1
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
-            LIMIT 30 '''
+            LIMIT 10 '''
+
+            if user_ids:
+                command = command % ('AND shf_booking_settings.user_id IN (%s) ' % ','.join(user_ids))
+            else:
+                command = command % ''
 
             driver_info = cursor.query(command, {
                 'goods_id': goods_id

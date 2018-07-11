@@ -208,9 +208,6 @@ class CityNearbyCars(object):
         for i in driver:
             if len(result) >= 10:
                 break
-            # 条件一
-            # if goods_type == 2 and i['inner_length'] < goods['inner_length']:
-            #     continue
             # 距离
             mileage_total = 0
             if i['locations']['longitude'] and i['locations']['latitude'] and goods['from_longitude'] and goods['from_latitude']:
@@ -218,11 +215,6 @@ class CityNearbyCars(object):
 
             if mileage_total > 5:
                 continue
-            # 所在地
-            current_region = i['locations'].get('province_name', '') +\
-                             i['locations'].get('city_name', '') +\
-                             i['locations'].get('county_name', '') +\
-                             i['locations'].get('address', '')
             # 诚信会员
             is_trust_member = 0
             if i['trust_member_type'] == 1:
@@ -232,7 +224,7 @@ class CityNearbyCars(object):
 
             # 时间间隔
             now_time = (time.time())
-            create_time = time.mktime(i['locations']['time'].timetuple())
+            create_time = time.mktime(i['locations']['time'].timetuple()) if i['locations']['time'] else 0
             delta = ''
             if not create_time:
                 pass
@@ -249,33 +241,62 @@ class CityNearbyCars(object):
             elif (now_time - create_time) // 60 > 0:
                 delta = '%d分钟前' % ((now_time - create_time) // 60)
 
-            result.append({
-                'name': i['user_name'],
-                'mobile': i['mobile'],
-                'current_region': current_region,
-                'vehicle_length': i['vehicle_length'] if i['vehicle_length'] else '不限车长',
-                'vehicle_type': i['vehicle_type'] if i['vehicle_type'] else '不限车型',
-                'credit_level': i['credit_level'],
-                'is_trust_member': is_trust_member,
-                'order_count': i['order_count'],
-                'order_finished': i['order_finished'],
-                'order_cancel': i['order_cancel'],
-                'match_type': i['match_type'],
-                # 排序用
-                'inner_length': i['inner_length'],
-                'auth_driver': i['auth_driver'],
-                'mileage_total': mileage_total,
-                'delta': delta
-            })
+            milleage_str = ''
+            if not mileage_total:
+                milleage_str = ''
+            elif mileage_total > 1:
+                milleage_str = '%.2f公里' % mileage_total
+            elif mileage_total < 1:
+                milleage_str = '%d米' % (mileage_total * 1000)
+
+            locations = i['locations']['address'] + ', ' + milleage_str + ', ' + delta
+            # 常驻地
+            if goods_type == 1:
+                result.append({
+                    'name': i['user_name'],
+                    'mobile': i['mobile'],
+                    'usual_region': init_regions.to_address(i['from_province_id'], i['from_city_id'], i['from_county_id']),
+                    'locations': locations,
+                    'vehicle_length': i['vehicle_length'] if i['vehicle_length'] else '不限车长',
+                    'is_trust_member': is_trust_member,
+                    'order_count': i['order_count'],
+                    'order_finished': i['order_finished'],
+                    'order_cancel': i['order_cancel'],
+                    'match_type': i['match_type'],
+                    # 排序用
+                    # 'inner_length': i['inner_length'],
+                    # 'auth_driver': i['auth_driver'],
+                    # 'mileage_total': mileage_total,
+                    # 'locations_time': create_time
+                })
+            # 接单线路
+            else:
+                result.append({
+                    'name': i['user_name'],
+                    'mobile': i['mobile'],
+                    'booking_line': init_regions.to_address(i['from_province_id'], i['from_city_id'], i['from_county_id']) + '-' + init_regions.to_address(i['to_province_id'], i['to_city_id'], i['to_county_id']),
+                    'booking_time': i['create_time'] if i['create_time'] else '',
+                    'vehicle_length': i['vehicle_length'] if i['vehicle_length'] else '不限车长',
+                    'locations': locations,
+                    'is_trust_member': is_trust_member,
+                    'order_count': i['order_count'],
+                    'order_finished': i['order_finished'],
+                    'order_cancel': i['order_cancel'],
+                    'match_type': i['match_type'],
+                    # 排序用
+                    # 'inner_length': i['inner_length'],
+                    # 'auth_driver': i['auth_driver'],
+                    # 'mileage_total': mileage_total,
+                    # 'locations_time': create_time
+                })
         # 1: 车长满足货源要求越优先（如货主要求4.2米，则优先排4.2米，然后是6.8米、7.6米，小面包车根本不显示）
         # 2: 认证用户优先
         # 3: 距离近的优先
         # 4: 评分高的优先
         # 5: 是否诚信会员
-        result.sort(key=lambda x: (x['inner_length'],
-                                   -x['auth_driver'],
-                                   x['mileage_total'],
-                                   -x['credit_level'],
-                                   -x['is_trust_member'])
-                    )
+        # result.sort(key=lambda x: (x['inner_length'],
+        #                            -x['auth_driver'],
+        #                            x['mileage_total'],
+        #                            -x['is_trust_member'])
+        #             )
         return make_result(APIStatus.Ok, data=json.loads(json.dumps(result))), HTTPStatus.Ok
