@@ -549,15 +549,18 @@ function popupRender(url) {
                 loading: true,
                 cols: [[{
                     field: "name",
-                    title: "司机姓名"
+                    title: "司机姓名",
+                    width:86
                 },
                     {
                         field: "mobile",
-                        title: "手机号码"
+                        title: "手机号码",
+                        width:108
                     },
                     {
                         field: "usual_region",
-                        title: "常驻地"
+                        title: "常驻地",
+                        width:300
                     },
                     {
                         field: "locations",
@@ -565,26 +568,31 @@ function popupRender(url) {
                     },
                     {
                         field: "vehicle_length",
-                        title: "车长"
+                        title: "车长",
+                        width:94
                     },
                     {
                         field: "is_trust_member",
-                        title: "诚信会员"
+                        title: "诚信会员",
+                        width:80
                     },
                     {
                         field: "order_count",
                         title: "接单数",
-                        sort: true
+                        sort: true,
+                        width:80
                     },
                     {
                         field: "order_finished",
                         title: "完成数",
-                        sort: true
+                        sort: true,
+                        width:80
                     },
                     {
                         field: "order_cancel",
                         title: "取消数",
-                        sort: true
+                        sort: true,
+                        width:80
                     }]],
                 done: function (res) {
                     $("td[data-field='is_trust_member']").children().each(function () {
