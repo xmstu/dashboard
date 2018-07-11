@@ -74,6 +74,7 @@ $("#user_search_box").on("click",
         var url = "/city/latest_orders/?goods_type=" + data.goods_type + "&is_called=" + data.is_called + "&vehicle_length=" + data.vehicle_length + "&node_id=" + data.node_id + "&spec_tag=" + data.spec_tag + "&is_addition=" + data.is_addition;
         tableInit(url)
     });
+
 function dataInit(dataArrSet) {
     layui.use("layer",
         function () {
@@ -148,8 +149,8 @@ function dataInit(dataArrSet) {
                                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ":" + val[1][0].value + "辆</span>";
                                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ":" + val[1][1].value + "辆</span>";
                                     result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ":" + val[1][2].value + "辆</span>";
-                                    var all_count_ano = '<p class="all_count">货源数：<span>' + (val[0][0].value + val[0][1].value + val[0][2].value + val[0][3].value) + "单</span></p>";
-                                    var all_count_ano_1 = '<p class="all_count_1">车辆数：<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
+                                    var all_count_ano = '<p class="all_count">货源数:<span>' + (val[0][0].value + val[0][1].value + val[0][2].value + val[0][3].value) + "单</span></p>";
+                                    var all_count_ano_1 = '<p class="all_count_1">车辆数:<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
                                     $(".data-list-container" + arr.length).html("");
                                     $(".data-list-container" + arr.length).append(all_count_ano + all_count_ano_1 + result_ano)
                                 }
@@ -287,10 +288,10 @@ function tableInit(url) {
                     },
                     {
                         field: "operate",
-                        title: "操作",
+                        title: "附近的车",
                         width: 100,
                         templet: function (d) {
-                            return '<button value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby" style="padding: 0 8px;"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button>'
+                            return '<button value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-suozaichengshi" style="margin-right: 2px"></i>常驻地</button>'
                         }
                     }]],
                 done: function (res, curr, count) {
@@ -298,26 +299,41 @@ function tableInit(url) {
                     $("[data-field]>div").css({
                         "padding": "0 6px"
                     });
-                    $(".nearby").on("click",
-                        function () {
-                            var val = $(this).val();
-                            var url = "/city/nearby_cars/" + val;
-                            form.on("select(interest)",
-                                function (res) {
-                                    var value = res.value;
-                                    var url_reset = "/city/nearby_cars/" + val + "?goods_type" + value;
-                                    tableReset(url_reset)
-                                });
-                            tableReset(url);
-                            layer.open({
-                                type: 1,
-                                title: "附近的车",
-                                area: ["1300px", "600px"],
-                                skin: "layui-layer-molv",
-                                closeBtn: 1,
-                                content: $("#popup")
-                            })
-                        });
+                    $(".nearby-one").on("click", function () {
+                        layer.load();
+                        var val = $(this).val();
+                        var url = "/city/nearby_cars/" + val;
+                        /*
+                           首页表格按钮框点击弹出的遮罩层筛选
+                         form.on("select(interest)",
+                               function (res) {
+                                   var value = res.value;
+                                   var url_reset = "/city/nearby_cars/" + val + "?goods_type" + value;
+                                   tableReset(url_reset)
+                               });*/
+                        tableReset(url);
+                        layer.open({
+                            type: 1,
+                            title: "<p>出发地&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;目的地</p>",
+                            area: ["1300px", "600px"],
+                            skin: "layui-layer-molv",
+                            closeBtn: 1,
+                            content: $("#popup")
+                        })
+                    });
+                    $(".nearby-two").on('click', function (e) {
+                        e.preventDefault()
+                        layer.msg('success')
+                        layer.open({
+                            type: 1,
+                            title: "<p>出发地&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;目的地</p>",
+                            area: ["1300px", "600px"],
+                            skin: "layui-layer-molv",
+                            closeBtn: 1,
+                            content: $("#popup_one")
+                        })
+                        popupRender()
+                    })
                     $("td[data-field='price']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
@@ -404,7 +420,7 @@ function tableReset(url) {
                 elem: "#demo",
                 url: url,
                 page: false,
-                width:1272,
+                width: 1272,
                 response: {
                     statusName: "status",
                     statusCode: 100000
@@ -459,15 +475,16 @@ function tableReset(url) {
                         width: 100
                     },
                     {
-                       field: "delta",
-                       title: "匹配时间",
-                       width: 110
+                        field: "delta",
+                        title: "匹配时间",
+                        width: 110
                     },
                     {
                         field: "current_region",
                         title: "所在地"
                     }]],
                 done: function (res) {
+                    layer.closeAll('loading')
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
@@ -496,6 +513,109 @@ function tableReset(url) {
             })
         })
 }
+
+function popupRender(url) {
+  layui.use(["table", "form"],
+        function () {
+            var table = layui.table;
+            table.render({
+                elem: "#demo_one",
+                url: url,
+                page: false,
+                width: 1272,
+                response: {
+                    statusName: "status",
+                    statusCode: 100000
+                },
+                loading: true,
+                cols: [[{
+                    field: "name",
+                    title: "司机姓名",
+                    width: 86
+                },
+                    {
+                        field: "mobile",
+                        title: "手机号码",
+                        width: 108
+                    },
+                    {
+                        field: "vehicle_length",
+                        title: "车长",
+                        width: 144
+                    },
+                    {
+                        field: "credit_level",
+                        title: "司机评分",
+                        width: 100
+                    },
+                    {
+                        field: "is_trust_member",
+                        title: "诚信会员",
+                        width: 80
+                    },
+                    {
+                        field: "order_count",
+                        title: "接单数",
+                        sort: true,
+                        width: 80
+                    },
+                    {
+                        field: "order_finished",
+                        title: "完成数",
+                        sort: true,
+                        width: 80
+                    },
+                    {
+                        field: "order_cancel",
+                        title: "取消数",
+                        sort: true,
+                        width: 70
+                    },
+                    {
+                        field: "match_type",
+                        title: "匹配原则",
+                        width: 100
+                    },
+                    {
+                        field: "delta",
+                        title: "匹配时间",
+                        width: 110
+                    },
+                    {
+                        field: "current_region",
+                        title: "所在地"
+                    }]],
+                done: function (res) {
+                    layer.closeAll('loading')
+                    $("td[data-field='is_trust_member']").children().each(function () {
+                        if ($(this).text() != "") {
+                            var str = $(this).text();
+                            if (str == 1) {
+                                $(this).text("是")
+                            } else {
+                                if (str == 0) {
+                                    $(this).text("否")
+                                }
+                            }
+                        }
+                    });
+                    $("td[data-field='credit_level']").children().each(function () {
+                        var value_level = $(this).text();
+                        if (value_level == 1) {
+                            $(this).html('<p><i class="iconfont icon-iconfontxingxing"></i></p>')
+                        }
+                        if (value_level == 2) {
+                            $(this).html('<p><i class="iconfont icon-iconfontxingxing"></i></p>')
+                        }
+                        if (value_level == 5) {
+                            $(this).html('<p style="color: #009f95;"><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i></p>')
+                        }
+                    })
+                }
+            })
+        })
+}
+
 function area_select() {
     var auth_role = $("#user-info").attr("data-role");
     if (!!auth_role && auth_role == 1) {

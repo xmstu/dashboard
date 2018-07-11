@@ -41,6 +41,7 @@ var mapdata = [];
 var data_ano = [];
 $('.main-content-right').addClass('animated fadeIn');
 var special = ["北京", "天津", "上海", "重庆", "香港", "澳门"];
+
 function dataInit() {
     layui.use('layer', function () {
         var layer = layui.layer;
@@ -49,7 +50,7 @@ function dataInit() {
             filter: $.trim($('#filter').val()),
             dimension: $.trim($('#dimension').val()),
             field: $.trim($('.heat-maps-tabs > li.active').attr('data-value')),
-            region_id:''
+            region_id: ''
         };
         http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             if (res.status == 100000) {
@@ -141,7 +142,7 @@ function dataInit() {
                         },
                         axisLine: {
                             lineStyle: {
-                                color: "#2F4554"
+                                color: "#fff"
                             }
                         }
                     },
@@ -155,7 +156,6 @@ function dataInit() {
                     animationDurationUpdate: 1000
                 };
                 $.getJSON('/static/map/china.json', function (data) {
-                    //console.log(data);
                     d = [];
                     for (var i = 0; i < data.features.length; i++) {
                         d.push({
@@ -167,11 +167,20 @@ function dataInit() {
                     pageSet.renderMap('china', d);
                 });
                 chart.on('click', function (params) {
-                    console.log(params)
+                    console.log(params);
+                    var data_province = {
+                        filter: $.trim($('#filter').val()),
+                        dimension: $.trim($('#dimension').val()),
+                        field: $.trim($('.heat-maps-tabs > li.active').attr('data-value')),
+                        region_id: provinces[params.name]
+                    };
+                   /* http.ajax.get(true, false, url,data_province,http.ajax.CONTENT_TYPE_2,function(res){
+                        console.log(res.data)
+                    });*/
                     if (params.name in provinces) {
                         $.getJSON('/static/map/province/' + provinces[params.name] + '.json', function (data) {
-                            //console.log(provinces[params.name]);
                             echarts.registerMap(params.name, data);
+                            console.log(data)
                             var d = [];
                             for (var i = 0; i < data.features.length; i++) {
                                 d.push({
@@ -185,7 +194,6 @@ function dataInit() {
                             pageSet.renderMap('china', mapdata);
                         } else {
                             $.getJSON('/static/map/city/' + cityMap[params.name] + '.json', function (data) {
-
                                 console.log(cityMap[params.name])
                                 echarts.registerMap(params.name, data);
                                 var d = [];
@@ -194,7 +202,9 @@ function dataInit() {
                                         name: data.features[i].properties.name
                                     })
                                 }
+                                console.log('test' + d)
                                 pageSet.renderMap(params.name, d);
+
                             });
                         }
                     } else {
@@ -365,6 +375,7 @@ function dataInit() {
     })
 
 }
+
 dataInit();
 $('#search_btn').click(function (e) {
     e.preventDefault();

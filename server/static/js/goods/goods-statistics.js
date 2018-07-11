@@ -476,13 +476,13 @@ var dataSet = {
                         str += '<tr>'
                         $('.cancel-reason-types').append(str)
                     }
+                     var string = '<tr class="cancel_reason_total"><td>取消总数：<span>'+res.data.sum_count+'单</span></td></tr>';
+                    $('.cancel-reason-types').append(string)
                 }
-
             })
         })
     }
 }
-
 function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_series, goods_user_count_series, interval) {
     Highcharts.setOptions({
     colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']

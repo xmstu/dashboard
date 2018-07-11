@@ -34,10 +34,7 @@
 
 .part-2 .layui-table-body .layui-table-cell {
     height: auto !important;
-    line-height: 22px;
-}
-.area-select-options-setting{
-
+    line-height: 24px;
 }
 .layui-form-spec {
     width: 220px!important;
