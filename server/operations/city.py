@@ -46,6 +46,7 @@ class CityNearbyCars(object):
             # 新建mongo连接, 省内存
             user_locations = MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
             # 货源5公里内用户
+            log.info('xxx-用户聚合')
             user_location = user_locations.collection.aggregate([
                 {'$geoNear': {
                     'near': {'type': "Point", 'coordinates': [float(goods['from_longitude']), float(goods['from_latitude'])]},
@@ -53,34 +54,31 @@ class CityNearbyCars(object):
                     'distanceField': 'distance',
                     'spherical': True,
                     'query': {
-                        'time': {'$gt': datetime.datetime.today() - datetime.timedelta(days=1)},
-                        'province_id': goods['from_province_id'],
-                        'city_id': goods['from_city_id'],
-                        'county_id': goods['from_county_id']
+                        'time': {'$gte': datetime.datetime.today() - datetime.timedelta(days=1)}
                     }
                 }},
-                 {'$group': {'_id': '$user_id', 'time': {'$max': '$time'}}}
+                {'$group': {'_id': '$user_id'}}
             ])
-            user_location = [(i['_id'], i['time']) for i in user_location]
+            user_location = [i['_id'] for i in user_location]
             if not user_location:
                 return Response(data={}, goods_type=goods_type)
             # 获取用户信息
+            log.info('xxx-用户信息')
             locations = {}
             for i in user_location:
                 result = user_locations.collection.find({
-                    'time': i[1],
-                    'user_id': i[0],
-                }, {'user_id': 1, 'time': 1, 'address': 1, 'longitude': 1, 'latitude': 1}).limit(1)
+                    'user_id': i,
+                }, {'user_id': 1, 'time': 1, 'address': 1, 'longitude': 1, 'latitude': 1}).sort([('_id', -1)]).limit(1)
                 result = [j for j in result]
-                locations[i[0]] = result[0] if result else {
+                locations[i] = result[0] if result else {
                     'address': '',
                     'longitude': 0,
                     'latitude': 0,
                     'time': 0
                 }
-
+            log.info('xxx-查询完毕')
             # 1.附近车辆-常驻地
-            if goods_type == 1:
+            if goods_type == 2:
                 driver = CityNearbyCarsModel.get_usual_region(db.read_bi,
                                                                     goods['from_city_id'],
                                                                     goods['from_county_id'],
