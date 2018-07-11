@@ -3,6 +3,7 @@ import time
 from flask_restful import abort
 
 from server import log
+from server.cache_data import init_regions
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
@@ -27,6 +28,13 @@ class HeatMap(object):
                 role, locations_id = sessionOperationClass.get_locations()
                 if role in (2, 3, 4):
                     params['role_region_id'] = locations_id
+                    L = []
+                    for i in locations_id:
+                        level = init_regions.get_city_level(params.get(i))
+                        L.append((level, i))
+                    L.sort(key=lambda item: item[0])
+                    params['authority_region_id'] = L[0][1]
+
                 elif role == 1:
                     params['role_region_id'] = locations_id + ['0']
                 else:

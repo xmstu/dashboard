@@ -135,7 +135,8 @@ class HeatMap(object):
             "toolTipData": toolTipData,
             "max_value": max_value,
             "min_value": min_value,
-            "sum_value": sum_value
+            "sum_value": sum_value,
+            "authority_region_id": params.get('authority_region_id', 0)
         }
 
         return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
