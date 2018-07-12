@@ -203,8 +203,22 @@ class CityNearbyCars(object):
         try:
             if not data:
                 return make_result(APIStatus.Ok, data=[]), HTTPStatus.Ok
-            # goods = data['goods']
+            goods = data['goods']
             driver = data['driver']
+            # 过滤接单车型
+            if goods_type == 1:
+                booking_vehicle = driver
+                town = []
+                count = []
+                for i in booking_vehicle:
+                    if i['from_town_id'] != 0 and i['to_town_id'] != 0 and goods['from_town_id'] == i['from_town_id'] and goods['to_town_id'] == i['to_town_id']:
+                        town.append(i)
+                        booking_vehicle.pop(i)
+                    elif i['from_town_id'] != 0 and i['to_town_id'] != 0 and goods['from_town_id'] == i['from_town_id'] and goods['to_town_id'] == i['to_town_id']:
+                        count.append(i)
+                        booking_vehicle.pop(i)
+                driver = (town + count + booking_vehicle)[:10]
+
 
             result = []
             for i in driver:
@@ -267,7 +281,7 @@ class CityNearbyCars(object):
                         'order_count': i['order_count'],
                         'order_finished': i['order_finished'],
                         'order_cancel': i['order_cancel'],
-                        'match_type': i['match_type'],
+                        'last_login_time': time.strftime('%Y-%m-%d', time.localtime(i['last_login_time']))
                         # 排序用
                         # 'inner_length': i['inner_length'],
                         # 'auth_driver': i['auth_driver'],
@@ -289,7 +303,7 @@ class CityNearbyCars(object):
                         'order_count': i['order_count'],
                         'order_finished': i['order_finished'],
                         'order_cancel': i['order_cancel'],
-                        'match_type': i['match_type'],
+                        'last_login_time': time.strftime('%Y-%m-%d', time.localtime(i['last_login_time']))
                         # 排序用
                         # 'inner_length': i['inner_length'],
                         # 'auth_driver': i['auth_driver'],

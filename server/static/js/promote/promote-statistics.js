@@ -337,7 +337,7 @@ var pageSet = {
         layui.use(['layer','table'], function () {
             var table = layui.table;
             var layer = layui.layer;
-            layer.load()
+            layer.load();
             table.render({
                 elem: '#promote_table'
                 , even: true
