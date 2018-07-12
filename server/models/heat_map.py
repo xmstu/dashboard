@@ -61,7 +61,7 @@ class HeatMapModel(object):
             # 求活跃数
             elif params['field'] == 3:
                 fetch_where += """
-                AND keep_login_days >= 7 AND last_login_time > UNIX_TIMESTAMP() - 86400
+                AND keep_login_days >= 7 AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
                 """
 
         # 根据级别分组数据

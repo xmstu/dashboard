@@ -47,6 +47,18 @@ class Regions(object):
         """获取地区code的上级城市code"""
         return self.region.get(int(region_id), {'parent_id': 0})['parent_id']
 
+    def get_city_next_region(self, region_arr):
+        """获取城市区级信息"""
+        result = []
+        for k in region_arr:
+            for i, j in self.region.items():
+                if k != 441900:
+                    if j['parent_id'] == k and j['level'] == 3:
+                        result.append({'region_id': i, 'name': j['full_short_name']})
+                else:
+                    if j['parent_id'] == k and j['level'] == 4:
+                        result.append({'region_id': i, 'name': j['full_short_name']})
+        return result
 
 class InitRegionModel(object):
     @staticmethod

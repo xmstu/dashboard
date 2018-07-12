@@ -18,4 +18,6 @@ def promote():
     locations = [{'region_id': i, 'name': init_regions.to_full_short_name(i)} for i in
                  session['login'].get('locations', [])]
     role = session['login'].get('role', 0)
+    if role == 4:
+        locations = init_regions.get_city_next_region(session['login'].get('locations', []))
     return render_template('/promote/promote-statistics.html', user_name=user_name, avatar_url=avatar_url, locations=locations, role=role)

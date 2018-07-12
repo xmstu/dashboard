@@ -108,17 +108,17 @@ class PromoteEffectList(object):
             fetch_where += 'AND tb_inf_user.user_type = %s ' % params['role_type']
         # 是否活跃
         if params['is_actived'] == 1:
-            fetch_where += 'AND tb_inf_user.keep_login_days >= 7 AND tb_inf_user.last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
+            fetch_where += 'AND tb_inf_user.keep_login_days >= 7 AND tb_inf_user.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY)) '
         elif params['is_actived'] == 2:
-            fetch_where += '''AND tb_inf_user.last_login_time < UNIX_TIMESTAMP() - 1 * 86400
-            AND tb_inf_user.last_login_time > UNIX_TIMESTAMP() - 3 * 86400 '''
+            fetch_where += '''AND tb_inf_user.last_login_time < UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
+            AND tb_inf_user.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 3 DAY)) '''
         elif params['is_actived'] == 3:
-            fetch_where += '''AND tb_inf_user.last_login_time < UNIX_TIMESTAMP() - 4 * 86400
-            AND tb_inf_user.last_login_time > UNIX_TIMESTAMP() - 10 * 86400 '''
+            fetch_where += '''AND tb_inf_user.last_login_time < UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 4 DAY))
+            AND tb_inf_user.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 10 DAY)) '''
         elif params['is_actived'] == 4:
-            fetch_where += 'AND tb_inf_user.last_login_time < UNIX_TIMESTAMP() - 10 * 86400 '
+            fetch_where += 'AND tb_inf_user.last_login_time < UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 10 DAY)) '
         elif params['is_actived'] == 5:
-            fetch_where += 'AND tb_inf_user.last_login_time > UNIX_TIMESTAMP() - 1 * 86400 '
+            fetch_where += 'AND tb_inf_user.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY)) '
         # 贴车贴
         if params['is_car_sticker'] == 1:
             fetch_where += 'AND tb_inf_user.is_sticker = 1 '
