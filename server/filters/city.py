@@ -221,7 +221,7 @@ class CityNearbyCars(object):
 
             result = []
             # 常驻地
-            if goods_type == 1:
+            if goods_type == 2:
                 for i in driver:
                     # 时间间隔
                     last_delta = i['last_delta']
