@@ -45,13 +45,12 @@ class CityNearbyCars(object):
             if goods_type == 2:
                 all_drivers = CityNearbyCarsModel.get_all_drivers(db.read_bi, goods['from_province_id'], goods['from_city_id'])
                 driver = []
-                today = time.mktime(time.strptime(time.strftime('%Y-%m-%d 00:00:00', time.localtime(time.time())),'%Y-%m-%d %H:%M:%S'))
                 for i in all_drivers:
                     result = pyredis.token.read_one('online:position:%s' % i['user_id'])
                     if result and result['province'] == goods['from_province_id'] \
                     and result['city'] == goods['from_city_id'] \
                     and result['county'] == goods['from_county_id'] \
-                    and today - time.mktime(time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S')) > 86400:
+                    and int(time.time() - time.mktime(time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S'))) < 86400:
                         # 车长
                         length_id = str(i['vehicle_length_id']).split(',')[0]
                         i['vehicle_length_id'] = VehicleModel.get_vehicle_length_name(db.read_db, int(length_id))
@@ -60,7 +59,7 @@ class CityNearbyCars(object):
                             'longitude': result['longitude'],
                             'latitude': result['latitude'],
                             'last_login_time': result['location_time'],
-                            'last_delta': today - time.mktime(time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S')),
+                            'last_delta': int(time.time() - time.mktime(time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S'))),
                             'province': result['province'],
                             'city': result['city'],
                             'county': result['county']
