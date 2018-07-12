@@ -4,8 +4,8 @@ $(".layui-table-cell").css({
 $(".part-2 .layui-form-item").css({
     "width": "246px"
 });
-$("#date_show_one").val(String(common.getNowFormatDate()[3]));
-$("#date_show_two").val(String(common.getNowFormatDate()[3]));
+$("#date_show_one").val(String(common.getNowFormatDate()[0]));
+$("#date_show_two").val(String(common.getNowFormatDate()[0]));
 var dataArr1 = ["待接单", "已接单", "已取消", "已接单车辆", "待接单车辆数"];
 var dataArr2 = ["待联系", "已联系", "已接单", "已取消", "已接单车辆", "待接单车辆数"];
 setTimeout(function () {
@@ -103,12 +103,13 @@ function dataInit(dataArrSet) {
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2,
                 function (res) {
                     var arr = Object.keys(res.data);
-                    /*if(arr.length==0){
-                        var results_ ='<li style="font-size: 13px;color: #ccc;text-align: center;line-height: 22px;">该条件下无数据</li>'
-                        console.log(results_)
-                        $('.part-1-bottom').text(1234)
-                    }*/
-                    var str = "";
+                    console.log(arr.length)
+                    if(arr.length==0){
+                         $('.part-1-bottom > ul').html('')
+                        var results_ ='<li style="font-size: 13px;color: #aaa;text-align: center;line-height: 22px;height: 40px;line-height: 40px;width: 100%;">该条件下无数据</li>'
+                        $('.part-1-bottom > ul').append(results_)
+                    }else if(arr.length>0){
+                          var str = "";
                     for (var i = 0; i < arr.length; i++) {
                         str += '<li class="charts-lists"><div class="charts-container" id="charts_container_' + i + '"></div><div class="data-list-container' + i + '"></li>';
                         $(".data-list-container0").append($(".tip-list-show0"))
@@ -218,10 +219,10 @@ function dataInit(dataArrSet) {
                                 myChart.setOption(option, true)
                             }
                         });
-                    if ($(".charts-lists").html() != "") {
-                        layer.closeAll("loading");
-                        $(".main-content-right").addClass("animated fadeIn")
                     }
+                    layer.closeAll("loading");
+                        $(".main-content-right").addClass("animated fadeIn")
+
                 })
         })
 }
@@ -472,7 +473,7 @@ function tableReset(url) {
                         width: 300
                     },
                     {
-                        field: "vehicel_length",
+                        field: "vehicle_length",
                         title: "车长",
                         width: 80
                     },
@@ -557,15 +558,14 @@ function popupRender(url) {
                         title: "手机号码",
                         width:108
                     },
-                    // {
-                    //     field: "usual_region",
-                    //     title: "常驻地",
-                    //     width:300
-                    // },
+                    {
+                        field: "usual_region",
+                        title: "常驻地",
+                        width:300
+                    },
                     {
                         field: "locations",
-                        title: "最新定位",
-                        width:300
+                        title: "最新定位"
                     },
                     {
                         field: "vehicle_length",
