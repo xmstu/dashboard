@@ -410,10 +410,8 @@ class CityNearbyCarsModel(object):
             
             FROM shf_booking_settings, (
             SELECT
-            from_county_id,
-            from_town_id,
-            to_county_id,
-            to_town_id
+            from_city_id,
+            to_city_id
             FROM shf_goods
             WHERE id = :goods_id AND is_deleted = 0
             ) AS goods, shu_user_profiles
@@ -422,35 +420,17 @@ class CityNearbyCarsModel(object):
             
             WHERE
             shf_booking_settings.is_deleted = 0
-            
             AND (
-            -- 镇到镇
-            (goods.from_town_id = shf_booking_settings.from_town_id
-            AND goods.to_town_id = shf_booking_settings.to_town_id
-            AND goods.from_town_id != 0
-            AND goods.to_town_id != 0)
-            -- 区到区
-            OR (goods.from_county_id = shf_booking_settings.from_county_id
-            AND goods.to_county_id = shf_booking_settings.to_county_id
-            AND shf_booking_settings.from_town_id = 0
-            AND shf_booking_settings.to_town_id = 0
-            AND goods.from_county_id != 0
-            AND goods.to_county_id != 0)
-            -- 镇到区
-            OR (goods.from_town_id = shf_booking_settings.from_town_id
-            AND goods.to_county_id = shf_booking_settings.to_county_id
-            AND shf_booking_settings.to_town_id = 0
-            AND goods.from_town_id != 0
-            AND goods.to_county_id != 0)
-            -- 区到镇
-            OR (goods.from_county_id = shf_booking_settings.from_county_id
-            AND goods.to_town_id = shf_booking_settings.to_town_id
-            AND shf_booking_settings.from_town_id = 0
-            AND goods.from_county_id != 0
-            AND goods.to_town_id != 0))
+            -- 市到市
+            (goods.from_city_id = shf_booking_settings.from_city_id
+            AND goods.to_city_id = shf_booking_settings.to_city_id
+            AND goods.from_city_id != 0
+            AND goods.to_city_id != 0
+            AND shf_booking_settings.from_city_id != 0
+            AND shf_booking_settings.to_city_id != 0))
             AND shu_user_profiles.user_id = shf_booking_settings.user_id AND shu_user_profiles.is_deleted = 0 AND shu_user_profiles.`status` = 1
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
-            LIMIT 10 '''
+            LIMIT 100'''
 
             # if user_ids:
             #     command = command % ('AND shf_booking_settings.user_id IN (%s) ' % ','.join(user_ids))
