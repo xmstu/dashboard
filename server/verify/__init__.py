@@ -11,3 +11,4 @@ from server.verify.city import *
 from server.verify.order import *
 from server.verify.transport import *
 from server.verify.heat_map import *
+from server.verify.price import *
