@@ -43,19 +43,47 @@ $('.main-content-right').addClass('animated fadeIn');
 var special = ["北京", "天津", "上海", "重庆", "香港", "澳门"];
 
 function dataInit() {
-    layui.use('layer', function () {
+    layui.use(['form', 'layer'], function () {
         var layer = layui.layer;
+        var form = layui.form;
+        form.on('select(methods_select)', function (data) {
+            if (data.value == '1') {
+                $('#filter').removeClass('none').addClass('area-select-options-setting');
+                $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
+                $('#role_select').addClass('none').removeClass('area-select-options-setting');
+                $('#heat_maps_tabs').removeClass('none').addClass('map-select-options-setting');
+                $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
+                $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
+            } else if (data.value == '2') {
+                $('#role_select').removeClass('none').addClass('area-select-options-setting');
+                $('#filter').addClass('none').removeClass('area-select-options-setting');
+                $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
+                $('#heat_maps_tabs_one').removeClass('none').addClass('map-select-options-setting');
+                $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
+                $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
+            } else if (data.value == '3') {
+                $('#vehicle_select').removeClass('none').addClass('area-select-options-setting');
+                $('#filter').addClass('none').removeClass('area-select-options-setting');
+                $('#role_select').addClass('none').removeClass('area-select-options-setting');
+                $('#heat_maps_tabs_two').removeClass('none').addClass('map-select-options-setting');
+                $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
+                $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
+            }
+        });
         var url = '/map/heat_map/';
+        var area_select = $('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
+        var map_select = $('.map-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
         var data = {
-            filter: $.trim($('#filter').val()),
             dimension: $.trim($('#dimension').val()),
-            field: $.trim($('.heat-maps-tabs > li.active').attr('data-value')),
+            filter: area_select == undefined ? 0 : area_select,
+            field: map_select == undefined ? 0 : map_select,
             region_id: ''
         };
         http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             if (res.status == 100000) {
                 var data = res.data;
                 var data_reset = data.map_data;
+                var province_reset = data.map_data;
                 var max_value = data.max_value;
                 var toolTipData = data.toolTipData;
                 var ynameMap = [];
@@ -110,7 +138,7 @@ function dataInit() {
                         min: 0,
                         max: max_value + (max_value / 5),
                         text: ['High', 'Low'],
-                        realtime: false,
+                        realtime: true,
                         calculable: true,
                         color: ['orangered', 'yellow', 'lightskyblue']
                     },
@@ -171,20 +199,20 @@ function dataInit() {
                 });
                 chart.on('click', function (params) {
                     var data_province = {
-                        filter: $.trim($('#filter').val()),
                         dimension: $.trim($('#dimension').val()),
-                        field: $.trim($('.heat-maps-tabs > li.active').attr('data-value')),
+                        filter: area_select == undefined ? 0 : area_select,
+                        field: map_select == undefined ? 0 : map_select,
                         region_id: provinces[params.name]
                     };
                     http.ajax.get(true, false, url, data_province, http.ajax.CONTENT_TYPE_2, function (res) {
                         if (res.status == 100000) {
-                            console.log(res.data);
+                            // console.log(res.data);
                             var data = res.data;
                             var map_data = data.map_data;
                             var city_toolTipData = data.toolTipData;
                             if (params.name in provinces) {
                                 $.getJSON('/static/map/province/' + provinces[params.name] + '.json', function (data) {
-                                    console.log(params.name);
+                                    //console.log(params.name);
                                     echarts.registerMap(params.name, data);
                                     var d = [];
                                     for (var i = 0; i < data.features.length; i++) {
@@ -192,7 +220,7 @@ function dataInit() {
                                             name: data.features[i].properties.name
                                         })
                                     }
-                                    toolTipData=city_toolTipData
+                                    toolTipData = city_toolTipData
                                     d = map_data;
                                     pageSet.renderMap(params.name, d);
                                 });
@@ -201,19 +229,19 @@ function dataInit() {
                                     pageSet.renderMap('china', mapdata);
                                 } else {
                                     $.getJSON('/static/map/city/' + cityMap[params.name] + '.json', function (data) {
-                                        console.log(cityMap[params.name]);
+                                        // console.log(cityMap[params.name]);
                                         var city_data = {
-                                            filter: $.trim($('#filter').val()),
                                             dimension: $.trim($('#dimension').val()),
-                                            field: $.trim($('.heat-maps-tabs > li.active').attr('data-value')),
+                                            filter: area_select == undefined ? 0 : area_select,
+                                            field: map_select == undefined ? 0 : map_select,
                                             region_id: cityMap[params.name]
                                         };
                                         http.ajax.get(true, false, url, city_data, http.ajax.CONTENT_TYPE_2, function (res) {
-                                            console.log(res.data)
+                                            //  console.log(res.data)
                                             if (res.status == 100000) {
                                                 var city_data = res.data;
                                                 var city_map_data = city_data.map_data;
-                                                var city_map_tooltip = city_data.ToolTipData;
+                                                var city_map_tooltip = city_data.toolTipData;
                                                 echarts.registerMap(params.name, data);
                                                 var d = [];
                                                 for (var i = 0; i < data.features.length; i++) {
@@ -221,7 +249,8 @@ function dataInit() {
                                                         name: data.features[i].properties.name
                                                     })
                                                 }
-                                                toolTipData=city_map_tooltip
+                                                toolTipData = city_map_tooltip;
+                                                //  console.log('tooltipData:' + toolTipData);
                                                 d = city_map_data;
                                                 pageSet.renderMap(params.name, d);
                                             }
@@ -355,7 +384,7 @@ function dataInit() {
                                 }
                                 , itemStyle: {
                                     normal: {
-                                        areaColor: 'yellow'
+                                        areaColor: '#fff'
                                         , borderColor: 'skublue'
                                     }
                                     , emphasis: {
@@ -405,4 +434,7 @@ function dataInit() {
 dataInit();
 $('#search_btn').click(function (e) {
     e.preventDefault();
+    console.log($('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value'))
+    console.log($('.map-select-options-setting .layui-anim > dd.layui-this').attr('lay-value'))
+    dataInit();
 });

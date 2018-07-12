@@ -115,7 +115,9 @@
 .thead-tr-spec tr {
     font-size: 13px;
 }
-.heat-maps-tabs >li {
+.heat-maps-tabs >li,
+.heat-maps-tabs-one>li,
+.heat-maps-tabs-two>li{
     width: 33.3%;
     height: 40px;
     line-height: 40px;
@@ -125,7 +127,12 @@
     color: purple;
     cursor: pointer;
 }
-.heat-maps-tabs >li.active{
+.heat-maps-tabs-one>li{
+    width:25%;
+}
+.heat-maps-tabs >li.active,
+.heat-maps-tabs-one >li.active,
+.heat-maps-tabs-two >li.active{
     border-bottom: 2px solid #f40;
     color: #f40;
     font-weight: bold;

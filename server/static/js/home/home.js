@@ -297,7 +297,7 @@ function tableInit(url) {
                         title: "附近的车",
                         width: 100,
                         templet: function (d) {
-                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-suozaichengshi" style="margin-right: 2px"></i>常驻地</button> <p class="display-content" style="display: none">' + d.address + '</p>'
+                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button> <p class="display-content" style="display: none">' + d.address + '</p>'
                         }
                     }]],
                 done: function (res, curr, count) {
@@ -451,43 +451,43 @@ function tableReset(url) {
                 cols: [[{
                     field: "name",
                     title: "司机姓名",
-                    width: 86
+                  //  width: 86
                 },
                     {
                         field: "mobile",
                         title: "手机号码",
-                        width: 108
+                      //  width: 108
                     },
                     {
                         field: "booking_line",
-                        title: "接单线路"
+                      //  title: "接单线路"
                     },
                     {
                         field: "booking_time",
                         title: "设置时间",
-                        width: 100
+                      //  width: 100
                     },
-                    {
-                        field: "locations",
-                        title: "最新定位",
-                        width: 300
+                   {
+                        field: "last_login_time",
+                        title: "最后登陆",
+                        //width: 100
                     },
                     {
                         field: "vehicle_length",
                         title: "车长",
-                        width: 80
+                       // width: 80
                     },
                     {
                         field: "is_trust_member",
                         title: "诚信会员",
                         sort: true,
-                        width: 90
+                       // width: 90
                     },
                     {
                         field: "order_count",
                         title: "接单数",
                         sort: true,
-                        width: 80
+                        //width: 80
                     },
                     {
                         field: "order_finished",
