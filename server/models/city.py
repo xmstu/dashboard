@@ -412,6 +412,7 @@ class CityNearbyCarsModel(object):
             
             WHERE
             shf_booking_settings.is_deleted = 0
+            AND shf_booking_settings.vehicle_length_id != 0
             AND (
             -- 市到市
             (goods.from_city_id = shf_booking_settings.from_city_id
