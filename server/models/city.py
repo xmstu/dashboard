@@ -299,7 +299,7 @@ class CityNearbyCarsModel(object):
 
     @staticmethod
     def get_all_drivers(cursor, from_province_id, from_city_id):
-        """附近货车"""
+        """常驻地"""
         command = '''
         SELECT
         user_id,
@@ -312,6 +312,7 @@ class CityNearbyCarsModel(object):
         is_sticker,
         order_count_SH + order_count_LH AS order_count,
         order_finished_count_SH_online + order_finished_count_SH_unline + order_finished_count_LH_online + order_finished_count_LH_unline AS order_finished,
+        0 AS order_cancel,
         vehicle_length_id
         
         FROM tb_inf_user
@@ -328,42 +329,6 @@ class CityNearbyCarsModel(object):
         })
 
         return all_drivers if all_drivers else []
-
-    @staticmethod
-    def get_driver_info(cursor, ids):
-        """获取司机信息"""
-        try:
-            command = """
-            SELECT
-
-            shu_user_profiles.user_id,
-            (SELECT `name` FROM shm_dictionary_items WHERE id = shu_vehicle_auths.length_id) AS vehicle_length,
-            -- 诚信会员
-            shu_user_profiles.is_trust_member,
-            shu_user_profiles.trust_member_type,
-            shu_user_profiles.ad_expired_time,
-            0 AS inner_length,
-            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_user_profiles.user_id) AS order_count,
-            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_user_profiles.user_id AND shb_orders.`status` = 3) AS order_finished,
-            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_user_profiles.user_id AND shb_orders.`status` = -1) AS order_cancel
-            
-            FROM shu_user_profiles
-            INNER JOIN shu_user_stats ON shu_user_profiles.user_id = shu_user_stats.user_id
-            LEFT JOIN shu_vehicles ON shu_vehicles.user_id = shu_user_profiles.user_id
-            LEFT JOIN shu_vehicle_auths ON shu_vehicles.last_auth_id = shu_vehicle_auths.id AND shu_vehicle_auths.auth_status = 2 AND shu_vehicle_auths.is_deleted = 0
-            
-            WHERE shu_user_profiles.user_id IN (%s)
-            GROUP BY shu_user_profiles.user_id
-            """
-
-            command = command % ','.join(ids)
-
-            result = cursor.query(command)
-            return result if result else []
-        except Exception as e:
-            log.error('获取司机信息出错: [error: %s]' % e, exc_info=True)
-
-
 
     @staticmethod
     def get_driver_by_booking(cursor, goods_id):
@@ -423,6 +388,7 @@ class CityNearbyCarsModel(object):
             AND shf_booking_settings.to_city_id != 0))
             AND shu_user_profiles.user_id = shf_booking_settings.user_id AND shu_user_profiles.is_deleted = 0 AND shu_user_profiles.`status` = 1
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
+            GROUP BY shf_booking_settings.user_id
             LIMIT 100'''
 
             # if user_ids:

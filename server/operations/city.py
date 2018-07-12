@@ -41,7 +41,7 @@ class CityNearbyCars(object):
             goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
             if not goods:
                 return Response(data={}, goods_type=goods_type)
-            # 1.附近车辆-附近货车
+            # 1.附近车辆-常驻地
             if goods_type == 2:
                 all_drivers = CityNearbyCarsModel.get_all_drivers(db.read_bi, goods['from_province_id'], goods['from_city_id'])
                 driver = []
