@@ -3,11 +3,9 @@ from server import log
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.city import CityOrderListModel, CityResourceBalanceModel, CityNearbyCarsModel
-from server.mysqldb import MongoLinks
-from server.configs import configs
-
-import datetime
-from decimal import Decimal
+from server.models.vehicle import VehicleModel
+from server.database import pyredis
+import time
 
 class CityResourceBalance(object):
     @staticmethod
@@ -43,68 +41,39 @@ class CityNearbyCars(object):
             goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
             if not goods:
                 return Response(data={}, goods_type=goods_type)
-            # 新建mongo连接, 省内存
-            # user_locations = MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_location_last')
-            # user_info = MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
-            # # 货源5公里内用户
-            # user_location = user_locations.collection.aggregate([
-            #     {'$geoNear': {
-            #         'near': {'type': "Point", 'coordinates': [float(goods['from_longitude']), float(goods['from_latitude'])]},
-            #         'maxDistance': 5000,
-            #         'distanceField': 'distance',
-            #         'spherical': True,
-            #     }},
-            #     {'$group': {'_id': '$user_id'}},
-            #     {'$sort': {'_id': -1}},
-            #     {'$limit': 30}
-            # ])
-            # user_location = [i['_id'] for i in user_location]
-            # if not user_location:
-            #     return Response(data={}, goods_type=goods_type)
-            # # 获取用户信息
-            # locations = {}
-            # result = user_info.collection.aggregate([
-            #     {'$match': {'user_id': {'$in': user_location},
-            #                 # 'time': {'$gte': datetime.datetime.today() - datetime.timedelta(days=1)}
-            #                 }},
-            #     {'$group': {'_id': '$user_id',
-            #                 # 'time': {'$max': '$time'},
-            #                 'address': {'$first': '$address'},
-            #                 'longitude': {'$first': '$longitude'}, 'latitude': {'$first': '$latitude'}}}
-            # ])
-            # result = [j for j in result]
-            # for i in result:
-            #     locations[i['_id']] = i
-            # 1.附近车辆-常驻地
+            # 1.附近车辆-附近货车
             if goods_type == 2:
-                driver = CityNearbyCarsModel.get_usual_region(db.read_bi,
-                                                                    goods['from_city_id'],
-                                                                    goods['from_county_id'])
-                driver_id = [str(i['user_id']) for i in driver]
-                if not driver_id:
-                    pass
-                else:
-                    driver_info = CityNearbyCarsModel.get_driver_info(db.read_db, driver_id)
-                    if driver_info:
-                        for i in driver:
-                            result = [j for j in driver_info if j['user_id'] == i['user_id']]
-                            if result:
-                                i.update(result[0])
+                all_drivers = CityNearbyCarsModel.get_all_drivers(db.read_bi, goods['from_province_id'], goods['from_city_id'])
+                driver = []
+                today = time.mktime(time.strptime(time.strftime('%Y-%m-%d 00:00:00', time.localtime(time.time())),'%Y-%m-%d %H:%M:%S'))
+                for i in all_drivers:
+                    result = pyredis.token.read_one('online:position:%s' % i['user_id'])
+                    if result and result['province'] == goods['from_province_id'] \
+                    and result['city'] == goods['from_city_id'] \
+                    and result['county'] == goods['from_county_id'] \
+                    and today - time.mktime(time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S')) > 86400:
+                        # 车长
+                        length_id = str(i['vehicle_length_id']).split(',')[0]
+                        i['vehicle_length_id'] = VehicleModel.get_vehicle_length_name(db.read_db, int(length_id))
+                        i.update({
+                            'address': result['address'],
+                            'longitude': result['longitude'],
+                            'latitude': result['latitude'],
+                            'last_login_time': result['location_time'],
+                            'last_delta': today - time.mktime(time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S')),
+                            'province': result['province'],
+                            'city': result['city'],
+                            'county': result['county']
+                        })
+                        driver.append(i)
+                    if len(driver) >= 10:
+                        break
             # 2.附近车辆-接单线路
             else:
                 driver = CityNearbyCarsModel.get_driver_by_booking(db.read_db, goods_id)
             if not driver:
                 return Response(data={}, goods_type=goods_type)
-            # for i in driver:
-            #     if locations.get(i.get('user_id', 0)):
-            #         i['locations'] = locations[i['user_id']]
-            #     else:
-            #         i['locations'] = {
-            #             'address': '',
-            #             'longitude': 0,
-            #             'latitude': 0,
-            #             'time': 0
-            #         }
+
 
             return Response(data={'goods': goods, 'driver': driver}, goods_type=goods_type)
         except Exception as e:

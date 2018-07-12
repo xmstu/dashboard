@@ -297,11 +297,9 @@ class CityNearbyCarsModel(object):
 
         return goods if goods else {}
 
-
-
     @staticmethod
-    def get_usual_region(cursor, from_city_id, from_county_id):
-        """常驻地"""
+    def get_all_drivers(cursor, from_province_id, from_city_id):
+        """附近货车"""
         command = '''
         SELECT
         user_id,
@@ -309,32 +307,27 @@ class CityNearbyCarsModel(object):
         from_province_id,
         from_city_id,
         from_county_id,
-        from_town_id,
         driver_auth AS auth_driver,
         mobile,
+        is_sticker,
         order_count_SH + order_count_LH AS order_count,
         order_finished_count_SH_online + order_finished_count_SH_unline + order_finished_count_LH_online + order_finished_count_LH_unline AS order_finished,
-        last_login_time,
-        '常驻地' AS match_type
+        vehicle_length_id
         
         FROM tb_inf_user
-        WHERE from_city_id = :from_city_id AND from_county_id = :from_county_id
+        WHERE from_province_id = :from_province_id AND from_city_id = :from_city_id
         
         AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 2 DAY))
         AND driver_auth = 1
-        LIMIT 10'''
+        AND vehicle_length_id != ''
+        ORDER BY last_login_time DESC'''
 
-        # if user_ids:
-        #     command = command % ('AND tb_inf_user.user_id IN (%s) '% ','.join(user_ids))
-        # else:
-        #     command = command % ''
-
-        usual_regions = cursor.query(command, {
-            'from_city_id': from_city_id,
-            'from_county_id': from_county_id
+        all_drivers = cursor.query(command, {
+            'from_province_id': from_province_id,
+            'from_city_id': from_city_id
         })
 
-        return usual_regions if usual_regions else []
+        return all_drivers if all_drivers else []
 
     @staticmethod
     def get_driver_info(cursor, ids):
@@ -405,8 +398,7 @@ class CityNearbyCarsModel(object):
             shf_booking_settings.to_county_id,
             shf_booking_settings.to_town_id,
             FROM_UNIXTIME(shf_booking_settings.create_time, '%%Y-%%m-%%d') AS create_time,
-            shu_user_stats.last_login_time,
-            '接单线路' AS match_type
+            shu_user_stats.last_login_time
             
             FROM shf_booking_settings, (
             SELECT

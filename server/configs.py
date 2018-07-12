@@ -42,6 +42,6 @@ def __da_read_db(conf):
 def __da_write_db(conf):
     pass
 
-@configs.register('.union.redis.dispatcher_nearby')
-def __dispatcher_nearby(conf):
+@configs.register('.union.redis.token')
+def __token(conf):
     pass
