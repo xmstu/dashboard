@@ -461,7 +461,7 @@ function tableReset(url) {
                     {
                         field: "booking_line",
                         title: "接单线路",
-                        width:240
+                        width:280
                     },
                     {
                         field: "booking_time",
