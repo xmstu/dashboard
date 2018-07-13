@@ -1,5 +1,6 @@
+import json
 import time
-from server.utils.extend import data_price
+from server.utils.extend import data_price, ExtendHandler
 
 
 class PriceTrendModel(object):
@@ -26,7 +27,7 @@ class PriceTrendModel(object):
         AND so.create_time >= :start_time 
         AND so.create_time < :end_time
         -- 车长
-        AND shf_goods_vehicles.`name` = ":vehicle_length"
+        AND shf_goods_vehicles.`name` = :vehicle_length
         GROUP BY
             FROM_UNIXTIME(so.create_time,"%%Y-%%m-%%d")
         """
@@ -120,17 +121,17 @@ class PriceTrendModel(object):
         }
 
         price_trend = cursor.query(command.format(fetch_where=fetch_where), kwargs)
-
+        price_trend = json.loads(json.dumps(price_trend, default=ExtendHandler.handler_to_float))
         # 获取价格基准线
+        recommend_price_instance = data_price[params['vehicle_length']]
+        recommend_price_one = recommend_price_instance.get_fast_price(params['min_mileage'])
+        recommend_price_two = recommend_price_instance.get_fast_price(params['max_mileage'])
         if price_trend:
-            recommend_price_instance = data_price[params['vehicle_length']]
             if params.get('from_province_id') and params.get('to_province_id'):
                 recommend_price_one = recommend_price_instance.get_fast_price(price_trend[0]['avg_mileage'])
                 recommend_price_two = 0
-            else:
-                recommend_price_one = recommend_price_instance.get_fast_price(params['min_mileage'])
-                recommend_price_two = recommend_price_instance.get_fast_price(params['max_mileage'])
         else:
+            price_trend = []
             recommend_price_one = 0
             recommend_price_two = 0
 

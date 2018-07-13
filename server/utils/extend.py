@@ -63,7 +63,7 @@ def get_struct_data(data, params, *args, **kwargs):
     for count in data:
         if count.get('create_time'):
             create_time = count['create_time'].strftime('%Y-%m-%d') if isinstance(count['create_time'], int) else count['create_time']
-            date_count[create_time] = count.get(args[0], 0)
+            date_count[create_time] = [count.get(i, 0) for i in args] if len(args) > 1 else count.get(args[0], 0)
     # 日期补全
     begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['start_time'])), "%Y-%m-%d")
     end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params['end_time'])), "%Y-%m-%d")
@@ -75,7 +75,7 @@ def get_struct_data(data, params, *args, **kwargs):
         date_val = begin_date
         while date_val <= end_date:
             date_str = date_val.strftime("%Y-%m-%d")
-            date_count.setdefault(date_str, 0)
+            date_count.setdefault(date_str, [0 for _ in args]) if len(args) > 1 else date_count.setdefault(date_str, 0)
             xAxis.append(date_str)
             series.append(date_count[date_str])
             date_val += datetime.timedelta(days=1)
