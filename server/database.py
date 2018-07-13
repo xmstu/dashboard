@@ -19,9 +19,9 @@ db = DictModel({
 # })
 
 pyredis = DictModel({
-    'nearby_vehicle': ExtendRedis(ip=configs.remote.union.redis.dispatcher_nearby.host,
-                                  port=configs.remote.union.redis.dispatcher_nearby.port,
-                                  db=configs.remote.union.redis.dispatcher_nearby.db)
+    'token': ExtendRedis(ip=configs.remote.union.redis.token.host,
+                          port=configs.remote.union.redis.token.port,
+                          db=configs.remote.union.redis.token.db)
 })
 
 # redis = DictModel({

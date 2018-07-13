@@ -460,7 +460,8 @@ function tableReset(url) {
                     },
                     {
                         field: "booking_line",
-                      //  title: "接单线路"
+                        title: "接单线路",
+                        width:280
                     },
                     {
                         field: "booking_time",
@@ -561,7 +562,7 @@ function popupRender(url) {
                     {
                         field: "usual_region",
                         title: "常驻地",
-                        width:300
+                        width:200
                     },
                     {
                         field: "locations",
