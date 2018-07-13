@@ -10,3 +10,4 @@ from server.resources.weather import *
 from server.resources.order import *
 from server.resources.transport import *
 from server.resources.map import *
+from server.resources.price import *

@@ -1,3 +1,4 @@
+from server import log
 from server.utils.constant import vehicle_id_name
 
 
@@ -26,16 +27,29 @@ class TransportRadarModel(object):
 
         vehicle_cmd = """
         SELECT
+            vehicle.from_province_id,
+            vehicle.from_city_id,
+            vehicle.from_county_id,
+            vehicle.to_province_id,
+            vehicle.to_city_id,
+            vehicle.to_county_id,
             COUNT(1) vehicle_count
         FROM
-            tb_inf_user
-            INNER JOIN tb_inf_user_login USING ( user_id ) 
-        WHERE
-            {vehicle_sql}
-            AND tb_inf_user_login.last_login_time >= :start_time 
-            AND tb_inf_user_login.last_login_time < :end_time
-            AND tb_inf_user.vehicle_length_id != ''
-            AND vehicle_length_id LIKE "%%{vehicle_id}%%"
+            `tb_inf_transport_vehicles` vehicle
+            LEFT JOIN tb_inf_user user USING(user_id)
+            WHERE
+            1=1
+            AND user.last_login_time >= :start_time 
+            AND user.last_login_time < :end_time
+            AND vehicle.vehicle_length_id != ''
+            AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%"
+            GROUP BY
+            vehicle.from_province_id,
+            vehicle.from_city_id,
+            vehicle.from_county_id,
+            vehicle.to_province_id,
+            vehicle.to_city_id,
+            vehicle.to_county_id;
         """
 
         order_cmd = """
@@ -61,20 +75,30 @@ class TransportRadarModel(object):
         order_sql = """ 1=1 """
 
         # 地区
-        region = ' AND 1=1 '
+        goods_region = ' AND 1=1 '
+        vehicle_region = ' AND 1=1 '
         order_region = ' AND 1=1 '
         if params['region_id']:
             if isinstance(params['region_id'], int):
-                region = ' AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
+                goods_region = ' AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
+                vehicle_region = ' AND (vehicle.from_province_id = %(region_id)s OR vehicle.from_city_id = %(region_id)s OR vehicle.from_county_id = %(region_id)s OR vehicle.from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
                 order_region = ' AND (shb_orders.from_province_id = %(region_id)s OR shb_orders.from_city_id = %(region_id)s OR shb_orders.from_county_id = %(region_id)s OR shb_orders.from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
             elif isinstance(params['region_id'], list):
-                region = '''
+                goods_region = '''
                         AND (
                         from_province_id IN (%(region_id)s)
                         OR from_city_id IN (%(region_id)s)
                         OR from_county_id IN (%(region_id)s)
                         OR from_town_id IN (%(region_id)s)
                         ) ''' % {'region_id': ','.join(params['region_id'])}
+                vehicle_region = '''
+                        AND (
+                        vehicle.from_province_id IN (%(region_id)s)
+                        OR vehicle.from_city_id IN (%(region_id)s)
+                        OR vehicle.from_county_id IN (%(region_id)s)
+                        OR vehicle.from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
+
                 order_region = '''
                         AND (
                         shb_orders.from_province_id IN (%(region_id)s)
@@ -83,8 +107,8 @@ class TransportRadarModel(object):
                         OR shb_orders.from_town_id IN (%(region_id)s)
                         ) ''' % {'region_id': ','.join(params['region_id'])}
 
-        goods_sql += region
-        vehicle_sql += region
+        goods_sql += goods_region
+        vehicle_sql += vehicle_region
         order_sql += order_region
 
         # 同城/跨城
@@ -116,43 +140,43 @@ class TransportRadarModel(object):
         # 出发地
         if params.get('from_province_id'):
             goods_sql += """ AND from_province_id = %d """ % params.get('from_province_id')
-            vehicle_sql += """ AND from_province_id = %d """ % params.get('from_province_id')
+            vehicle_sql += """ AND vehicle.from_province_id = %d """ % params.get('from_province_id')
             order_sql += """ AND shb_orders.from_province_id = %d """ % params.get('from_province_id')
 
         if params.get('from_city_id'):
             goods_sql += """ AND from_city_id = %d """ % params.get('from_city_id')
-            vehicle_sql += """ AND from_city_id = %d """ % params.get('from_city_id')
+            vehicle_sql += """ AND vehicle.from_city_id = %d """ % params.get('from_city_id')
             order_sql += """ AND shb_orders.from_city_id = %d """ % params.get('from_city_id')
 
         if params.get('from_county_id'):
             goods_sql += """ AND from_county_id = %d """ % params.get('from_county_id')
-            vehicle_sql += """ AND from_county_id = %d """ % params.get('from_county_id')
+            vehicle_sql += """ AND vehicle.from_county_id = %d """ % params.get('from_county_id')
             order_sql += """ AND shb_orders.from_county_id = %d """ % params.get('from_county_id')
 
         if params.get('from_town_id'):
             goods_sql += """ AND from_town_id = %d """ % params.get('from_town_id')
-            vehicle_sql += """ AND from_town_id = %d """ % params.get('from_town_id')
+            vehicle_sql += """ AND vehicle.from_town_id = %d """ % params.get('from_town_id')
             order_sql += """ AND shb_orders.from_town_id = %d """ % params.get('from_town_id')
 
         # 目的地
         if params.get('to_province_id'):
             goods_sql += """ AND to_province_id = %d """ % params.get('to_province_id')
-            # vehicle_sql += """ AND to_province_id = %d """ % params.get('to_province_id')
+            vehicle_sql += """ AND vehicle.to_province_id = %d """ % params.get('to_province_id')
             order_sql += """ AND shb_orders.to_province_id = %d """ % params.get('to_province_id')
 
         if params.get('to_city_id'):
             goods_sql += """ AND to_city_id = %d """ % params.get('to_city_id')
-            # vehicle_sql += """ AND to_city_id = %d """ % params.get('to_city_id')
+            vehicle_sql += """ AND vehicle.to_city_id = %d """ % params.get('to_city_id')
             order_sql += """ AND shb_orders.to_city_id = %d """ % params.get('to_city_id')
 
         if params.get('to_county_id'):
             goods_sql += """ AND to_county_id = %d """ % params.get('to_county_id')
-            # vehicle_sql += """ AND to_county_id = %d """ % params.get('to_county_id')
+            vehicle_sql += """ AND vehicle.to_county_id = %d """ % params.get('to_county_id')
             order_sql += """ AND shb_orders.to_county_id = %d """ % params.get('to_county_id')
 
         if params.get('to_town_id'):
             goods_sql += """ AND to_town_id = %d """ % params.get('to_town_id')
-            # vehicle_sql += """ AND to_town_id = %d """ % params.get('to_town_id')
+            vehicle_sql += """ AND vehicle.to_town_id = %d """ % params.get('to_town_id')
             order_sql += """ AND shb_orders.to_town_id = %d """ % params.get('to_town_id')
 
         kwargs = {
@@ -166,8 +190,12 @@ class TransportRadarModel(object):
         # 获取每种常用车型的数量
         vehicles_ret = []
         for i in vehicle_id_list:
-            vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)['vehicle_count']
-            vehicles_ret.append(vehicle_count)
+            try:
+                vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)['vehicle_count']
+                vehicles_ret.append(vehicle_count)
+            except Exception as e:
+                log.error('Error:{}'.format(e))
+                vehicles_ret.append(0)
 
         goods_count = cursor1.query(goods_cmd.format(goods_sql=goods_sql), kwargs)
         order_count = cursor1.query(order_cmd.format(order_sql=order_sql), kwargs)
@@ -248,23 +276,28 @@ class TransportListModel(object):
 
         cmd2 = """
         SELECT
-            from_province_id,
-            from_city_id,
-            from_county_id,
+            vehicle.from_province_id,
+            vehicle.from_city_id,
+            vehicle.from_county_id,
+            vehicle.to_province_id,
+            vehicle.to_city_id,
+            vehicle.to_county_id,
             COUNT(1) vehicle_count
         FROM
-            tb_inf_user
-            INNER JOIN tb_inf_user_login USING ( user_id ) 
-        WHERE
-            {inner_vehicle_fetch_where}
-            AND tb_inf_user_login.last_login_time >= :start_time 
-            AND tb_inf_user_login.last_login_time < :end_time
-            AND tb_inf_user.vehicle_length_id != ''
-            AND from_province_id != 0 AND from_city_id != 0 AND from_county_id != 0
-            GROUP BY 
-            from_province_id,
-            from_city_id,
-            from_county_id
+            `tb_inf_transport_vehicles` vehicle
+            LEFT JOIN tb_inf_user user USING(user_id)
+            WHERE
+            1=1
+            AND user.last_login_time >= :start_time 
+            AND user.last_login_time < :end_time
+            AND vehicle.vehicle_length_id != ''
+            GROUP BY
+            vehicle.from_province_id,
+            vehicle.from_city_id,
+            vehicle.from_county_id,
+            vehicle.to_province_id,
+            vehicle.to_city_id,
+            vehicle.to_county_id;
         """
 
         # 地区权限
@@ -288,29 +321,29 @@ class TransportListModel(object):
         # 出发地
         if params['from_county_id']:
             inner_good_order_fetch_where += ' AND sg.from_county_id = %d ' % params['from_county_id']
-            inner_vehicle_fetch_where += ' AND from_county_id = %d ' % params['from_county_id']
+            inner_vehicle_fetch_where += ' AND vehicle.from_county_id = %d ' % params['from_county_id']
         if params['from_city_id']:
             inner_good_order_fetch_where += ' AND sg.from_city_id = %d ' % params['from_city_id']
-            inner_vehicle_fetch_where += ' AND from_city_id = %d ' % params['from_city_id']
+            inner_vehicle_fetch_where += ' AND vehicle.from_city_id = %d ' % params['from_city_id']
         if params['from_province_id']:
             inner_good_order_fetch_where += ' AND sg.from_province_id = %d ' % params['from_province_id']
-            inner_vehicle_fetch_where += ' AND from_province_id = %d ' % params['from_province_id']
+            inner_vehicle_fetch_where += ' AND vehicle.from_province_id = %d ' % params['from_province_id']
 
         # 目的地
         if params['to_county_id']:
             inner_good_order_fetch_where += ' AND sg.to_county_id = %d ' % params['to_county_id']
-            # inner_vehicle_fetch_where += ' AND to_county_id = %d ' % params['to_county_id']
+            inner_vehicle_fetch_where += ' AND vehicle.to_county_id = %d ' % params['to_county_id']
         if params['to_city_id']:
             inner_good_order_fetch_where += ' AND sg.to_city_id = %d ' % params['to_city_id']
-            # inner_vehicle_fetch_where += ' AND to_city_id = %d ' % params['to_city_id']
+            inner_vehicle_fetch_where += ' AND vehicle.to_city_id = %d ' % params['to_city_id']
         if params['to_province_id']:
             inner_good_order_fetch_where += ' AND sg.to_province_id = %d ' % params['to_province_id']
-            # inner_vehicle_fetch_where += ' AND to_province_id = %d ' % params['to_province_id']
+            inner_vehicle_fetch_where += ' AND vehicle.to_province_id = %d ' % params['to_province_id']
 
         # 车长要求
         if params['vehicle_length']:
             inner_good_order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
-            inner_vehicle_fetch_where += """ AND vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_id_name.get(params['vehicle_length'], '小面包车'))
+            inner_vehicle_fetch_where += """ AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_id_name.get(params['vehicle_length'], '小面包车'))
 
         # 业务类型
         if params['business']:
@@ -336,7 +369,9 @@ class TransportListModel(object):
         vehicle_list = cursor2.query(cmd2.format(inner_vehicle_fetch_where=inner_vehicle_fetch_where), kwargs)
         for i in transport_list:
             vehicle_count = [j['vehicle_count'] for j in vehicle_list if
-                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id'] and i['from_county_id'] == j['from_county_id']]
+                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id'] and i['from_county_id'] == j['from_county_id']
+                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id'] and i['to_county_id'] == j['to_county_id']
+                             ]
             if vehicle_count:
                 i['vehicle_count'] = vehicle_count[0]
             else:

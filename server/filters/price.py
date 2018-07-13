@@ -6,7 +6,7 @@ class PriceTrend(object):
 
     @staticmethod
     @make_decorator
-    def get_result(data):
+    def get_result(params, data):
         # TODO 过滤参数
 
-        return make_result(APIStatus.Ok), HTTPStatus.Ok
+        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok

@@ -9,4 +9,4 @@ class PriceTrend(object):
     @make_decorator
     def get_data(params):
         data = PriceTrendModel.get_data(db.read_db, params)
-        return Response(data=data)
+        return Response(params=params, data=data)
