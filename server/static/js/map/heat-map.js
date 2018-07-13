@@ -41,8 +41,9 @@ var mapdata = [];
 var data_ano = [];
 $('.main-content-right').addClass('animated fadeIn');
 var special = ["北京", "天津", "上海", "重庆", "香港", "澳门"];
- $('#date_show_one').val(String(common.getNowFormatDate()[2]));
+$('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+
 function dataInit() {
     layui.use(['form', 'layer'], function () {
         var layer = layui.layer;
@@ -96,16 +97,9 @@ function dataInit() {
                     var option = {
                         backgroundColor: '#f6f6f6',
                         title: {
-                            text: '数据统计地图',
+                            text: null,
                             subtext: null,
                             link: null,
-                            left: '30%',
-                            textStyle: {
-                                fontSize: 14,
-                                fontWeight: 'normal',
-                                fontFamily: "Microsoft YaHei",
-                                color: 'red'
-                            },
                             subtextStyle: null
                         }
                         , tooltip: {
@@ -205,8 +199,8 @@ function dataInit() {
                             filter: area_select == undefined ? 0 : area_select,
                             field: map_select == undefined ? 0 : map_select,
                             region_id: provinces[params.name],
-                            start_time:start_time,
-                            end_time:end_time
+                            start_time: start_time,
+                            end_time: end_time
                         };
                         http.ajax.get(true, false, url, data_province, http.ajax.CONTENT_TYPE_2, function (res) {
                             if (res.status == 100000) {
@@ -252,8 +246,8 @@ function dataInit() {
                                                 filter: area_select == undefined ? 0 : area_select,
                                                 field: map_select == undefined ? 0 : map_select,
                                                 region_id: cityMap[params.name],
-                                                start_time:start_time,
-                                                end_time:end_time
+                                                start_time: start_time,
+                                                end_time: end_time
                                             };
                                             http.ajax.get(true, false, url, city_data, http.ajax.CONTENT_TYPE_2, function (res) {
                                                 if (res.status == 100000) {
@@ -289,6 +283,14 @@ function dataInit() {
                                         });
                                     }
                                 } else {
+                                   // console.log(province_reset)
+                                    var province_length = province_reset.length;
+                                    var province_arr = [];
+                                    for (var l = 0; l < province_length; l++) {
+                                        province_arr.push(province_reset[l].name)
+                                    }
+                                    console.log(province_arr)
+                                    option.yAxis.data=province_arr
                                     pageSet.renderMap('china', province_reset);
                                 }
                             } else {
