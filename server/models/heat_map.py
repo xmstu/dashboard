@@ -18,6 +18,7 @@ class HeatMapModel(object):
             `tb_inf_user` 
         WHERE
             {fetch_where} 
+            AND is_deleted = 0
             AND create_time >= :start_time 
             AND create_time < :end_time
             GROUP BY

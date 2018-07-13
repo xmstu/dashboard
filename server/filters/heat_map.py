@@ -24,8 +24,8 @@ class HeatMap(object):
                     detail['name'] = name
 
                 all_data = json.loads(json.dumps(user_list, default=ExtendHandler.handler_to_float))
-                all_data = sorted(all_data, key=lambda i: i['count'])
-                max_value, min_value = all_data[-1]['count'], all_data[0]['count'] if len(all_data) > 0 else (0, 0)
+                all_data = sorted(all_data, key=lambda i: -i['count'])
+                max_value, min_value = all_data[0]['count'], all_data[-1]['count'] if len(all_data) > 0 else (0, 0)
 
                 value = d_user.get(params['field'])
                 # 构造map_data
@@ -64,8 +64,8 @@ class HeatMap(object):
                 # 根据点击的字段排序,获取最大最小值
                 value = d_goods.get(params['field'])
 
-                all_data = sorted(all_data, key=lambda i: i[value])
-                max_value, min_value = all_data[-1][value], all_data[0][value] if len(all_data) > 0 else (0, 0)
+                all_data = sorted(all_data, key=lambda i: -i[value])
+                max_value, min_value = all_data[0][value], all_data[-1][value] if len(all_data) > 0 else (0, 0)
 
                 # 构造map_data
                 map_data = []
@@ -101,8 +101,8 @@ class HeatMap(object):
                 all_data = json.loads(json.dumps(vehicle_list, default=ExtendHandler.handler_to_float))
                 # 根据点击的字段排序,获取最大最小值
                 value = d_vehicle.get(params['field'])
-                all_data = sorted(all_data, key=lambda i: i[value])
-                max_value, min_value = all_data[-1][value], all_data[0][value] if len(all_data) > 0 else (0, 0)
+                all_data = sorted(all_data, key=lambda i: -i[value])
+                max_value, min_value = all_data[0][value], all_data[-1][value] if len(all_data) > 0 else (0, 0)
                 # 构造map_data
                 map_data = []
                 toolTipData = []
