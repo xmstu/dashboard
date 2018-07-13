@@ -191,8 +191,11 @@ class TransportRadarModel(object):
         vehicles_ret = []
         for i in vehicle_id_list:
             try:
-                vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)['vehicle_count']
-                vehicles_ret.append(vehicle_count)
+                vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)
+                if vehicle_count:
+                    vehicles_ret.append(vehicle_count['vehicle_count'])
+                else:
+                    vehicles_ret.append(0)
             except Exception as e:
                 log.error('Error:{}'.format(e))
                 vehicles_ret.append(0)

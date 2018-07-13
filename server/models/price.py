@@ -1,11 +1,11 @@
 import time
+from server.utils.extend import data_price
 
 
 class PriceTrendModel(object):
 
     @staticmethod
     def get_data(cursor, params):
-
         fetch_where = """ 1=1 """
 
         command = """
@@ -13,17 +13,20 @@ class PriceTrendModel(object):
             FROM_UNIXTIME(so.create_time,"%%Y-%%m-%%d") create_time,
             MAX(price) max_price,
             MIN(price) min_price,
-            AVG(sg.mileage_total) avg_price
+            AVG(sg.mileage_total) avg_mileage
         FROM
-        shb_orders so INNER JOIN shf_goods sg ON so.goods_id = sg.id
-        LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = sg.id 
-        AND shf_goods_vehicles.vehicle_attribute = 3 
-        AND shf_goods_vehicles.is_deleted = 0
+            shb_orders so 
+            INNER JOIN shf_goods sg ON so.goods_id = sg.id
+            LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = sg.id 
+            AND shf_goods_vehicles.vehicle_attribute = 3 
+            AND shf_goods_vehicles.is_deleted = 0
         WHERE
         {fetch_where}
         -- 时间
         AND so.create_time >= :start_time 
         AND so.create_time < :end_time
+        -- 车长
+        AND shf_goods_vehicles.`name` = ":vehicle_length"
         GROUP BY
             FROM_UNIXTIME(so.create_time,"%%Y-%%m-%%d")
         """
@@ -100,10 +103,6 @@ class PriceTrendModel(object):
         if params.get('max_mileage'):
             fetch_where += """ AND sg.mileage_total < {max_mileage} """.format(max_mileage=params['max_mileage'])
 
-        # 车长
-        if params.get('vehicle_length'):
-            fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
-
         # 支付方式
         if params.get('pay_method'):
             fetch_where += """
@@ -113,12 +112,32 @@ class PriceTrendModel(object):
             )
             """.format(pay_method=params['pay_method'])
 
-        # 时间
+        # 时间和车长
         kwargs = {
             'start_time': params.get('start_time', time.time() - 86400 * 7),
-            'end_time': params.get('end_time', time.time() - 86400)
+            'end_time': params.get('end_time', time.time() - 86400),
+            'vehicle_length': params.get('vehicle_length', '小面包车')
         }
 
-        data = cursor.query(command.format(fetch_where=fetch_where), kwargs)
+        price_trend = cursor.query(command.format(fetch_where=fetch_where), kwargs)
+
+        # 获取价格基准线
+        if price_trend:
+            recommend_price_instance = data_price[params['vehicle_length']]
+            if params.get('from_province_id') and params.get('to_province_id'):
+                recommend_price_one = recommend_price_instance.get_fast_price(price_trend[0]['avg_mileage'])
+                recommend_price_two = 0
+            else:
+                recommend_price_one = recommend_price_instance.get_fast_price(params['min_mileage'])
+                recommend_price_two = recommend_price_instance.get_fast_price(params['max_mileage'])
+        else:
+            recommend_price_one = 0
+            recommend_price_two = 0
+
+        data = {
+            "price_trend": price_trend,
+            "recommend_price_one": recommend_price_one,
+            "recommend_price_two": recommend_price_two,
+        }
 
         return data

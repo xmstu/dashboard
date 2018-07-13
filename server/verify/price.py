@@ -23,7 +23,7 @@ class PriceTrend(object):
             params['to_county_id'] = int(params.get('to_county_id') or 0)
             params['min_mileage'] = int(params.get('min_mileage') or 0)
             params['max_mileage'] = int(params.get('max_mileage') or 0)
-            params['vehicle_length'] = str(params.get('vehicle_length') or '')
+            params['vehicle_length'] = str(params.get('vehicle_length') or '小面包车')
             params['pay_method'] = int(params.get('pay_method') or 0)
             params['start_time'] = int(params.get('start_time') or time.time() - 8*86400)
             params['end_time'] = int(params.get('end_time') or time.time() - 86400)
