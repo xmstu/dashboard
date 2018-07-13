@@ -460,7 +460,8 @@ function tableReset(url) {
                     },
                     {
                         field: "booking_line",
-                      //  title: "接单线路"
+                        title: "接单线路",
+                        width:240
                     },
                     {
                         field: "booking_time",
