@@ -41,6 +41,8 @@ class TransportRadarModel(object):
             1=1
             AND user.last_login_time >= :start_time 
             AND user.last_login_time < :end_time
+            AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
+            AND vehicle.create_time < FROM_UNIXTIME(:end_time)
             AND vehicle.vehicle_length_id != ''
             AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%"
             GROUP BY
@@ -293,6 +295,8 @@ class TransportListModel(object):
             1=1
             AND user.last_login_time >= :start_time 
             AND user.last_login_time < :end_time
+            AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
+            AND vehicle.create_time < FROM_UNIXTIME(:end_time)
             AND vehicle.vehicle_length_id != ''
             GROUP BY
             vehicle.from_province_id,

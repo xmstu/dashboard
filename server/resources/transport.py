@@ -16,6 +16,7 @@ class TransportRadar(Resource):
     @operations.TransportRadar.get_trend(params=dict)
     @verify.TransportRadar.check_params(params=dict)
     def get():
+        """运力雷达"""
         resp = Response(params=get_all_arg())
 
         return resp
