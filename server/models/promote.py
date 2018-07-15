@@ -66,7 +66,7 @@ class PromoteEffectList(object):
         SELECT
         
         referrer.*,
-        COUNT(DISTINCT users.user_id) AS user_count,
+        COUNT(DISTINCT tb_inf_user.user_id) AS user_count,
         0 AS wake_up_count,
         COALESCE(SUM(goods_count_SH), 0) AS goods_count_SH,
         COALESCE(SUM(goods_count_LH), 0) AS goods_count_LH,
@@ -93,11 +93,8 @@ class PromoteEffectList(object):
         WHERE tb_inf_promoter.is_deleted = 0
         AND tb_inf_promoter.mobile IN (%(promote_mobile)s)) AS referrer
         -- 用户信息
-        LEFT JOIN (
-        SELECT *
-        FROM tb_inf_user
-        WHERE 1=1 %(fetch_where)s
-        ) AS users ON referrer.mobile = users.referrer_mobile
+        LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
+        %(fetch_where)s
         GROUP BY referrer.mobile
         '''
 
