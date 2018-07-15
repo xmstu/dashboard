@@ -115,9 +115,9 @@ class UserList(object):
                 fetch_where += 'AND from_channel = "%s" ' % params['from_channel']
             # 推荐注册
             if params['is_referenced'] == 1:
-                fetch_where += 'AND referrer_mobile != "" '
+                fetch_where += 'AND referrer_mobile '
             elif params['is_referenced'] == 2:
-                fetch_where += 'AND referrer_mobile = "" '
+                fetch_where += 'AND NOT referrer_mobile '
             # 注册角色
             if params['role_type'] == 1:
                 fetch_where += 'AND user_type = 1 '
