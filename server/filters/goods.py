@@ -7,8 +7,7 @@ from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import build_result, APIStatus, HTTPStatus, make_result
-from server.utils.date_format import get_date_aggregate
-from server.utils.extend import get_struct_data, get_xAxis
+from server.utils.extend import get_struct_data
 
 
 class GoodsList(object):
@@ -40,9 +39,9 @@ class GoodsList(object):
                 # 初次下单
                 mobile = detail['mobile']
                 if detail['shf_goods_counts'] < 3:
-                    mobile = detail['mobile'] + '\n' + detail.get('user_name', '') + '\n新用户'
+                    mobile = mobile + '\n' + detail.get('user_name', '') + '\n新用户'
                 else:
-                    mobile = detail['mobile'] + '\n' + detail.get('user_name', '') + '\n'
+                    mobile = mobile + '\n' + detail.get('user_name', '') + '\n'
 
                 # 构造运费
                 price = '货主出价:%(price_expect)s元%(price_addition)s\n系统价:%(price_recommend)s元' % \
@@ -188,12 +187,10 @@ class GoodsDistributionTrend(object):
         recv_order = data['recv_order']
         cancel_order = data['cancel_order']
 
-        goods_user_count_series = get_struct_data(all_order, params, 'goods_user_count')
-        wait_order_series = get_struct_data(wait_order, params, 'count')
-        recv_order_series = get_struct_data(recv_order, params, 'count')
-        cancel_order_series = get_struct_data(cancel_order, params, 'count')
-
-        xAxis = get_xAxis(params['periods'], params['start_time'], params['end_time'])
+        xAxis, goods_user_count_series = get_struct_data(all_order, params, 'goods_user_count')
+        _, wait_order_series = get_struct_data(wait_order, params, 'count')
+        _, recv_order_series = get_struct_data(recv_order, params, 'count')
+        _, cancel_order_series = get_struct_data(cancel_order, params, 'count')
 
         ret = {
             'xAxis': xAxis,

@@ -175,7 +175,6 @@ class HeatMapModel(object):
 
     @staticmethod
     def get_vehicle(cursor1, cursor2, params, region_level):
-        fields = """"""
 
         fetch_where1 = """ 1=1 """
         fetch_where2 = """ 1=1 """
@@ -277,7 +276,6 @@ class HeatMapModel(object):
         data = {
             'vehicle_list': ret1,
             'region_group': region_group,
-            # 'ret2': ret2
         }
 
         return data

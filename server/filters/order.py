@@ -6,7 +6,7 @@ from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus, build_result
-from server.utils.extend import ExtendHandler, get_struct_data, get_xAxis, timestamp2date
+from server.utils.extend import ExtendHandler, get_struct_data, timestamp2date
 
 
 class OrdersReceivedStatistics(object):
@@ -14,16 +14,14 @@ class OrdersReceivedStatistics(object):
     @staticmethod
     @make_decorator
     def get_result(data, params):
-        complete_order_count_series = get_struct_data(data['complete_order'], params, 'order_counts')
-        complete_order_sum_price_series = get_struct_data(data['complete_order'], params, 'order_sum_price')
+        xAxis, complete_order_count_series = get_struct_data(data['complete_order'], params, 'order_counts')
+        _, complete_order_sum_price_series = get_struct_data(data['complete_order'], params, 'order_sum_price')
 
-        pending_order_count_series = get_struct_data(data['pending_order'], params, 'order_counts')
-        pending_order_sum_price_series = get_struct_data(data['pending_order'], params, 'order_sum_price')
+        _, pending_order_count_series = get_struct_data(data['pending_order'], params, 'order_counts')
+        _, pending_order_sum_price_series = get_struct_data(data['pending_order'], params, 'order_sum_price')
 
-        cancel_order_count_series = get_struct_data(data['cancel_order'], params, 'order_counts')
-        cancel_order_sum_price_series = get_struct_data(data['cancel_order'], params, 'order_sum_price')
-
-        xAxis = get_xAxis(params['periods'], params['start_time'], params['end_time'])
+        _, cancel_order_count_series = get_struct_data(data['cancel_order'], params, 'order_counts')
+        _, cancel_order_sum_price_series = get_struct_data(data['cancel_order'], params, 'order_sum_price')
 
         complete_order_count_series = json.loads(json.dumps(complete_order_count_series, default=ExtendHandler.handler_to_float))
         pending_order_count_series = json.loads(json.dumps(pending_order_count_series, default=ExtendHandler.handler_to_float))

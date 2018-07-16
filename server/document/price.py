@@ -13,5 +13,4 @@ price_trend_param = api.doc(params={
     "pay_method": "1.线上支付;2.线下支付",
     "start_time": "开始时间",
     "end_time": "结束时间",
-    "periods": "1.按日;2.按周;3.按月",
 }, description='价格趋势统计')
