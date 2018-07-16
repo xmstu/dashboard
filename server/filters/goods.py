@@ -7,8 +7,7 @@ from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import build_result, APIStatus, HTTPStatus, make_result
-from server.utils.date_format import get_date_aggregate
-from server.utils.extend import get_struct_data, get_xAxis
+from server.utils.extend import get_struct_data
 
 
 class GoodsList(object):
@@ -40,9 +39,9 @@ class GoodsList(object):
                 # 初次下单
                 mobile = detail['mobile']
                 if detail['shf_goods_counts'] < 3:
-                    mobile = detail['mobile'] + '\n' + detail.get('user_name', '') + '\n新用户'
+                    mobile = mobile + '\n' + detail.get('user_name', '') + '\n新用户'
                 else:
-                    mobile = detail['mobile'] + '\n' + detail.get('user_name', '') + '\n'
+                    mobile = mobile + '\n' + detail.get('user_name', '') + '\n'
 
                 # 构造运费
                 price = '货主出价:%(price_expect)s元%(price_addition)s\n系统价:%(price_recommend)s元' % \
@@ -57,17 +56,23 @@ class GoodsList(object):
                 node_id = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
                                                   detail.get('from_county_id', 0))
 
-                # 货源类型
-                if detail['haul_dist'] == 1 and detail['type'] == 1:
+                # 货源距离类型
+                if detail['haul_dist'] == 1:
                     goods_type = '同城'
-                elif detail['haul_dist'] == 2 and detail['goods_level'] == 2 and detail['type'] == 1:
-                    goods_type = '跨城定价'
-                elif detail['haul_dist'] == 2 and detail['goods_level'] == 1 and detail['type'] == 1:
-                    goods_type = '跨城议价'
+                elif detail['haul_dist'] == 2:
+                    goods_type = '跨城'
                 elif detail['type'] == 2:
                     goods_type = '零担'
                 else:
                     goods_type = '未知货源类型'
+
+                # 货源距离类型
+                if detail['is_system_price'] == 0:
+                    goods_type += '议价'
+                elif detail['is_system_price'] == 1:
+                    goods_type += '一口价'
+                else:
+                    goods_type += ''
 
                 # 构造货物规格
                 goods_standard = []
@@ -188,12 +193,10 @@ class GoodsDistributionTrend(object):
         recv_order = data['recv_order']
         cancel_order = data['cancel_order']
 
-        goods_user_count_series = get_struct_data(all_order, params, 'goods_user_count')
-        wait_order_series = get_struct_data(wait_order, params, 'count')
-        recv_order_series = get_struct_data(recv_order, params, 'count')
-        cancel_order_series = get_struct_data(cancel_order, params, 'count')
-
-        xAxis = get_xAxis(params['periods'], params['start_time'], params['end_time'])
+        xAxis, goods_user_count_series = get_struct_data(all_order, params, 'goods_user_count')
+        _, wait_order_series = get_struct_data(wait_order, params, 'count')
+        _, recv_order_series = get_struct_data(recv_order, params, 'count')
+        _, cancel_order_series = get_struct_data(cancel_order, params, 'count')
 
         ret = {
             'xAxis': xAxis,

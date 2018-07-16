@@ -6,7 +6,7 @@ from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus, build_result
-from server.utils.extend import ExtendHandler, get_struct_data, get_xAxis, timestamp2date
+from server.utils.extend import ExtendHandler, get_struct_data, timestamp2date
 
 
 class OrdersReceivedStatistics(object):
@@ -14,16 +14,14 @@ class OrdersReceivedStatistics(object):
     @staticmethod
     @make_decorator
     def get_result(data, params):
-        complete_order_count_series = get_struct_data(data['complete_order'], params, 'order_counts')
-        complete_order_sum_price_series = get_struct_data(data['complete_order'], params, 'order_sum_price')
+        xAxis, complete_order_count_series = get_struct_data(data['complete_order'], params, 'order_counts')
+        _, complete_order_sum_price_series = get_struct_data(data['complete_order'], params, 'order_sum_price')
 
-        pending_order_count_series = get_struct_data(data['pending_order'], params, 'order_counts')
-        pending_order_sum_price_series = get_struct_data(data['pending_order'], params, 'order_sum_price')
+        _, pending_order_count_series = get_struct_data(data['pending_order'], params, 'order_counts')
+        _, pending_order_sum_price_series = get_struct_data(data['pending_order'], params, 'order_sum_price')
 
-        cancel_order_count_series = get_struct_data(data['cancel_order'], params, 'order_counts')
-        cancel_order_sum_price_series = get_struct_data(data['cancel_order'], params, 'order_sum_price')
-
-        xAxis = get_xAxis(params['periods'], params['start_time'], params['end_time'])
+        _, cancel_order_count_series = get_struct_data(data['cancel_order'], params, 'order_counts')
+        _, cancel_order_sum_price_series = get_struct_data(data['cancel_order'], params, 'order_sum_price')
 
         complete_order_count_series = json.loads(json.dumps(complete_order_count_series, default=ExtendHandler.handler_to_float))
         pending_order_count_series = json.loads(json.dumps(pending_order_count_series, default=ExtendHandler.handler_to_float))
@@ -87,17 +85,23 @@ class OrderList(object):
                     volume = str(int(detail.get('volume', 0))) + 'm³'
                     goods_standard.append(volume)
 
-                # 货源类型
-                if detail['haul_dist'] == 1 and detail['type'] == 1:
+                # 货源距离类型
+                if detail['haul_dist'] == 1:
                     goods_type = '同城'
-                # elif detail['haul_dist'] == 2 and detail['goods_level'] == 2 and detail['type'] == 1:
-                #     goods_type = '跨城定价'
-                elif detail['haul_dist'] == 2 and detail['goods_level'] == 1 and detail['type'] == 1:
-                    goods_type = '跨城议价'
+                elif detail['haul_dist'] == 2:
+                    goods_type = '跨城'
                 elif detail['type'] == 2:
                     goods_type = '零担'
                 else:
                     goods_type = '未知货源类型'
+
+                # 货源距离类型
+                if detail['is_system_price'] == 0:
+                    goods_type += '议价'
+                elif detail['is_system_price'] == 1:
+                    goods_type += '一口价'
+                else:
+                    goods_type += ''
 
                 # 出发地-目的地
                 from_address = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),

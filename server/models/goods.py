@@ -18,6 +18,7 @@ class GoodsList(object):
                 shf_goods.volume,
                 shf_goods.type,
                 shf_goods.goods_level,
+                shf_goods.is_system_price,
                 shf_goods.haul_dist,
                 shf_goods.from_province_id,
                 shf_goods.from_city_id,
@@ -144,16 +145,24 @@ class GoodsList(object):
         if params['to_province_id']:
             fetch_where += ' AND shf_goods.to_province_id = %s ' % params['to_province_id']
 
-        # 货源类型
+        # 货源类型:同城/跨城/零担
         if params['goods_type']:
             fetch_where += """
                 AND(
-                ( {goods_type}=1 AND shf_goods.haul_dist = 1 AND shf_goods.type = 1) OR
-                ( {goods_type}=2 AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 2 AND shf_goods.type = 1) OR
-                ( {goods_type}=3 AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 1 AND shf_goods.type = 1) OR
-                ( {goods_type}=4 AND shf_goods.type = 2)
+                ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
+                ( {goods_type}=2 AND shf_goods.haul_dist = 2) OR
+                ( {goods_type}=3 AND shf_goods.type = 2)
                 )
             """.format(goods_type=params['goods_type'])
+
+        # 货源类型:议价/一口价
+        if params['goods_price_type']:
+            fetch_where += """
+            AND (
+            ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+            ({goods_price_type}=2 AND (shf_goods.is_system_price = 1 OR shf_goods.goods_level = 2))
+            )
+            """.format(goods_price_type=params['goods_price_type'])
 
         # 货源状态
         if params['goods_status']:
@@ -346,7 +355,10 @@ class CancelReasonList(object):
                     -- 同城
                     ({goods_type} = 1 AND haul_dist = 1) OR
                     -- 跨城
-                    ({goods_type} = 2 AND haul_dist = 2)) """.format(goods_type=params['goods_type'])
+                    ({goods_type} = 2 AND haul_dist = 2)) OR
+                    -- 零担
+                    ({goods_type} = 3 AND type = 2)
+                    """.format(goods_type=params['goods_type'])
 
         cancel_list_dict = cursor.query(command.format(fetch_where=fetch_where))
 

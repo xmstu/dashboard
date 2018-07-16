@@ -144,7 +144,8 @@ class CancelOrderReasonModel(object):
             fetch_where += """
             AND (
             ({goods_type}=1 AND shf_goods.haul_dist = 1) OR
-            ({goods_type}=2 AND shf_goods.haul_dist = 2)
+            ({goods_type}=2 AND shf_goods.haul_dist = 2) OR
+            ({goods_type}=3 AND shf_goods.type = 2)
             )
             """.format(goods_type=params['goods_type'])
 
@@ -192,6 +193,7 @@ class OrderListModel(object):
                 sg.volume,
                 sg.type,
                 sg.goods_level,
+                sg.is_system_price,
                 sg.haul_dist,
                 so.from_province_id,
                 so.from_city_id,
@@ -353,16 +355,24 @@ class OrderListModel(object):
             )
             """.format(order_status=params['order_status'])
 
-        # 订单类型
+        # 订单类型:同城/跨城/零担
         if params.get('order_type'):
             fetch_where += """
             AND (
-            ( {order_type}=1 AND sg.haul_dist = 1 AND sg.type = 1) OR
-            ( {order_type}=2 AND sg.haul_dist = 2 AND sg.goods_level = 2 AND sg.type = 1) OR
-            ( {order_type}=3 AND sg.haul_dist = 2 AND sg.goods_level = 1 AND sg.type = 1) OR
-            ( {order_type}=4 AND sg.type = 2)
+            ( {order_type}=1 AND sg.haul_dist = 1) OR
+            ( {order_type}=2 AND sg.haul_dist = 2) OR
+            ( {order_type}=3 AND sg.type = 2)
             )
             """.format(order_type=params['order_type'])
+
+        # 订单类型:议价/一口价
+        if params.get('order_price_type'):
+            fetch_where += """
+            AND (
+            ({order_price_type}=1 AND sg.goods_level = 1) OR
+            ({order_price_type}=2 AND sg.is_system_price = 1)
+            )
+            """.format(order_price_type=params['order_price_type'])
 
         # 车长
         if params.get('vehicle_length'):

@@ -125,6 +125,7 @@ class CityOrderListModel(object):
             shf_goods.id,
             shf_goods.type,
             shf_goods.goods_level,
+            shf_goods.is_system_price,
             shf_goods.haul_dist,
             shf_goods.`name`,
             shf_goods.weight,
@@ -213,15 +214,24 @@ class CityOrderListModel(object):
 
         command = command.format(region=region)
 
-        # 货源类型
-        if params['goods_type'] == 1:
-            command += """ AND shf_goods.haul_dist = 1 AND shf_goods.type = 1 """
-        elif params['goods_type'] == 2:
-            command += """ AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 2 AND shf_goods.type = 1 """
-        elif params['goods_type'] == 3:
-            command += """ AND shf_goods.haul_dist = 2 AND shf_goods.goods_level = 1 AND shf_goods.type = 1 """
-        elif params['goods_type'] == 4:
-            command += """ AND shf_goods.type = 2 """
+        # 货源类型:同城/跨城/零担
+        if params['goods_type']:
+            command += """
+                    AND(
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 2) OR
+                    ( {goods_type}=3 AND shf_goods.type = 2)
+                    )
+                """.format(goods_type=params['goods_type'])
+
+        # 货源类型:议价/一口价
+        if params['goods_price_type']:
+            command += """
+                AND (
+                ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+                ({goods_price_type}=2 AND (shf_goods.is_system_price = 1 OR shf_goods.goods_level = 2))
+                )
+                """.format(goods_price_type=params['goods_price_type'])
 
         # 车长
         if params['vehicle_length']:

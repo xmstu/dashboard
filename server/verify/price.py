@@ -27,7 +27,6 @@ class PriceTrend(object):
             params['pay_method'] = int(params.get('pay_method') or 0)
             params['start_time'] = int(params.get('start_time') or time.time() - 8*86400)
             params['end_time'] = int(params.get('end_time') or time.time() - 86400)
-            params['periods'] = int(params.get('periods') or 1)
 
             # 当前权限下所有地区
             if sessionOperationClass.check():

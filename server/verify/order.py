@@ -93,6 +93,7 @@ class OrderList(object):
             params['to_town_id'] = int(params.get('to_town_id', None) or 0)
             params['order_status'] = int(params.get('order_status', None) or 0)
             params['order_type'] = int(params.get('order_type', None) or 0)
+            params['order_price_type'] = int(params.get('order_price_type', None) or 0)
             params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
             params['vehicle_type'] = int(params.get('vehicle_type', None) or 0)
             params['node_id'] = int(params.get('node_id', None) or 0)

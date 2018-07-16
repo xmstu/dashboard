@@ -51,6 +51,7 @@ class CityOrderList(object):
         # 通过params获取参数
         try:
             goods_type = int(params.get('goods_type', None) or 0)
+            goods_price_type = int(params.get('goods_price_type', None) or 0)
             vehicle_length = str(params.get('vehicle_length', None) or '')
             is_called = int(params.get('is_called', None) or 0)
             is_addition = int(params.get('is_addition', None) or 0)
@@ -64,6 +65,7 @@ class CityOrderList(object):
 
             params = {
                 "goods_type": goods_type,
+                "goods_price_type": goods_price_type,
                 "is_called": is_called,
                 "vehicle_length": vehicle_length,
                 "region_id": region_id,
