@@ -12,8 +12,8 @@ class VehicleModel(object):
             (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id) AS order_count,
             (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = 3) AS order_finished,
             (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = -1) AS order_cancel,
-            (SELECT `name` FROM shm_dictionary_items WHERE id = :length_id),
-            (SELECT `value` FROM shm_dictionary_items WHERE id = :length_id)
+            (SELECT `name` FROM shm_dictionary_items WHERE id = :length_id) AS `name`,
+            (SELECT `value` FROM shm_dictionary_items WHERE id = :length_id) AS `value`
             FROM shu_users
             WHERE id = :user_id '''
 
@@ -22,7 +22,7 @@ class VehicleModel(object):
                 'length_id': length_id
             })
 
-            return result if result else ''
+            return result if result else {}
         except Exception as e:
             log.error('获取车长名称出错: [length_id: %s][e: %s]' % (length_id, e), exc_info=True)
 
