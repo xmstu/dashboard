@@ -292,7 +292,7 @@ class TransportListModel(object):
             `tb_inf_transport_vehicles` vehicle
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
-            1=1
+            {inner_vehicle_fetch_where}
             AND user.last_login_time >= :start_time 
             AND user.last_login_time < :end_time
             AND vehicle.create_time >= FROM_UNIXTIME(:start_time)

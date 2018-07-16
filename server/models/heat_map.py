@@ -18,9 +18,8 @@ class HeatMapModel(object):
             `tb_inf_user` 
         WHERE
             {fetch_where} 
-            AND is_deleted = 0
-            AND create_time >= :start_time 
             AND create_time < :end_time
+            AND is_deleted = 0
             GROUP BY
               {region_group}
         """
@@ -38,11 +37,14 @@ class HeatMapModel(object):
 
         # 字段
         if params.get('field'):
-            # 求用户总数
+            # 求新增用户总数
             if params['field'] == 1:
-                pass
-            # 求角色对应的认证数
+                fetch_where += """ AND create_time >= :start_time  """
+            # 求累计用户总数
             elif params['field'] == 2:
+                pass
+            # 求角色对应的累计认证数
+            elif params['field'] == 3:
                 if params.get('filter') == 1:
                     fetch_where += """
                     AND driver_auth = 1
@@ -59,10 +61,10 @@ class HeatMapModel(object):
                     fetch_where += """
                     AND ( driver_auth = 1 OR goods_auth = 1 OR company_auth = 1 ) 
                     """
-            # 求活跃数
-            elif params['field'] == 3:
+            # 求累计活跃数
+            elif params['field'] == 4:
                 fetch_where += """
-                AND keep_login_days >= 7 AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
+                AND last_login_time < :end_time
                 """
 
         # 根据级别分组数据
@@ -181,9 +183,6 @@ class HeatMapModel(object):
 
         cmd1 = """
         SELECT
-          *
-        FROM
-        (SELECT
             shf_goods.{region_group},
             IF({field}=1, COUNT( shf_goods.id ), 0) goods_vehicle_count,
             IF({field}=3, COUNT( shb_orders.id ), 0) order_vehicle_count 
@@ -198,46 +197,32 @@ class HeatMapModel(object):
             AND shf_goods.create_time >= :start_time 
             AND shf_goods.create_time < :end_time 
         GROUP BY
-            shf_goods.{region_group}) AS a 
-        LEFT JOIN
-        (
-        SELECT
-            {region_group},
-            IF({field}=2, COUNT( 1 ), 0) vehicle_count 
-        FROM
-            bi_uat.tb_inf_user
-            INNER JOIN bi_uat.tb_inf_user_login USING ( user_id ) 
-        WHERE
-            {fetch_where2}
-            AND tb_inf_user_login.last_login_time >= :start_time 
-            AND tb_inf_user_login.last_login_time < :end_time
-            AND tb_inf_user.vehicle_length_id != '' 
-        GROUP BY
-            {region_group}
-        ) AS b ON a.{region_group} = b.{region_group}
+            shf_goods.{region_group}
         """
 
-        # cmd2 = """
-        # SELECT
-        #     {region_group},
-        #     IF({field=3}, COUNT( 1 ), 0) vehicle_count
-        # FROM
-        #     tb_inf_user
-        #     INNER JOIN tb_inf_user_login USING ( user_id )
-        # WHERE
-        #     {fetch_where2}
-        #     AND tb_inf_user_login.last_login_time >= :start_time
-        #     AND tb_inf_user_login.last_login_time < :end_time
-        #     AND tb_inf_user.vehicle_length_id != ''
-        # GROUP BY
-        #     {region_group}
-        # """
+        cmd2 = """
+        SELECT
+            vehicle.{region_group},
+            IF({field}=2, COUNT( 1 ), 0) vehicle_count
+        FROM
+            `tb_inf_transport_vehicles` vehicle
+            LEFT JOIN tb_inf_user user USING(user_id)
+            WHERE
+            {fetch_where2}
+            AND user.last_login_time >= :start_time 
+            AND user.last_login_time < :end_time
+            AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
+            AND vehicle.create_time < FROM_UNIXTIME(:end_time)
+            AND vehicle.vehicle_length_id != ''
+        GROUP BY
+            vehicle.{region_group};
+        """
 
         # 车长
         if params.get('filter'):
             f = str(params.get('filter'))
             fetch_where1 += """ AND shf_goods_vehicles.`name` = '%s' """ % vehicle_name.get(f, '小面包车')
-            fetch_where2 += """ AND vehicle_length_id LIKE "%%%s%%"  """ % vehicle_id_name.get(vehicle_name.get(f, '小面包车'), '')
+            fetch_where2 += """ AND vehicle.vehicle_length_id LIKE "%%%s%%"  """ % vehicle_id_name.get(vehicle_name.get(f, '小面包车'), '')
 
         # 根据级别分组数据
         if region_level == 0:
@@ -259,10 +244,10 @@ class HeatMapModel(object):
         # 根据地区id获取数据
         if int(params.get('region_id')):
             fetch_where1 += """ AND shf_goods.{group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
-            fetch_where2 += """ AND {group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+            fetch_where2 += """ AND vehicle.{group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
 
         fetch_where1 += """ AND shf_goods.{group_condition} != 0 AND shf_goods.{region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
-        fetch_where2 += """ AND {group_condition} != 0 AND {region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
+        fetch_where2 += """ AND vehicle.{group_condition} != 0 AND vehicle.{region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
 
         # 时间
         kwargs = {
@@ -270,11 +255,18 @@ class HeatMapModel(object):
             "end_time": params.get("end_time", time.time())
         }
 
-        ret1 = cursor1.query(cmd1.format(region_group=region_group, field=params.get('field', 1), fetch_where1=fetch_where1, fetch_where2=fetch_where2), kwargs)
-        # ret2 = cursor2.query(cmd2.format(region_group=region_group, field=params.get('field', 1), fetch_where2=fetch_where2), kwargs)
+        ret1 = cursor1.query(cmd1.format(region_group=region_group, field=params.get('field', 1), fetch_where1=fetch_where1), kwargs)
+        ret2 = cursor2.query(cmd2.format(region_group=region_group, field=params.get('field', 1), fetch_where2=fetch_where2), kwargs)
+
+        for i in ret1:
+            vehicle_count = [j['vehicle_count'] for j in ret2 if j[region_group] == i[region_group]]
+            if vehicle_count:
+                i['vehicle_count'] = vehicle_count[0]
+            else:
+                i['vehicle_count'] = 0
 
         data = {
-            'vehicle_list': ret1,
+            'vehicle_list': ret1 if ret1 else [],
             'region_group': region_group,
         }
 
