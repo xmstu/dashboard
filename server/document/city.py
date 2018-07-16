@@ -11,7 +11,8 @@ request_city_resource_balance = api.doc(params={
 })
 
 request_order_list_param = api.doc(params={
-    'goods_type': '货源类型,1:同城,2:跨城定价,3:跨城议价,4:零担,默认:0全部',
+    'goods_type': '货源类型,1:同城,2:跨城,3:零担,默认:0全部',
+    'goods_price_type': '货源类型,1:议价,2:一口价,默认:0全部',
     'priority': '优先级,1:高,2:一般,3:默认:0全部',
     'vehicle_length': '车长要求,车长id,默认:0全部',
     'is_called': '是否通话：1:有,2:无,3:大于10次,默认：0全部',
@@ -22,10 +23,6 @@ request_order_list_param = api.doc(params={
     'limit': '条数'
 }, description='最新待接订单统计列表查询参数')
 
-response_order_list_param_success = api.response(200, '成功', api.model('response_success', {
-    'state': fields.Integer(description=str(APIStatus.Ok)),
-    'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
-}))
 
 request_nearby_cars_param = api.doc(params={
     'goods_type': '车辆类型,1:接单线路,2:附近货车，默认:1:接单线路',

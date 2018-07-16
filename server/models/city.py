@@ -125,7 +125,7 @@ class CityOrderListModel(object):
             shf_goods.id,
             shf_goods.type,
             shf_goods.goods_level,
-            shf_goods.goods_price_type,
+            shf_goods.is_system_price,
             shf_goods.haul_dist,
             shf_goods.`name`,
             shf_goods.weight,

@@ -26,7 +26,6 @@ class CityResourceBalance(Resource):
 class CityLatestOpenOrderList(Resource):
     @staticmethod
     @doc.request_order_list_param
-    @doc.response_order_list_param_success
     @filters.CityOrderListFilterDecorator.get_result(data=dict)
     @operations.CityOrderListDecorator.get_data(page=int, limit=int, params=dict)
     @verify.CityOrderList.check_params(page=int, limit=int, params=dict)
