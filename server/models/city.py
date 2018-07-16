@@ -320,9 +320,6 @@ class CityNearbyCarsModel(object):
         driver_auth AS auth_driver,
         mobile,
         is_sticker,
-        order_count_SH + order_count_LH AS order_count,
-        order_finished_count_SH_online + order_finished_count_SH_unline + order_finished_count_LH_online + order_finished_count_LH_unline AS order_finished,
-        0 AS order_cancel,
         vehicle_length_id
         
         FROM tb_inf_user
@@ -331,7 +328,8 @@ class CityNearbyCarsModel(object):
         AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 2 DAY))
         AND driver_auth = 1
         AND vehicle_length_id != ''
-        ORDER BY last_login_time DESC'''
+        ORDER BY last_login_time DESC
+        LIMIT 500'''
 
         all_drivers = cursor.query(command, {
             'from_province_id': from_province_id,

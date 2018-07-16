@@ -3,13 +3,13 @@
 from server.meta.decorators import make_decorator
 from server.status import build_result, HTTPStatus, APIStatus, make_result
 from server.cache_data import init_regions
-import simplejson as json
-from functools import reduce
 from server.logger import log
+from server.utils.amap import distance
 
 import time
 from operator import itemgetter
-from server.utils.amap import distance
+import simplejson as json
+from functools import reduce
 
 class CityResourceBalance(object):
     @staticmethod
@@ -238,8 +238,15 @@ class CityNearbyCars(object):
                         delta = '%d小时前' % (last_delta // 3600)
                     elif last_delta // 60 > 0:
                         delta = '%d分钟前' % (last_delta // 60)
+                    # 距离
+                    mileage_total = distance(goods['from_longitude'], goods['from_latitude'], i['longitude'],
+                                             i['latitude'])
+                    if mileage_total < 1:
+                        mileage = '%d米' % (i['mileage_total'] * 1000)
+                    else:
+                        mileage = '%.2f公里' % i['mileage_total']
                     usual_region = init_regions.to_address(i['from_province_id'], i['from_city_id'], i['from_county_id'])
-                    locations = init_regions.to_address(i['province'], i['city'], i['county']) + i['address'] + ', ' + i['last_login_time'] + ', ' + delta
+                    locations = init_regions.to_address(i['province'], i['city'], i['county']) + i['address'] + ', ' + mileage + ', ' + delta
 
                     result.append({
                         'name': i['user_name'],
