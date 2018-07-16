@@ -34,6 +34,7 @@ class GoodsList(object):
             to_town_id = params.get('to_town_id') if params.get('to_town_id') else ''
 
             goods_type = int(params.get('goods_type')) if params.get('goods_type') else 0
+            goods_price_type = int(params.get('goods_price_type')) if params.get('goods_price_type') else 0
             goods_status = int(params.get('goods_status')) if params.get('goods_status') else 0
             is_called = int(params.get('is_called')) if params.get('is_called') else 0
             vehicle_length = str(params.get('vehicle_length')) if params.get('vehicle_length') else 0
@@ -70,6 +71,7 @@ class GoodsList(object):
                 'to_county_id': to_county_id,
                 'to_town_id': to_town_id,
                 "goods_type": goods_type,
+                "goods_price_type": goods_price_type,
                 "goods_status": goods_status,
                 "is_called": is_called,
                 "vehicle_length": vehicle_length,
