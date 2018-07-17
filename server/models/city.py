@@ -260,6 +260,10 @@ class CityOrderListModel(object):
         if params['spec_tag'] == 1:
             command += ' AND ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) <= 3 '
 
+        # 根据手机号搜索
+        if params['mobile']:
+            command += """ AND shu_users.mobile = {0} """.format(params['mobile'])
+
         goods_counts = cursor.query_one(command % "COUNT(1) as goods_counts")
 
         command += ' ORDER BY shf_goods.id DESC LIMIT {0}, {1} '.format((page - 1) * limit, limit)

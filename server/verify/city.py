@@ -57,6 +57,7 @@ class CityOrderList(object):
             is_addition = int(params.get('is_addition', None) or 0)
             region_id = int(params.get('node_id', None) or 0)
             spec_tag = int(params.get('spec_tag', None) or 0)
+            mobile = int(params.get('mobile', None) or 0)
 
             # 当前权限下所有地区
             role, locations_id = sessionOperationClass.get_locations()
@@ -71,6 +72,7 @@ class CityOrderList(object):
                 "region_id": region_id,
                 "spec_tag": spec_tag,
                 "is_addition": is_addition,
+                "mobile": mobile
             }
             return Response(page=page, limit=limit, params=params)
 
