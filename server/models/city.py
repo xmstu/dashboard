@@ -279,7 +279,6 @@ class CityOrderListModel(object):
 
 
 class CityNearbyCarsModel(object):
-
     @staticmethod
     def get_goods(cursor, goods_id):
         """货源"""
@@ -296,22 +295,21 @@ class CityNearbyCarsModel(object):
         from_latitude,
         shf_goods_vehicles.`name`,
         shf_goods_vehicles.inner_length,
-        shf_goods.is_deleted,
         shf_goods.`status`
         FROM shf_goods
         LEFT JOIN shf_goods_vehicles ON shf_goods.id = shf_goods_vehicles.goods_id
         AND shf_goods_vehicles.vehicle_attribute = 3
         AND shf_goods_vehicles.is_deleted = 0
-        WHERE shf_goods.id = :goods_id'''
-
+        WHERE shf_goods.id = :goods_id
+        AND shf_goods.is_deleted = 0
+        AND shf_goods.`status` IN (1, 2)'''
         goods = cursor.query_one(command, {
             'goods_id': goods_id
         })
-
         return goods if goods else {}
 
     @staticmethod
-    def get_all_drivers(cursor, from_county_id):
+    def get_all_drivers(cursor, from_province_id, from_city_id):
         """常驻地"""
         command = '''
         SELECT
@@ -323,26 +321,26 @@ class CityNearbyCarsModel(object):
         driver_auth AS auth_driver,
         mobile,
         is_sticker,
+        order_count_SH + order_count_LH AS order_count,
+        order_finished_count_SH_online + order_finished_count_SH_unline + order_finished_count_LH_online + order_finished_count_LH_unline AS order_finished,
+        0 AS order_cancel,
         vehicle_length_id
-        
+
         FROM tb_inf_user
-        WHERE from_county_id = :from_county_id
-        
+        WHERE from_province_id = :from_province_id AND from_city_id = :from_city_id
+
         AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 2 DAY))
         AND driver_auth = 1
         AND vehicle_length_id != ''
-        ORDER BY last_login_time DESC
-        LIMIT 300
-        '''
-
+        ORDER BY last_login_time DESC'''
         all_drivers = cursor.query(command, {
-            'from_county_id': from_county_id
+            'from_province_id': from_province_id,
+            'from_city_id': from_city_id
         })
-
         return all_drivers if all_drivers else []
 
     @staticmethod
-    def get_driver_by_booking(cursor, goods_id, inner_length):
+    def get_driver_by_booking(cursor, goods_id):
         """接单线路获取司机信息"""
         try:
             command = '''
@@ -357,7 +355,6 @@ class CityNearbyCarsModel(object):
             shu_user_profiles.user_name,
             shu_users.mobile,
             (SELECT `name` FROM shm_dictionary_items WHERE id = shf_booking_settings.vehicle_length_id) AS vehicle_length,
-            (SELECT `value` FROM shm_dictionary_items WHERE id = shf_booking_settings.vehicle_length_id) AS vehicle_value,
             -- 诚信会员
             shu_user_profiles.is_trust_member,
             shu_user_profiles.trust_member_type,
@@ -374,9 +371,9 @@ class CityNearbyCarsModel(object):
             shf_booking_settings.to_city_id,
             shf_booking_settings.to_county_id,
             shf_booking_settings.to_town_id,
-            shf_booking_settings.create_time,
+            FROM_UNIXTIME(shf_booking_settings.create_time, '%%Y-%%m-%%d') AS create_time,
             shu_user_stats.last_login_time
-            
+
             FROM shf_booking_settings, (
             SELECT
             from_city_id,
@@ -386,7 +383,7 @@ class CityNearbyCarsModel(object):
             ) AS goods, shu_user_profiles
             INNER JOIN shu_users ON shu_user_profiles.user_id = shu_users.id AND shu_users.is_deleted = 0
             INNER JOIN shu_user_stats ON shu_user_profiles.user_id = shu_user_stats.user_id
-            
+
             WHERE
             shf_booking_settings.is_deleted = 0
             AND shf_booking_settings.vehicle_length_id != 0
@@ -401,20 +398,14 @@ class CityNearbyCarsModel(object):
             AND shu_user_profiles.user_id = shf_booking_settings.user_id AND shu_user_profiles.is_deleted = 0 AND shu_user_profiles.`status` = 1
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
             GROUP BY shf_booking_settings.user_id
-            HAVING vehicle_value > :inner_length
-            '''
-
+            LIMIT 100'''
             # if user_ids:
             #     command = command % ('AND shf_booking_settings.user_id IN (%s) ' % ','.join(user_ids))
             # else:
             #     command = command % ''
-
             driver_info = cursor.query(command, {
-                'goods_id': goods_id,
-                'inner_length': inner_length
+                'goods_id': goods_id
             })
-
             return driver_info if driver_info else []
-
         except Exception as e:
             log.error('接单线路获取司机信息出错: [error: %s]' % e, exc_info=True)

@@ -257,8 +257,6 @@ class CityNearbyCars(object):
                     })
                     if len(result) >= 10:
                         break
-
-                result.sort(key=lambda x: x.get('last_login_time', 0))
             else:
                 for i in driver:
                     # 诚信会员
@@ -283,7 +281,6 @@ class CityNearbyCars(object):
                     })
                     if len(result) >= 10:
                         break
-                result.sort(key=lambda x: x.get('booking_time', ''), reverse=True)
             return make_result(APIStatus.Ok, data=json.loads(json.dumps(result))), HTTPStatus.Ok
         except Exception as e:
             log.error('附近车辆过滤错误: %s' % e, exc_info=True)
