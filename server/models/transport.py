@@ -27,12 +27,6 @@ class TransportRadarModel(object):
 
         vehicle_cmd = """
         SELECT
-            vehicle.from_province_id,
-            vehicle.from_city_id,
-            vehicle.from_county_id,
-            vehicle.to_province_id,
-            vehicle.to_city_id,
-            vehicle.to_county_id,
             COUNT(1) vehicle_count
         FROM
             `tb_inf_transport_vehicles` vehicle
@@ -45,13 +39,6 @@ class TransportRadarModel(object):
             AND vehicle.create_time < FROM_UNIXTIME(:end_time)
             AND vehicle.vehicle_length_id != ''
             AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%"
-            GROUP BY
-            vehicle.from_province_id,
-            vehicle.from_city_id,
-            vehicle.from_county_id,
-            vehicle.to_province_id,
-            vehicle.to_city_id,
-            vehicle.to_county_id;
         """
 
         order_cmd = """
