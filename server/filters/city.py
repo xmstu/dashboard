@@ -268,7 +268,14 @@ class CityNearbyCars(object):
                         'last_login_time': i['last_login_time'],
                         'last_delta': last_delta
                     })
+<<<<<<< HEAD
                 result.sort(key=lambda x: x.get('last_delta', 0))
+=======
+                    if len(result) >= 10:
+                        break
+                    
+                result.sort(key=lambda x: x.get('last_login_time', 0))
+>>>>>>> eab8c6a654b0725e275d8ef7b358efdc0a8cd743
 
             else:
                 for i in driver:
@@ -294,6 +301,8 @@ class CityNearbyCars(object):
                     })
 
                 result.sort(key=lambda x: x.get('booking_time', 0), reverse=True)
+
+                result.sort(key=lambda x: x.get('booking_time', ''), reverse=True)
 
             return make_result(APIStatus.Ok, data=json.loads(json.dumps(result))), HTTPStatus.Ok
 
