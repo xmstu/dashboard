@@ -53,6 +53,9 @@ class GoodsList(object):
             if not compare_time(load_start_time, load_end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
+            if not compare_time(register_start_time, register_end_time):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+
             # 当前权限下所有地区
             if sessionOperationClass.check():
                 role, locations_id = sessionOperationClass.get_locations()

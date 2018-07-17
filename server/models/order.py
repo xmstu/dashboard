@@ -260,7 +260,7 @@ class OrderListModel(object):
             AND shf_goods_vehicles.vehicle_attribute = 3 
             AND shf_goods_vehicles.is_deleted = 0
             LEFT JOIN shu_user_evaluations AS se ON so.id = se.order_id 
-            LEFT JOIN shu_users ON shu_users.id = shb_orders.owner_id
+            LEFT JOIN shu_users ON shu_users.id = so.owner_id
         WHERE 
             {fetch_where}
         """

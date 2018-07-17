@@ -121,6 +121,9 @@ class OrderList(object):
             if not compare_time(params['start_complete_time'], params['end_complete_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
+            if not compare_time(params['register_start_time'], params['register_end_time']):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+
             return Response(page=page, limit=limit, params=params)
         except Exception as e:
             log.error('error:{}'.format(e), exc_info=True)
