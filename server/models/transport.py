@@ -123,14 +123,6 @@ class TransportRadarModel(object):
             )
             """.format(params['business'])
 
-            # vehicle_sql += """
-            # AND
-            # (
-            # ( {0}=1 AND shf_booking_basis.enabled_long_haul = 1) OR
-            # ( {0}=2 AND shf_booking_basis.enabled_short_haul = 1)
-            # )
-            # """.format(params['business'])
-
             order_sql += """ 
             AND 
             (

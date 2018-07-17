@@ -32,9 +32,8 @@ class OrdersReceivedStatistics(object):
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
 
-            if params['start_time'] <= params['end_time'] < time.time():
-                pass
-            else:
+            # 校验参数
+            if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             return Response(params=params)
