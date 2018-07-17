@@ -118,7 +118,7 @@ class HeatMapModel(object):
             IF({field}=4, COALESCE ( SUM( so.price ), 0 ), 0) orders_price
         FROM
             shf_goods sg
-            LEFT JOIN shb_orders so ON so.goods_id = sg.id 
+            INNER JOIN shb_orders so ON so.goods_id = sg.id 
         WHERE
             {fetch_where}
             AND sg.is_deleted = 0 AND so.is_deleted = 0 AND so.`status` != -1

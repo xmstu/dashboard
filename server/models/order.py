@@ -260,6 +260,7 @@ class OrderListModel(object):
             AND shf_goods_vehicles.vehicle_attribute = 3 
             AND shf_goods_vehicles.is_deleted = 0
             LEFT JOIN shu_user_evaluations AS se ON so.id = se.order_id 
+            LEFT JOIN shu_users ON shu_users.id = shb_orders.owner_id
         WHERE 
             {fetch_where}
         """
@@ -444,6 +445,12 @@ class OrderListModel(object):
             AND 
             IF ( so.STATUS = 3 AND ( so.pay_status = 2 OR so.paid_offline = 1 ), so.update_time, 0 ) < {1}
             """.format(params.get('start_complete_time'), params.get('end_complete_time'))
+
+        # 货主注册时间
+        if params.get('register_start_time') and params.get('register_end_time'):
+            fetch_where += """
+            AND shu_users.create_time >= {0} AND shu_users.create_time < {1}
+            """.format(params['register_start_time'], params['register_end_time'])
 
         fetch_where += """ GROUP BY so.id """
 

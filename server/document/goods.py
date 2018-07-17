@@ -30,6 +30,8 @@ request_goods_list_param = api.doc(params={
     'create_end_time': '发布结束日期',
     'load_start_time': '装货开始日期',
     'load_end_time': '装货结束日期',
+    'register_start_time': '注册开始时间',
+    'register_end_time': '注册结束时间',
     'page': '页数',
     'limit': '条数',
 }, description='货源统计列表查询参数')

@@ -104,9 +104,8 @@ class OrderList(object):
             params['end_order_time'] = int(params.get('end_order_time', None) or time.time())
             params['start_complete_time'] = int(params.get('start_complete_time', None) or 0)
             params['end_complete_time'] = int(params.get('end_complete_time', None) or 0)
-
-            # params['start_order_time'], params['end_order_time'] = date_to_timestamp(params['start_order_time'], params['end_order_time'])
-            # params['start_complete_time'], params['end_complete_time'] = date_to_timestamp(params['start_complete_time'], params['end_complete_time'])
+            params['register_start_time'] = int(params.get('register_start_time', None) or 0)
+            params['register_end_time'] = int(params.get('register_end_time', None) or 0)
 
             # 当前权限下所有地区
             if sessionOperationClass.check():
