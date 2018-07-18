@@ -295,14 +295,13 @@ class CityNearbyCarsModel(object):
         from_latitude,
         shf_goods_vehicles.`name`,
         shf_goods_vehicles.inner_length,
-        shf_goods.`status`
+        shf_goods.`status`,
+        shf_goods.is_deleted
         FROM shf_goods
         LEFT JOIN shf_goods_vehicles ON shf_goods.id = shf_goods_vehicles.goods_id
         AND shf_goods_vehicles.vehicle_attribute = 3
         AND shf_goods_vehicles.is_deleted = 0
-        WHERE shf_goods.id = :goods_id
-        AND shf_goods.is_deleted = 0
-        AND shf_goods.`status` IN (1, 2)'''
+        WHERE shf_goods.id = :goods_id'''
         goods = cursor.query_one(command, {
             'goods_id': goods_id
         })
@@ -321,9 +320,6 @@ class CityNearbyCarsModel(object):
         driver_auth AS auth_driver,
         mobile,
         is_sticker,
-        order_count_SH + order_count_LH AS order_count,
-        order_finished_count_SH_online + order_finished_count_SH_unline + order_finished_count_LH_online + order_finished_count_LH_unline AS order_finished,
-        0 AS order_cancel,
         vehicle_length_id
 
         FROM tb_inf_user
@@ -366,12 +362,10 @@ class CityNearbyCarsModel(object):
             shf_booking_settings.from_province_id,
             shf_booking_settings.from_city_id,
             shf_booking_settings.from_county_id,
-            shf_booking_settings.from_town_id,
             shf_booking_settings.to_province_id,
             shf_booking_settings.to_city_id,
             shf_booking_settings.to_county_id,
-            shf_booking_settings.to_town_id,
-            FROM_UNIXTIME(shf_booking_settings.create_time, '%%Y-%%m-%%d') AS create_time,
+            shf_booking_settings.create_time,
             shu_user_stats.last_login_time
 
             FROM shf_booking_settings, (
