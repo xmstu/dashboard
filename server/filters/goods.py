@@ -56,23 +56,25 @@ class GoodsList(object):
                 node_id = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),
                                                   detail.get('from_county_id', 0))
 
-                # 货源距离类型
-                if detail['haul_dist'] == 1:
-                    goods_type = '同城'
-                elif detail['haul_dist'] == 2:
-                    goods_type = '跨城'
-                elif detail['type'] == 2:
-                    goods_type = '零担'
+                # 货源价格类型
+                if detail['is_system_price'] == 0:
+                    goods_type = '议价'
+                elif detail['is_system_price'] == 1:
+                    goods_type = '一口价'
                 else:
-                    goods_type = '未知货源类型'
+                    goods_type = ''
+
+                goods_type += '\n'
 
                 # 货源距离类型
-                if detail['is_system_price'] == 0:
-                    goods_type += '议价'
-                elif detail['is_system_price'] == 1:
-                    goods_type += '一口价'
+                if detail['haul_dist'] == 1:
+                    goods_type += '同城'
+                elif detail['haul_dist'] == 2:
+                    goods_type += '跨城'
+                elif detail['type'] == 2:
+                    goods_type += '零担'
                 else:
-                    goods_type += ''
+                    goods_type += '未知货源类型'
 
                 # 构造货物规格
                 goods_standard = []

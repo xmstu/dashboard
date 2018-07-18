@@ -1,3 +1,5 @@
+import time
+
 from flask_restful import abort
 
 from server import log
@@ -14,17 +16,20 @@ class VerifyVehicle(object):
     def check_params(page, limit, params):
         try:
             params['mobile'] = int(params.get('mobile', None) or 0)
-            params['vehicle_number'] = int(params.get('vehicle_number', None) or 0)
-            params['residence_id'] = int(params.get('residence_id', None) or 0)
+            params['vehicle_number'] = str(params.get('vehicle_number', None) or '')
+            params['home_station_province_id'] = int(params.get('home_station_province_id', None) or 0)
+            params['home_station_city_id'] = int(params.get('home_station_city_id', None) or 0)
+            params['home_station_county_id'] = int(params.get('home_station_county_id', None) or 0)
             params['vehicle_length'] = int(params.get('vehicle_length', None) or 0)
-            params['verify_start_time'] = int(params.get('verify_start_time', None) or 0)
-            params['verify_end_time'] = int(params.get('verify_end_time', None) or 0)
-            params['last_login_start_time'] = int(params.get('last_login_start_time', None) or 0)
-            params['last_login_end_time'] = int(params.get('last_login_end_time', None) or 0)
+            params['verify_start_time'] = int(params.get('verify_start_time', None) or time.time() - 86400*7)
+            params['verify_end_time'] = int(params.get('verify_end_time', None) or time.time())
+            params['last_login_start_time'] = int(params.get('last_login_start_time', None) or time.time() - 86400*7)
+            params['last_login_end_time'] = int(params.get('last_login_end_time', None) or time.time())
 
             # 校验手机号码
-            if not Check.is_mobile(params['mobile']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='手机号非法'))
+            if params.get('mobile'):
+                if not Check.is_mobile(params['mobile']):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='手机号非法'))
 
             # 校验是否登录和权限
             if sessionOperationClass.check():

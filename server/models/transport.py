@@ -1,5 +1,5 @@
 from server import log
-from server.utils.constant import vehicle_id_name
+from server.utils.constant import vehicle_name_id
 
 
 class TransportRadarModel(object):
@@ -329,7 +329,7 @@ class TransportListModel(object):
         # 车长要求
         if params['vehicle_length']:
             inner_good_order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
-            inner_vehicle_fetch_where += """ AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_id_name.get(params['vehicle_length'], '小面包车'))
+            inner_vehicle_fetch_where += """ AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
 
         # 业务类型
         if params['business']:

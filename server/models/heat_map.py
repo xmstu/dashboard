@@ -1,6 +1,6 @@
 import time
 
-from server.utils.constant import vehicle_id_name, vehicle_name
+from server.utils.constant import vehicle_name_id, vehicle_name
 
 
 class HeatMapModel(object):
@@ -222,7 +222,7 @@ class HeatMapModel(object):
         if params.get('filter'):
             f = str(params.get('filter'))
             fetch_where1 += """ AND shf_goods_vehicles.`name` = '%s' """ % vehicle_name.get(f, '小面包车')
-            fetch_where2 += """ AND vehicle.vehicle_length_id LIKE "%%%s%%"  """ % vehicle_id_name.get(vehicle_name.get(f, '小面包车'), '')
+            fetch_where2 += """ AND vehicle.vehicle_length_id LIKE "%%%s%%"  """ % vehicle_name_id.get(vehicle_name.get(f, '小面包车'), '')
 
         # 根据级别分组数据
         if region_level == 0:

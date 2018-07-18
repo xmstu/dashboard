@@ -7,7 +7,7 @@ class VerifyVehicle(object):
 
     @staticmethod
     @make_decorator
-    def get_list(params):
-        data = VerifyVehicleModel.get_data(db.read_db, params)
+    def get_list(page, limit, params):
+        data = VerifyVehicleModel.get_data(db.read_db, page, limit, params)
 
         return Response(data=data)
