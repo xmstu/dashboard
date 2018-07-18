@@ -10,3 +10,4 @@ from server.route.map import *
 from server.route.potential import *
 from server.route.order import *
 from server.route.introduce import *
+from server.route.price import *
