@@ -12,18 +12,18 @@ class VerifyVehicleList(Resource):
 
     @staticmethod
     @doc.verify_vehicle_list_param
-    @filters.TransportList.get_result(data=dict)
-    @operations.TransportList.get_list(page=int, limit=int, params=dict)
-    @verify.TransportList.check_params(page=int, limit=int, params=dict)
+    @filters.VerifyVehicle.get_result(data=dict)
+    @operations.VerifyVehicle.get_list(page=int, limit=int, params=dict)
+    @verify.VerifyVehicle.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():
-        """运力列表"""
+        """认证车辆列表"""
         resp = Response(
             page=get_arg_int('page', 1),
             limit=get_arg_int('limit', 10),
             params=get_all_arg())
 
-        log.debug('获取订单列表参数{}'.format(resp))
+        log.debug('获取认证车辆列表{}'.format(resp))
         return resp
 
 

@@ -4,7 +4,7 @@ from server import api
 verify_vehicle_list_param = api.doc(params={
     "mobile": "手机号",
     "vehicle_number": "车牌号码",
-    "residence": "常驻地",
+    "residence_id": "常驻地id",
     "vehicle_length": "车长要求",
     "verify_start_time": "认证开始时间",
     "verify_end_time": "认证结束时间",
