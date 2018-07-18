@@ -42,7 +42,13 @@ class CityNearbyCars(object):
         # 获取货源信息
         goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
         if not goods:
-            return Response(data={}, goods_type=goods_type)
+            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='货源不存在'))
+        if goods['is_deleted'] != 0:
+            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='货源已删除'))
+        if goods['status'] == 3:
+            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='货源已成单'))
+        if goods['status'] == -1:
+            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='货源已取消'))
         # 1.附近车辆-常驻地
         if goods_type == 2:
             all_drivers = CityNearbyCarsModel.get_all_drivers(db.read_bi, goods['from_province_id'],
@@ -57,8 +63,7 @@ class CityNearbyCars(object):
                             time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S'))) < 86400:
                     # 车长
                     length_id = str(i['vehicle_length_id']).split(',')[0]
-                    i['vehicle_length_id'] = VehicleModel.get_vehicle_length_name(db.read_db,
-                                                                                  int(length_id))
+                    user_info = VehicleModel.get_vehicle_length_name(db.read_db, int(length_id), i['user_id'])
                     i.update({
                         'address': result['address'],
                         'longitude': result['longitude'],
@@ -68,7 +73,11 @@ class CityNearbyCars(object):
                             time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S'))),
                         'province': result['province'],
                         'city': result['city'],
-                        'county': result['county']
+                        'county': result['county'],
+                        'vehicle_length_id': user_info.get('vehicle_length_id', ''),
+                        'order_count': user_info.get('order_count', 0),
+                        'order_finished': user_info.get('order_finished', 0),
+                        'order_cancel': user_info.get('order_cancel', 0)
                     })
                     driver.append(i)
                 if len(driver) >= 10:
