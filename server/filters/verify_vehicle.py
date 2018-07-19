@@ -22,6 +22,7 @@ class VerifyVehicle(object):
             vehicle_length_type = detail.get('length_name', '') + '/' + detail.get('type_name', '')
 
             result.append({
+                'id': detail.get('id', 0),
                 'name': detail.get('user_name', ''),
                 'mobile': detail.get('mobile', ''),
                 'number': detail.get('number', ''),
