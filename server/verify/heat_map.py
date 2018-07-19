@@ -30,11 +30,17 @@ class HeatMap(object):
                     params['role_region_id'] = locations_id
                     L = []
                     for i in locations_id:
-                        level = init_regions.get_city_level(params.get(i))
+                        level = init_regions.get_city_level(i)
                         L.append((level, i))
-                    L.sort(key=lambda item: item[0])
-                    params['authority_region_id'] = L[0][1]
-
+                    max_level, min_level = max(L, key=lambda k: k[0])[0], min(L, key=lambda k: k[0])[0]
+                    if max_level == min_level:
+                        params['authority_region_id'] = str(init_regions.get_parent_id(L[0][1]))
+                        locations_id.append(params['authority_region_id'])
+                        params['region_id'] = params['region_id'] if params['region_id'] != '0' else params['authority_region_id']
+                    else:
+                        L.sort(key=lambda item: item[0])
+                        params['authority_region_id'] = L[0][1]
+                        params['region_id'] = params['region_id'] if params['region_id'] != '0' else params['authority_region_id']
                 elif role == 1:
                     params['role_region_id'] = locations_id + ['0']
                 else:

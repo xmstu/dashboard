@@ -17,9 +17,7 @@ class VerifyVehicle(object):
         try:
             params['mobile'] = int(params.get('mobile', None) or 0)
             params['vehicle_number'] = str(params.get('vehicle_number', None) or '')
-            params['home_station_province_id'] = int(params.get('home_station_province_id', None) or 0)
-            params['home_station_city_id'] = int(params.get('home_station_city_id', None) or 0)
-            params['home_station_county_id'] = int(params.get('home_station_county_id', None) or 0)
+            params['home_station_id'] = int(params.get('home_station_id', None) or 0)
             params['vehicle_length'] = int(params.get('vehicle_length', None) or 0)
             params['verify_start_time'] = int(params.get('verify_start_time', None) or time.time() - 86400*7)
             params['verify_end_time'] = int(params.get('verify_end_time', None) or time.time())

@@ -48,7 +48,7 @@ class VerifyVehicleModel(object):
             (shu_vehicle_auths.home_station_county_id IN {region_id}) OR
             (shu_vehicle_auths.home_station_town_id IN {region_id})
             )
-            """.format(region_id=params['region_id'])
+            """.format(region_id=','.join(params['region_id']))
 
         # 手机号
         if params.get('mobile'):
@@ -58,17 +58,16 @@ class VerifyVehicleModel(object):
         if params.get('vehicle_number'):
             fetch_where += """ AND shu_vehicle_auths.number = '{0}' """.format(params['vehicle_number'])
 
-        # 常驻地省份id
-        if params.get('home_station_province_id'):
-            fetch_where += """ AND shu_vehicle_auths.home_station_province_id = {0} """.format(params['home_station_province_id'])
-
-        # 常驻地城市id
-        if params.get('home_station_city_id'):
-            fetch_where += """ AND shu_vehicle_auths.home_station_city_id = {0} """.format(params['home_station_city_id'])
-
-        # 常驻地区县id
-        if params.get('home_station_county_id'):
-            fetch_where += """ AND shu_vehicle_auths.home_station_county_id = {0} """.format(params['home_station_county_id'])
+        # 常驻地id
+        if params.get('home_station_id'):
+            fetch_where += """ 
+            AND ( 
+            (shu_vehicle_auths.home_station_province_id = {0}) OR
+            (shu_vehicle_auths.home_station_city_id = {0}) OR
+            (shu_vehicle_auths.home_station_county_id = {0}) OR
+            (shu_vehicle_auths.home_station_town_id = {0})
+            )
+            """.format(params['home_station_id'])
 
         # 车长要求
         if params.get('vehicle_length'):

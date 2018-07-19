@@ -287,22 +287,30 @@ class TransportListModel(object):
         """
 
         # 地区权限
-        region = ' AND 1=1 '
+        inner_good_order_region = inner_vehicle_region = ' AND 1=1 '
         if params['region_id']:
             if isinstance(params['region_id'], int):
-                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                inner_good_order_region = 'AND (sg.from_province_id = %(region_id)s OR sg.from_city_id = %(region_id)s OR sg.from_county_id = %(region_id)s OR sg.from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+                inner_vehicle_region = 'AND (vehicle.from_province_id = %(region_id)s OR vehicle.from_city_id = %(region_id)s OR vehicle.from_county_id = %(region_id)s OR vehicle.from_town_id = %(region_id)s) ' % {
                     'region_id': params['region_id']}
             elif isinstance(params['region_id'], list):
-                region = '''
+                inner_good_order_region = '''
                         AND (
-                        from_province_id IN (%(region_id)s)
-                        OR from_city_id IN (%(region_id)s)
-                        OR from_county_id IN (%(region_id)s)
-                        OR from_town_id IN (%(region_id)s)
+                        sg.from_province_id IN (%(region_id)s)
+                        OR sg.from_city_id IN (%(region_id)s)
+                        OR sg.from_county_id IN (%(region_id)s)
+                        OR sg.from_town_id IN (%(region_id)s)
                         ) ''' % {'region_id': ','.join(params['region_id'])}
-
-        inner_good_order_fetch_where += region
-        inner_vehicle_fetch_where += region
+                inner_vehicle_region = '''
+                        AND (
+                        vehicle.from_province_id IN (%(region_id)s)
+                        OR vehicle.from_city_id IN (%(region_id)s)
+                        OR vehicle.from_county_id IN (%(region_id)s)
+                        OR vehicle.from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
+        inner_good_order_fetch_where += inner_good_order_region
+        inner_vehicle_fetch_where += inner_vehicle_region
 
         # 出发地
         if params['from_county_id']:
