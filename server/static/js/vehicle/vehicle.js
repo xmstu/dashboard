@@ -21,6 +21,11 @@ var set = {
                         layer.msg('提示：开始时间大于了结束时间！');
                         return false;
                     }
+                    if ($('#date_show_one').val() == '' || val == '') {
+                        $('#date_show_one').next('.date-tips').show();
+                    } else {
+                        $('#date_show_one').next('.date-tips').hide()
+                    }
                 }
             });
             laydate.render({
@@ -37,6 +42,11 @@ var set = {
                     if (startTime > endTime) {
                         layer.msg('提示：开始时间大于了结束时间！');
                         return false;
+                    }
+                     if ($('#date_show_two').val() == '' || val == '') {
+                        $('#date_show_two').next('.date-tips').show();
+                    } else {
+                        $('#date_show_two').next('.date-tips').hide()
                     }
                 }
             });
@@ -108,58 +118,58 @@ var set = {
         })
     },
     dataRender: function () {
-           var that = this;
+        var that = this;
         $('#search_btn').click(function (e) {
             e.preventDefault();
             var verify_start_time = $('#date_show_one').val();
             var verify_end_time = $('#date_show_two').val();
-            var last_login_start_time =$('#date_show_three').val()
-            var last_login_end_time=$('#date_show_four').val()
-            var data ={
-                mobile:$('#mobile').val(),
-                vehicle_number:$('#vehicle_number').val(),
-                home_station_id:$.trim($("#region_id").val()) == "" ? common.role_area_show($("#super_manager_area_select_zero")) : $.trim($("#region_id").val()),
-                vehicle_length:$('#vehicle_type').val(),
-                verify_start_time:verify_start_time,
-                verify_end_time:verify_end_time,
-                last_login_start_time:last_login_start_time,
-                last_login_end_time:last_login_end_time
+            var last_login_start_time = $('#date_show_three').val()
+            var last_login_end_time = $('#date_show_four').val()
+            var data = {
+                mobile: $('#mobile').val(),
+                vehicle_number: $('#vehicle_number').val(),
+                home_station_id: $.trim($("#region_id").val()) == "" ? common.role_area_show($("#super_manager_area_select_zero")) : $.trim($("#region_id").val()),
+                vehicle_length: $('#vehicle_type').val(),
+                verify_start_time: verify_start_time,
+                verify_end_time: verify_end_time,
+                last_login_start_time: last_login_start_time,
+                last_login_end_time: last_login_end_time
             };
-             if(data.verify_start_time!=''){
-                data.verify_start_time=common.timeTransform(data.verify_start_time+' 00:00:00')
+            if (data.verify_start_time != '') {
+                data.verify_start_time = common.timeTransform(data.verify_start_time + ' 00:00:00')
             }
-            if(data.verify_end_time!=''){
-                data.verify_end_time=common.timeTransform(data.verify_end_time+' 23:59:59')
+            if (data.verify_end_time != '') {
+                data.verify_end_time = common.timeTransform(data.verify_end_time + ' 23:59:59')
             }
-              if(data.last_login_start_time!=''){
-                data.last_login_start_time=common.timeTransform(data.last_login_start_time+' 00:00:00')
+            if (data.last_login_start_time != '') {
+                data.last_login_start_time = common.timeTransform(data.last_login_start_time + ' 00:00:00')
             }
-            if(data.last_login_end_time!=''){
-                data.last_login_end_time=common.timeTransform(data.last_login_end_time+' 23:59:59')
+            if (data.last_login_end_time != '') {
+                data.last_login_end_time = common.timeTransform(data.last_login_end_time + ' 23:59:59')
             }
-            var url = '/vehicle/list/?mobile='+data.mobile+'&vehicle_number='+data.vehicle_number+'&home_station_id='+data.home_station_id+'&vehicle_length='+data.vehicle_length+'&verify_start_time='+data.verify_start_time+'&verify_end_time='+data.verify_end_time+'&last_login_start_time='+data.last_login_start_time+'&last_login_end_time'+data.last_login_end_time;
-             that.tableRender(url)
+            var url = '/vehicle/list/?mobile=' + data.mobile + '&vehicle_number=' + data.vehicle_number + '&home_station_id=' + data.home_station_id + '&vehicle_length=' + data.vehicle_length + '&verify_start_time=' + data.verify_start_time + '&verify_end_time=' + data.verify_end_time + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time;
+            that.tableRender(url)
         })
     },
-    area_select:function() {
-    var auth_role = $("#user-info").attr("data-role");
-    if (!!auth_role && auth_role == 1) {
-        $("#super_manager_area").css({
-            "display": "block"
-        });
-        $("#super_manager_area_select_zero").address({
-            level: 3,
-            offsetLeft: '-124px'
-        })
-    } else {
-        $("#super_manager_area").css({
-            "display": "none"
-        });
-        $("#city_manager_one").css({
-            "display": "block"
-        })
+    area_select: function () {
+        var auth_role = $("#user-info").attr("data-role");
+        if (!!auth_role && auth_role == 1) {
+            $("#super_manager_area").css({
+                "display": "block"
+            });
+            $("#super_manager_area_select_zero").address({
+                level: 3,
+                offsetLeft: '-124px'
+            })
+        } else {
+            $("#super_manager_area").css({
+                "display": "none"
+            });
+            $("#city_manager_one").css({
+                "display": "block"
+            })
+        }
     }
-}
 
 };
 set.init();
