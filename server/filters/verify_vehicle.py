@@ -9,7 +9,6 @@ class VerifyVehicle(object):
     @staticmethod
     @make_decorator
     def get_result(data):
-        # TODO 过滤参数
         verify_vehicle_list = data['verify_vehicle_list']
         result = []
         for detail in verify_vehicle_list:
