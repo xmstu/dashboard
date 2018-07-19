@@ -4,3 +4,18 @@
 #search_btn{
     vertical-align: top;
 }
+.part-3{
+    padding-top: 0;
+}
+.date-tips-spec {
+    width: 100%;
+    left: 10px;
+}
+.part-2-top h2 {
+       font-size: 15px;
+    color: #333;
+    font-weight: 600
+}
+.part-2-top h2 > i.iconfont {
+    margin-right: 6px;
+}
