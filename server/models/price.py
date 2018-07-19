@@ -14,6 +14,7 @@ class PriceTrendModel(object):
             FROM_UNIXTIME(so.create_time,"%%Y-%%m-%%d") create_time,
             MAX(price) max_price,
             MIN(price) min_price,
+            AVG(price) avg_price,
             AVG(sg.mileage_total) avg_mileage
         FROM
             shb_orders so 

@@ -10,7 +10,7 @@ class PriceTrend(Resource):
 
     @staticmethod
     @doc.price_trend_param
-    @filters.PriceTrend.get_result(params=dict, data=dict)
+    @filters.PriceTrend.get_result(data=dict)
     @operations.PriceTrend.get_data(params=dict)
     @verify.PriceTrend.check_params(params=dict)
     def get():
