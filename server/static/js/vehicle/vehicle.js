@@ -1,8 +1,6 @@
 var set = {
     init: function () {
         var that = this
-        $('#date_show_one').val(String(common.getNowFormatDate()[2]));
-        $('#date_show_two').val(String(common.getNowFormatDate()[3]));
         $('#date_show_three').val(String(common.getNowFormatDate()[2]));
         $('#date_show_four').val(String(common.getNowFormatDate()[3]));
         layui.use(['layer', 'laydate'], function () {
@@ -120,7 +118,7 @@ var set = {
             var data ={
                 mobile:$('#mobile').val(),
                 vehicle_number:$('#vehicle_number').val(),
-                home_station_id:$.trim($("#region_id").val()) == "" ? common.role_area_show($("#super_manager_area_zero")) : $.trim($("#region_id").val()),
+                home_station_id:$.trim($("#region_id").val()) == "" ? common.role_area_show($("#super_manager_area_select_zero")) : $.trim($("#region_id").val()),
                 vehicle_length:$('#vehicle_type').val(),
                 verify_start_time:verify_start_time,
                 verify_end_time:verify_end_time,
@@ -139,7 +137,7 @@ var set = {
             if(data.last_login_end_time!=''){
                 data.last_login_end_time=common.timeTransform(data.last_login_end_time+' 23:59:59')
             }
-            var url = '/vehicle/list/?mobile='+data.mobile+'&vehicle_number='+data.vehicle_number+'&home_station_id='+data.home_station_id+'&vehicle_length='+data.home_station_id+'&vehicle_length='+data.vehicle_length+'&verify_start_time='+data.verify_start_time+'&verify_end_time='+data.verify_end_time+'&last_login_start_time='+data.last_login_start_time+'&last_login_end_time'+data.last_login_end_time;
+            var url = '/vehicle/list/?mobile='+data.mobile+'&vehicle_number='+data.vehicle_number+'&home_station_id='+data.home_station_id+'&vehicle_length='+data.vehicle_length+'&verify_start_time='+data.verify_start_time+'&verify_end_time='+data.verify_end_time+'&last_login_start_time='+data.last_login_start_time+'&last_login_end_time'+data.last_login_end_time;
              that.tableRender(url)
         })
     },
