@@ -2,9 +2,171 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>运力统计-省省统计中心</title>
+    <link rel="stylesheet" href="../static/css/base.css?v=1.4">
+    <link rel="stylesheet" href="../static/layui/css/layui.css?v=1.4">
+    <link rel="stylesheet" href="../static/css/common.css?v=1.4">
+    <link rel="stylesheet" href="../static/css/iconfont.css?v=1.4">
+    <link rel="stylesheet" href="../static/css/vehicle/vehicle.css?v=1.4">
 </head>
 <body>
-Hello World
+<article id="page_area" class="page-area clearfix">
+    {% include '/header/header.html' %}
+    <article class="main-content">
+        {% include '/menu/menu.html' %}
+        <aside class="main-content-right">
+            <section class="main-content-right-header"><span>统计中心</span> / <span>数据统计</span> / <span>运力统计</span>
+            </section>
+            <div>
+                <div class="m-c-l-content">
+                    <div class="part-2">
+                        <div class="part-2-top">
+                            <h2><i class="iconfont icon-cheliangguanli"></i>全部车辆列表</h2>
+                            <hr>
+                            <form action="" class="layui-form layui-form-pane">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">手机号码</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="mobile" name="user_name" autocomplete="off"
+                                                   lay-verify="user_name" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">车牌号码</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="vehicle_number" name="vehicle_number" autocomplete="off"
+                                                   lay-verify="vehicle_number" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="width:236px;">
+                                    <div class="layui-inline" style="">
+                                        <label class="layui-form-label">车型类别</label>
+                                        <div class="layui-input-inline" style="width:140px;">
+                                            <select id="vehicle_type" name="business" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部车型</option>
+                                                <option value="小面包车">小面包车</option>
+                                                <option value="中面包车">中面包车</option>
+                                                <option value="小货车">小货车</option>
+                                                <option value="4.2米">4.2米</option>
+                                                <option value="6.8米">6.8米</option>
+                                                <option value="7.6米">7.6米</option>
+                                                <option value="9.6米">9.6米</option>
+                                                <option value="13米">13米</option>
+                                                <option value="17.5米">17.5米</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 230px">
+                                        <label class="layui-form-label">区域选择</label>
+                                        <div id="city_manager_one" class="layui-input-inline"
+                                             style="width:140px;display: none;">
+                                            <select id="region_id" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部地区</option>
+                                                {% for location in locations %}
+                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div id="super_manager_area" class="layui-input-inline"
+                                             style="width:140px;display: none;">
+                                            <input id="super_manager_area_select_zero" placeholder="请选择地区"
+                                                   name="super_manager_area_select_zero" autocomplete="off"
+                                                   lay-verify="super_manager_area_select_zero" class="layui-input"
+                                                   type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="width:232px;">
+                                    <div class="layui-inline" style="">
+                                        <label class="layui-form-label">业务类别</label>
+                                        <div class="layui-input-inline" style="width:140px;">
+                                            <select id="business" name="business" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部业务</option>
+                                                <option value="1">同城</option>
+                                                <option value="2">跨城</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" style="width: 210px;">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">认证日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="date_show_one" name="date_show_one" autocomplete="off"
+                                                   lay-verify="date_show_one" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <span style="display: inline-block;margin-top: 6px;">至</span>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">认证日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="date_show_two" name="date_show_two" autocomplete="off"
+                                                   lay-verify="date_show_two" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!------------------>
+                                <div class="layui-form-item" style="width: 210px;">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">最后登陆</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="date_show_three" name="date_show_three" autocomplete="off"
+                                                   lay-verify="date_show_three" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <span style="display: inline-block;margin-top: 6px;">至</span>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 210px;">
+                                        <label class="layui-form-label">最后登陆</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="date_show_four" name="date_show_four" autocomplete="off"
+                                                   lay-verify="date_show_four" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="search_btn" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn"><i style=""
+                                                             class="iconfont icon-sousuo1"></i> 搜索
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="part-3">
+                        <table class="layui-hide" id="vehicle_table"></table>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </article>
+</article>
+<span style="display: none!important">
+        <script src="https://s22.cnzz.com/z_stat.php?id=1274088436&web_id=1274088436" language="JavaScript"></script>
+</span>
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=1.4"></script>
+<script src="../static/js/libs/jquery.address.js?v=1.4"></script>
+<script src="../static/layui/layui.js?v=1.4"></script>
+<script src="../static/js/common/common.js?v=1.4"></script>
+<script src="../static/js/common/http.js?v=1.4"></script>
+<script src="../static/js/vehicle/vehicle.js?v=1.4"></script>
 </body>
 </html>
+

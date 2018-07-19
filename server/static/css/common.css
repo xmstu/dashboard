@@ -379,14 +379,13 @@ body {
 }
 
 .menu-line {
-	height: 374px;
+	height: 400px;
 	position: absolute;
 	width: 1px;
 	background: #994578;
-	top: -306px;
+	top: -381px;
 	left: 18px
 }
-
 .charts-area-four,.charts-area-three {
 	padding-top: 10px
 }
@@ -427,8 +426,8 @@ body {
 }
 
 .layui-nav-item {
-	line-height: 38px!important;
-	margin-bottom: 10px
+	line-height: 34px!important;
+	margin-bottom: 8px
 }
 
 .layui-nav .layui-nav-item i {
