@@ -103,9 +103,10 @@ var set = {
                 , cols: [[
                     {field: 'id', title: '车辆ID'},
                     {field: 'name', title: '姓名'},
+                    {field:'mobile',title:'手机号'},
                     {field: 'number', title: '车牌号'},
                     {field: 'home_station', title: '常驻地'},
-                    {field: 'vehicle_length_type', title: '车长'},
+                    {field: 'vehicle_length_type', title: '车长/车型'},
                     {field: 'audit_time', title: '认证时间'},
                     {field: 'last_login_time', title: '最后登陆时间'}
                 ]],
