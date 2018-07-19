@@ -28,7 +28,8 @@ class VerifyVehicleModel(object):
             {fields}
         FROM
             shu_vehicles
-            INNER JOIN shu_vehicle_auths on shu_vehicles.id = shu_vehicle_auths.vehicle_id AND shu_vehicle_auths.auth_status = 2
+            INNER JOIN shu_vehicle_auths on shu_vehicles.id = shu_vehicle_auths.vehicle_id 
+            AND shu_vehicle_auths.auth_status = 2 AND shu_vehicle_auths.is_deleted = 0
             LEFT JOIN shu_users on shu_vehicles.user_id = shu_users.id
             LEFT JOIN shu_user_stats USING(user_id)
             LEFT JOIN shu_user_profiles USING(user_id)
