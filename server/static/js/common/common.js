@@ -149,10 +149,12 @@ var common = {
         var date3 = new Date();//八天前
         var date4 = new Date();//昨天
         var date5 = new Date();//前天
+        var date6 = new Date();//七天前
         date3.setTime(date3.getTime() - 8 * 24 * 60 * 60 * 1000);
         date2.setTime(date2.getTime() + 24 * 60 * 60 * 1000);
         date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
         date5.setTime(date5.getTime() - 2 * 24 * 60 * 60 * 1000);
+        date6.setTime(date6.getTime() - 7* 24 * 60 * 60 * 1000);
         var seperator1 = "-";
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
@@ -164,6 +166,8 @@ var common = {
         var date_4 = date4.getDate();
         var month_5 = date5.getMonth() + 1;
         var date_5 = date5.getDate();
+          var month_6 = date6.getMonth() + 1;
+        var date_6 = date6.getDate();
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
@@ -188,6 +192,12 @@ var common = {
         if (date_5 >= 0 && date_5 <= 9) {
             date_5 = "0" + date_5;
         }
+          if (month_6 >= 1 && month_6 <= 9) {
+            month_6 = "0" + month_6;
+        }
+        if (date_6 >= 0 && date_6 <= 9) {
+            date_6 = "0" + date_6;
+        }
         monthAnother > 10 ? monthAnother : "0" + monthAnother;
         dateAnother > 10 ? dateAnother : "0" + dateAnother;
         var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
@@ -195,8 +205,8 @@ var common = {
         var defaultdate = date3.getFullYear() + seperator1 + month_3 + seperator1 + date_3;
         var yesterdaydate = date4.getFullYear() + seperator1 + month_4 + seperator1 + date_4;
         var beforeYesterday = date5.getFullYear() + seperator1 + month_5 + seperator1 + date_5;
-
-        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday];
+        var sevenDayAgo =  date6.getFullYear() + seperator1 + month_6 + seperator1 + date_6;
+        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday,sevenDayAgo];
     },
     dateInterval: function (num1, num2,dayLength) {
         var date1 = new Date(num1.replace(/-/g, "/"));

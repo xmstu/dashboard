@@ -1,15 +1,15 @@
 var set = {
     init: function () {
         var that = this
-        $('#date_show_three').val(String(common.getNowFormatDate()[2]));
-        $('#date_show_four').val(String(common.getNowFormatDate()[3]));
+        $('#date_show_three').val(String(common.getNowFormatDate()[5]));
+        $('#date_show_four').val(String(common.getNowFormatDate()[0]));
         layui.use(['layer', 'laydate'], function () {
             var layer = layui.layer;
             var laydate = layui.laydate;
             laydate.render({
                 elem: '#date_show_one',
                 theme: '#009688',
-                max: String(common.getNowFormatDate()[3]),
+                max: String(common.getNowFormatDate()[0]),
                 calendar: true,
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
