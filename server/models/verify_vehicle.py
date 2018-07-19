@@ -43,10 +43,10 @@ class VerifyVehicleModel(object):
         if params.get('region_id') and isinstance(params.get('region_id'), list):
             fetch_where += """
             AND ( 
-            (shu_vehicle_auths.home_station_province_id IN {region_id}) OR
-            (shu_vehicle_auths.home_station_city_id IN {region_id}) OR
-            (shu_vehicle_auths.home_station_county_id IN {region_id}) OR
-            (shu_vehicle_auths.home_station_town_id IN {region_id})
+            (shu_vehicle_auths.home_station_province_id IN ({region_id})) OR
+            (shu_vehicle_auths.home_station_city_id IN ({region_id})) OR
+            (shu_vehicle_auths.home_station_county_id IN ({region_id})) OR
+            (shu_vehicle_auths.home_station_town_id IN ({region_id}))
             )
             """.format(region_id=','.join(params['region_id']))
 
