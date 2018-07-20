@@ -156,7 +156,7 @@ var common = {
         date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
         date5.setTime(date5.getTime() - 2 * 24 * 60 * 60 * 1000);
         date6.setTime(date6.getTime() - 7* 24 * 60 * 60 * 1000);
-        date7.setTime(date7.getTime() - 21* 24 * 60 * 60 * 1000);
+        date7.setTime(date7.getTime() - 50* 24 * 60 * 60 * 1000);
         var seperator1 = "-";
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
