@@ -7,22 +7,22 @@ class PriceTrend(object):
 
     @staticmethod
     @make_decorator
-    def get_result(data):
+    def get_result(params, data):
         price_trend = data.get('price_trend', [])
         # 按日
-        xAxis = []
+        # xAxis = []
         price_trend_series = []
         avg_price = []
         for detail in price_trend:
             if detail.get('create_time'):
-                create_time = detail['create_time'].strftime('%Y-%m-%d') if isinstance(detail['create_time'], int) else detail['create_time']
-                xAxis.append(create_time)
+                create_time = detail['create_time']
+                # xAxis.append(create_time)
                 trend_series = [detail.get('max_price', 0), detail.get('min_price', 0)] * 2
-                price_trend_series.append(trend_series)
+                price_trend_series.append([create_time] + trend_series)
                 avg_price.append(detail.get('avg_price', 0))
 
         ret = {
-            "xAxis": xAxis,
+            # "xAxis": xAxis,
             "price_trend_series": price_trend_series,
             "avg_price": avg_price,
             "recommend_price_one": data.get("recommend_price_one", 0),

@@ -242,7 +242,7 @@ class GoodsList(object):
             ( shf_goods.loading_time_period_begin >= {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
             loading_time_date, params['load_start_time'], params['load_end_time'])
 
-        # 注册时间
+        # # 注册时间
         if params.get('register_start_time') and params.get('register_end_time'):
             fetch_where += """
             AND shu_users.create_time >= {0} AND shu_users.create_time < {1}
