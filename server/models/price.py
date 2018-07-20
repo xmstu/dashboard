@@ -24,9 +24,14 @@ class PriceTrendModel(object):
             AND shf_goods_vehicles.is_deleted = 0
         WHERE
         {fetch_where}
+        AND so.is_deleted = 0
+        AND so.`status` = 3
+        AND so.driver_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1 ) 
+        AND so.owner_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1) 
         -- 时间
         AND so.create_time >= :start_time 
         AND so.create_time < :end_time
+        AND (SELECT is_test FROM shu_users WHERE shu_users.id IN (so.driver_id, so.owner_id)) = 0
         -- 车长
         AND shf_goods_vehicles.`name` = :vehicle_length
         GROUP BY

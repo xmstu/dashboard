@@ -18,8 +18,8 @@ class PriceTrend(object):
         for detail in price_trend:
             if detail.get('create_time'):
                 create_time = detail['create_time']
-                trend_series = [detail.get('max_price', 0), detail.get('min_price', 0)] * 2
-                date_count[create_time] = [create_time] + trend_series + [detail.get('avg_price', 0)]
+                trend_series = [create_time] + [detail.get('max_price', 0), detail.get('min_price', 0)] * 2 + [detail.get('avg_price', 0)]
+                date_count[create_time] = trend_series
 
         while date_val <= end_date:
             date_str = date_val.strftime("%Y-%m-%d")
