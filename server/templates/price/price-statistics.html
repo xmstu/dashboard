@@ -2,9 +2,165 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>价格统计-省省统计中心</title>
+    <link rel="stylesheet" href="../static/css/base.css?v=1.4">
+    <link rel="stylesheet" href="../static/layui/css/layui.css?v=1.4">
+    <link rel="stylesheet" href="../static/css/common.css?version=1.0.1">
+    <link rel="stylesheet" href="../static/css/iconfont.css?v=1.4">
 </head>
 <body>
-price
+<article id="page_area" class="page-area clearfix">
+    {% include '/header/header.html' %}
+    <article class="main-content">
+        {% include '/menu/menu.html' %}
+        <aside class="main-content-right">
+            <div>
+                <div class="m-c-l-content">
+                    <div class="content-header">
+                        <h2><i class="iconfont icon-dituleixianlu"></i>地域统计</h2>
+                        <hr>
+                    </div>
+                    <div class="part-1">
+                        <div class="part-1-top">
+                            <form action="" class="layui-form layui-form-pane">
+                                <div class="layui-form-item layui-form-special">
+                                    <div class="layui-inline" style="width: 200px;">
+                                        <label class="layui-form-label">开始日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="date_show_one" name="date_show_one" autocomplete="off"
+                                                   lay-verify="date_show_one" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-special">
+                                    <div class="layui-inline" style="width: 200px;">
+                                        <label class="layui-form-label">结束日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="date_show_two" name="date_two" autocomplete="off"
+                                                   lay-verify="date_show_two" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-special " id="">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">筛选方式</label>
+                                        <div class="layui-input-inline" style="width: 102px">
+                                            <select id="dimension" name="modules" lay-verify="required"  lay-filter="methods_select">
+                                                <option value="1" selected>按用户</option>
+                                                <option value="2">按货源</option>
+                                                <option value="3">按车型</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-special area-select-options-setting" id="filter" >
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">角色选择</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select name="modules" lay-verify="required" >
+                                                <option value="">全部</option>
+                                                <option value="1">司机</option>
+                                                <option value="2">货主</option>
+                                                <option value="3">物流公司</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-special none " id="role_select">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">业务类型</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select id="test132456456" name="modules" lay-verify="required">
+                                                <option value="">全部业务</option>
+                                                <option value="1">同城</option>
+                                                <option value="2">跨城</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item layui-form-special none " id="vehicle_select">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">车型选择</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select name="modules" lay-verify="required" class="">
+                                                <option value="">全部车型</option>
+                                                <option value="1">小面包车</option>
+                                                <option value="2">中面包车</option>
+                                                <option value="3">小货车</option>
+                                                <option value="4">4.2米</option>
+                                                <option value="5">6.8米</option>
+                                                <option value="6">7.6米</option>
+                                                <option value="7">9.6米</option>
+                                                <option value="8">13米</option>
+                                                <option value="9">17.5米</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                   <div class="layui-form-item layui-form-special map-select-options-setting" id="heat_maps_tabs">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">用户类型</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select name="modules" lay-verify="required">
+                                                <option value="1">用户数</option>
+                                                <option value="2">认证数</option>
+                                                <option value="3">活跃数</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                   <div class="layui-form-item layui-form-special none " id="heat_maps_tabs_one">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">选择类型</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select name="modules" lay-verify="required">
+                                                <option value="1">货源数</option>
+                                                <option value="2">货源金额</option>
+                                                <option value="3">订单数</option>
+                                                <option value="4">订单金额</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                   <div class="layui-form-item layui-form-special none " id="heat_maps_tabs_two">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">业务类型</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select name="modules" lay-verify="required">
+                                                <option value="1">货源所需</option>
+                                                <option value="2">车辆数</option>
+                                                <option value="3">实际接单</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="search_btn" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索</button>
+                            </form>
+                        </div>
+                        <div class="">
+                            <div class="">
+                                <div class="" style="height: 500px">
+                                    <div id="charts_container" style="width: 100%;height: 100%;padding-right: 1%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </article>
+</article>
+<span style="display: none!important">
+      <script src="https://s95.cnzz.com/z_stat.php?id=1260774712&web_id=1260774712" language="JavaScript"></script>
+</span>
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=1.4"></script>
+<script src="../static/js/libs/echarts.min.js?v=1.4"  charset="UTF-8"></script>
+<script src="../static/layui/layui.js?v=1.4"></script>
+<script src="../static/js/common/common.js?v=1.4"></script>
+<script src="../static/js/common/http.js?v=1.4"></script>
+<script src="../static/js/price/price-statistics.js?v=1.4"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 var set = {
     init: function () {
-        var that = this
+        var that = this;
+        $('.vehicle-menu-about>a').addClass('selected-active');
         $('#date_show_three').val(String(common.getNowFormatDate()[5]));
         $('#date_show_four').val(String(common.getNowFormatDate()[0]));
         layui.use(['layer', 'laydate'], function () {
