@@ -213,22 +213,21 @@ class CityNearbyCars(object):
             driver = data['driver']
             # 过滤接单车型
             if goods_type == 1:
-                booking_vehicle = driver
                 double = []
                 from_country = []
                 to_country = []
-                for i in booking_vehicle:
+                surplus = []
+                for i in driver:
                     if i['from_county_id'] != 0 and i['to_county_id'] != 0 and goods['from_county_id'] == i['from_county_id'] \
                     and goods['to_county_id'] == i['to_county_id']:
                         double.append(i)
-                        booking_vehicle.pop(i)
                     elif i['from_county_id'] != 0 and goods['from_county_id'] == i['from_county_id']:
                         from_country.append(i)
-                        booking_vehicle.pop(i)
                     elif i['to_county_id'] != 0 and goods['to_county_id'] == i['to_county_id']:
                         to_country.append(i)
-                        booking_vehicle.pop(i)
-                driver = (double + from_country + to_country + booking_vehicle)[:10]
+                    else:
+                        surplus.append(i)
+                driver = (double + from_country + to_country + surplus)[:10]
             result = []
             # 常驻地
             if goods_type == 2:
@@ -246,10 +245,7 @@ class CityNearbyCars(object):
                                                            i['from_county_id'])
                     # 距离
                     mileage_total = distance(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])
-                    if mileage_total >= 1:
-                        mileage = '%.2f公里' % mileage_total
-                    else:
-                        mileage = '%d米' % (mileage_total * 1000)
+                    mileage = '%.3fkm' % mileage_total
                     locations = init_regions.to_address(i['province'], i['city'], i['county']) + i['address'] + ', ' + \
                                 mileage + ', ' + delta
                     result.append({
