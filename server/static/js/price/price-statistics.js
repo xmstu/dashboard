@@ -43,7 +43,7 @@ var set = {
             });
         })
         var that = this;
-        $('#date_show_one').val(common.getNowFormatDate()[5]);
+        $('#date_show_one').val(common.getNowFormatDate()[6]);
         $('#date_show_two').val(common.getNowFormatDate()[0]);
         $('.price-menu-about>a').addClass('selected-active');
         $('.price-menu-about>a>i').addClass('select-active');
