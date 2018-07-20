@@ -41,16 +41,26 @@ class CityResourceBalanceModel(object):
                 OR from_county_id IN (%(region_id)s)
                 OR from_town_id IN (%(region_id)s)
                 )''' % {'region_id': ','.join(params['region_id'])}
-        # 同城
+
         goods_type = ''
-        if params['goods_type'] == 1:
-            goods_type = 'AND haul_dist = 1'
-        # 跨城定价
-        elif params['goods_type'] == 2:
-            goods_type = 'AND haul_dist = 2 AND goods_level = 2'
-        # 跨城议价
-        elif params['goods_type'] == 3:
-            goods_type = 'AND haul_dist = 2 AND goods_level = 1'
+        # 货源类型:同城/跨城/零担
+        if params.get('goods_type'):
+            goods_type += """
+                    AND (
+                    ({goods_type}=1 AND shf_goods.haul_dist = 1) OR
+                    ({goods_type}=2 AND shf_goods.haul_dist = 2) OR
+                    ({goods_type}=3 AND shf_goods.type = 2)
+                    )
+                    """.format(goods_type=params['goods_type'])
+
+        # 货源类型:议价/一口价
+        if params.get('goods_price_type'):
+            goods_type += """
+                        AND (
+                        ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+                        ({goods_price_type}=2 AND shf_goods.is_system_price = 1)
+                        )
+                        """.format(goods_price_type=params['goods_price_type'])
 
         command = command % {
             'region': region,

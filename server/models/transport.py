@@ -100,13 +100,14 @@ class TransportRadarModel(object):
         vehicle_sql += vehicle_region
         order_sql += order_region
 
-        # 同城/跨城
+        # 同城/跨城/零担
         if params.get('business'):
             goods_sql += """
             AND
             (
             ( {0}=1 AND haul_dist = 1) OR
-            ( {0}=2 AND haul_dist = 2)
+            ( {0}=2 AND haul_dist = 2) OR
+            ( {0}=3 AND type = 2) 
             )
             """.format(params['business'])
 
@@ -114,9 +115,28 @@ class TransportRadarModel(object):
             AND 
             (
             ( {0}=1 AND shf_goods.haul_dist = 1 ) OR
-            ( {0}=2 AND shf_goods.haul_dist = 2 )
+            ( {0}=2 AND shf_goods.haul_dist = 2 ) OR
+            ( {0}=2 AND shf_goods.type = 2 )
             )
             """.format(params['business'])
+
+        # 议价/一口价
+        if params.get('business_price'):
+            goods_sql += """
+                        AND
+                        (
+                        ( {0}=1 AND goods_level = 1) OR
+                        ( {0}=2 AND is_system_price = 1)
+                        )
+                        """.format(params['business_price'])
+
+            order_sql += """ 
+                        AND 
+                        (
+                        ( {0}=1 AND shf_goods.goods_level = 1 ) OR
+                        ( {0}=2 AND shf_goods.is_system_price = 1 )
+                        )
+                        """.format(params['business_price'])
 
         # 出发地
         if params.get('from_province_id'):
@@ -219,6 +239,8 @@ class TransportListModel(object):
         filelds = """
             FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") as create_time,
             haul_dist,
+            sg.type,
+            sg.is_system_price,
             sg.from_province_id,
             sg.from_city_id,
             sg.from_county_id,
@@ -339,14 +361,17 @@ class TransportListModel(object):
             inner_good_order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
             inner_vehicle_fetch_where += """ AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
 
-        # 业务类型
+        # 业务类型:同城/跨城/零担
         if params['business']:
-            inner_good_order_fetch_where += """ AND (({business}=1 AND haul_dist = 1) OR ({business}=2 AND haul_dist = 2)) """.format(business=params['business'])
-            # inner_vehicle_fetch_where += """ AND (({business}=1 AND shf_booking_basis.enabled_long_haul = 1) OR ({business}=2 AND shf_booking_basis.enabled_short_haul = 1)) """.format(business=params['business'])
+            inner_good_order_fetch_where += """ 
+            AND (({business}=1 AND haul_dist = 1) OR ({business}=2 AND haul_dist = 2) OR ({business}=3 AND sg.type = 2)) 
+            """.format(business=params['business'])
 
-        # # 筛选条件
-        # if params['filter']:
-        #     outer_fetch_where += """ AND (({filter}=1 AND a.goods_count > IFNULL( b.vehicle_count, 0 )) OR ({filter}=2 AND a.goods_count < b.vehicle_count)) """.format(filter=params['filter'])
+        # 业务类型:议价/一口价
+        if params['business_price']:
+            inner_good_order_fetch_where += """ 
+            AND (({business_price}=1 AND sg.goods_level = 1) OR ({business_price}=2 AND sg.is_system_price = 1)) 
+            """.format(business_price=params['business_price'])
 
         # 时间
         kwargs = {

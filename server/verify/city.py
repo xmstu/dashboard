@@ -16,6 +16,7 @@ class CityResourceBalance(object):
         end_time = int(params.get('end_time')) if params.get('end_time') else time.time() - 60 * 60 * 24
         region_id = int(params.get('region_id')) if params.get('region_id') else 0
         goods_type = int(params.get('goods_type')) if params.get('goods_type') else 1
+        goods_price_type = int(params.get('goods_price_type')) if params.get('goods_price_type') else 1
 
         if start_time and end_time:
             if start_time <= end_time:
@@ -36,7 +37,8 @@ class CityResourceBalance(object):
             'start_time': start_time,
             'end_time': end_time,
             'region_id': region_id,
-            'goods_type': goods_type
+            'goods_type': goods_type,
+            'goods_price_type': goods_price_type
         }
         log.debug('获取供需平衡数据统计检查参数: [region_id: %s][goods_type: %s][start_time: %s][end_time: %s]'
                  % (params['region_id'], params['goods_type'], params['start_time'], params['end_time']))

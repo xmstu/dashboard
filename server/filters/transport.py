@@ -29,12 +29,25 @@ class TransportList(object):
             transport_list = data['transport_list']
             result = []
             for detail in transport_list:
-                # 业务类型
-                business = '未知业务'
-                if detail.get('haul_dist') == 1:
-                    business = '同城'
-                elif detail.get('haul_dist') == 2:
-                    business = '跨城'
+                # 货源距离类型
+                if detail['is_system_price'] == 0:
+                    business = '议价'
+                elif detail['is_system_price'] == 1:
+                    business = '一口价'
+                else:
+                    business = ''
+
+                business += '\n'
+
+                # 货源距离类型
+                if detail['haul_dist'] == 1:
+                    business += '同城'
+                elif detail['haul_dist'] == 2:
+                    business += '跨城'
+                elif detail['type'] == 2:
+                    business += '零担'
+                else:
+                    business += '未知货源类型'
 
                 # 出发地-目的地
                 from_address = init_regions.to_address(detail.get('from_province_id', 0), detail.get('from_city_id', 0),

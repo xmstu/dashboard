@@ -45,6 +45,7 @@ request_cancel_reason_param = api.doc(params={
     'start_time': '开始时间',
     'end_time': '结束时间',
     'goods_type': '货源类型',
+    'goods_price_type': '货源类型,1:议价,2:一口价,默认:0全部',
     'region_id': '地区id'
 
 }, description='取消货源原因查询参数')
@@ -54,5 +55,6 @@ request_goods_distribution_trend_param = api.doc(params={
     'end_time': '结束时间',
     'periods': '时间周期,2:日，3:周，4:月，默认:2',
     'goods_type': '货源类型',
+    'goods_price_type': '货源类型,1:议价,2:一口价,默认:0全部',
     'region_id': '地区id'
 }, description='货源分布趋势查询参数')

@@ -16,7 +16,8 @@ class GoodsList(object):
     def check_params(page, limit, params):
         # 通过params获取参数
         try:
-            create_start_time = int(params.get('create_start_time')) if params.get('create_start_time') else time.time() - 86400 * 7
+            create_start_time = int(params.get('create_start_time')) if params.get(
+                'create_start_time') else time.time() - 86400 * 7
             create_end_time = int(params.get('create_end_time')) if params.get('create_end_time') else time.time()
             load_start_time = int(params.get('load_start_time')) if params.get('load_start_time') else 0
             load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else 0
@@ -109,6 +110,7 @@ class CancelGoodsReason(object):
             start_time = int(params.get('start_time', None) or time.time() - 86400 * 7)
             end_time = int(params.get('end_time', None) or time.time() - 86400)
             goods_type = int(params.get('goods_type', None) or 0)
+            goods_price_type = int(params.get('goods_price_type', None) or 0)
             region_id = int(params.get('region_id', None) or 0)
 
             # 当前权限下所有地区
@@ -126,6 +128,7 @@ class CancelGoodsReason(object):
                 'start_time': start_time,
                 'end_time': end_time,
                 'goods_type': goods_type,
+                'goods_price_type': goods_price_type,
                 'region_id': region_id
             }
             return Response(params=params)
@@ -144,6 +147,7 @@ class GoodsDistributionTrend(object):
             end_time = int(params.get('end_time', None) or time.time() - 86400)
             periods = int(params.get('periods', None) or 2)
             goods_type = int(params.get('goods_type', None) or 0)
+            goods_price_type = int(params.get('goods_price_type', None) or 0)
             region_id = int(params.get('region_id', None) or 0)
 
             # 当前权限下所有地区
@@ -158,11 +162,12 @@ class GoodsDistributionTrend(object):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             params = {
-                'start_time':start_time,
-                'end_time':end_time,
-                'periods':periods,
-                'goods_type':goods_type,
-                'region_id':region_id
+                'start_time': start_time,
+                'end_time': end_time,
+                'periods': periods,
+                'goods_type': goods_type,
+                'goods_price_type': goods_price_type,
+                'region_id': region_id
             }
 
             return Response(params=params)
