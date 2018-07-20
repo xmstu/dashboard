@@ -1018,4 +1018,8 @@ body {
 	font-size: 13px;
 	vertical-align: middle;
 }
-
+  .layui-layer-loading .layui-layer-content{
+    background: url(/static/images/loading.gif) no-repeat center center!important;
+    width: 150px!important;
+    height: 100px!important;
+  }
