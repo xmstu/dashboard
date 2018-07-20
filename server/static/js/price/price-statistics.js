@@ -43,7 +43,7 @@ var set = {
             });
         })
         var that = this;
-        $('#date_show_one').val(common.getNowFormatDate()[5]);
+        $('#date_show_one').val(common.getNowFormatDate()[6]);
         $('#date_show_two').val(common.getNowFormatDate()[0]);
         $('.price-menu-about>a').addClass('selected-active');
         $('.price-menu-about>a>i').addClass('select-active');
@@ -123,12 +123,23 @@ var set = {
                 position: [10, '70%'],
                 formatter: function (params) {
                     console.log(params);
-                    var str = '日期：' + params[0].name;
+                    if(params.length>1){
+                             var str = '日期：' + params[0].name;
                     var string_data ='今日价格最低：￥'+ params[0].data[2];
                       string_data +='<br>'+ '今日价格最高：￥'+params[0].data[1];
 
                       str += '<br>'+params[1].seriesName +':￥'+ (params[1].data).toFixed(2);
+                      if(params[1].seriesName ==undefined){
+                          params[1].seriesName='平均价'
+                      }
                       return  str+ '<br>' +string_data
+                    }else {
+                                  var str = '日期：' + params[0].name;
+                    var string_data ='今日价格最低：￥'+ params[0].data[2];
+                      string_data +='<br>'+ '今日价格最高：￥'+params[0].data[1];
+
+                      return  str+ '<br>'+string_data
+                    }
                 },
                 borderWidth: 1,
                 textStyle: {
