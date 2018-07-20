@@ -31,7 +31,6 @@ class PriceTrendModel(object):
         -- 时间
         AND so.create_time >= :start_time 
         AND so.create_time < :end_time
-        AND (SELECT is_test FROM shu_users WHERE shu_users.id IN (so.driver_id, so.owner_id)) = 0
         -- 车长
         AND shf_goods_vehicles.`name` = :vehicle_length
         GROUP BY
