@@ -1,7 +1,6 @@
-from flask_restplus import fields
+# -*- coding: utf-8 -*-
 
 from server import api
-from server.status import APIStatus, FeedAPIStatus
 
 request_city_resource_balance = api.doc(params={
     'start_time': '开始日期(时间戳),默认:8天前',

@@ -243,13 +243,11 @@ class CityNearbyCars(object):
                         delta = '%d小时前' % (last_delta // 3600)
                     elif last_delta // 60 >= 0:
                         delta = '%d分钟前' % (last_delta // 60)
-                    usual_region = init_regions.to_address(i['from_province_id'], i['from_city_id'],
-                                                           i['from_county_id'])
+                    usual_region = init_regions.to_address(i['from_province_id'], i['from_city_id'], i['from_county_id'])
                     # 距离
                     mileage_total = distance(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])
                     mileage = '%.3fkm' % mileage_total
-                    locations = init_regions.to_address(i['province'], i['city'], i['county']) + i['address'] + ', ' + \
-                                mileage + ', ' + delta
+                    locations = init_regions.to_address(i['province'], i['city'], i['county']) + i['address'] + ', ' + mileage + ', ' + delta
                     result.append({
                         'name': i['user_name'],
                         'mobile': i['mobile'],

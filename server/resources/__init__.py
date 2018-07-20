@@ -12,3 +12,4 @@ from server.resources.transport import *
 from server.resources.map import *
 from server.resources.price import *
 from server.resources.verify_vehicle import *
+from server.resources.city_manager import *
