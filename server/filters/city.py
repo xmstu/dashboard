@@ -239,7 +239,7 @@ class CityNearbyCars(object):
                         delta = '%d天前' % (last_delta // 86400)
                     elif last_delta // 3600 > 0:
                         delta = '%d小时前' % (last_delta // 3600)
-                    elif last_delta // 60 > 0:
+                    elif last_delta // 60 >= 0:
                         delta = '%d分钟前' % (last_delta // 60)
                     usual_region = init_regions.to_address(i['from_province_id'], i['from_city_id'],
                                                            i['from_county_id'])
