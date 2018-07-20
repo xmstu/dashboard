@@ -2,24 +2,7 @@
 
 class cityManagerModel(object):
     @staticmethod
-    def get_promoter(cursor, mobile):
-        """获取推广人员"""
-        command = '''
-        SELECT tb_inf_promoter.mobile
-        FROM tb_inf_city_manager
-        INNER JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id
-        AND tb_inf_promoter.is_deleted = 0
-        
-        WHERE tb_inf_city_manager.is_deleted = 0 AND tb_inf_city_manager.account = :mobile '''
-
-        result = cursor.query(command, {
-            'mobile': mobile
-        })
-
-        return result if result else []
-
-    @staticmethod
-    def increased_user_data(cursor, user_ids, start_time, end_time):
+    def increased_user_data(cursor, mobile, start_time, end_time):
         command = '''
         SELECT recommended_user_id,
         -- 司机认证
@@ -52,11 +35,10 @@ class cityManagerModel(object):
         LEFT JOIN shu_user_auths ON shu_user_profiles.last_auth_driver_id = shu_user_auths.id
         AND shu_user_auths.auth_status = 2 AND shu_user_auths.is_deleted = 0
         AND shu_user_auths.submit_time >= :start_time AND shu_user_auths.submit_time <= :end_time
-        WHERE shu_users.mobile IN (%s)'''
-
-        command = command % user_ids
+        WHERE shu_users.mobile = :mobile'''
 
         result = cursor.query(command, {
+            'mobile': mobile,
             'start_time': start_time,
             'end_time': end_time
         })
