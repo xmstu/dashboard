@@ -52,10 +52,11 @@ class cityManagerModel(object):
         LEFT JOIN shu_user_auths ON shu_user_profiles.last_auth_driver_id = shu_user_auths.id
         AND shu_user_auths.auth_status = 2 AND shu_user_auths.is_deleted = 0
         AND shu_user_auths.submit_time >= :start_time AND shu_user_auths.submit_time <= :end_time
-        WHERE shu_users.mobile IN (:user_ids)'''
+        WHERE shu_users.mobile IN (%s)'''
+
+        command = command % user_ids
 
         result = cursor.query(command, {
-            'user_ids': user_ids,
             'start_time': start_time,
             'end_time': end_time
         })
