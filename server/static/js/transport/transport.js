@@ -11,19 +11,19 @@ var dataSet = {
             that.tableRender('/transport/list/');
         }, 10);
         $('#area_select').address({
-             offsetLeft: '-124px',
+            offsetLeft: '-124px',
             level: 3,
             onClose: function () {
             }
         });
         $('#start_place').address({
-             offsetLeft: '-124px',
+            offsetLeft: '-124px',
             level: 3,
             onClose: function () {
             }
         });
         $('#end_place').address({
-             offsetLeft: '-124px',
+            offsetLeft: '-124px',
             level: 3,
             onClose: function () {
             }
@@ -166,9 +166,9 @@ var dataSet = {
         })
 
     },
-    tableRender:function(table_url){
+    tableRender: function (table_url) {
         var that = this;
-        layui.use(['table','layer'],function(){
+        layui.use(['table', 'layer'], function () {
             var layer = layui.layer;
             var table = layui.table;
             table.render({
@@ -196,15 +196,15 @@ var dataSet = {
                 ]]
                 ,
                 done: function (res, curr, count) {
-                     $('.main-content-right').addClass('animated fadeIn');
-                     $("td[data-field='business']").children().each(function () {
-                    if($(this).text()==1){
-                        $(this).text('同城')
-                    }
-                     if($(this).text()==2){
-                        $(this).text('跨城')
-                    }
-                });
+                    $('.main-content-right').addClass('animated fadeIn');
+                    $("td[data-field='business']").children().each(function () {
+                        if ($(this).text() == 1) {
+                            $(this).text('同城')
+                        }
+                        if ($(this).text() == 2) {
+                            $(this).text('跨城')
+                        }
+                    });
                     $('.radar-btn').on('click', function () {
                         layer.load();
                         var url = '/transport/radar/';
@@ -232,7 +232,7 @@ var dataSet = {
                             start_time: start_time,
                             end_time: end_time
 
-                        }
+                        };
                         $.ajax({
                             type: 'get',
                             url: url,
@@ -277,11 +277,11 @@ var dataSet = {
                             },
                             complete: function () {
                                 layer.closeAll('loading')
-
                             }
                         })
 
                     })
+                    common.clearSelect()
                 }
                 , id: 'testReload'
                 , page: true
@@ -348,7 +348,7 @@ var dataSet = {
             $('#super_manager_area').css({'display': 'block'})
             $('#super_manager_area_select_zero').address({
                 level: 3,
-                 offsetLeft: '-124px',
+                offsetLeft: '-124px',
             });
         } else {
             $('#super_manager_area').css({'display': 'none'});

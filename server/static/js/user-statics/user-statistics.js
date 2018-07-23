@@ -192,6 +192,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                     $(this).html(str + '单')
                 }
             })
+            common.clearSelect()
         }
         , cols: [[
             {field: 'user_id', title: '用户ID', sort: true},

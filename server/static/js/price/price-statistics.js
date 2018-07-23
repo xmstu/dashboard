@@ -103,8 +103,7 @@ var set = {
                 down: '#19b34c',
                 m5: '#f00',
                 m10: 'yellow',
-                m30: '#dd1ce0',
-                // y: '#ffefef'
+                m30: '#dd1ce0'
             },
             // bg: '#000',
             st: 10,
@@ -123,22 +122,21 @@ var set = {
                 position: [10, '70%'],
                 formatter: function (params) {
                     console.log(params);
-                    if(params.length>1){
-                             var str = '日期：' + params[0].name;
-                    var string_data ='今日价格最低：￥'+ params[0].data[2];
-                      string_data +='<br>'+ '今日价格最高：￥'+params[0].data[1];
+                    if (params.length > 1) {
+                        var str = '日期：' + params[0].name;
+                        var string_data = '今日价格最低：￥' + params[0].data[2];
+                        string_data += '<br>' + '今日价格最高：￥' + params[0].data[1];
 
-                      str += '<br>'+params[1].seriesName +':￥'+ (params[1].data).toFixed(2);
-                      if(params[1].seriesName ==undefined){
-                          params[1].seriesName='平均价'
-                      }
-                      return  str+ '<br>' +string_data
-                    }else {
-                                  var str = '日期：' + params[0].name;
-                    var string_data ='今日价格最低：￥'+ params[0].data[2];
-                      string_data +='<br>'+ '今日价格最高：￥'+params[0].data[1];
-
-                      return  str+ '<br>'+string_data
+                        str += '<br>' + params[1].seriesName + ':￥' + (params[1].data).toFixed(2);
+                        if (params[1].seriesName == undefined) {
+                            params[1].seriesName = '平均价'
+                        }
+                        return str + '<br>' + string_data
+                    } else {
+                        var str = '日期：' + params[0].name;
+                        var string_data = '今日价格最低：￥' + params[0].data[2];
+                        string_data += '<br>' + '今日价格最高：￥' + params[0].data[1];
+                        return str + '<br>' + string_data
                     }
                 },
                 borderWidth: 1,
@@ -282,7 +280,7 @@ var set = {
                     },
                     data: datas.values
                 },
-                    {
+                {
                     type: 'line',
                     name: '日平均',
                     data: avg_price,

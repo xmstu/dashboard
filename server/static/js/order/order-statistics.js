@@ -546,7 +546,8 @@ var setAbout = {
                             var result = $(this).text().split('\n');
                             $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
                         }
-                    })
+                    });
+                    common.clearSelect()
                 }
                 , id: 'order_reload'
                 , page: true
