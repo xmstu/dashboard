@@ -129,12 +129,12 @@ $('#add_promote_person').on('click', function (e) {
         };
         if (mobile == '' || mobile.length != 11) {
             layer.tips('请检查您输入的的手机号码格式','#add_users', {
-                tips: [1, '#3595CC'],
+                tips: [1, '#009688'],
                 time: 3000
             });
         } else if (username == '') {
             layer.tips('请输入推广人员姓名','#add_users_name', {
-                tips: [1, '#3595CC'],
+                tips: [1, '#009688'],
                 time: 3000
             });
         } else {
@@ -221,7 +221,7 @@ function dataInit() {
 
 function lineChartInit(xAxis, series, interval, str_title, names, units) {
     Highcharts.setOptions({
-        colors: ['#A47D7C', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
+        colors: ['#009688', '#DB843D', '#B6A2DE', '#2EC7C9', '#AA4643', '#5AB1EF', '#3D96AE', '#92A8CD', '#B5CA92']
     });
     $('#charts_container_one').highcharts({
         tooltip: {
@@ -290,7 +290,7 @@ function lineChartInit(xAxis, series, interval, str_title, names, units) {
                 dataLabels: {
                     enabled: true,
                     formatter: function () {
-                        return this.point.y > 0 ? this.point.y + '人' : this.point.y;
+                        return this.point.y > 0 ? this.point.y + '人' : null;
                     }
                 },
                 enableMouseTracking: true
@@ -316,6 +316,16 @@ var pageSet = {
             }
             if (endRequest != '') {
                 endRequest = common.timeTransform($('#date_show_four').val() + ' 23:59:59');
+            }
+            if(requestStrat!=''&&endRequest==''){
+                endRequest=common.currentTime();
+            }
+           if(requestStrat==''&&endRequest!=''){
+                 layer.tips('请输入开始日期！', '#date_show_three', {
+                    tips: [1, '#009688'],
+                    time: 3000
+                });
+                 return false;
             }
             var url = '/promote/effect/';
             var data = {

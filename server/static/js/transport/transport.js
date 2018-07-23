@@ -196,6 +196,7 @@ var dataSet = {
                 ]]
                 ,
                 done: function (res, curr, count) {
+                    layer.closeAll('loading')
                     $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='business']").children().each(function () {
                         if ($(this).text() == 1) {
@@ -276,6 +277,7 @@ var dataSet = {
                                 layer.msg('数据请求失败')
                             },
                             complete: function () {
+                                console.log('complete')
                                 layer.closeAll('loading')
                             }
                         })

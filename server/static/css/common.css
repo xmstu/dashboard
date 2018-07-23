@@ -971,13 +971,13 @@ body {
 }
 
 #scrollUp {
-	width: 3rem;
-	height: 3rem;
+	width: 2rem;
+	height: 2rem;
 	display: none
 }
 
 #scrollUp>i {
-	font-size: 2.4rem;
+	font-size: 3.4rem;
 	color: #009688
 }
 
@@ -1002,11 +1002,6 @@ body {
 
 	nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 		font-size: 12px
-	}
-
-	.part-2 .layui-table-body .layui-table-cell {
-		font-size: 12px!important;
-		line-height: 18px!important
 	}
 }
 

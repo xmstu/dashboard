@@ -2,7 +2,7 @@ $(".layui-table-cell").css({
     "height": "auto!important"
 });
 $(".part-2 .layui-form-item").css({
-    "width": "246px"
+    "width": "218px"
 });
 $("#date_show_one").val(String(common.getNowFormatDate()[0]));
 $("#date_show_two").val(String(common.getNowFormatDate()[0]));
@@ -69,9 +69,10 @@ $("#user_search_box").on("click",
             vehicle_length: $.trim($("#vehicle_length").val()),
             node_id: $.trim($("#node_id").val()) == "" ? common.role_area_show($("#super_manager_area_one")) : $.trim($("#node_id").val()),
             spec_tag: $.trim($("#spec_tag").val()),
-            is_addition: $.trim($("#is_addition").val())
+            is_addition: $.trim($("#is_addition").val()),
+            goods_price_type:$('#goods_price_type').val()
         };
-        var url = "/city/latest_orders/?goods_type=" + data.goods_type + "&is_called=" + data.is_called + "&vehicle_length=" + data.vehicle_length + "&node_id=" + data.node_id + "&spec_tag=" + data.spec_tag + "&is_addition=" + data.is_addition;
+        var url = "/city/latest_orders/?goods_type=" + data.goods_type + "&is_called=" + data.is_called + "&goods_price_type=" + data.goods_price_type + "&vehicle_length=" + data.vehicle_length + "&node_id=" + data.node_id + "&spec_tag=" + data.spec_tag + "&is_addition=" + data.is_addition;
         tableInit(url)
     });
 

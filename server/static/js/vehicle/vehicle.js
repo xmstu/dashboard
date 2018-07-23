@@ -44,7 +44,7 @@ var set = {
                         layer.msg('提示：开始时间大于了结束时间！');
                         return false;
                     }
-                     if ($('#date_show_two').val() == '' || val == '') {
+                    if ($('#date_show_two').val() == '' || val == '') {
                         $('#date_show_two').next('.date-tips').show();
                     } else {
                         $('#date_show_two').next('.date-tips').hide()
@@ -104,7 +104,7 @@ var set = {
                 , cols: [[
                     {field: 'id', title: '车辆ID'},
                     {field: 'name', title: '姓名'},
-                    {field:'mobile',title:'手机号'},
+                    {field: 'mobile', title: '手机号'},
                     {field: 'number', title: '车牌号'},
                     {field: 'home_station', title: '常驻地'},
                     {field: 'vehicle_length_type', title: '车长/车型'},
@@ -148,6 +148,16 @@ var set = {
             }
             if (data.last_login_end_time != '') {
                 data.last_login_end_time = common.timeTransform(data.last_login_end_time + ' 23:59:59')
+            }
+            if (data.verify_end_time != '' && data.verify_start_time == '') {
+                layer.tips('请输入开始日期！', '#date_show_one', {
+                    tips: [1, '#009688'],
+                    time: 3000
+                });
+                return false;
+            }
+            if (data.verify_start_time != ''&&data.verify_end_time == '') {
+                data.verify_end_time = common.currentTime()
             }
             var url = '/vehicle/list/?mobile=' + data.mobile + '&vehicle_number=' + data.vehicle_number + '&home_station_id=' + data.home_station_id + '&vehicle_length=' + data.vehicle_length + '&verify_start_time=' + data.verify_start_time + '&verify_end_time=' + data.verify_end_time + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time;
             that.tableRender(url)
