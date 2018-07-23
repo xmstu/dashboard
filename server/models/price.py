@@ -125,45 +125,8 @@ class PriceTrendModel(object):
         price_trend = cursor.query(command.format(fetch_where=fetch_where), kwargs)
         price_trend = json.loads(json.dumps(price_trend, default=ExtendHandler.handler_to_float))
 
-        recommend_price_instance = data_price[params['vehicle_length']]
-        for detail in price_trend:
-            detail_recommend_price = recommend_price_instance.get_fast_price(detail.get('mileage_total'))
-            if not 0.6 * detail_recommend_price < detail['price'] < 2 * detail_recommend_price:
-                price_trend.remove(detail)
-
-        result = {}
-        price_trend.sort(key=lambda i: (time.mktime(time.strptime(i['create_time'], '%Y-%m-%d')), i['price']))
-        date_str_list = list(set([i['create_time'] for i in price_trend]))
-        date_str_list.sort(key=lambda k: time.mktime(time.strptime(k, '%Y-%m-%d')))
-        for date_str in date_str_list:
-            price = []
-            mileage = []
-            for detail in price_trend:
-                if detail['create_time'] == date_str:
-                    price.append(detail['price'])
-                    mileage.append(detail['mileage_total'])
-
-            max_price, min_price = max(price), min(price)
-            avg_price = sum(price) / len(price)
-            avg_mileage = sum(mileage) / len(mileage)
-            result[date_str] = [date_str, max_price, min_price, avg_price, avg_mileage]
-
-        # 获取价格基准线
-        recommend_price_one = recommend_price_instance.get_fast_price(params['min_mileage'])
-        recommend_price_two = recommend_price_instance.get_fast_price(params['max_mileage'])
-        if price_trend:
-            if params.get('from_province_id') and params.get('to_province_id'):
-                recommend_price_one = recommend_price_two = recommend_price_instance.get_fast_price(
-                    [v for v in result.values()][0][-1])
-        else:
-            price_trend = []
-            recommend_price_one = 0
-            recommend_price_two = 0
-
         data = {
-            "price_trend": price_trend,
-            "recommend_price_one": recommend_price_one,
-            "recommend_price_two": recommend_price_two,
+            "price_trend": price_trend if price_trend else [],
         }
 
         return data

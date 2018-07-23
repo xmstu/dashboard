@@ -9,7 +9,7 @@ from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
 from server.meta.session_operation import sessionOperationClass
 from server.cache_data import init_regions
-from server.utils.extend import compare_time
+from server.utils.extend import compare_time, complement_time
 
 
 class UserStatistic(object):
@@ -85,6 +85,9 @@ class UserList(object):
 
             register_start_time = int(params.get('register_start_time')) if params.get('register_start_time') else 0
             register_end_time = int(params.get('register_end_time')) if params.get('register_end_time') else 0
+
+            last_login_start_time, last_login_end_time = complement_time(last_login_start_time, last_login_end_time)
+            register_start_time, register_end_time = complement_time(register_start_time, register_end_time)
 
             # 检验最后登陆时间
             if not compare_time(last_login_start_time, last_login_end_time):

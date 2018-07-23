@@ -131,6 +131,28 @@ def get_struct_data(data, params, *args, **kwargs):
     return xAxis, series
 
 
+class ParamsError(Exception):
+    def __init__(self, *args, **kwargs): # real signature unknown
+        pass
+
+
+def complement_time(start_time, end_time):
+    if start_time and not end_time:
+        end_time = time.time()
+        if start_time <= end_time:
+            return start_time, end_time
+        else:
+            raise ParamsError
+    elif not start_time and end_time:
+        start_time = int(time.time() - 86400 * 7)
+        if start_time <= end_time:
+            return start_time, end_time
+        else:
+            raise ParamsError
+    else:
+        return start_time, end_time
+
+
 def compare_time(start_time, end_time) -> bool:
     if start_time and end_time:
         if start_time <= end_time:
