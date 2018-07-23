@@ -99,6 +99,7 @@ function dataInit(dataArrSet) {
                 start_time: start_time,
                 end_time: end_time,
                 region_id: region_id,
+                goods_price_type:$('#goods_price_types').val(),
                 goods_type: goods_types
             };
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2,
