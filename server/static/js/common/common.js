@@ -150,7 +150,7 @@ var common = {
         var date4 = new Date();//昨天
         var date5 = new Date();//前天
         var date6 = new Date();//七天前
-        var date7 = new Date();//60tian
+        var date7 = new Date();//30tian
         date3.setTime(date3.getTime() - 8 * 24 * 60 * 60 * 1000);
         date2.setTime(date2.getTime() + 24 * 60 * 60 * 1000);
         date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
@@ -441,8 +441,12 @@ var common = {
         }
     },
     clearSelect: function (element) {
-
-
+      var layui_none = $('.layui-none').html();
+        if(layui_none=='无数据'){
+          $('.layui-table-body').css({'min-height':'40px'})
+        }else {
+           $('.layui-table-body').css({'min-height':'200px'})
+        }
     }
 };
 setTimeout(function () {
