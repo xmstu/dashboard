@@ -4,7 +4,7 @@ from server.meta.decorators import make_decorator
 from server.status import build_result, HTTPStatus, APIStatus, make_result
 from server.cache_data import init_regions
 from server.logger import log
-from server.utils.amap import distance
+from server.utils.amap import distance_between_position
 
 import time
 from operator import itemgetter
@@ -245,7 +245,7 @@ class CityNearbyCars(object):
                         delta = '%d分钟前' % (last_delta // 60)
                     usual_region = init_regions.to_address(i['from_province_id'], i['from_city_id'], i['from_county_id'])
                     # 距离
-                    mileage_total = distance(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])
+                    mileage_total = distance_between_position(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])*1.3
                     mileage = '%.3fkm' % mileage_total
                     locations = init_regions.to_address(i['province'], i['city'], i['county']) + i['address'] + ', ' + mileage + ', ' + delta
                     result.append({
