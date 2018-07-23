@@ -25,8 +25,8 @@ class PriceTrendModel(object):
         {fetch_where}
         AND so.is_deleted = 0
         AND so.`status` = 3
-        AND so.driver_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1 ) 
-        AND so.owner_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1) 
+        -- AND so.driver_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1 ) 
+        -- AND so.owner_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1) 
         -- 时间
         AND so.create_time >= :start_time 
         AND so.create_time < :end_time
@@ -128,7 +128,7 @@ class PriceTrendModel(object):
         recommend_price_instance = data_price[params['vehicle_length']]
         for detail in price_trend:
             detail_recommend_price = recommend_price_instance.get_fast_price(detail.get('mileage_total'))
-            if not 0.6 * detail_recommend_price < price_trend['price'] < 2 * detail_recommend_price:
+            if not 0.6 * detail_recommend_price < detail['price'] < 2 * detail_recommend_price:
                 price_trend.remove(detail)
 
         result = {}
@@ -143,10 +143,10 @@ class PriceTrendModel(object):
                     price.append(detail['price'])
                     mileage.append(detail['mileage_total'])
 
-                max_price, min_price = price[-1], price[0]
-                avg_price = sum(price) / len(price)
-                avg_mileage = sum(mileage) / len(mileage)
-                result[date_str] = [date_str, max_price, min_price, avg_price, avg_mileage]
+            max_price, min_price = max(price), min(price)
+            avg_price = sum(price) / len(price)
+            avg_mileage = sum(mileage) / len(mileage)
+            result[date_str] = [date_str, max_price, min_price, avg_price, avg_mileage]
 
         # 获取价格基准线
         recommend_price_one = recommend_price_instance.get_fast_price(params['min_mileage'])

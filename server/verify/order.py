@@ -19,7 +19,7 @@ class OrdersReceivedStatistics(object):
             params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
             params['periods'] = int(params.get('periods', None) or 2)
             params['goods_type'] = int(params.get('goods_type', None) or 0)
-            params['goods_price_type'] = int(params.get('goods_type', None) or 0)
+            params['goods_price_type'] = int(params.get('goods_price_type', None) or 0)
             params['dimension'] = int(params.get('dimension', None) or 1)
             params['region_id'] = int(params.get('region_id', None) or 0)
             params['comment_type'] = int(params.get('comment_type', None) or 0)
