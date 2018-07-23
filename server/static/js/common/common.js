@@ -155,8 +155,8 @@ var common = {
         date2.setTime(date2.getTime() + 24 * 60 * 60 * 1000);
         date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
         date5.setTime(date5.getTime() - 2 * 24 * 60 * 60 * 1000);
-        date6.setTime(date6.getTime() - 7* 24 * 60 * 60 * 1000);
-        date7.setTime(date7.getTime() - 30* 24 * 60 * 60 * 1000);
+        date6.setTime(date6.getTime() - 7 * 24 * 60 * 60 * 1000);
+        date7.setTime(date7.getTime() - 30 * 24 * 60 * 60 * 1000);
         var seperator1 = "-";
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
@@ -168,9 +168,9 @@ var common = {
         var date_4 = date4.getDate();
         var month_5 = date5.getMonth() + 1;
         var date_5 = date5.getDate();
-          var month_6 = date6.getMonth() + 1;
+        var month_6 = date6.getMonth() + 1;
         var date_6 = date6.getDate();
-          var month_7 = date7.getMonth() + 1;
+        var month_7 = date7.getMonth() + 1;
         var date_7 = date7.getDate();
         if (month >= 1 && month <= 9) {
             month = "0" + month;
@@ -196,13 +196,13 @@ var common = {
         if (date_5 >= 0 && date_5 <= 9) {
             date_5 = "0" + date_5;
         }
-          if (month_6 >= 1 && month_6 <= 9) {
+        if (month_6 >= 1 && month_6 <= 9) {
             month_6 = "0" + month_6;
         }
         if (date_6 >= 0 && date_6 <= 9) {
             date_6 = "0" + date_6;
         }
-          if (month_7 >= 1 && month_7 <= 9) {
+        if (month_7 >= 1 && month_7 <= 9) {
             month_7 = "0" + month_7;
         }
         if (date_7 >= 0 && date_7 <= 9) {
@@ -215,11 +215,11 @@ var common = {
         var defaultdate = date3.getFullYear() + seperator1 + month_3 + seperator1 + date_3;
         var yesterdaydate = date4.getFullYear() + seperator1 + month_4 + seperator1 + date_4;
         var beforeYesterday = date5.getFullYear() + seperator1 + month_5 + seperator1 + date_5;
-        var sevenDayAgo =  date6.getFullYear() + seperator1 + month_6 + seperator1 + date_6;
-        var sixtyDayAgo =  date7.getFullYear() + seperator1 + month_7 + seperator1 + date_7;
-        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday,sevenDayAgo,sixtyDayAgo];
+        var sevenDayAgo = date6.getFullYear() + seperator1 + month_6 + seperator1 + date_6;
+        var sixtyDayAgo = date7.getFullYear() + seperator1 + month_7 + seperator1 + date_7;
+        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday, sevenDayAgo, sixtyDayAgo];
     },
-    dateInterval: function (num1, num2,dayLength) {
+    dateInterval: function (num1, num2, dayLength) {
         var date1 = new Date(num1.replace(/-/g, "/"));
         var date2 = new Date(num2.replace(/-/g, "/"));
         var days = date1.getTime() - date2.getTime();
@@ -245,7 +245,7 @@ var common = {
                 $("#week_methods").removeAttr('disabled').css({'cursor': 'pointer'}).addClass('active');
                 $("#month_methods").removeAttr('disabled').css({'cursor': 'pointer'});
             }
-        }else if(time>60){
+        } else if (time > 60) {
             $("#day_methods").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
         } else {
             $("#day_methods").removeAttr('disabled').css({'cursor': 'pointer'});
@@ -266,7 +266,7 @@ var common = {
             $("#day_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods_1").attr("disabled", "disabled").css({'cursor': 'not-allowed'});
             $("#week_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
-        } else if (time>30) {
+        } else if (time > 30) {
             $("#day_methods_1").attr("disabled", "disabled").css({'cursor': 'not-allowed'}).removeClass('active');
             $("#week_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
             $("#month_methods_1").removeAttr('disabled').css({'cursor': 'pointer'});
@@ -441,12 +441,25 @@ var common = {
         }
     },
     clearSelect: function (element) {
-      var layui_none = $('.layui-none').html();
-        if(layui_none=='无数据'){
-          $('.layui-table-body').css({'min-height':'40px'})
-        }else {
-           $('.layui-table-body').css({'min-height':'200px'})
+        var layui_none = $('.layui-none').html();
+        if (layui_none == '无数据') {
+            $('.layui-table-body').css({'min-height': '40px'})
+        } else {
+            $('.layui-table-body').css({'min-height': '200px'})
         }
+    },
+    currentTime: function () {
+        var that = this;
+        var date = new Date();
+        this.year = date.getFullYear();
+        this.month = date.getMonth() + 1;
+        this.date = date.getDate();
+        this.hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        this.minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        this.second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        var currentTime = "现在是:" + this.year + "-" + this.month + "-" + this.date +' '+ this.hour + ":" + this.minute + ":" + this.second;
+        currentTime = that.timeTransform(currentTime);
+        return currentTime
     }
 };
 setTimeout(function () {

@@ -14,7 +14,7 @@ setTimeout(function () {
 
 function init() {
     $('.layui-form-item').width('236px');
-
+$('.part-1-top .layui-form-item').css({width:180})
     $('#from_region_id').address({
         offsetLeft: '0',
         level: 3,
@@ -347,6 +347,7 @@ var setAbout = {
             start_time: requestStart,
             end_time: requestEnd,
             goods_type: $('#cancel_reason_types').val(),
+            goods_price_type:$('#goods_price_type1').val(),
             cancel_type: $('#cancel_reason_roles').val(),
             region_id: $('#cancel_reason_area').val() == '' ? common.role_area_show($('#super_manager_area_select_one')) : $.trim($('#cancel_reason_area').val())
         };
@@ -362,7 +363,7 @@ var setAbout = {
                     $('.cancel-reason-types').html('').append(str);
                     $('#charts_container_two').height('90px');
                     console.log($('.highcharts-container').height());
-                    that.chartShow(cancel_list, '图表无法显示，因该日期段无数据')
+                    that.chartShow(cancel_list, '图表无法显示，因该条件下无数据')
                 } else if (cancel_list.length > 0) {
                     $('#charts_container_two').height('400px');
                     that.chartShow(cancel_list, '取消原因统计表');
@@ -392,6 +393,7 @@ var setAbout = {
             start_time: requestStart,
             end_time: requestEnd,
             periods: $('.periods>li').find('button.active').val(),
+            goods_price_type:$('#goods_price_type').val(),
             goods_type: $('#goods_type_show').val(),
             dimension: $('#dimension').val(),
             region_id: $.trim($('#region_id_show').val()) == '' ? common.role_area_show($('#super_manager_area_select_zero')) : $.trim($('#region_id_show').val()),
@@ -443,15 +445,15 @@ var setAbout = {
                 },
                 cols: [[
                     {field: 'order_id', title: '订单ID', width: 60},
-                    {field: 'goods_standard', title: '货物规格', width: 80},
-                    {field: 'goods_type', title: '类型', width: 70},
-                    {field: 'address', title: '出发地-目的地', width: 240},
+                    {field: 'goods_standard', title: '货物规格', width: 70},
+                    {field: 'goods_type', title: '类型', width: 80},
+                    {field: 'address', title: '出发地-目的地', width: 260},
                     {field: 'vehicle', title: '车型要求', width: 76},
                     {field: 'freight', title: '运费', width: 80},
                     {field: 'cargo_owner', title: '货主', width: 96},
-                    {field: 'driver', title: '司机', width: 96},
+                    {field: 'driver', title: '司机', width: 94},
                     {field: 'latency_time', title: '接单时间', width: 90},
-                    {field: 'order_status', title: '状态', width: 86},
+                    {field: 'order_status', title: '状态', width: 80},
                     {field: 'time_field', title: '时间', width: 180},
                     {field: 'evaluation', title: '互评', width: 92},
                     {field: 'comment', title: '互评内容'}
@@ -463,7 +465,7 @@ var setAbout = {
                     $("td[data-field='goods_standard']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');
-                            $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: #009688;"></i><span style="font-weight: 500;color: #009688;">' + result[0] + '</span><br><i style="font-weight: 500;color: #009688;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: #009688;">' + result[1] + '</span>')
+                            $(this).html(result[0] + '<br>' + result[1] + '</span>')
                         }
                     });
                     $("td[data-field='goods_time']").children().each(function (val) {
@@ -575,10 +577,21 @@ $('#goods_search_box').on('click', function (e) {
         if (load_end_time != '') {
             load_end_time = common.timeTransform(load_end_time + ' 23:59:59')
         }
+        if(load_start_time!=''&&load_end_time==''){
+            load_end_time=common.currentTime();
+        }
+         if(load_start_time==''&&load_end_time!=''){
+               layer.tips('请输入开始日期！', '#load_start_time', {
+                    tips: [1, '#009688'],
+                    time: 3000
+                });
+                 return false;
+        }
         var data = {
             order_id: $.trim($('#order_id').val()),
             consignor_mobile: $.trim($('#consignor_mobile').val()),
             driver_mobile: $.trim($('#driver_mobile').val()),
+            order_price_type:$.trim($('#order_price_type').val()),
             order_type: $.trim($('#order_type').val()),
             order_status: $.trim($('#order_status').val()),
             vehicle_length: $.trim($('#vehicle_length').val()),
@@ -597,11 +610,10 @@ $('#goods_search_box').on('click', function (e) {
             start_order_time: create_start_time,
             end_order_time: create_end_time,
             start_complete_time: load_start_time,
-            end_complete_time: load_end_time,//23
-            page: 1,
-            limit: 10
+            end_complete_time: load_end_time
         };
-        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile + '&driver_mobile=' + data.driver_mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&order_type=' +
+        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile + '&driver_mobile=' + data.driver_mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id+ '&order_price_type=' +
+            data.order_price_type  + '&order_type=' +
             data.order_type + '&order_status=' + data.order_status + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&spec_tag=' + data.spec_tag + '&node_id=' + data.node_id + '&is_change_price=' + data.is_change_price + '&pay_status=' + data.pay_status + '&comment_type=' + data.comment_type + '&start_order_time=' + data.start_order_time + '&end_order_time=' + data.end_order_time + '&start_complete_time=' + data.start_complete_time + '&end_complete_time=' + data.end_complete_time;
         setAbout.tableRender(url)
     });

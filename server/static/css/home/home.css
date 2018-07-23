@@ -274,3 +274,6 @@
 .layui-layer-loading {
     z-index: 999999999999!important;
 }
+.layui-form-item .layui-input-inline{
+    width: 130px;
+}

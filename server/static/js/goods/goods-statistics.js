@@ -317,7 +317,6 @@ layui.use(['laydate', 'form', 'table'], function () {
                     var str = $(this).text();
                     if (str != '') {
                         str = str.split('\n');
-                        console.log(str)
                         if(str[0]==''){
                              $(this).html(str[0])
                         }else if(str[0]!=''&&str[1] == ''&&str[2] != '') {
@@ -422,6 +421,8 @@ var dataSet = {
             periods: $('.periods>li').find('button.active').val(),
             goods_type: $('#goods_type_one').val(),
             region_id: $('#region_id').val()==''?common.role_area_show($('#super_manager_area_select_zero')):$.trim($('#region_id').val()),
+           goods_price_type:$('#goods_price_type').val()
+
         }
         layui.use('layer', function () {
             var layer = layui.layer;
@@ -449,12 +450,12 @@ var dataSet = {
             end_time: requestEndTime,
             goods_type: $('#cancel_reason_types').val(),
             region_id: $('#area_select').val()==''?common.role_area_show($('#super_manager_area_select_one')):$.trim($('#area_select').val()),
+            goods_price_type:$('#goods_price_type2').val()
         }
         layui.use('layer', function () {
             var layer = layui.layer;
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var all_reason = res.data.cancel_list;
-                console.log(res)
                 if (res.data.cancel_list_dict == '' && res.data.cancel_list == '') {
                     var str = '<p style="color: #ccc; text-align: center; font-size: 24px;width: 400%;line-height: 40px;" >there is no data</p>';
                     Chart_third(all_reason, '该时间段无数据，图表无法展示')
@@ -484,8 +485,8 @@ var dataSet = {
     }
 }
 function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_series, goods_user_count_series, interval) {
-    Highcharts.setOptions({
-    colors: ['#2EC7C9', '#AA4643', '#B6A2DE', '#5AB1EF', '#3D96AE', '#DB843D', '#92A8CD', '#A47D7C', '#B5CA92']
+Highcharts.setOptions({
+    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
     $('#charts_container_two').highcharts({
         chart: {
@@ -525,7 +526,7 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
         tooltip: {
             shared: true
         },
-        legend: {
+       /* legend: {
             layout: 'vertical',
             align: 'left',
             verticalAlign: 'top',
@@ -537,7 +538,7 @@ function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_s
             labelFormatter: function () {
                 return this.name
             }
-        },
+        },*/
         lotOptions: {
             line: {
                 dataLabels: {
@@ -682,6 +683,7 @@ $('#goods_search_box').on('click', function (e) {
         from_region_id: $.trim($('#reference_mobile').val()),
         to_region_id: $.trim($('#to_region_id').val()),
         goods_type: $.trim($('#goods_type').val()),
+        goods_price_type:$.trim($('#goods_price_type').val()),
         goods_status: $.trim($('#goods_status').val()),
         is_called: $.trim($('#is_called').val()),
         vehicle_length: $.trim($('#vehicle_length').val()),
@@ -703,7 +705,8 @@ $('#goods_search_box').on('click', function (e) {
         page: 1,
         limit: 10
     }
-    var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&goods_type=' +
+    var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&goods_price_type=' +
+        data.goods_price_type + '&goods_type=' +
         data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;
     layui.use(['table', 'layer'], function () {
         var table = layui.table;
@@ -765,7 +768,6 @@ $('#goods_search_box').on('click', function (e) {
                     var str = $(this).text();
                     if (str != '') {
                         str = str.split('\n');
-                        console.log(str)
                         if(str[0]==''){
                              $(this).html(str[0])
                         }else if(str[0]!=''&&str[1] == ''&&str[2] != '') {

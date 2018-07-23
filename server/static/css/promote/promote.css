@@ -176,6 +176,12 @@
 .order-item-spec {
     width: 214px!important;
 }
+.layui-form-item-show-spec {
+    width: 158px!important;
+}
+.layui-form-item-show-spec-ano{
+    width: 195px!important;
+}
 .cancel_reason_total {
     position: absolute;
     right: 0;

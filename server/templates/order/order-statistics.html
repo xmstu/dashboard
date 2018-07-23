@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>订单统计-省省统计中心</title>
-    <link rel="stylesheet" href="../static/css/base.css?v=1.2">
+    <link rel="stylesheet" href="../static/css/base.css?v=1.3">
     <link rel="stylesheet" href="../static/layui/css/layui.css">
-    <link rel="stylesheet" href="../static/css/common.css?v=1.2">
-    <link rel="stylesheet" href="../static/css/iconfont.css?v=1.2">
-    <link rel="stylesheet" href="../static/css/promote/promote.css?v=1.2">
+    <link rel="stylesheet" href="../static/css/common.css?v=1.3">
+    <link rel="stylesheet" href="../static/css/iconfont.css?v=1.3">
+    <link rel="stylesheet" href="../static/css/promote/promote.css?v=1.3">
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
@@ -24,8 +24,8 @@
                     <div class="part-1">
                         <div class="part-1-top">
                             <form action="" class="layui-form layui-form-pane">
-                                <div class="layui-form-item layui-form-spec">
-                                    <div class="layui-inline" style="width: 200px;">
+                                <div class="layui-form-item layui-form-item-show-spec-ano">
+                                    <div class="layui-inline" style="width: 180px;">
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -34,8 +34,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item layui-form-spec">
-                                    <div class="layui-inline" style="width: 200px;">
+                                <div class="layui-form-item layui-form-item-show-spec-ano">
+                                    <div class="layui-inline" style="width: 180px;">
                                         <label class="layui-form-label">结束日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -55,10 +55,23 @@
                                         <button value="4" id="month_methods">按月</button>
                                     </li>
                                 </ul>
-                                <div class="layui-form-item layui-form-special" id="">
+                                  <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">价格类型</label>
+                                        <div class="layui-input-inline" style="width: 94px">
+                                            <select id="goods_price_type" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">议价</option>
+                                                <option value="2">一口价</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" id="">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">货源类型</label>
-                                        <div class="layui-input-inline" style="width: 116px">
+                                        <div class="layui-input-inline" style="width: 94px">
                                             <select id="goods_type_show" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
@@ -69,10 +82,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item layui-form-special">
+                                <div class="layui-form-item layui-form-item-show-spec">
                                     <div class="layui-inline " style="">
-                                        <label class="layui-form-label">筛选类别</label>
-                                        <div class="layui-input-inline" style="width:116px;">
+                                        <label class="layui-form-label">类别</label>
+                                        <div class="layui-input-inline" style="width:94px;">
                                             <select id="dimension" name="modules" lay-verify="required" lay-search="">
                                                 <option value="1">按数量</option>
                                                 <option value="2">按金额</option>
@@ -80,10 +93,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item layui-form-special">
+                                <div class="layui-form-item">
                                     <div class="layui-inline " style="">
-                                        <label class="layui-form-label">评价级别</label>
-                                        <div class="layui-input-inline" style="width:110px;">
+                                        <label class="layui-form-label">评价类型</label>
+                                        <div class="layui-input-inline" style="width:94px;">
                                             <select id="comment_type" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部评价</option>
@@ -97,10 +110,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item layui-form-special">
+                                <div class="layui-form-item">
                                     <div class="layui-inline " style="">
                                         <label class="layui-form-label">支付方式</label>
-                                        <div class="layui-input-inline" style="width:110px;">
+                                        <div class="layui-input-inline" style="width:94px;">
                                             <select id="pay_method" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部支付</option>
                                                 <option value="1">未支付</option>
@@ -110,11 +123,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item layui-form-special">
+                                <div class="layui-form-item">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">所属地区</label>
                                         <div id="city_manager_one" class="layui-input-inline"
-                                             style="width:140px;display: none;">
+                                             style="width:94px;display: none;">
                                             <select id="region_id_show" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部地区</option>
@@ -125,7 +138,7 @@
                                             </select>
                                         </div>
                                         <div id="super_manager_area" class="layui-input-inline"
-                                             style="width:116px;display: none;">
+                                             style="width:94px;display: none;">
                                             <input id="super_manager_area_select_zero" placeholder="请选择地区"
                                                    name="super_manager_area_select_zero" autocomplete="off"
                                                    lay-verify="super_manager_area_select_zero" class="layui-input"
@@ -169,6 +182,19 @@
                                             <i class="layui-icon layui-icon-riqi"></i>
                                             <input id="end_time_one" name="end_time_one" autocomplete="off"
                                                    lay-verify="end_time_one" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 230px">
+                                        <label class="layui-form-label">价格类型</label>
+                                        <div class="layui-input-inline" style="width: 146px">
+                                            <select id="goods_price_type1" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">议价</option>
+                                                <option value="2">一口价</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -301,6 +327,18 @@
                                     <div class="layui-input-inline" style="">
                                         <input id="to_region_id" type="tel" name="phone" placeholder="请输入地名"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">价格类型</label>
+                                    <div class="layui-input-inline" style="width: 147px;">
+                                        <select id="order_price_type" name="modules" lay-verify="required" lay-search="">
+                                            <option value="">全部类型</option>
+                                            <option value="1">议价</option>
+                                            <option value="2">一口价</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -507,14 +545,14 @@
 <span style="display: none!important">
        <script src="https://s22.cnzz.com/z_stat.php?id=1274088436&web_id=1274088436" language="JavaScript"></script>
 </span>
-<script src="../static/js/libs/jquery-2.1.1.min.js?v=1.2"></script>
-<script src="../static/js/libs/highcharts.min.js?v=1.2"></script>
-<script src="../static/js/libs/highcharts-exporting.js?v=1.2"></script>
-<script src="../static/layui/layui.js?v=1.2"></script>
-<script src="../static/js/common/common.js?v=1.2"></script>
-<script src="../static/js/common/http.js?v=1.2"></script>
-<script src="../static/js/libs/jquery.address.js?v=1.2"></script>
-<script src="../static/js/order/order-statistics.js?v=1.2"></script>
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=1.3"></script>
+<script src="../static/js/libs/highcharts.min.js?v=1.3"></script>
+<script src="../static/js/libs/highcharts-exporting.js?v=1.3"></script>
+<script src="../static/layui/layui.js?v=1.3"></script>
+<script src="../static/js/common/common.js?v=1.3"></script>
+<script src="../static/js/common/http.js?v=1.3"></script>
+<script src="../static/js/libs/jquery.address.js?v=1.3"></script>
+<script src="../static/js/order/order-statistics.js?v=1.3"></script>
 </body>
 </html>
 <script>

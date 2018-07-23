@@ -37,13 +37,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-            if ($('#date_show_three').val() == '') {
-                $('#date_show_three').next('.date-tips').show();
-            } else {
-                $('#date_show_three').next('.date-tips').hide()
-            }
-        },
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -59,13 +52,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-            if ($('#date_show_three').val() == '') {
-                $('#date_show_three').next('.date-tips').show();
-            } else {
-                $('#date_show_three').next('.date-tips').hide()
-            }
-        },
         done: function (val, index) {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -85,18 +71,11 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-            if ($('#date_show_four').val() == '') {
+        done: function (val, index) {
+            if ($('#date_show_four').val() == ''||val=='') {
                 $('#date_show_four').next('.date-tips').show();
             } else {
                 $('#date_show_four').next('.date-tips').hide()
-            }
-        },
-        done: function (val, index) {
-            if ($('#date_show_three').val() == '') {
-                $('#date_show_three').next('.date-tips').show();
-            } else {
-                $('#date_show_three').next('.date-tips').hide()
             }
             var startTime = common.timeTransform($('#date_show_three').val())
             var endTime = common.timeTransform($('#date_show_four').val())
@@ -220,27 +199,31 @@ $('#user_search_box').on('click', function (e) {
     var infinteTime = $.trim($('#date_show_five').val());
     var overTIme = $.trim($('#date_show_six').val());
     if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
-        layer.msg('请检查用户名号码长度!', function () {
-
+          layer.tips('请检查号码格式', '#phone_number', {
+            tips: [1, '#009688'],
+            time: 3000
         });
         return false;
     }
     if ($('#reference_mobile').val() != '' && $('#reference_mobile').val().length != 11) {
-        layer.msg('请检查推荐人号码长度!', function () {
-
+      layer.tips('请检查号码格式', '#reference_mobile', {
+            tips: [1, '#009688'],
+            time: 3000
         });
         return false;
     }
 
     if (beginTime !== '' && finishTime == '') {
-        layer.msg('请选择最后登陆的结束日期', function () {
-
+        layer.tips('请输入结束日期', '#date_show_four', {
+            tips: [1, '#009688'],
+            time: 4000
         });
         return false;
     }
     if (beginTime == '' && finishTime != '') {
-        layer.msg('请选择最后登陆的起始日期', function () {
-
+        layer.tips('请输入开始日期', '#date_show_three', {
+            tips: [1, '#009688'],
+            time: 4000
         });
         return false;
     }
@@ -265,14 +248,16 @@ $('#user_search_box').on('click', function (e) {
         overTIme = overTIme
     }
     if (infinteTime !== '' && overTIme == '') {
-        layer.msg('请选择注册日期的结束日期', function () {
-
+         layer.tips('请选择注册日期的结束日期', '#date_show_six', {
+            tips: [1, '#009688'],
+            time: 3000
         });
         return false
     }
     if (infinteTime == '' && overTIme != '') {
-        layer.msg('请选择注册日期的开始日期', function () {
-
+        layer.tips('请选择注册日期的开始日期', '#date_show_five', {
+            tips: [1, '#009688'],
+            time: 3000
         });
         return false;
     }
@@ -284,7 +269,7 @@ $('#user_search_box').on('click', function (e) {
         download_ch: $.trim($('#download_ch').val()),
         from_channel: $.trim($('#register').val()),
         is_referenced: $.trim($('#is_referenced').val()),
-        region_id: $.trim($('#area_select').val())==''?common.role_area_show($('#super_manager_area_select_one')):$.trim($('#area_select').val()),
+        region_id: $.trim($('#area_select').val()) == '' ? common.role_area_show($('#super_manager_area_select_one')) : $.trim($('#area_select').val()),
         role_type: $.trim($('#role_type').val()),
         role_auth: $.trim($('#role_auth').val()),
         is_actived: $.trim($('#is_actived').val()),
@@ -298,7 +283,7 @@ $('#user_search_box').on('click', function (e) {
         limit: 10
     }
     var url = '/user/list/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&reference_mobile=' + data.reference_mobile + '&download_ch=' + data.download_ch + '&from_channel=' +
-        data.from_channel + '&is_referenced=' + data.is_referenced + '&home_station_province=' + data.home_station_province + '&home_station_city=' + data.home_station_city + '&home_station_county=' + data.home_station_county+ '&region_id=' + data.region_id + '&role_type=' + data.role_type + '&role_auth=' + data.role_auth + '&is_actived=' + data.is_actived + '&is_used=' + data.is_used + '&is_car_sticker=' + data.is_car_sticker + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
+        data.from_channel + '&is_referenced=' + data.is_referenced + '&home_station_province=' + data.home_station_province + '&home_station_city=' + data.home_station_city + '&home_station_county=' + data.home_station_county + '&region_id=' + data.region_id + '&role_type=' + data.role_type + '&role_auth=' + data.role_auth + '&is_actived=' + data.is_actived + '&is_used=' + data.is_used + '&is_car_sticker=' + data.is_car_sticker + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
     layui.use(['layer', 'table'], function () {
         var table = layui.table;
         var layer = layui.layer;
@@ -379,7 +364,7 @@ function dataInit() {
         periods: $('.periods>li').find('button.active').val(),
         user_type: $('#user_type').val(),
         role_type: $('#role_type_first').val(),
-        region_id: $('#region_id').val()==''?common.role_area_show($('#super_manager_area_select_zero')):$('#region_id').val(),
+        region_id: $('#region_id').val() == '' ? common.role_area_show($('#super_manager_area_select_zero')) : $('#region_id').val(),
         is_auth: $("#is_auth").val()
     };
     var url = '/user/statistic/'
@@ -402,7 +387,7 @@ function dataInit() {
 }
 
 Highcharts.setOptions({
-    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+    colors: ['#9999ff', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
 
 function chartInit(xAxis, series, interval, x_value1) {
@@ -517,12 +502,12 @@ function area_select() {
         $('#super_manager_area').css({'display': 'block'})
         $('#super_manager_area_select_zero').address({
             level: 3,
-             offsetLeft: '-124px',
+            offsetLeft: '-124px',
         });
         $('#super_manager_area_one').css({'display': 'block'})
         $('#super_manager_area_select_one').address({
             level: 3,
-             offsetLeft: '-124px',
+            offsetLeft: '-124px',
         });
     } else {
         $('#super_manager_area').css({'display': 'none'})
@@ -532,6 +517,7 @@ function area_select() {
 
     }
 }
+
 area_select()
-if($('#region_id').val()==''){
+if ($('#region_id').val() == '') {
 }
