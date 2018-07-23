@@ -176,6 +176,7 @@ class CityOrderListFilterDecorator(object):
                 'content': '\n'.join([name, weight, volume]),
                 'supplier_node': supplier_node,
                 'address': '\n'.join([from_address, to_address, mileage_total]),
+                'to_address': to_address,
                 'vehicle': vehicle,
                 'price': '货主出价:%(price_expect)s元%(price_addition)s\n系统价:%(price_recommend)s元' % {
                     'price_expect': str(int(detail.get('price_expect', 0) + detail.get('price_addition', 0))),
