@@ -1,4 +1,6 @@
 import time
+from itertools import groupby
+from operator import itemgetter
 
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus
@@ -47,22 +49,25 @@ class PriceTrend(object):
 
         result = {}
         avg_mileage_list = []
-        price_trend.sort(key=lambda i: (time.mktime(time.strptime(i['create_time'], '%Y-%m-%d')), i['price']))
-        date_str_list = list(set([i['create_time'] for i in price_trend]))
-        date_str_list.sort(key=lambda k: time.mktime(time.strptime(k, '%Y-%m-%d')))
-        for index, date_str in enumerate(date_str_list):
+        price_trend.sort(key=itemgetter('create_time', 'price'))
+
+        # 用外部指针记录迭代次数
+        index = 0
+        last_date_str = ''
+        for date_str, item in groupby(price_trend, key=itemgetter('create_time')):
             price = []
             mileage = []
-            for detail in price_trend:
-                if detail['create_time'] == date_str:
-                    price.append(detail['price'])
-                    mileage.append(detail['mileage_total'])
-
+            for detail in item:
+                price.append(detail['price'])
+                mileage.append(detail['mileage_total'])
             max_price, min_price = max(price), min(price)
             avg_price = float(('%.2f' % (sum(price) / len(price))))
             avg_mileage = sum(mileage) / len(mileage)
             avg_mileage_list.append(avg_mileage)
-            result[date_str] = [date_str, result[date_str_list[index-1]][2] if index-1 >= 0 else 0, avg_price, min_price, max_price]
+
+            result[date_str] = [date_str, result[last_date_str][2] if index - 1 >= 0 else 0, avg_price, min_price, max_price]
+            index += 1
+            last_date_str = date_str
 
         price_trend_series = [i for i in result.values()]
         avg_price_list = [i[2] for i in result.values()]
