@@ -19,3 +19,9 @@
 .part-2-top h2 > i.iconfont {
     margin-right: 6px;
 }
+.charts-box {
+    height: 500px;
+    border: 1px solid #ddd;
+    margin:0 8px;
+    padding: 8px 0;
+}

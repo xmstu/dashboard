@@ -150,13 +150,15 @@ var common = {
         var date4 = new Date();//昨天
         var date5 = new Date();//前天
         var date6 = new Date();//七天前
-        var date7 = new Date();//30tian
+        var date7 = new Date();//30天
+        var date8 = new Date();//90天前
         date3.setTime(date3.getTime() - 8 * 24 * 60 * 60 * 1000);
         date2.setTime(date2.getTime() + 24 * 60 * 60 * 1000);
         date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
         date5.setTime(date5.getTime() - 2 * 24 * 60 * 60 * 1000);
         date6.setTime(date6.getTime() - 7 * 24 * 60 * 60 * 1000);
         date7.setTime(date7.getTime() - 30 * 24 * 60 * 60 * 1000);
+        date8.setTime(date8.getTime() - 90 * 24 * 60 * 60 * 1000);
         var seperator1 = "-";
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
@@ -172,6 +174,8 @@ var common = {
         var date_6 = date6.getDate();
         var month_7 = date7.getMonth() + 1;
         var date_7 = date7.getDate();
+        var month_8 = date8.getMonth() + 1;
+        var date_8 = date8.getDate();
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
@@ -208,6 +212,12 @@ var common = {
         if (date_7 >= 0 && date_7 <= 9) {
             date_7 = "0" + date_7;
         }
+         if (month_8 >= 1 && month_8 <= 9) {
+            month_8 = "0" + month_8;
+        }
+        if (date_8 >= 0 && date_8 <= 9) {
+            date_8 = "0" + date_8;
+        }
         monthAnother > 10 ? monthAnother : "0" + monthAnother;
         dateAnother > 10 ? dateAnother : "0" + dateAnother;
         var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
@@ -216,8 +226,9 @@ var common = {
         var yesterdaydate = date4.getFullYear() + seperator1 + month_4 + seperator1 + date_4;
         var beforeYesterday = date5.getFullYear() + seperator1 + month_5 + seperator1 + date_5;
         var sevenDayAgo = date6.getFullYear() + seperator1 + month_6 + seperator1 + date_6;
-        var sixtyDayAgo = date7.getFullYear() + seperator1 + month_7 + seperator1 + date_7;
-        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday, sevenDayAgo, sixtyDayAgo];
+        var thirtyDayAgo = date7.getFullYear() + seperator1 + month_7 + seperator1 + date_7;
+        var ninetyDayAgo = date8.getFullYear() + seperator1 + month_8 + seperator1 + date_8;
+        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday, sevenDayAgo, thirtyDayAgo,ninetyDayAgo];
     },
     dateInterval: function (num1, num2, dayLength) {
         var date1 = new Date(num1.replace(/-/g, "/"));
@@ -441,12 +452,7 @@ var common = {
         }
     },
     clearSelect: function (element) {
-        var layui_none = $('.layui-none').html();
-        if (layui_none == '无数据') {
-            $('.layui-table-body').css({'min-height': '40px'})
-        } else {
-            $('.layui-table-body').css({'min-height': '200px'})
-        }
+
     },
     currentTime: function () {
         var that = this;
