@@ -52,7 +52,7 @@ layui.use(["laydate", "form", "table"],
 $("#search_btn").click(function (e) {
     e.preventDefault();
     var current_val = $("#goods_types").val();
-    if (current_val == 3) {
+    if (current_val == 2) {
         dataInit(dataArr2)
     } else {
         if (current_val == 1) {
@@ -298,7 +298,7 @@ function tableInit(url) {
                         title: "附近的车",
                         width: 100,
                         templet: function (d) {
-                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button> <p class="display-content" style="display: none">' + d.address + '</p>'
+                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button> <p class="display-content" style="display: none">' + d.supplier_node+'&nbsp;&nbsp;到&nbsp;&nbsp;'+d.to_address+'('+d.vehicle+')</p>'
                         }
                     }]],
                 done: function (res, curr, count) {
@@ -312,8 +312,8 @@ function tableInit(url) {
                         e.preventDefault();
                         var content_title = $(this).siblings('p.display-content').text()
                         if (content_title != '') {
-                            var result_title = content_title.split('\n')
-                            result_title = '<p>' + result_title[0] + '&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;' + result_title[1] + '</p'
+                           // var result_title = content_title.split('\n')
+                            result_title = '<p>' +content_title+'</p>'
                         }
                         layer.load();
                         var val = $(this).val();
@@ -341,8 +341,7 @@ function tableInit(url) {
                         e.preventDefault()
                         var content_title = $(this).siblings('p.display-content').text()
                         if (content_title != '') {
-                            var result_title = content_title.split('\n')
-                            result_title = '<p>' + result_title[0] + '&nbsp;&nbsp;&nbsp;到&nbsp;&nbsp;&nbsp;' + result_title[1] + '</p'
+                            result_title = '<p>' +content_title+'</p'
                         }
                         var val = $(this).val();
                         var goods_type = $(this).attr('data-type')

@@ -34,7 +34,8 @@
 
 .part-2 .layui-table-body .layui-table-cell {
     height: auto !important;
-    line-height: 24px;
+    line-height: 27px !important;
+
 }
 .layui-form-spec {
     width: 220px!important;

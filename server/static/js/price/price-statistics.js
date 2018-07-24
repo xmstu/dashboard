@@ -43,7 +43,7 @@ var set = {
             });
         })
         var that = this;
-        $('#date_show_one').val(common.getNowFormatDate()[6]);
+        $('#date_show_one').val(common.getNowFormatDate()[7]);
         $('#date_show_two').val(common.getNowFormatDate()[0]);
         $('.price-menu-about>a').addClass('selected-active');
         $('.price-menu-about>a>i').addClass('select-active');
@@ -59,10 +59,8 @@ var set = {
     chartRender: function (price_trend_series, avg_price) {
         var dom = document.getElementById("charts_container");
         var myChart = echarts.init(dom);
-
-        console.log(typeof price_trend_series);
         var datas = splitData(price_trend_series);
-
+        console.log(datas.values);
         function splitData(rawData) {
             var categoryData = [],
                 values = [],
@@ -78,30 +76,17 @@ var set = {
                 values: values
             };
         }
-
-// 平均值
-        function calculateMA(dayCount) {
-            var result = [];
-            for (var i = 0, len = datas.values.length; i < len; i++) {
-                if (i < dayCount) {
-                    result.push('-');
-                    continue;
-                }
-                var sum = 0;
-                for (var j = 0; j < dayCount; j++) {
-                    sum += datas.values[i - j][1];
-                }
-                result.push((sum / dayCount).toFixed(2));
-            }
-            return result;
-        }
-
         var config = {
-            // barWidth: 10,//指定柱宽度
+             barWidth: 20,//指定柱宽度
             col: {
-                up: 'rgb(153, 14, 14)',
+               /* up: 'rgb(153, 14, 14)',
                 down: '#19b34c',
                 m5: '#f00',
+                m10: 'yellow',
+                m30: '#dd1ce0'*/
+               up: 'rgb(0,198,215)',
+                down: 'rgb(5,41,99)',
+                m5: 'rgb(0,198,215)',
                 m10: 'yellow',
                 m30: '#dd1ce0'
             },
@@ -124,10 +109,10 @@ var set = {
                     console.log(params);
                     if (params.length > 1) {
                         var str = '日期：' + params[0].name;
-                        var string_data = '今日价格最低：￥' + params[0].data[2];
-                        string_data += '<br>' + '今日价格最高：￥' + params[0].data[1];
+                        var string_data = '今日价格最低：￥' + params[0].data[3];
+                        string_data += '<br>' + '今日价格最高：￥' + params[0].data[4];
 
-                        str += '<br>' + params[1].seriesName + ':￥' + (params[1].data).toFixed(2);
+                        str += '<br>' + params[1].seriesName + ':￥' + (params[0].data[2]).toFixed(2);
                         if (params[1].seriesName == undefined) {
                             params[1].seriesName = '平均价'
                         }
@@ -156,12 +141,11 @@ var set = {
                     },
                     crossStyle: {
                         type: 'solid'
-                    },
-
+                    }
                 }
             },
             legend: {
-                data: ['分时', '价格趋势', '日平均', '10日平均线', '30日平均线', '振幅', '增加']
+                data: ['价格趋势', '日平均']
             },
             grid: [{
                 top: '10%',
@@ -182,12 +166,12 @@ var set = {
                 },
                 label: {
                     backgroundColor: '#777'
-                },
-                // triggerOn:'click'
+                }
             },
             // 上下两个图表的x轴数据
             xAxis: [{
                 type: 'category',
+                boundaryGap:true,
                 axisLine: {
                     // show: false,
                     onZero: false
@@ -214,16 +198,12 @@ var set = {
                 },
                 data: datas.categoryData
             }],
-            //
             yAxis: [{
                 axisLabel: {
                     color: config.col.y
                 },
                 scale: true,
                 position: 'left',
-                // splitArea: {
-                //     show: false
-                // },
                 splitLine: {
                     show: true,
                     lineStyle: {
@@ -247,7 +227,6 @@ var set = {
                     }
                 },
                 axisLabel: {
-                    // show: true,
                     color: config.col.y
                 }
             }],
@@ -333,7 +312,7 @@ var set = {
                 console.log(res)
                 var avg_price = res.data.avg_price;
                 var price_trend_series = res.data.price_trend_series;
-                console.log(price_trend_series[0]);
+                console.log(avg_price);
                 that.chartRender(price_trend_series, avg_price)
             })
         })
