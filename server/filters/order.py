@@ -86,7 +86,7 @@ class OrderList(object):
                     goods_standard.append(volume)
 
                 # 货源价格类型
-                if detail['is_system_price'] == 0:
+                if detail['goods_level'] == 1:
                     goods_type = '议价'
                 elif detail['is_system_price'] == 1:
                     goods_type = '一口价'
