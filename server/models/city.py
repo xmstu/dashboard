@@ -133,7 +133,6 @@ class CityOrderListModel(object):
 
         fields = """
             shf_goods.id,
-            shf_goods.type,
             shf_goods.goods_level,
             shf_goods.is_system_price,
             shf_goods.haul_dist,
@@ -224,13 +223,12 @@ class CityOrderListModel(object):
 
         command = command.format(region=region)
 
-        # 货源类型:同城/跨城/零担
+        # 货源类型:同城/跨城
         if params['goods_type']:
             command += """
                     AND(
                     ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
-                    ( {goods_type}=2 AND shf_goods.haul_dist = 2) OR
-                    ( {goods_type}=3 AND shf_goods.type = 2)
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 2)
                     )
                 """.format(goods_type=params['goods_type'])
 
