@@ -65,7 +65,7 @@ class PriceTrend(object):
             result[date_str] = [date_str, result[date_str_list[index-1]][2] if index-1 >= 0 else 0, avg_price, min_price, max_price]
 
         price_trend_series = [i for i in result.values()]
-        avg_price_list = [i[-1] for i in result.values()]
+        avg_price_list = [i[2] for i in result.values()]
         # 获取价格基准线
         recommend_price_one = recommend_price_instance.get_fast_price(params['min_mileage'])
         recommend_price_two = recommend_price_instance.get_fast_price(params['max_mileage'])
