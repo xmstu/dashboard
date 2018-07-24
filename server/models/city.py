@@ -43,22 +43,22 @@ class CityResourceBalanceModel(object):
                 )''' % {'region_id': ','.join(params['region_id'])}
 
         goods_type = ''
-        # 货源类型:同城/跨城/零担
+        # 货源类型:跨城/同城
         if params.get('goods_type'):
             goods_type += """
                     AND (
-                    ({goods_type}=1 AND shf_goods.haul_dist = 1) OR
-                    ({goods_type}=2 AND shf_goods.haul_dist = 2) OR
-                    ({goods_type}=3 AND shf_goods.type = 2)
+                    ({goods_type}=1 AND shf_goods.haul_dist = 2) OR
+                    ({goods_type}=2 AND shf_goods.haul_dist = 1)
                     )
                     """.format(goods_type=params['goods_type'])
 
-        # 货源类型:议价/一口价
+        # 货源类型:议价/一口价/零担
         if params.get('goods_price_type'):
             goods_type += """
                         AND (
                         ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
-                        ({goods_price_type}=2 AND shf_goods.is_system_price = 1)
+                        ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
+                        ({goods_price_type}=3 AND shf_goods.type = 2)
                         )
                         """.format(goods_price_type=params['goods_price_type'])
 
@@ -136,6 +136,7 @@ class CityOrderListModel(object):
             shf_goods.goods_level,
             shf_goods.is_system_price,
             shf_goods.haul_dist,
+            shf_goods.type,
             shf_goods.`name`,
             shf_goods.weight,
             shf_goods.volume,
@@ -223,21 +224,22 @@ class CityOrderListModel(object):
 
         command = command.format(region=region)
 
-        # 货源类型:同城/跨城
+        # 货源类型:跨城/同城
         if params['goods_type']:
             command += """
                     AND(
-                    ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
-                    ( {goods_type}=2 AND shf_goods.haul_dist = 2)
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 1)
                     )
                 """.format(goods_type=params['goods_type'])
 
-        # 货源类型:议价/一口价
+        # 货源类型:议价/一口价/零担
         if params['goods_price_type']:
             command += """
                 AND (
                 ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
-                ({goods_price_type}=2 AND (shf_goods.is_system_price = 1 OR shf_goods.goods_level = 2))
+                ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
+                ({goods_price_type}=3 AND shf_goods.type = 2)
                 )
                 """.format(goods_price_type=params['goods_price_type'])
 

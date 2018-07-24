@@ -65,12 +65,12 @@ class PriceTrend(object):
             avg_mileage = sum(mileage) / len(mileage)
             avg_mileage_list.append(avg_mileage)
 
-            result[date_str] = [date_str, result[last_date_str][2] if index - 1 >= 0 else 0, avg_price, min_price, max_price]
+            result[date_str] = [date_str, max_price, min_price, result[last_date_str][-1] if index - 1 >= 0 else 0, avg_price]
             index += 1
             last_date_str = date_str
 
         price_trend_series = [i for i in result.values()]
-        avg_price_list = [i[2] for i in result.values()]
+        avg_price_list = [i[-1] for i in result.values()]
         # 获取价格基准线
         recommend_price_one = recommend_price_instance.get_fast_price(params['min_mileage'])
         recommend_price_two = recommend_price_instance.get_fast_price(params['max_mileage'])

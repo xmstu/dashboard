@@ -11,7 +11,7 @@ request_order_received_statistics_param = api.doc(params={
     'start_time': '开始日期(时间戳),默认:8天前',
     'end_time': '结束日期(时间戳),默认:昨天',
     'periods': '时间周期,2:日，3:周，4:月，默认:2',
-    'goods_type': '货源类型,1:同城,2:跨城,3:零担,默认:0全部',
+    'goods_type': '货源类型,1:跨城,2:同城,默认:0全部',
     'goods_price_type': '货源类型,1:议价,2:一口价,默认:0全部',
     'dimension': '维度,1:按数量,2：按金额,默认:1',
     'region_id': '地区id,默认:0全部',

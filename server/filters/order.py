@@ -90,6 +90,8 @@ class OrderList(object):
                     goods_type = '议价'
                 elif detail['is_system_price'] == 1:
                     goods_type = '一口价'
+                elif detail['type'] == 2:
+                    goods_type = '零担'
                 else:
                     goods_type = ''
 
@@ -100,8 +102,6 @@ class OrderList(object):
                     goods_type += '同城'
                 elif detail['haul_dist'] == 2:
                     goods_type += '跨城'
-                elif detail['type'] == 2:
-                    goods_type += '零担'
                 else:
                     goods_type += '未知货源类型'
 

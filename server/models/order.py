@@ -47,24 +47,24 @@ class OrdersReceivedStatisticsList(object):
             fetch_where += """ AND shb_orders.create_time >= {start_time} AND
             shb_orders.create_time < {end_time} """.format(start_time=params['start_time'], end_time=params['end_time'])
 
-        # 货源类型:同城/跨城/零担
-        if params.get('goods_type'):
+        # 货源类型:跨城/同城
+        if params['goods_type']:
             fetch_where += """
-                AND (
-                ({goods_type}=1 AND shf_goods.haul_dist = 1) OR
-                ({goods_type}=2 AND shf_goods.haul_dist = 2) OR
-                ({goods_type}=3 AND shf_goods.type = 2)
-                )
+                    AND(
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 1)
+                    )
                 """.format(goods_type=params['goods_type'])
 
-        # 货源类型:议价/一口价
-        if params.get('goods_price_type'):
+        # 货源类型:议价/一口价/零担
+        if params['goods_price_type']:
             fetch_where += """
-                    AND (
-                    ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
-                    ({goods_price_type}=2 AND shf_goods.is_system_price = 1)
-                    )
-                    """.format(goods_price_type=params['goods_price_type'])
+                AND (
+                ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+                ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
+                ({goods_price_type}=3 AND shf_goods.type = 2)
+                )
+                """.format(goods_price_type=params['goods_price_type'])
 
         # 评价类型
         if params.get('comment_type'):
@@ -150,22 +150,22 @@ class CancelOrderReasonModel(object):
             AND shb_orders.create_time < {end_time}
             """.format(start_time=params['start_time'], end_time=params['end_time'])
 
-        # 货源类型:同城/跨城/零担
-        if params.get('goods_type'):
+        # 货源类型:跨城/同城
+        if params['goods_type']:
             fetch_where += """
-            AND (
-            ({goods_type}=1 AND shf_goods.haul_dist = 1) OR
-            ({goods_type}=2 AND shf_goods.haul_dist = 2) OR
-            ({goods_type}=3 AND shf_goods.type = 2)
-            )
-            """.format(goods_type=params['goods_type'])
+                    AND(
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 1)
+                    )
+                """.format(goods_type=params['goods_type'])
 
-        # 货源类型:议价/一口价
-        if params.get('goods_price_type'):
+        # 货源类型:议价/一口价/零担
+        if params['goods_price_type']:
             fetch_where += """
                 AND (
                 ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
-                ({goods_price_type}=2 AND shf_goods.is_system_price = 1)
+                ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
+                ({goods_price_type}=3 AND shf_goods.type = 2)
                 )
                 """.format(goods_price_type=params['goods_price_type'])
 
@@ -376,13 +376,12 @@ class OrderListModel(object):
             )
             """.format(order_status=params['order_status'])
 
-        # 订单类型:同城/跨城/零担
+        # 订单类型:跨城/同城
         if params.get('order_type'):
             fetch_where += """
             AND (
-            ( {order_type}=1 AND sg.haul_dist = 1) OR
-            ( {order_type}=2 AND sg.haul_dist = 2) OR
-            ( {order_type}=3 AND sg.type = 2)
+            ( {order_type}=1 AND sg.haul_dist = 2) OR
+            ( {order_type}=2 AND sg.haul_dist = 1)
             )
             """.format(order_type=params['order_type'])
 
@@ -391,7 +390,8 @@ class OrderListModel(object):
             fetch_where += """
             AND (
             ({order_price_type}=1 AND sg.goods_level = 1) OR
-            ({order_price_type}=2 AND sg.is_system_price = 1)
+            ({order_price_type}=2 AND sg.is_system_price = 1) OR
+            ({order_price_type}=3 AND sg.type = 2)
             )
             """.format(order_price_type=params['order_price_type'])
 

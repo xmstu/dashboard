@@ -145,22 +145,22 @@ class GoodsList(object):
         if params['to_province_id']:
             fetch_where += ' AND shf_goods.to_province_id = %s ' % params['to_province_id']
 
-        # 货源类型:同城/跨城/零担
+        # 货源类型:跨城/同城
         if params['goods_type']:
             fetch_where += """
                 AND(
-                ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
-                ( {goods_type}=2 AND shf_goods.haul_dist = 2) OR
-                ( {goods_type}=3 AND shf_goods.type = 2)
+                ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
+                ( {goods_type}=2 AND shf_goods.haul_dist = 1)
                 )
             """.format(goods_type=params['goods_type'])
 
-        # 货源类型:议价/一口价
+        # 货源类型:议价/一口价/零担
         if params['goods_price_type']:
             fetch_where += """
             AND (
             ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
-            ({goods_price_type}=2 AND (shf_goods.is_system_price = 1 OR shf_goods.goods_level = 2))
+            ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
+            ({goods_price_type}=3 AND shf_goods.type = 2)
             )
             """.format(goods_price_type=params['goods_price_type'])
 
@@ -354,24 +354,24 @@ class CancelReasonList(object):
             fetch_where += """ AND create_time >= {start_time} AND create_time < {end_time} """.format(
                 start_time=params['start_time'], end_time=params['end_time'])
 
-        # 货源类型:同城/跨城/零担
-        if params.get('goods_type'):
+        # 货源类型:跨城/同城
+        if params['goods_type']:
             fetch_where += """
-                AND (
-                ({goods_type}=1 AND shf_goods.haul_dist = 1) OR
-                ({goods_type}=2 AND shf_goods.haul_dist = 2) OR
-                ({goods_type}=3 AND shf_goods.type = 2)
-                )
+                    AND(
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 1)
+                    )
                 """.format(goods_type=params['goods_type'])
 
-        # 货源类型:议价/一口价
-        if params.get('goods_price_type'):
+        # 货源类型:议价/一口价/零担
+        if params['goods_price_type']:
             fetch_where += """
-                    AND (
-                    ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
-                    ({goods_price_type}=2 AND shf_goods.is_system_price = 1)
-                    )
-                    """.format(goods_price_type=params['goods_price_type'])
+                AND (
+                ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+                ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
+                ({goods_price_type}=3 AND shf_goods.type = 2)
+                )
+                """.format(goods_price_type=params['goods_price_type'])
 
         cancel_list_dict = cursor.query(command.format(fetch_where=fetch_where))
 
@@ -437,25 +437,24 @@ class GoodsDistributionTrendList(object):
             fetch_where += """ AND create_time >= {start_time} AND create_time < {end_time} """.format(
                 start_time=params['start_time'], end_time=params['end_time'])
 
-        # 货源类型:同城/跨城/零担
-        if params.get('goods_type'):
-            fetch_where += """ 
-            AND (({goods_type} = 0) OR
-            -- 同城
-            ({goods_type} = 1 AND haul_dist = 1) OR
-            -- 跨城
-            ({goods_type} = 2 AND haul_dist = 2) OR
-            -- 零担
-            ({goods_type} = 3 AND type = 2)) """.format(goods_type=params['goods_type'])
-
-        # 货源类型:议价/一口价
-        if params.get('goods_price_type'):
+        # 货源类型:跨城/同城
+        if params['goods_type']:
             fetch_where += """
-                    AND (
-                    ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
-                    ({goods_price_type}=2 AND shf_goods.is_system_price = 1)
+                    AND(
+                    ( {goods_type}=1 AND haul_dist = 2) OR
+                    ( {goods_type}=2 AND haul_dist = 1)
                     )
-                    """.format(goods_price_type=params['goods_price_type'])
+                """.format(goods_type=params['goods_type'])
+
+        # 货源类型:议价/一口价/零担
+        if params['goods_price_type']:
+            fetch_where += """
+                AND (
+                ({goods_price_type}=1 AND goods_level = 1) OR
+                ({goods_price_type}=2 AND is_system_price = 1) OR
+                ({goods_price_type}=3 AND type = 2)
+                )
+                """.format(goods_price_type=params['goods_price_type'])
 
         wait_where = """ AND ( status = 1 OR status = 2 ) """
         recv_where = """ AND shf_goods.STATUS = 3 """
