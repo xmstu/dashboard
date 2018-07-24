@@ -24,7 +24,9 @@ class CityResourceBalanceModel(object):
         -- 地区
         AND 1 = 1 %(region)s
         -- 货源类型
-        AND 1 = 1 %(goods_type)s'''
+        AND 1 = 1 %(goods_type)s
+        -- 货主手机
+        %(mobile)s'''
 
         # 地区
         region = ''
@@ -41,6 +43,11 @@ class CityResourceBalanceModel(object):
                 OR from_county_id IN (%(region_id)s)
                 OR from_town_id IN (%(region_id)s)
                 )''' % {'region_id': ','.join(params['region_id'])}
+
+        # 货主手机
+        mobile = ''
+        if params['mobile']:
+            mobile = 'AND shf_goods.user_id = (SELECT id FROM shu_users WHERE mobile="%s" AND is_deleted = 0)' % params['mobile']
 
         goods_type = ''
         # 货源类型:跨城/同城
@@ -64,7 +71,8 @@ class CityResourceBalanceModel(object):
 
         command = command % {
             'region': region,
-            'goods_type': goods_type
+            'goods_type': goods_type,
+            'mobile': mobile
         }
         result = cursor.query(command, {
             'start_time': params['start_time'],
