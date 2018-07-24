@@ -115,7 +115,7 @@ body {
 .header {
 	min-width: 1300px;
 	height: 56px;
-	background: #47475c;
+	background: #1a2732;
 	-webkit-background-size: cover;
 	background-size: cover;
 	box-sizing: border-box;
@@ -394,7 +394,7 @@ body {
 	width: 8%;
 	top: 56px;
 	max-width: 165px;
-	background: #3a3a4f!important;
+	background: #222d32!important;
 	-webkit-background-size: cover;
 	background-size: cover
 }
@@ -559,7 +559,8 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	padding-right: 0;
 	min-width: 1200px;
 	position: relative;
-	opacity: 0
+	opacity: 0;
+	margin-bottom:24px;
 }
 
 .main-content-right::after {
