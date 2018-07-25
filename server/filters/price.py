@@ -65,7 +65,7 @@ class PriceTrend(object):
             avg_mileage = sum(mileage) / len(mileage)
             avg_mileage_list.append(avg_mileage)
 
-            result[date_str] = [date_str, max_price, min_price, result[last_date_str][-1] if index - 1 >= 0 else 0, avg_price]
+            result[date_str] = [date_str, min_price, max_price, result[last_date_str][-1] if index - 1 >= 0 else 0, avg_price]
             index += 1
             last_date_str = date_str
 
