@@ -100,7 +100,7 @@ class CityOrderListFilterDecorator(object):
             #     urgent = 0
 
             # 货源距离类型
-            if detail['goods_level'] == 1:
+            if detail['is_system_price'] == 0:
                 goods_type = '议价'
             elif detail['is_system_price'] == 1:
                 goods_type = '一口价'

@@ -57,7 +57,7 @@ class GoodsList(object):
                                                   detail.get('from_county_id', 0))
 
                 # 货源价格类型
-                if detail['goods_level'] == 1:
+                if detail['is_system_price'] == 0:
                     goods_type = '议价'
                 elif detail['is_system_price'] == 1:
                     goods_type = '一口价'

@@ -60,7 +60,7 @@ class OrdersReceivedStatisticsList(object):
         if params['goods_price_type']:
             fetch_where += """
                 AND (
-                ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+                ({goods_price_type}=1 AND shf_goods.is_system_price = 0) OR
                 ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
                 ({goods_price_type}=3 AND shf_goods.type = 2)
                 )
@@ -164,7 +164,7 @@ class CancelOrderReasonModel(object):
         if params['goods_price_type']:
             fetch_where += """
                 AND (
-                ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+                ({goods_price_type}=1 AND shf_goods.is_system_price = 0) OR
                 ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
                 ({goods_price_type}=3 AND shf_goods.type = 2)
                 )
@@ -390,7 +390,7 @@ class OrderListModel(object):
         if params.get('order_price_type'):
             fetch_where += """
             AND (
-            ({order_price_type}=1 AND sg.goods_level = 1) OR
+            ({order_price_type}=1 AND sg.is_system_price = 0) OR
             ({order_price_type}=2 AND sg.is_system_price = 1) OR
             ({order_price_type}=3 AND sg.type = 2)
             )
