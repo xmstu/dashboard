@@ -326,7 +326,7 @@ class CancelReasonList(object):
             shf_goods 
         WHERE
             1=1
-            AND ( shf_goods.is_deleted = 1 OR shf_goods.STATUS = - 1 ) 
+            AND shf_goods.STATUS = - 1
             AND {fetch_where}
         GROUP BY canceled_reason_text
         ORDER BY reason_count

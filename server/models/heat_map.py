@@ -61,9 +61,10 @@ class HeatMapModel(object):
                     fetch_where += """
                     AND ( driver_auth = 1 OR goods_auth = 1 OR company_auth = 1 ) 
                     """
-            # 求累计活跃数
+            # 统计时间内登陆过
             elif params['field'] == 4:
                 fetch_where += """
+                AND last_login_time >= :start_time
                 AND last_login_time < :end_time
                 """
 
@@ -271,3 +272,7 @@ class HeatMapModel(object):
         }
 
         return data
+
+    @staticmethod
+    def get_order(cursor, params, region_level):
+        pass
