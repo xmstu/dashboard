@@ -45,17 +45,17 @@ class CityResourceBalanceModel(object):
                 OR from_town_id IN (%(region_id)s)
                 )''' % {'region_id': ','.join(params['region_id'])}
 
-        # 货源价格类型:一口价/议价
+        # 货源价格类型:议价/一口价
         goods_price_type = ''
         if params.get('goods_price_type'):
             goods_price_type += """
                     AND (
-                    ({goods_price_type}=1 AND shf_goods.is_system_price = 1) OR
-                    ({goods_price_type}=2 AND shf_goods.is_system_price = 0)
+                    ({goods_price_type}=1 AND shf_goods.is_system_price = 0) OR
+                    ({goods_price_type}=2 AND shf_goods.is_system_price = 1)
                     )
                     """.format(goods_price_type=params['goods_price_type'])
 
-        # 运输距离:跨城/同城
+        # 运输距离:同城/跨城
         haul_dist = ''
         if params.get('haul_dist'):
             haul_dist += """
@@ -231,12 +231,12 @@ class CityOrderListModel(object):
 
         command = command.format(region=region)
 
-        # 货源类型:跨城/同城
+        # 货源类型:同城/跨城
         if params['goods_type']:
             command += """
                     AND(
-                    ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
-                    ( {goods_type}=2 AND shf_goods.haul_dist = 1)
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 2)
                     )
                 """.format(goods_type=params['goods_type'])
 
@@ -244,7 +244,7 @@ class CityOrderListModel(object):
         if params['goods_price_type']:
             command += """
                 AND (
-                ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+                ({goods_price_type}=1 AND shf_goods.is_system_price = 0) OR
                 ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
                 ({goods_price_type}=3 AND shf_goods.type = 2)
                 )

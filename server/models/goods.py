@@ -158,7 +158,7 @@ class GoodsList(object):
         if params['goods_price_type']:
             fetch_where += """
             AND (
-            ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+            ({goods_price_type}=1 AND shf_goods.is_system_price = 0) OR
             ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
             ({goods_price_type}=3 AND shf_goods.type = 2)
             )
@@ -234,13 +234,13 @@ class GoodsList(object):
             fetch_where += """ AND shf_goods.create_time >= %s AND shf_goods.create_time < %s """ % (
                 params['create_start_time'], params['create_end_time'])
 
-        # 装货时间
-        if params['load_start_time'] and params['load_end_time']:
-            loading_time_date = time.strftime('%Y-%m-%d', time.localtime(params['load_start_time']))
-            fetch_where += """ AND ( shf_goods.loading_time_date = '{0}'
-            OR -- 新版
-            ( shf_goods.loading_time_period_begin >= {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
-            loading_time_date, params['load_start_time'], params['load_end_time'])
+        # # 装货时间
+        # if params['load_start_time'] and params['load_end_time']:
+        #     loading_time_date = time.strftime('%Y-%m-%d', time.localtime(params['load_start_time']))
+        #     fetch_where += """ AND ( shf_goods.loading_time_date = '{0}'
+        #     OR -- 新版
+        #     ( shf_goods.loading_time_period_begin >= {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
+        #     loading_time_date, params['load_start_time'], params['load_end_time'])
 
         # # 注册时间
         if params.get('register_start_time') and params.get('register_end_time'):
@@ -367,7 +367,7 @@ class CancelReasonList(object):
         if params['goods_price_type']:
             fetch_where += """
                 AND (
-                ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
+                ({goods_price_type}=1 AND shf_goods.is_system_price = 0) OR
                 ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
                 ({goods_price_type}=3 AND shf_goods.type = 2)
                 )
@@ -450,7 +450,7 @@ class GoodsDistributionTrendList(object):
         if params['goods_price_type']:
             fetch_where += """
                 AND (
-                ({goods_price_type}=1 AND goods_level = 1) OR
+                ({goods_price_type}=1 AND is_system_price = 0) OR
                 ({goods_price_type}=2 AND is_system_price = 1) OR
                 ({goods_price_type}=3 AND type = 2)
                 )
