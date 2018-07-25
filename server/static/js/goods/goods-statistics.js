@@ -3,6 +3,7 @@
  */
 $('.layui-table-cell').css({'height': 'auto!important'});
 $('.layui-form-item').css({'width':'234px'})
+$('.chart-area-two-body .layui-form-item').css({'width':'224px'})
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_one').val(String(common.getNowFormatDate()[2]));
@@ -485,9 +486,9 @@ var dataSet = {
     }
 }
 function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_series, goods_user_count_series, interval) {
-Highcharts.setOptions({
+/*Highcharts.setOptions({
     colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
-});
+});*/
     $('#charts_container_two').highcharts({
         chart: {
             zoomType: 'xy'

@@ -247,7 +247,6 @@ var set = {
                                                         dataArr.push(d[i].name);
                                                     }
                                                 }
-                                               // console.log(option.visualMap.max)
                                                 option.visualMap.max=max_value_reset;
                                                 option.yAxis.data = dataArr;
                                                 pageSet.renderMap(params.name, d);
@@ -257,7 +256,6 @@ var set = {
                                                 pageSet.renderMap('china', mapdata);
                                             } else {
                                                 $.getJSON('/static/map/city/' + cityMap[params.name] + '.json', function (data) {
-                                                    // console.log(cityMap[params.name]);
                                                     var city_data = {
                                                         dimension: $.trim($('#dimension').val()),
                                                         filter: area_select == undefined ? 0 : area_select,
@@ -271,7 +269,7 @@ var set = {
                                                             var city_data = res.data;
                                                             var city_map_data = city_data.map_data;
                                                             var city_map_tooltip = city_data.toolTipData;
-                                                            var max_value_reset1 = data.max_value
+                                                            var max_value_reset1 = city_data.max_value
                                                             echarts.registerMap(params.name, data);
                                                             var d = [];
                                                             for (var i = 0; i < data.features.length; i++) {
@@ -295,7 +293,7 @@ var set = {
                                                                 }
                                                             }
                                                             option.yAxis.data = dataArr_;
-                                                            option.visualMap.max=  max_value_reset1
+                                                            option.visualMap.max=max_value_reset1
                                                             pageSet.renderMap(params.name, d);
                                                         }
                                                     });
@@ -308,6 +306,7 @@ var set = {
                                                 province_arr.push(province_reset[l].name)
                                             }
                                             option.yAxis.data = province_arr;
+                                             option.visualMap.max=max_value + (max_value / 5)
                                             pageSet.renderMap('china', province_reset);
                                         }
                                     } else {
