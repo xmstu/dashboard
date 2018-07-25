@@ -267,17 +267,17 @@ layui.use(['laydate', 'form', 'table'], function () {
             statusCode: 100000
         },
         cols: [[
-            {field: 'id', title: '货源ID', width: 60},
-            {field: 'goods_standard', title: '货物规格', width: 86},
-            {field: 'goods_type', title: '类型', width: 76},
-            {field: 'address', title: '出发地-目的地', width: 300},
-            {field: 'vehicle', title: '车型要求', width: 114},
-            {field: 'price', title: '运费', width: 116},
-            {field: 'mobile', title: '货主手机', width: 100},
-            {field: 'goods_status', title: '状态', width: 86},
-            {field: 'call_count', title: '通话数', width: 60},
-            {field: 'latency_time', title: '初次触达', width: 80},
-            {field: 'goods_time', title: '时间', width: 190},
+            {field: 'id', title: '货源ID'},
+            {field: 'goods_standard', title: '货物规格'},
+            {field: 'goods_type', title: '类型'},
+            {field: 'address', title: '出发地-目的地', width: 280},
+            {field: 'vehicle', title: '车型要求'},
+            {field: 'price', title: '运费',width:110},
+            {field: 'mobile', title: '货主手机'},
+            {field: 'goods_status', title: '状态'},
+            {field: 'call_count', title: '通话数'},
+            {field: 'latency_time', title: '初次触达'},
+            {field: 'goods_time', title: '时间', width: 170},
             {field: 'node_id', title: '所属网点'}
         ]],
         done: function (res, curr, count) {
