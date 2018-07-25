@@ -19,7 +19,7 @@ class TransportRadarModel(object):
         WHERE
             {goods_sql}
             AND shf_goods.is_deleted = 0
-            AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
+            AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '5.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
             AND shf_goods.create_time >= :start_time 
             AND shf_goods.create_time < :end_time
             GROUP BY shf_goods_vehicles.NAME
@@ -33,8 +33,6 @@ class TransportRadarModel(object):
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
             {vehicle_sql}
-            AND user.last_login_time >= :start_time 
-            AND user.last_login_time < :end_time
             AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
             AND vehicle.create_time < FROM_UNIXTIME(:end_time)
             AND vehicle.vehicle_length_id != ''
@@ -53,7 +51,7 @@ class TransportRadarModel(object):
         WHERE
             {order_sql}
             AND shb_orders.is_deleted = 0 AND shb_orders.`status` != -1
-            AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
+            AND shf_goods_vehicles.name IN ('小面包车', '中面包车', '小货车', '4.2米', '5.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米')
             AND shb_orders.create_time >= :start_time
             AND shb_orders.create_time < :end_time
             GROUP BY shf_goods_vehicles.name
@@ -100,43 +98,43 @@ class TransportRadarModel(object):
         vehicle_sql += vehicle_region
         order_sql += order_region
 
-        # 同城/跨城/零担
-        if params.get('business'):
-            goods_sql += """
-            AND
-            (
-            ( {0}=1 AND haul_dist = 1) OR
-            ( {0}=2 AND haul_dist = 2) OR
-            ( {0}=3 AND type = 2) 
-            )
-            """.format(params['business'])
-
-            order_sql += """ 
-            AND 
-            (
-            ( {0}=1 AND shf_goods.haul_dist = 1 ) OR
-            ( {0}=2 AND shf_goods.haul_dist = 2 ) OR
-            ( {0}=2 AND shf_goods.type = 2 )
-            )
-            """.format(params['business'])
-
-        # 议价/一口价
-        if params.get('business_price'):
-            goods_sql += """
-                        AND
-                        (
-                        ( {0}=1 AND goods_level = 1) OR
-                        ( {0}=2 AND is_system_price = 1)
-                        )
-                        """.format(params['business_price'])
-
-            order_sql += """ 
-                        AND 
-                        (
-                        ( {0}=1 AND shf_goods.goods_level = 1 ) OR
-                        ( {0}=2 AND shf_goods.is_system_price = 1 )
-                        )
-                        """.format(params['business_price'])
+        # # 同城/跨城/零担
+        # if params.get('business'):
+        #     goods_sql += """
+        #     AND
+        #     (
+        #     ( {0}=1 AND haul_dist = 1) OR
+        #     ( {0}=2 AND haul_dist = 2) OR
+        #     ( {0}=3 AND type = 2)
+        #     )
+        #     """.format(params['business'])
+        #
+        #     order_sql += """
+        #     AND
+        #     (
+        #     ( {0}=1 AND shf_goods.haul_dist = 1 ) OR
+        #     ( {0}=2 AND shf_goods.haul_dist = 2 ) OR
+        #     ( {0}=2 AND shf_goods.type = 2 )
+        #     )
+        #     """.format(params['business'])
+        #
+        # # 议价/一口价
+        # if params.get('business_price'):
+        #     goods_sql += """
+        #                 AND
+        #                 (
+        #                 ( {0}=1 AND goods_level = 1) OR
+        #                 ( {0}=2 AND is_system_price = 1)
+        #                 )
+        #                 """.format(params['business_price'])
+        #
+        #     order_sql += """
+        #                 AND
+        #                 (
+        #                 ( {0}=1 AND shf_goods.goods_level = 1 ) OR
+        #                 ( {0}=2 AND shf_goods.is_system_price = 1 )
+        #                 )
+        #                 """.format(params['business_price'])
 
         # 出发地
         if params.get('from_province_id'):
@@ -185,18 +183,44 @@ class TransportRadarModel(object):
             'end_time': params.get('end_time')
         }
 
-        vehicle_name_list = ['小面包车', '中面包车', '小货车', '4.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']
-        vehicle_id_list = ['118', '119', '274', '18', '20', '21', '23', '31', '25']
+        vehicle_name_list = ['小面包车', '中面包车', '小货车', '4.2米', '5.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']
 
-        # 获取每种常用车型的数量
+        vehicle_id_sql = """
+        SELECT
+            id,
+            name 
+        FROM
+            shm_dictionary_items 
+        WHERE
+            NAME IN ( '小面包车', '中面包车', '小货车', '4.2米', '5.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米' ) 
+            AND dictionary_id = 2 
+            AND is_deleted = 0
+        """
+
+        vehicle_id_ret = cursor1.query(vehicle_id_sql)
+
+        ret = {i['name']: i['id'] for i in vehicle_id_ret}
+
+        vehicle_id_list = [ret.get(i, 0) for i in vehicle_name_list]
+
+        # 活跃车辆数
         vehicles_ret = []
+        # 累计车辆数(非活跃和活跃)
+        vehicles_all_ret = []
         for i in vehicle_id_list:
             try:
+
+                vehicle_all_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)
+                vehicles_all_ret.append(vehicle_all_count['vehicle_count'])
+
+                vehicle_sql += """
+                AND user.last_login_time >= :start_time 
+                AND user.last_login_time < :end_time
+                """
+
                 vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)
-                if vehicle_count:
-                    vehicles_ret.append(vehicle_count['vehicle_count'])
-                else:
-                    vehicles_ret.append(0)
+                vehicles_ret.append(vehicle_count['vehicle_count'])
+
             except Exception as e:
                 log.error('Error:{}'.format(e))
                 vehicles_ret.append(0)
@@ -204,14 +228,8 @@ class TransportRadarModel(object):
         goods_count = cursor1.query(goods_cmd.format(goods_sql=goods_sql), kwargs)
         order_count = cursor1.query(order_cmd.format(order_sql=order_sql), kwargs)
 
-        goods_dict = {}
-        orders_dict ={}
-
-        for i in goods_count:
-            goods_dict[i.get('name')] = i.get('goods_count')
-
-        for i in order_count:
-            orders_dict[i.get('name')] = i.get('order_count')
+        goods_dict = {i.get('name'): i.get('goods_count') for i in goods_count}
+        orders_dict = {i.get('name'): i.get('order_count') for i in order_count}
 
         goods_ret = []
         orders_ret = []
@@ -225,6 +243,7 @@ class TransportRadarModel(object):
             'vehicle_name_list': vehicle_name_list,
             'goods_ret': goods_ret,
             'vehicles_ret': vehicles_ret,
+            'vehicles_all_ret': vehicles_all_ret,
             'orders_ret': orders_ret
         }
 
@@ -294,8 +313,6 @@ class TransportListModel(object):
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
             {inner_vehicle_fetch_where}
-            AND user.last_login_time >= :start_time 
-            AND user.last_login_time < :end_time
             AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
             AND vehicle.create_time < FROM_UNIXTIME(:end_time)
             AND vehicle.vehicle_length_id != ''
@@ -361,17 +378,17 @@ class TransportListModel(object):
             inner_good_order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
             inner_vehicle_fetch_where += """ AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
 
-        # 业务类型:同城/跨城/零担
-        if params['business']:
-            inner_good_order_fetch_where += """ 
-            AND (({business}=1 AND haul_dist = 1) OR ({business}=2 AND haul_dist = 2) OR ({business}=3 AND sg.type = 2)) 
-            """.format(business=params['business'])
-
-        # 业务类型:议价/一口价
-        if params['business_price']:
-            inner_good_order_fetch_where += """ 
-            AND (({business_price}=1 AND sg.goods_level = 1) OR ({business_price}=2 AND sg.is_system_price = 1)) 
-            """.format(business_price=params['business_price'])
+        # # 业务类型:同城/跨城/零担
+        # if params['business']:
+        #     inner_good_order_fetch_where += """
+        #     AND (({business}=1 AND haul_dist = 1) OR ({business}=2 AND haul_dist = 2) OR ({business}=3 AND sg.type = 2))
+        #     """.format(business=params['business'])
+        #
+        # # 业务类型:议价/一口价
+        # if params['business_price']:
+        #     inner_good_order_fetch_where += """
+        #     AND (({business_price}=1 AND sg.goods_level = 1) OR ({business_price}=2 AND sg.is_system_price = 1))
+        #     """.format(business_price=params['business_price'])
 
         # 时间
         kwargs = {
@@ -385,8 +402,28 @@ class TransportListModel(object):
         cmd1 += """ ORDER BY create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
         transport_list = cursor1.query(cmd1.format(filelds=filelds, inner_good_order_fetch_where=inner_good_order_fetch_where), kwargs)
+
+        vehicle_all_list = cursor2.query(cmd2.format(inner_vehicle_fetch_where=inner_vehicle_fetch_where), kwargs)
+
+        inner_vehicle_fetch_where += """
+        AND user.last_login_time >= :start_time 
+        AND user.last_login_time < :end_time
+        """
         vehicle_list = cursor2.query(cmd2.format(inner_vehicle_fetch_where=inner_vehicle_fetch_where), kwargs)
+
         for i in transport_list:
+            vehicle_all_count = [j['vehicle_count'] for j in vehicle_all_list if
+                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j[
+                                 'from_city_id'] and i['from_county_id'] == j['from_county_id']
+                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id'] and
+                             i['to_county_id'] == j['to_county_id']
+                             ]
+
+            if vehicle_all_count:
+                i['vehicle_all_count'] = vehicle_all_count[0]
+            else:
+                i['vehicle_all_count'] = 0
+
             vehicle_count = [j['vehicle_count'] for j in vehicle_list if
                              i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id'] and i['from_county_id'] == j['from_county_id']
                              and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id'] and i['to_county_id'] == j['to_county_id']

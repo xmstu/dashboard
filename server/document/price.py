@@ -10,7 +10,8 @@ price_trend_param = api.doc(params={
     "min_mileage": "最小里程",
     "max_mileage": "最大里程",
     "vehicle_length": "车型",
-    "pay_method": "1.线上支付;2.线下支付",
+    # "pay_method": "1.线上支付;2.线下支付",
+    "order_status": "1.进行中;2.已完成;3.已取消",
     "start_time": "开始时间",
     "end_time": "结束时间",
 }, description='价格趋势统计')

@@ -47,12 +47,12 @@ class OrdersReceivedStatisticsList(object):
             fetch_where += """ AND shb_orders.create_time >= {start_time} AND
             shb_orders.create_time < {end_time} """.format(start_time=params['start_time'], end_time=params['end_time'])
 
-        # 货源类型:跨城/同城
+        # 货源类型:同城/跨城
         if params['goods_type']:
             fetch_where += """
                     AND(
-                    ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
-                    ( {goods_type}=2 AND shf_goods.haul_dist = 1)
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 2)
                     )
                 """.format(goods_type=params['goods_type'])
 
@@ -85,7 +85,8 @@ class OrdersReceivedStatisticsList(object):
              AND (
                 ( {pay_method}=1 AND shb_orders.pay_status = 1 AND shb_orders.paid_offline = 0) OR
                 ( {pay_method}=2 AND shb_orders.pay_status = 2) OR
-                ( {pay_method}=3 AND shb_orders.paid_offline = 1)
+                ( {pay_method}=3 AND shb_orders.paid_offline = 1) OR
+                ( {pay_method}=4 AND (shb_orders.pay_status = 2 OR shb_orders.paid_offline = 1))
              )
              """.format(pay_method=params['pay_method'])
 
@@ -150,12 +151,12 @@ class CancelOrderReasonModel(object):
             AND shb_orders.create_time < {end_time}
             """.format(start_time=params['start_time'], end_time=params['end_time'])
 
-        # 货源类型:跨城/同城
+        # 货源类型:同城/跨城
         if params['goods_type']:
             fetch_where += """
                     AND(
-                    ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
-                    ( {goods_type}=2 AND shf_goods.haul_dist = 1)
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 2)
                     )
                 """.format(goods_type=params['goods_type'])
 
@@ -376,12 +377,12 @@ class OrderListModel(object):
             )
             """.format(order_status=params['order_status'])
 
-        # 订单类型:跨城/同城
+        # 订单类型:同城/跨城
         if params.get('order_type'):
             fetch_where += """
             AND (
-            ( {order_type}=1 AND sg.haul_dist = 2) OR
-            ( {order_type}=2 AND sg.haul_dist = 1)
+            ( {order_type}=1 AND sg.haul_dist = 1) OR
+            ( {order_type}=2 AND sg.haul_dist = 2)
             )
             """.format(order_type=params['order_type'])
 
@@ -429,6 +430,7 @@ class OrderListModel(object):
             ({pay_status}=1 AND pay_status = 1 AND paid_offline = 0) OR
             ({pay_status}=2 AND pay_status = 2) OR
             ({pay_status}=3 AND paid_offline = 1)
+            ({pay_status}=4 AND (pay_status = 2 OR paid_offline = 1))
             )
             """.format(pay_status=params['pay_status'])
 

@@ -145,12 +145,12 @@ class GoodsList(object):
         if params['to_province_id']:
             fetch_where += ' AND shf_goods.to_province_id = %s ' % params['to_province_id']
 
-        # 货源类型:跨城/同城
+        # 货源类型:同城/跨城
         if params['goods_type']:
             fetch_where += """
                 AND(
-                ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
-                ( {goods_type}=2 AND shf_goods.haul_dist = 1)
+                ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
+                ( {goods_type}=2 AND shf_goods.haul_dist = 2)
                 )
             """.format(goods_type=params['goods_type'])
 
@@ -213,14 +213,14 @@ class GoodsList(object):
         if params['new_goods_type'] == 1:
             fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id_list)
 
-        # 急需处理
-        if params['urgent_goods']:
-            if params['urgent_goods'] == 1:
-                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 0 AND (UNIX_TIMESTAMP() - shf_goods.create_time) < 300 """
-            if params['urgent_goods'] == 2:
-                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) >= 300 AND (UNIX_TIMESTAMP() - shf_goods.create_time) <= 600 """
-            if params['urgent_goods'] == 3:
-                fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600 """
+        # # 急需处理
+        # if params['urgent_goods']:
+        #     if params['urgent_goods'] == 1:
+        #         fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 0 AND (UNIX_TIMESTAMP() - shf_goods.create_time) < 300 """
+        #     if params['urgent_goods'] == 2:
+        #         fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) >= 300 AND (UNIX_TIMESTAMP() - shf_goods.create_time) <= 600 """
+        #     if params['urgent_goods'] == 3:
+        #         fetch_where += """ AND (UNIX_TIMESTAMP() - shf_goods.create_time) > 600 """
 
         # 是否加价
         if params['is_addition']:
@@ -354,12 +354,12 @@ class CancelReasonList(object):
             fetch_where += """ AND create_time >= {start_time} AND create_time < {end_time} """.format(
                 start_time=params['start_time'], end_time=params['end_time'])
 
-        # 货源类型:跨城/同城
+        # 货源类型:同城/跨城
         if params['goods_type']:
             fetch_where += """
                     AND(
-                    ( {goods_type}=1 AND shf_goods.haul_dist = 2) OR
-                    ( {goods_type}=2 AND shf_goods.haul_dist = 1)
+                    ( {goods_type}=1 AND shf_goods.haul_dist = 1) OR
+                    ( {goods_type}=2 AND shf_goods.haul_dist = 2)
                     )
                 """.format(goods_type=params['goods_type'])
 
@@ -437,12 +437,12 @@ class GoodsDistributionTrendList(object):
             fetch_where += """ AND create_time >= {start_time} AND create_time < {end_time} """.format(
                 start_time=params['start_time'], end_time=params['end_time'])
 
-        # 货源类型:跨城/同城
+        # 货源类型:同城/跨城
         if params['goods_type']:
             fetch_where += """
                     AND(
-                    ( {goods_type}=1 AND haul_dist = 2) OR
-                    ( {goods_type}=2 AND haul_dist = 1)
+                    ( {goods_type}=1 AND haul_dist = 1) OR
+                    ( {goods_type}=2 AND haul_dist = 2)
                     )
                 """.format(goods_type=params['goods_type'])
 

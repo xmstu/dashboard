@@ -6,7 +6,7 @@ from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
-from server.utils.extend import compare_time
+from server.utils.extend import compare_time, complement_time
 
 
 class GoodsList(object):
@@ -16,11 +16,10 @@ class GoodsList(object):
     def check_params(page, limit, params):
         # 通过params获取参数
         try:
-            create_start_time = int(params.get('create_start_time')) if params.get(
-                'create_start_time') else time.time() - 86400 * 7
+            create_start_time = int(params.get('create_start_time')) if params.get('create_start_time') else time.time() - 86400 * 7
             create_end_time = int(params.get('create_end_time')) if params.get('create_end_time') else time.time()
-            load_start_time = int(params.get('load_start_time')) if params.get('load_start_time') else 0
-            load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else 0
+            # load_start_time = int(params.get('load_start_time')) if params.get('load_start_time') else 0
+            # load_end_time = int(params.get('load_end_time')) if params.get('load_end_time') else 0
             register_start_time = int(params.get('register_start_time', None) or 0)
             register_end_time = int(params.get('register_end_time', None) or 0)
 
@@ -44,15 +43,19 @@ class GoodsList(object):
             vehicle_type = str(params.get('vehicle_type')) if params.get('vehicle_type') else 0
             node_id = int(params.get('node_id')) if params.get('node_id') else 0
             new_goods_type = int(params.get('new_goods_type')) if params.get('new_goods_type') else 0
-            urgent_goods = int(params.get('urgent_goods')) if params.get('urgent_goods') else 0
+            # urgent_goods = int(params.get('urgent_goods')) if params.get('urgent_goods') else 0
             is_addition = int(params.get('is_addition')) if params.get('is_addition') else 0
+
+            # 补全时间
+            create_start_time, create_end_time = complement_time(create_start_time, create_end_time)
+            register_start_time, register_end_time = complement_time(register_start_time, register_end_time)
 
             # 校验参数
             if not compare_time(create_start_time, create_end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
-            if not compare_time(load_start_time, load_end_time):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+            # if not compare_time(load_start_time, load_end_time):
+            #     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             if not compare_time(register_start_time, register_end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))

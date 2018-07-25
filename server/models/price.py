@@ -106,14 +106,24 @@ class PriceTrendModel(object):
         if params.get('max_mileage'):
             fetch_where += """ AND sg.mileage_total < {max_mileage} """.format(max_mileage=params['max_mileage'])
 
-        # 支付方式
-        if params.get('pay_method'):
+        # # 支付方式
+        # if params.get('pay_method'):
+        #     fetch_where += """
+        #     AND (
+        #     ( {pay_method}=1 AND pay_status = 2) OR
+        #     ( {pay_method}=2 AND paid_offline = 1)
+        #     )
+        #     """.format(pay_method=params['pay_method'])
+
+        # 订单状态
+        if params.get('order_status'):
             fetch_where += """
-            AND (
-            ( {pay_method}=1 AND pay_status = 2) OR
-            ( {pay_method}=2 AND paid_offline = 1)
-            )
-            """.format(pay_method=params['pay_method'])
+                AND (
+                ( {order_status}=1 AND so.`status` in (1,2) ) OR
+                ( {order_status}=2 AND so.`status` = 3 ) OR
+                ( {order_status}=3 AND so.`status` = -1)
+                )
+                """.format(order_status=params['order_status'])
 
         # 时间和车长
         kwargs = {

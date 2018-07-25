@@ -63,6 +63,7 @@ class TransportList(object):
                     'goods_count': detail.get('goods_count', None) or 0,
                     'order_count': detail.get('order_count', None) or 0,
                     'vehicle_count': detail.get('vehicle_count', None) or 0,
+                    'vehicle_all_count': detail.get('vehicle_all_count', None) or 0,
                     'create_time': detail.get('create_time', '时间不详'),
                     # 前端要用的字段
                     'business': detail.get('haul_dist'),
