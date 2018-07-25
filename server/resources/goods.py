@@ -39,6 +39,7 @@ class CancelGoodsReason(Resource):
 
         return resp
 
+
 class GoodsDistributionTrend(Resource):
 
     @staticmethod
