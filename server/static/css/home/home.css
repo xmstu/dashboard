@@ -34,7 +34,7 @@
 
 .part-2 .layui-table-body .layui-table-cell {
     height: auto !important;
-    line-height: 24px;
+    line-height: 27px;
 }
 .area-select-options-setting{
 
@@ -172,9 +172,7 @@
     background: #f5f5f5;
     border-bottom: 2px solid #ddd;
 }
-.layui-layer-title {
-    text-align: center;
-}
+
 .order-item-spec {
     width: 214px!important;
 }
@@ -284,4 +282,7 @@
     margin-left: 5%;
     text-align: left;
     display: inline-block;
+}
+.layui-layer-title{
+    text-align: center;
 }

@@ -16,7 +16,7 @@ setTimeout(function () {
     10);
 layui.use(["laydate", "form", "table"],
     function () {
-        dataInit(dataArr2);
+        dataInit(dataArr1);
         layer.load();
         var laydate = layui.laydate;
         var table = layui.table;
@@ -358,6 +358,14 @@ function tableInit(url) {
                         layer.load();
                         popupRender(url)
                     })
+                    //对后端返回的数据重新进行渲染
+                    $("td[data-field='content']").children().each(function () {
+                        if ($(this).text() != "") {
+                            var str = $(this).text();
+                            str = str.split("\n");
+                            $(this).html(str[0] + "<br>" + str[1]+ "<br>" + str[2])
+                        }
+                    });
                     $("td[data-field='price']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
