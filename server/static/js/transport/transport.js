@@ -181,12 +181,13 @@ var dataSet = {
                 }
                 , cols: [[
                     {field: 'business', title: '业务类型'},
-                    {field: 'from_address', title: '出发地', width: 300}
-                    , {field: 'to_address', title: '目的地', width: 300}
+                    {field: 'from_address', title: '出发地', width: 280}
+                    , {field: 'to_address', title: '目的地', width: 280}
                     , {field: 'mileage', title: '里程'}
                     , {field: 'goods_count', title: '货源量'}
                     , {field: 'order_count', title: '接单量'}
                     , {field: 'vehicle_count', title: '活跃司机'}
+                    , {field: 'vehicle_all_count', title: '所有车辆'}
                     , {field: 'create_time', title: '统计时间'}
                     , {
                         field: 'operate', title: '操作', width: 107, templet: function (d) {
