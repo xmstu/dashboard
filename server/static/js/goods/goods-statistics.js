@@ -104,32 +104,32 @@ layui.use(['laydate', 'form', 'table'], function () {
         }
     });
     laydate.render({
-        elem: '#load_start_time',
+        elem: '#register_start_time',
         theme: '#009688',
         calendar: true,
         ready: function () {
 
         },
         done: function (val, index) {
-            if ($('#load_start_time').val() == '') {
-                $('#load_start_time').next('.date-tips').show();
+            if ($('#register_start_time').val() == '') {
+                $('#register_start_time').next('.date-tips').show();
             } else {
-                $('#load_start_time').next('.date-tips').hide()
+                $('#register_start_time').next('.date-tips').hide()
             }
         }
     });
     laydate.render({
-        elem: '#load_end_time',
+        elem: '#register_end_time',
         theme: '#009688',
         calendar: true,
         ready: function () {
 
         },
         done: function (val, index) {
-            if ($('#load_end_time').val() == '') {
-                $('#load_end_time').next('.date-tips').show();
+            if ($('#register_end_time').val() == '') {
+                $('#register_end_time').next('.date-tips').show();
             } else {
-                $('#load_end_time').next('.date-tips').hide()
+                $('#register_end_time').next('.date-tips').hide()
             }
         }
     });
@@ -663,19 +663,19 @@ $('#goods_search_box').on('click', function (e) {
     e.preventDefault();
     var create_start_time = $('#create_start_time').val();
     var create_end_time = $('#create_end_time').val();
-    var load_start_time = $('#load_start_time').val();
-    var load_end_time = $('#load_end_time').val();
+    var register_start_time = $('#register_start_time').val();
+    var register_end_time = $('#register_end_time').val();
     if (create_start_time != '') {
         create_start_time = common.timeTransform(create_start_time + ' 00:00:00')
     }
     if (create_end_time != '') {
         create_end_time = common.timeTransform(create_end_time + ' 23:59:59')
     }
-    if (load_start_time != '') {
-        load_start_time = common.timeTransform(load_start_time + ' 00:00:00')
+    if (register_start_time != '') {
+        register_start_time = common.timeTransform(register_start_time + ' 00:00:00')
     }
-    if (load_end_time != '') {
-        load_end_time = common.timeTransform(load_end_time + ' 23:59:59')
+    if (register_end_time != '') {
+        register_end_time = common.timeTransform(register_end_time + ' 23:59:59')
     }
     var data = {
         goods_id: $.trim($('#goods_id').val()),
@@ -700,14 +700,14 @@ $('#goods_search_box').on('click', function (e) {
         to_country_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
         create_start_time: create_start_time,
         create_end_time: create_end_time,
-        load_start_time: load_start_time,
-        load_end_time: load_end_time,//23
+        register_start_time: register_start_time,
+        register_end_time: register_end_time,//23
         page: 1,
         limit: 10
     }
     var url = '/goods/list/?goods_id=' + data.goods_id + '&mobile=' + data.mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_country_id=' + data.to_country_id + '&goods_price_type=' +
         data.goods_price_type + '&goods_type=' +
-        data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&load_start_time=' + data.load_start_time + '&load_end_time=' + data.load_end_time;
+        data.goods_type + '&goods_status=' + data.goods_status + '&is_called=' + data.is_called + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&node_id=' + data.node_id + '&new_goods_type=' + data.new_goods_type + '&urgent_goods=' + data.urgent_goods + '&is_addition=' + data.is_addition + '&create_start_time=' + data.create_start_time + '&create_end_time=' + data.create_end_time + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time;
     layui.use(['table', 'layer'], function () {
         var table = layui.table;
         var layer = layui.layer;

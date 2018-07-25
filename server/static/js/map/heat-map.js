@@ -15,7 +15,7 @@ var provinces = {
     "湖北": "420000",
     "湖南": "460000",
     "广东": "440000",
-    "海南": "hainan",
+    "海南": "150300",
     "四川": "510000",
     "贵州": "520000",
     "云南": "530000",
@@ -41,446 +41,463 @@ var mapdata = [];
 var data_ano = [];
 $('.main-content-right').addClass('animated fadeIn');
 var special = ["北京", "天津", "上海", "重庆", "香港", "澳门"];
-$('#date_show_one').val(String(common.getNowFormatDate()[2]));
-$('#date_show_two').val(String(common.getNowFormatDate()[3]));
-
-function dataInit() {
-    layui.use(['form', 'layer'], function () {
-        var layer = layui.layer;
-        var form = layui.form;
-        var start_time = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
-        var end_time = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
-        form.on('select(methods_select)', function (data) {
-            if (data.value == '1') {
-                $('#filter').removeClass('none').addClass('area-select-options-setting');
-                $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
-                $('#role_select').addClass('none').removeClass('area-select-options-setting');
-                $('#heat_maps_tabs').removeClass('none').addClass('map-select-options-setting');
-                $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
-                $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
-            } else if (data.value == '2') {
-                $('#role_select').removeClass('none').addClass('area-select-options-setting');
-                $('#filter').addClass('none').removeClass('area-select-options-setting');
-                $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
-                $('#heat_maps_tabs_one').removeClass('none').addClass('map-select-options-setting');
-                $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
-                $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
-            } else if (data.value == '3') {
-                $('#vehicle_select').removeClass('none').addClass('area-select-options-setting');
-                $('#filter').addClass('none').removeClass('area-select-options-setting');
-                $('#role_select').addClass('none').removeClass('area-select-options-setting');
-                $('#heat_maps_tabs_two').removeClass('none').addClass('map-select-options-setting');
-                $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
-                $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
-            }
-        });
-        var url = '/map/heat_map/';
-        var area_select = $('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
-        var map_select = $('.map-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
-        var data = {
-            dimension: $.trim($('#dimension').val()),
-            filter: area_select == undefined ? 0 : area_select,
-            field: map_select == undefined ? 0 : map_select,
-            start_time: start_time,
-            end_time: end_time,
-            region_id: ''
-        };
-
-        http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-                if (res.status == 100000) {
-                    var data = res.data;
-                    var data_reset = data.map_data;
-                    var province_reset = data.map_data;
-                    var max_value = data.max_value;
-                    var toolTipData = data.toolTipData;
-                    var chart = echarts.init(document.getElementById('map_container'));
-                    var option = {
-                        backgroundColor: '#f6f6f6',
-                        title: {
-                            text: null,
-                            subtext: null,
-                            link: null,
-                            subtextStyle: null
-                        }
-                        , tooltip: {
-                            trigger: 'item',
-                            formatter: function (params) {
-                                if (typeof(params.value)[2] == "undefined") {
-                                    var toolTiphtml = '';
-                                    for (var i = 0; i < toolTipData.length; i++) {
-                                        if (params.name == toolTipData[i].name) {
-                                            toolTiphtml += toolTipData[i].name + ':<br>';
-                                            for (var j = 0; j < toolTipData[i].value.length; j++) {
-                                                toolTiphtml += toolTipData[i].value[j].name + ':' + toolTipData[i].value[j].value + "<br>"
-                                            }
-                                        }
-                                    }
-                                    return toolTiphtml;
-                                } else {
-                                    var toolTiphtml = '';
-                                    for (var i = 0; i < toolTipData.length; i++) {
-                                        if (params.name == toolTipData[i].name) {
-                                            toolTiphtml += toolTipData[i].name + ':<br>';
-                                            for (var j = 0; j < toolTipData[i].value.length; j++) {
-                                                toolTiphtml += toolTipData[i].value[j].name + ':' + toolTipData[i].value[j].value + "<br>"
-                                            }
-                                        }
-                                    }
-                                    return toolTiphtml;
-                                }
-                            }
-                        },
-                        dataRange: {
-                            min: 0,
-                            max: max_value + (max_value / 5),
-                            text: ['High', 'Low'],
-                            realtime: true,
-                            calculable: true,
-                            color: ['orangered', 'yellow', 'lightskyblue']
-                        },
-                        xAxis: {
-                            gridIndex: 0,
-                            axisTick: {
-                                show: true
-                            },
-                            axisLabel: {
-                                show: true
-                            },
-                            splitLine: {
-                                show: true
-                            },
-                            axisLine: {
-                                show: true
-                            }
-                        },
-                        yAxis: {
-                            data: ynameMap_(data_reset),
-                            axisTick: {
-                                show: true
-                            },
-                            axisLabel: {
-                                show: true
-                            },
-                            splitLine: {
-                                show: true
-                            },
-                            axisLine: {
-                                lineStyle: {
-                                    color: "#009688"
-                                }
-                            }
-                        },
-                        grid: {
-                            right: '3%',
-                            top: 0,
-                            width: '16%'
-                        },
-                        animationDuration: 1000,
-                        animationEasing: 'cubicOut',
-                        animationDurationUpdate: 1000
-                    };
-                    $.getJSON('/static/map/china.json', function (data) {
-                        d = [];
-                        for (var i = 0; i < data.features.length; i++) {
-                            d.push({
-                                name: data.features[i].properties.name
-                            })
-                        }
-                        mapdata = d;
-                        if (d.length != 0) {
-                            d = data_reset;
-                        }
-                        echarts.registerMap('china', data);
-                        pageSet.renderMap('china', d);
-                    });
-                    chart.on('click', function (params) {
-                        var data_province = {
-                            dimension: $.trim($('#dimension').val()),
-                            filter: area_select == undefined ? 0 : area_select,
-                            field: map_select == undefined ? 0 : map_select,
-                            region_id: provinces[params.name],
-                            start_time: start_time,
-                            end_time: end_time
-                        };
-                        http.ajax.get(true, false, url, data_province, http.ajax.CONTENT_TYPE_2, function (res) {
-                            if (res.status == 100000) {
-                                var data = res.data;
-                                var map_data = data.map_data;
-                                var city_toolTipData = data.toolTipData;
-                                if (params.name in provinces) {
-                                    $.getJSON('/static/map/province/' + provinces[params.name] + '.json', function (data) {
-                                        echarts.registerMap(params.name, data);
-                                        var d = [];
-                                        for (var i = 0; i < data.features.length; i++) {
-                                            d.push({
-                                                name: data.features[i].properties.name
-                                            })
-                                        }
-                                        toolTipData = city_toolTipData;
-                                        data_reset = map_data;
-                                        d = map_data;
-                                        var data_length = d.length;
-                                        var dataArr = []
-                                        if (data_length > 20) {
-                                            data_length = 20
-                                            for (var i = 0; i < data_length; i++) {
-                                                dataArr.push(d[i].name);
-                                            }
-                                        } else if (data_length < 20) {
-                                            for (var i = 0; i < data_length; i++) {
-                                                dataArr.push(d[i].name);
-                                            }
-                                        }
-                                        console.log(dataArr)
-                                        option.yAxis.data = dataArr;
-                                        pageSet.renderMap(params.name, d);
-                                    });
-                                } else if (params.seriesName in provinces) {
-                                    if (special.indexOf(params.seriesName) >= 0) {
-                                        pageSet.renderMap('china', mapdata);
-                                    } else {
-                                        $.getJSON('/static/map/city/' + cityMap[params.name] + '.json', function (data) {
-                                            // console.log(cityMap[params.name]);
-                                            var city_data = {
-                                                dimension: $.trim($('#dimension').val()),
-                                                filter: area_select == undefined ? 0 : area_select,
-                                                field: map_select == undefined ? 0 : map_select,
-                                                region_id: cityMap[params.name],
-                                                start_time: start_time,
-                                                end_time: end_time
-                                            };
-                                            http.ajax.get(true, false, url, city_data, http.ajax.CONTENT_TYPE_2, function (res) {
-                                                if (res.status == 100000) {
-                                                    var city_data = res.data;
-                                                    var city_map_data = city_data.map_data;
-                                                    var city_map_tooltip = city_data.toolTipData;
-                                                    echarts.registerMap(params.name, data);
-                                                    var d = [];
-                                                    for (var i = 0; i < data.features.length; i++) {
-                                                        d.push({
-                                                            name: data.features[i].properties.name
-                                                        })
-                                                    }
-                                                    toolTipData = city_map_tooltip;
-                                                    data_reset = city_map_data;
-                                                    d = city_map_data;
-                                                    var dataArr_ = []
-                                                    var data_length_ = d.length
-                                                    if (data_length_ > 20) {
-                                                        data_length_ = 20
-                                                        for (var i = 0; i < data_length_; i++) {
-                                                            dataArr_.push(d[i].name);
-                                                        }
-                                                    } else if (data_length_ < 20) {
-                                                        for (var i = 0; i < data_length_; i++) {
-                                                            dataArr_.push(d[i].name);
-                                                        }
-                                                    }
-                                                    option.yAxis.data = dataArr_;
-                                                    pageSet.renderMap(params.name, d);
-                                                }
-                                            });
-                                        });
-                                    }
-                                } else {
-                                   // console.log(province_reset)
-                                    var province_length = province_reset.length;
-                                    var province_arr = [];
-                                    for (var l = 0; l < province_length; l++) {
-                                        province_arr.push(province_reset[l].name)
-                                    }
-                                    console.log(province_arr)
-                                    option.yAxis.data=province_arr
-                                    pageSet.renderMap('china', province_reset);
-                                }
-                            } else {
-                                layer.msg('接口请求异常')
-                            }
-                        });
-
-                    });
-                    var pageSet = {
-                        init: function () {
-                            $.ajax({
-                                url: '/static/map/china.json',
-                                dataType: 'json',
-                                type: 'get',
-                                success: function (res) {
-                                    $.each(res.features, function (val, index) {
-                                        $.each(index, function (v, i) {
-                                            var name = i.name;
-                                            geoCoordMap[name] = i.cp;
-                                            data_ano.push({
-                                                name: name,
-                                                value: Math.round(Math.random() * 100 + 10)
-                                            })
-                                        })
-                                    });
-                                }
-                            });
-
-                            $('.map-menu-about>a').addClass('selected-active');
-                            $('.map-menu-about>a>i').addClass('select-active');
-                            layui.use(['laydate', 'layer', 'form', 'table'], function () {
-                                var form = layui.form;
-                                var table = layui.table;
-                                var layer = layui.layer;
-                                var laydate = layui.laydate;
-                                laydate.render({
-                                    elem: '#date_show_one',
-                                    theme: '#009688',
-                                    calendar: true,
-                                    max: String(common.getNowFormatDate()[0]),
-                                    ready: function () {
-
-                                    },
-                                    done: function (val, index) {
-                                        var startTime = $('#date_show_one').val();
-                                        var endTime = $('#date_show_two').val();
-                                        common.dateInterval(endTime, startTime);
-                                        if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
-                                            layer.msg('提示：开始时间大于了结束时间！');
-                                            return false
-                                        }
-                                    }
-                                });
-                                laydate.render({
-                                    elem: '#date_show_two',
-                                    theme: '#009688',
-                                    calendar: true,
-                                    max: String(common.getNowFormatDate()[0]),
-                                    ready: function () {
-
-                                    },
-                                    done: function (val, index) {
-                                        var startTime = $('#date_show_one').val();
-                                        var endTime = $('#date_show_two').val();
-                                        common.dateInterval(endTime, startTime);
-                                        if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
-                                            layer.msg('提示：开始时间大于了结束时间！');
-                                            return false
-                                        }
-                                    }
-                                });
-                            })
-
-                        },
-                        renderMap: function (map, data) {
-                            option.title.subtext = map;
-                            option.series = [
-                                {
-                                    name: '散点',
-                                    type: 'scatter',
-                                    coordinateSystem: 'geo',
-                                    label: {
-                                        normal: {},
-                                        emphasis: {}
-                                    },
-                                    itemStyle: {
-                                        normal: {
-                                            color: '#009688'
-                                        }
-                                    }
-                                },
-                                {
-                                    name: map
-                                    , type: 'map'
-                                    , mapType: map
-                                    , roam: false,
-                                    borderWidth: 1.6,
-                                    aspectScale: 0.68,
-                                    geoIndex: 0,
-                                    left: '10%',
-                                    top: '2%',
-                                    width: '60%',
-                                    height: '76%',
-                                    nameMap: {
-                                        'china': '中国'
-                                    }
-                                    , label: {
-                                        normal: {
-                                            show: true
-                                            , textStyle: {
-                                                color: '#999'
-                                                , fontSize: 13
-                                            }
-                                        }
-                                        , emphasis: {
-                                            show: true
-                                            , textStyle: {
-                                                color: '#333'
-                                                , fontSize: 13
-                                            }
-                                        }
-                                    }
-                                    , itemStyle: {
-                                        normal: {
-                                            areaColor: '#fff'
-                                            , borderColor: 'skublue'
-                                        }
-                                        , emphasis: {
-                                            areaColor: 'darkorange'
-                                        }
-                                    }
-                                    , data: data
-                                },
-                                {
-                                    name: '数量排名',
-                                    zlevel: 1,
-                                    xAxisIndex: 0,
-                                    yAxisIndex: 0,
-                                    type: 'bar',
-                                    barMaxWidth: 20,
-                                    label: {
-                                        normal: {
-                                            show: true,
-                                            position: 'right'
-                                        },
-                                        emphasis: {
-                                            show: true
-                                        }
-                                    },
-                                    data: data
-                                }
-                            ];
-                            chart.setOption(option);
-                        },
-                        tab: function () {
-                            var lis = $('.heat-maps-tabs > li');
-                            lis.click(function () {
-                                $(this).addClass('active').siblings('li').removeClass('active')
-                            })
-                        }
-                    };
-                    pageSet.init();
-                    pageSet.tab();
-                } else {
-                    layer.msg('error')
+var set = {
+    init: function () {
+        $('#date_show_one').val(String(common.getNowFormatDate()[2]));
+        $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+    },
+    dataInit: function () {
+        var that = this;
+        layui.use(['form', 'layer'], function () {
+            var layer = layui.layer;
+            var form = layui.form;
+            that.init();
+            var start_time = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
+            var end_time = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
+            form.on('select(methods_select)', function (data) {
+                if (data.value == '1') {
+                    $('#filter').removeClass('none').addClass('area-select-options-setting');
+                    $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
+                    $('#role_select').addClass('none').removeClass('area-select-options-setting');
+                    $('#heat_maps_tabs').removeClass('none').addClass('map-select-options-setting');
+                    $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
+                } else if (data.value == '2') {
+                    $('#role_select').removeClass('none').addClass('area-select-options-setting');
+                    $('#filter').addClass('none').removeClass('area-select-options-setting');
+                    $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
+                    $('#heat_maps_tabs_one').removeClass('none').addClass('map-select-options-setting');
+                    $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
+                } else if (data.value == '3') {
+                    $('#vehicle_select').removeClass('none').addClass('area-select-options-setting');
+                    $('#filter').addClass('none').removeClass('area-select-options-setting');
+                    $('#role_select').addClass('none').removeClass('area-select-options-setting');
+                    $('#heat_maps_tabs_two').removeClass('none').addClass('map-select-options-setting');
+                    $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
                 }
+            });
+            var url = '/map/heat_map/';
+            var area_select = $('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
+            var map_select = $('.map-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
+            var data = {
+                dimension: $.trim($('#dimension').val()),
+                filter: area_select == undefined ? 0 : area_select,
+                field: map_select == undefined ? 0 : map_select,
+                start_time: start_time,
+                end_time: end_time,
+                region_id: ''
+            };
+            http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+                    var data_reload = res.data
+                    if (data_reload.authority_region_id == 0) {
+                        if (res.status == 100000) {
+                            var data = res.data;
+                            var data_reset = data.map_data;
+                            var province_reset = data.map_data;
+                            var max_value = data.max_value;
+                            var toolTipData = data.toolTipData;
+                            var chart = echarts.init(document.getElementById('map_container'));
+                            var option = {
+                                backgroundColor: '#f6f6f6',
+                                title: {
+                                    text: null,
+                                    subtext: null,
+                                    link: null,
+                                    subtextStyle: null
+                                }
+                                , tooltip: {
+                                    trigger: 'item',
+                                    formatter: function (params) {
+                                        if (typeof(params.value)[2] == "undefined") {
+                                            var toolTiphtml = '';
+                                            for (var i = 0; i < toolTipData.length; i++) {
+                                                if (params.name == toolTipData[i].name) {
+                                                    toolTiphtml += toolTipData[i].name + ':<br>';
+                                                    for (var j = 0; j < toolTipData[i].value.length; j++) {
+                                                        toolTiphtml += toolTipData[i].value[j].name + ':' + toolTipData[i].value[j].value + "<br>"
+                                                    }
+                                                }
+                                            }
+                                            return toolTiphtml;
+                                        } else {
+                                            var toolTiphtml = '';
+                                            for (var i = 0; i < toolTipData.length; i++) {
+                                                if (params.name == toolTipData[i].name) {
+                                                    toolTiphtml += toolTipData[i].name + ':<br>';
+                                                    for (var j = 0; j < toolTipData[i].value.length; j++) {
+                                                        toolTiphtml += toolTipData[i].value[j].name + ':' + toolTipData[i].value[j].value + "<br>"
+                                                    }
+                                                }
+                                            }
+                                            return toolTiphtml;
+                                        }
+                                    }
+                                },
+                                visualMap: {
+                                    /*  min: 0,
+                                      max: max_value + (max_value / 5),
+                                      text: ['High', 'Low'],
+                                      realtime: true,
+                                      calculable: true,
+                                      color: ['#00467F', '#A5CC82', '#ffc0cb'] //*/
+                                    min: 0,
+                                    max: max_value + (max_value / 5),
+                                    left: 'left',
+                                    top: 'bottom',
+                                    text: ['高', '低'], // 文本，默认为数值文本
+                                    calculable: true,
+                                    seriesIndex: [1],
+                                    inRange: {
+                                        color: ['#00467F', '#A5CC82']
+                                    }
+                                },
+                                xAxis: {
+                                    gridIndex: 0,
+                                    axisTick: {
+                                        show: true
+                                    },
+                                    axisLabel: {
+                                        show: true
+                                    },
+                                    splitLine: {
+                                        show: true
+                                    },
+                                    axisLine: {
+                                        show: true
+                                    }
+                                },
+                                yAxis: {
+                                    data: ynameMap_(data_reset),
+                                    axisTick: {
+                                        show: true
+                                    },
+                                    axisLabel: {
+                                        show: true
+                                    },
+                                    splitLine: {
+                                        show: true
+                                    },
+                                    axisLine: {
+                                        lineStyle: {
+                                            color: "#009688"
+                                        }
+                                    }
+                                },
+                                grid: {
+                                    right: '3%',
+                                    top: 0,
+                                    width: '16%'
+                                },
+                                animationDuration: 1000,
+                                animationEasing: 'cubicOut',
+                                animationDurationUpdate: 1000
+                            };
+                            $.getJSON('/static/map/china.json', function (data) {
+                                d = [];
+                                for (var i = 0; i < data.features.length; i++) {
+                                    d.push({
+                                        name: data.features[i].properties.name
+                                    })
+                                }
+                                mapdata = d;
+                                if (d.length != 0) {
+                                    d = data_reset;
+                                }
+                                echarts.registerMap('china', data);
+                                pageSet.renderMap('china', d);
+                            });
+                            chart.on('click', function (params) {
+                                var data_province = {
+                                    dimension: $.trim($('#dimension').val()),
+                                    filter: area_select == undefined ? 0 : area_select,
+                                    field: map_select == undefined ? 0 : map_select,
+                                    region_id: provinces[params.name],
+                                    start_time: start_time,
+                                    end_time: end_time
+                                };
+                                http.ajax.get(true, false, url, data_province, http.ajax.CONTENT_TYPE_2, function (res) {
+                                    if (res.status == 100000) {
+                                        var data = res.data;
+                                        var map_data = data.map_data;
+                                        var city_toolTipData = data.toolTipData;
+                                        var max_value_reset = data.max_value
+                                        if (params.name in provinces) {
+                                            $.getJSON('/static/map/province/' + provinces[params.name] + '.json', function (data) {
+                                                echarts.registerMap(params.name, data);
+                                                var d = [];
+                                                for (var i = 0; i < data.features.length; i++) {
+                                                    d.push({
+                                                        name: data.features[i].properties.name
+                                                    })
+                                                }
+                                                toolTipData = city_toolTipData;
+                                                data_reset = map_data;
+                                                d = map_data;
+                                                var data_length = d.length;
+                                                var dataArr = [];
+                                                if (data_length > 20) {
+                                                    data_length = 20
+                                                    for (var i = 0; i < data_length; i++) {
+                                                        dataArr.push(d[i].name);
+                                                    }
+                                                } else if (data_length < 20) {
+                                                    for (var i = 0; i < data_length; i++) {
+                                                        dataArr.push(d[i].name);
+                                                    }
+                                                }
+                                               // console.log(option.visualMap.max)
+                                                option.visualMap.max=max_value_reset;
+                                                option.yAxis.data = dataArr;
+                                                pageSet.renderMap(params.name, d);
+                                            });
+                                        } else if (params.seriesName in provinces) {
+                                            if (special.indexOf(params.seriesName) >= 0) {
+                                                pageSet.renderMap('china', mapdata);
+                                            } else {
+                                                $.getJSON('/static/map/city/' + cityMap[params.name] + '.json', function (data) {
+                                                    // console.log(cityMap[params.name]);
+                                                    var city_data = {
+                                                        dimension: $.trim($('#dimension').val()),
+                                                        filter: area_select == undefined ? 0 : area_select,
+                                                        field: map_select == undefined ? 0 : map_select,
+                                                        region_id: cityMap[params.name],
+                                                        start_time: start_time,
+                                                        end_time: end_time
+                                                    };
+                                                    http.ajax.get(true, false, url, city_data, http.ajax.CONTENT_TYPE_2, function (res) {
+                                                        if (res.status == 100000) {
+                                                            var city_data = res.data;
+                                                            var city_map_data = city_data.map_data;
+                                                            var city_map_tooltip = city_data.toolTipData;
+                                                            var max_value_reset1 = data.max_value
+                                                            echarts.registerMap(params.name, data);
+                                                            var d = [];
+                                                            for (var i = 0; i < data.features.length; i++) {
+                                                                d.push({
+                                                                    name: data.features[i].properties.name
+                                                                })
+                                                            }
+                                                            toolTipData = city_map_tooltip;
+                                                            data_reset = city_map_data;
+                                                            d = city_map_data;
+                                                            var dataArr_ = []
+                                                            var data_length_ = d.length
+                                                            if (data_length_ > 20) {
+                                                                data_length_ = 20
+                                                                for (var i = 0; i < data_length_; i++) {
+                                                                    dataArr_.push(d[i].name);
+                                                                }
+                                                            } else if (data_length_ < 20) {
+                                                                for (var i = 0; i < data_length_; i++) {
+                                                                    dataArr_.push(d[i].name);
+                                                                }
+                                                            }
+                                                            option.yAxis.data = dataArr_;
+                                                            option.visualMap.max=  max_value_reset1
+                                                            pageSet.renderMap(params.name, d);
+                                                        }
+                                                    });
+                                                });
+                                            }
+                                        } else {
+                                            var province_length = province_reset.length;
+                                            var province_arr = [];
+                                            for (var l = 0; l < province_length; l++) {
+                                                province_arr.push(province_reset[l].name)
+                                            }
+                                            option.yAxis.data = province_arr;
+                                            pageSet.renderMap('china', province_reset);
+                                        }
+                                    } else {
+                                        layer.msg('接口请求异常')
+                                    }
+                                });
 
-                function ynameMap_(d) {
-                    var ynameMap = [];
-                    var data_length = d.length
-                    if (data_length > 20) {
-                        data_length = 20
-                        for (var i = 0; i < data_length; i++) {
-                            ynameMap.push(d[i].name);
-                        }
-                    } else if (data_length < 20) {
-                        for (var i = 0; i < data_length; i++) {
-                            ynameMap.push(d[i].name);
+                            });
+                            var pageSet = {
+                                init: function () {
+                                    $.ajax({
+                                        url: '/static/map/china.json',
+                                        dataType: 'json',
+                                        type: 'get',
+                                        success: function (res) {
+                                            $.each(res.features, function (val, index) {
+                                                $.each(index, function (v, i) {
+                                                    var name = i.name;
+                                                    geoCoordMap[name] = i.cp;
+                                                    data_ano.push({
+                                                        name: name,
+                                                        value: Math.round(Math.random() * 100 + 10)
+                                                    })
+                                                })
+                                            });
+                                        }
+                                    });
+
+                                    $('.map-menu-about>a').addClass('selected-active');
+                                    $('.map-menu-about>a>i').addClass('select-active');
+                                    layui.use(['laydate', 'layer', 'form', 'table'], function () {
+                                        var form = layui.form;
+                                        var table = layui.table;
+                                        var layer = layui.layer;
+                                        var laydate = layui.laydate;
+                                        laydate.render({
+                                            elem: '#date_show_one',
+                                            theme: '#009688',
+                                            calendar: true,
+                                            max: String(common.getNowFormatDate()[0]),
+                                            ready: function () {
+
+                                            },
+                                            done: function (val, index) {
+                                                var startTime = $('#date_show_one').val();
+                                                var endTime = $('#date_show_two').val();
+                                                common.dateInterval(endTime, startTime);
+                                                if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                                                    layer.msg('提示：开始时间大于了结束时间！');
+                                                    return false
+                                                }
+                                            }
+                                        });
+                                        laydate.render({
+                                            elem: '#date_show_two',
+                                            theme: '#009688',
+                                            calendar: true,
+                                            max: String(common.getNowFormatDate()[0]),
+                                            ready: function () {
+
+                                            },
+                                            done: function (val, index) {
+                                                var startTime = $('#date_show_one').val();
+                                                var endTime = $('#date_show_two').val();
+                                                common.dateInterval(endTime, startTime);
+                                                if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                                                    layer.msg('提示：开始时间大于了结束时间！');
+                                                    return false
+                                                }
+                                            }
+                                        });
+                                    })
+
+                                },
+                                renderMap: function (map, data) {
+                                    option.title.subtext = map;
+                                    option.series = [
+                                        {
+                                            name: '散点',
+                                            type: 'scatter',
+                                            coordinateSystem: 'geo',
+                                            label: {
+                                                normal: {},
+                                                emphasis: {}
+                                            },
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#009688'
+                                                }
+                                            }
+                                        },
+                                        {
+                                            name: map
+                                            , type: 'map'
+                                            , mapType: map
+                                            , roam: false,
+                                            borderWidth: 1.6,
+                                            aspectScale: 0.68,
+                                            geoIndex: 0,
+                                            left: '10%',
+                                            top: '2%',
+                                            width: '60%',
+                                            height: '76%',
+                                            nameMap: {
+                                                'china': '中国'
+                                            }
+                                            , label: {
+                                                normal: {
+                                                    show: true
+                                                    , textStyle: {
+                                                        color: '#999'
+                                                        , fontSize: 13
+                                                    }
+                                                }
+                                                , emphasis: {
+                                                    show: true
+                                                    , textStyle: {
+                                                        color: '#333'
+                                                        , fontSize: 13
+                                                    }
+                                                }
+                                            }
+                                            , itemStyle: {
+                                                normal: {
+                                                    areaColor: '#fff'
+                                                    , borderColor: 'skublue'
+                                                }
+                                                , emphasis: {
+                                                    areaColor: 'darkorange'
+                                                }
+                                            }
+                                            , data: data
+                                        },
+                                        {
+                                            name: '数量排名',
+                                            zlevel: 1,
+                                            xAxisIndex: 0,
+                                            yAxisIndex: 0,
+                                            type: 'bar',
+                                            barMaxWidth: 20,
+                                            label: {
+                                                normal: {
+                                                    show: true,
+                                                    position: 'right'
+                                                },
+                                                emphasis: {
+                                                    show: true
+                                                }
+                                            },
+                                            data: data
+                                        }
+                                    ];
+                                    chart.setOption(option);
+                                },
+                                tab: function () {
+                                    var lis = $('.heat-maps-tabs > li');
+                                    lis.click(function () {
+                                        $(this).addClass('active').siblings('li').removeClass('active')
+                                    })
+                                }
+                            };
+                            pageSet.init();
+                            pageSet.tab();
+                        } else {
+                            layer.msg('error')
                         }
                     }
-                    return ynameMap
+
+                    function ynameMap_(d) {
+                        var ynameMap = [];
+                        var data_length = d.length
+                        if (data_length > 20) {
+                            data_length = 20
+                            for (var i = 0; i < data_length; i++) {
+                                ynameMap.push(d[i].name);
+                            }
+                        } else if (data_length < 20) {
+                            for (var i = 0; i < data_length; i++) {
+                                ynameMap.push(d[i].name);
+                            }
+                        }
+                        return ynameMap
+                    }
                 }
-
-            }
-        )
-    })
-
+            )
+        })
+    }
 }
 
-dataInit();
+set.dataInit();
 $('#search_btn').click(function (e) {
     e.preventDefault();
     dataInit();

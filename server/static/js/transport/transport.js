@@ -151,7 +151,7 @@ var dataSet = {
                     type: 'area'
                 },
                 {
-                    name: '车辆数',
+                    name: '活跃司机数',
                     data: vehicles_ret,
                     pointPlacement: 'on',
                     type: 'line'
@@ -181,12 +181,13 @@ var dataSet = {
                 }
                 , cols: [[
                     {field: 'business', title: '业务类型'},
-                    {field: 'from_address', title: '出发地', width: 300}
-                    , {field: 'to_address', title: '目的地', width: 300}
+                    {field: 'from_address', title: '出发地', width: 280}
+                    , {field: 'to_address', title: '目的地', width: 280}
                     , {field: 'mileage', title: '里程'}
                     , {field: 'goods_count', title: '货源量'}
                     , {field: 'order_count', title: '接单量'}
-                    , {field: 'vehicle_count', title: '车辆数'}
+                    , {field: 'vehicle_count', title: '活跃司机'}
+                    , {field: 'vehicle_all_count', title: '所有车辆'}
                     , {field: 'create_time', title: '统计时间'}
                     , {
                         field: 'operate', title: '操作', width: 107, templet: function (d) {
@@ -249,13 +250,15 @@ var dataSet = {
                                 var goods_ret = data.goods_ret;
                                 var orders_ret = data.orders_ret;
                                 var vehicle_ret = data.vehicles_ret;
+                                var vehicles_all_ret = data.vehicles_all_ret
                                 console.log(vehicle_ret);
                                 that.radar_chart_init($('#radar_charts_container'), vehicle_name_list, orders_ret, vehicle_ret, goods_ret);
                                 for (var i = 0; i < vehicle_name_list.length; i++) {
                                     var str = '<tr>';
                                     str += '<td>' + vehicle_name_list[i] + '</td>';
                                     str += '<td>' + goods_ret[i] + '单</td>';
-                                    str += '<td>' + vehicle_ret[i] + '辆</td>';
+                                    str += '<td>' + vehicle_ret[i] + '人</td>';
+                                    str += '<td>' + vehicles_all_ret[i] + '辆</td>';
                                     str += '<td style="color: #44c660;font-weight: bold;">' + orders_ret[i] + '单</td>';
                                     str += '<td style="color: #f40;font-weight: bold;">' + that.transition(goods_ret[i], orders_ret[i]) + '</td>';
                                     str += '<tr>';
@@ -315,6 +318,7 @@ var dataSet = {
                 var goods_ret = res.data.goods_ret;
                 var orders_ret = res.data.orders_ret;
                 var vehicle_name_list = res.data.vehicle_name_list;
+                var vehicles_all_ret = res.data.vehicles_all_ret
                 $('.transport-tbody').html('');
                 if (vehicle_name_list.length > 0) {
                     that.radar_chart_init($('#charts_container_two'), vehicle_name_list, orders_ret, vehicles_ret, goods_ret);
@@ -322,7 +326,8 @@ var dataSet = {
                         var str = '<tr>';
                         str += '<td>' + vehicle_name_list[i] + '</td>';
                         str += '<td>' + goods_ret[i] + '单</td>';
-                        str += '<td>' + vehicles_ret[i] + '辆</td>';
+                        str += '<td>' + vehicles_ret[i] + '人</td>';
+                        str += '<td>' + vehicles_all_ret[i] + '辆</td>';
                         str += '<td style="color: #44c660;font-weight: bold;">' + orders_ret[i] + '单</td>';
                         str += '<td style="color: #f40;font-weight: bold;">' + that.transition(goods_ret[i], orders_ret[i]) + '</td>';
                         str += '<tr>';
