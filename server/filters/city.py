@@ -23,7 +23,7 @@ class CityResourceBalance(object):
                 result.setdefault(vehicle_name, {})
                 if i['status'] == 3:
                     result[vehicle_name]['已接单'] = result[vehicle_name].setdefault('已接单', 0) + 1
-                elif i['status'] == -1:
+                elif i['is_deleted'] == 1:
                     result[vehicle_name]['已取消'] = result[vehicle_name].setdefault('已取消', 0) + 1
                 # 一口价
                 if params['goods_price_type'] == 1:

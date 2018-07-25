@@ -7,7 +7,7 @@ class CityResourceBalanceModel(object):
     def get_goods_data(cursor, params):
         """获取货源数据"""
         command = '''
-        SELECT shf_goods.id, shf_goods.`status`,
+        SELECT shf_goods.id, shf_goods.`status`, shf_goods.is_deleted,
         -- 车型
         shf_goods_vehicles.`name` AS new_vehicle,
         -- 是否通话
