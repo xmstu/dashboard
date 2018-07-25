@@ -458,7 +458,7 @@ class GoodsDistributionTrendList(object):
 
         wait_where = """ AND ( status = 1 OR status = 2 ) """
         recv_where = """ AND shf_goods.STATUS = 3 """
-        cancel_where = """ shf_goods.is_deleted = 1 """
+        cancel_where = """ AND shf_goods.is_deleted = 1 """
 
         all_order = cursor.query(command.format(flag=1, fetch_where=fetch_where))
         wait_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + wait_where))
