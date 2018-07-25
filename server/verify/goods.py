@@ -43,7 +43,7 @@ class GoodsList(object):
             vehicle_type = str(params.get('vehicle_type')) if params.get('vehicle_type') else 0
             node_id = int(params.get('node_id')) if params.get('node_id') else 0
             new_goods_type = int(params.get('new_goods_type')) if params.get('new_goods_type') else 0
-            # urgent_goods = int(params.get('urgent_goods')) if params.get('urgent_goods') else 0
+            urgent_goods = int(params.get('urgent_goods')) if params.get('urgent_goods') else 0
             is_addition = int(params.get('is_addition')) if params.get('is_addition') else 0
 
             # 补全时间
@@ -91,8 +91,8 @@ class GoodsList(object):
                 "is_addition": is_addition,
                 "create_start_time": create_start_time,
                 "create_end_time": create_end_time,
-                "load_start_time": load_start_time,
-                "load_end_time": load_end_time,
+                # "load_start_time": load_start_time,
+                # "load_end_time": load_end_time,
                 "register_start_time": register_start_time,
                 "register_end_time": register_end_time
             }
