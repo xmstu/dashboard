@@ -267,6 +267,7 @@ var dataSet = {
                                         type: 1,
                                         title: '运力统计车型雷达图',
                                         content: $('#popup'),
+                                        shadeClose:true,
                                         area: ['1300px', '540px'],
                                         skin: 'layui-layer-molv',
                                         colseBtn: 1

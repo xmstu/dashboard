@@ -51,11 +51,10 @@
                                 </div>
                                 <div class="layui-form-item " id="">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label">价格类型</label>
+                                        <label class="layui-form-label">货源类型</label>
                                         <div class="layui-input-inline" style="width: 140px">
                                             <select id="goods_price_types" name="modules" lay-verify="required"
                                                     lay-search="">
-                                                <option value="">全部类型</option>
                                                 <option value="1">议价</option>
                                                 <option value="2">一口价</option>
                                             </select>
@@ -64,12 +63,12 @@
                                 </div>
                                 <div class="layui-form-item layui-item-spec" id="">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label">货源类型</label>
+                                        <label class="layui-form-label">距离类型</label>
                                         <div class="layui-input-inline" style="width: 140px">
-                                            <select id="goods_types" name="modules" lay-verify="required" lay-search="">
+                                            <select id="haul_dist" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">全部类型</option>
                                                 <option value="1">同城</option>
-                                                <option value="2" selected>跨城</option>
-                                                <option value="3">零担</option>
+                                                <option value="2">跨城</option>
                                             </select>
                                         </div>
                                     </div>
@@ -106,9 +105,20 @@
                         <div class="river"></div>
                         <div class="part-2">
                             <form id="select_box" lay-filter="resetForm" action="" class="layui-form layui-form-pane">
+
                                 <div class="layui-form-item">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label">价格类型</label>
+                                        <label class="layui-form-label">货主手机</label>
+                                        <div class="layui-input-inline">
+                                            <input id="phone_number" type="tel" name="phone" maxlength="11"
+                                                   placeholder="请输入手机号" lay-verify="required|phone" autocomplete="off"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">货源类型</label>
                                         <div class="layui-input-inline">
                                             <select id="goods_price_type" name="modules" lay-verify="required"
                                                     lay-search="">
@@ -121,13 +131,12 @@
                                 </div>
                                 <div class="layui-form-item">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label">货源类型</label>
+                                        <label class="layui-form-label">运输距离</label>
                                         <div class="layui-input-inline">
                                             <select id="goods_type" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部类型</option>
                                                 <option value="1">同城</option>
                                                 <option value="2">跨城</option>
-                                                <option value="3">零担</option>
                                             </select>
                                         </div>
                                     </div>
@@ -155,6 +164,7 @@
                                                 <option value="中面包车">中面包车</option>
                                                 <option value="小货车">小货车</option>
                                                 <option value="4.2米">4.2米</option>
+                                                <option value="5.2米">5.2米</option>
                                                 <option value="6.8米">6.8米</option>
                                                 <option value="7.6米">7.6米</option>
                                                 <option value="9.6米">9.6米</option>
@@ -209,6 +219,7 @@
                                 <button id="user_search_box" style="position: relative;padding-left: 20px;"
                                         class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索
                                 </button>
+                                <p class="tips-paragraph">提示：跨省货源可不提供服务~</p>
                             </form>
                             <table class="layui-hide goods-table" id="LAY_table_goods" lay-filter="user"></table>
                         </div>

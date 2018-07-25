@@ -22,11 +22,12 @@ class CityResourceBalanceModel(object):
         WHERE shf_goods.create_time >= :start_time
         AND shf_goods.create_time < :end_time
         -- 地区
-        AND 1 = 1 %(region)s
+        %(region)s
         -- 货源类型
-        AND 1 = 1 %(goods_type)s
-        -- 货主手机
-        %(mobile)s'''
+        %(goods_price_type)s
+        -- 运输距离
+        %(haul_dist)s
+        '''
 
         # 地区
         region = ''
@@ -44,35 +45,30 @@ class CityResourceBalanceModel(object):
                 OR from_town_id IN (%(region_id)s)
                 )''' % {'region_id': ','.join(params['region_id'])}
 
-        # 货主手机
-        mobile = ''
-        if params['mobile']:
-            mobile = 'AND shf_goods.user_id = (SELECT id FROM shu_users WHERE mobile="%s" AND is_deleted = 0)' % params['mobile']
-
-        goods_type = ''
-        # 货源类型:跨城/同城
-        if params.get('goods_type'):
-            goods_type += """
-                    AND (
-                    ({goods_type}=1 AND shf_goods.haul_dist = 2) OR
-                    ({goods_type}=2 AND shf_goods.haul_dist = 1)
-                    )
-                    """.format(goods_type=params['goods_type'])
-
-        # 货源类型:议价/一口价/零担
+        # 货源价格类型:一口价/议价
+        goods_price_type = ''
         if params.get('goods_price_type'):
-            goods_type += """
+            goods_price_type += """
+                    AND (
+                    ({goods_price_type}=1 AND shf_goods.is_system_price = 1) OR
+                    ({goods_price_type}=2 AND shf_goods.is_system_price = 0)
+                    )
+                    """.format(goods_price_type=params['goods_price_type'])
+
+        # 运输距离:跨城/同城
+        haul_dist = ''
+        if params.get('haul_dist'):
+            haul_dist += """
                         AND (
-                        ({goods_price_type}=1 AND shf_goods.goods_level = 1) OR
-                        ({goods_price_type}=2 AND shf_goods.is_system_price = 1) OR
-                        ({goods_price_type}=3 AND shf_goods.type = 2)
+                        ({haul_dist}=1 AND shf_goods.haul_dist = 1) OR
+                        ({haul_dist}=2 AND shf_goods.haul_dist = 2)
                         )
-                        """.format(goods_price_type=params['goods_price_type'])
+                        """.format(haul_dist=params['haul_dist'])
 
         command = command % {
             'region': region,
-            'goods_type': goods_type,
-            'mobile': mobile
+            'goods_price_type': goods_price_type,
+            'haul_dist': haul_dist
         }
         result = cursor.query(command, {
             'start_time': params['start_time'],
@@ -119,11 +115,14 @@ class CityResourceBalanceModel(object):
                 OR from_town_id IN (%(region_id)s)
                 )''' % {'region_id': ','.join(params['region_id'])}
         # 同城
-        if params['goods_type'] == 1:
+        if params['haul_dist'] == 1:
             goods_type = 'INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id AND enabled_short_haul = 1'
         # 跨城
-        else:
+        elif params['haul_dist'] == 2:
             goods_type = 'INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id AND enabled_long_haul = 1'
+        else:
+            goods_type = 'INNER JOIN shf_booking_basis ON shf_booking_settings.user_id = shf_booking_basis.user_id'
+
         command = command % {
             'region': region,
             'goods_type': goods_type

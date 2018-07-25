@@ -61,6 +61,7 @@ var set = {
         var myChart = echarts.init(dom);
         var datas = splitData(price_trend_series);
         console.log(datas.values);
+
         function splitData(rawData) {
             var categoryData = [],
                 values = [],
@@ -76,15 +77,16 @@ var set = {
                 values: values
             };
         }
+
         var config = {
-             barWidth: 20,//指定柱宽度
+            barWidth: 20,//指定柱宽度
             col: {
-               /* up: 'rgb(153, 14, 14)',
-                down: '#19b34c',
-                m5: '#f00',
-                m10: 'yellow',
-                m30: '#dd1ce0'*/
-               up: 'rgb(0,198,215)',
+                /* up: 'rgb(153, 14, 14)',
+                 down: '#19b34c',
+                 m5: '#f00',
+                 m10: 'yellow',
+                 m30: '#dd1ce0'*/
+                up: 'rgb(0,198,215)',
                 down: 'rgb(5,41,99)',
                 m5: 'rgb(0,198,215)',
                 m10: 'yellow',
@@ -171,7 +173,7 @@ var set = {
             // 上下两个图表的x轴数据
             xAxis: [{
                 type: 'category',
-                boundaryGap:true,
+                boundaryGap: true,
                 axisLine: {
                     // show: false,
                     onZero: false
@@ -308,11 +310,28 @@ var set = {
                 start_time: start_time,
                 end_time: end_time
             }
+            console.log(typeof data.min_mileage);
+            if (data.min_mileage != '') {
+                if (typeof data.min_mileage != 'number') {
+                    layer.tips('请检查数据格式-(数字)', '#min_mileage', {
+                        tips: [1, '#009688'],
+                        time: 3000
+                    });
+                    return false;
+                }
+            }
+            if (data.max_mileage != '') {
+              if (typeof data.max_mileage != 'number') {
+                  layer.tips('请检查数据格式-(数字)', '#max_mileage', {
+                      tips: [1, '#009688'],
+                      time: 3000
+                  });
+                  return false;
+              }
+            }
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-                console.log(res)
                 var avg_price = res.data.avg_price;
                 var price_trend_series = res.data.price_trend_series;
-                console.log(avg_price);
                 that.chartRender(price_trend_series, avg_price)
             })
         })
