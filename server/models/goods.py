@@ -171,7 +171,7 @@ class GoodsList(object):
             if params['goods_status'] == 2:
                 fetch_where += ' AND shf_goods.status = 3 '
             if params['goods_status'] == 3:
-                fetch_where += ' AND shf_goods.status = -1 '
+                fetch_where += ' AND shf_goods.is_deleted = 1 '
             if params['goods_status'] == 4:
                 fetch_where += """ 
                         AND shf_goods.STATUS IN ( 1, 2 ) 
@@ -326,7 +326,7 @@ class CancelReasonList(object):
             shf_goods 
         WHERE
             1=1
-            AND shf_goods.STATUS = - 1
+            AND shf_goods.is_deleted = 1
             AND {fetch_where}
         GROUP BY canceled_reason_text
         ORDER BY reason_count
@@ -458,7 +458,7 @@ class GoodsDistributionTrendList(object):
 
         wait_where = """ AND ( status = 1 OR status = 2 ) """
         recv_where = """ AND shf_goods.STATUS = 3 """
-        cancel_where = """ AND shf_goods.STATUS = - 1 """
+        cancel_where = """ shf_goods.is_deleted = 1 """
 
         all_order = cursor.query(command.format(flag=1, fetch_where=fetch_where))
         wait_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + wait_where))
