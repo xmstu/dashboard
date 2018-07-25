@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>订单统计-省省统计中心</title>
-    <link rel="stylesheet" href="../static/css/base.css?v=1.4">
+    <link rel="stylesheet" href="../static/css/base.css?v=1.5">
     <link rel="stylesheet" href="../static/layui/css/layui.css">
-    <link rel="stylesheet" href="../static/css/common.css?v=1.4">
-    <link rel="stylesheet" href="../static/css/iconfont.css?v=1.4">
-    <link rel="stylesheet" href="../static/css/promote/promote.css?v=1.4">
+    <link rel="stylesheet" href="../static/css/common.css?v=1.5">
+    <link rel="stylesheet" href="../static/css/iconfont.css?v=1.5">
+    <link rel="stylesheet" href="../static/css/promote/promote.css?v=1.5">
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
@@ -57,27 +57,27 @@
                                 </ul>
                                   <div class="layui-form-item">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label">价格类型</label>
+                                        <label class="layui-form-label">货源类型</label>
                                         <div class="layui-input-inline" style="width: 94px">
                                             <select id="goods_price_type" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
                                                 <option value="1">议价</option>
                                                 <option value="2">一口价</option>
+                                                <option value="3">零担</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="layui-form-item" id="">
                                     <div class="layui-inline">
-                                        <label class="layui-form-label">货源类型</label>
+                                        <label class="layui-form-label">距离类型</label>
                                         <div class="layui-input-inline" style="width: 94px">
                                             <select id="goods_type_show" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
                                                 <option value="1">同城</option>
                                                 <option value="2">跨城</option>
-                                                <option value="3">零担</option>
                                             </select>
                                         </div>
                                     </div>
@@ -187,27 +187,27 @@
                                 </div>
                                  <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
-                                        <label class="layui-form-label">价格类型</label>
+                                        <label class="layui-form-label">货源类型</label>
                                         <div class="layui-input-inline" style="width: 146px">
                                             <select id="goods_price_type1" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
                                                 <option value="1">议价</option>
                                                 <option value="2">一口价</option>
+                                                <option value="3">零担</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 230px">
-                                        <label class="layui-form-label">货源类型</label>
+                                        <label class="layui-form-label">距离类型</label>
                                         <div class="layui-input-inline" style="width: 146px">
                                             <select id="cancel_reason_types" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
                                                 <option value="1">同城</option>
                                                 <option value="2">跨城</option>
-                                                <option value="3">零担</option>
                                             </select>
                                         </div>
                                     </div>
@@ -332,12 +332,13 @@
                             </div>
                              <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">价格类型</label>
+                                    <label class="layui-form-label">货源类型</label>
                                     <div class="layui-input-inline" style="width: 147px;">
                                         <select id="order_price_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部类型</option>
                                             <option value="1">议价</option>
                                             <option value="2">一口价</option>
+                                            <option value="3">零担</option>
                                         </select>
                                     </div>
                                 </div>
@@ -350,7 +351,6 @@
                                             <option value="">全部类型</option>
                                             <option value="1">同城</option>
                                             <option value="2">跨城</option>
-                                            <option value="3">零担</option>
                                         </select>
                                     </div>
                                 </div>
@@ -545,14 +545,14 @@
 <span style="display: none!important">
        <script src="https://s22.cnzz.com/z_stat.php?id=1274088436&web_id=1274088436" language="JavaScript"></script>
 </span>
-<script src="../static/js/libs/jquery-2.1.1.min.js?v=1.4"></script>
-<script src="../static/js/libs/highcharts.min.js?v=1.4"></script>
-<script src="../static/js/libs/highcharts-exporting.js?v=1.4"></script>
-<script src="../static/layui/layui.js?v=1.4"></script>
-<script src="../static/js/common/common.js?v=1.4"></script>
-<script src="../static/js/common/http.js?v=1.4"></script>
-<script src="../static/js/libs/jquery.address.js?v=1.4"></script>
-<script src="../static/js/order/order-statistics.js?v=1.4"></script>
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=1.5"></script>
+<script src="../static/js/libs/highcharts.min.js?v=1.5"></script>
+<script src="../static/js/libs/highcharts-exporting.js?v=1.5"></script>
+<script src="../static/layui/layui.js?v=1.5"></script>
+<script src="../static/js/common/common.js?v=1.5"></script>
+<script src="../static/js/common/http.js?v=1.5"></script>
+<script src="../static/js/libs/jquery.address.js?v=1.5"></script>
+<script src="../static/js/order/order-statistics.js?v=1.5"></script>
 </body>
 </html>
 <script>

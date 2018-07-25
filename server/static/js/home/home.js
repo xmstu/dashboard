@@ -51,28 +51,27 @@ layui.use(["laydate", "form", "table"],
     });
 $("#search_btn").click(function (e) {
     e.preventDefault();
-    var current_val = $("#goods_types").val();
+    var current_val = $("#goods_price_types").val();
     if (current_val == 2) {
         dataInit(dataArr2)
-    } else {
-        if (current_val == 1) {
-            dataInit(dataArr1)
-        }
+    } else if (current_val == 1) {
+        dataInit(dataArr1)
     }
 });
 $("#user_search_box").on("click",
     function (e) {
         e.preventDefault();
         var data = {
+            mobile: $('#phone_number').val(),
             goods_type: $.trim($("#goods_type").val()),
             is_called: $.trim($("#is_called").val()),
             vehicle_length: $.trim($("#vehicle_length").val()),
             node_id: $.trim($("#node_id").val()) == "" ? common.role_area_show($("#super_manager_area_one")) : $.trim($("#node_id").val()),
             spec_tag: $.trim($("#spec_tag").val()),
             is_addition: $.trim($("#is_addition").val()),
-            goods_price_type:$('#goods_price_type').val()
+            goods_price_type: $('#goods_price_type').val()
         };
-        var url = "/city/latest_orders/?goods_type=" + data.goods_type + "&is_called=" + data.is_called + "&goods_price_type=" + data.goods_price_type + "&vehicle_length=" + data.vehicle_length + "&node_id=" + data.node_id + "&spec_tag=" + data.spec_tag + "&is_addition=" + data.is_addition;
+        var url = "/city/latest_orders/?goods_type=" + data.goods_type + "&mobile=" + data.mobile + "&is_called=" + data.is_called + "&goods_price_type=" + data.goods_price_type + "&vehicle_length=" + data.vehicle_length + "&node_id=" + data.node_id + "&spec_tag=" + data.spec_tag + "&is_addition=" + data.is_addition;
         tableInit(url)
     });
 
@@ -86,7 +85,7 @@ function dataInit(dataArrSet) {
                 layer.msg("提示：开始时间大于了结束时间！");
                 return false
             }
-            var goods_types = $.trim($("#goods_types").val());
+            var haul_dist = $.trim($("#haul_dist").val());
             var region_id = $.trim($("#city_area").val()) == "" ? common.role_area_show($("#super_manager_area_zero")) : $.trim($("#city_area").val());
             if (start_time != "") {
                 start_time = common.timeTransform(start_time + " 00:00:00")
@@ -99,8 +98,8 @@ function dataInit(dataArrSet) {
                 start_time: start_time,
                 end_time: end_time,
                 region_id: region_id,
-                goods_price_type:$('#goods_price_types').val(),
-                goods_type: goods_types
+                goods_price_type: $('#goods_price_types').val(),
+                haul_dist: haul_dist
             };
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2,
                 function (res) {
@@ -145,11 +144,11 @@ function dataInit(dataArrSet) {
                                 result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ":" + val[1][2].value + "辆</span>";
                                 var all_count = '<p class="all_count">货源数:<span>' + (val[0][0].value + val[0][1].value + val[0][2].value) + "单</span></p>";
                                 var all_count_1 = '<p class="all_count_1">车辆数:<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
-                                if ($("#goods_types").val() == 1 || $("#goods_types").val() == 2) {
+                                if ($("#goods_price_types").val() == 1) {
                                     $(".data-list-container" + arr.length).html("");
                                     $(".data-list-container" + arr.length).append(all_count + all_count_1 + result)
                                 } else {
-                                    if ($("#goods_types").val() == 3) {
+                                    if ($("#goods_price_types").val() == 2) {
                                         var result_ano = '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ":" + val[0][0].value + "单</span>";
                                         result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ":" + val[0][1].value + "单</span>";
                                         result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ":" + val[0][2].value + "单</span>";
@@ -298,12 +297,12 @@ function tableInit(url) {
                         title: "附近的车",
                         width: 100,
                         templet: function (d) {
-                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button> <p class="display-content" style="display: none">' + d.supplier_node+'&nbsp;&nbsp;到&nbsp;&nbsp;'+d.to_address+'('+d.vehicle+')</p>'
+                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button> <p class="display-content" style="display: none">' + d.from_region + '&nbsp;&nbsp;到&nbsp;&nbsp;' + d.to_region + '(' + d.vehicle + ')</p>'
                         }
                     }]],
                 done: function (res, curr, count) {
                     layer.closeAll("loading");
-                     common.clearSelect()
+                    common.clearSelect()
 
                     $("[data-field]>div").css({
                         "padding": "0 6px"
@@ -312,8 +311,8 @@ function tableInit(url) {
                         e.preventDefault();
                         var content_title = $(this).siblings('p.display-content').text()
                         if (content_title != '') {
-                           // var result_title = content_title.split('\n')
-                            result_title = '<p>' +content_title+'</p>'
+                            // var result_title = content_title.split('\n')
+                            result_title = '<p>' + content_title + '</p>'
                         }
                         layer.load();
                         var val = $(this).val();
@@ -331,6 +330,7 @@ function tableInit(url) {
                         layer.open({
                             type: 1,
                             title: result_title,
+                            shadeClose: true,
                             area: ["1300px", "600px"],
                             skin: "layui-layer-molv",
                             closeBtn: 1,
@@ -341,7 +341,7 @@ function tableInit(url) {
                         e.preventDefault()
                         var content_title = $(this).siblings('p.display-content').text()
                         if (content_title != '') {
-                            result_title = '<p>' +content_title+'</p'
+                            result_title = '<p>' + content_title + '</p'
                         }
                         var val = $(this).val();
                         var goods_type = $(this).attr('data-type')
@@ -349,6 +349,7 @@ function tableInit(url) {
                         layer.open({
                             type: 1,
                             title: result_title,
+                            shadeClose: true,
                             area: ["1300px", "600px"],
                             skin: "layui-layer-molv",
                             closeBtn: 1,
@@ -416,17 +417,6 @@ function tableInit(url) {
                             $(this).html(str + "次")
                         }
                     });
-                    $("td[data-field='goods_type']").children().each(function () {
-                        if ($(this).text() == "跨城定价") {
-                            $(this).html('<span style="color: #01AAED;">跨城定价</span>')
-                        }
-                        if ($(this).text() == "跨城议价") {
-                            $(this).html('<span style="color: #f40;">跨城议价</span>')
-                        }
-                        if ($(this).text() == "同城") {
-                            $(this).html('<span style="color: green;">同城</span>')
-                        }
-                    })
                 },
                 id: "testReload",
                 page: true
@@ -437,6 +427,7 @@ function tableInit(url) {
 function tableReset(url) {
     layui.use(["table", 'layer', "form"],
         function () {
+            var none_data = null;
             var layer = layui.layer;
             var table = layui.table;
             layer.load()
@@ -463,7 +454,7 @@ function tableReset(url) {
                     {
                         field: "booking_line",
                         title: "接单线路",
-                        width: 280
+                        width: 300
                     },
                     {
                         field: "booking_time",
@@ -480,11 +471,14 @@ function tableReset(url) {
                         title: "车长",
                         // width: 80
                     },
+                     {
+                        field: "vehicle_type",
+                        title: "车型",
+                        // width: 80
+                    },
                     {
                         field: "is_trust_member",
-                        title: "诚信会员",
-                        sort: true,
-                        // width: 90
+                        title: "诚信会员"
                     },
                     {
                         field: "order_count",
@@ -505,6 +499,11 @@ function tableReset(url) {
                         width: 80
                     }]],
                 done: function (res) {
+                    if (res.status == 400) {
+                        $('#popup .layui-none').html('货源可能已删除')
+                    } else {
+                        $('#popup .layui-none').html('无数据·····')
+                    }
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
@@ -599,6 +598,11 @@ function popupRender(url) {
                         width: 80
                     }]],
                 done: function (res) {
+                    if (res.status == 400) {
+                        $('#popup_one .layui-none').html('货源已被接')
+                    } else {
+                        $('#popup_one .layui-none').html('无数据·····')
+                    }
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();

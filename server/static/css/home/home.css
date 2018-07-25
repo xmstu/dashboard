@@ -277,3 +277,11 @@
 .layui-form-item .layui-input-inline{
     width: 130px;
 }
+.tips-paragraph {
+    color: #f40;
+    font-size: 14px;
+    vertical-align: middle;
+    margin-left: 5%;
+    text-align: left;
+    display: inline-block;
+}
