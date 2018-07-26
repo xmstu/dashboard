@@ -33,8 +33,8 @@ class TransportRadarModel(object):
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
             {vehicle_sql}
-            AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
-            AND vehicle.create_time < FROM_UNIXTIME(:end_time)
+            AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time
+            AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
             AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%"
         """
@@ -308,8 +308,8 @@ class TransportListModel(object):
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
             {inner_vehicle_fetch_where}
-            AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
-            AND vehicle.create_time < FROM_UNIXTIME(:end_time)
+            AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time
+            AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
             GROUP BY
             vehicle.from_province_id,
