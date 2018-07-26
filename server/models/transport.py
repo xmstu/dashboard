@@ -33,8 +33,8 @@ class TransportRadarModel(object):
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
             {vehicle_sql}
-            AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
-            AND vehicle.create_time < FROM_UNIXTIME(:end_time)
+            AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time
+            AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
             AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%"
         """
@@ -207,18 +207,13 @@ class TransportRadarModel(object):
         vehicles_ret = []
         # 累计车辆数(非活跃和活跃)
         vehicles_all_ret = []
+        vehicle_sql1 = vehicle_sql + """ AND user.last_login_time >= :start_time AND user.last_login_time < :end_time """
         for i in vehicle_id_list:
             try:
-
                 vehicle_all_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)
                 vehicles_all_ret.append(vehicle_all_count['vehicle_count'])
 
-                vehicle_sql += """
-                AND user.last_login_time >= :start_time 
-                AND user.last_login_time < :end_time
-                """
-
-                vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)
+                vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql1, vehicle_id=i), kwargs)
                 vehicles_ret.append(vehicle_count['vehicle_count'])
 
             except Exception as e:
@@ -262,10 +257,8 @@ class TransportListModel(object):
             sg.is_system_price,
             sg.from_province_id,
             sg.from_city_id,
-            sg.from_county_id,
             sg.to_province_id,
             sg.to_city_id,
-            sg.to_county_id,
             AVG(mileage_total) AS avg_mileage_total,
             COUNT( 1 ) AS goods_count,
             COUNT(so.id) AS order_count
@@ -293,36 +286,30 @@ class TransportListModel(object):
             GROUP BY 
             sg.from_province_id,
             sg.from_city_id,
-            sg.from_county_id,
             sg.to_province_id,
-            sg.to_city_id,
-            sg.to_county_id
+            sg.to_city_id
         """
 
         cmd2 = """
         SELECT
             vehicle.from_province_id,
             vehicle.from_city_id,
-            vehicle.from_county_id,
             vehicle.to_province_id,
             vehicle.to_city_id,
-            vehicle.to_county_id,
             COUNT(1) vehicle_count
         FROM
             `tb_inf_transport_vehicles` vehicle
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
             {inner_vehicle_fetch_where}
-            AND vehicle.create_time >= FROM_UNIXTIME(:start_time)
-            AND vehicle.create_time < FROM_UNIXTIME(:end_time)
+            AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time
+            AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
             GROUP BY
             vehicle.from_province_id,
             vehicle.from_city_id,
-            vehicle.from_county_id,
             vehicle.to_province_id,
-            vehicle.to_city_id,
-            vehicle.to_county_id;
+            vehicle.to_city_id
         """
 
         # 地区权限
@@ -413,10 +400,8 @@ class TransportListModel(object):
 
         for i in transport_list:
             vehicle_all_count = [j['vehicle_count'] for j in vehicle_all_list if
-                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j[
-                                 'from_city_id'] and i['from_county_id'] == j['from_county_id']
-                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id'] and
-                             i['to_county_id'] == j['to_county_id']
+                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id']
+                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id']
                              ]
 
             if vehicle_all_count:
@@ -425,8 +410,8 @@ class TransportListModel(object):
                 i['vehicle_all_count'] = 0
 
             vehicle_count = [j['vehicle_count'] for j in vehicle_list if
-                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id'] and i['from_county_id'] == j['from_county_id']
-                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id'] and i['to_county_id'] == j['to_county_id']
+                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id']
+                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id']
                              ]
             if vehicle_count:
                 i['vehicle_count'] = vehicle_count[0]
