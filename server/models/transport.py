@@ -35,7 +35,7 @@ class TransportRadarModel(object):
             {vehicle_sql}
             AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
-            AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%"
+            AND vehicle.vehicle_length_id = "{vehicle_id}"
         """
 
         order_cmd = """
@@ -249,10 +249,7 @@ class TransportListModel(object):
     @staticmethod
     def get_data(cursor1, cursor2, page, limit, params):
 
-        filelds = """
-            goods.*,
-            IF(orders.order_count, orders.order_count, 0) order_count
-        """
+        filelds = """goods.*, IF ( orders.order_count, orders.order_count, 0 ) order_count"""
 
         good_fetch_where = """ 1=1 """
         vehicle_fetch_where = """ 1=1 """
@@ -296,7 +293,7 @@ class TransportListModel(object):
                 so.from_city_id,
                 so.to_province_id,
                 so.to_city_id,
-                COUNT( 1 ) order_count
+                COUNT( so.id ) order_count
             FROM
                 shb_orders so INNER JOIN shf_goods sg ON sg.id = so.goods_id
                 LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = so.goods_id 
@@ -306,8 +303,8 @@ class TransportListModel(object):
                 {order_fetch_where}
                 AND so.is_deleted = 0 AND so.`status` != -1
                 AND so.create_time >= :start_time
-                AND so.create_time < :start_time
-                GROUP BY 
+                AND so.create_time < :end_time
+            GROUP BY 
                 so.from_province_id,
                 so.from_city_id,
                 so.to_province_id,
@@ -331,11 +328,11 @@ class TransportListModel(object):
         FROM
             `tb_inf_transport_vehicles` vehicle
             LEFT JOIN tb_inf_user user USING(user_id)
-            WHERE
+        WHERE
             {vehicle_fetch_where}
             AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
-            GROUP BY
+        GROUP BY
             vehicle.from_province_id,
             vehicle.from_city_id,
             vehicle.to_province_id,
@@ -408,7 +405,7 @@ class TransportListModel(object):
         if params['vehicle_length']:
             good_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
             order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
-            vehicle_fetch_where += """ AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
+            vehicle_fetch_where += """ AND vehicle.vehicle_length_id = "{vehicle_id}" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
 
         # # 业务类型:同城/跨城/零担
         # if params['business']:
