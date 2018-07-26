@@ -261,9 +261,6 @@ class TransportListModel(object):
         FROM 
         (SELECT
             FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") as create_time,
-            haul_dist,
-            sg.type,
-            sg.is_system_price,
             sg.from_province_id,
             sg.from_city_id,
             sg.to_province_id,
