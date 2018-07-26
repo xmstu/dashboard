@@ -251,6 +251,19 @@ class TransportListModel(object):
     def get_data(cursor1, cursor2, page, limit, params):
 
         filelds = """
+            goods.*,
+            IF(orders.order_count, orders.order_count, 0) order_count
+        """
+
+        good_fetch_where = """ 1=1 """
+        vehicle_fetch_where = """ 1=1 """
+        order_fetch_where = """ 1=1 """
+
+        cmd1 = """ 
+        SELECT
+          {filelds}
+        FROM 
+        (SELECT
             FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d") as create_time,
             haul_dist,
             sg.type,
@@ -260,26 +273,15 @@ class TransportListModel(object):
             sg.to_province_id,
             sg.to_city_id,
             AVG(mileage_total) AS avg_mileage_total,
-            COUNT( 1 ) AS goods_count,
-            COUNT(so.id) AS order_count
-        """
-
-        inner_good_order_fetch_where = """ 1=1 """
-        inner_vehicle_fetch_where = """ 1=1 """
-
-        cmd1 = """ 
-            -- 货源和订单查询
-        SELECT
-            {filelds}
+            COUNT(sg.id) AS goods_count
         FROM
             shf_goods sg
-            LEFT JOIN shb_orders so ON sg.id = so.goods_id
             LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = sg.id 
             AND shf_goods_vehicles.vehicle_attribute = 3 
             AND shf_goods_vehicles.is_deleted = 0 
         WHERE
-            {inner_good_order_fetch_where}
-            AND sg.is_deleted = 0 AND so.is_deleted = 0 AND so.`status` != -1
+            {good_fetch_where}
+            AND sg.is_deleted = 0
             -- 时间
             AND sg.create_time >= :start_time 
             AND sg.create_time < :end_time
@@ -287,7 +289,37 @@ class TransportListModel(object):
             sg.from_province_id,
             sg.from_city_id,
             sg.to_province_id,
-            sg.to_city_id
+            sg.to_city_id) AS goods LEFT JOIN
+            (
+            SELECT
+                FROM_UNIXTIME(so.create_time, "%%Y-%%m-%%d") as create_time,
+                so.from_province_id,
+                so.from_city_id,
+                so.to_province_id,
+                so.to_city_id,
+                COUNT( 1 ) order_count
+            FROM
+                shb_orders so INNER JOIN shf_goods sg ON sg.id = so.goods_id
+                LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = so.goods_id 
+                AND shf_goods_vehicles.vehicle_attribute = 3 
+                AND shf_goods_vehicles.is_deleted = 0 
+            WHERE
+                {order_fetch_where}
+                AND so.is_deleted = 0 AND so.`status` != -1
+                AND so.create_time >= :start_time
+                AND so.create_time < :start_time
+                GROUP BY 
+                so.from_province_id,
+                so.from_city_id,
+                so.to_province_id,
+                so.to_city_id
+            ) AS orders USING(
+            create_time,
+            from_province_id,
+            from_city_id,
+            to_province_id,
+            to_city_id
+            )
         """
 
         cmd2 = """
@@ -301,8 +333,7 @@ class TransportListModel(object):
             `tb_inf_transport_vehicles` vehicle
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
-            {inner_vehicle_fetch_where}
-            AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time
+            {vehicle_fetch_where}
             AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
             GROUP BY
@@ -313,67 +344,82 @@ class TransportListModel(object):
         """
 
         # 地区权限
-        inner_good_order_region = inner_vehicle_region = ' AND 1=1 '
+        good_region = vehicle_region = order_region =' AND 1=1 '
         if params['region_id']:
             if isinstance(params['region_id'], int):
-                inner_good_order_region = 'AND (sg.from_province_id = %(region_id)s OR sg.from_city_id = %(region_id)s OR sg.from_county_id = %(region_id)s OR sg.from_town_id = %(region_id)s) ' % {
+                good_region = 'AND (sg.from_province_id = %(region_id)s OR sg.from_city_id = %(region_id)s OR sg.from_county_id = %(region_id)s OR sg.from_town_id = %(region_id)s) ' % {
                     'region_id': params['region_id']}
-                inner_vehicle_region = 'AND (vehicle.from_province_id = %(region_id)s OR vehicle.from_city_id = %(region_id)s OR vehicle.from_county_id = %(region_id)s OR vehicle.from_town_id = %(region_id)s) ' % {
+                vehicle_region = 'AND (vehicle.from_province_id = %(region_id)s OR vehicle.from_city_id = %(region_id)s OR vehicle.from_county_id = %(region_id)s OR vehicle.from_town_id = %(region_id)s) ' % {
+                    'region_id': params['region_id']}
+                order_region = 'AND (so.from_province_id = %(region_id)s OR so.from_city_id = %(region_id)s OR so.from_county_id = %(region_id)s OR so.from_town_id = %(region_id)s) ' % {
                     'region_id': params['region_id']}
             elif isinstance(params['region_id'], list):
-                inner_good_order_region = '''
+                good_region = '''
                         AND (
                         sg.from_province_id IN (%(region_id)s)
                         OR sg.from_city_id IN (%(region_id)s)
                         OR sg.from_county_id IN (%(region_id)s)
                         OR sg.from_town_id IN (%(region_id)s)
                         ) ''' % {'region_id': ','.join(params['region_id'])}
-                inner_vehicle_region = '''
+                vehicle_region = '''
                         AND (
                         vehicle.from_province_id IN (%(region_id)s)
                         OR vehicle.from_city_id IN (%(region_id)s)
                         OR vehicle.from_county_id IN (%(region_id)s)
                         OR vehicle.from_town_id IN (%(region_id)s)
                         ) ''' % {'region_id': ','.join(params['region_id'])}
-        inner_good_order_fetch_where += inner_good_order_region
-        inner_vehicle_fetch_where += inner_vehicle_region
+                order_region = '''
+                        AND (
+                        so.from_province_id IN (%(region_id)s)
+                        OR so.from_city_id IN (%(region_id)s)
+                        OR so.from_county_id IN (%(region_id)s)
+                        OR so.from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
+        good_fetch_where += good_region
+        vehicle_fetch_where += vehicle_region
+        order_fetch_where += order_region
 
         # 出发地
-        if params['from_county_id']:
-            inner_good_order_fetch_where += ' AND sg.from_county_id = %d ' % params['from_county_id']
-            inner_vehicle_fetch_where += ' AND vehicle.from_county_id = %d ' % params['from_county_id']
+        # if params['from_county_id']:
+        #     good_fetch_where += ' AND sg.from_county_id = %d ' % params['from_county_id']
+        #     vehicle_fetch_where += ' AND vehicle.from_county_id = %d ' % params['from_county_id']
         if params['from_city_id']:
-            inner_good_order_fetch_where += ' AND sg.from_city_id = %d ' % params['from_city_id']
-            inner_vehicle_fetch_where += ' AND vehicle.from_city_id = %d ' % params['from_city_id']
+            good_fetch_where += ' AND sg.from_city_id = %d ' % params['from_city_id']
+            vehicle_fetch_where += ' AND vehicle.from_city_id = %d ' % params['from_city_id']
+            order_fetch_where += ' AND so.from_city_id = %d ' % params['from_city_id']
         if params['from_province_id']:
-            inner_good_order_fetch_where += ' AND sg.from_province_id = %d ' % params['from_province_id']
-            inner_vehicle_fetch_where += ' AND vehicle.from_province_id = %d ' % params['from_province_id']
+            good_fetch_where += ' AND sg.from_province_id = %d ' % params['from_province_id']
+            vehicle_fetch_where += ' AND vehicle.from_province_id = %d ' % params['from_province_id']
+            order_fetch_where += ' AND so.from_province_id = %d ' % params['from_province_id']
 
         # 目的地
-        if params['to_county_id']:
-            inner_good_order_fetch_where += ' AND sg.to_county_id = %d ' % params['to_county_id']
-            inner_vehicle_fetch_where += ' AND vehicle.to_county_id = %d ' % params['to_county_id']
+        # if params['to_county_id']:
+        #     good_fetch_where += ' AND sg.to_county_id = %d ' % params['to_county_id']
+        #     vehicle_fetch_where += ' AND vehicle.to_county_id = %d ' % params['to_county_id']
         if params['to_city_id']:
-            inner_good_order_fetch_where += ' AND sg.to_city_id = %d ' % params['to_city_id']
-            inner_vehicle_fetch_where += ' AND vehicle.to_city_id = %d ' % params['to_city_id']
+            good_fetch_where += ' AND sg.to_city_id = %d ' % params['to_city_id']
+            vehicle_fetch_where += ' AND vehicle.to_city_id = %d ' % params['to_city_id']
+            order_fetch_where += ' AND so.to_city_id = %d ' % params['to_city_id']
         if params['to_province_id']:
-            inner_good_order_fetch_where += ' AND sg.to_province_id = %d ' % params['to_province_id']
-            inner_vehicle_fetch_where += ' AND vehicle.to_province_id = %d ' % params['to_province_id']
+            good_fetch_where += ' AND sg.to_province_id = %d ' % params['to_province_id']
+            vehicle_fetch_where += ' AND vehicle.to_province_id = %d ' % params['to_province_id']
+            order_fetch_where += ' AND so.to_province_id = %d ' % params['to_province_id']
 
         # 车长要求
         if params['vehicle_length']:
-            inner_good_order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
-            inner_vehicle_fetch_where += """ AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
+            good_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
+            order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
+            vehicle_fetch_where += """ AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
 
         # # 业务类型:同城/跨城/零担
         # if params['business']:
-        #     inner_good_order_fetch_where += """
+        #     good_fetch_where += """
         #     AND (({business}=1 AND haul_dist = 1) OR ({business}=2 AND haul_dist = 2) OR ({business}=3 AND sg.type = 2))
         #     """.format(business=params['business'])
         #
         # # 业务类型:议价/一口价
         # if params['business_price']:
-        #     inner_good_order_fetch_where += """
+        #     good_fetch_where += """
         #     AND (({business_price}=1 AND sg.goods_level = 1) OR ({business_price}=2 AND sg.is_system_price = 1))
         #     """.format(business_price=params['business_price'])
 
@@ -383,20 +429,20 @@ class TransportListModel(object):
             'end_time': params.get('end_time', 0)
         }
 
-        ret = cursor1.query(cmd1.format(filelds=""" COUNT(1) AS count """, inner_good_order_fetch_where=inner_good_order_fetch_where), kwargs)
-        count = len(ret)
+        count = cursor1.query_one(cmd1.format(filelds=""" COUNT(1) AS count """, good_fetch_where=good_fetch_where, order_fetch_where=order_fetch_where), kwargs)['count']
 
         cmd1 += """ ORDER BY create_time DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
-        transport_list = cursor1.query(cmd1.format(filelds=filelds, inner_good_order_fetch_where=inner_good_order_fetch_where), kwargs)
+        transport_list = cursor1.query(cmd1.format(filelds=filelds, good_fetch_where=good_fetch_where, order_fetch_where=order_fetch_where), kwargs)
 
-        vehicle_all_list = cursor2.query(cmd2.format(inner_vehicle_fetch_where=inner_vehicle_fetch_where), kwargs)
+        vehicle_all_list = cursor2.query(cmd2.format(vehicle_fetch_where=vehicle_fetch_where), kwargs)
 
-        inner_vehicle_fetch_where += """
+        vehicle_fetch_where += """
+        AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time
         AND user.last_login_time >= :start_time 
         AND user.last_login_time < :end_time
         """
-        vehicle_list = cursor2.query(cmd2.format(inner_vehicle_fetch_where=inner_vehicle_fetch_where), kwargs)
+        vehicle_list = cursor2.query(cmd2.format(vehicle_fetch_where=vehicle_fetch_where), kwargs)
 
         for i in transport_list:
             vehicle_all_count = [j['vehicle_count'] for j in vehicle_all_list if
