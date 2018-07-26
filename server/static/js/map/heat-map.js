@@ -136,12 +136,6 @@ var set = {
                                     }
                                 },
                                 visualMap: {
-                                    /*  min: 0,
-                                      max: max_value + (max_value / 5),
-                                      text: ['High', 'Low'],
-                                      realtime: true,
-                                      calculable: true,
-                                      color: ['#00467F', '#A5CC82', '#ffc0cb'] //*/
                                     min: 0,
                                     max: max_value + (max_value / 5),
                                     left: 'left',
@@ -149,9 +143,8 @@ var set = {
                                     text: ['高', '低'], // 文本，默认为数值文本
                                     calculable: true,
                                     seriesIndex: [1],
-                                    inRange: {
-                                        color: ['#00467F', '#A5CC82']
-                                    }
+                                    colorLightness: [0.2, 100],
+                                    color: ['#c05050', '#e5cf0d', '#5ab1ef']
                                 },
                                 xAxis: {
                                     gridIndex: 0,
@@ -247,7 +240,7 @@ var set = {
                                                         dataArr.push(d[i].name);
                                                     }
                                                 }
-                                                option.visualMap.max=max_value_reset;
+                                                option.visualMap.max = max_value_reset;
                                                 option.yAxis.data = dataArr;
                                                 pageSet.renderMap(params.name, d);
                                             });
@@ -269,7 +262,7 @@ var set = {
                                                             var city_data = res.data;
                                                             var city_map_data = city_data.map_data;
                                                             var city_map_tooltip = city_data.toolTipData;
-                                                            var max_value_reset1 = city_data.max_value
+                                                            var max_value_reset1 = city_data.max_value;
                                                             echarts.registerMap(params.name, data);
                                                             var d = [];
                                                             for (var i = 0; i < data.features.length; i++) {
@@ -280,10 +273,10 @@ var set = {
                                                             toolTipData = city_map_tooltip;
                                                             data_reset = city_map_data;
                                                             d = city_map_data;
-                                                            var dataArr_ = []
-                                                            var data_length_ = d.length
+                                                            var dataArr_ = [];
+                                                            var data_length_ = d.length;
                                                             if (data_length_ > 20) {
-                                                                data_length_ = 20
+                                                                data_length_ = 20;
                                                                 for (var i = 0; i < data_length_; i++) {
                                                                     dataArr_.push(d[i].name);
                                                                 }
@@ -293,7 +286,7 @@ var set = {
                                                                 }
                                                             }
                                                             option.yAxis.data = dataArr_;
-                                                            option.visualMap.max=max_value_reset1
+                                                            option.visualMap.max = max_value_reset1
                                                             pageSet.renderMap(params.name, d);
                                                         }
                                                     });
@@ -306,7 +299,7 @@ var set = {
                                                 province_arr.push(province_reset[l].name)
                                             }
                                             option.yAxis.data = province_arr;
-                                             option.visualMap.max=max_value + (max_value / 5)
+                                            option.visualMap.max = max_value + (max_value / 5)
                                             pageSet.renderMap('china', province_reset);
                                         }
                                     } else {
@@ -473,6 +466,8 @@ var set = {
                         } else {
                             layer.msg('error')
                         }
+                    } else if (data_reload.authority_region_id != 0) {
+
                     }
 
                     function ynameMap_(d) {
@@ -494,7 +489,8 @@ var set = {
             )
         })
     }
-}
+};
+
 
 set.dataInit();
 $('#search_btn').click(function (e) {
