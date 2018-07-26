@@ -23,7 +23,7 @@ class TransportList(object):
 
     @staticmethod
     @make_decorator
-    def get_result(data):
+    def get_result(params, data):
         try:
             data = json.loads(json.dumps(data, default=ExtendHandler.handler_to_float))
             transport_list = data['transport_list']
@@ -76,7 +76,8 @@ class TransportList(object):
                     'to_county_id': detail.get('to_county_id', 0),
                     'to_town_id': detail.get('to_town_id', 0),
                     'start_time': date2timestamp(detail['create_time']),
-                    'end_time': date2timestamp(detail['create_time']) + 86399
+                    # 'end_time': date2timestamp(detail['create_time']) + 86399,
+                    'end_time': params['end_time']
                 })
 
             return build_result(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok
