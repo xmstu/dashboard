@@ -257,10 +257,8 @@ class TransportListModel(object):
             sg.is_system_price,
             sg.from_province_id,
             sg.from_city_id,
-            sg.from_county_id,
             sg.to_province_id,
             sg.to_city_id,
-            sg.to_county_id,
             AVG(mileage_total) AS avg_mileage_total,
             COUNT( 1 ) AS goods_count,
             COUNT(so.id) AS order_count
@@ -288,20 +286,16 @@ class TransportListModel(object):
             GROUP BY 
             sg.from_province_id,
             sg.from_city_id,
-            sg.from_county_id,
             sg.to_province_id,
-            sg.to_city_id,
-            sg.to_county_id
+            sg.to_city_id
         """
 
         cmd2 = """
         SELECT
             vehicle.from_province_id,
             vehicle.from_city_id,
-            vehicle.from_county_id,
             vehicle.to_province_id,
             vehicle.to_city_id,
-            vehicle.to_county_id,
             COUNT(1) vehicle_count
         FROM
             `tb_inf_transport_vehicles` vehicle
@@ -314,10 +308,8 @@ class TransportListModel(object):
             GROUP BY
             vehicle.from_province_id,
             vehicle.from_city_id,
-            vehicle.from_county_id,
             vehicle.to_province_id,
-            vehicle.to_city_id,
-            vehicle.to_county_id;
+            vehicle.to_city_id
         """
 
         # 地区权限
@@ -408,10 +400,8 @@ class TransportListModel(object):
 
         for i in transport_list:
             vehicle_all_count = [j['vehicle_count'] for j in vehicle_all_list if
-                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j[
-                                 'from_city_id'] and i['from_county_id'] == j['from_county_id']
-                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id'] and
-                             i['to_county_id'] == j['to_county_id']
+                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id']
+                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id']
                              ]
 
             if vehicle_all_count:
@@ -420,8 +410,8 @@ class TransportListModel(object):
                 i['vehicle_all_count'] = 0
 
             vehicle_count = [j['vehicle_count'] for j in vehicle_list if
-                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id'] and i['from_county_id'] == j['from_county_id']
-                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id'] and i['to_county_id'] == j['to_county_id']
+                             i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id']
+                             and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id']
                              ]
             if vehicle_count:
                 i['vehicle_count'] = vehicle_count[0]
