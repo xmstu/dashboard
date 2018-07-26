@@ -111,10 +111,10 @@ var set = {
                     console.log(params);
                     if (params.length > 1) {
                         var str = '日期：' + params[0].name;
-                        var string_data = '今日价格最低：￥' + params[0].data[3];
-                        string_data += '<br>' + '今日价格最高：￥' + params[0].data[4];
+                        var string_data = '今日价格最低：￥' + params[0].data[1];
+                        string_data += '<br>' + '今日价格最高：￥' + params[0].data[2];
 
-                        str += '<br>' + params[1].seriesName + ':￥' + (params[0].data[2]).toFixed(2);
+                        str += '<br>' + params[1].seriesName + ':￥' + (params[0].data[3]).toFixed(2);
                         if (params[1].seriesName == undefined) {
                             params[1].seriesName = '平均价'
                         }
@@ -309,10 +309,9 @@ var set = {
                 pay_method: $('#pay_methods').val(),
                 start_time: start_time,
                 end_time: end_time
-            }
-            console.log(typeof data.min_mileage);
+            };
             if (data.min_mileage != '') {
-                if (typeof data.min_mileage != 'number') {
+                if (common.isNumber(data.min_mileage)) {
                     layer.tips('请检查数据格式-(数字)', '#min_mileage', {
                         tips: [1, '#009688'],
                         time: 3000
@@ -321,7 +320,7 @@ var set = {
                 }
             }
             if (data.max_mileage != '') {
-              if (typeof data.max_mileage != 'number') {
+              if (common.isNumber(data.max_mileage)) {
                   layer.tips('请检查数据格式-(数字)', '#max_mileage', {
                       tips: [1, '#009688'],
                       time: 3000
