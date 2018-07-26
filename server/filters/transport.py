@@ -66,7 +66,7 @@ class TransportList(object):
                     'vehicle_all_count': detail.get('vehicle_all_count', None) or 0,
                     'create_time': detail.get('create_time', '时间不详'),
                     # 前端要用的字段
-                    'business': detail.get('haul_dist'),
+                    # 'business': detail.get('haul_dist'),
                     'from_province_id': detail.get('from_province_id', 0),
                     'from_city_id': detail.get('from_city_id', 0),
                     'from_county_id': detail.get('from_county_id', 0),
