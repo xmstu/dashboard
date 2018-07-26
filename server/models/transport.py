@@ -27,7 +27,7 @@ class TransportRadarModel(object):
 
         vehicle_cmd = """
         SELECT
-            COUNT(1) vehicle_count
+            {vehicle_count} vehicle_count
         FROM
             `tb_inf_transport_vehicles` vehicle
             LEFT JOIN tb_inf_user user USING(user_id)
@@ -209,10 +209,10 @@ class TransportRadarModel(object):
         vehicle_sql1 = vehicle_sql + """ AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time AND user.last_login_time >= :start_time AND user.last_login_time < :end_time """
         for i in vehicle_id_list:
             try:
-                vehicle_all_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)
+                vehicle_all_count = cursor2.query_one(vehicle_cmd.format(vehicle_count="COUNT( DISTINCT user_id )", vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)
                 vehicles_all_ret.append(vehicle_all_count['vehicle_count'])
 
-                vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql1, vehicle_id=i), kwargs)
+                vehicle_count = cursor2.query_one(vehicle_cmd.format(vehicle_count="COUNT(1)", vehicle_sql=vehicle_sql1, vehicle_id=i), kwargs)
                 vehicles_ret.append(vehicle_count['vehicle_count'])
 
             except Exception as e:
@@ -324,7 +324,7 @@ class TransportListModel(object):
             vehicle.from_city_id,
             vehicle.to_province_id,
             vehicle.to_city_id,
-            COUNT(1) vehicle_count
+            {vehicle_count} vehicle_count
         FROM
             `tb_inf_transport_vehicles` vehicle
             LEFT JOIN tb_inf_user user USING(user_id)
@@ -431,14 +431,14 @@ class TransportListModel(object):
 
         transport_list = cursor1.query(cmd1.format(filelds=filelds, good_fetch_where=good_fetch_where, order_fetch_where=order_fetch_where), kwargs)
 
-        vehicle_all_list = cursor2.query(cmd2.format(vehicle_fetch_where=vehicle_fetch_where), kwargs)
+        vehicle_all_list = cursor2.query(cmd2.format(vehicle_count="COUNT( DISTINCT user_id )", vehicle_fetch_where=vehicle_fetch_where), kwargs)
 
         vehicle_fetch_where += """
         AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time
         AND user.last_login_time >= :start_time 
         AND user.last_login_time < :end_time
         """
-        vehicle_list = cursor2.query(cmd2.format(vehicle_fetch_where=vehicle_fetch_where), kwargs)
+        vehicle_list = cursor2.query(cmd2.format(vehicle_count="COUNT( 1 )", vehicle_fetch_where=vehicle_fetch_where), kwargs)
 
         for i in transport_list:
             vehicle_all_count = [j['vehicle_count'] for j in vehicle_all_list if
