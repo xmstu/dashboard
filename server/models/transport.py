@@ -33,7 +33,6 @@ class TransportRadarModel(object):
             LEFT JOIN tb_inf_user user USING(user_id)
             WHERE
             {vehicle_sql}
-            AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time
             AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
             AND vehicle.vehicle_length_id LIKE "%%{vehicle_id}%%"
@@ -207,7 +206,7 @@ class TransportRadarModel(object):
         vehicles_ret = []
         # 累计车辆数(非活跃和活跃)
         vehicles_all_ret = []
-        vehicle_sql1 = vehicle_sql + """ AND user.last_login_time >= :start_time AND user.last_login_time < :end_time """
+        vehicle_sql1 = vehicle_sql + """ AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time AND user.last_login_time >= :start_time AND user.last_login_time < :end_time """
         for i in vehicle_id_list:
             try:
                 vehicle_all_count = cursor2.query_one(vehicle_cmd.format(vehicle_sql=vehicle_sql, vehicle_id=i), kwargs)
