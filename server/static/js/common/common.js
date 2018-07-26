@@ -212,7 +212,7 @@ var common = {
         if (date_7 >= 0 && date_7 <= 9) {
             date_7 = "0" + date_7;
         }
-         if (month_8 >= 1 && month_8 <= 9) {
+        if (month_8 >= 1 && month_8 <= 9) {
             month_8 = "0" + month_8;
         }
         if (date_8 >= 0 && date_8 <= 9) {
@@ -228,7 +228,7 @@ var common = {
         var sevenDayAgo = date6.getFullYear() + seperator1 + month_6 + seperator1 + date_6;
         var thirtyDayAgo = date7.getFullYear() + seperator1 + month_7 + seperator1 + date_7;
         var ninetyDayAgo = date8.getFullYear() + seperator1 + month_8 + seperator1 + date_8;
-        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday, sevenDayAgo, thirtyDayAgo,ninetyDayAgo];
+        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday, sevenDayAgo, thirtyDayAgo, ninetyDayAgo];
     },
     dateInterval: function (num1, num2, dayLength) {
         var date1 = new Date(num1.replace(/-/g, "/"));
@@ -463,9 +463,15 @@ var common = {
         this.hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
         this.minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
         this.second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-        var currentTime = "现在是:" + this.year + "-" + this.month + "-" + this.date +' '+ this.hour + ":" + this.minute + ":" + this.second;
+        var currentTime = "现在是:" + this.year + "-" + this.month + "-" + this.date + ' ' + this.hour + ":" + this.minute + ":" + this.second;
         currentTime = that.timeTransform(currentTime);
         return currentTime
+    },
+    isNumber: function (str) {
+        var re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
+        if (!re.test(str)) {
+           return true
+        }
     }
 };
 setTimeout(function () {
