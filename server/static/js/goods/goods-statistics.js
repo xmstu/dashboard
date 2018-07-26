@@ -459,7 +459,7 @@ var dataSet = {
                 var all_reason = res.data.cancel_list;
                 if (res.data.cancel_list_dict == '' && res.data.cancel_list == '') {
                     var str = '<p style="color: #ccc; text-align: center; font-size: 24px;width: 400%;line-height: 40px;" >there is no data</p>';
-                    Chart_third(all_reason, '该时间段无数据，图表无法展示')
+                    Chart_third(all_reason, '该条件下无数据，图表无法展示')
                     $('#charts_container_four').css('height', '90px')
                     $('.cancel-reason-types').html(str)
                 } else if (res.data.cancel_list != '' || res.data.cancel_list_dict != '') {
@@ -609,6 +609,9 @@ Highcharts.setOptions({
 }
 
 function Chart_third(dataArr, chartsTitle) {
+    Highcharts.setOptions({
+    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+});
     $('#charts_container_four').highcharts({
         chart: {
             renderTo: 'chart'
