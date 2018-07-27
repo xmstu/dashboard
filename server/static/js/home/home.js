@@ -136,7 +136,23 @@ function dataInit(dataArrSet) {
                                 if (arr.length >= 0) {
                                     arr.length--
                                 }
-                                var result = '<span class=" tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ":" + val[0][0].value + "单</span>";
+                                 var result_ano = '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ":" + val[0][0].value + "单</span>";
+                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ":" + val[0][1].value + "单</span>";
+                                        // result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ":" + val[0][2].value + "单</span>";
+                                      /*  result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][3].name + ":" + val[0][3].value + "单</span>";*/
+                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ":" + val[1][0].value + "辆</span>";
+                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ":" + val[1][1].value + "辆</span>";
+                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ":" + val[1][2].value + "辆</span>";
+                                        var all_count_ano = '<p class="all_count">货源数:<span>' + (val[0][0].value + val[0][1].value + val[0][2].value) + "单</span></p>";
+                                        var all_count_ano_1 = '<p class="all_count_1">车辆数:<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
+
+
+                                if ($("#goods_price_types").val() == 1) {
+                                      $(".data-list-container" + arr.length).html("");
+                                        $(".data-list-container" + arr.length).append(all_count_ano + all_count_ano_1 + result_ano)
+                                } else {
+                                    if ($("#goods_price_types").val() == 2) {
+                                          var result = '<span class=" tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ":" + val[0][0].value + "单</span>";
                                 result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ":" + val[0][1].value + "单</span>";
                                 result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ":" + val[0][2].value + "单</span>";
                                 result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ":" + val[1][0].value + "辆</span>";
@@ -144,22 +160,8 @@ function dataInit(dataArrSet) {
                                 result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ":" + val[1][2].value + "辆</span>";
                                 var all_count = '<p class="all_count">货源数:<span>' + (val[0][0].value + val[0][1].value + val[0][2].value) + "单</span></p>";
                                 var all_count_1 = '<p class="all_count_1">车辆数:<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
-                                if ($("#goods_price_types").val() == 1) {
-                                    $(".data-list-container" + arr.length).html("");
+                                $(".data-list-container" + arr.length).html("");
                                     $(".data-list-container" + arr.length).append(all_count + all_count_1 + result)
-                                } else {
-                                    if ($("#goods_price_types").val() == 2) {
-                                        var result_ano = '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ":" + val[0][0].value + "单</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ":" + val[0][1].value + "单</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ":" + val[0][2].value + "单</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][3].name + ":" + val[0][3].value + "单</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ":" + val[1][0].value + "辆</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ":" + val[1][1].value + "辆</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ":" + val[1][2].value + "辆</span>";
-                                        var all_count_ano = '<p class="all_count">货源数:<span>' + (val[0][0].value + val[0][1].value + val[0][2].value + val[0][3].value) + "单</span></p>";
-                                        var all_count_ano_1 = '<p class="all_count_1">车辆数:<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
-                                        $(".data-list-container" + arr.length).html("");
-                                        $(".data-list-container" + arr.length).append(all_count_ano + all_count_ano_1 + result_ano)
                                     }
                                 }
                                 var dom = document.getElementById("charts_container_" + arr.length + "");
