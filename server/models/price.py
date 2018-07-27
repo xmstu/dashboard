@@ -118,8 +118,8 @@ class PriceTrendModel(object):
         if params.get('order_status'):
             fetch_where += """
                 AND (
-                ( {order_status}=1 AND so.`status` in (1,2) ) OR
-                ( {order_status}=2 AND so.`status` = 3 ) OR
+                ( {order_status}=2 AND so.`status` in (1,2) ) OR
+                ( {order_status}=1 AND so.`status` = 3 ) OR
                 ( {order_status}=3 AND so.`status` = -1)
                 )
                 """.format(order_status=params['order_status'])
