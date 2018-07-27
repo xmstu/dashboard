@@ -7,7 +7,7 @@ request_city_resource_balance = api.doc(params={
     'end_time': '结束日期(时间戳),默认:昨天',
     'region_id': '地区id,默认:0',
     'haul_dist': '运输距离:1.同城,2.跨城,默认:0',
-    'goods_price_type': '货源价格类型,1:一口价,2:议价,默认:1一口价',
+    'goods_price_type': '货源价格类型,1:议价,2:一口价,默认:1议价'
 })
 
 request_order_list_param = api.doc(params={
