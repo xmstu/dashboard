@@ -687,7 +687,7 @@ $('#goods_search_box').on('click', function (e) {
         from_region_id: $.trim($('#reference_mobile').val()),
         to_region_id: $.trim($('#to_region_id').val()),
         goods_type: $.trim($('#goods_type').val()),
-        goods_price_type:$.trim($('#goods_price_type').val()),
+        goods_price_type:$.trim($('#goods_price_type3').val()),
         goods_status: $.trim($('#goods_status').val()),
         is_called: $.trim($('#is_called').val()),
         vehicle_length: $.trim($('#vehicle_length').val()),

@@ -306,7 +306,7 @@ var set = {
                 min_mileage: $('#min_mileage').val(),
                 max_mileage: $('#max_mileage').val(),
                 vehicle_length: $('#vehicle_type').val(),
-                pay_method: $('#pay_methods').val(),
+                order_status: $('#order_status').val(),
                 start_time: start_time,
                 end_time: end_time
             };
