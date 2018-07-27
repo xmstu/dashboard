@@ -1,5 +1,6 @@
 from server import log
-from server.utils.constant import vehicle_name_id
+from server.cache_data import vehicle_id_list
+from server.utils.constant import vehicle_name_id, vehicle_name_list
 
 
 class TransportRadarModel(object):
@@ -182,26 +183,6 @@ class TransportRadarModel(object):
             'end_time': params.get('end_time')
         }
 
-        vehicle_name_list = ['小面包车', '中面包车', '小货车', '4.2米', '5.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']
-
-        vehicle_id_sql = """
-        SELECT
-            id,
-            name 
-        FROM
-            shm_dictionary_items 
-        WHERE
-            NAME IN ( '小面包车', '中面包车', '小货车', '4.2米', '5.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米' ) 
-            AND dictionary_id = 2 
-            AND is_deleted = 0
-        """
-
-        vehicle_id_ret = cursor1.query(vehicle_id_sql)
-
-        ret = {i['name']: i['id'] for i in vehicle_id_ret}
-
-        vehicle_id_list = [ret.get(i, 0) for i in vehicle_name_list]
-
         # 活跃车辆数
         vehicles_ret = []
         # 累计车辆数(非活跃和活跃)
@@ -279,6 +260,7 @@ class TransportListModel(object):
             AND sg.create_time >= :start_time 
             AND sg.create_time < :end_time
             GROUP BY 
+            FROM_UNIXTIME(sg.create_time, "%%Y-%%m-%%d"),
             sg.from_province_id,
             sg.from_city_id,
             sg.to_province_id,
@@ -302,6 +284,7 @@ class TransportListModel(object):
                 AND so.create_time >= :start_time
                 AND so.create_time < :end_time
             GROUP BY 
+                FROM_UNIXTIME(so.create_time, "%%Y-%%m-%%d"),
                 so.from_province_id,
                 so.from_city_id,
                 so.to_province_id,
@@ -317,6 +300,7 @@ class TransportListModel(object):
 
         cmd2 = """
         SELECT
+            vehicle.create_time,
             vehicle.from_province_id,
             vehicle.from_city_id,
             vehicle.to_province_id,
@@ -330,6 +314,7 @@ class TransportListModel(object):
             AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
         GROUP BY
+            vehicle.create_time,
             vehicle.from_province_id,
             vehicle.from_city_id,
             vehicle.to_province_id,
@@ -439,6 +424,7 @@ class TransportListModel(object):
 
         for i in transport_list:
             vehicle_all_count = [j['vehicle_count'] for j in vehicle_all_list if
+                             i['create_time'] == j['create_time'] and
                              i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id']
                              and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id']
                              ]
@@ -449,6 +435,7 @@ class TransportListModel(object):
                 i['vehicle_all_count'] = 0
 
             vehicle_count = [j['vehicle_count'] for j in vehicle_list if
+                             i['create_time'] == j['create_time'] and
                              i['from_province_id'] == j['from_province_id'] and i['from_city_id'] == j['from_city_id']
                              and i['to_province_id'] == j['to_province_id'] and i['to_city_id'] == j['to_city_id']
                              ]
