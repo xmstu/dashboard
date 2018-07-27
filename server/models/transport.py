@@ -36,7 +36,7 @@ class TransportRadarModel(object):
             {vehicle_sql}
             AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
-            AND vehicle.vehicle_length_id = "{vehicle_id}"
+            AND vehicle.vehicle_length_id REGEXP ",{vehicle_id}|{vehicle_id},|,{vehicle_id},|^{vehicle_id}$"
         """
 
         order_cmd = """
@@ -302,8 +302,10 @@ class TransportListModel(object):
             create_time,
             from_province_id,
             from_city_id,
+            from_county_id,
             to_province_id,
-            to_city_id
+            to_city_id,
+            to_county_id
             )
         """
 
@@ -312,10 +314,10 @@ class TransportListModel(object):
             vehicle.create_time,
             vehicle.from_province_id,
             vehicle.from_city_id,
-            vehicle.from_county_id,
+            -- vehicle.from_county_id,
             vehicle.to_province_id,
             vehicle.to_city_id,
-            vehicle.to_county_id,
+            -- vehicle.to_county_id,
             {vehicle_count} vehicle_count
         FROM
             `tb_inf_transport_vehicles` vehicle
@@ -325,13 +327,13 @@ class TransportListModel(object):
             AND UNIX_TIMESTAMP(vehicle.create_time) < :end_time
             AND vehicle.vehicle_length_id != ''
         GROUP BY
-            -- vehicle.create_time,
+            vehicle.create_time,
             vehicle.from_province_id,
             vehicle.from_city_id,
-            vehicle.from_county_id,
+            -- vehicle.from_county_id,
             vehicle.to_province_id,
-            vehicle.to_city_id,
-            vehicle.to_county_id
+            vehicle.to_city_id
+            -- vehicle.to_county_id
         """
 
         # 地区权限
@@ -400,7 +402,7 @@ class TransportListModel(object):
         if params['vehicle_length']:
             good_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
             order_fetch_where += """ AND shf_goods_vehicles.`name` = '%s' """ % params['vehicle_length']
-            vehicle_fetch_where += """ AND vehicle.vehicle_length_id = "{vehicle_id}" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
+            vehicle_fetch_where += """ AND vehicle.vehicle_length_id REGEXP ",{vehicle_id}|{vehicle_id},|,{vehicle_id},|^{vehicle_id}$" """.format(vehicle_id=vehicle_name_id.get(params['vehicle_length'], '小面包车'))
 
         # # 业务类型:同城/跨城/零担
         # if params['business']:
