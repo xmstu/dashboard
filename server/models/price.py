@@ -24,7 +24,6 @@ class PriceTrendModel(object):
         WHERE
         {fetch_where}
         AND so.is_deleted = 0
-        AND so.`status` = 3
         AND so.driver_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1 ) 
         AND so.owner_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1) 
         -- 时间
