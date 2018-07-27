@@ -429,7 +429,7 @@ class OrderListModel(object):
             AND (
             ({pay_status}=1 AND pay_status = 1 AND paid_offline = 0) OR
             ({pay_status}=2 AND pay_status = 2) OR
-            ({pay_status}=3 AND paid_offline = 1)
+            ({pay_status}=3 AND paid_offline = 1) OR
             ({pay_status}=4 AND (pay_status = 2 OR paid_offline = 1))
             )
             """.format(pay_status=params['pay_status'])
