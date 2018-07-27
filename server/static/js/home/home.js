@@ -16,7 +16,7 @@ setTimeout(function () {
     10);
 layui.use(["laydate", "form", "table"],
     function () {
-        dataInit(dataArr1);
+        dataInit(dataArr2);
         layer.load();
         var laydate = layui.laydate;
         var table = layui.table;
@@ -53,9 +53,9 @@ $("#search_btn").click(function (e) {
     e.preventDefault();
     var current_val = $("#goods_price_types").val();
     if (current_val == 2) {
-        dataInit(dataArr2)
-    } else if (current_val == 1) {
         dataInit(dataArr1)
+    } else if (current_val == 1) {
+        dataInit(dataArr2)
     }
 });
 $("#user_search_box").on("click",

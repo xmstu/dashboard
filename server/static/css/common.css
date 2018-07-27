@@ -151,8 +151,6 @@ body {
 	float: left;
 	min-width: 750px;
 	border-right: 1px solid rgba(0,0,0,.1);
-	padding-left: 10px;
-	padding-top: 16px;
 	color: #fff
 }
 
@@ -396,7 +394,8 @@ body {
 	max-width: 165px;
 	background: #222d32!important;
 	-webkit-background-size: cover;
-	background-size: cover
+	background-size: cover;
+	min-width:110px;
 }
 
 .button-spec-one {
@@ -545,7 +544,17 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 .m-c-l-content-header {
 	padding-bottom: 2px
 }
-
+.header-tips{
+	height: 100%;
+	width: 56px;
+	text-align: center;
+	line-height: 56px;
+	display: inline-block;
+	border-right: 1px solid rgba(0,0,0,.1);
+}
+.header-tips > i {
+	font-size: 20px;
+}
 .setting-about {
 	padding: 16px 0 0 20px
 }
@@ -989,23 +998,6 @@ body {
 .layui-nav-tree .layui-nav-bar {
 	width: 0
 }
-
-@media screen and (min-width:1650px) {
-	.main-content>.main-content-left {
-		max-width: 178px!important
-	}
-}
-
-@media screen and (max-width:1650px) {
-	.header-content-main {
-		font-size: 12px
-	}
-
-	nav.main-content-left .layui-nav-tree .layui-nav-item>a {
-		font-size: 12px
-	}
-}
-
 .clear-select {
 	display: inline;
 	color: #009688;
