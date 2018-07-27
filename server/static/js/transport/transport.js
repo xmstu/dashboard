@@ -180,7 +180,6 @@ var dataSet = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field: 'business', title: '业务类型'},
                     {field: 'from_address', title: '出发地', width: 280}
                     , {field: 'to_address', title: '目的地', width: 280}
                     , {field: 'mileage', title: '里程'}
@@ -191,7 +190,7 @@ var dataSet = {
                     , {field: 'create_time', title: '统计时间'}
                     , {
                         field: 'operate', title: '操作', width: 107, templet: function (d) {
-                            return '<button value="' + d.business + '" data-from-province="' + d.from_province_id + '"  data-from-city="' + d.from_city_id + '" data-from-town="' + d.from_town_id + '"  data-from-county="' + d.from_county_id + '" data-to-province="' + d.to_province_id + '"  data-to-city="' + d.to_city_id + '"  data-to-town="' + d.to_town_id + '"  data-to-county="' + d.to_county_id + '" class="layui-btn layui-btn-small radar-btn" data-start-time = "' + d.start_time + '" data-end-time = "' + d.end_time + '" style="padding: 0 8px;"><i class="iconfont icon-leidatu" style="margin-right: 2px"></i>雷达图</button>'
+                            return '<button data-from-province="' + d.from_province_id + '"  data-from-city="' + d.from_city_id + '" data-from-town="' + d.from_town_id + '"  data-from-county="' + d.from_county_id + '" data-to-province="' + d.to_province_id + '"  data-to-city="' + d.to_city_id + '"  data-to-town="' + d.to_town_id + '"  data-to-county="' + d.to_county_id + '" class="layui-btn layui-btn-small radar-btn" data-start-time = "' + d.start_time + '" data-end-time = "' + d.end_time + '" style="padding: 0 8px;"><i class="iconfont icon-leidatu" style="margin-right: 2px"></i>雷达图</button>'
                         }
                     }
                 ]]
@@ -222,7 +221,6 @@ var dataSet = {
                         var start_time = $(this).attr('data-start-time');
                         var end_time = $(this).attr('data-end-time');
                         var data = {
-                            'business': business,
                             'from_province_id': from_province_id,
                             'from_city_id': from_city_id,
                             'from_county_id': from_county_id,

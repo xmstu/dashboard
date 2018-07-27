@@ -470,8 +470,18 @@ var common = {
     isNumber: function (str) {
         var re = /^[0-9]+.?[0-9]*/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/;//判断字符串是否为数字//判断正整数/[1−9]+[0−9]∗]∗/
         if (!re.test(str)) {
-           return true
+            return true
         }
+    },
+    ajaxSetting: function () {
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            $.ajaxSetup({
+                complete: function () {
+                    layer.closeAll('loading')
+                }
+            })
+        })
     }
 };
 setTimeout(function () {
@@ -481,8 +491,9 @@ setTimeout(function () {
     common.weather();
     common.init();
     common.setLink();
+    common.ajaxSetting()
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
-}, 20);
+}, 10);
 setInterval(function () {
     $('.header-content-main').fadeIn('normal');
     $('#date_now').html('');
