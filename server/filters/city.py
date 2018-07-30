@@ -25,16 +25,16 @@ class CityResourceBalance(object):
                     result[vehicle_name]['已接单'] = result[vehicle_name].setdefault('已接单', 0) + 1
                 elif i['is_deleted'] == 1:
                     result[vehicle_name]['已取消'] = result[vehicle_name].setdefault('已取消', 0) + 1
-                # 一口价
-                if params['goods_price_type'] == 1:
-                    if i['status'] == 1 or i['status'] == 2:
-                        result[vehicle_name]['待接单'] = result[vehicle_name].setdefault('待接单', 0) + 1
                 # 议价
-                else:
+                if params['goods_price_type'] == 1:
                     if i['call_count'] == 0:
                         result[vehicle_name]['待联系'] = result[vehicle_name].setdefault('待联系', 0) + 1
                     else:
                         result[vehicle_name]['已联系'] =result[vehicle_name] .setdefault('已联系', 0) + 1
+                # 一口价
+                else:
+                    if i['status'] == 1 or i['status'] == 2:
+                        result[vehicle_name]['待接单'] = result[vehicle_name].setdefault('待接单', 0) + 1
         # 接单车型
         for i in vehicle:
             if i['booking_vehicle'] in ['小面包车', '中面包车', '小货车', '4.2米', '5.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']:
@@ -58,13 +58,15 @@ class CityResourceBalance(object):
                     {'value': result[i].get('待接单车辆数', 0), 'name': '待接单车辆数'},
                 ]
             ]
+            # 议价
             if params['goods_price_type'] == 1:
-                city_result[i][0].extend([{'value': result[i].get('待接单', 0), 'name': '待接单'},])
-            else:
                 city_result[i][0].extend([
                     {'value': result[i].get('待联系', 0), 'name': '待联系'},
                     {'value': result[i].get('已联系', 0), 'name': '已联系'}
                 ])
+            # 一口价
+            else:
+                city_result[i][0].extend([{'value': result[i].get('待接单', 0), 'name': '待接单'},])
             # 内圈空缺值
             city_result[i][1].append({'value': reduce(lambda x, y: x + y, [i['value'] for i in city_result[i][0]]) - reduce(lambda x, y: x + y, [i['value'] for i in city_result[i][1]]), 'name': '空缺', 'itemStyle': {
                 'normal': {
