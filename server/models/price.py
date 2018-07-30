@@ -13,7 +13,7 @@ class PriceTrendModel(object):
         command = """
         SELECT
             FROM_UNIXTIME(so.create_time,"%%Y-%%m-%%d") create_time,
-            price,
+            so.price,
             sg.mileage_total
         FROM
             shb_orders so 

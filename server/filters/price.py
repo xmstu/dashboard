@@ -40,11 +40,12 @@ class PriceTrend(object):
         #     "recommend_price_one": data.get("recommend_price_one", 0),
         #     "recommend_price_two": data.get("recommend_price_two", 0)
         # }
-
-        recommend_price_instance = data_price[params['vehicle_length']]
+        data_price_list = data_price[params['vehicle_length']]
+        recommend_price_instance = data_price_list[0]
+        coefficient = data_price_list[1]
         # 从后往前删，避免发生元素顶位的问题
         for detail in price_trend[::-1]:
-            detail_recommend_price = recommend_price_instance.get_fast_price(detail.get('mileage_total'))
+            detail_recommend_price = recommend_price_instance.get_fast_price(detail.get('mileage_total')) * coefficient
             if not (0.6 * detail_recommend_price < detail['price'] < 2 * detail_recommend_price):
                 price_trend.remove(detail)
 
