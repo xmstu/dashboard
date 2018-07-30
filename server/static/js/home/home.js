@@ -258,7 +258,7 @@ function tableInit(url) {
                     {
                         field: "content",
                         title: "货物规格",
-                        width: 120
+                        width: 80
                     },
                     {
                         field: "address",
@@ -273,7 +273,7 @@ function tableInit(url) {
                     {
                         field: "price",
                         title: "运费",
-                        width: 100
+                        width: 120
                     },
                     {
                         field: "mobile",
@@ -283,7 +283,7 @@ function tableInit(url) {
                     {
                         field: "call_count",
                         title: "通话数",
-                        width: 60
+                        width: 70
                     },
                     {
                         field: "goods_time",
@@ -509,11 +509,7 @@ function tableReset(url) {
                         width: 80
                     }]],
                 done: function (res) {
-                    if (res.status == 400) {
-                        $('#popup .layui-none').html('货源可能已删除')
-                    } else {
-                        $('#popup .layui-none').html('无数据·····')
-                    }
+                   common.ajaxSetting()
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
@@ -608,11 +604,7 @@ function popupRender(url) {
                         width: 80
                     }]],
                 done: function (res) {
-                    if (res.status == 400) {
-                        $('#popup_one .layui-none').html('货源已被接')
-                    } else {
-                        $('#popup_one .layui-none').html('无数据·····')
-                    }
+                   common.ajaxSetting()
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
