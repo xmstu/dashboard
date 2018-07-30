@@ -58,16 +58,6 @@ var common = {
         }
     },
     fullScreen: function () {
-        var el = document.documentElement;
-        var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
-        if (typeof rfs != "undefined" && rfs) {
-            rfs.call(el);
-        } else if (typeof window.ActiveXObject != "undefined") {
-            var wscript = new ActiveXObject("WScript.Shell");
-            if (wscript != null) {
-                wscript.SendKeys("{F11}");
-            }
-        }
         var full_screen = $('#fullScreen');
         full_screen.on('click', function () {
             if ($(this).find('strong').text() == '开启全屏展示') {
