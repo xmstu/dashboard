@@ -132,7 +132,7 @@ def get_struct_data(data, params, *args, **kwargs):
 
 
 class ParamsError(Exception):
-    def __init__(self, *args, **kwargs): # real signature unknown
+    def __init__(self, *args, **kwargs):  # real signature unknown
         pass
 
 

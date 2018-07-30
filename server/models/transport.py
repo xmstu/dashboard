@@ -428,7 +428,7 @@ class TransportListModel(object):
 
         transport_list = cursor1.query(cmd1.format(filelds=filelds, good_fetch_where=good_fetch_where, order_fetch_where=order_fetch_where), kwargs)
 
-        vehicle_all_list = cursor2.query(cmd2.format(vehicle_count="COUNT( DISTINCT user_id )", vehicle_fetch_where=vehicle_fetch_where), kwargs)
+        vehicle_all_list = cursor2.query(cmd2.format(vehicle_count="COUNT( vehicle.user_id )", vehicle_fetch_where=vehicle_fetch_where), kwargs)
 
         vehicle_fetch_where += """
         AND UNIX_TIMESTAMP(vehicle.create_time) >= :start_time

@@ -87,7 +87,7 @@ class VerifyVehicleModel(object):
             """.format(params['last_login_start_time'], params['last_login_end_time'])
 
         # 计算条数
-        ret = cursor.query(command.format(fields='COUNT(*)', fetch_where=fetch_where))
+        ret = cursor.query(command.format(fields='COUNT(1)', fetch_where=fetch_where))
         count = len(ret)
 
         command += """ DESC LIMIT {0}, {1} """.format((page-1)*limit, limit)
