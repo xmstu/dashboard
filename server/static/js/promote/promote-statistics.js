@@ -357,9 +357,9 @@ var pageSet = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field: 'reference_id', title: '用户ID', sort: true}
+                    {field: 'reference_id', title: '用户ID'}
                     , {field: 'reference_name', title: '姓名'}
-                    , {field: 'reference_mobile', title: '手机号', sort: true}
+                    , {field: 'reference_mobile', title: '手机号'}
                     , {field: 'user_count', title: '推荐人数'}
                     , {field: 'wake_up_count', title: '唤醒人数'}
                     , {field: 'goods_count', title: '发货数', sort: true}
@@ -367,8 +367,8 @@ var pageSet = {
                     , {field: 'order_over_count_online', title: '线上支付'}
                     , {field: 'order_over_count_unline', title: '线下支付'}
                     , {field: 'goods_price', title: '货源金额', sort: true}
-                    , {field: 'order_over_price_online', title: '线上完成金额', sort: true}
-                    , {field: 'order_over_price_unline', title: '线下完成金额', sort: true}
+                    , {field: 'order_over_price_online', title: '线上完成金额'}
+                    , {field: 'order_over_price_unline', title: '线下完成金额'}
                     , {
                         field: 'wealth', title: '操作', width: 96, templet: function (d) {
                             return '<button id="deleteButton_' + d.reference_id + '" value="' + d.reference_mobile + '" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'

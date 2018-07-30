@@ -52,11 +52,22 @@ var common = {
             });
         });
         var menuStatus = $.cookie('menuStatus')
+        console.log(menuStatus)
         if(menuStatus=='true'){
             $('.icon-caidan').click()
         }
     },
     fullScreen: function () {
+          var el = document.documentElement;
+                var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
+                if (typeof rfs != "undefined" && rfs) {
+                    rfs.call(el);
+                } else if (typeof window.ActiveXObject != "undefined") {
+                    var wscript = new ActiveXObject("WScript.Shell");
+                    if (wscript != null) {
+                        wscript.SendKeys("{F11}");
+                    }
+                }
         var full_screen = $('#fullScreen');
         full_screen.on('click', function () {
             if ($(this).find('strong').text() == '开启全屏展示') {
@@ -463,7 +474,8 @@ var common = {
         menu_icon.on('click', function () {
             var $width = $('.main-content-left').width()
             if ($width >= 110) {
-                $.cookie('menuStatus', true);
+                $(this).css({'transform':'rotateZ(-90deg)'});
+                $.cookie('menuStatus', true,{expires:7,path:'/'});
                 $('.layui-nav-tree').css({'width': '100%', 'margin': 0});
                 $('.nav-content').css({'display': 'none'});
                 $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').width('80%');
@@ -472,7 +484,8 @@ var common = {
                 $('.menu-line').css({'left': '19px'});
                 $('.main-content-right').css({'margin-left': '38px'})
             } else {
-                 $.cookie('menuStatus', false);
+                $.cookie('menuStatus', false,{expires:7,'path':'/'});
+                $(this).css({'transform':'rotateZ(0deg)'});
                 $('.layui-nav-tree').css({'width': '94%', 'margin': '10px 4% 0 2%'});
                 $('.nav-content').css({'display': 'block'});
                 $('.main-content-left').css({width: '8%', 'margin-left': 0, 'min-width': '110px'});
@@ -537,7 +550,7 @@ setTimeout(function () {
     common.weather();
     common.init();
     common.setLink();
-    common.ajaxSetting()
+    common.ajaxSetting();
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
 }, 10);
 setInterval(function () {

@@ -157,7 +157,7 @@ body {
 .header-content-main {
 	border-radius: 30px;
 	color: #FFF;
-	padding: 4px 15px 6px 20px;
+	padding: 4px 0 6px 1%;
 	width: 90%;
 	margin-left: 2%;
 	display: none;
@@ -174,9 +174,9 @@ body {
 
 .header-content-main>p span {
 	padding: 0 6px;
-	color: #fff
+	color: #fff;
+	font-size: 13px;
 }
-
 #weather_now u {
 	margin-right: 6px;
 	text-decoration: none;
@@ -1011,3 +1011,6 @@ body {
     width: 150px!important;
     height: 100px!important;
   }
+.icon-caidan {
+	display: inline-block;
+}

@@ -258,7 +258,7 @@ function tableInit(url) {
                     {
                         field: "content",
                         title: "货物规格",
-                        width: 120
+                        width: 80
                     },
                     {
                         field: "address",
@@ -273,7 +273,7 @@ function tableInit(url) {
                     {
                         field: "price",
                         title: "运费",
-                        width: 100
+                        width: 120
                     },
                     {
                         field: "mobile",
@@ -283,7 +283,7 @@ function tableInit(url) {
                     {
                         field: "call_count",
                         title: "通话数",
-                        width: 60
+                        width: 70
                     },
                     {
                         field: "goods_time",
