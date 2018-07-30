@@ -26,6 +26,7 @@ class PriceTrendModel(object):
         AND so.is_deleted = 0
         AND so.driver_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1 ) 
         AND so.owner_id NOT IN ( SELECT id FROM shu_users WHERE is_test=1) 
+        AND so.price < 1000000
         -- 时间
         AND so.create_time >= :start_time 
         AND so.create_time < :end_time
