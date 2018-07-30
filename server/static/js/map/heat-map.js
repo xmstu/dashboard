@@ -91,6 +91,10 @@ var set = {
             };
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                     var data_reload = res.data
+                    var roles = data_reload.authority_region_id;
+                    var city_manager_map = data_reload.map_data;
+                    var city_manager_tooltip = data_reload.toolTipData;
+                    var city_manager_max_value = data_reload.max_value
                     if (data_reload.authority_region_id == 0) {
                         if (res.status == 100000) {
                             var data = res.data;
@@ -215,7 +219,7 @@ var set = {
                                         var data = res.data;
                                         var map_data = data.map_data;
                                         var city_toolTipData = data.toolTipData;
-                                        var max_value_reset = data.max_value
+                                        var max_value_reset = data.max_value;
                                         if (params.name in provinces) {
                                             $.getJSON('/static/map/province/' + provinces[params.name] + '.json', function (data) {
                                                 echarts.registerMap(params.name, data);
@@ -286,7 +290,7 @@ var set = {
                                                                 }
                                                             }
                                                             option.yAxis.data = dataArr_;
-                                                            option.visualMap.max = max_value_reset1
+                                                            option.visualMap.max = max_value_reset1;
                                                             pageSet.renderMap(params.name, d);
                                                         }
                                                     });
@@ -299,7 +303,7 @@ var set = {
                                                 province_arr.push(province_reset[l].name)
                                             }
                                             option.yAxis.data = province_arr;
-                                            option.visualMap.max = max_value + (max_value / 5)
+                                            option.visualMap.max = max_value + (max_value / 5);
                                             pageSet.renderMap('china', province_reset);
                                         }
                                     } else {
@@ -453,12 +457,6 @@ var set = {
                                         }
                                     ];
                                     chart.setOption(option);
-                                },
-                                tab: function () {
-                                    var lis = $('.heat-maps-tabs > li');
-                                    lis.click(function () {
-                                        $(this).addClass('active').siblings('li').removeClass('active')
-                                    })
                                 }
                             };
                             pageSet.init();
@@ -467,7 +465,167 @@ var set = {
                             layer.msg('error')
                         }
                     } else if (data_reload.authority_region_id != 0) {
+                        layui.use(['laydate', 'layer', 'form', 'table'], function () {
+                            var form = layui.form;
+                            var table = layui.table;
+                            var layer = layui.layer;
+                            var laydate = layui.laydate;
+                            laydate.render({
+                                elem: '#date_show_one',
+                                theme: '#009688',
+                                calendar: true,
+                                max: String(common.getNowFormatDate()[0]),
+                                ready: function () {
 
+                                },
+                                done: function (val, index) {
+                                    var startTime = $('#date_show_one').val();
+                                    var endTime = $('#date_show_two').val();
+                                    common.dateInterval(endTime, startTime);
+                                    if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                                        layer.msg('提示：开始时间大于了结束时间！');
+                                        return false
+                                    }
+                                }
+                            });
+                            laydate.render({
+                                elem: '#date_show_two',
+                                theme: '#009688',
+                                calendar: true,
+                                max: String(common.getNowFormatDate()[0]),
+                                ready: function () {
+
+                                },
+                                done: function (val, index) {
+                                    var startTime = $('#date_show_one').val();
+                                    var endTime = $('#date_show_two').val();
+                                    common.dateInterval(endTime, startTime);
+                                    if (common.timeTransform(startTime) > common.timeTransform(endTime)) {
+                                        layer.msg('提示：开始时间大于了结束时间！');
+                                        return false
+                                    }
+                                }
+                            });
+                        })
+                        var chart_container = echarts.init(document.getElementById('map_container'));
+                        var mapdata = [];
+                        $.getJSON('/static/map/city/' + roles + '.json', function (data) {
+                            echarts.registerMap('hangzhou', data);
+                            var d = [];
+                            for (var i = 0; i < data.features.length; i++) {
+                                d.push({
+                                    name: data.features[i].properties.name
+                                })
+                            }
+                            RenderMap('hangzhou', d);
+                        });
+                        var map_option = {
+                            backgroundColor: '#f5f5f5',
+                            title: {
+                                text: null,
+                                subtext: null,
+                                link: null,
+                                left: 'center',
+
+                                subtextStyle: {
+                                    color: '#ccc',
+                                    fontSize: 13,
+                                    fontWeight: 'normal',
+                                    fontFamily: "Microsoft YaHei"
+                                }
+                            },
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: function (params) {
+                                    var toolTiphtml = '';
+                                    for (var i = 0; i < city_manager_tooltip.length; i++) {
+                                        if (params.name == city_manager_tooltip[i].name) {
+                                            toolTiphtml += city_manager_tooltip[i].name + ':<br>';
+                                            for (var j = 0; j < city_manager_tooltip[i].value.length; j++) {
+                                                toolTiphtml += city_manager_tooltip[i].value[j].name + ':' + city_manager_tooltip[i].value[j].value + "<br>"
+                                            }
+                                        }
+                                    }
+                                    return toolTiphtml;
+                                }
+                            },
+                            visualMap: {
+                                min: 0,
+                                max: city_manager_max_value,
+                                left: 'left',
+                                top: 'bottom',
+                                text: ['高', '低'], // 文本，默认为数值文本
+                                calculable: true,
+                                colorLightness: [0.2, 100],
+                                color: ['skyblue', '#fff']
+                            },
+                            toolbox: {
+                                show: true,
+                                orient: 'vertical',
+                                left: 'right',
+                                top: 'center',
+                                feature: {
+                                    dataView: {readOnly: false},
+                                    restore: {},
+                                    saveAsImage: {}
+                                },
+                                iconStyle: {
+                                    normal: {
+                                        color: '#fff'
+                                    }
+                                }
+                            },
+                            /*------------------start----------------------*/
+                            /*-------------------end-----------------------*/
+                            animationDuration: 1000,
+                            animationEasing: 'cubicOut',
+                            animationDurationUpdate: 1000
+                        };
+
+                        function RenderMap(map, data) {
+                            data = city_manager_map;
+                            map_option.title.subtext = map;
+                            map_option.series = [
+                                {
+                                    name: map,
+                                    type: 'map',
+                                    mapType: map,
+                                    roam: false,
+                                    nameMap: {
+                                        'china': '中国'
+                                    },
+                                    label: {
+                                        normal: {
+                                            show: true,
+                                            textStyle: {
+                                                color: '#999',
+                                                fontSize: 13
+                                            }
+                                        },
+                                        emphasis: {
+                                            show: true,
+                                            textStyle: {
+                                                color: '#fff',
+                                                fontSize: 13
+                                            }
+                                        }
+                                    },
+                                    itemStyle: {
+                                        normal: {
+                                            areaColor: '#fff',
+                                            borderColor: 'dodgerblue'
+                                        },
+                                        emphasis: {
+                                            areaColor: 'darkorange'
+                                        }
+                                    },
+                                    data: data
+                                },
+
+                            ];
+                            //渲染地图
+                            chart_container.setOption(map_option);
+                        }
                     }
 
                     function ynameMap_(d) {
@@ -495,5 +653,5 @@ var set = {
 set.dataInit();
 $('#search_btn').click(function (e) {
     e.preventDefault();
-    dataInit();
+    set.dataInit();
 });
