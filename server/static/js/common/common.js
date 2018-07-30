@@ -53,21 +53,21 @@ var common = {
         });
         var menuStatus = $.cookie('menuStatus')
         console.log(menuStatus)
-        if(menuStatus=='true'){
+        if (menuStatus == 'true') {
             $('.icon-caidan').click()
         }
     },
     fullScreen: function () {
-          var el = document.documentElement;
-                var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
-                if (typeof rfs != "undefined" && rfs) {
-                    rfs.call(el);
-                } else if (typeof window.ActiveXObject != "undefined") {
-                    var wscript = new ActiveXObject("WScript.Shell");
-                    if (wscript != null) {
-                        wscript.SendKeys("{F11}");
-                    }
-                }
+        var el = document.documentElement;
+        var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
+        if (typeof rfs != "undefined" && rfs) {
+            rfs.call(el);
+        } else if (typeof window.ActiveXObject != "undefined") {
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript != null) {
+                wscript.SendKeys("{F11}");
+            }
+        }
         var full_screen = $('#fullScreen');
         full_screen.on('click', function () {
             if ($(this).find('strong').text() == '开启全屏展示') {
@@ -474,8 +474,8 @@ var common = {
         menu_icon.on('click', function () {
             var $width = $('.main-content-left').width()
             if ($width >= 110) {
-                $(this).css({'transform':'rotateZ(-90deg)'});
-                $.cookie('menuStatus', true,{expires:7,path:'/'});
+                $(this).css({'transform': 'rotateZ(-90deg)'});
+                $.cookie('menuStatus', true, {expires: 7, path: '/'});
                 $('.layui-nav-tree').css({'width': '100%', 'margin': 0});
                 $('.nav-content').css({'display': 'none'});
                 $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').width('80%');
@@ -484,8 +484,8 @@ var common = {
                 $('.menu-line').css({'left': '19px'});
                 $('.main-content-right').css({'margin-left': '38px'})
             } else {
-                $.cookie('menuStatus', false,{expires:7,'path':'/'});
-                $(this).css({'transform':'rotateZ(0deg)'});
+                $.cookie('menuStatus', false, {expires: 7, 'path': '/'});
+                $(this).css({'transform': 'rotateZ(0deg)'});
                 $('.layui-nav-tree').css({'width': '94%', 'margin': '10px 4% 0 2%'});
                 $('.nav-content').css({'display': 'block'});
                 $('.main-content-left').css({width: '8%', 'margin-left': 0, 'min-width': '110px'});
@@ -498,14 +498,14 @@ var common = {
 
         $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').stop().hover(function () {
             if ($(this).width() < 60) {
-                    layer.tips($(this).text(), $(this), {
+                layer.tips($(this).text(), $(this), {
                     tips: [2, '#009688'],
                     time: 0
                 });
             }
-        },function(){
-             if ($(this).width() < 60) {
-                    layer.tips($(this).text(), $(this), {
+        }, function () {
+            if ($(this).width() < 60) {
+                layer.tips($(this).text(), $(this), {
                     tips: [2, '#009688'],
                     time: 100
                 });
@@ -535,8 +535,13 @@ var common = {
         layui.use('layer', function () {
             var layer = layui.layer;
             $.ajaxSetup({
-                complete: function () {
+                complete: function (Xhttp) {
                     layer.closeAll('loading')
+                    if (Xhttp.responseJSON, status == 400 && Xhttp.responseJSON.msg == '货源已成单') {
+                        $('#popup_one .layui-none').html('货源已被接')
+                    }else if(Xhttp.responseJSON, status == 400 && Xhttp.responseJSON.msg == '货源已删除'){
+                         $('#popup .layui-none').html('货源已删除')
+                    }
                 }
             })
         })
