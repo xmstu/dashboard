@@ -114,7 +114,7 @@ var set = {
                         var string_data = '今日价格最低：￥' + params[0].data[1];
                         string_data += '<br>' + '今日价格最高：￥' + params[0].data[2];
 
-                        str += '<br>' + params[1].seriesName + ':￥' + (params[0].data[3]).toFixed(2);
+                        str += '<br>' + params[1].seriesName + ':￥' + (params[0].data[4]).toFixed(2);
                         if (params[1].seriesName == undefined) {
                             params[1].seriesName = '平均价'
                         }
