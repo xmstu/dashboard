@@ -106,10 +106,11 @@ class CityOrderListFilterDecorator(object):
                 goods_type = '议价'
             elif detail['is_system_price'] == 1:
                 goods_type = '一口价'
-            elif detail['type'] == 2:
-                goods_type = '零担'
             else:
                 goods_type = ''
+
+            if detail['type'] == 2:
+                goods_type = '零担'
 
             goods_type += '\n'
 
