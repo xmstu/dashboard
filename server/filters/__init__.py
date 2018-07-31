@@ -12,3 +12,4 @@ from server.filters.heat_map import *
 from server.filters.price import *
 from server.filters.verify_vehicle import *
 from server.filters.city_manager import *
+from server.filters.message import *
