@@ -67,6 +67,12 @@ class HeatMapModel(object):
                 AND last_login_time >= :start_time
                 AND last_login_time < :end_time
                 """
+            # 均有登录
+            elif params['field'] == 5:
+                fetch_where += """
+                AND FROM_UNIXTIME(last_login_time, "%Y-%m-%d") = FROM_UNIXTIME(:end_time, "%Y-%m-%d")
+                AND keep_login_days = :days
+                """
 
         # 根据级别分组数据
         if region_level == 0:
@@ -91,9 +97,14 @@ class HeatMapModel(object):
 
         fetch_where += """ AND {group_condition} != 0 AND {region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
 
+        start_time = params.get('start_time', time.time() - 86400*7)
+        end_time = params.get('end_time', time.time() - 86400)
+        days = int((end_time + 1 - start_time) / 86400)
+
         kwargs = {
-            "start_time": params.get('start_time', time.time() - 86400*7),
-            "end_time": params.get('end_time', time.time() - 86400)
+            "start_time": start_time,
+            "end_time": end_time,
+            "days": days
         }
 
         user_list = cursor.query(command.format(fetch_where=fetch_where, region_group=region_group), kwargs)
@@ -130,7 +141,7 @@ class HeatMapModel(object):
         """
 
         # 按业务类型分
-        if params.get('filter') == 1:
+        if params.get('filter'):
             fetch_where += """
             AND (
             ({filter}=1 AND haul_dist = 1) OR

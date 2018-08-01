@@ -21,8 +21,8 @@ class VerifyVehicle(object):
             params['vehicle_length'] = str(params.get('vehicle_length') or '')
             params['verify_start_time'] = int(params.get('verify_start_time') or 0)
             params['verify_end_time'] = int(params.get('verify_end_time') or 0)
-            params['last_login_start_time'] = int(params.get('last_login_start_time') or time.time() - 86400*7)
-            params['last_login_end_time'] = int(params.get('last_login_end_time') or time.time())
+            params['last_login_start_time'] = int(params.get('last_login_start_time') or 0)
+            params['last_login_end_time'] = int(params.get('last_login_end_time') or 0)
 
             # 校验手机号码
             if params.get('mobile'):
