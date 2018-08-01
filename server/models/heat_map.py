@@ -9,18 +9,19 @@ class HeatMapModel(object):
     def get_user(cursor, params, region_level):
 
         fetch_where = """ 1=1 """
+        table = """ `tb_inf_user` """
 
         command = """
         SELECT
             {region_group},
             COUNT( 1 ) count
         FROM
-            `tb_inf_user` 
+            {table}
         WHERE
             {fetch_where} 
             AND create_time < :end_time
             AND is_deleted = 0
-            GROUP BY
+        GROUP BY
               {region_group}
         """
 
@@ -69,9 +70,10 @@ class HeatMapModel(object):
                 """
             # 均有登录
             elif params['field'] == 5:
+                table += """ LEFT JOIN tb_inf_user_login login USING(user_id) """
                 fetch_where += """
-                AND FROM_UNIXTIME(last_login_time, "%Y-%m-%d") = FROM_UNIXTIME(:end_time, "%Y-%m-%d")
-                AND keep_login_days = :days
+                AND FROM_UNIXTIME(login.last_login_time, "%%Y-%%m-%%d") = FROM_UNIXTIME(:end_time, "%%Y-%%m-%%d")
+                AND login.keep_login_days = :days
                 """
 
         # 根据级别分组数据
@@ -107,7 +109,7 @@ class HeatMapModel(object):
             "days": days
         }
 
-        user_list = cursor.query(command.format(fetch_where=fetch_where, region_group=region_group), kwargs)
+        user_list = cursor.query(command.format(table=table, fetch_where=fetch_where, region_group=region_group), kwargs)
 
         data = {
             "user_list": user_list if user_list else [],
