@@ -11,35 +11,31 @@ vehicle_name = {
 }
 
 d_user = {
-    1: '用户数',
-    2: '认证数',
-    3: '活跃数',
+    1: '新增用户数',
+    2: '累计用户数',
+    3: '累计认证数',
+    4: '登录过人数',
+    5: '均有登录人数',
 }
 
 d_goods = {
-    1: 'goods_count',
-    2: 'goods_price',
-    3: 'orders_count',
-    4: 'orders_price',
-}
-
-d_name = {
-    'goods_count': '货源数',
-    'goods_price': '货源金额',
-    'orders_count': '订单数',
-    'orders_price': '订单金额',
+    1: '货源数',
+    2: '接单数',
+    3: '取消数',
+    4: '待接单数',
 }
 
 d_vehicle = {
-    1: 'goods_vehicle_count',
-    2: 'vehicle_count',
-    3: 'order_vehicle_count',
+    1: '货源所需车辆',
+    2: '累计车辆',
+    3: '活跃车辆',
 }
 
-d_vehicle_name = {
-    'goods_vehicle_count': '货源所需',
-    'vehicle_count': '车辆数',
-    'order_vehicle_count': '实际接单',
+d_order = {
+    1: '订单数',
+    2: '完成订单数',
+    3: '进行中',
+    4: '已取消',
 }
 
 vehicle_name_id = {
