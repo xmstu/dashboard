@@ -193,3 +193,28 @@
     color: #f40;
     font-size: 16px;
 }
+.layui-colla-title-child{
+    float: right;
+}
+.layui-colla-title-child > span {
+    margin-right: 20px;
+}
+.read-status {
+    padding: 0 6px;
+
+    text-align: center;
+    display: inline-block;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+
+    line-height: 20px;
+}
+.orange {
+    color: orange;
+    border: 1px solid orange;
+}
+.red{
+      color: red;
+    border: 1px solid red;
+}

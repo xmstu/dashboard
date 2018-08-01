@@ -594,43 +594,134 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 	line-height: 34px;
 	display: none
 }
-
 .main-content-right-header>ol li {
 	float: left
 }
-
 .main-content-right-header>ol li:nth-child(1) {
 	width: 90%
 }
-
 .main-content-right-header>ol li:nth-child(2) {
 	width: 10%
 }
-
-p.message-center {
+.message-center {
 	color: #f5f5f5;
 	font-size: 14px;
 	position: relative;
 	display: inline-block;
-	margin-left: 4%
+	margin-left: 6%;
 }
-
-p.message-center i {
+.message-center >i {
 	position: absolute;
-	right: -24px
+	right: 12px;
+	font-size: 21px;
+}
+.message-center > ul {
+	position: absolute;
+    width: 250px;
+    top: 38px;
+    left: -32px;
+    height: auto;
+    background: #fff;
+}
+.message-center > ul >li {
+	width: 100%;
+	border-bottom:1px solid #eee;
+    line-height: 36px;
+    color: #000;
+}
+.message-center > ul >li>pre{
+	vertical-align: top;
+	margin-right: 12px;
+	display: inline-block;
+	width: 36px;
+	height: 36px;
+	text-align: center;
+	color: #fff;
+}
+.message-center > ul >li:nth-of-type(1)>pre{
+	background: #578EBE !important;
+    border-color: #578EBE !important;
+}
+.message-center > ul >li:nth-of-type(2)>pre{
+    background: #43B5AD !important;
+    border-color: #43B5AD !important;
+}
+.message-center > ul >li:nth-of-type(3)>pre{
+    background: #DEB948 !important;
+    border-color: #DEB948 !important;
+}
+.message-center > ul >li:nth-of-type(4)>pre{
+  background: #43B5AD !important;
+    border-color: #43B5AD !important;
+}
+.message-center > ul >li:nth-of-type(5)>pre{
+  background: #43B5AD !important;
+    border-color: #43B5AD !important;
 }
 
+
+.message-center > ul >li>p{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow:ellipsis;
+	width: 132px;
+	display: inline-block;
+	vertical-align: top;
+	font-size: 12px;
+	letter-spacing: 0.4px;
+}
+.message-center > ul >li:hover{
+	background: #578EBE !important;
+	color: #fff;
+}
+.message-center > ul >li:nth-of-type(1){
+	border-top:1px solid #eee;
+}
+.message-center > ul >li:nth-of-type(5){
+	border-bottom:1px solid #fff;
+}
+.message-center > ul >li>span {
+	vertical-align: top;
+	display: inline-block;
+	margin-left: 4px;
+	width: 64px;
+	float: right;
+	font-style: italic;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: right;
+	padding-right: 4px;
+}
+.message-center > ul>p{
+	 background: #333;
+    line-height: 30px;
+    font-size: 13px;
+	padding-left: 14px;
+
+}
+.message-center > ul > li:last-child{
+	background: #eee;
+	font-style: normal;
+	padding-left: 14px;
+	cursor: pointer;
+}
 .layui-badge {
-	right: -30px;
-	font-size: 12px
+    top: 6px;
+    right: 0;
+	font-size: 12px;
+	height: 22px;
+    width: 22px;
+    line-height: 22px;
+	padding: 0;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
 }
-
 .main-content-right-header span {
 	color: #aaa;
 	font-size: 16px;
 	font-weight: bold
 }
-
 .main-content-right-header span:nth-child(1) {
 	color: #455
 }
