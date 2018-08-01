@@ -535,6 +535,14 @@ var common = {
                 }
             })
         })
+    },
+    messageSet:function(elem,elemAno){
+       elem.mouseenter(function(){
+           elemAno.slideDown()
+       });
+       elemAno.mouseleave(function(){
+            elemAno.slideUp()
+       });
     }
 };
 setTimeout(function () {
@@ -546,6 +554,7 @@ setTimeout(function () {
     common.init();
     common.setLink();
     common.ajaxSetting();
+    common.messageSet($('.message-center'),$())
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
 }, 10);
 setInterval(function () {
