@@ -1,6 +1,6 @@
 import time
 
-from server.utils.constant import vehicle_name_id, vehicle_name
+from server.utils.constant import vehicle_name_id
 
 
 class HeatMapModel(object):
@@ -95,11 +95,13 @@ class HeatMapModel(object):
 
         # 根据地区id获取数据
         if int(params.get('region_id')):
-            fetch_where += """ AND {group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+            fetch_where += """ AND {group_condition} = {region_id} """.format(group_condition=group_condition,
+                                                                              region_id=params['region_id'])
 
-        fetch_where += """ AND {group_condition} != 0 AND {region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
+        fetch_where += """ AND {group_condition} != 0 AND {region_group} != 0 """.format(
+            group_condition=group_condition, region_group=region_group)
 
-        start_time = params.get('start_time', time.time() - 86400*7)
+        start_time = params.get('start_time', time.time() - 86400 * 7)
         end_time = params.get('end_time', time.time() - 86400)
         days = int((end_time + 1 - start_time) / 86400)
 
@@ -109,7 +111,8 @@ class HeatMapModel(object):
             "days": days
         }
 
-        user_list = cursor.query(command.format(table=table, fetch_where=fetch_where, region_group=region_group), kwargs)
+        user_list = cursor.query(command.format(table=table, fetch_where=fetch_where, region_group=region_group),
+                                 kwargs)
 
         data = {
             "user_list": user_list if user_list else [],
@@ -126,13 +129,9 @@ class HeatMapModel(object):
         command = """
         SELECT
             sg.{region_group},
-            IF({field}=1, COUNT( 1 ), 0) goods_count,
-            IF({field}=2, COALESCE ( SUM( price_expect + price_addition ), 0 ), 0) goods_price,
-            IF({field}=3, COUNT( so.id ), 0) orders_count,
-            IF({field}=4, COALESCE ( SUM( so.price ), 0 ), 0) orders_price
+            COUNT( 1 ) goods_count
         FROM
             shf_goods sg
-            INNER JOIN shb_orders so ON so.goods_id = sg.id 
         WHERE
             {fetch_where}
             AND sg.is_deleted = 0 AND so.is_deleted = 0 AND so.`status` != -1
@@ -150,6 +149,17 @@ class HeatMapModel(object):
             ({filter}=2 AND haul_dist = 2)
             )
             """.format(filter=params['filter'])
+
+        # 按统计方式分 货源数 接单数 取消数 待接单数
+        if params.get('field'):
+            fetch_where += """
+                AND (
+                ({field}=1) OR
+                ({field}=2 AND sg.status = 3) OR
+                ({field}=3 AND sg.status = -1) OR
+                ({field}=4 AND sg.status IN (1, 2)) OR
+                ) 
+                """.format(field=params['field'])
 
         # 根据级别分组数据
         if region_level == 0:
@@ -170,17 +180,20 @@ class HeatMapModel(object):
 
         # 根据地区id获取数据
         if int(params.get('region_id')):
-            fetch_where += """ AND sg.{group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+            fetch_where += """ AND sg.{group_condition} = {region_id} """.format(group_condition=group_condition,
+                                                                                 region_id=params['region_id'])
 
-        fetch_where += """ AND sg.{group_condition} != 0 AND sg.{region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
+        fetch_where += """ AND sg.{group_condition} != 0 AND sg.{region_group} != 0 """.format(
+            group_condition=group_condition, region_group=region_group)
 
         # 时间
         kwargs = {
-            "start_time": params.get("start_time", time.time() - 86400*7),
+            "start_time": params.get("start_time", time.time() - 86400 * 7),
             "end_time": params.get("end_time", time.time())
         }
 
-        goods_list = cursor.query(command.format(region_group=region_group, field=params['field'], fetch_where=fetch_where), kwargs)
+        goods_list = cursor.query(
+            command.format(region_group=region_group, field=params['field'], fetch_where=fetch_where), kwargs)
 
         data = {
             "goods_list": goods_list if goods_list else [],
@@ -234,9 +247,8 @@ class HeatMapModel(object):
 
         # 车长
         if params.get('filter'):
-            f = str(params.get('filter'))
-            fetch_where1 += """ AND shf_goods_vehicles.`name` = '%s' """ % vehicle_name.get(f, '小面包车')
-            fetch_where2 += """ AND vehicle.vehicle_length_id LIKE "%%%s%%"  """ % vehicle_name_id.get(vehicle_name.get(f, '小面包车'), '')
+            fetch_where1 += """ AND shf_goods_vehicles.`name` = '%s' """ % params['filter']
+            fetch_where2 += """ AND vehicle.vehicle_length_id LIKE "%%%s%%"  """ % vehicle_name_id.get(params['filter'], '')
 
         # 根据级别分组数据
         if region_level == 0:
@@ -257,11 +269,15 @@ class HeatMapModel(object):
 
         # 根据地区id获取数据
         if int(params.get('region_id')):
-            fetch_where1 += """ AND shf_goods.{group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
-            fetch_where2 += """ AND vehicle.{group_condition} = {region_id} """.format(group_condition=group_condition, region_id=params['region_id'])
+            fetch_where1 += """ AND shf_goods.{group_condition} = {region_id} """.format(
+                group_condition=group_condition, region_id=params['region_id'])
+            fetch_where2 += """ AND vehicle.{group_condition} = {region_id} """.format(group_condition=group_condition,
+                                                                                       region_id=params['region_id'])
 
-        fetch_where1 += """ AND shf_goods.{group_condition} != 0 AND shf_goods.{region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
-        fetch_where2 += """ AND vehicle.{group_condition} != 0 AND vehicle.{region_group} != 0 """.format(group_condition=group_condition, region_group=region_group)
+        fetch_where1 += """ AND shf_goods.{group_condition} != 0 AND shf_goods.{region_group} != 0 """.format(
+            group_condition=group_condition, region_group=region_group)
+        fetch_where2 += """ AND vehicle.{group_condition} != 0 AND vehicle.{region_group} != 0 """.format(
+            group_condition=group_condition, region_group=region_group)
 
         # 时间
         kwargs = {
@@ -269,8 +285,10 @@ class HeatMapModel(object):
             "end_time": params.get("end_time", time.time())
         }
 
-        ret1 = cursor1.query(cmd1.format(region_group=region_group, field=params.get('field', 1), fetch_where1=fetch_where1), kwargs)
-        ret2 = cursor2.query(cmd2.format(region_group=region_group, field=params.get('field', 1), fetch_where2=fetch_where2), kwargs)
+        ret1 = cursor1.query(
+            cmd1.format(region_group=region_group, field=params.get('field', 1), fetch_where1=fetch_where1), kwargs)
+        ret2 = cursor2.query(
+            cmd2.format(region_group=region_group, field=params.get('field', 1), fetch_where2=fetch_where2), kwargs)
 
         for i in ret1:
             vehicle_count = [j['vehicle_count'] for j in ret2 if j[region_group] == i[region_group]]
@@ -288,4 +306,7 @@ class HeatMapModel(object):
 
     @staticmethod
     def get_order(cursor, params, region_level):
-        pass
+        fetch_where = """ 1=1 """
+        command = """
+        
+        """
