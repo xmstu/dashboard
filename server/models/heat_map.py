@@ -30,6 +30,7 @@ class HeatMapModel(object):
             fetch_where += """
             AND 
             (
+            ( {filter}=0) OR
             ( {filter}=1 AND user_type = 1) OR
             ( {filter}=2 AND user_type = 2) OR
             ( {filter}=3 AND user_type = 3) 
@@ -145,6 +146,7 @@ class HeatMapModel(object):
         if params.get('filter'):
             fetch_where += """
             AND (
+            ( {filter}=0) OR
             ({filter}=1 AND sg.is_system_price = 0) OR
             ({filter}=2 AND sg.is_system_price = 1)
             )
@@ -322,6 +324,7 @@ class HeatMapModel(object):
         if params.get('filter'):
             fetch_where += """
                     AND (
+                    ({filter}=0) OR
                     ({filter}=1 AND sg.is_system_price = 0) OR
                     ({filter}=2 AND sg.is_system_price = 1)
                     )

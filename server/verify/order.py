@@ -6,7 +6,7 @@ from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
-from server.utils.extend import compare_time, date_to_timestamp
+from server.utils.extend import compare_time, date_to_timestamp, complement_time
 
 
 class OrdersReceivedStatistics(object):
@@ -108,6 +108,11 @@ class OrderList(object):
             params['end_complete_time'] = int(params.get('end_complete_time', None) or 0)
             params['register_start_time'] = int(params.get('register_start_time', None) or 0)
             params['register_end_time'] = int(params.get('register_end_time', None) or 0)
+
+            # 补全时间
+            params['start_order_time'], params['end_order_time'] = complement_time(params['start_order_time'], params['end_order_time'])
+            params['start_complete_time'], params['end_complete_time'] = complement_time(params['start_complete_time'], params['end_complete_time'])
+            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
 
             # 当前权限下所有地区
             if sessionOperationClass.check():
