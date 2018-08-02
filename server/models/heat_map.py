@@ -245,7 +245,7 @@ class HeatMapModel(object):
         # 车长
         if params.get('filter'):
             fetch_where1 += """ AND shf_goods_vehicles.`name` = '%s' """ % params['filter']
-            fetch_where2 += """ AND vehicle.vehicle_length_id LIKE "%%%s%%"  """ % vehicle_name_id.get(params['filter'], '')
+            fetch_where2 += """ AND vehicle.vehicle_length_id REGEXP ",{vehicle_id}|{vehicle_id},|,{vehicle_id},|^{vehicle_id}$" """.format(vehicle_id=vehicle_name_id.get(params['filter'], ''))
 
         # 根据级别分组数据
         if region_level == 0:
