@@ -21,6 +21,11 @@ var set = {
                         layer.msg('提示：开始时间大于了结束时间！');
                         return false
                     }
+                    if ($('#date_show_one').val() == '' || val == '') {
+                        $('#date_show_one').next('.date-tips').show();
+                    } else {
+                        $('#date_show_one').next('.date-tips').hide()
+                    }
                 }
             });
             laydate.render({
@@ -39,12 +44,15 @@ var set = {
                         layer.msg('提示：开始时间大于了结束时间！');
                         return false
                     }
+                    if ($('#date_show_two').val() == '' || val == '') {
+                        $('#date_show_two').next('.date-tips').show();
+                    } else {
+                        $('#date_show_two').next('.date-tips').hide()
+                    }
                 }
             });
         })
         var that = this;
-        $('#date_show_one').val(common.getNowFormatDate()[7]);
-        $('#date_show_two').val(common.getNowFormatDate()[0]);
         $('.price-menu-about>a').addClass('selected-active');
         $('.price-menu-about>a>i').addClass('select-active');
         that.dataInit();
@@ -320,13 +328,13 @@ var set = {
                 }
             }
             if (data.max_mileage != '') {
-              if (common.isNumber(data.max_mileage)) {
-                  layer.tips('请检查数据格式-(数字)', '#max_mileage', {
-                      tips: [1, '#009688'],
-                      time: 3000
-                  });
-                  return false;
-              }
+                if (common.isNumber(data.max_mileage)) {
+                    layer.tips('请检查数据格式-(数字)', '#max_mileage', {
+                        tips: [1, '#009688'],
+                        time: 3000
+                    });
+                    return false;
+                }
             }
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var avg_price = res.data.avg_price;
