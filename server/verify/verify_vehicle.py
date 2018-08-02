@@ -6,7 +6,7 @@ from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
-from server.utils.extend import Check, compare_time
+from server.utils.extend import Check, compare_time, complement_time
 
 
 class VerifyVehicle(object):
@@ -23,6 +23,9 @@ class VerifyVehicle(object):
             params['verify_end_time'] = int(params.get('verify_end_time') or 0)
             params['last_login_start_time'] = int(params.get('last_login_start_time') or 0)
             params['last_login_end_time'] = int(params.get('last_login_end_time') or 0)
+
+            params['verify_start_time'], params['verify_end_time'] = complement_time(params['verify_start_time'], params['verify_end_time'])
+            params['last_login_start_time'], params['last_login_end_time'] = complement_time(params['last_login_end_time'], params['last_login_end_time'])
 
             # 校验手机号码
             if params.get('mobile'):
