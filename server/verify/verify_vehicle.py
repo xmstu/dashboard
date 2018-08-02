@@ -25,7 +25,7 @@ class VerifyVehicle(object):
             params['last_login_end_time'] = int(params.get('last_login_end_time') or 0)
 
             params['verify_start_time'], params['verify_end_time'] = complement_time(params['verify_start_time'], params['verify_end_time'])
-            params['last_login_start_time'], params['last_login_end_time'] = complement_time(params['last_login_end_time'], params['last_login_end_time'])
+            params['last_login_start_time'], params['last_login_end_time'] = complement_time(params['last_login_start_time'], params['last_login_end_time'])
 
             # 校验手机号码
             if params.get('mobile'):
