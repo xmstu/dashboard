@@ -527,6 +527,7 @@ var common = {
             $.ajaxSetup({
                 complete: function (Xhttp) {
                     layer.closeAll('loading')
+                    console.log(Xhttp)
                     if (Xhttp.responseJSON, status == 400 && Xhttp.responseJSON.msg == '货源已成单') {
                         $('#popup_one .layui-none').html('货源已被接')
                     }else if(Xhttp.responseJSON, status == 400 && Xhttp.responseJSON.msg == '货源已删除'){

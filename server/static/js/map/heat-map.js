@@ -460,7 +460,6 @@ var set = {
                                 }
                             };
                             pageSet.init();
-                            pageSet.tab();
                         } else {
                             layer.msg('error')
                         }
