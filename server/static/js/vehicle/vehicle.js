@@ -2,8 +2,6 @@ var set = {
     init: function () {
         var that = this;
         $('.vehicle-menu-about>a').addClass('selected-active');
-        $('#date_show_three').val(String(common.getNowFormatDate()[5]));
-        $('#date_show_four').val(String(common.getNowFormatDate()[0]));
         layui.use(['layer', 'laydate'], function () {
             var layer = layui.layer;
             var laydate = layui.laydate;
@@ -66,6 +64,11 @@ var set = {
                         layer.msg('提示：开始时间大于了结束时间！');
                         return false;
                     }
+                    if ($('#date_show_three').val() == '' || val == '') {
+                        $('#date_show_three').next('.date-tips').show();
+                    } else {
+                        $('#date_show_three').next('.date-tips').hide()
+                    }
                 }
             });
             laydate.render({
@@ -82,6 +85,11 @@ var set = {
                     if (startTime > endTime) {
                         layer.msg('提示：开始时间大于了结束时间！');
                         return false;
+                    }
+                    if ($('#date_show_four').val() == '' || val == '') {
+                        $('#date_show_four').next('.date-tips').show();
+                    } else {
+                        $('#date_show_four').next('.date-tips').hide()
                     }
                 }
             });
@@ -156,7 +164,7 @@ var set = {
                 });
                 return false;
             }
-            if (data.verify_start_time != ''&&data.verify_end_time == '') {
+            if (data.verify_start_time != '' && data.verify_end_time == '') {
                 data.verify_end_time = common.currentTime()
             }
             var url = '/vehicle/list/?mobile=' + data.mobile + '&vehicle_number=' + data.vehicle_number + '&home_station_id=' + data.home_station_id + '&vehicle_length=' + data.vehicle_length + '&verify_start_time=' + data.verify_start_time + '&verify_end_time=' + data.verify_end_time + '&last_login_start_time=' + data.last_login_start_time + '&last_login_end_time=' + data.last_login_end_time;
