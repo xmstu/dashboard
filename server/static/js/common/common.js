@@ -527,23 +527,30 @@ var common = {
             $.ajaxSetup({
                 complete: function (Xhttp) {
                     layer.closeAll('loading')
-                    console.log(Xhttp)
                     if (Xhttp.responseJSON.status == 400 && Xhttp.responseJSON.msg == '货源已成单') {
                         $('#popup_one .layui-none').html('货源已被接')
-                    }else if(Xhttp.responseJSON.status == 400 && Xhttp.responseJSON.msg == '货源已删除'){
-                         $('#popup .layui-none').html('货源已删除')
+                        $('#popup .layui-none').html('货源已被接')
+                    } else if (Xhttp.responseJSON.status == 400 && Xhttp.responseJSON.msg == '货源已删除') {
+                        $('#popup_one .layui-none').html('货源已删除')
+                        $('#popup .layui-none').html('货源已删除')
+                    } else if (Xhttp.responseJSON.status == 400 && Xhttp.responseJSON.msg == '货源不存在') {
+                        $('#popup_one .layui-none').html('货源不存在')
+                        $('#popup .layui-none').html('货源不存在')
+                    } else if (Xhttp.responseJSON.status == 400 && Xhttp.responseJSON.msg == '货源已取消') {
+                        $('#popup_one .layui-none').html('货源已取消')
+                        $('#popup .layui-none').html('货源已取消')
                     }
                 }
             })
         })
     },
-    messageSet:function(elem,elemAno){
-       elem.mouseenter(function(){
-           elemAno.slideDown()
-       });
-       elemAno.mouseleave(function(){
+    messageSet: function (elem, elemAno) {
+        elem.mouseenter(function () {
+            elemAno.slideDown()
+        });
+        elemAno.mouseleave(function () {
             elemAno.slideUp()
-       });
+        });
     }
 };
 setTimeout(function () {
@@ -555,7 +562,7 @@ setTimeout(function () {
     common.init();
     common.setLink();
     common.ajaxSetting();
-    common.messageSet($('.message-center'),$())
+    common.messageSet($('.message-center'), $())
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
 }, 10);
 setInterval(function () {
