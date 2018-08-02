@@ -41,6 +41,7 @@ class LoginDecorator(object):
             elif role == 4:
                 locations = [user_info['region_id']]
 
+            user_info['account'] = user_name
             # 写入session
             result = sessionOperationClass.insert(user_info, role, locations)
 

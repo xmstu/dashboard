@@ -48,6 +48,7 @@ def broker():
             'user_name': result[0]['user_name'],
             'mobile': result[0]['mobile'],
             'avatar_url': result[0]['avatar_url'],
+            'account': result[0]['mobile']
         }
         role = result[0]['role']
         locations = [location['region_id'] for location in result]
