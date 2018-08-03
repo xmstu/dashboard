@@ -2,6 +2,9 @@ from server.meta.decorators import make_decorator
 from server.status import build_result, build_result_1, APIStatus, HTTPStatus
 import time
 
+from server.utils.extend import timestamp2date
+
+
 class MessageSystem(object):
     @staticmethod
     @make_decorator
@@ -20,7 +23,7 @@ class MessageUser(object):
         un_read = []
         # 时间格式化
         for i in data:
-            i['date'] = i['create_time']
+            i['date'] = timestamp2date(i['create_time'], accuracy=2)
             # 时间间隔
             last_delta = int(time.time() - i['create_time'])
             delta = ''
