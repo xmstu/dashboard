@@ -240,7 +240,9 @@ class CityNearbyCars(object):
                     else:
                         surplus.append(i)
                 driver = (driver['county'] + double + from_country + to_country + surplus)[:10]
-            result = []
+            # 置顶排序
+            top_arr = []
+            sim_arr = []
             # 常驻地
             if goods_type == 2:
                 for i in driver:
@@ -258,7 +260,9 @@ class CityNearbyCars(object):
                     mileage_total = distance_between_position(i['longitude'], i['latitude'], goods['from_longitude'], goods['from_latitude'])*1.3
                     mileage = '%.3fkm' % mileage_total
                     locations = init_regions.to_address(i['province'], i['city'], i['county']) + i['address'] + ', ' + mileage + ', ' + delta
-                    result.append({
+                    if i['from_province_id'] == goods['from_province_id'] and i['from_city_id'] == goods['from_city_id'] \
+                    and i['from_county_id'] == goods['from_county_id']:
+                        top_arr.append({
                         'name': i['user_name'],
                         'mobile': i['mobile'],
                         'usual_region': usual_region,
@@ -273,12 +277,30 @@ class CityNearbyCars(object):
                         # 排序
                         'last_delta': i['last_delta']
                     })
-                    if len(result) >= 10:
+                    else:
+                        sim_arr.append({
+                            'name': i['user_name'],
+                            'mobile': i['mobile'],
+                            'usual_region': usual_region,
+                            'locations': locations,
+                            'vehicle_type': i['vehicle_type'],
+                            'vehicle_length': i['vehicle_length'],
+                            'is_trust_member': i['is_sticker'],
+                            'order_count': i['order_count'],
+                            'order_finished': i['order_finished'],
+                            'order_cancel': i['order_cancel'],
+                            'last_login_time': i['last_login_time'],
+                            # 排序
+                            'last_delta': i['last_delta']
+                        })
+                    if len(top_arr) + len(sim_arr) >= 10:
                         break
-
-                result.sort(key=lambda x: x.get('last_delta', 0))
+                top_arr.sort(key=lambda x: x.get('last_delta', 0))
+                sim_arr.sort(key=lambda x: x.get('last_delta', 0))
+                result = top_arr + sim_arr
 
             else:
+
                 for i in driver:
                     # 诚信会员
                     is_trust_member = 0
@@ -286,7 +308,10 @@ class CityNearbyCars(object):
                         is_trust_member = 1
                     elif i['trust_member_type'] == 2 and i['ad_expired_time'] > int(time.time()):
                         is_trust_member = 1
-                    result.append({
+                    if i['from_province_id'] == goods['from_province_id'] and i['from_city_id'] == goods['from_city_id'] \
+                    and i['from_county_id'] == goods['from_county_id'] and i['to_province_id'] == goods['to_province_id'] \
+                    and i['to_city_id'] == goods['to_city_id'] and i['to_county_id'] == goods['to_county_id']:
+                        top_arr.append({
                         'name': i['user_name'],
                         'mobile': i['mobile'],
                         'booking_line': init_regions.to_address(i['from_province_id'], i['from_city_id'],
@@ -303,10 +328,30 @@ class CityNearbyCars(object):
                         # 排序
                         'create_time': i['create_time']
                     })
-                    if len(result) >= 10:
+                    else:
+                        sim_arr.append({
+                            'name': i['user_name'],
+                            'mobile': i['mobile'],
+                            'booking_line': init_regions.to_address(i['from_province_id'], i['from_city_id'],
+                                                                    i['from_county_id']) + '-' + init_regions.to_address(
+                                i['to_province_id'], i['to_city_id'], i['to_county_id']),
+                            'booking_time': time.strftime('%Y-%m-%d', time.localtime(i['create_time'])) if i['create_time'] else '',
+                            'last_login_time': time.strftime('%Y-%m-%d', time.localtime(i['last_login_time'])),
+                            'vehicle_type': i['vehicle_type'] if i['vehicle_type'] else '',
+                            'vehicle_length': i['vehicle_length'] if i['vehicle_length'] else '',
+                            'is_trust_member': is_trust_member,
+                            'order_count': i['order_count'],
+                            'order_finished': i['order_finished'],
+                            'order_cancel': i['order_cancel'],
+                            # 排序
+                            'create_time': i['create_time']
+                        })
+                    if len(top_arr) + len(sim_arr) >= 10:
                         break
+                top_arr.sort(key=lambda x: x.get('last_delta', 0))
+                sim_arr.sort(key=lambda x: x.get('last_delta', 0))
+                result = top_arr + sim_arr
 
-                result.sort(key=lambda x: x.get('create_time', 0), reverse=True)
             return make_result(APIStatus.Ok, data=json.loads(json.dumps(result))), HTTPStatus.Ok
         except Exception as e:
             log.error('附近车辆过滤错误: %s' % e, exc_info=True)
