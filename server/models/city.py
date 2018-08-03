@@ -353,7 +353,7 @@ class CityNearbyCarsModel(object):
         return all_drivers if all_drivers else []
 
     @staticmethod
-    def get_driver_by_booking(cursor, params):
+    def get_driver_by_booking_city(cursor, params):
         """接单线路获取司机信息"""
         try:
             command = '''
@@ -395,17 +395,73 @@ class CityNearbyCarsModel(object):
             WHERE
             shf_booking_settings.is_deleted = 0
             AND shf_booking_settings.vehicle_length_id != 0
-            AND (
             -- 市到市
-            (shf_booking_settings.from_city_id = :from_city_id
+            AND shf_booking_settings.from_city_id = :from_city_id
             AND shf_booking_settings.to_city_id = :to_city_id
-            AND shf_booking_settings.from_city_id != 0
-            AND shf_booking_settings.to_city_id != 0))
+            AND shf_booking_settings.from_county_id != :from_county_id
+            AND shf_booking_settings.to_county_id != :to_county_id
             AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
             GROUP BY shf_booking_settings.user_id
             HAVING vehicle_length >= :inner_length
             ORDER BY from_county_id, to_county_id DESC
-            LIMIT 100'''
+            LIMIT 10'''
+
+            driver_info = cursor.query(command, params)
+            return driver_info if driver_info else []
+        except Exception as e:
+            log.error('接单线路获取司机信息出错: [error: %s]' % e, exc_info=True)
+
+    @staticmethod
+    def get_driver_by_booking_county(cursor, params):
+        """接单线路获取司机信息"""
+        try:
+            command = '''
+            SELECT
+            CASE WHEN 
+            (SELECT auth_driver FROM shu_user_auths
+             WHERE id = shu_user_profiles.last_auth_driver_id
+             AND auth_status = 2
+             AND is_deleted != 1) = 1
+            THEN 1 ELSE 0 END AS auth_driver,
+            shf_booking_settings.user_id,
+            shu_user_profiles.user_name,
+            shu_users.mobile,
+            (SELECT `name` FROM shm_dictionary_items WHERE id = shf_booking_settings.vehicle_length_id) AS vehicle_type,
+            (SELECT `value` FROM shm_dictionary_items WHERE id = shf_booking_settings.vehicle_length_id) AS vehicle_length,
+
+            -- 诚信会员
+            shu_user_profiles.is_trust_member,
+            shu_user_profiles.trust_member_type,
+            shu_user_profiles.ad_expired_time,
+            0 AS inner_length,
+            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id) AS order_count,
+            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = 3) AS order_finished,
+            (SELECT COUNT(1) FROM shb_orders WHERE driver_id = shu_users.id AND shb_orders.`status` = -1) AS order_cancel,
+            shf_booking_settings.from_province_id,
+            shf_booking_settings.from_city_id,
+            shf_booking_settings.from_county_id,
+            shf_booking_settings.to_province_id,
+            shf_booking_settings.to_city_id,
+            shf_booking_settings.to_county_id,
+            shf_booking_settings.create_time,
+            shu_user_stats.last_login_time
+
+            FROM shf_booking_settings
+            INNER JOIN shu_user_profiles ON shu_user_profiles.user_id = shf_booking_settings.user_id AND shu_user_profiles.is_deleted = 0 AND shu_user_profiles.`status` = 1
+            INNER JOIN shu_users ON shu_user_profiles.user_id = shu_users.id AND shu_users.is_deleted = 0
+            INNER JOIN shu_user_stats ON shu_user_profiles.user_id = shu_user_stats.user_id
+
+            WHERE
+            shf_booking_settings.is_deleted = 0
+            AND shf_booking_settings.vehicle_length_id != 0
+            -- 区到区
+            AND shf_booking_settings.from_county_id = :from_county_id
+            AND shf_booking_settings.to_county_id = :to_county_id
+            AND shu_user_stats.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
+            GROUP BY shf_booking_settings.user_id
+            HAVING vehicle_length >= :inner_length
+            ORDER BY from_county_id, to_county_id DESC
+            LIMIT 10'''
 
             driver_info = cursor.query(command, params)
             return driver_info if driver_info else []

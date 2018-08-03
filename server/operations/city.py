@@ -84,12 +84,21 @@ class CityNearbyCars(object):
                     break
         # 2.附近车辆-接单线路
         else:
-            params = {
+            # 区到区
+            driver_county = CityNearbyCarsModel.get_driver_by_booking_county(db.read_db, {
+                'from_county_id': goods['from_county_id'],
+                'to_county_id': goods['to_county_id'],
+                'inner_length': goods['inner_length']
+            })
+            # 市到市
+            driver_city = CityNearbyCarsModel.get_driver_by_booking_city(db.read_db, {
                 'from_city_id': goods['from_city_id'],
                 'to_city_id': goods['to_city_id'],
+                'from_county_id': goods['from_county_id'],
+                'to_county_id': goods['to_county_id'],
                 'inner_length': goods['inner_length']
-            }
-            driver = CityNearbyCarsModel.get_driver_by_booking(db.read_db, params)
+            })
+            driver = {'county': driver_county, 'city': driver_city}
         if not driver:
             return Response(data={}, goods_type=goods_type)
         return Response(data={'goods': goods, 'driver': driver}, goods_type=goods_type)

@@ -229,7 +229,7 @@ class CityNearbyCars(object):
                 from_country = []
                 to_country = []
                 surplus = []
-                for i in driver:
+                for i in driver['city']:
                     if i['from_county_id'] != 0 and i['to_county_id'] != 0 and goods['from_county_id'] == i['from_county_id'] \
                     and goods['to_county_id'] == i['to_county_id']:
                         double.append(i)
@@ -239,7 +239,7 @@ class CityNearbyCars(object):
                         to_country.append(i)
                     else:
                         surplus.append(i)
-                driver = (double + from_country + to_country + surplus)[:10]
+                driver = (driver['county'] + double + from_country + to_country + surplus)[:10]
             result = []
             # 常驻地
             if goods_type == 2:
