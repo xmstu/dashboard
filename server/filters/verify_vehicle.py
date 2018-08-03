@@ -18,7 +18,7 @@ class VerifyVehicle(object):
                                                    detail.get('home_station_county_id', 0)) + \
                            init_regions.to_region(detail.get('home_station_town_id', 0))
             # 车长/车型名称
-            vehicle_length_type = detail.get('length_name') or '' + '/' + detail.get('type_name') or ''
+            vehicle_length_type = (detail.get('length_name') or '') + '/' + (detail.get('type_name') or '')
 
             result.append({
                 'id': detail.get('id') or 0,
