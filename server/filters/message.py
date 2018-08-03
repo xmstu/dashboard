@@ -20,6 +20,7 @@ class MessageUser(object):
         un_read = []
         # 时间格式化
         for i in data:
+            i['date'] = i['create_time']
             # 时间间隔
             last_delta = int(time.time() - i['create_time'])
             delta = ''
