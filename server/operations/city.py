@@ -61,27 +61,35 @@ class CityNearbyCars(object):
                     # 车长
                     length_id = str(i['vehicle_length_id']).split(',')[0]
                     user_info = VehicleModel.get_vehicle_length_name(db.read_db, int(length_id), i['user_id'])
-                    i.update({
-                        'address': result['address'],
-                        'longitude': result['longitude'],
-                        'latitude': result['latitude'],
-                        'last_login_time': result['location_time'],
-                        'last_delta': int(time.time() - time.mktime(
-                            time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S'))),
-                        'province': result['province'],
-                        'city': result['city'],
-                        'county': result['county'],
-                        'vehicle_length_id': user_info.get('vehicle_length_id', ''),
-                        'order_count': user_info.get('order_count', 0),
-                        'order_finished': user_info.get('order_finished', 0),
-                        'order_cancel': user_info.get('order_cancel', 0)
-                    })
-                    driver.append(i)
+                    # 车长大于货源需求
+                    if float(user_info.get('vehicle_length', 0)) >= float(goods['inner_length']):
+                        i.update({
+                            'address': result['address'],
+                            'longitude': result['longitude'],
+                            'latitude': result['latitude'],
+                            'last_login_time': result['location_time'],
+                            'last_delta': int(time.time() - time.mktime(
+                                time.strptime(result['location_time'], '%Y-%m-%d %H:%M:%S'))),
+                            'province': result['province'],
+                            'city': result['city'],
+                            'county': result['county'],
+                            'vehicle_type': user_info.get('vehicle_type', ''),
+                            'vehicle_length': user_info.get('vehicle_length', 0),
+                            'order_count': user_info.get('order_count', 0),
+                            'order_finished': user_info.get('order_finished', 0),
+                            'order_cancel': user_info.get('order_cancel', 0)
+                        })
+                        driver.append(i)
                 if len(driver) >= 10:
                     break
         # 2.附近车辆-接单线路
         else:
-            driver = CityNearbyCarsModel.get_driver_by_booking(db.read_db, goods_id)
+            params = {
+                'from_city_id': goods['from_city_id'],
+                'to_city_id': goods['to_city_id'],
+                'inner_length': goods['inner_length']
+            }
+            driver = CityNearbyCarsModel.get_driver_by_booking(db.read_db, params)
         if not driver:
             return Response(data={}, goods_type=goods_type)
         return Response(data={'goods': goods, 'driver': driver}, goods_type=goods_type)

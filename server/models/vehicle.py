@@ -13,7 +13,8 @@ class VehicleModel(object):
             (SELECT COUNT(1) AS order_count FROM shb_orders WHERE driver_id = :user_id) AS order_count,
             (SELECT COUNT(1) AS order_finished FROM shb_orders WHERE driver_id = :user_id AND shb_orders.`status` = 3) AS order_finished,
             (SELECT COUNT(1) AS order_cancel FROM shb_orders WHERE driver_id = :user_id AND shb_orders.`status` = -1) AS order_cancel,
-            (SELECT `name` AS vehicle_length_id FROM shm_dictionary_items WHERE id = :length_id) AS vehicle_length_id'''
+            (SELECT `name` AS vehicle_type FROM shm_dictionary_items WHERE id = :length_id) AS vehicle_type,
+            (SELECT `value` AS vehicle_length FROM shm_dictionary_items WHERE id = :length_id) AS vehicle_length'''
             result = cursor.query_one(command, {
                 'user_id': user_id,
                 'length_id': length_id
