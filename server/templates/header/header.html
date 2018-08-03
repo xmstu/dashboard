@@ -42,26 +42,25 @@
                     <li class="loginOut"><a href="#"><i class="iconfont icon-secede"></i> <span
                             style="border-left: 1px dashed #ccc; padding-left: 5px;">退出登陆</span></a></li>
                 </ul>
-                <div class="message-center" style="display:none;">
+                <div class="message-center">
                     <i class="iconfont icon-xiaoxi1"></i><b class="layui-badge">10+</b>
                     <ul>
-                        <p>You have 11 notifications</p>
-                        <li><pre><i class="iconfont icon-xiaoxi"></i></pre><p>Lorem ipsum dolor sit amet</p><span> 1 min</span></li>
-                        <li><pre><i class="iconfont icon-xinfeng2"></i></pre><p>consectetur adipiscing elit.</p> <span>5 min</span></li>
-                        <li><pre><i class="iconfont icon-xiaoxi"></i></pre><p>Pellentesque eleifend...</p> <span>7 min</span></li>
-                        <li><pre><i class="iconfont icon-xinfeng2"></i></pre><p>You have 9 unfinished tasks </p><span>10 min</li>
-                        <li><pre><i class="iconfont icon-xiaoxi"></i></pre><p>Weekly meeting in 1 hour </p><span>11 min</span></li>
-                        <li onclick="goTo()">View all notifications</li>
+                        <p class="message-count-show">You have 11 notifications</p>
+                        <li onclick="goTo()"><i class="iconfont icon-xiaolian-"></i>&nbsp; 浏览所有相关信息 </li>
                     </ul>
                 </div>
                 <span id="project_introduce" class="layui-btn layui-btn-sm"
                       style="background: none;border: 1px dashed #009688;color: #fff;"><i
-                        class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank"
-                                                           href="/introduce/">统计中心介绍</a></span>
+                        class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank" href="/introduce/">统计中心介绍</a></span>
             </div>
         </div>
     </section>
 </header>
+<style>
+    .message-center > ul {
+        display: none;
+    }
+</style>
 <script>
     function goTo(){
         window.location.href='/message/'

@@ -546,14 +546,46 @@ var common = {
     },
     messageSet: function (elem, elemAno) {
         elem.mouseenter(function () {
-            elemAno.slideDown()
+            elemAno.slideDown('fast')
         });
         elemAno.mouseleave(function () {
-            elemAno.slideUp()
+            elemAno.slideUp('fast')
         });
+    },
+    messageRequest: function () {
+        var url = '/message/user/';
+        var data = {
+            'account': $('#user-info').attr('data-account'),
+            'page': 1,
+            'limit': 6
+        };
+        http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+            var data = res.data;
+            var str = ''
+            $('.message-center .layui-badge').html(res.count);
+            for (var i = 0; i < res.count; i++) {
+                var id = data[i].id;
+                var create_time = data[i].create_time;
+                var title = data[i].title;
+                var is_read = data[i].is_read;
+                str += '<li class="message-center-simple" value="' + id + '"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
+            }
+            $(".message-count-show").html('你当前一共有'+res.count+'条消息接收！');
+            $(".message-count-show").after(str);
+            function select() {
+                if (is_read == 1) {
+                    return 'iconfont icon-xinfeng2'
+                } else if (is_read == 0) {
+                    return 'iconfont icon-xiaoxi'
+                }
+            }
+
+
+        })
     }
 };
 setTimeout(function () {
+    common.messageRequest();
     common.menuSet();
     common.returnTop();
     common.periods();
@@ -562,7 +594,7 @@ setTimeout(function () {
     common.init();
     common.setLink();
     common.ajaxSetting();
-    common.messageSet($('.message-center'), $())
+     common.messageSet($('.message-center'), $('.message-center > ul'));
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
 }, 10);
 setInterval(function () {

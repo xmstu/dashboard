@@ -605,10 +605,10 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 }
 .message-center {
 	color: #f5f5f5;
-	font-size: 14px;
+	font-size: 13px;
 	position: relative;
 	display: inline-block;
-	margin-left: 6%;
+	margin-left: 10%;
 }
 .message-center >i {
 	position: absolute;
@@ -707,15 +707,11 @@ nav.main-content-left .layui-nav-tree .layui-nav-item>a {
 }
 .layui-badge {
     top: 6px;
-    right: 0;
+    right: -8px;
 	font-size: 12px;
-	height: 22px;
     width: 22px;
-    line-height: 22px;
+    line-height: 18px;
 	padding: 0;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border-radius: 50%;
 }
 .main-content-right-header span {
 	color: #aaa;
