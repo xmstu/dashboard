@@ -3,12 +3,12 @@
 from flask_restful import abort
 from flask_restplus import Resource
 
+import server.document.message as doc
 from server import operations, api, verify, filters
 from server.meta.decorators import Response
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.request import get_payload, get_all_arg
-import server.document.message as doc
 
 
 class MessageSystem(Resource):
@@ -93,6 +93,7 @@ class MessageUser(Resource):
         resp = Response(params=get_all_arg())
         return resp
 
+
 class MessageUserOperator(Resource):
     @staticmethod
     @doc.request_user_message_read_get
@@ -104,6 +105,7 @@ class MessageUserOperator(Resource):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
         resp = Response(params=get_all_arg(), msg_id=id)
         return resp
+
 
 ns = api.namespace('message', description='消息窗口接口')
 ns.add_resource(MessageSystem, '/system/')

@@ -26,16 +26,16 @@ class MessageSystemVerify(object):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='标题为空'))
         if not params.get('content'):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='内容为空'))
-        if params.get('msg_type') not in [1,2]:
+        if int(params.get('msg_type')) not in [1,2]:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='消息类型错误'))
-        if params.get('push_role') not in [0,1,2,3,4]:
+        if int(params.get('push_role')) not in [0,1,2,3,4]:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推送角色错误'))
         params = {
             'user_id': user_id,
             'title': params['title'],
             'content': params['content'],
-            'msg_type': params['msg_type'],
-            'push_role': params['push_role']
+            'msg_type': int(params['msg_type']),
+            'push_role': int(params['push_role'])
         }
         log.debug('消息发布检查参数: [user_id: %s][title: %s][content: %s][msg_type: %s][push_role: %s]'
                   % (params['user_id'], params['title'], params['content'], params['msg_type'], params['push_role']))
