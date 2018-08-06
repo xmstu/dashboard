@@ -15,3 +15,4 @@ from server.verify.price import *
 from server.verify.verify_vehicle import *
 from server.verify.city_manager import *
 from server.verify.message import *
+from server.verify.root import *

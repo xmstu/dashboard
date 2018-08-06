@@ -2,17 +2,15 @@
 # -*- coding:utf-8 -*-
 # author=hexm
 from flask_restplus.resource import Resource
-from flask import session
-from flask_restful import abort
 
 import server.document.promote as doc
 import server.verify.general as general_verify
-from server.status import HTTPStatus, make_result, APIStatus
 from server import api
 from server import verify, operations, filters
 from server.meta.decorators import Response
-from server.utils.request import get_all_arg, get_arg_int, get_arg, get_payload
 from server.meta.session_operation import sessionOperationClass
+from server.utils.request import get_all_arg, get_arg_int, get_payload
+
 
 class PromoteQuality(Resource):
     @staticmethod
@@ -25,6 +23,7 @@ class PromoteQuality(Resource):
         """推广数据统计"""
         resp = Response(params=get_all_arg())
         return resp
+
 
 class PromoteEffect(Resource):
 
@@ -57,6 +56,7 @@ class PromoteEffect(Resource):
         payload = get_payload()
         return Response(role=role, user_id=user_id, payload=payload)
 
+
 class PromoteDelete(Resource):
     @staticmethod
     @doc.response_promote_effect_delete_param_success
@@ -68,7 +68,6 @@ class PromoteDelete(Resource):
         role, user_id = sessionOperationClass.get_role()
         promoter_mobile = mobile
         return Response(role=role, user_id=user_id, promoter_mobile=promoter_mobile)
-
 
 
 ns = api.namespace('promote', description='推广统计')

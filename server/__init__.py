@@ -10,7 +10,7 @@ redis：redis对象
 log：日志对象
 """
 
-from server.app import app, api
+from server.app import app, api, socketio
 from server.configs import configs
 from server.logger import log
 

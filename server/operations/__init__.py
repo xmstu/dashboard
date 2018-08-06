@@ -15,3 +15,4 @@ from server.operations.price import *
 from server.operations.verify_vehicle import *
 from server.operations.city_manager import *
 from server.operations.message import *
+from server.operations.root import *
