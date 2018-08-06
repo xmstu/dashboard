@@ -15,7 +15,7 @@ class RootManagement(object):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='页数错误'))
             if not params.get('limit') or not params['limit'].isdigit():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='条数错误'))
-            params['page'] = (params['page'] - 1) * params['limit']
+            params['page'], params['limit'] = (int(params['page']) - 1) * int(params['limit']), int(params['limit'])
             return Response(params=params)
         except Exception as e:
             log.error('error:{}'.format(e))
