@@ -302,7 +302,7 @@ var set = {
                 from_county_id: $('#end_address').attr('districtsid') == undefined ? '' : $('#end_address').attr('districtsid'),
                 to_province_id: $('#end_address').attr('provinceid') == undefined ? '' : $('#end_address').attr('provinceid'),
                 to_city_id: $('#end_place').attr('cityid') == undefined ? '' : $('#end_place').attr('cityid'),
-                to_country_id: $('#end_place').attr('districtsid') == undefined ? '' : $('#end_place').attr('districtsid'),
+                to_county_id: $('#end_place').attr('districtsid') == undefined ? '' : $('#end_place').attr('districtsid'),
                 min_mileage: $('#min_mileage').val(),
                 max_mileage: $('#max_mileage').val(),
                 vehicle_length: $('#vehicle_type').val(),
