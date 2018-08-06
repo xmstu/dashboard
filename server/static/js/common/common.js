@@ -562,7 +562,7 @@ var common = {
         console.log($('.user_name_icon').attr('data-account'));
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             var data = res.data;
-            var str = ''
+            var str = '';
             $('.message-center .layui-badge').html(res.count);
             for (var i = 0; i < res.count; i++) {
                 var id = data[i].id;
@@ -593,7 +593,7 @@ setTimeout(function () {
     common.init();
     common.setLink();
     common.ajaxSetting();
-     common.messageSet($('.message-center'), $('.message-center > ul'));
+    common.messageSet($('.message-center'), $('.message-center > ul'));
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
 }, 10);
 setInterval(function () {

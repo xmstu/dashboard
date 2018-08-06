@@ -12,9 +12,6 @@ var set = {
                 'page': 1,
                 'limit': 10
             };
-            element.on('collapse(message_list)', function (data) {
-                //layer.msg('展开状态：' + data.show);
-            });
             $(window).load(function () {
                 $('.main-content-right').addClass('animated fadeIn')
             });
@@ -24,23 +21,34 @@ var set = {
                 var str = '';
                 for (var i = 0; i < count; i++) {
                     str += '<div class="layui-colla-item">';
-                    str += '<div class="layui-colla-title">' + data[i].title;
+                    str += '<div data-value="'+data[i].id+'" class="layui-colla-title">' + data[i].title;
                     str += '<p class="layui-colla-title-child"><span>' + data[i].date + '</span><i class="read-status orange">' + _that.setAbout(data[i].is_read) + '</i></p></div>';
                     str += '<div class="layui-colla-content">' + data[i].content + '</div></div>';
                 }
-                $('.layui-collapse').html('');
-                $('.layui-collapse').append(str);
+                $('.layui-collapse').html(_that.resetData(str));
                 element.init();//告诉layui对js模板重新渲染
+                element.on('collapse(message_list)', function (data) {
+                    if(data.show==true){
+                        var url = '/message/user/'+$(this).attr('data-value')+'/?account='+$('#user-info').attr('data-account');
+                        var data  = {};
+                        var _that  = $(this);
+                        http.ajax.get_no_loading(true,false,url,data,http.ajax.CONTENT_TYPE_2,function(){
+                            if(_that.find('.read-status').text()=='未读'&&res.status==100000){
+                              _that.find('.read-status').html('已读')
+                            }
+                        })
+                     }
+                });
                 laypage.render({
                     elem: $('#pagination')
                     , count: count
                     , layout: ['count', 'prev', 'page', 'next', 'refresh', 'skip']
                     , jump: function (obj) {
-                       // console.log(obj)
                     }
                 })
             })
         })
+
     },
     dataRender: function () {
     },
@@ -50,6 +58,12 @@ var set = {
         } else if (num == 0) {
             return '未读'
         }
+    },
+    resetData:function(str){
+        /*js反转义*/
+        str = str.replace(/&lt;/g,'<');
+        str = str.replace(/&gt;/g,'>');
+        return str
     }
 };
 set.init();
