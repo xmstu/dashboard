@@ -28,7 +28,7 @@ class RootManagement(object):
 
     @staticmethod
     @make_decorator
-    def add_data(params):
-        data = RootManagementModel.delete_data(db.read_bi, params)
+    def post_data(params):
+        data = RootManagementModel.post_data(db.read_bi, params)
 
         return Response(data=data)

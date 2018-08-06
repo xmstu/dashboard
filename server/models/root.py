@@ -3,15 +3,29 @@ class RootManagementModel(object):
     @staticmethod
     def get_data(cursor, params):
 
-        fields = """"""
+        command = """
+        SELECT
+            id,
+            account,
+            user_name,
+            region_id
+        FROM
+            `tb_inf_city_manager`
+        WHERE 
+            is_deleted = 0
+        LIMIT :page, :limit
+        """
 
-        which_table = """"""
+        kwargs = {
+            'page': params.get('page'),
+            'limit': params.get('limit'),
+        }
 
-        fetch_where = """"""
+        city_manager_list = cursor.query(command, kwargs)
 
-        command = """"""
-
-        data = cursor.query(command)
+        data = {
+            'city_manager_list': city_manager_list
+        }
 
         return data
 
@@ -31,6 +45,20 @@ class RootManagementModel(object):
 
     @staticmethod
     def delete_data(cursor, params):
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data
+
+    @staticmethod
+    def post_data(cursor, params):
         fields = """"""
 
         which_table = """"""
