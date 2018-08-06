@@ -9,14 +9,6 @@
     <link rel="stylesheet" href="../static/css/iconfont.css?v=2.0">
     <link rel="stylesheet" href="../static/css/promote/promote.css?v=2.0">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <script src="../static/js/libs/jquery-2.1.1.min.js?v=2.0"></script>
-    <script src="../static/layui/layui.js?v=2.0"></script>
-    <script src="../static/js/common/common.js?v=2.0"></script>
-    <script src="../static/js/common/http.js?v=2.0"></script>
-    <script type="text/javascript" charset="utf-8" src="../static/js/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../static/js/ueditor/editor_api.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../static/js/ueditor/lang/zh-cn/zh-cn.js"></script>
-    <script src="../static/js/message/edit-message.js?v=2.0"></script>
 </head>
 <body>
 <div>
@@ -33,44 +25,75 @@
                         </div>
                         <div class="part-1">
                             <div class="part-1-top">
-                                <form class="layui-form layui-form-pane" action="">
-                                    <div class="layui-form-item" style="width: 100%;">
+                                <form id="message_setting" class="layui-form layui-form-pane" action="">
+                                    <div class="layui-form-item" style="width: 99%;">
                                         <label class="layui-form-label">消息标题</label>
                                         <div class="layui-input-block">
-                                            <input type="text" name="title" autocomplete="off" placeholder="请输入要填写的消息标题" class="layui-input">
+                                            <input id="message_title" type="text" name="title" autocomplete="off" placeholder="请输入要填写的消息标题"
+                                                   class="layui-input">
                                         </div>
                                     </div>
-                                     <script id="editor" type="text/plain"></script>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">发布类型</label>
+                                        <div class="layui-input-block">
+                                            <input type="radio" name="sex" data-value = "1" value="手动" title="手动" checked="">
+                                            <input type="radio" name="sex" data-value = "2" value="自动" title="自动">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">推送角色</label>
+                                        <div class="layui-input-block">
+                                            <input type="radio" data-value="0" name="sex" value="全部" title="全部" checked="">
+                                            <input type="radio" data-value="1" name="sex" value="后台用户" title="后台用户">
+                                            <input type="radio" data-value="2" name="sex" value="区镇合伙人" title="区镇合伙人">
+                                            <input type="radio" data-value="3" name="sex" value="网点管理员" title="网点管理员">
+                                            <input type="radio" data-value="4" name="sex" value="城市经理" title="城市经理">
+                                        </div>
+                                    </div>
+                                    <script id="editor" type="text/plain"></script>
                                 </form>
-                                 <div id="btns" class="edit-btns">
+                                <div id="btns" class="edit-btns">
                                     <div>
                                         <span class="submit-edit">点击提交</span>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="getAllHtml()">预览全部</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="getContent()">预览内容</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="setContent()">写入内容</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="setContent(true)">追加内容</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="getContentTxt()">预览纯文本</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="getPlainTxt()">预览格式纯文本</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="hasContent()">判断是否有内容</button>
-                                        <button class="layui-btn layui-btn-primary layui-btn-sm " onclick="getText()">预览选中文本</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="insertHtml()">插入给定内容</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onclick="setFocus()">获得焦点</button>
-                                        <button  class="layui-btn layui-btn-primary layui-btn-sm " onmousedown="setblur(event)">失去焦点</button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm "
+                                                onclick="getContent()">预览内容
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm "
+                                                onclick="getContentTxt()">预览纯文本
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm " onclick="getText()">
+                                            预览选中文本
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm " onclick="setFocus()">
+                                            获得焦点
+                                        </button>
+                                        <button class="layui-btn layui-btn-primary layui-btn-sm "
+                                                onmousedown="setblur(event)">失去焦点
+                                        </button>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </aside>
             <!--{% include '/exception/unfinished.html' %}-->
+            <div id="popup">
+            </div>
         </article>
     </article>
     <span style="display: none!important">
       <script src="https://s95.cnzz.com/z_stat.php?id=1260774712&web_id=1260774712" language="JavaScript"></script>
 </span>
-
 </div>
-
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=2.0"></script>
+<script src="../static/layui/layui.js?v=2.0"></script>
+<script src="../static/js/common/common.js?v=2.0"></script>
+<script src="../static/js/common/http.js?v=2.0"></script>
+<script type="text/javascript" charset="utf-8" src="../static/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../static/js/ueditor/editor_api.js"></script>
+<script type="text/javascript" charset="utf-8" src="../static/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="../static/js/message/edit-message.js?v=2.0"></script>
 </body>
 </html>
