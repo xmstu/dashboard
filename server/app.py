@@ -4,7 +4,6 @@ from datetime import timedelta
 
 from flask import Flask, render_template
 from flask_restplus import Api
-from flask_socketio import SocketIO
 
 from server.configs import configs
 from server.logger import log
