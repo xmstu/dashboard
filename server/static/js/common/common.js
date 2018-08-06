@@ -559,6 +559,7 @@ var common = {
             'page': 1,
             'limit': 6
         };
+        console.log($('.user_name_icon').attr('data-account'));
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             var data = res.data;
             var str = ''
@@ -579,8 +580,6 @@ var common = {
                     return 'iconfont icon-xiaoxi'
                 }
             }
-
-
         })
     }
 };
