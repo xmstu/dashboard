@@ -3,28 +3,31 @@ class RootManagementModel(object):
     @staticmethod
     def get_data(cursor, params):
 
+        fields = """
+        id,
+        account,
+        user_name,
+        region_id
+        """
+
         command = """
         SELECT
-            id,
-            account,
-            user_name,
-            region_id
+            {fields}
         FROM
             `tb_inf_city_manager`
         WHERE 
             is_deleted = 0
-        LIMIT :page, :limit
         """
 
-        kwargs = {
-            'page': params.get('page'),
-            'limit': params.get('limit'),
-        }
+        count = cursor.query_one(command.format(fields="""COUNT(1) count"""))
 
-        city_manager_list = cursor.query(command, kwargs)
+        command += """ LIMIT {0}, {1} """.format(params.get('page'), params.get('limit'))
+
+        city_manager_list = cursor.query(command.format(fields=fields))
 
         data = {
-            'city_manager_list': city_manager_list
+            'city_manager_list': city_manager_list if city_manager_list else [],
+            'count': count if count else 0
         }
 
         return data
@@ -59,14 +62,20 @@ class RootManagementModel(object):
 
     @staticmethod
     def post_data(cursor, params):
-        fields = """"""
 
-        which_table = """"""
+        command = """
+        INSERT INTO tb_inf_city_manager(account, password, user_name, avatar_url, region_id) 
+        VALUES(:account, :password, :username, :avatar_url, :region_id)
+        """
 
-        fetch_where = """"""
+        kwargs = {
+            'account', params.get('account'),
+            'password', params.get('password'),
+            'username', params.get('username'),
+            'avatar_url', 'https://mp.huitouche.com/static/images/newicon.png',
+            'region_id', params.get('region_id'),
+        }
 
-        command = """"""
+        user_id = cursor.query(command, kwargs)
 
-        data = cursor.query(command)
-
-        return data
+        return user_id

@@ -15,11 +15,11 @@ from server.utils.request import *
 class RootManagement(Resource):
     @staticmethod
     @doc.request_root_management_get
-    @filters.RootManagement.get_result(params=dict, data=list, before_user_count=int)
+    @filters.RootManagement.get_result(data=dict)
     @operations.RootManagement.get_data(params=dict)
     @verify.RootManagement.check_get_params(params=dict)
     def get():
-        """获取城市经理或合伙人管理列表"""
+        """获取城市经理管理列表"""
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == 1:
@@ -33,7 +33,7 @@ class RootManagement(Resource):
     @operations.RootManagement.post_data(params=dict)
     @verify.RootManagement.check_post_params(params=dict)
     def post():
-        """增加新的城市经理或合伙人"""
+        """增加新的城市经理"""
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == 1:
@@ -71,5 +71,5 @@ class RootManagement(Resource):
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
 
 
-ns = api.namespace('root', description='超级用户管理')
+ns = api.namespace('root', description='城市经理管理')
 ns.add_resource(RootManagement, '/management/')
