@@ -29,13 +29,13 @@ class cityManagerModel(object):
         ) AS order_count
         
         FROM shu_recommended_users
-        INNER JOIN shu_users ON shu_recommended_users.referrer_user_id = shu_users.id
+        INNER JOIN shu_users ON shu_recommended_users.recommended_user_id = shu_users.id
         AND shu_users.is_deleted = 0
         INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
         LEFT JOIN shu_user_auths ON shu_user_profiles.last_auth_driver_id = shu_user_auths.id
         AND shu_user_auths.auth_status = 2 AND shu_user_auths.is_deleted = 0
         AND shu_user_auths.submit_time >= :start_time AND shu_user_auths.submit_time <= :end_time
-        WHERE shu_users.mobile = :mobile'''
+        WHERE shu_recommended_users.referrer_user_id = (SELECT id FROM shu_users WHERE mobile = :mobile)'''
 
         result = cursor.query(command, {
             'mobile': mobile,
