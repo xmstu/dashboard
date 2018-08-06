@@ -319,3 +319,7 @@
     line-height: 38px;
     height: 38px;
 }
+#message_setting #edit_tips {
+    margin-bottom: -11px;
+    width: 280px;
+}

@@ -16,7 +16,7 @@
         {% include '/header/header.html' %}
         <article class="main-content">
             {% include '/menu/menu.html' %}
-            <aside class="main-content-right" style="opacity: 1;">
+            <aside class="main-content-right">
                 <div>
                     <div class="m-c-l-content">
                         <div class="content-header">
@@ -36,19 +36,22 @@
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">发布类型</label>
                                         <div class="layui-input-block">
-                                            <input type="radio" name="sex" data-value = "1" value="手动" title="手动" checked="">
-                                            <input type="radio" name="sex" data-value = "2" value="自动" title="自动">
+                                            <input type="radio" name="publish" data-value = "1" value="手动" title="手动" checked="">
+                                            <input type="radio" name="publish" data-value = "2" value="自动" title="自动">
                                         </div>
                                     </div>
                                     <div class="layui-form-item">
                                         <label class="layui-form-label">推送角色</label>
                                         <div class="layui-input-block">
-                                            <input type="radio" data-value="0" name="sex" value="全部" title="全部" checked="">
-                                            <input type="radio" data-value="1" name="sex" value="后台用户" title="后台用户">
-                                            <input type="radio" data-value="2" name="sex" value="区镇合伙人" title="区镇合伙人">
-                                            <input type="radio" data-value="3" name="sex" value="网点管理员" title="网点管理员">
-                                            <input type="radio" data-value="4" name="sex" value="城市经理" title="城市经理">
+                                            <input type="radio" data-value="0" name="publish-role" value="全部" title="全部" checked="">
+                                            <input type="radio" data-value="1" name="publish-role" value="后台用户" title="后台用户">
+                                            <input type="radio" data-value="2" name="publish-role" value="区镇合伙人" title="区镇合伙人">
+                                            <input type="radio" data-value="3" name="publish-role" value="网点管理员" title="网点管理员">
+                                            <input type="radio" data-value="4" name="publish-role" value="城市经理" title="城市经理">
                                         </div>
+                                    </div>
+                                      <div class="layui-form-item">
+                                        <label id="edit_tips" class="layui-form-label">请在下方的编辑器中输入相关的信息</label>
                                     </div>
                                     <script id="editor" type="text/plain"></script>
                                 </form>
@@ -79,8 +82,8 @@
                 </div>
             </aside>
             <!--{% include '/exception/unfinished.html' %}-->
-            <div id="popup">
-            </div>
+            <div id="popup"></div>
+
         </article>
     </article>
     <span style="display: none!important">
