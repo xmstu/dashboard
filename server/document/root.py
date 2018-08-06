@@ -9,14 +9,16 @@ request_root_management_get = api.doc(params={
 })
 
 request_root_management_add = api.doc(body=api.model('request_root_management_add', {
-    'account': fields.String(description='用户名'),
+    'account': fields.String(description='手机号'),
+    'username': fields.String(description='用户名'),
     'password': fields.String(description='密码'),
-    'region_id': fields.String(description='所属地'),
+    'region_id': fields.Integer(description='所属地id'),
 }))
 
 request_root_management_put = api.doc(body=api.model('request_root_management_put', {
-    'account': fields.String(description='用户名'),
+    'account': fields.String(description='手机号'),
+    'username': fields.String(description='用户名'),
     'password': fields.String(description='密码'),
-    'region_id': fields.String(description='所属地'),
+    'region_id': fields.Integer(description='所属地id'),
 }))
 

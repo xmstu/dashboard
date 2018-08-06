@@ -62,14 +62,20 @@ class RootManagementModel(object):
 
     @staticmethod
     def post_data(cursor, params):
-        fields = """"""
 
-        which_table = """"""
+        command = """
+        INSERT INTO tb_inf_city_manager(account, password, user_name, avatar_url, region_id) 
+        VALUES(:account, :password, :username, :avatar_url, :region_id)
+        """
 
-        fetch_where = """"""
+        kwargs = {
+            'account', params.get('account'),
+            'password', params.get('password'),
+            'username', params.get('username'),
+            'avatar_url', 'https://mp.huitouche.com/static/images/newicon.png',
+            'region_id', params.get('region_id'),
+        }
 
-        command = """"""
+        user_id = cursor.query(command, kwargs)
 
-        data = cursor.query(command)
-
-        return data
+        return user_id
