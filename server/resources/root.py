@@ -25,7 +25,7 @@ class RootManagement(Resource):
             if role == 1:
                 resp = Response(params=get_all_arg())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户获取消息列表'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户获取账户列表'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
 
     @staticmethod
@@ -37,39 +37,42 @@ class RootManagement(Resource):
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == 1:
-                resp = Response(params=get_all_arg())
+                resp = Response(params=get_payload())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户获取消息列表'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户添加账户'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
 
+
+class RootManagementOperator(Resource):
     @staticmethod
     @operations.RootManagement.delete_data(params=dict)
-    def delete(id):
+    def delete(user_id):
         """删除该账户"""
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == 1:
-                params = get_all_arg()
-                params['user_id'] = id
-                return Response(params=params)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户获取消息列表'))
+                return Response(params={'user_id': user_id})
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户删除账户'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
 
     @staticmethod
     @doc.request_root_management_put
     @operations.RootManagement.put_data(params=dict)
     @verify.RootManagement.check_put_params(params=dict)
-    def put(id):
+    def put(user_id):
         """修改当前用户id的账号或者密码"""
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == 1:
-                params = get_all_arg()
-                params['user_id'] = id
+                if user_id == 0:
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='用户id不能为0'))
+                params = get_payload()
+                params.setdefault('user_id', user_id)
                 return Response(params=params)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户获取消息列表'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户修改账户'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
 
 
 ns = api.namespace('root', description='城市经理管理')
 ns.add_resource(RootManagement, '/management/')
+ns.add_resource(RootManagementOperator, '/management/<int:user_id>')

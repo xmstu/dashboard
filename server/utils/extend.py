@@ -1,5 +1,6 @@
 import calendar
 import datetime
+import hashlib
 import re
 import time
 import math
@@ -251,3 +252,9 @@ data_price = {
     # =1.02*(10^3)+11.2*A2-7.48*(10^-3)*A2^2
     '17.5米': [CarPrice(11.2, -7.48/1000, 0, 1020, 30), 1],
 }
+
+
+def pwd_to_hash(pwd):
+    m2 = hashlib.md5()
+    m2.update(pwd.encode("utf-8"))  # 参数必须是byte类型，否则报Unicode-objects must be encoded before hashing错误
+    return m2.hexdigest()

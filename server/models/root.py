@@ -34,48 +34,48 @@ class RootManagementModel(object):
 
     @staticmethod
     def put_data(cursor, params):
-        fields = """"""
+        update_sql = """id=id"""
 
-        which_table = """"""
+        user_id = params.pop('user_id', 0)
+        if user_id:
+            update_list = (', {0}={1}'.format(key, "'" + value + "'" if isinstance(value, str) else value) for key, value in params.items() if value)
+            for i in update_list:
+                update_sql += i
+            command = """
+            UPDATE tb_inf_city_manager
+            SET {update_sql}
+            WHERE is_deleted = 0 AND id=:user_id
+            """
 
-        fetch_where = """"""
+            rowcount = cursor.update(command.format(update_sql=update_sql), args={"user_id": user_id})
 
-        command = """"""
-
-        data = cursor.query(command)
-
-        return data
+            return rowcount
+        else:
+            return 0
 
     @staticmethod
     def delete_data(cursor, params):
-        fields = """"""
 
-        which_table = """"""
+        command = """
+        UPDATE tb_inf_city_manager
+        SET is_deleted = 1
+        WHERE id=:user_id
+        """
 
-        fetch_where = """"""
+        rowcount = cursor.update(command, params)
 
-        command = """"""
-
-        data = cursor.query(command)
-
-        return data
+        return rowcount
 
     @staticmethod
     def post_data(cursor, params):
 
         command = """
         INSERT INTO tb_inf_city_manager(account, password, user_name, avatar_url, region_id) 
-        VALUES(:account, :password, :username, :avatar_url, :region_id)
+        VALUES(:account, :password, :user_name, :avatar_url, :region_id)
         """
 
-        kwargs = {
-            'account', params.get('account'),
-            'password', params.get('password'),
-            'username', params.get('username'),
-            'avatar_url', 'https://mp.huitouche.com/static/images/newicon.png',
-            'region_id', params.get('region_id'),
-        }
+        params['avatar_url'] = 'https://mp.huitouche.com/static/images/newicon.png'
 
-        user_id = cursor.query(command, kwargs)
+        user_id = cursor.insert(command, params)
 
         return user_id
