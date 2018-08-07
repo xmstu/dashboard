@@ -7,7 +7,7 @@ from server.meta.session_operation import sessionOperationClass
 from server.meta.login_record import visitor_record
 
 
-@app.route('/root/', endpoint='root')
+@app.route('/root/', endpoint='root_manage')
 @visitor_record
 def root():
     """城市经理用户管理页面"""
