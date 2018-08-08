@@ -368,7 +368,7 @@ body {
 }
 
 .nav-content > p > strong {
-    font-size: 15px;
+    font-size: 13px;
     display: block;
     text-align: center
 }
@@ -423,7 +423,7 @@ body {
 }
 
 .layui-nav-item {
-    line-height: 34px !important;
+    line-height: 33px !important;
     margin-bottom: 6px
 }
 
@@ -452,8 +452,8 @@ body {
 }
 
 nav.main-content-left .layui-nav-tree .layui-nav-item > a {
-    line-height: 34px;
-    height: 34px;
+    line-height: 33px;
+    height: 33px;
     text-align: left;
     padding-left: 0;
     color: #dee;
@@ -1157,4 +1157,7 @@ body {
 
 .icon-caidan {
     display: inline-block;
+}
+.layui-form-radioed>i{
+
 }

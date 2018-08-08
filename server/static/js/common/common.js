@@ -461,11 +461,17 @@ var common = {
     },
     menuSet: function () {
         var menu_icon = $('.icon-caidan');
+        layui.use('layer',function(){
+           var layer = layui.layer;
+        })
         menu_icon.on('click', function () {
+
             var $width = $('.main-content-left').width();
             if ($width >= 110) {
+
                 $.cookie('menuStatus', true, {expires: 7, path: '/'});
-                 $(this).css({'transform': 'rotateZ(-90deg)'});
+                $(this).css({'transform': 'rotateZ(-90deg)'});
+                $('#second_menu_list').find('a').css({'display': 'none'});
                 $('.icon-xia').css({'opacity': 0});
                 $('.layui-nav-tree').css({'width': '100%', 'margin': 0});
                 $('.nav-content').css({'display': 'none'});
@@ -474,7 +480,9 @@ var common = {
                 $('.layui-nav-item>a>i:nth-child(1)').css({'margin': '0 7px'});
                 $('.main-content-right').css({'margin-left': '36px'})
             } else {
+                layer.closeAll('tips')
                 $.cookie('menuStatus', false, {expires: 7, 'path': '/'});
+                $('#second_menu_list').find('a').css({'display': 'block'});
                 $(this).css({'transform': 'rotateZ(0deg)'});
                 $('.layui-nav-tree').css({'width': '94%', 'margin': '10px 4% 0 2%'});
                 $('.icon-xia').css({'opacity': 1});
@@ -485,8 +493,16 @@ var common = {
                 $('.main-content-right').css({'margin-left': '8%'})
             }
         });
-
-        $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').stop().hover(function () {
+        $('#second_menu_box').stop().mouseenter(function () {
+            if ($(this).width() < 60) {
+                var content = '<a class="second-menu-list-child" href="/edit-message/">信息编辑</a><br><a class="second-menu-list-child" href="/root/">用户管理</a>'
+                layer.tips(content, $(this), {
+                    tips: [2, '#009688'],
+                    time: 20000
+                });
+            }
+        });
+        $('nav.main-content-left .layui-nav-tree .layui-nav-item>a.first-menu-list').stop().hover(function () {
             if ($(this).width() < 60) {
                 layer.tips($(this).text(), $(this), {
                     tips: [2, '#009688'],
@@ -501,6 +517,7 @@ var common = {
                 });
             }
         })
+
     },
     currentTime: function () {
         var that = this;
@@ -591,7 +608,7 @@ var common = {
             $(".second-menu-list").slideToggle("fast");
             if ($('.menu-line').height() == 376) {
                 $('.menu-line').height(442)
-            } else if($('.menu-line').height()==442){
+            } else if ($('.menu-line').height() == 442) {
                 $('.menu-line').height(376)
             }
         });
