@@ -272,6 +272,7 @@
 #editor {
     width: 99%;
     height: 400px;
+    border-top: -1px;
 }
 .edit-btns {
     margin-top: 90px;
@@ -283,13 +284,13 @@
     margin-left: 0;
 }
 .submit-edit{
-    line-height: 30px;
+    line-height: 29px;
     text-align: center;
     color: #fff;
     background: #009688;
     width: 8%;
     display: inline-block;
-    /* margin: 0 auto; */
+    vertical-align: top;
 }
 #message_setting .layui-form-item{
     display: block;
@@ -321,5 +322,11 @@
 }
 #message_setting #edit_tips {
     margin-bottom: -11px;
-    width: 280px;
+    width: 99%;
+}
+.second-menu-list-child {
+    color: #fff;
+}
+.second-menu-list-child:hover {
+    color: orange;
 }
