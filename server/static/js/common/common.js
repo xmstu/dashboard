@@ -462,29 +462,29 @@ var common = {
     menuSet: function () {
         var menu_icon = $('.icon-caidan');
         menu_icon.on('click', function () {
-            var $width = $('.main-content-left').width()
+            var $width = $('.main-content-left').width();
             if ($width >= 110) {
-                $(this).css({'transform': 'rotateZ(-90deg)'});
                 $.cookie('menuStatus', true, {expires: 7, path: '/'});
+                 $(this).css({'transform': 'rotateZ(-90deg)'});
+                $('.icon-xia').css({'opacity': 0});
                 $('.layui-nav-tree').css({'width': '100%', 'margin': 0});
                 $('.nav-content').css({'display': 'none'});
                 $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').width('80%');
-                $('.main-content-left').css({width: '38px', 'margin-left': 0, 'min-width': '38px'});
+                $('.main-content-left').css({width: '36px', 'margin-left': 0, 'min-width': '36px'});
                 $('.layui-nav-item>a>i:nth-child(1)').css({'margin': '0 7px'});
-                $('.menu-line').css({'left': '19px'});
-                $('.main-content-right').css({'margin-left': '38px'})
+                $('.main-content-right').css({'margin-left': '36px'})
             } else {
                 $.cookie('menuStatus', false, {expires: 7, 'path': '/'});
                 $(this).css({'transform': 'rotateZ(0deg)'});
                 $('.layui-nav-tree').css({'width': '94%', 'margin': '10px 4% 0 2%'});
+                $('.icon-xia').css({'opacity': 1});
                 $('.nav-content').css({'display': 'block'});
                 $('.main-content-left').css({width: '8%', 'margin-left': 0, 'min-width': '110px'});
                 $('.layui-nav-item>a>i:nth-child(1)').css({'margin-left': '6%', 'margin-right': '10%'});
-                $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').width('100%');
-                $('.menu-line').css({'left': '19px'});
+                $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').width('80%');
                 $('.main-content-right').css({'margin-left': '8%'})
             }
-        })
+        });
 
         $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').stop().hover(function () {
             if ($(this).width() < 60) {
@@ -571,8 +571,9 @@ var common = {
                 var is_read = data[i].is_read;
                 str += '<li class="message-center-simple" value="' + id + '"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
             }
-            $(".message-count-show").html('你当前一共有'+res.count+'条消息接收！');
+            $(".message-count-show").html('你当前一共有' + res.count + '条消息接收！');
             $(".message-count-show").after(str);
+
             function select() {
                 if (is_read == 1) {
                     return 'iconfont icon-xinfeng2'
@@ -581,6 +582,19 @@ var common = {
                 }
             }
         })
+    },
+    secondMenuSet: function () {
+        var second = $('#second_menu_box');
+        $(second).click(function () {
+            $(this).addClass('menu-active')
+            $(".icon-xia").toggleClass("icon-rotate");
+            $(".second-menu-list").slideToggle("fast");
+            if ($('.menu-line').height() == 376) {
+                $('.menu-line').height(442)
+            } else if($('.menu-line').height()==442){
+                $('.menu-line').height(376)
+            }
+        });
     }
 };
 setTimeout(function () {
@@ -593,9 +607,10 @@ setTimeout(function () {
     common.init();
     common.setLink();
     common.ajaxSetting();
+    common.secondMenuSet();
     common.messageSet($('.message-center'), $('.message-center > ul'));
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
-}, 10);
+}, 50);
 setInterval(function () {
     $('.header-content-main').fadeIn('normal').css({'display': 'inline-block'});
     $('#date_now').html('');

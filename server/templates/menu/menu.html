@@ -3,71 +3,82 @@
         <section class="nav-content">
             <p>
                 <img src="{{ avatar_url }}" alt="">
-                <strong>{{ user_name}}</strong>
+                <strong>{{ user_name }}</strong>
             </p>
         </section>
     </div>
     <ul class="layui-nav layui-nav-tree" lay-filter="nav-slider">
         <li class="layui-nav-item area-menu-about">
-            <a href="/admin/">
+            <a class="first-menu-list" href="/admin/">
                 <i class="iconfont icon-zhuye"></i>区域概况
             </a>
         </li>
         <li class="layui-nav-item user-menu-about">
-            <a href="/user/">
+            <a class="first-menu-list" href="/user/">
                 <i class="iconfont icon-permissions-user"></i>用户统计
             </a>
         </li>
         <li class="layui-nav-item promote-menu-about">
-            <a href="/promote/">
+            <a class="first-menu-list" href="/promote/">
                 <i class="iconfont icon-xianlu"></i>推广统计
             </a>
         </li>
         <li class="layui-nav-item transport-menu-about">
-            <a href="/transport/">
+            <a class="first-menu-list" href="/transport/">
                 <i class="iconfont icon-line"></i>运力统计
             </a>
         </li>
         <li class="layui-nav-item vehicle-menu-about">
-            <a href="/vehicle/">
+            <a class="first-menu-list" href="/vehicle/">
                 <i class="iconfont icon-cheliangguanli"></i>认证车辆
             </a>
         </li>
         <li class="layui-nav-item goods-menu-about">
-            <a href="/goods/">
+            <a class="first-menu-list" href="/goods/">
                 <i class="iconfont icon-tongji"></i>货源统计
             </a>
         </li>
         <li class="layui-nav-item potential-menu-about">
-            <a href="/potential/">
+            <a class="first-menu-list" href="/potential/">
                 <i class="iconfont icon-yincang"></i>潜在货源
             </a>
         </li>
         <li class="layui-nav-item order-menu-about">
-            <a href="/order/">
+            <a class="first-menu-list" href="/order/">
                 <i class="iconfont icon-dingdan"></i>订单统计
             </a>
         </li>
         <li class="layui-nav-item price-menu-about">
-            <a href="/price/">
+            <a class="first-menu-list" href="/price/">
                 <i class="iconfont icon--jiageyujing"></i>价格统计
             </a>
         </li>
         <li class="layui-nav-item map-menu-about">
-            <a href="/map/">
+            <a class="first-menu-list" href="/map/">
                 <i class="iconfont icon-relitu"></i>热力图
             </a>
-            <u class="menu-line"></u>
+            <u class="menu-line" style="display: none;"></u>
         </li>
         {% if role == 1 %}
-        <li class="layui-nav-item map-menu-about">
-            <a href="/edit-message/">
-                <i class="iconfont icon-xiaoxi"></i>消息管理
-            </a>
-            <u class="menu-line"></u>
-        </li>
+            <li class="layui-nav-item map-menu-about">
+                <a href="javascript:;"  id="second_menu_box">
+                    <i class="iconfont icon-suo"></i>权限管理
+                    <i class="iconfont icon-xia"></i>
+                </a>
+                <ol class="second-menu-list" id="second_menu_list">
+                    <li>
+                         <a href="/edit-message/">
+                             <i class="iconfont icon-yuandianxiao"></i>
+                            消息管理
+                        </a>
+                    </li>
+                      <li>
+                        <a href="/root/">
+                            <i class="iconfont icon-yuandianxiao"></i>用户管理
+                        </a>
+                    </li>
+                </ol>
+            </li>
         {% endif %}
     </ul>
 </nav>
-<script>
-</script>

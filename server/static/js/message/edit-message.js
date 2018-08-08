@@ -1,4 +1,10 @@
 var ue = UE.getEditor('editor');
+window.onload=function() {
+    var secondMenu = document.getElementById('second_menu_list');
+    secondMenu.style.display = 'block';
+     $('#second_menu_list>li:nth-of-type(1) a').addClass('selected-active');
+    $('#second_menu_box').addClass('menu-active')
+}
  $(window).load(function(){
  $('.main-content-right').addClass('animated fadeIn')
  });
@@ -105,9 +111,7 @@ function init() {
             content: $('#popup')
         });
     })
-
 }
-
 $('.submit-edit').click(function () {
     var url = '/message/system/';
     var content = UE.getEditor('editor').getContent();
@@ -132,7 +136,7 @@ $('.submit-edit').click(function () {
         "msg_type": $('[name=publish]:checked').attr('data-value'),
         "push_role": $('[name=publish-role]:checked').attr('data-value')
     };
-     data=JSON.stringify(data);
+    data=JSON.stringify(data);
     http.ajax.post(true,false,url,data,http.ajax.CONTENT_TYPE_2,function(res){
         if(res.status==100000){
             layer.msg('发布成功')
