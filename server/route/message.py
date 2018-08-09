@@ -51,7 +51,7 @@ def message():
     if role == 4:
         locations = init_regions.get_city_next_region(session['login'].get('locations', []))
     return render_template('/message/edit-message.html', user_name=user_name, avatar_url=avatar_url,
-                           locations=locations, role=role, account=account)
+                           locations=locations, role=role, account=account, async_mode=socketio.async_mode)
 
 
 # 后台线程 产生数据，即刻推送至前端
@@ -71,10 +71,16 @@ def background_thread():
                 MessageSystemModel.insert_system_message(db.read_db, params)
             # 将数据发送给对应地区的区镇合伙人，实际上是写数据到对应的user_id
 
-            socketio.emit('server_response', {'data': '你有新的消息！'}, namespace='/auto_message')
+            socketio.emit('server_response', {'data': '你有新的消息！'}, namespace='/test')
+        socketio.emit('server_response', {'data': '你没有新的消息！'}, namespace='/test')
         last_count = now_count
         # 下次更新推送消息时隔10分钟
         socketio.sleep(600)
+
+
+@socketio.on('client_request', namespace='/test')
+def test_connect(request):
+    print('received json: ' + str(request))
 
 
 @socketio.on('connect', namespace='/test')

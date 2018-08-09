@@ -19,7 +19,7 @@ class RootManagementModel(object):
             is_deleted = 0
         """
 
-        count = cursor.query_one(command.format(fields="""COUNT(1) count"""))
+        count = cursor.query_one(command.format(fields="""COUNT(1) count"""))['count']
 
         command += """ LIMIT {0}, {1} """.format(params.get('page'), params.get('limit'))
 

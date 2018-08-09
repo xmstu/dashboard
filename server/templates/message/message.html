@@ -32,6 +32,7 @@
             </div>
         </aside>
         <!----------------------------------------------------->
+
     </article>
 </article>
 <span style="display: none!important">
@@ -42,5 +43,21 @@
 <script src="../static/js/common/common.js?v=2.4"></script>
 <script src="../static/js/common/http.js?v=2.4"></script>
 <script src="../static/js/message/message.js?v=2.4"></script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/socket.io/1.5.1/socket.io.min.js"></script>
+<script type="text/javascript">
+        // 建立socket连接，等待服务器“推送”数据，用回调函数更新图表
+    $(document).ready(function() {
+        namespace = '/test';
+        const socket = io.connect('http://' + '127.0.0.1' + ':' + '2333' + namespace);
+
+        socket.on('connect', function() {
+            socket.emit('client_request', {data: 'I\'m connected!'});
+        });
+        socket.on('server_response', function(res) {
+            alert(res.data);
+        });
+
+    });</script>
 </body>
 </html>
