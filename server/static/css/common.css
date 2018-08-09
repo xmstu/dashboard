@@ -1044,7 +1044,7 @@ body {
 .layui-table-cell {
     font-size: 12px;
     color: #000;
-    padding: 0 12px
+    padding: 0 6px
 }
 
 .layui-table-view .layui-table {
@@ -1158,6 +1158,6 @@ body {
 .icon-caidan {
     display: inline-block;
 }
-.layui-form-radioed>i{
-
+.layui-table-view .layui-table td, .layui-table-view .layui-table th{
+    text-align: center;
 }

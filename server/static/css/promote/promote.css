@@ -198,10 +198,6 @@
     border-bottom: 2px solid #ddd;
 }
 
-.layui-layer-title {
-    text-align: center;
-}
-
 .order-item-spec {
     width: 214px !important;
 }
@@ -288,9 +284,12 @@
     text-align: center;
     color: #fff;
     background: #009688;
-    width: 8%;
+    padding: 0 10px;
     display: inline-block;
     vertical-align: top;
+    -webkit-border-radius: 5%;
+    -moz-border-radius: 5%;
+    border-radius: 5%;
 }
 #message_setting .layui-form-item{
     display: block;
@@ -329,4 +328,7 @@
 }
 .second-menu-list-child:hover {
     color: orange;
+}
+.message-menu-about.layui-this {
+    background: none!important;
 }
