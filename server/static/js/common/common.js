@@ -615,11 +615,11 @@ var common = {
     }
 };
 setTimeout(function () {
+    common.cookieSet();
     common.messageRequest();
     common.menuSet();
     common.returnTop();
     common.periods();
-    common.cookieSet();
     common.weather();
     common.init();
     common.setLink();
@@ -627,7 +627,7 @@ setTimeout(function () {
     common.secondMenuSet();
     common.messageSet($('.message-center'), $('.message-center > ul'));
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
-}, 50);
+}, 30);
 setInterval(function () {
     $('.header-content-main').fadeIn('normal').css({'display': 'inline-block'});
     $('#date_now').html('');

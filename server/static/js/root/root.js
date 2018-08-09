@@ -8,7 +8,7 @@ var set = {
             var layer = layui.layer;
             var table = layui.table;
             var url = '/root/management/'
-           var tableIns = table.render({
+            var tableIns = table.render({
                 elem: '#root_table',
                 even: true,
                 url: url,
@@ -23,7 +23,7 @@ var set = {
                     {field: 'region_name', title: '所属城市'},
                     {
                         field: 'region_id', title: '操作', width: 120, templet: function (d) {
-                            return '<i class="layui-icon layui-icon-edit edit-icon" title="编辑"  style="margin-right: 40px;cursor:pointer;">&#xe642;</i><i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon delete-icon"  title="删除" >&#xe640;</i>'
+                            return '<i data-number="' + d.account + '" class="layui-icon layui-icon-edit edit-icon" title="编辑"  style="margin-right: 40px;cursor:pointer;">&#xe642;</i><i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon delete-icon"  title="删除" >&#xe640;</i>'
                         }
                     }
                 ]],
@@ -44,6 +44,22 @@ var set = {
                             skin: "layui-layer-molv",
                             content: $('#popup_one')
                         });
+                    });
+                    $('#confirm_add').click(function () {
+                        var name_edit = $('#name_edit').val();
+                        var password = $('#password').val();
+                        var city_picker_search_second = $('#city_picker_search_second').val();
+                        var phone = $(this).attr('data-number');
+                        var data = {
+                            "account": phone,
+                            "user_name": name_edit,
+                            "password": password,
+                            "region_id": city_picker_search_second
+                        };
+                        var url = '/root/management/';
+                        http.ajax.post_no_loading(true, false, url,data,http.ajax.CONTENT_TYPE_2,function(res){
+                            console.log(res)
+                        })
                     });
                     $('.delete-icon').click(function () {
                         var user_id = $(this).attr('data-id');
