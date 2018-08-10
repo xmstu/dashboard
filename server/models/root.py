@@ -58,7 +58,7 @@ class RootManagementModel(object):
 
         command = """
         UPDATE tb_inf_city_manager
-        SET is_deleted = 1 AND region_id = 0
+        SET is_deleted = 1, region_id = 0
         WHERE id=:user_id
         """
 
