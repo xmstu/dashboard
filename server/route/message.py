@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-import re
 from threading import Lock
 
 from flask import render_template, session, redirect
 
 from server import app
 from server.cache_data import init_regions
-from server.database import db
 from server.meta.login_record import visitor_record
 from server.meta.session_operation import sessionOperationClass
-from server.models.long_term_vehicle import LongTermVehiclModel
-from server.models.message import MessageSystemModel
 
 thread = None
 thread_lock = Lock()
@@ -52,4 +48,3 @@ def message():
         locations = init_regions.get_city_next_region(session['login'].get('locations', []))
     return render_template('/message/edit-message.html', user_name=user_name, avatar_url=avatar_url,
                            locations=locations, role=role, account=account)
-
