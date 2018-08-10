@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import redis, time
+import redis
 
 from server import log
+
 
 class ExtendRedis(object):
     def __init__(self, ip, port, db):
@@ -10,7 +11,6 @@ class ExtendRedis(object):
         self.port = port
         self.db = db
         self.conn = redis.StrictRedis(host=self.ip, port=self.port, db=self.db)
-
 
     def read_one(self, key):
         data = self.conn.get(key)

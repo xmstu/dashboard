@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-
 from datetime import timedelta
 
 from flask import Flask, render_template
 from flask_restplus import Api
-from flask_socketio import SocketIO
+# from flask_socketio import SocketIO
 
 from server.configs import configs
 from server.logger import log
@@ -15,8 +14,6 @@ app = Flask(__name__)
 app.config['ERROR_404_HELP'] = False
 app.secret_key = '\x1a\x8dfb#\xb9\xc8\xc3\x05\x86|\xda\x96\xff\xceo3\xf0\xa3\xb8\x8beoW'
 
-async_mode = None
-socketio = SocketIO(app, async_mode=async_mode)
 
 # flask_restplus对象
 api = Api(app, version='4.0.2', title='省省回头车 BI API 4.0.1',
@@ -31,19 +28,6 @@ api = Api(app, version='4.0.2', title='省省回头车 BI API 4.0.1',
 
 # session超时时间
 app.permanent_session_lifetime = timedelta(days=3)
-
-
-# 登录验证
-# @app.before_request
-# def login_auth():
-#     # 接口页面
-#     if request.path == '/' or 'swagger' in request.path:
-#         pass
-#     # 静态文件
-#     elif 'static' in request.path:
-#         pass
-#     elif not session.get('login') and request.path != '/login/':
-#         return redirect('/login/')
 
 
 # 跨域设置

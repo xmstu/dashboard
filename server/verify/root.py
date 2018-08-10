@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
-from server.utils.extend import pwd_to_hash
+from server.utils.extend import pwd_to_hash, Check
 
 
 class RootManagement(object):
@@ -49,6 +49,8 @@ class RootManagement(object):
             params['password'] = pwd = str(params.get('password') or '')
             params['region_id'] = int(params.get('region_id') or 0)
 
+            if not Check.is_mobile(params['account']):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='账号非法'))
             # 加密密码
             params['password'] = pwd_to_hash(pwd)
 
