@@ -97,7 +97,7 @@ http.ajax.post = function(async, cache, url, data, contentType, callback) {
         }
     })
 };
-http.ajax.post_no_loading = function(async, cache, url, data, contentType, callback) {
+http.ajax.post_no_loading = function(async, cache, url, data, contentType, callback,cb) {
     $.ajax({
         async: async,
         cache: cache,
@@ -109,6 +109,12 @@ http.ajax.post_no_loading = function(async, cache, url, data, contentType, callb
         success: function(result) {
             if (typeof callback == "function") {
                 callback(result);
+                return
+            }
+        },
+        complete:function(response){
+            if(typeof cb=='function'){
+                cb(response)
                 return
             }
         }
@@ -182,7 +188,7 @@ http.ajax.put = function(async, cache, url, data, contentType, callback) {
         }
     })
 };
-http.ajax.put_no_loading = function(async, cache, url, data, contentType, callback) {
+http.ajax.put_no_loading = function(async, cache, url, data, contentType, callback,cb) {
     $.ajax({
         async: async,
         cache: cache,
@@ -191,7 +197,11 @@ http.ajax.put_no_loading = function(async, cache, url, data, contentType, callba
         data: data,
         contentType: contentType,
         dataType: "json",
-        complete: function(response) {},
+        complete: function(response) {
+            if(typeof cb=='function'){
+                cb(response)
+            }
+        },
         success: function(result) {
             if (typeof callback == "function") {
                 callback(result);
