@@ -35,11 +35,11 @@ class RootManagement(Resource):
     def post():
         """增加新的城市经理"""
         if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
-            if role == 1:
+            role, supper_user_id = sessionOperationClass.get_role()
+            if role == 1 and supper_user_id == 322:
                 resp = Response(params=get_payload())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户添加账户'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限超级管理员添加账户'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
 
 
@@ -49,8 +49,8 @@ class RootManagementOperator(Resource):
     def delete(user_id):
         """删除该账户"""
         if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
-            if role == 1:
+            role, supper_user_id = sessionOperationClass.get_role()
+            if role == 1 and supper_user_id == 322:
                 return Response(params={'user_id': user_id})
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户删除账户'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
@@ -62,8 +62,8 @@ class RootManagementOperator(Resource):
     def put(user_id):
         """修改当前用户id的账号或者密码"""
         if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
-            if role == 1:
+            role, supper_user_id = sessionOperationClass.get_role()
+            if role == 1 and supper_user_id == 322:
                 if user_id == 0:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='用户id不能为0'))
                 params = get_payload()
