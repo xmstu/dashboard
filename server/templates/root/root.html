@@ -2,9 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>认证车辆-省省统计中心</title>
+    <link rel="stylesheet" href="../static/css/base.css?v=3.0">
+    <link rel="stylesheet" href="../static/layui/css/layui.css?v=3.0">
+    <link rel="stylesheet" href="../static/css/common.css?v=3.0">
+    <link rel="stylesheet" href="../static/css/iconfont.css?v=3.0">
+    <link rel="stylesheet" href="../static/css/promote/promote.css">
+    <link rel="stylesheet" href="../static/css/root/root.css">
 </head>
 <body>
-hello world
+<article id="page_area" class="page-area clearfix">
+    {% include '/header/header.html' %}
+    <article class="main-content">
+        {% include '/menu/menu.html' %}
+        <aside class="main-content-right" style="opacity: 1;">
+            <section class="main-content-right-header"><span>统计中心</span> / <span>数据统计</span> / <span>运力统计</span>
+            </section>
+            <div>
+                <div class="m-c-l-content">
+                    <div class="part-2">
+                        <div class="part-2-top">
+                            <h2><i class="iconfont icon-renqun"></i>城市经理管理</h2>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="part-3">
+                        <button class="layui-btn add-user" id="add_user">新增</button>
+                        <table class="layui-hide" id="root_table"></table>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </article>
+    <div id="popup" style="display: none;">
+        <form class="layui-form layui-form-pane" action="">
+            <div style="display: block" class="layui-form-item">
+                <label class="layui-form-label">人员号码</label>
+                <div class="layui-input-block">
+                    <input id="phone_number" type="text" maxLength="11" name="mobile" autocomplete="off" placeholder="输入新增城市经理的手机号码" class="layui-input">
+                </div>
+            </div>
+            <div style="display: block;" class="layui-form-item">
+                <label class="layui-form-label">人员姓名</label>
+                <div class="layui-input-block">
+                    <input id="user_name" type="text" name="name" autocomplete="off" placeholder="输入新增城市经理的姓名" class="layui-input">
+                </div>
+            </div>
+            <div style="display: block;" class="layui-form-item">
+                <label class="layui-form-label">登陆密码</label>
+                <div class="layui-input-block">
+                    <input id="add_user_password" type="password" name="name" autocomplete="off" placeholder="输入新增城市经理的密码" class="layui-input">
+                </div>
+            </div>
+             <div style="display: block;" class="layui-form-item">
+                <label class="layui-form-label">所在城市</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" id="city_picker_search" readonly autocomplete="off" placeholder="选择新增城市经理所在城市" class="layui-input">
+                </div>
+            </div>
+        </form>
+        <button class="layui-btn" id="confirm_add">确定添加</button>
+    </div>
+     <div id="popup_one" style="display: none;">
+        <form class="layui-form layui-form-pane" action="">
+            <div style="display: block" class="layui-form-item">
+                <label class="layui-form-label">人员姓名</label>
+                <div class="layui-input-block">
+                    <input id="name_edit" type="text" maxLength="11" name="mobile" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div style="display: block;" class="layui-form-item">
+                <label class="layui-form-label">重置密码</label>
+                <div class="layui-input-block">
+                    <input id="password" type="password" name="name" autocomplete="off" placeholder="请输入密码" class="layui-input">
+                </div>
+            </div>
+             <div style="display: block;" class="layui-form-item">
+                <label class="layui-form-label">所在城市</label>
+                <div class="layui-input-block">
+                    <input  type="text" name="name" id="city_picker_search_second" readonly autocomplete="off" placeholder="选择新增城市经理所在城市" class="layui-input">
+                </div>
+            </div>
+        </form>
+        <button class="layui-btn" id="confirm_fix">确定修改</button>
+    </div>
+</article>
+<span style="display: none!important">
+        <script src="https://s22.cnzz.com/z_stat.php?id=1274088436&web_id=1274088436" language="JavaScript"></script>
+</span>
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=3.0"></script>
+<script src="../static/js/libs/jquery.address.js?v=3.0"></script>
+<script src="../static/layui/layui.js?v=3.0"></script>
+<script src="../static/js/common/http.js?v=3.0"></script>
+<script src="../static/js/common/common.js?v=3.0"></script>
+<script src="../static/js/root/root.js?v=3.0"></script>
 </body>
 </html>
+

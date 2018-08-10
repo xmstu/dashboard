@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from threading import Lock
 
 from flask import render_template, session, redirect
 
@@ -7,9 +6,6 @@ from server import app
 from server.cache_data import init_regions
 from server.meta.login_record import visitor_record
 from server.meta.session_operation import sessionOperationClass
-
-thread = None
-thread_lock = Lock()
 
 
 @app.route('/message/', endpoint='message')

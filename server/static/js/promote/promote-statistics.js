@@ -113,12 +113,12 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
 });
 $('#add_promote_person').on('click', function (e) {
     e.preventDefault();
-    var str = "<p  style='position: relative;'><span class='phone-number'>人员号码</span><i class='iconfont icon-dianhua'></i><input id='add_users' maxlength='11' type='text' placeholder='请输入添加人的号码'></p> ";
-    str += "<p  style='position: relative;'><span class='phone-number'>人员姓名</span><i class='iconfont icon-guanliyuan'></i><input id='add_users_name'  type='text' placeholder='请输入推广人的姓名'></p>";
+    var str = "<p  style='position: relative;'><span class='phone-number'>人员号码</span><i class='iconfont icon-dianhua'></i><input id='add_users' maxlength='11' type='text' placeholder='请输入推广人号码'></p> ";
+    str += "<p  style='position: relative;'><span class='phone-number'>人员姓名</span><i class='iconfont icon-guanliyuan'></i><input id='add_users_name'  type='text' placeholder='请输入推广人姓名'></p>";
     layer.confirm(str, {
         skin: 'layui-layer-molv',
         title: '新增推广人员',
-        btn: ['确定添加', '取消']
+        btn: ['确定', '取消']
     }, function () {
         var url = '/promote/effect/';
         var mobile = $('#add_users').val();
