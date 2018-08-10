@@ -70,13 +70,16 @@ var set = {
                                 layer.closeAll();
                                 tableIns.reload();
                             }, 700)
+                        },function(xhttp){
+                            if(xhttp.responseJSON.status!=100000){
+                                layer.msg('添加失败，请检查输入的数据')
+                            }
                         })
                     });
                     $('#confirm_fix').click(function () {
                         var name_edit = $('#name_edit').val();
                         var password = $('#password').val();
                         var city_picker_search_second = $('#city_picker_search_second').attr('cityid');
-                        console.log(user_id)
                         var data = {
                             "account": phone,
                             "user_name": name_edit,
@@ -109,7 +112,6 @@ var set = {
                                 url: url,
                                 dataType: 'json',
                                 success: function (res) {
-                                    console.log(res);
                                     if (res.status == 100000) {
                                         layer.msg('删除成功', {
                                             time: 700,
