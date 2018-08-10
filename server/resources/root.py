@@ -52,7 +52,7 @@ class RootManagementOperator(Resource):
             role, supper_user_id = sessionOperationClass.get_role()
             if role == 1 and supper_user_id == 322:
                 return Response(params={'user_id': user_id})
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户删除账户'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限超级管理员删除账户'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
 
     @staticmethod
@@ -69,7 +69,7 @@ class RootManagementOperator(Resource):
                 params = get_payload()
                 params.setdefault('user_id', user_id)
                 return Response(params=params)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限后台用户修改账户'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='仅限超级管理员修改账户'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='未登录用户'))
 
 
