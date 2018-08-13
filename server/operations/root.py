@@ -20,7 +20,7 @@ class RootManagement(object):
     @make_decorator
     def put_data(params):
         try:
-            rowcount = RootManagementModel.put_data(db.read_bi, params)
+            rowcount = RootManagementModel.put_data(db.write_bi, params)
             if rowcount:
                 return make_result(APIStatus.Ok), HTTPStatus.Ok
             else:
@@ -34,7 +34,7 @@ class RootManagement(object):
     @make_decorator
     def delete_data(params):
         try:
-            rowcount = RootManagementModel.delete_data(db.read_bi, params)
+            rowcount = RootManagementModel.delete_data(db.write_bi, params)
             if rowcount:
                 return make_result(APIStatus.Ok), HTTPStatus.Ok
             else:
@@ -48,7 +48,7 @@ class RootManagement(object):
     @make_decorator
     def post_data(params):
         try:
-            user_id = RootManagementModel.post_data(db.read_bi, params)
+            user_id = RootManagementModel.post_data(db.write_bi, params)
             if user_id:
                 return make_result(APIStatus.Ok), HTTPStatus.Ok
             else:
