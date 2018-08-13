@@ -8,7 +8,6 @@ var set = {
             var layer = layui.layer;
             var table = layui.table;
             var url = '/root/management/';
-
             var tableIns = table.render({
                 elem: '#root_table',
                 even: true,
@@ -74,7 +73,7 @@ var set = {
                             if (xhttp.responseJSON.status != 100000) {
                                 layer.msg('普通管理员无权限', {
                                     time: 1000
-                                })
+                                });
                                 setTimeout(function () {
                                     layer.closeAll()
                                 }, 1000)
