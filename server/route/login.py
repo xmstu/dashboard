@@ -64,7 +64,7 @@ def broker():
             child_id_set = InitRegionModel.get_child_id(db.read_db, parent_id)
             if child_id_set <= locations:
                 locations.add(parent_id)
-
+        locations = list(locations)
         # 登录
         if sessionOperationClass.insert(user_info, role, locations):
             return redirect('/home/')
