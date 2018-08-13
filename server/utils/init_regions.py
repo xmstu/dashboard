@@ -173,3 +173,25 @@ class InitRegionModel(object):
             log.warn('获取乡镇ID数据失败: [error: %s]' % (e,), exc_info=True)
 
         return 0
+
+    @staticmethod
+    def get_child_id(cursor, parent_id):
+        try:
+            command = """
+            SELECT 
+                id
+            FROM
+                shm_regions 
+            WHERE
+                parent_id = :parent_id
+            """
+            records = cursor.query(command, {
+                'parent_id': parent_id,
+            })
+            child_id_set = {i.get('id', 0) for i in records}
+            return child_id_set
+
+        except Exception as e:
+            log.warn('warn:{}'.format(e))
+
+        return 0

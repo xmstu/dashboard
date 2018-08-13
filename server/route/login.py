@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from server import app
-from server.logger import log
 from flask import render_template, redirect, request
-from flask import abort
-from server.utils.broker_token import decode
-from server.models.login import Login
+
+from server import app
+from server.cache_data import init_regions
 from server.database import db
+from server.logger import log
 from server.meta.session_operation import sessionOperationClass
+from server.models.login import Login
+from server.utils.broker_token import decode
+from server.utils.init_regions import InitRegionModel
+
 
 @app.route('/login/')
 def login():
@@ -16,6 +19,7 @@ def login():
     if sessionOperationClass.check():
         return redirect('/home/')
     return render_template('/login/login.html')
+
 
 @app.route('/broker/')
 def broker():
@@ -29,7 +33,7 @@ def broker():
         if not token:
             log.warn('区镇合伙人token传值错误')
             return render_template('/exception/except.html', status_coder=400, title='参数错误',
-                            content='区镇合伙人token传值错误')
+                                   content='区镇合伙人token传值错误')
         # token解码
         payload = decode(token)
         mobile = payload.get('mobile')
@@ -52,7 +56,15 @@ def broker():
         }
         role = result[0]['role']
         locations = [location['region_id'] for location in result]
-        locations = list(set(locations))
+        locations = set(locations)
+        # 先将locations中所有region_id的父级id查出来，然后去重
+        parent_id_set = {init_regions.get_parent_id(i) for i in locations}
+        # 再求出每个父id的子id集合，看该子id集合是否为location的子集，是的话，就将该父id加进location
+        for parent_id in parent_id_set:
+            child_id_set = InitRegionModel.get_child_id(db.read_db, parent_id)
+            if child_id_set <= locations:
+                locations.add(parent_id)
+
         # 登录
         if sessionOperationClass.insert(user_info, role, locations):
             return redirect('/home/')
