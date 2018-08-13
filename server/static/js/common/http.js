@@ -183,7 +183,8 @@ http.ajax.put = function(async, cache, url, data, contentType, callback) {
         },
         success: function(result) {
             if (typeof callback == "function") {
-                callback(result)
+                callback(result);
+                return false
             }
         }
     })
@@ -200,6 +201,7 @@ http.ajax.put_no_loading = function(async, cache, url, data, contentType, callba
         complete: function(response) {
             if(typeof cb=='function'){
                 cb(response)
+                return
             }
         },
         success: function(result) {

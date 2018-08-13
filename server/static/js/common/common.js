@@ -586,6 +586,11 @@ var common = {
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             var data = res.data;
             var str = '';
+            var unread = res.unread;
+            $('.header .layui-badge').css({'display':'block'})
+            if(unread==0){
+                $('.message-center .layui-badge').css({'background':'#ccc'})
+            }
             $('.message-center .layui-badge').html(res.count);
             for (var i = 0; i < res.count; i++) {
                 var id = data[i].id;
@@ -594,7 +599,7 @@ var common = {
                 var is_read = data[i].is_read;
                 str += '<li class="message-center-simple" value="' + id + '"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
             }
-            $(".message-count-show").html('你当前一共有' + res.count + '条消息接收！');
+            $(".message-count-show").html('当前有' + res.count + '条（已读：'+(res.count-unread)+';未读:'+unread+'）消息！');
             $(".message-count-show").after(str);
 
             function select() {
