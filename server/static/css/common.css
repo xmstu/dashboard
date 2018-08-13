@@ -120,7 +120,6 @@ body {
     background-size: cover;
     box-sizing: border-box;
     width: 100%;
-    box-shadow: 1px 2px 3px rgba(0, 0, 0, .1);
     top: 0;
     z-index: 99
 }
@@ -394,7 +393,7 @@ body {
     width: 8%;
     top: 56px;
     max-width: 165px;
-    background: #222d32 !important;
+    background: #1a2732 !important;
     -webkit-background-size: cover;
     background-size: cover;
     min-width: 110px;
@@ -745,9 +744,8 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
 .message-center > ul > p {
     background: #333;
     line-height: 30px;
-    font-size: 13px;
+    font-size: 12px;
     padding-left: 14px;
-
 }
 
 .message-center > ul > li:last-child {
