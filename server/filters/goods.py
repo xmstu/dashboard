@@ -24,17 +24,17 @@ class GoodsList(object):
                 goods_status = ''
                 if detail.get('expire') == 1:
                     goods_status = '已过期'
-                    if detail.get('STATUS') == 3:
-                        goods_status = '已接单'
-                    if detail.get('STATUS') == -1:
-                        goods_status = '已取消'
                 elif detail.get('expire') == 0:
                     if detail.get('STATUS') in (1, 2):
                         goods_status = '待接单'
-                    if detail.get('STATUS') == 3:
+                    elif detail.get('STATUS') == 3:
                         goods_status = '已接单'
-                    if detail.get('STATUS') == -1:
-                        goods_status = '已取消'
+                    elif detail.get('STATUS') == -1:
+                        goods_status = '系统已取消'
+                        if detail.get('is_deleted') == 1:
+                            goods_status = '用户已取消'
+                    else:
+                        goods_status = ''
 
                 # 初次下单
                 mobile = detail['mobile']
@@ -46,10 +46,9 @@ class GoodsList(object):
                 # 构造运费
                 price = '货主出价:%(price_expect)s元%(price_addition)s\n系统价:%(price_recommend)s元' % \
                         {
-                            'price_expect': str(int(detail.get('price_expect', 0) + detail.get('price_addition', 0))),
-                            'price_addition': '(+%s)' % str(int(detail['price_addition'])) if detail.get('price_addition',
-                                                                                                    0) else '',
-                            'price_recommend': str(int(detail.get('price_recommend', 0)))
+                        'price_expect': str(int(detail.get('price_expect', 0) + detail.get('price_addition', 0))),
+                        'price_addition': '(+%s)' % str(int(detail['price_addition'])) if detail.get('price_addition', 0) else '',
+                        'price_recommend': str(int(detail.get('price_recommend', 0)))
                         }
 
                 # 网点

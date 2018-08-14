@@ -32,6 +32,7 @@ class GoodsList(object):
                 shf_goods.to_address,
                 shf_goods.mileage_total,
                 shf_goods.STATUS,
+                shf_goods.is_deleted,
                 CASE WHEN
                 (shf_goods.STATUS IN ( 1, 2 ) 
                 AND (( shf_goods.loading_time_is_realtime = 1 AND ( expired_timestamp + 600 ) < UNIX_TIMESTAMP()) 
