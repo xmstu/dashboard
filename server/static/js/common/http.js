@@ -56,7 +56,7 @@ http.ajax.get_no_loading = function(async, cache, url, data, contentType, callba
         }
     })
 };
-http.ajax.post = function(async, cache, url, data, contentType, callback) {
+http.ajax.post = function(async, cache, url, data, contentType, callback,cb) {
     $.ajax({
         async: async,
         cache: cache,
@@ -72,18 +72,11 @@ http.ajax.post = function(async, cache, url, data, contentType, callback) {
             })
         },
         complete: function(response) {
-            if (response.status == 400) {
-                layer.msg("请检查账号密码！");
-                layer.closeAll("loading");
-                return false
-            }
-            if (response.status == 500) {
-                layer.msg("服务器内部错误！");
-                layer.closeAll("loading");
-                return false
-            } else {
-                layer.closeAll("loading")
-            }
+           if(typeof cb=='function'){
+               cb(response);
+               layer.closeAll('loading')
+               return
+           }
         },
         success: function(result) {
             if (typeof callback == "function") {

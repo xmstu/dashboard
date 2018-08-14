@@ -75,6 +75,10 @@ function checkUser(){
                 layer.msg('服务器错误')
             }
             return false;
+        },function(xhttp){
+            if(xhttp.status==500){
+                layer.msg('请检查您输入的的账号是否正确，或者是否与选择的角色对应！')
+            }
         })
     }
 }
