@@ -94,6 +94,7 @@ class PromoteEffectList(object):
         AND tb_inf_promoter.mobile IN (%(promote_mobile)s)) AS referrer
         -- 用户信息
         LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
+        AND tb_inf_user.last_login_time != 0 
         %(fetch_where)s
         GROUP BY referrer.mobile
         '''
