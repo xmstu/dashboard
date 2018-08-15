@@ -9,7 +9,7 @@ class GoodsList(object):
     @staticmethod
     def get_goods_list(cursor, page, limit, user_id_list, params):
 
-        fetch_where = """ 1=1 """
+        fetch_where = """ AND 1=1 """
 
         fields = """
                 shf_goods.id,
@@ -92,13 +92,14 @@ class GoodsList(object):
 
         command = """
                     SELECT 
-                    {fields}
+                        {fields}
                     FROM shf_goods
-                    LEFT JOIN shu_user_profiles USING(user_id)
-                    LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
-                    LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
-                    AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
-                    WHERE {fetch_where}
+                        LEFT JOIN shu_user_profiles USING(user_id)
+                        LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
+                        LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
+                    WHERE 
+                        shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
+                        {fetch_where}
         """
 
         # 地区
@@ -120,7 +121,7 @@ class GoodsList(object):
 
         # 货源id
         if params['goods_id']:
-            fetch_where += ' AND shf_goods.id = %s AND shf_goods.is_deleted = 0 ' % params['goods_id']
+            fetch_where += ' AND shf_goods.id = %s ' % params['goods_id']
 
         # 手机
         if params['mobile']:
@@ -172,7 +173,7 @@ class GoodsList(object):
             if params['goods_status'] == 2:
                 fetch_where += ' AND shf_goods.status = 3 '
             if params['goods_status'] == 3:
-                fetch_where += ' AND shf_goods.is_deleted = 1 '
+                fetch_where += ' AND (shf_goods.is_deleted = 1 OR shf_goods.status = -1) '
             if params['goods_status'] == 4:
                 fetch_where += """ 
                         AND shf_goods.STATUS IN ( 1, 2 ) 
@@ -327,7 +328,7 @@ class CancelReasonList(object):
             shf_goods 
         WHERE
             1=1
-            AND shf_goods.is_deleted = 1
+            AND (shf_goods.is_deleted = 1 OR shf_goods.status = -1)
             AND {fetch_where}
         GROUP BY canceled_reason_text
         ORDER BY reason_count
@@ -459,7 +460,7 @@ class GoodsDistributionTrendList(object):
 
         wait_where = """ AND ( status = 1 OR status = 2 ) """
         recv_where = """ AND shf_goods.STATUS = 3 """
-        cancel_where = """ AND shf_goods.is_deleted = 1 """
+        cancel_where = """ AND (shf_goods.is_deleted = 1 OR shf_goods.status = -1) """
 
         all_order = cursor.query(command.format(flag=1, fetch_where=fetch_where))
         wait_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + wait_where))

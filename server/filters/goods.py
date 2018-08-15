@@ -24,17 +24,13 @@ class GoodsList(object):
                 goods_status = ''
                 if detail.get('expire') == 1:
                     goods_status = '已过期'
-                elif detail.get('expire') == 0:
+                else:
                     if detail.get('STATUS') in (1, 2):
                         goods_status = '待接单'
                     elif detail.get('STATUS') == 3:
                         goods_status = '已接单'
-                    elif detail.get('STATUS') == -1:
-                        goods_status = '系统已取消'
-                        if detail.get('is_deleted') == 1:
-                            goods_status = '用户已取消'
-                    else:
-                        goods_status = ''
+                    elif detail.get('STATUS') == -1 or detail.get('is_deleted') == 1:
+                        goods_status = '已取消'
 
                 # 初次下单
                 mobile = detail['mobile']
