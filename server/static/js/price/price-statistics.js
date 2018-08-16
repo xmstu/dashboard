@@ -299,10 +299,10 @@ var set = {
             var data = {
                 from_province_id: $('#start_address').attr('provinceid') == undefined ? '' : $('#start_address').attr('provinceid'),
                 from_city_id: $('#start_address').attr('cityid') == undefined ? '' : $('#start_address').attr('cityid'),
-                from_county_id: $('#end_address').attr('districtsid') == undefined ? '' : $('#end_address').attr('districtsid'),
+                from_county_id: $('#start_address').attr('districtsid') == undefined ? '' : $('#start_address').attr('districtsid'),
                 to_province_id: $('#end_address').attr('provinceid') == undefined ? '' : $('#end_address').attr('provinceid'),
-                to_city_id: $('#end_place').attr('cityid') == undefined ? '' : $('#end_place').attr('cityid'),
-                to_county_id: $('#end_place').attr('districtsid') == undefined ? '' : $('#end_place').attr('districtsid'),
+                to_city_id: $('#end_address').attr('cityid') == undefined ? '' : $('#end_address').attr('cityid'),
+                to_county_id: $('#end_address').attr('districtsid') == undefined ? '' : $('#end_address').attr('districtsid'),
                 min_mileage: $('#min_mileage').val(),
                 max_mileage: $('#max_mileage').val(),
                 vehicle_length: $('#vehicle_type').val(),
@@ -310,6 +310,7 @@ var set = {
                 start_time: start_time,
                 end_time: end_time
             };
+            console.log(data.to_province_id)
             if (data.min_mileage != '') {
                 if (common.isNumber(data.min_mileage)) {
                     layer.tips('请检查数据格式-(数字)', '#min_mileage', {
