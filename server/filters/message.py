@@ -24,6 +24,7 @@ class MessageUser(object):
         # 时间格式化
         for i in data:
             i['date'] = timestamp2date(i['create_time'], accuracy=2)
+            i['create_timestamp'] = i['create_time']
             # 时间间隔
             last_delta = int(time.time() - i['create_time'])
             delta = ''
@@ -39,7 +40,7 @@ class MessageUser(object):
             else:
                 is_read.append(i)
         # 排序
-        un_read.sort(key=lambda x: x['create_time'], reverse=True)
-        is_read.sort(key=lambda x: x['create_time'], reverse=True)
+        un_read.sort(key=lambda x: x['create_timestamp'], reverse=True)
+        is_read.sort(key=lambda x: x['create_timestamp'], reverse=True)
 
         return build_result_1(APIStatus.Ok, data=un_read+is_read, count=count, unread=unread), HTTPStatus.Ok
