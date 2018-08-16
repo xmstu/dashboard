@@ -175,7 +175,7 @@ class MessageUserModel(object):
         INNER JOIN tb_inf_system_message ON tb_inf_user_message.sys_msg_id = tb_inf_system_message.id
         WHERE account = :account
         AND tb_inf_user_message.is_deleted = 0
-        ORDER BY is_read
+        ORDER BY is_read, create_time DESC
         LIMIT :page, :limit"""
 
         result = cursor.query(command, params)
