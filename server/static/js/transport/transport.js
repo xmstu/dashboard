@@ -39,9 +39,7 @@ var dataSet = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[0]),
                 calendar: true,
-                ready: function () {
-
-                },
+              format:'yyyy/MM/dd',
                 done: function (val, index) {
                     if ($('#date_show_three').val() == '') {
                         $('#date_show_three').next('.date-tips').show();
@@ -55,8 +53,7 @@ var dataSet = {
                 theme: '#009688',
                 calendar: true,
                 max: String(common.getNowFormatDate()[0]),
-                ready: function () {
-                },
+                format:'yyyy/MM/dd',
                 done: function (val, index) {
                     if ($('#date_show_four').val() == '') {
                         $('#date_show_four').next('.date-tips').show();
@@ -70,9 +67,7 @@ var dataSet = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[0]),
                 calendar: true,
-                ready: function () {
-
-                },
+                 format:'yyyy/MM/dd',
                 done: function (val, index) {
                     if ($('#start_time_show').val() == '' || val == '') {
                         $('#start_time_show').next('.date-tips').show();
@@ -86,9 +81,7 @@ var dataSet = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[0]),
                 calendar: true,
-                ready: function () {
-
-                },
+                 format:'yyyy/MM/dd',
                 done: function (val, index) {
                     if ($('#end_time_show').val() == '' || val == '') {
                         $('#end_time_show').next('.date-tips').show();

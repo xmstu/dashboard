@@ -344,9 +344,7 @@ var set = {
                                             theme: '#009688',
                                             calendar: true,
                                             max: String(common.getNowFormatDate()[0]),
-                                            ready: function () {
-
-                                            },
+                                            format:'yyyy/MM/dd',
                                             done: function (val, index) {
                                                 var startTime = $('#date_show_one').val();
                                                 var endTime = $('#date_show_two').val();
@@ -362,9 +360,7 @@ var set = {
                                             theme: '#009688',
                                             calendar: true,
                                             max: String(common.getNowFormatDate()[0]),
-                                            ready: function () {
-
-                                            },
+                                            format:'yyyy/MM/dd',
                                             done: function (val, index) {
                                                 var startTime = $('#date_show_one').val();
                                                 var endTime = $('#date_show_two').val();
@@ -474,9 +470,7 @@ var set = {
                                 theme: '#009688',
                                 calendar: true,
                                 max: String(common.getNowFormatDate()[0]),
-                                ready: function () {
-
-                                },
+                                format:'yyyy/MM/dd',
                                 done: function (val, index) {
                                     var startTime = $('#date_show_one').val();
                                     var endTime = $('#date_show_two').val();
@@ -492,9 +486,7 @@ var set = {
                                 theme: '#009688',
                                 calendar: true,
                                 max: String(common.getNowFormatDate()[0]),
-                                ready: function () {
-
-                                },
+                                 format:'yyyy/MM/dd',
                                 done: function (val, index) {
                                     var startTime = $('#date_show_one').val();
                                     var endTime = $('#date_show_two').val();

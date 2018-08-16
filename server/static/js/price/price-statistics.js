@@ -10,9 +10,7 @@ var set = {
                 theme: '#009688',
                 calendar: true,
                 max: String(common.getNowFormatDate()[0]),
-                ready: function () {
-
-                },
+                format:'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
                     var endTime = $('#date_show_two').val();
@@ -28,9 +26,7 @@ var set = {
                 theme: '#009688',
                 calendar: true,
                 max: String(common.getNowFormatDate()[0]),
-                ready: function () {
-
-                },
+                 format:'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
                     var endTime = $('#date_show_two').val();
@@ -60,8 +56,6 @@ var set = {
         var dom = document.getElementById("charts_container");
         var myChart = echarts.init(dom);
         var datas = splitData(price_trend_series);
-        console.log(datas.values);
-
         function splitData(rawData) {
             var categoryData = [],
                 values = [],
@@ -299,10 +293,10 @@ var set = {
             var data = {
                 from_province_id: $('#start_address').attr('provinceid') == undefined ? '' : $('#start_address').attr('provinceid'),
                 from_city_id: $('#start_address').attr('cityid') == undefined ? '' : $('#start_address').attr('cityid'),
-                from_county_id: $('#end_address').attr('districtsid') == undefined ? '' : $('#end_address').attr('districtsid'),
+                from_county_id: $('#start_address').attr('districtsid') == undefined ? '' : $('#start_address').attr('districtsid'),
                 to_province_id: $('#end_address').attr('provinceid') == undefined ? '' : $('#end_address').attr('provinceid'),
-                to_city_id: $('#end_place').attr('cityid') == undefined ? '' : $('#end_place').attr('cityid'),
-                to_county_id: $('#end_place').attr('districtsid') == undefined ? '' : $('#end_place').attr('districtsid'),
+                to_city_id: $('#end_address').attr('cityid') == undefined ? '' : $('#end_address').attr('cityid'),
+                to_county_id: $('#end_address').attr('districtsid') == undefined ? '' : $('#end_address').attr('districtsid'),
                 min_mileage: $('#min_mileage').val(),
                 max_mileage: $('#max_mileage').val(),
                 vehicle_length: $('#vehicle_type').val(),
