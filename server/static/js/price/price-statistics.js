@@ -10,9 +10,7 @@ var set = {
                 theme: '#009688',
                 calendar: true,
                 max: String(common.getNowFormatDate()[0]),
-                ready: function () {
-
-                },
+                format:'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
                     var endTime = $('#date_show_two').val();
@@ -28,9 +26,7 @@ var set = {
                 theme: '#009688',
                 calendar: true,
                 max: String(common.getNowFormatDate()[0]),
-                ready: function () {
-
-                },
+                 format:'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
                     var endTime = $('#date_show_two').val();
@@ -60,8 +56,6 @@ var set = {
         var dom = document.getElementById("charts_container");
         var myChart = echarts.init(dom);
         var datas = splitData(price_trend_series);
-        console.log(datas.values);
-
         function splitData(rawData) {
             var categoryData = [],
                 values = [],
@@ -310,7 +304,6 @@ var set = {
                 start_time: start_time,
                 end_time: end_time
             };
-            console.log(data.to_province_id)
             if (data.min_mileage != '') {
                 if (common.isNumber(data.min_mileage)) {
                     layer.tips('请检查数据格式-(数字)', '#min_mileage', {

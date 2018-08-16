@@ -40,6 +40,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         max: String(common.getNowFormatDate()[3]),
         calendar: true,
+        format:'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -57,6 +58,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
+        format:'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -76,6 +78,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
+        format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -95,6 +98,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
+        format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_four').val() == '') {
                 $('#date_show_four').next('.date-tips').show();
@@ -312,7 +316,7 @@ var pageSet = {
             var requestStrat = $('#date_show_three').val();
             var endRequest = $('#date_show_four').val();
             if (requestStrat != '') {
-                requestStrat = common.timeTransform($('#date_show_three').val() + ' 00:00:00');
+                requestStrat = Number(common.timeTransform($('#date_show_three').val() + ' 00:00:00'));
             }
             if (endRequest != '') {
                 endRequest = common.timeTransform($('#date_show_four').val() + ' 23:59:59');

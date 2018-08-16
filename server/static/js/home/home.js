@@ -24,6 +24,7 @@ layui.use(["laydate", "form", "table"],
             elem: "#date_show_one",
             theme: "#009688",
             calendar: true,
+             format:'yyyy/MM/dd',
             max: String(common.getNowFormatDate()[0]),
             done: function (val, index) {
                 var startTime = common.timeTransform($("#date_show_one").val());
@@ -38,6 +39,7 @@ layui.use(["laydate", "form", "table"],
             elem: "#date_show_two",
             theme: "#009688",
             calendar: true,
+             format:'yyyy/MM/dd',
             max: String(common.getNowFormatDate()[0]),
             done: function (val, index) {
                 var startTime = common.timeTransform($("#date_show_one").val());

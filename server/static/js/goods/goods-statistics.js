@@ -53,9 +53,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#1E9FFF',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+         format:'yyyy/MM/dd',
         done: function (val, index) {
 
         }
@@ -65,9 +63,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#1E9FFF',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+        format:'yyyy/MM/dd',
         done: function (val, index) {
 
         }
@@ -77,9 +73,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+        format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#create_start_time').val() == '') {
                 $('#create_start_time').next('.date-tips').show();
@@ -93,9 +87,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+         format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#create_end_time').val() == '') {
                 $('#create_end_time').next('.date-tips').show();
@@ -108,9 +100,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#register_start_time',
         theme: '#009688',
         calendar: true,
-        ready: function () {
-
-        },
+        format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#register_start_time').val() == '') {
                 $('#register_start_time').next('.date-tips').show();
@@ -123,9 +113,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#register_end_time',
         theme: '#009688',
         calendar: true,
-        ready: function () {
-
-        },
+         format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#register_end_time').val() == '') {
                 $('#register_end_time').next('.date-tips').show();
@@ -139,9 +127,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+        format:'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#start_date_one').val();
             var endTime = $('#end_time_one').val();
@@ -162,9 +148,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+         format:'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#start_date_one').val();
             var endTime = $('#end_time_one').val();
@@ -186,9 +170,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+        format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#start_date_two').val() == '') {
                 $('#start_date_two').next('.date-tips').show();
@@ -202,9 +184,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+         format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#end_time_two').val() == '') {
                 $('#end_time_two').next('.date-tips').show();
@@ -218,9 +198,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+         format:'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#start_date_three').val();
             var endTime = $('#end_time_three').val();
@@ -241,9 +219,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
          max: String(common.getNowFormatDate()[0]),
-        ready: function () {
-
-        },
+         format:'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#start_date_three').val();
             var endTime = $('#end_time_three').val();

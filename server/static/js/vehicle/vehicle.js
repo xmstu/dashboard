@@ -10,6 +10,7 @@ var set = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[0]),
                 calendar: true,
+                 format:'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
                     var endTime = $('#date_show_two').val();
@@ -32,6 +33,7 @@ var set = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[3]),
                 calendar: true,
+                 format:'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
                     var endTime = $('#date_show_two').val();
@@ -54,6 +56,7 @@ var set = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[3]),
                 calendar: true,
+                 format:'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_three').val();
                     var endTime = $('#date_show_four').val();
@@ -76,6 +79,7 @@ var set = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[3]),
                 calendar: true,
+                 format:'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_three').val();
                     var endTime = $('#date_show_four').val();
