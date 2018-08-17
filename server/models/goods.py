@@ -231,6 +231,16 @@ class GoodsList(object):
             elif params['is_addition'] == 2:
                 fetch_where += ' AND shf_goods.price_addition = 0 '
 
+        # 支付方式:1.发货人付;2.收货人付;3.省心保
+        if params['payment_method']:
+            fetch_where += """
+                AND (
+                ({payment_method}=1 AND payment_method=1) OR
+                ({payment_method}=2 AND payment_method=2) OR
+                ({payment_method}=3 AND payment_method=3) 
+                )
+            """.format(payment_method=params['payment_method'])
+
         # 发布时间
         if params['create_start_time'] and params['create_end_time']:
             fetch_where += """ AND shf_goods.create_time >= %s AND shf_goods.create_time < %s """ % (
@@ -457,6 +467,16 @@ class GoodsDistributionTrendList(object):
                 ({goods_price_type}=3 AND type = 2)
                 )
                 """.format(goods_price_type=params['goods_price_type'])
+
+        # 支付方式:1.发货人付;2.收货人付;3.省心保
+        if params['payment_method']:
+            fetch_where += """
+                AND (
+                ({payment_method}=1 AND payment_method=1) OR
+                ({payment_method}=2 AND payment_method=2) OR
+                ({payment_method}=3 AND payment_method=3) 
+                )
+            """.format(payment_method=params['payment_method'])
 
         wait_where = """ AND ( status = 1 OR status = 2 ) """
         recv_where = """ AND shf_goods.STATUS = 3 """

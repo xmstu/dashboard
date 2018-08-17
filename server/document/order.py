@@ -16,7 +16,8 @@ request_order_received_statistics_param = api.doc(params={
     'dimension': '维度,1:按数量,2：按金额,默认:1',
     'region_id': '地区id,默认:0全部',
     'comment_type': '评价:1:好评,2:中评,3:差评,默认:0全部',
-    'pay_method': '支付方式,1:未支付,2:线上支付,3:线下支付,默认:0全部'
+    'pay_method': '支付方式,1:未支付,2:线上支付,3:线下支付,默认:0全部',
+    'SXB': '0:全部;1.需要;2.不需要;3.生效;4.未生效',
 }, description='订单统计请求参数')
 
 
@@ -48,6 +49,7 @@ request_order_list_param = api.doc(params={
     'node_id': '所属网点',
     'spec_tag': '特殊标签',
     'pay_status': '支付状态',
+    'SXB': '0:全部;1.需要;2.不需要;3.生效;4.未生效',
     'is_change_price': '是否改价',
     'comment_type': '评价',
     'start_order_time': '开始接单时间',

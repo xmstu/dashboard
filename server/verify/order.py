@@ -24,6 +24,7 @@ class OrdersReceivedStatistics(object):
             params['region_id'] = int(params.get('region_id', None) or 0)
             params['comment_type'] = int(params.get('comment_type', None) or 0)
             params['pay_method'] = int(params.get('pay_method', None) or 0)
+            params['SXB'] = int(params.get('SXB', None) or 0)
 
             # 当前权限下所有地区
             if sessionOperationClass.check():
@@ -108,6 +109,7 @@ class OrderList(object):
             params['end_complete_time'] = int(params.get('end_complete_time', None) or 0)
             params['register_start_time'] = int(params.get('register_start_time', None) or 0)
             params['register_end_time'] = int(params.get('register_end_time', None) or 0)
+            params['SXB'] = int(params.get('SXB', None) or 0)
 
             # 补全时间
             params['start_order_time'], params['end_order_time'] = complement_time(params['start_order_time'], params['end_order_time'])

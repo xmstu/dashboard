@@ -90,6 +90,17 @@ class OrdersReceivedStatisticsList(object):
              )
              """.format(pay_method=params['pay_method'])
 
+        # 省心保
+        if params.get('SXB'):
+            fetch_where += """
+                            AND (
+                            ({SXB}=1 AND is_need_SXB=1) OR
+                            ({SXB}=2 AND is_need_SXB=0) OR
+                            ({SXB}=3 AND is_need_SXB=1 AND enabled_SXB=1) OR
+                            ({SXB}=4 AND is_need_SXB=1 AND enabled_SXB=0) 
+                            )
+                            """.format(SXB=params['SXB'])
+
         complete_sql = """ AND shb_orders.`status` = 3 """
         pending_sql = """ AND shb_orders.`status` IN (1, 2) """
         cancel_sql = """ AND shb_orders.`status` = -1 """
@@ -452,6 +463,17 @@ class OrderListModel(object):
                         ({comment_type}=6 AND se.rater_id = so.owner_id AND se.user_id = so.driver_id AND se.`level` IN (1,2))
                         )
                         """.format(comment_type=params['comment_type'])
+
+        # 省心保
+        if params.get('SXB'):
+            fetch_where += """
+                        AND (
+                        ({SXB}=1 AND so.is_need_SXB=1) OR
+                        ({SXB}=2 AND so.is_need_SXB=0) OR
+                        ({SXB}=3 AND so.is_need_SXB=1 AND so.enabled_SXB=1) OR
+                        ({SXB}=4 AND so.is_need_SXB=1 AND so.enabled_SXB=0) 
+                        )
+                        """.format(SXB=params['SXB'])
 
         # 订单发布时间
         if params.get('start_order_time') and params.get('end_order_time'):

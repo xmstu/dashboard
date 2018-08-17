@@ -45,6 +45,7 @@ class GoodsList(object):
             new_goods_type = int(params.get('new_goods_type')) if params.get('new_goods_type') else 0
             urgent_goods = int(params.get('urgent_goods')) if params.get('urgent_goods') else 0
             is_addition = int(params.get('is_addition')) if params.get('is_addition') else 0
+            payment_method = int(params.get('payment_method') or 0)
 
             # 补全时间
             create_start_time, create_end_time = complement_time(create_start_time, create_end_time)
@@ -94,7 +95,8 @@ class GoodsList(object):
                 # "load_start_time": load_start_time,
                 # "load_end_time": load_end_time,
                 "register_start_time": register_start_time,
-                "register_end_time": register_end_time
+                "register_end_time": register_end_time,
+                "payment_method": payment_method
             }
             log.debug("货源列表验证参数{}".format(params))
             return Response(page=page, limit=limit, params=params)
@@ -152,6 +154,7 @@ class GoodsDistributionTrend(object):
             goods_type = int(params.get('goods_type', None) or 0)
             goods_price_type = int(params.get('goods_price_type', None) or 0)
             region_id = int(params.get('region_id', None) or 0)
+            payment_method = int(params.get('payment_method') or 0)
 
             # 当前权限下所有地区
             if sessionOperationClass.check():
@@ -170,7 +173,8 @@ class GoodsDistributionTrend(object):
                 'periods': periods,
                 'goods_type': goods_type,
                 'goods_price_type': goods_price_type,
-                'region_id': region_id
+                'region_id': region_id,
+                'payment_method': payment_method
             }
 
             return Response(params=params)

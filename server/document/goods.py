@@ -26,6 +26,7 @@ request_goods_list_param = api.doc(params={
     'new_goods_type': '初次下单',
     'urgent_goods': '急需处理',
     'is_addition': '是否加价',
+    'payment_method': '0:全部;1.发货人付;2.收货人付;3.省心保',
     'create_start_time': '发布开始日期',
     'create_end_time': '发布结束日期',
     'load_start_time': '装货开始日期',
@@ -56,5 +57,6 @@ request_goods_distribution_trend_param = api.doc(params={
     'periods': '时间周期,2:日，3:周，4:月，默认:2',
     'goods_type': '货源类型',
     'goods_price_type': '货源类型,1:议价,2:一口价,默认:0全部',
-    'region_id': '地区id'
+    'region_id': '地区id',
+    'payment_method': '0:全部;1.发货人付;2.收货人付;3.省心保',
 }, description='货源分布趋势查询参数')
