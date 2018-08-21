@@ -189,7 +189,6 @@ var dataSet = {
                 ]]
                 ,
                 done: function (res, curr, count) {
-                    layer.closeAll('loading')
                     $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='business']").children().each(function () {
                         if ($(this).text() == 1) {
@@ -200,7 +199,6 @@ var dataSet = {
                         }
                     });
                     $('.radar-btn').on('click', function () {
-                        layer.load();
                         var url = '/transport/radar/';
                         var business = $(this).val();
                         var from_province_id = $(this).attr('data-from-province');
@@ -272,8 +270,6 @@ var dataSet = {
                                 layer.msg('数据请求失败')
                             },
                             complete: function () {
-                                console.log('complete')
-                                layer.closeAll('loading')
                             }
                         })
 
@@ -367,7 +363,6 @@ $('#transport_search_box').click(function (e) {
     e.preventDefault();
     layui.use('layer', function () {
         var layer = layui.layer;
-        layer.load()
         var start_time = $('#start_time_show').val();
         var end_time = $('#end_time_show').val();
         if (start_time != '') {

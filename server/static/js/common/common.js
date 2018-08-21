@@ -549,6 +549,9 @@ var common = {
         layui.use('layer', function () {
             var layer = layui.layer;
             $.ajaxSetup({
+                beforeSend:function(){
+                  layer.load()
+                },
                 complete: function (Xhttp) {
                     layer.closeAll('loading')
                     if (Xhttp.responseJSON.status == 400 && Xhttp.responseJSON.msg == '货源已成单') {

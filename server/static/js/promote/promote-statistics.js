@@ -5,7 +5,6 @@ $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 layui.use('layer', function () {
     var layer = layui.layer;
-    layer.load();
     dataInit();
     $('.layui-form-item').css({width:'230px'})
 });
@@ -149,7 +148,7 @@ $('#add_promote_person').on('click', function (e) {
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 beforeSend: function () {
-                    layer.load();
+
                 },
                 success: function (res) {
                     if (res.status == 100000) {
@@ -159,7 +158,6 @@ $('#add_promote_person').on('click', function (e) {
                     }
                 },
                 complete: function (xhttp) {
-                    layer.closeAll('loading');
                     if (xhttp.status == 400) {
                         layer.msg('用户名不存在或者重复添加了推荐人')
                     }
@@ -351,7 +349,6 @@ var pageSet = {
         layui.use(['layer','table'], function () {
             var table = layui.table;
             var layer = layui.layer;
-            layer.load();
             table.render({
                 elem: '#promote_table'
                 , even: true
@@ -380,7 +377,6 @@ var pageSet = {
                     }
                 ]]
                 , done: function (res) {
-                     layer.closeAll('loading')
                      $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='user_count']").children().each(function () {
                         if ($(this).text() != '') {
@@ -437,7 +433,7 @@ var pageSet = {
                                 url: url,
                                 type: 'DELETE',
                                 beforeSend: function () {
-                                    layer.load();
+
                                 },
                                 success: function (res) {
                                     if (res.status == 100000) {
@@ -469,7 +465,6 @@ var pageSet = {
                                     }
                                 },
                                 complete: function (xhttp) {
-                                    layer.closeAll('loading');
                                     if (xhttp.status == 400) {
                                         layer.msg('request error', {icon: 5})
                                     }

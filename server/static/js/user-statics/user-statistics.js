@@ -13,7 +13,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
     var layer = layui.layer;
-    layer.load();
     laydate.render({
         elem: '#date_show_one',
         theme: '#009688',
@@ -137,7 +136,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='usual_city']").css({'display': 'none'})
-            layer.closeAll('loading')
             $('.main-content-right').addClass('animated fadeIn');
             $("[data-field='user_type']").children().each(function () {
                 if ($(this).text() == 0) {
@@ -284,7 +282,6 @@ $('#user_search_box').on('click', function (e) {
     layui.use(['layer', 'table'], function () {
         var table = layui.table;
         var layer = layui.layer;
-        layer.load()
         table.render({
             url: url
             , elem: '#LAY_table_user'
@@ -295,7 +292,6 @@ $('#user_search_box').on('click', function (e) {
             }
             , done: function () {
                 $('[data-field]>div').css({'padding': '0 6px'})
-                layer.closeAll('loading')
                 $("[data-field='user_type']").children().each(function () {
                     if ($(this).text() == 0) {
                         $(this).text('未录入')
@@ -384,7 +380,7 @@ function dataInit() {
 }
 
 Highcharts.setOptions({
-    colors: ['#9999ff', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+    colors: [ /*'#9FE6B8', '#FFDB5C','#ff9f7f',*/  '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
 
 function chartInit(xAxis, series, interval, x_value1) {
@@ -431,6 +427,8 @@ function chartInit(xAxis, series, interval, x_value1) {
         yAxis: {
             gridLineColor: '#eee',
             gridLineWidth: 1,
+            min:0,
+            allowDecimals:false,
             plotLines: [
                 {
                     color: '#ddd',
@@ -446,7 +444,7 @@ function chartInit(xAxis, series, interval, x_value1) {
                 }
             },
             labels: {
-                format: '{value} 人',
+                format: '{value}人',
                 style: {
                     color: Highcharts.getOptions().colors[0]
                 }
