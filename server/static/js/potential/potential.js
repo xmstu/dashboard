@@ -220,4 +220,4 @@ var setAbout = {
         })
     }
 };
-setAbout.chartRequest();
+//setAbout.tableRender();
