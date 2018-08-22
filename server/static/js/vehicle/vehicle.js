@@ -104,7 +104,6 @@ var set = {
         layui.use(['layer', 'table'], function () {
             var table = layui.table;
             var layer = layui.layer;
-            layer.load();
             table.render({
                 elem: '#vehicle_table',
                 even: true,

@@ -14,7 +14,7 @@ setTimeout(function () {
 
 function init() {
     $('.layui-form-item').width('236px');
-$('.part-1-top .layui-form-item').css({width:174})
+$('.part-1-top .layui-form-item').css({width:182})
     $('#from_region_id').address({
         offsetLeft: '0',
         level: 3,

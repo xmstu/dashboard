@@ -116,7 +116,7 @@ body {
 
 .header {
     min-width: 1300px;
-    height: 56px;
+    height: 42px;
     background: #1a2732;
     -webkit-background-size: cover;
     background-size: cover;
@@ -142,7 +142,7 @@ body {
 }
 
 .header-left > a > img {
-    margin-top: 18px;
+    margin-top: 12px;
     width: 100%
 }
 
@@ -161,7 +161,6 @@ body {
     width: 90%;
     margin-left: 2%;
     display: none;
-    min-width: 754px
 }
 
 .header-content-main > p {
@@ -197,11 +196,6 @@ body {
     margin-top: 12px;
     margin-right: 6px;
     color: #fff
-}
-
-.header-right > .oneself-set {
-    height: 100%;
-    padding-top: 4px
 }
 
 .menu-lists {
@@ -301,9 +295,9 @@ body {
 
 .oneself-set > div:nth-of-type(1) > span.layui-btn {
     float: right;
-    line-height: 34px;
-    height: 34px;
-    margin-top: 6px
+    line-height: 30px;
+    height: 30px;
+    margin-top: 4px
 }
 
 .dropdown-menu .icon-xiaoxi {
@@ -392,7 +386,7 @@ body {
 
 .main-content > .main-content-left {
     width: 8%;
-    top: 56px;
+    top: 42px;
     background: #1a2732 !important;
     -webkit-background-size: cover;
     background-size: cover;
@@ -578,7 +572,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
     height: 100%;
     width: 56px;
     text-align: center;
-    line-height: 56px;
+    line-height: 42px;
     display: inline-block;
     border-right: 1px solid rgba(0, 0, 0, .1);
 }
@@ -595,7 +589,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
     padding: .2%;
     height: auto;
     margin-left: 8%;
-    margin-top: 56px;
+    margin-top: 42px;
     background: #f1f1f1;
     padding-right: 0;
     min-width: 1200px;
@@ -651,12 +645,13 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
     position: absolute;
     right: 12px;
     font-size: 21px;
+    top: -4px;
 }
 
 .message-center > ul {
     position: absolute;
     width: 250px;
-    top: 38px;
+    top: 34px;
     left: -32px;
     height: auto;
     background: #fff;
@@ -756,8 +751,8 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
 }
 
 .layui-badge {
-    top: 6px;
-    right: -8px;
+    top: 0;
+    right: -12px;
     font-size: 12px;
     width: 22px;
     line-height: 18px;
