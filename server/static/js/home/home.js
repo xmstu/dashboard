@@ -140,15 +140,11 @@ function dataInit(dataArrSet) {
                                 }
                                  var result_ano = '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ":" + val[0][0].value + "单</span>";
                                         result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ":" + val[0][1].value + "单</span>";
-                                        // result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ":" + val[0][2].value + "单</span>";
-                                      /*  result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][3].name + ":" + val[0][3].value + "单</span>";*/
                                         result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ":" + val[1][0].value + "辆</span>";
                                         result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ":" + val[1][1].value + "辆</span>";
                                         result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ":" + val[1][2].value + "辆</span>";
                                         var all_count_ano = '<p class="all_count">货源数:<span>' + (val[0][0].value + val[0][1].value + val[0][2].value) + "单</span></p>";
                                         var all_count_ano_1 = '<p class="all_count_1">车辆数:<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
-
-
                                 if ($("#goods_price_types").val() == 1) {
                                       $(".data-list-container" + arr.length).html("");
                                         $(".data-list-container" + arr.length).append(all_count_ano + all_count_ano_1 + result_ano)
@@ -202,7 +198,7 @@ function dataInit(dataArrSet) {
                                             }
                                         }
                                     },
-                                    color: ["skyblue", "#7dd4f8", "#60b2d3", "#2973a7", "#497080", "#5fd779", "#56b35d"],
+                                    color: ["skyblue", "#7dd4f8", "#0484C1", "#2973a7", "#497080", "#5fd779", "#56b35d"],
                                     series: [{
                                         name: "货源数",
                                         type: "pie",
