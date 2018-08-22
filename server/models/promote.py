@@ -94,7 +94,7 @@ class PromoteEffectList(object):
         AND tb_inf_promoter.mobile IN (%(promote_mobile)s)) AS referrer
         -- 用户信息
         LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
-        AND tb_inf_user.last_login_time != 0 
+        AND tb_inf_user.recommended_status = 2
         %(fetch_where)s
         GROUP BY referrer.mobile
         '''
@@ -271,6 +271,7 @@ class PromoteQuality(object):
             FROM shu_recommended_users
             WHERE create_time >= :start_time
             AND create_time < :end_time
+            AND status = 1
             AND is_deleted = 0
             %s
             GROUP BY FROM_UNIXTIME(create_time, '%%%%Y-%%%%m-%%%%d')"""
@@ -297,6 +298,7 @@ class PromoteQuality(object):
                 SELECT COUNT(*) AS count
                 FROM shu_recommended_users
                 WHERE create_time < :start_time
+                AND status = 1
                 AND is_deleted = 0
                 %s """
 

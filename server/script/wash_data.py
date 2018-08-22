@@ -4,12 +4,10 @@ import pymysql
 from twisted.enterprise import adbapi
 from twisted.internet import reactor
 
-# 全局对象
-select_data = []
-
 
 def handle(result_data):
     # 处理from_channel
+    ret = []
     for i in result_data:
         download_channel = i.get('download_channel')
         from_channel = i.get('from_channel')
@@ -20,30 +18,31 @@ def handle(result_data):
                     pass
                 elif from_channel == 'qudao=tuijian':
                     i['from_channel'] = '推荐注册'
+                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
                 else:
                     i['from_channel'] = download_channel
+                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
         else:
             if from_channel:
                 if from_channel == 'miniprogram':
                     pass
                 elif from_channel == 'qudao=tuijian':
                     i['from_channel'] = '推荐注册'
+                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
                 elif from_channel not in ('qudao=tuijian', 'miniprogram'):
                     pass
                 else:
                     i['from_channel'] = ''
+                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
+    del result_data
+    return ret
 
-    return result_data
 
-
-def update_from_channel(cursor):
+def update_from_channel(cursor, sql):
     """更新数据"""
     try:
-        command = """UPDATE shu_user_profiles SET from_channel=%s WHERE id =%s"""
-        rowcount = cursor.executemany(command, select_data)
-        select_data.clear()
-        print('finish')
-        print(rowcount)
+        rowcount = cursor.execute(sql)
+        print('received rowcount:', rowcount)
     except Exception as e:
         print(e)
 
@@ -70,21 +69,20 @@ def select_shu_user_profiles(cursor):
                 is_deleted = 0
             LIMIT 10000 OFFSET %s
             """ % step
-        sshuitouche_db.runInteraction(select_shu_user, command, all_count)
+        sshuitouche_db.runInteraction(select_shu_user, command)
 
 
-def select_shu_user(cursor, sql, all_count):
+def select_shu_user(cursor, sql):
     """查询"""
     cursor.execute(sql)
     result_data = handle(cursor.fetchall())
     for i in result_data:
-        data = [i['from_channel'], i['id']]
-        select_data.append(data)
         # 提交
-        if len(select_data) == all_count:
-            print('start')
-            sshuitouche_db.runInteraction(update_from_channel)
-        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), len(select_data), all_count)
+        print('start')
+        command = """UPDATE shu_user_profiles SET from_channel='{0}' WHERE id ={1}""".format(i['from_channel'], i['id'])
+        sshuitouche_db.runInteraction(update_from_channel, command)
+        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()))
+    print('finish')
 
 
 if __name__ == '__main__':
