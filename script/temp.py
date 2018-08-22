@@ -68,7 +68,7 @@ if __name__ == '__main__':
     #     "keepConnectionAlive": True
     # })
 
-    # 线上业务库
+    # 线上业务库读库
     reader = MySQLdb({
         "maxConnections": 3,
         "port": 3306,
@@ -81,11 +81,22 @@ if __name__ == '__main__':
         "keepConnectionAlive": True
     })
 
+    # 线上业务库写库
+    writer = MySQLdb({
+        "maxConnections": 3,
+        "port": 3306,
+        "host": "101.37.176.18",
+        "minFreeConnections": 1,
+        "database": "sshuitouche",
+        "password": "wJI83&d3$Rop2c",
+        "user": "sshtcwrite",
+        "charset": "utf8mb4",
+        "keepConnectionAlive": True
+    })
+
     try:
-        with reader.begin() as db:
-            all_count = \
-            db.conn.query_one("""SELECT count(1) all_count FROM `shu_user_profiles` WHERE is_deleted = 0""")[
-                'all_count']
+        with reader.begin() as db_read:
+            all_count = db_read.conn.query_one("""SELECT count(1) all_count FROM `shu_user_profiles` WHERE is_deleted = 0""")['all_count']
             for step in range(0, all_count, 10000):
                 command = """
                             SELECT
@@ -98,15 +109,19 @@ if __name__ == '__main__':
                                 is_deleted = 0
                             LIMIT 10000 OFFSET %s
                             """ % step
-                result_data = handle(db.conn.query(command))
+                result_data = handle(db_read.conn.query(command))
                 print('start')
                 # 提交
-                cmd = """UPDATE shu_user_profiles SET from_channel=:from_channel WHERE id =:id"""
-                rowcount = db.conn.update(cmd, result_data)
-                print('finished rowcount:', rowcount)
-                print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), len(result_data))
-                print('finish')
-                print('\t')
+                try:
+                    with writer.begin() as db_write:
+                        cmd = """UPDATE shu_user_profiles SET from_channel=:from_channel WHERE id =:id"""
+                        rowcount = db_write.conn.update(cmd, result_data)
+                        print('finished rowcount:', rowcount)
+                        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), len(result_data))
+                        print('finish')
+                        print('\t')
+                except Exception as e:
+                    print('write error happen:', e)
 
     except Exception as e:
-        print(e)
+        print('read error happen:', e)
