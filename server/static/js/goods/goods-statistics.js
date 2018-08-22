@@ -408,13 +408,11 @@ var dataSet = {
                 var len = res.data.xAxis.length;
                 if (len > 0 && len < 20) {
                     Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 1)
-                } else if (len > 20 && len < 50) {
+                } else if (len >= 20 && len < 50) {
                     Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 3)
-                } else if (len > 50) {
+                } else if (len >= 50) {
                     Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 5)
                 }
-                /*if (len > 0 && len > 20 && len < 40)*/
-
             })
         })
     },

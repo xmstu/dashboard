@@ -553,7 +553,7 @@ var common = {
                   layer.load()
                 },
                 complete: function (Xhttp) {
-                    layer.closeAll('loading')
+                    layer.closeAll('loading');
                     if (Xhttp.responseJSON.status == 400 && Xhttp.responseJSON.msg == '货源已成单') {
                         $('#popup_one .layui-none').html('货源已被接')
                         $('#popup .layui-none').html('货源已被接')

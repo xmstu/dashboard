@@ -363,6 +363,7 @@ function dataInit() {
     var url = '/user/statistic/'
     http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
         if (res.status == 100000) {
+            layer.closeAll('loading')
             var len = res.data.xAxis.length;
             var X_data = res.data.xAxis;
             if (len > 0 && len < 20) {
