@@ -192,18 +192,18 @@
 }
 .part-1-bottom > ul.clearfix > li {
     float: left;
-    min-width: 394px;
+    min-width: 388px;
     width: 32.8%;
     height: 280px;
     background: #fff;
     margin-right: 0.3%;
-    box-shadow:  0 0 12px #ddd;
+    box-shadow:  0 0 4px #ddd;
     padding-top: 4px;
     position: relative;
     margin-bottom: 0.3%;
     -webkit-border-radius: 1.4%;
     -moz-border-radius: 1.4%;
-    border-radius: 1.4%;
+    border-radius: 0.4%;
 }
 .part-1-bottom > ul.clearfix > li >div {
     height: 100%;

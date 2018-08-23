@@ -257,19 +257,6 @@ function lineChartInit(xAxis, series, interval, str_title, names, units) {
         subtitle: {
             text: null
         },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 1100,
-            y: 0,
-            floating: true,
-            borderWidth: 1,
-            backgroundColor: 'transparent',
-            labelFormatter: function () {
-                return this.name
-            }
-        },
         xAxis: {
             tickInterval: interval,
             categories: xAxis,
@@ -358,8 +345,7 @@ var pageSet = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field: 'reference_id', title: '用户ID'}
-                    , {field: 'reference_name', title: '姓名'}
+                      {field: 'reference_name', title: '姓名'}
                     , {field: 'reference_mobile', title: '手机号'}
                     , {field: 'user_count', title: '推荐人数'}
                     , {field: 'wake_up_count', title: '唤醒人数'}

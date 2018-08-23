@@ -369,10 +369,10 @@ function dataInit() {
             if (len > 0 && len < 20) {
                 $('.chart-tips').css({'display': 'none'})
                 chartInit(res.data.xAxis, res.data.series, 1, X_data[1])
-            } else if (len > 0 && len > 20 && len < 40) {
+            } else if (len > 0 && len >= 20 && len < 40) {
                 $('.chart-tips').css({'display': 'none'})
                 chartInit(res.data.xAxis, res.data.series, 3, X_data[1])
-            } else if (len > 0 && len > 40 && len < 90) {
+            } else if (len > 0 && len >= 40 && len < 90) {
                 $('.chart-tips').css({'display': 'none'})
                 chartInit(res.data.xAxis, res.data.series, 5, X_data[1])
             }
@@ -405,19 +405,6 @@ function chartInit(xAxis, series, interval, x_value1) {
         },
         subtitle: {
             text: null
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 1000,
-            y: 0,
-            floating: true,
-            borderWidth: 1,
-            backgroundColor: 'transparent',
-            labelFormatter: function () {
-                return this.name
-            }
         },
         xAxis: {
             tickInterval: interval,

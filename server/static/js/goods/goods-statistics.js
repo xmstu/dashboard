@@ -274,7 +274,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             $("td[data-field='goods_standard']").children().each(function (val) {
                 if ($(this).text() != '') {
                     var result = $(this).text().split('\n');
-                    $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: #009688;" title="货物名称"></i><span style="font-weight: 500;color: #009688;">' + result[0] + '</span><br><i style="font-weight: 500;color: #009688;" class="mr-4 iconfont icon-zhongliangweight9" title="货物重量"></i><span style="font-weight: 500;color: #009688;">' + result[1] + '</span>')
+                    $(this).html('<span style="font-weight: 500">' + result[0] + '</span><br><span>' + result[1] + '</span>')
                 }
             })
             $("td[data-field='goods_time']").children().each(function (val) {
@@ -429,6 +429,7 @@ var dataSet = {
         }
         layui.use('layer', function () {
             var layer = layui.layer;
+            /*左边表格部分*/
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var all_reason = res.data.cancel_list;
                 if (res.data.cancel_list_dict == '' && res.data.cancel_list == '') {
@@ -725,12 +726,6 @@ $('#goods_search_box').on('click', function (e) {
                         content: $('#popup')
                     })
                 });
-                $("td[data-field='goods_standard']").children().each(function (val) {
-                    if ($(this).text() != '') {
-                        var result = $(this).text().split('\n');
-                        $(this).html('<i class="iconfont icon-huowu1 mr-4" style="font-weight: 500;color: #009688;"></i><span style="font-weight: 500;color: #009688;">' + result[0] + '</span><br><i style="font-weight: 500;color: #009688;" class="mr-4 iconfont icon-zhongliangweight9"></i><span style="font-weight: 500;color: #009688;">' + result[1] + '</span>')
-                    }
-                })
                 $("td[data-field='goods_time']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
