@@ -337,8 +337,7 @@ class CancelReasonList(object):
         FROM
             shf_goods 
         WHERE
-            1=1
-            AND (shf_goods.is_deleted = 1 OR shf_goods.status = -1)
+            (shf_goods.is_deleted = 1 OR shf_goods.status = -1)
             AND {fetch_where}
         GROUP BY canceled_reason_text
         ORDER BY reason_count
@@ -478,8 +477,8 @@ class GoodsDistributionTrendList(object):
                 )
             """.format(payment_method=params['payment_method'])
 
-        wait_where = """ AND ( status = 1 OR status = 2 ) """
-        recv_where = """ AND shf_goods.STATUS = 3 """
+        wait_where = """ AND ( status = 1 OR status = 2 ) AND shf_goods.is_deleted = 0"""
+        recv_where = """ AND shf_goods.STATUS = 3 AND shf_goods.is_deleted = 0"""
         cancel_where = """ AND (shf_goods.is_deleted = 1 OR shf_goods.status = -1) """
 
         all_order = cursor.query(command.format(flag=1, fetch_where=fetch_where))

@@ -56,72 +56,68 @@ def handle(result_data):
 if __name__ == '__main__':
 
     # 测试数据库
+    reader = writer = MySQLdb({
+        "maxConnections": 3,
+        "port": 3306,
+        "host": "huitouche2.mysql.rds.aliyuncs.com",
+        "minFreeConnections": 1,
+        "database": "sshuitouche",
+        "password": "htctita337",
+        "user": "sshtc_user",
+        "charset": "utf8mb4",
+        "keepConnectionAlive": True
+    })
+
+    # 线上业务库读库
     # reader = MySQLdb({
     #     "maxConnections": 3,
     #     "port": 3306,
-    #     "host": "huitouche2.mysql.rds.aliyuncs.com",
+    #     "host": "101.37.176.18",
     #     "minFreeConnections": 1,
     #     "database": "sshuitouche",
-    #     "password": "htctita337",
-    #     "user": "sshtc_user",
+    #     "password": "wJI83&d3$Rop2c",
+    #     "user": "sshtcread",
     #     "charset": "utf8mb4",
     #     "keepConnectionAlive": True
     # })
 
-    # 线上业务库读库
-    reader = MySQLdb({
-        "maxConnections": 3,
-        "port": 3306,
-        "host": "101.37.176.18",
-        "minFreeConnections": 1,
-        "database": "sshuitouche",
-        "password": "wJI83&d3$Rop2c",
-        "user": "sshtcread",
-        "charset": "utf8mb4",
-        "keepConnectionAlive": True
-    })
-
     # 线上业务库写库
-    writer = MySQLdb({
-        "maxConnections": 3,
-        "port": 3306,
-        "host": "101.37.176.18",
-        "minFreeConnections": 1,
-        "database": "sshuitouche",
-        "password": "wJI83&d3$Rop2c",
-        "user": "sshtcwrite",
-        "charset": "utf8mb4",
-        "keepConnectionAlive": True
-    })
+    # writer = MySQLdb({
+    #     "maxConnections": 3,
+    #     "port": 3306,
+    #     "host": "101.37.176.18",
+    #     "minFreeConnections": 1,
+    #     "database": "sshuitouche",
+    #     "password": "wJI83&d3$Rop2c",
+    #     "user": "sshtcwrite",
+    #     "charset": "utf8mb4",
+    #     "keepConnectionAlive": True
+    # })
 
-    try:
-        with reader.begin() as db_read:
-            all_count = db_read.conn.query_one("""SELECT count(1) all_count FROM `shu_user_profiles` WHERE is_deleted = 0""")['all_count']
-            for step in range(0, all_count, 10000):
-                command = """
-                            SELECT
-                                id,
-                                from_channel,
-                                download_channel 
-                            FROM
-                                `shu_user_profiles` 
-                            WHERE
-                                is_deleted = 0
-                            LIMIT 10000 OFFSET %s
-                            """ % step
-                result_data = handle(db_read.conn.query(command))
-                print('start')
-                # 提交
-                try:
-                    with writer.begin() as db_write:
-                        cmd = """UPDATE shu_user_profiles SET from_channel=:from_channel WHERE id =:id"""
-                        rowcount = db_write.conn.update(cmd, result_data)
-                        print('finished rowcount:', rowcount)
-                        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), len(result_data))
-                        print('finish')
-                        print('\t')
-                except Exception as e:
-                    print('write error happen:', e)
-
-    except Exception as e:
-        print('read error happen:', e)
+    all_count = reader.query_one("""SELECT count(1) all_count FROM `shu_user_profiles` WHERE is_deleted = 0""")['all_count']
+    for step in range(0, all_count, 10000):
+        command = """
+                    SELECT
+                        id,
+                        from_channel,
+                        download_channel 
+                    FROM
+                        `shu_user_profiles` 
+                    WHERE
+                        is_deleted = 0
+                    LIMIT 10000 OFFSET %s
+                    """ % step
+        result_data = handle(reader.query(command))
+        print('start')
+        # 提交
+        try:
+            with writer.begin() as db_write:
+                cmd = """UPDATE shu_user_profiles SET from_channel=:from_channel WHERE id =:id"""
+                rowcount = db_write.conn.update(cmd, result_data)
+                print('finished rowcount:', rowcount)
+                print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), len(result_data))
+                print('\t')
+        except Exception as e:
+            print('write error happen:', e)
+        finally:
+            print('end')
