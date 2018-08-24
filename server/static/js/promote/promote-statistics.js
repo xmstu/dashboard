@@ -6,7 +6,7 @@ $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 layui.use('layer', function () {
     var layer = layui.layer;
     dataInit();
-    $('.layui-form-item').css({width:'230px'})
+    $('.layui-form-item').css({width:'184px'})
 });
 setTimeout(function () {
     $('.promote-menu-about>a').addClass('selected-active');
@@ -80,9 +80,9 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_three').val() == '') {
-                $('#date_show_three').next('.date-tips').show();
+                $('#date_show_three').next('.date-tips-icon').show();
             } else {
-                $('#date_show_three').next('.date-tips').hide()
+                $('#date_show_three').next('.date-tips-icon').hide()
             }
             var startTime = common.timeTransform($('#date_show_three').val())
             var endTime = common.timeTransform($('#date_show_four').val())
@@ -100,9 +100,9 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         format:'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_four').val() == '') {
-                $('#date_show_four').next('.date-tips').show();
+                $('#date_show_four').next('.date-tips-icon').show();
             } else {
-                $('#date_show_four').next('.date-tips').hide()
+                $('#date_show_four').next('.date-tips-icon').hide()
             }
             var startTime = common.timeTransform($('#date_show_three').val());
             var endTime = common.timeTransform($('#date_show_four').val());
@@ -257,19 +257,6 @@ function lineChartInit(xAxis, series, interval, str_title, names, units) {
         subtitle: {
             text: null
         },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 1100,
-            y: 0,
-            floating: true,
-            borderWidth: 1,
-            backgroundColor: 'transparent',
-            labelFormatter: function () {
-                return this.name
-            }
-        },
         xAxis: {
             tickInterval: interval,
             categories: xAxis,
@@ -358,8 +345,7 @@ var pageSet = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field: 'reference_id', title: '用户ID'}
-                    , {field: 'reference_name', title: '姓名'}
+                      {field: 'reference_name', title: '姓名'}
                     , {field: 'reference_mobile', title: '手机号'}
                     , {field: 'user_count', title: '推荐人数'}
                     , {field: 'wake_up_count', title: '唤醒人数'}

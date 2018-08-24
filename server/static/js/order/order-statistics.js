@@ -13,7 +13,9 @@ setTimeout(function () {
 }, 10);
 
 function init() {
-    $('.layui-form-item').width('236px');
+    $('.part-2 .layui-input-inline').width(102)
+    $('.part-2 .layui-inline').addClass('mr4')
+    $('.layui-form-item').width(184);
 $('.part-1-top .layui-form-item').css({width:182})
     $('#from_region_id').address({
         offsetLeft: '0',

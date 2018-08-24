@@ -2,10 +2,11 @@ $(".layui-table-cell").css({
     "height": "auto!important"
 });
 $(".part-2 .layui-form-item").css({
-    "width": "218px"
+    "width": "180px"
 });
 $("#date_show_one").val(String(common.getNowFormatDate()[0]));
 $("#date_show_two").val(String(common.getNowFormatDate()[0]));
+/*圆环的legel显示，echarts中legal数据要与data中的数据一直才能显示*/
 var dataArr1 = ["待接单", "已接单", "已取消", "已接单车辆", "待接单车辆数"];
 var dataArr2 = ["待联系", "已联系", "已接单", "已取消", "已接单车辆", "待接单车辆数"];
 setTimeout(function () {
@@ -24,7 +25,7 @@ layui.use(["laydate", "form", "table"],
             elem: "#date_show_one",
             theme: "#009688",
             calendar: true,
-             format:'yyyy/MM/dd',
+            format:'yyyy/MM/dd',
             max: String(common.getNowFormatDate()[0]),
             done: function (val, index) {
                 var startTime = common.timeTransform($("#date_show_one").val());
@@ -303,10 +304,7 @@ function tableInit(url) {
                 done: function (res, curr, count) {
                     layer.closeAll("loading");
                     common.clearSelect()
-
-                    $("[data-field]>div").css({
-                        "padding": "0 6px"
-                    });
+                    $("[data-field]>div").css({"padding": "0 6px" });
                     $(".nearby-one").on("click", function (e) {
                         e.preventDefault();
                         var content_title = $(this).siblings('p.display-content').text()
@@ -319,7 +317,7 @@ function tableInit(url) {
                         var goods_type = $(this).attr('data-type')
                         var url = "/city/nearby_cars/" + val + '?goods_type=' + goods_type;
                         /*
-                           首页表格按钮框点击弹出的遮罩层筛选
+                           首页表格按钮框点击弹出的遮罩层筛选<暂时废除>
                          form.on("select(interest)",
                                function (res) {
                                    var value = res.value;

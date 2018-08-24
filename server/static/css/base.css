@@ -138,3 +138,18 @@ s,i,em{font-style:normal;text-decoration:none;}
     border-radius: 1px;
     background-color: #009688;
 }
+.mr4{
+    margin-right: 4px!important;
+}
+.ml4{
+    margin-left: 4px!important;
+}
+.ml2{
+    margin-left: 2px!important;
+}
+.l-p-4{
+    letter-spacing: 4px;
+}
+.l-p-3-5{
+    letter-spacing: 3.5px;
+}

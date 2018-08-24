@@ -1,6 +1,8 @@
 var dataSet = {
     init: function () {
         var that = this;
+        $('.part-2 .layui-form-item').width('184');
+        $('.part-3 .layui-input-inline').width('108');
         $('#date_show_three').val(String(common.getNowFormatDate()[2]));
         $('#date_show_four').val(String(common.getNowFormatDate()[3]));
         setTimeout(function () {

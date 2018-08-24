@@ -110,7 +110,7 @@ input:-ms-input-placeholder {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif !important;
+    font-family: "Menlo", "DejaVu Sans Mono", "Liberation Mono", "Consolas",Arial, Helvetica, sans-serif !important;
     min-width: 1300px
 }
 
@@ -441,7 +441,7 @@ body {
 }
 
 .layui-form-item {
-    margin-bottom: 8px
+    margin-bottom: 6px
 }
 
 nav.main-content-left .layui-nav-tree .layui-nav-item > a {
@@ -915,7 +915,6 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
 }
 
 .part-1-bottom {
-    margin-bottom: 17px;
     position: relative
 }
 
@@ -1031,12 +1030,13 @@ body {
 }
 
 .layui-table-header .layui-table-cell {
-    font-weight: 700
+    font-weight: bold;
+    font-size: 13px;
 }
 
 .layui-table-cell {
     font-size: 12px;
-    color: #333;
+    color: #000;
     padding: 0 6px
 }
 
@@ -1151,6 +1151,30 @@ body {
 .icon-caidan {
     display: inline-block;
 }
+
+/*修改layui表格*/
+
 .layui-table-view .layui-table td, .layui-table-view .layui-table th{
     text-align: center;
+    border-right: 0;
+    border-left: 0;
 }
+
+.layui-table thead tr > th {
+    border-bottom-width: 2px!important;
+}
+ .layui-table-view{
+     border-left-width:0 ;
+ }
+ .layui-table thead tr{
+     background: #fff;
+ }
+ .layui-table[lay-even] tr:nth-child(even){
+     background: #fff;
+ }
+ .layui-table-page{
+     border-top-width: 0;
+ }
+ .layui-table td, .layui-table th, .layui-table-fixed-r, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row]{
+     border-color: #ddd;
+ }
