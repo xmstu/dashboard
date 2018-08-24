@@ -25,7 +25,7 @@
                             <hr>
                             <form action="" class="layui-form layui-form-pane">
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
+                                    <div class="layui-inline" style="width: 174px;">
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
+                                    <div class="layui-inline" style="width: 174px;">
                                         <label class="layui-form-label">结束日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -45,10 +45,10 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
+                                    <div class="layui-inline">
                                         <label class="layui-form-label">区域选择</label>
                                         <div id="city_manager_one" class="layui-input-inline"
-                                             style="width:140px;display: none;">
+                                             style="width:108px;display: none;">
                                             <select id="region_id" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
@@ -58,7 +58,7 @@
                                             </select>
                                         </div>
                                         <div id="super_manager_area" class="layui-input-inline"
-                                             style="width:140px;display: none;">
+                                             style="width:108px;display: none;">
                                             <input id="super_manager_area_select_zero" placeholder="请选择地区"
                                                    name="super_manager_area_select_zero" autocomplete="off"
                                                    lay-verify="super_manager_area_select_zero" class="layui-input"
@@ -66,7 +66,7 @@
                                         </div>
                                     </div>
                                 </div>
-                             <!--   <div class="layui-form-item" style="width:232px;">
+                             <!--   <div class="layui-form-item" style="width:184px;">
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">业务类别</label>
                                         <div class="layui-input-inline" style="width:140px;">
@@ -118,16 +118,16 @@
                     <div class="river"></div>
                     <div class="part-3">
                         <form action="" class="layui-form layui-form-pane">
-                            <div class="layui-form-item" style="width: 238px;vertical-align: top">
-                                <label class="layui-form-label">出发地</label>
+                            <div class="layui-form-item" style="width: 184px;vertical-align: top">
+                                <label class="layui-form-label">出发地址</label>
                                 <div class="layui-input-inline">
                                     <input id="start_place" type="text" name="start_place"
                                            placeholder="请选择出发地" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 238px;">
+                            <div class="layui-form-item" style="width: 184px;">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">目的地</label>
+                                    <label class="layui-form-label">目的地址</label>
                                     <div class="layui-input-inline">
                                         <input id="end_place" type="tel" name="end_place"
                                                placeholder="请选择目的地"
@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width:232px;">
+                            <div class="layui-form-item" style="width:184px;">
                                 <div class="layui-inline" style="">
                                     <label class="layui-form-label">车长选择</label>
                                     <div class="layui-input-inline" style="width:140px;">
@@ -244,31 +244,30 @@
                                     <label class="layui-form-label">KM</label>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width:218px;position: relative;">
+                            <div class="layui-form-item" style="width:184px;position: relative;">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">开始时间</label>
                                     <div class="layui-input-block">
                                         <i class="layui-icon layui-icon-riqi"></i>
-                                        <input style="width: 148px;" id="start_time_show" name="start_time_show"
+                                        <input style="width: 120px;" id="start_time_show" name="start_time_show"
                                                autocomplete="off" lay-verify="start_time_show" class="layui-input"
                                                type="text">
-                                        <span class="date-tips" style="right: 64px;">请选择日期</span>
+                                        <span class="date-tips" style="right: 50px;">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
-                            <span style="display: inline-block;margin-top: 9px;">至</span>
-                            <div class="layui-form-item" style="width:188px;position: relative;">
+                            <span style="display: inline-block;margin-top: 9px;">至</span><div class="layui-form-item" style="width:130px;position: relative;">
                                 <div class="layui-inline">
                                     <div class="layui-input-block" style="margin-left: 6px;">
                                         <i class="layui-icon layui-icon-riqi"></i>
                                         <input id="end_time_show" name="end_time_show" autocomplete="off"
                                                lay-verify="end_time_show" class="layui-input" type="text">
-                                        <span class="date-tips">请选择日期</span>
+                                        <span class="date-tips" style="right: 50px;">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
                             <button id="transport_search_box"
-                                    style="position: relative;padding-left: 20px;vertical-align: top;"
+                                    style="position: relative;padding-left: 20px;margin-left: 12px;vertical-align: top;"
                                     class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索
                             </button>
                         </form>

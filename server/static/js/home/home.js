@@ -2,7 +2,7 @@ $(".layui-table-cell").css({
     "height": "auto!important"
 });
 $(".part-2 .layui-form-item").css({
-    "width": "218px"
+    "width": "180px"
 });
 $("#date_show_one").val(String(common.getNowFormatDate()[0]));
 $("#date_show_two").val(String(common.getNowFormatDate()[0]));

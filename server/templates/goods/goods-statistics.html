@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>货源统计-省省统计中心</title>
-    <link rel="stylesheet" href="../static/css/base.css?v=5.8">
-    <link rel="stylesheet" href="../static/layui/css/layui.css?v=5.8">
-    <link rel="stylesheet" href="../static/css/common.css?v=5.8">
-    <link rel="stylesheet" href="../static/css/iconfont.css?v=5.8">
-    <link rel="stylesheet" href="../static/css/promote/promote.css?v=5.8">
+    <link rel="stylesheet" href="../static/css/base.css?v=5.9">
+    <link rel="stylesheet" href="../static/layui/css/layui.css?v=5.9">
+    <link rel="stylesheet" href="../static/css/common.css?v=5.9">
+    <link rel="stylesheet" href="../static/css/iconfont.css?v=5.9">
+    <link rel="stylesheet" href="../static/css/promote/promote.css?v=5.9">
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
@@ -25,7 +25,7 @@
                         <div class="part-1-top">
                             <form action="" class="layui-form layui-form-pane">
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
+                                    <div class="layui-inline" style="width: 173px;">
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
+                                    <div class="layui-inline" style="width: 173px;">
                                         <label class="layui-form-label">结束日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -47,7 +47,7 @@
                                 <div class="layui-form-item layui-item-spec" id="">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width: 140px">
+                                        <div class="layui-input-inline" style="width: 106px">
                                             <select id="new_users" name="modules" lay-verify="required" lay-search="">
                                                 <option value="1">全部</option>
                                                 <option value="2">同城</option>
@@ -59,7 +59,7 @@
                                 <div class="layui-form-item">
                                     <div class="layui-inline layui-item-spec" style="">
                                         <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width:140px;">
+                                        <div class="layui-input-inline" style="width:106px;">
                                             <select name="modules" lay-verify="required" lay-search="">
                                                 <option value="1">按数量</option>
                                                 <option value="2">按金额</option>
@@ -70,7 +70,7 @@
                                 <div class="layui-form-item">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">搜索选择</label>
-                                        <div class="layui-input-inline" style="width:140px;">
+                                        <div class="layui-input-inline" style="width:106px;">
                                             <select name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
@@ -122,7 +122,7 @@
                         <div class="chart-area-two-body">
                             <form action="" class="layui-form layui-form-pane pl20">
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
+                                    <div class="layui-inline" style="width: 173px;">
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -132,7 +132,7 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 210px;">
+                                    <div class="layui-inline" style="width: 173px;">
                                         <label class="layui-form-label">结束日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -141,7 +141,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul class="periods" style="margin-right: 20px;">
+                                <ul class="periods" style="margin-right: 14px;">
                                     <li>
                                         <button class="active" value="2" id="day_methods">按日</button>
                                     </li>
@@ -153,9 +153,9 @@
                                     </li>
                                 </ul>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline">
+                                    <div class="layui-inline mr4">
                                         <label class="layui-form-label">货源类型</label>
-                                        <div class="layui-input-inline" style="width: 136px;">
+                                        <div class="layui-input-inline" style="width: 104px;">
                                             <select id="goods_price_type" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部类型</option>
@@ -167,9 +167,9 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
+                                    <div class="layui-inline" style="width: 184px">
                                         <label class="layui-form-label">距离类型</label>
-                                        <div class="layui-input-inline" style="width: 140px">
+                                        <div class="layui-input-inline mr4" style="width: 104px">
                                             <select id="goods_type_one" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
@@ -180,9 +180,9 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
+                                    <div class="layui-inline" style="width: 184px">
                                         <label class="layui-form-label">支付方式</label>
-                                        <div class="layui-input-inline" style="width: 140px">
+                                        <div class="layui-input-inline" style="width: 106px">
                                             <select id="pay_methods_statistics" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
@@ -197,7 +197,7 @@
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">地区选择</label>
                                         <div id="city_manager_one" class="layui-input-inline"
-                                             style="width:136px;display: none;">
+                                             style="width:98px;display: none;">
                                             <select id="region_id" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
@@ -207,7 +207,7 @@
                                             </select>
                                         </div>
                                         <div id="super_manager_area" class="layui-input-inline"
-                                             style="width:136px;display: none;">
+                                             style="width:98px;display: none;">
                                             <input id="super_manager_area_select_zero" placeholder="请选择地区"
                                                    name="super_manager_area_select_zero" autocomplete="off"
                                                    lay-verify="super_manager_area_select_zero" class="layui-input"
@@ -232,7 +232,7 @@
                         <div class="chart-area-four-body">
                             <form action="" class="layui-form layui-form-pane">
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 206px;">
+                                    <div class="layui-inline" style="width: 172px;">
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -242,7 +242,7 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 206px;">
+                                    <div class="layui-inline" style="width: 172px;">
                                         <label class="layui-form-label">结束日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -252,9 +252,9 @@
                                     </div>
                                 </div>
                                  <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
+                                    <div class="layui-inline" style="width: 184px">
                                         <label class="layui-form-label">货源类型</label>
-                                        <div class="layui-input-inline" style="width: 136px">
+                                        <div class="layui-input-inline" style="width: 104px">
                                             <select id="goods_price_type2" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部类型</option>
@@ -266,9 +266,9 @@
                                     </div>
                                 </div>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
+                                    <div class="layui-inline" style="width: 184px">
                                         <label class="layui-form-label">距离类型</label>
-                                        <div class="layui-input-inline" style="width: 140px">
+                                        <div class="layui-input-inline" style="width: 106px">
                                             <select id="cancel_reason_types" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部类型</option>
@@ -282,7 +282,7 @@
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">地区分布</label>
                                         <div id="city_manager_two" class="layui-input-inline"
-                                             style="display:none; width: 140px;">
+                                             style="display:none; width: 98px;">
                                             <select id="area_select" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
@@ -292,7 +292,7 @@
                                             </select>
                                         </div>
                                         <div id="super_manager_area_one" class="layui-input-inline"
-                                             style="width:140px;display: none;">
+                                             style="width:98px;display: none;">
                                             <input id="super_manager_area_select_one" placeholder="请选择地区"
                                                    name="super_manager_area_select_one" autocomplete="off"
                                                    lay-verify="super_manager_area_select_one" class="layui-input"
@@ -333,8 +333,8 @@
                     <div class="part-2">
                         <form action="" class="layui-form layui-form-pane">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">货源ID</label>
-                                <div class="layui-input-inline" style="width: 156px">
+                                <label class="layui-form-label">货源-I D</label>
+                                <div class="layui-input-inline" style="width: 98px">
                                     <input id="goods_id" type="text" name="username" lay-verify="required"
                                            placeholder="请输入货源ID" autocomplete="off" class="layui-input">
                                 </div>
@@ -342,7 +342,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货主手机</label>
-                                    <div class="layui-input-inline" style="width: 146px">
+                                    <div class="layui-input-inline" style="width: 98px">
                                         <input id="mobile" maxlength="11" type="tel" name="phone"
                                                placeholder="请输入手机号"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
@@ -351,17 +351,17 @@
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">出发地</label>
-                                    <div class="layui-input-inline" style="width: 156px">
-                                        <input id="from_region_id" type="tel" name="phone" placeholder="请输入地名"
+                                    <label class="layui-form-label">出发地址</label>
+                                    <div class="layui-input-inline" style="width: 98px">
+                                        <input id="from_region_id" type="tel" name="phone" placeholder="请选择地名"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">目的地</label>
-                                    <div class="layui-input-inline" style="width: 156px">
+                                    <label class="layui-form-label">目的地址</label>
+                                    <div class="layui-input-inline" style="width: 98px">
                                         <input id="to_region_id" type="tel" name="phone" placeholder="请输入地名"
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                     </div>
@@ -370,7 +370,7 @@
                              <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货源类型</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="goods_price_type3" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部类型</option>
                                             <option value="1">议价</option>
@@ -382,7 +382,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">距离类型</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="goods_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部类型</option>
                                             <option value="1">同城</option>
@@ -394,7 +394,7 @@
                             <div class="layui-form-item" style="width: 250px;">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">货源状态</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="goods_status" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="1">待接单</option>
@@ -408,7 +408,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">是否通话</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="is_called" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="1">是</option>
@@ -420,7 +420,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">车长要求</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="vehicle_length" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="小面包车">小面包车</option>
@@ -439,7 +439,7 @@
                             <div class="layui-form-item" style="">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">车型要求</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="vehicle_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部</option>
                                             <option value="1">需要开顶</option>
@@ -468,7 +468,7 @@
                                         </select>
                                     </div>
                                     <div id="super_manager_area_two" class="layui-input-inline"
-                                         style="width:144px;display: none;">
+                                         style="width:98px;display: none;">
                                         <input id="super_manager_area_select_two" placeholder="请选择地区"
                                                name="super_manager_area_select_two" autocomplete="off"
                                                lay-verify="super_manager_area_select_two" class="layui-input"
@@ -480,7 +480,7 @@
                             <div class="layui-form-item" style="">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">特殊标签</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="new_goods_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">新用户</option>
@@ -488,10 +488,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width:246px;">
+                            <div class="layui-form-item" style="width:184px;">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">急需处理</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="urgent_goods" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">小于5分钟</option>
@@ -504,7 +504,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">是否加价</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 98px;">
                                         <select id="is_addition" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">是</option>
@@ -514,9 +514,9 @@
                                 </div>
                             </div>
                           <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
+                                    <div class="layui-inline" style="width: 184px">
                                         <label class="layui-form-label">支付方式</label>
-                                        <div class="layui-input-inline" style="width: 140px">
+                                        <div class="layui-input-inline" style="width: 106px">
                                             <select id="pay_methods" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
@@ -528,14 +528,14 @@
                                     </div>
                                 </div>
                             <article style="display: inline-block; width: auto;">
-                                <div class="layui-form-item fabushijian">
+                                <div class="layui-form-item publish-time">
                                     <div class="layui-inline" style="margin-right: 0;">
                                         <label class="layui-form-label">发布时间</label>
-                                        <div class="layui-input-inline" style="width: 146px;margin-right: 0;">
+                                        <div class="layui-input-inline" style="width: 98px;margin-right: 0;">
                                             <i class="layui-icon layui-icon-riqi"></i>
                                             <input id="create_start_time" name="create_start_time" autocomplete="off"
                                                    lay-verify="create_start_time" class="layui-input" type="text">
-                                            <span class="date-tips">请选择日期</span>
+                                            <span class="date-tips goods-riqi-tips">请选择日期</span>
                                         </div>
                                     </div>
                                 </div>
@@ -546,20 +546,20 @@
                                             <i class="layui-icon layui-icon-riqi"></i>
                                             <input id="create_end_time" name="create_end_time" autocomplete="off"
                                                    lay-verify="create_end_time" class="layui-input" type="text">
-                                            <span class="date-tips">请选择日期</span>
+                                            <span class="date-tips ">请选择日期</span>
                                         </div>
                                     </div>
                                 </div>
                             </article>
-
-                            <div class="layui-form-item fabushijian">
+                            <article style="display: inline-block; width: auto;">
+                               <div class="layui-form-item">
                                 <div class="layui-inline" style="margin-left: 0;">
                                     <label class="layui-form-label">注册时间</label>
-                                    <div class="layui-input-block" style="width: 146px;">
-                                        <i class="layui-icon layui-icon-riqi"></i>
+                                    <div class="layui-input-block" style="width: 98px;">
+                                        <i class="layui-icon layui-icon-riqi "></i>
                                         <input id="register_start_time" name="load_start_time" autocomplete="off"
                                                lay-verify="load_start_time" class="layui-input" type="text">
-                                        <span class="date-tips">请选择日期</span>
+                                        <span class="date-tips goods-riqi-tips">请选择日期</span>
                                     </div>
                                 </div>
                             </div>
@@ -574,6 +574,8 @@
                                     </div>
                                 </div>
                             </div>
+                            </article>
+
                             <button id="goods_search_box" style="position: relative;padding-left: 20px;vertical-align: top;"
                                     class="layui-btn "><i style="" class="iconfont icon-sousuo1"></i> 搜索
                             </button>
@@ -588,18 +590,18 @@
 <span style="display: none!important">
         <script src="https://s22.cnzz.com/z_stat.php?id=1274088436&web_id=1274088436" language="JavaScript"></script>
 </span>
-<script src="../static/js/libs/jquery-2.1.1.min.js?v=5.8"></script>
-<script src="../static/js/libs/highcharts.min.js?v=5.8"></script>
-<script src="../static/js/libs/highcharts-more.js?v=5.8"></script>
-<script src="../static/js/libs/highcharts-final.js?v=5.8"></script>
-<script src="../static/js/libs/highcharts-exporting.js?v=5.8"></script>
-<script src="../static/js/libs/jquery.waypoints.min.js?v=5.8"></script>
-<script src="../static/js/libs/jquery.countup.min.js?v=5.8"></script>
-<script src="../static/layui/layui.js?v=5.8"></script>
-<script src="../static/js/common/http.js?v=5.8"></script>
-<script src="../static/js/common/common.js?v=5.8"></script>
-<script src="../static/js/libs/jquery.address.js?v=5.8"></script>
-<script src="../static/js/goods/goods-statistics.js?v=5.8"></script>
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=5.9"></script>
+<script src="../static/js/libs/highcharts.min.js?v=5.9"></script>
+<script src="../static/js/libs/highcharts-more.js?v=5.9"></script>
+<script src="../static/js/libs/highcharts-final.js?v=5.9"></script>
+<script src="../static/js/libs/highcharts-exporting.js?v=5.9"></script>
+<script src="../static/js/libs/jquery.waypoints.min.js?v=5.9"></script>
+<script src="../static/js/libs/jquery.countup.min.js?v=5.9"></script>
+<script src="../static/layui/layui.js?v=5.9"></script>
+<script src="../static/js/common/http.js?v=5.9"></script>
+<script src="../static/js/common/common.js?v=5.9"></script>
+<script src="../static/js/libs/jquery.address.js?v=5.9"></script>
+<script src="../static/js/goods/goods-statistics.js?v=5.9"></script>
 </body>
 </html>
 <script>

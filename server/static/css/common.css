@@ -110,7 +110,7 @@ input:-ms-input-placeholder {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif !important;
+    font-family: "Menlo", "DejaVu Sans Mono", "Liberation Mono", "Consolas",Arial, Helvetica, sans-serif !important;
     min-width: 1300px
 }
 
@@ -441,7 +441,7 @@ body {
 }
 
 .layui-form-item {
-    margin-bottom: 8px
+    margin-bottom: 6px
 }
 
 nav.main-content-left .layui-nav-tree .layui-nav-item > a {
@@ -1161,7 +1161,7 @@ body {
 }
 
 .layui-table thead tr > th {
-    border-bottom-width: 2px;
+    border-bottom-width: 2px!important;
 }
  .layui-table-view{
      border-left-width:0 ;

@@ -166,6 +166,11 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                     $(this).html(str + '单')
                 }
             })
+              $("td[data-field='user_name']").children().each(function () {
+                if ($(this).text() == '') {
+                    $(this).html('未录入').css({'color':'red'})
+                }
+            })
             common.clearSelect()
         }
         , cols: [[

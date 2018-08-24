@@ -2,8 +2,8 @@
  * Created by Creazy_Run on 2018/5/30.
  */
 $('.layui-table-cell').css({'height': 'auto!important'});
-$('.layui-form-item').css({'width':'234px'})
-$('.chart-area-two-body .layui-form-item').css({'width':'224px'})
+$('.layui-form-item').css({'width':'184px'})
+$('.chart-area-two-body .layui-form-item').css({'width':'184'})
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_one').val(String(common.getNowFormatDate()[2]));

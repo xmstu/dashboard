@@ -250,7 +250,7 @@
     margin-right: 6px;
 }
 .layui-form-item {
-    width: 230px;
+    width: 190px;
 }
 .admin-table-button{
     display: block;
@@ -273,16 +273,19 @@
     z-index: 999999999999!important;
 }
 .layui-form-item .layui-input-inline{
-    width: 130px;
+    width: 100px;
 }
 .tips-paragraph {
     color: #f40;
     font-size: 14px;
     vertical-align: middle;
-    margin-left: 5%;
+    margin-left: 1%;
     text-align: left;
     display: inline-block;
 }
 .layui-layer-title{
     text-align: center;
+}
+.layui-form-item .layui-inline{
+    margin-right: 4px;
 }

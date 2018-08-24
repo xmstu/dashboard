@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="../static/css/common.css?v=5.8">
     <link rel="stylesheet" href="../static/css/iconfont.css?v=5.8">
     <style>.part-2 .layui-form-item {
-        width: 234px;
+        width: 190px;
+    }
+    .layui-form-item .layui-input-inline{
+        width: 110px;
     }
     .layui-form-item .layui-inline {
         margin-right: 0;
@@ -31,8 +34,8 @@
                     <div class="part-1">
                         <div class="part-1-top">
                             <form action="" class="layui-form layui-form-pane">
-                                <div class="layui-form-item" style="width: 230px;">
-                                    <div class="layui-inline" style="width: 210px;">
+                                <div class="layui-form-item" style="width: 190px;">
+                                    <div class="layui-inline" style="width: 178px;">
                                         <label class="layui-form-label">开始日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -41,8 +44,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item" style="width: 230px;">
-                                    <div class="layui-inline" style="width: 210px;">
+                                <div class="layui-form-item" style="width: 190px;">
+                                    <div class="layui-inline" style="width: 178px;">
                                         <label class="layui-form-label">结束日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -51,7 +54,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul class="periods" style="margin-right: 20px">
+                                <ul class="periods" style="margin-right: 14px">
                                     <li>
                                         <button class="active" value="2" id="day_methods">按日</button>
                                     </li>
@@ -63,10 +66,10 @@
                                     </li>
                                 </ul>
                                 <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 230px">
+                                    <div class="layui-inline" style="width: 190px">
 
                                         <label class="layui-form-label">统计类型</label>
-                                        <div class="layui-input-inline" style="width: 140px">
+                                        <div class="layui-input-inline" style="width: 110px">
                                             <select id="user_type" name="modules" lay-verify="required" lay-search="">
                                                 <option value="1">新增用户</option>
                                                 <option value="2">累计用户</option>
@@ -74,10 +77,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item" style="width:230px;">
+                                <div class="layui-form-item" style="width:190px;">
                                     <div class="layui-inline" style="">
                                         <label class="layui-form-label">用户角色</label>
-                                        <div class="layui-input-inline" style="width:140px;">
+                                        <div class="layui-input-inline" style="width:110px;">
                                             <select id="role_type_first" name="modules" lay-verify="required"
                                                     lay-search="">
                                                 <option value="">全部</option>
@@ -88,10 +91,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item" style="width:230px;">
+                                <div class="layui-form-item" style="width:190px;">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">所属地区</label>
-                                        <div id="city_manager_one" class="layui-input-inline" style="width:140px;display: none;">
+                                        <div id="city_manager_one" class="layui-input-inline" style="width:110px;display: none;">
                                             <select id="region_id" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部地区</option>
                                                 {% for location in locations %}
@@ -101,17 +104,17 @@
                                             </select>
                                         </div>
                                         <div id="super_manager_area" class="layui-input-inline"
-                                             style="width:140px;display: none;">
+                                             style="width:110px;display: none;">
                                             <input id="super_manager_area_select_zero" placeholder="请选择地区"
                                                    name="super_manager_area_select_zero" autocomplete="off"
                                                    lay-verify="super_manager_area_select_zero" class="layui-input" type="text">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="layui-form-item" style="width:230px;">
+                                <div class="layui-form-item" style="width:190px;">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">是否认证</label>
-                                        <div class="layui-input-inline" style="width:140px;">
+                                        <div class="layui-input-inline" style="width:110px;">
                                             <select id="is_auth" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部</option>
                                                 <option value="1">认证</option>
@@ -136,7 +139,7 @@
                         <form action="" class="layui-form layui-form-pane">
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">用户名</label>
+                                    <label class="layui-form-label">用户姓名</label>
                                     <div class="layui-input-inline">
                                         <input id="user_name" type="text" name="username" lay-verify="required"
                                                placeholder="请输入用户名" autocomplete="off" class="layui-input">
@@ -145,7 +148,7 @@
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">手机号</label>
+                                    <label class="layui-form-label">手机号码</label>
                                     <div class="layui-input-inline">
                                         <input id="phone_number" type="tel" name="phone" maxlength="11"
                                                placeholder="请输入手机号" lay-verify="required|phone" autocomplete="off"
@@ -155,10 +158,10 @@
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">推荐人手机</label>
-                                    <div class="layui-input-inline" style="width: 132px;">
+                                    <label class="layui-form-label">推荐号码</label>
+                                    <div class="layui-input-inline" style="width: 110px;">
                                         <input id="reference_mobile" type="tel" name="phone" maxlength="11"
-                                               lay-verify="required|phone" placeholder="请输入推荐人手机" autocomplete="off"
+                                               lay-verify="required|phone" placeholder="请输入推荐号码" autocomplete="off"
                                                class="layui-input">
                                     </div>
                                 </div>
@@ -166,7 +169,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">下载渠道</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 110px;">
                                         <input id="download_ch" type="text" name="username" lay-verify="required"
                                                placeholder="请输入下载渠道" autocomplete="off" class="layui-input">
                                     </div>
@@ -176,7 +179,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">注册渠道</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 110px;">
                                         <input id="register" type="text" name="username" lay-verify="required"
                                                placeholder="请输入注册渠道" autocomplete="off" class="layui-input">
                                     </div>
@@ -185,7 +188,7 @@
                             <div class="layui-form-item" style="">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">推荐注册</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 110px;">
                                         <select id="is_referenced" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">有</option>
@@ -196,8 +199,8 @@
                             </div>
                             <div class="layui-form-item">
                                 <div  class="layui-inline">
-                                    <label class="layui-form-label">常驻地</label>
-                                    <div id="city_manager_two" class="layui-input-inline" style="width: 140px; display:none;">
+                                    <label class="layui-form-label">常驻地区</label>
+                                    <div id="city_manager_two" class="layui-input-inline" style="width: 110px; display:none;">
                                         <select id="area_select" name="modules" lay-verify="required" lay-search="">
                                             <option value="">全部地区</option>
                                             {% for location in locations %}
@@ -207,7 +210,7 @@
                                         </select>
                                     </div>
                                     <div id="super_manager_area_one" class="layui-input-inline"
-                                         style="width:160px;display: none;">
+                                         style="width:110px;display: none;">
                                         <input id="super_manager_area_select_one" placeholder="请选择地区"
                                                name="super_manager_area_select_one" autocomplete="off"
                                                lay-verify="super_manager_area_select_one" class="layui-input" type="text">
@@ -217,7 +220,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">注册角色</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 110px;">
                                         <select id="role_type" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">货主</option>
@@ -230,7 +233,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">认证角色</label>
-                                    <div class="layui-input-inline" style="width: 146px;">
+                                    <div class="layui-input-inline" style="width: 110px;">
                                         <select id="role_auth" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">货主</option>
@@ -243,7 +246,7 @@
                             <div class="layui-form-item">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">是否活跃</label>
-                                    <div class="layui-input-inline" style="width: 144px;">
+                                    <div class="layui-input-inline" style="width: 110px;">
                                         <select id="is_actived" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
                                             <option value="1">连续7天登陆</option>
@@ -257,7 +260,7 @@
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline" style="">
-                                    <label class="layui-form-label">操作过</label>
+                                    <label class="layui-form-label">操作类型</label>
                                     <div class="layui-input-inline">
                                         <select id="is_used" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
@@ -271,7 +274,7 @@
                             </div>
                             <div class="layui-form-item">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">贴车贴</label>
+                                    <label class="layui-form-label">粘贴车贴</label>
                                     <div class="layui-input-inline">
                                         <select id="is_car_sticker" name="modules" lay-verify="required" lay-search="">
                                             <option value="">请选择</option>
@@ -281,19 +284,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width:216px;position: relative;">
+                            <div class="layui-form-item" style="width:170px;position: relative;">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">最后登陆</label>
                                     <div class="layui-input-block">
                                         <i class="layui-icon layui-icon-riqi"></i>
-                                        <input id="date_show_three" style="width:148px"  name="date_three" autocomplete="off"
+                                        <input id="date_show_three" style="width:110px"  name="date_three" autocomplete="off"
                                                lay-verify="date_show_three" class="layui-input" type="text">
-                                        <span class="date-tips" style="right: 72px;">请选择日期</span>
+                                        <span class="date-tips" style="right: -12px;display:block;width: 100%;">请选择日期</span>
                                     </div>
                                 </div>
-                            </div>
-                            <span style="display: inline-block;margin-top: 9px;">至</span>
-                            <div class="layui-form-item" style="width:268px;position: relative;">
+                            </div><span style="display: inline-block;margin: 9px 4px 0 10px;">至</span><div class="layui-form-item" style="position: relative;">
                                 <div class="layui-inline">
                                     <div class="layui-input-block" style="margin-left: 3px;">
                                         <i class="layui-icon layui-icon-riqi"></i>
@@ -304,21 +305,21 @@
                                 </div>
                             </div>
                             <article style="width: auto;display: inline-block;">
-                                <div class="layui-form-item" style="width:214px;position: relative;">
+                                <div class="layui-form-item" style="position: relative;">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">注册日期</label>
                                         <div class="layui-input-block">
                                             <i class="layui-icon layui-icon-riqi"></i>
-                                            <input style="width: 146px;" id="date_show_five" name="date_five"
+                                            <input style="width: 110px;" id="date_show_five" name="date_five"
                                                    autocomplete="off" lay-verify="date_show_five" class="layui-input"
                                                    type="text">
-                                            <span class="date-tips" style="width:80px;right: 54px;">请选择日期</span>
+                                            <span class="date-tips" style="width:80px;right: 19px;">请选择日期</span>
                                         </div>
                                     </div>
 
                                 </div>
                                 <span style="display: inline-block;margin-top: 9px;">至</span>
-                                <div class="layui-form-item" style="width:268px;position: relative;">
+                                <div class="layui-form-item" style="position: relative;">
                                     <div class="layui-inline">
                                         <div class="layui-input-block" style="margin-left: 3px;">
                                             <i class="layui-icon layui-icon-riqi"></i>
@@ -330,7 +331,7 @@
                                 </div>
                             </article>
                             <button id="user_search_box"
-                                    style="position: relative;padding-left: 20px;margin-left: 54px;vertical-align: top"
+                                    style="position: relative;padding-left: 20px;vertical-align: top"
                                     class="layui-btn "><i style="" class="iconfont icon-sousuo1"></i> 搜索
                             </button>
                         </form>

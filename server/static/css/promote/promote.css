@@ -13,7 +13,7 @@
 }
 
 #add_users, #add_users_name {
-    padding-left: 25px;
+    padding-left: 30px;
     font-size: 12px;
     font-weight: normal;
     border: 1px solid #dee;
@@ -51,7 +51,7 @@
 }
 
 .layui-form-spec {
-    width: 218px !important;
+    width: 164px !important;
 }
 
 .badge {
@@ -163,11 +163,13 @@
 }
 
 .register-time {
-    width: 208px !important;
+    width: 178px !important;
 }
-
-.fabushijian {
-    width: 214px !important;
+.register-end-time{
+    width: 112px!important;
+}
+.publish-time {
+    width: 164px !important;
 }
 
 .chart-area-four-body {
@@ -199,7 +201,7 @@
 }
 
 .order-item-spec {
-    width: 214px !important;
+    width: 164px !important;
 }
 
 .layui-form-item-show-spec {
@@ -331,4 +333,28 @@
 }
 .message-menu-about.layui-this {
     background: none!important;
+}
+
+.date-tips-icon {
+    position: absolute;
+    color: #ccc;
+    font-size: 12px;
+    top: 6px;
+    width: 100%;
+    right: -10px;
+}
+#user_search_box{
+    position: relative;
+    padding:0 10px;
+    vertical-align: top;
+    margin-left: 14px;
+}
+#add_promote_person{
+    padding:0 4px 0 6px;
+}
+.rili-spec {
+    right: 3px;
+}
+.goods-riqi-tips{
+    right: 28px;
 }
