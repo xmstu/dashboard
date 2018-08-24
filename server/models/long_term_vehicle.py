@@ -9,7 +9,8 @@ class LongTermVehiclModel(object):
         FROM
             `x_activity_inputs` 
         WHERE
-            type = 140 
+            is_deleted = 0
+            AND type = 140 
         """
 
         count = cursor.query_one(command)['count']
@@ -26,7 +27,8 @@ class LongTermVehiclModel(object):
         FROM
             `x_activity_inputs` 
         WHERE
-            type = 140 
+            is_deleted = 0
+            AND type = 140 
         ORDER BY id DESC
         LIMIT {new_count};
         """
