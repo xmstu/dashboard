@@ -2,7 +2,7 @@
 from flask_restplus import Resource
 
 import server.verify.general as general_verify
-import server.document.goods as doc
+import server.document.goods_potential as doc
 from server import log, verify, operations, filters, api
 from server.meta.decorators import Response
 from server.utils.request import get_all_arg, get_arg_int
@@ -12,9 +12,9 @@ class GoodsPotentialDistributionTrend(Resource):
 
     @staticmethod
     @doc.request_goods_distribution_trend_param
-    @filters.GoodsDistributionTrend.get_result(data=dict, params=dict)
-    @operations.GoodsDistributionTrend.get_goods_distribution_trend(params=dict)
-    @verify.GoodsDistributionTrend.check_params(params=dict)
+    @filters.GoodsPotentialDistributionTrend.get_result(data=dict, params=dict)
+    @operations.GoodsPotentialDistributionTrend.get_goods_potential_distribution_trend(params=dict)
+    @verify.GoodsPotentialDistributionTrend.check_params(params=dict)
     def get():
         """潜在货源分布趋势"""
         resp = Response(params=get_all_arg())
@@ -25,7 +25,7 @@ class GoodsPotentialDistributionTrend(Resource):
 class GoodsPotentialList(Resource):
 
     @staticmethod
-    @doc.request_goods_list_param
+    @doc.request_goods_potential_list_param
     @filters.GoodsPotentialList.get_result(data=dict)
     @operations.GoodsPotentialList.get_potential_goods_list(page=int, limit=int, params=dict)
     @verify.GoodsPotentialList.check_params(page=int, limit=int, params=dict)
