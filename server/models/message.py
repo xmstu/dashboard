@@ -96,6 +96,33 @@ class MessageSystemModel(object):
         return result if result else []
 
     @staticmethod
+    def get_suppliers_user_by_region_id(cursor, region_id):
+        """通过region_id获取区镇合伙人"""
+        command = """
+            SELECT 
+                account,
+                2 AS role
+            FROM
+                (
+                SELECT
+                    DISTINCT shu_users.mobile AS account,
+                    region_id
+                FROM
+                    shd_supplier_areas ssa
+                    INNER JOIN shd_suppliers ss ON ss.id = ssa.supplier_id 
+                    INNER JOIN shu_users ON ss.user_id = shu_users.id 
+                    AND shu_users.is_deleted = 0 
+                WHERE
+                    ssa.is_deleted = 0 
+                AND ss.is_deleted = 0 
+                ) AS a
+            WHERE
+                region_id IN (:region_id);"""
+
+        result = cursor.query(command, {'region_id': ','.join(region_id)})
+        return result if result else []
+
+    @staticmethod
     def get_supplier_nodes(cursor):
         """获取网点管理员"""
         command = """
@@ -109,6 +136,32 @@ class MessageSystemModel(object):
         return result if result else []
 
     @staticmethod
+    def get_supplier_nodes_by_region_id(cursor, region_id):
+        """通过region_id获取网点管理员"""
+        command = """
+            SELECT 
+                account,
+                3 AS role
+            FROM
+                (
+                SELECT
+                    DISTINCT shu_users.mobile AS account,
+                    region_id
+                FROM
+                    shd_supplier_areas ssa
+                    INNER JOIN shd_supplier_nodes ssn ON ssn.supplier_id = ssa.supplier_id 
+                    INNER JOIN shu_users ON ssn.manager_user_id = shu_users.id 
+                    AND shu_users.is_deleted = 0 
+                    AND ssa.is_deleted = 0 
+                    AND ssn.is_deleted = 0 
+                ) AS a
+            WHERE
+                region_id = :region_id;"""
+
+        result = cursor.query(command, {'region_id': ','.join(region_id)})
+        return result if result else []
+
+    @staticmethod
     def get_city_manager(cursor):
         """获取城市经理"""
         command = """
@@ -117,6 +170,17 @@ class MessageSystemModel(object):
         WHERE is_deleted = 0"""
 
         result = cursor.query(command)
+        return result if result else []
+
+    @staticmethod
+    def get_city_manager_by_region_id(cursor, region_id):
+        """通过region_id获取城市经理"""
+        command = """
+            SELECT DISTINCT account, 4 AS role
+            FROM tb_inf_city_manager
+            WHERE is_deleted = 0 AND region_id IN (:region_id)"""
+
+        result = cursor.query(command, {'region_id': ','.join(region_id)})
         return result if result else []
 
     @staticmethod

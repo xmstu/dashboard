@@ -14,10 +14,11 @@ def background_thread():
     count = 0
     while True:
         now_count = LongTermVehiclModel.get_count(db.read_db)
-        print(now_count)
+        print('当前长期用车消息的数量:', now_count)
         if now_count and last_count:
             new_count = now_count - last_count
         if new_count:
+            print('有新的长期用车消息,数量为:', new_count)
             new_data = LongTermVehiclModel.get_data(db.read_db, new_count)
             if new_data:
                 try:
@@ -25,14 +26,47 @@ def background_thread():
                     new_data = handle(new_data)
                     # 将新添加的长期用车信息写进系统信息表
                     for detail in new_data:
+                        region_id = [detail.get('province_id'), detail.get('city_id'), detail.get('county_id'), detail.get('town_id')]
                         msg_id = MessageSystemModel.insert_system_message(db.write_bi, detail)
-                        # 将数据发送给对应地区的城市经理或区镇合伙人
                         data = []
-                        user_list = MessageSystemModel.get_system_user(db.read_db)
-                        for user in user_list:
+                        # 向后台用户推送长期用车消息
+                        system_user_list = MessageSystemModel.get_system_user(db.read_db)
+                        for system_user in system_user_list:
                             data.append({
-                                'account': user['account'],
-                                'role': user['role'],
+                                'account': system_user['account'],
+                                'role': system_user['role'],
+                                'sys_msg_id': msg_id,
+                                'create_time': int(time.time()),
+                                'update_time': int(time.time())
+                            })
+                            MessageSystemModel.insert_user_message(db.write_bi, data)
+                        data.clear()
+                        # 将数据发送给对应地区的城市经理
+                        city_manager_list = MessageSystemModel.get_city_manager_by_region_id(db.read_bi, region_id)
+                        for city_manager in city_manager_list:
+                            data.append({
+                                'account': city_manager['account'],
+                                'role': city_manager['role'],
+                                'sys_msg_id': msg_id,
+                                'create_time': int(time.time()),
+                                'update_time': int(time.time())
+                            })
+                            MessageSystemModel.insert_user_message(db.write_bi, data)
+                        data.clear()
+                        # 将数据发送给对应地区的区镇合伙人和网点管理人
+                        # 区镇合伙人
+                        suppliers_user_list = MessageSystemModel.get_suppliers_user_by_region_id(db.read_db, region_id)
+                        # 网点管理员
+                        supplier_nodes_user_list = MessageSystemModel.get_supplier_nodes_by_region_id(db.read_db, region_id)
+                        suppliers_user_account_list = [i.get('account') for i in suppliers_user_list]
+                        for i in supplier_nodes_user_list:
+                            if i.get('account') not in suppliers_user_account_list:
+                                suppliers_user_list.append(i)
+
+                        for supplier in suppliers_user_list:
+                            data.append({
+                                'account': supplier['account'],
+                                'role': supplier['role'],
                                 'sys_msg_id': msg_id,
                                 'create_time': int(time.time()),
                                 'update_time': int(time.time())
@@ -41,7 +75,7 @@ def background_thread():
                 except Exception as e:
                     log.error('消息推送失败,错误原因是:{}'.format(e))
         last_count = now_count
-        print(last_count)
+        print('上一次长期用车消息的数量:', last_count)
         # 下次更新推送消息时隔10分钟
         count += 1
         print('第%d次后台监控定时任务完成' % count)
@@ -57,14 +91,15 @@ def handle(data):
         detail.setdefault('user_id', user_id)
         detail.setdefault('msg_type', msg_type)
 
-        # content = detail.get('content', '')
-        # load_address = re.search('装货-地址：(.*?)<br>', content).group(1)
-        # print(load_address)
-        #
-        # unload_address = re.search('卸货-地址：(.*?)<br>', content).group(1)
-        # print(unload_address)
-        #
-        # long_lat = re.findall('(\d+\.\d+)', content)
-        # print(long_lat)
+        content = detail.get('content', '')
+        try:
+            ret = re.search('装货-省id：(\d{0,6})， 市id：(\d{0,6})， 区id：(\d{0,6})， 镇id：(\d{0,9})', content)
+            province_id, city_id, county_id, town_id = ret.group(1), ret.group(2), ret.group(3), ret.group(4)
+            detail.setdefault('province_id', province_id)
+            detail.setdefault('city_id', city_id)
+            detail.setdefault('county_id', county_id)
+            detail.setdefault('town_id', town_id)
+        except Exception as e:
+            log.error('长期用车信息匹配错误，错误原因是:{}'.format(e))
 
     return data
