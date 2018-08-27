@@ -117,9 +117,9 @@ class MessageSystemModel(object):
                 AND ss.is_deleted = 0 
                 ) AS a
             WHERE
-                region_id IN (:region_id);"""
+                region_id IN ({region_id})""".format(region_id=region_id)
 
-        result = cursor.query(command, {'region_id': ','.join(region_id)})
+        result = cursor.query(command)
         return result if result else []
 
     @staticmethod
@@ -156,9 +156,9 @@ class MessageSystemModel(object):
                     AND ssn.is_deleted = 0 
                 ) AS a
             WHERE
-                region_id = :region_id;"""
+                region_id IN ({region_id})""".format(region_id=region_id)
 
-        result = cursor.query(command, {'region_id': ','.join(region_id)})
+        result = cursor.query(command)
         return result if result else []
 
     @staticmethod
@@ -178,9 +178,9 @@ class MessageSystemModel(object):
         command = """
             SELECT DISTINCT account, 4 AS role
             FROM tb_inf_city_manager
-            WHERE is_deleted = 0 AND region_id IN (:region_id)"""
+            WHERE is_deleted = 0 AND region_id IN ({region_id})""".format(region_id=region_id)
 
-        result = cursor.query(command, {'region_id': ','.join(region_id)})
+        result = cursor.query(command)
         return result if result else []
 
     @staticmethod

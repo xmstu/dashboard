@@ -26,7 +26,7 @@ def background_thread():
                     new_data = handle(new_data)
                     # 将新添加的长期用车信息写进系统信息表
                     for detail in new_data:
-                        region_id = [detail.get('province_id'), detail.get('city_id'), detail.get('county_id'), detail.get('town_id')]
+                        region_id = ','.join([detail.get('province_id'), detail.get('city_id'), detail.get('county_id'), detail.get('town_id')])
                         msg_id = MessageSystemModel.insert_system_message(db.write_bi, detail)
                         data = []
                         # 向后台用户推送长期用车消息
@@ -94,11 +94,10 @@ def handle(data):
         content = detail.get('content', '')
         try:
             ret = re.search('装货-省id：(\d{0,6})， 市id：(\d{0,6})， 区id：(\d{0,6})， 镇id：(\d{0,9})', content)
-            province_id, city_id, county_id, town_id = ret.group(1), ret.group(2), ret.group(3), ret.group(4)
-            detail.setdefault('province_id', province_id)
-            detail.setdefault('city_id', city_id)
-            detail.setdefault('county_id', county_id)
-            detail.setdefault('town_id', town_id)
+            detail.setdefault('province_id', ret.group(1))
+            detail.setdefault('city_id', ret.group(2))
+            detail.setdefault('county_id', ret.group(3))
+            detail.setdefault('town_id', ret.group(4))
         except Exception as e:
             log.error('长期用车信息匹配错误，错误原因是:{}'.format(e))
 
