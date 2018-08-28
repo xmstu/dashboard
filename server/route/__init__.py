@@ -3,7 +3,6 @@
 from server.route.login import *
 from server.route.user import *
 from server.route.goods import *
-from server.route.goods_potential import *
 from server.route.promote import *
 from server.route.home import *
 from server.route.transport import *

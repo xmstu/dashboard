@@ -41,6 +41,7 @@ class GoodsPotentialList(Resource):
         return resp
 
 
-ns = api.namespace('goods_potential', description='潜在货源统计')
+ns = api.namespace('potential', description='潜在货源统计')
 ns.add_resource(GoodsPotentialList, '/list/')
+ns.add_resource(GoodsPotentialDistributionTrend, '/trend/')
 
