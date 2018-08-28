@@ -54,7 +54,7 @@ class GoodsPotentialListModel(object):
         user_name,
         ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) goods_counts,
         ( SELECT COUNT(1) FROM shb_orders WHERE owner_id = shu_users.id AND `status` = 3)  orders_counts,
-        shu_users.create_time register_time
+        FROM_UNIXTIME(shu_users.create_time, '%Y-%m-%d') register_time
         """
 
         fetch_where = """1=1"""
@@ -87,9 +87,9 @@ class GoodsPotentialListModel(object):
                     'to_province_id', 'to_city_id', 'to_county_id', 'to_town_id', 'vehicle_name')
 
         for key, value in params.items():
-            if key in svs_list and isinstance(value, int):
+            if key in svs_list and value and isinstance(value, int):
                 fetch_where += ' AND {key} = {value}'.format(key=key, value=value)
-            elif key in svs_list and isinstance(value, str):
+            elif key in svs_list and value and isinstance(value, str):
                 fetch_where += " AND {key} = '{value}'".format(key=key, value=value)
 
         # 货源类型 一口价/议价
@@ -132,14 +132,14 @@ class GoodsPotentialListModel(object):
         if params.get('record_start_time') and params.get('record_end_time'):
             fetch_where += """
             AND shf_potential_goods.create_time > {0}
-            AND shf_potential_goods.create_time <= {1]
+            AND shf_potential_goods.create_time <= {1}
             """.format(params['record_start_time'], params['record_end_time'])
 
-        count = cursor.query_one(command.format(fields='COUNT(1) AS count'))['count']
+        count = cursor.query_one(command.format(fields='COUNT(1) AS count', fetch_where=fetch_where))['count']
 
-        command += 'LIMIT %s, %s' % ((page - 1) * limit, limit)
+        command += 'ORDER BY shf_potential_goods.id DESC LIMIT %s, %s' % ((page - 1) * limit, limit)
 
-        ftl_data = cursor.query(command.format(fields=fields))
+        ftl_data = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
         data = {
             'potential_data': ftl_data if ftl_data else [],
@@ -173,7 +173,7 @@ class GoodsPotentialListModel(object):
             user_name,
             ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) goods_counts,
             ( SELECT COUNT(1) FROM shb_orders WHERE owner_id = shu_users.id AND `status` = 3)  orders_counts,
-            shu_users.create_time register_time
+            FROM_UNIXTIME(shu_users.create_time, '%Y-%m-%d') register_time
         """
 
         fetch_where = """1=1"""
@@ -207,7 +207,7 @@ class GoodsPotentialListModel(object):
                     'to_province_id', 'to_city_id', 'to_county_id', 'to_town_id')
 
         for key, value in params.items():
-            if key in svs_list and isinstance(value, int):
+            if key in svs_list and value and isinstance(value, int):
                 fetch_where += ' AND {key} = {value}'.format(key=key, value=value)
 
         # 特殊条件
@@ -232,14 +232,14 @@ class GoodsPotentialListModel(object):
         if params.get('record_start_time') and params.get('record_end_time'):
             fetch_where += """
                 AND shf_ltl_pre_goods.create_time > {0}
-                AND shf_ltl_pre_goods.create_time <= {1]
+                AND shf_ltl_pre_goods.create_time <= {1}
                 """.format(params['record_start_time'], params['record_end_time'])
 
-        count = cursor.query_one(command.format(fields='COUNT(1) AS count'))['count']
+        count = cursor.query_one(command.format(fields='COUNT(1) AS count', fetch_where=fetch_where))['count']
 
-        command += 'LIMIT %s, %s' % ((page - 1) * limit, limit)
+        command += 'ORDER BY shf_ltl_pre_goods.id DESC LIMIT %s, %s' % ((page - 1) * limit, limit)
 
-        ltl_data = cursor.query(command.format(fields=fields))
+        ltl_data = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
         data = {
             'potential_data': ltl_data if ltl_data else [],
