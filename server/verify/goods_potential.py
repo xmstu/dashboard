@@ -43,6 +43,7 @@ class GoodsPotentialList(object):
             params['to_town_id'] = int(params.get('to_town_id') or 0)
             params['goods_type'] = int(params.get('goods_type') or 0)
             params['business'] = int(params.get('business') or 1)
+            params['haul_dist'] = int(params.get('haul_dist') or 0)
             params['vehicle_length'] = str(params.get('vehicle_length') or 0)
             params['special_tag'] = int(params.get('special_tag') or 0)
             params['register_start_time'] = int(params.get('register_start_time') or 0)
