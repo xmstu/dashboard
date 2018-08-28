@@ -29,10 +29,10 @@ class LoginDecorator(object):
             elif role == 4:
                 user_info = Login.get_user_by_city_manage(db.read_bi, user_name, password)
             else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='用户身份错误'))
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.PasswdError, msg='用户身份错误'))
 
             if not user_info:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='找不到该用户'))
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.NotUser, msg='找不到该用户'))
             # 地区
             locations = []
             # 后台

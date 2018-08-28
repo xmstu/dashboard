@@ -27,13 +27,8 @@ request_goods_potential_list_param = api.doc(params={
     'limit': '条数',
 }, description='货源统计列表查询参数')
 
-response_success = api.response(200, '成功', api.model('response_success', {
-    'state': fields.Integer(description=str(APIStatus.Ok)),
-    'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
-}))
 
-
-request_goods_distribution_trend_param = api.doc(params={
+request_goods_potential_distribution_trend_param = api.doc(params={
     'start_time': '开始时间',
     'end_time': '结束时间',
     'periods': '时间周期,2:日，3:周，4:月，默认:2',

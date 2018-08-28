@@ -80,5 +80,5 @@ class CityOrderList(object):
 
         except Exception as e:
             log.error('最新接单货源参数错误:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
 

@@ -67,7 +67,7 @@ class GoodsList(object):
                 if role in (2, 3, 4) and not node_id:
                     node_id = locations_id
             else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
             params = {
                 "goods_id": goods_id,
@@ -103,7 +103,7 @@ class GoodsList(object):
 
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
 
 
 class CancelGoodsReason(object):
@@ -124,7 +124,7 @@ class CancelGoodsReason(object):
                 if role in (2, 3, 4) and not region_id:
                     region_id = locations_id
             else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
             if not compare_time(start_time, end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
@@ -139,7 +139,7 @@ class CancelGoodsReason(object):
             return Response(params=params)
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
 
 
 class GoodsDistributionTrend(object):
@@ -162,7 +162,7 @@ class GoodsDistributionTrend(object):
                 if role in (2, 3, 4) and not region_id:
                     region_id = locations_id
             else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
             if not compare_time(start_time, end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
@@ -180,4 +180,4 @@ class GoodsDistributionTrend(object):
             return Response(params=params)
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))

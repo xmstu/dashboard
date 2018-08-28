@@ -37,7 +37,7 @@ class PriceTrend(object):
                 elif role == 1:
                     params['region_id'] = 0
             else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
             if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
@@ -45,4 +45,4 @@ class PriceTrend(object):
             return Response(params=params)
         except Exception as e:
             log.error('error:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='拒绝请求'))

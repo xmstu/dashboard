@@ -11,7 +11,7 @@ from server.utils.request import get_all_arg, get_arg_int
 class GoodsPotentialDistributionTrend(Resource):
 
     @staticmethod
-    @doc.request_goods_distribution_trend_param
+    @doc.request_goods_potential_distribution_trend_param
     @filters.GoodsPotentialDistributionTrend.get_result(data=dict, params=dict)
     @operations.GoodsPotentialDistributionTrend.get_goods_potential_distribution_trend(params=dict)
     @verify.GoodsPotentialDistributionTrend.check_params(params=dict)

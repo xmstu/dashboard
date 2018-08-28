@@ -15,5 +15,5 @@ class Login(object):
         if result:
             return make_result(APIStatus.Ok), HTTPStatus.Ok
         else:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='登录失败'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.InternalServerError, msg='登录失败'))
 

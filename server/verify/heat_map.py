@@ -50,7 +50,7 @@ class HeatMap(object):
                 else:
                     params['role_region_id'] = ''
             else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
             if not check_region_id(params['region_id'], params['role_region_id']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='地区参数非法'))
@@ -61,4 +61,4 @@ class HeatMap(object):
             return Response(params=params)
         except Exception as e:
             log.error('error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='拒绝请求'))

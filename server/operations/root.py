@@ -27,7 +27,7 @@ class RootManagement(object):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.InternalServerError, msg='修改账户信息失败'))
         except Exception as e:
             log.error('Error:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='修改账户信息失败'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.InternalServerError, msg='修改账户信息失败'))
 
 
     @staticmethod

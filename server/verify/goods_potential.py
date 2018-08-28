@@ -63,4 +63,4 @@ class GoodsPotentialList(object):
             return Response(params=params, page=page, limit=limit)
         except Exception as e:
             log.error('前端传入参数错误:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='参数非法,服务器拒绝该请求'))
