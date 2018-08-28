@@ -17,6 +17,10 @@ class GoodsPotentialList(object):
     @staticmethod
     @make_decorator
     def get_potential_goods_list(page, limit, params):
-        data = GoodsPotentialListModel.get_data(db.read_db, page, limit, params)
-
+        if params.get('business') == 1:
+            data = GoodsPotentialListModel.get_ftl_data(db.read_db, page, limit, params)
+        elif params.get('business') == 2:
+            data = GoodsPotentialListModel.get_ltl_data(db.read_db, page, limit, params)
+        else:
+            data = []
         return Response(data=data)

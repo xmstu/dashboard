@@ -4,6 +4,7 @@ from flask import session
 from server.logger import log
 import time
 
+
 class sessionOperationClass(object):
     """session操作类"""
     @staticmethod

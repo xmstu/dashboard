@@ -63,3 +63,9 @@ def decode(token, datatime_format=False):
         if k in payload:
             payload[k] = from_utc_timestamp(payload[k])
     return payload
+
+
+if __name__ == '__main__':
+    token1 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjkwNSwidHkiOjIsIm1vYmlsZSI6IjEzODA5NjkzNDU4IiwiZXhwIjoxNTM2NzE2MzgzfQ%3D%3D.BCaspRnzwcVnaKaGyR0zY0BpYDEK9QkJwKInQNiBajk%3D'
+    payload = decode(token1)
+    print(payload)

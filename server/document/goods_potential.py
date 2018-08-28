@@ -15,6 +15,7 @@ request_goods_potential_list_param = api.doc(params={
     'to_city_id': '目的地城市',
     'to_county_id': '目的地区县',
     'goods_type': '货源距离类型',
+    'business': '货源业务类型',
     'vehicle_length': '车长要求',
     'special_tag': '车长要求',
     'register_start_time': '车长要求',
