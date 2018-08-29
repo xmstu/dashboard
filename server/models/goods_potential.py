@@ -1,17 +1,102 @@
 class GoodsPotentialDistributionTrendModel(object):
 
     @staticmethod
-    def get_data(cursor, params):
+    def get_ftl_data(cursor, params):
 
-        fields = """"""
+        fetch_where = """ 1=1 """
 
-        which_table = """"""
+        command = """
+        SELECT
+            FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') create_time,
+            COUNT(1) AS count
+        FROM
+            shf_potential_goods
+        WHERE
+            {fetch_where}
+        -- 	时间筛选
+            AND create_time > :start_time
+            AND create_time <= :end_time
+        GROUP BY 
+            FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+        """
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR ' \
+                         'from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
 
-        fetch_where = """"""
+        fetch_where += region
 
-        command = """"""
+        # 一口价/议价
+        if params.get('goods_price_type'):
+            fetch_where += """
+                         AND (
+                            ({goods_price_type}=1 AND is_system_price = 1) OR
+                            ({goods_price_type}=2 AND is_system_price = 0) 
+                            )
+                        """.format(goods_price_type=params['goods_price_type'])
 
-        data = cursor.query(command)
+        # 距离类型
+        if params.get('haul_dist'):
+            fetch_where += """
+                        AND (
+                            ({haul_dist}=1 AND haul_dist = 1) OR
+                            ({haul_dist}=2 AND haul_dist = 2) 
+                        )
+                        """.format(haul_dist=params['haul_dist'])
+
+        data = cursor.query(command.format(fetch_where=fetch_where), {'start_time': params['start_time'], 'end_time': params['end_time']})
+
+        return data
+
+    @staticmethod
+    def get_ltl_data(cursor, params):
+
+        fetch_where = """ 1=1 """
+
+        command = """
+        SELECT
+            FROM_UNIXTIME(create_time, '%%Y-%%m-%%d') create_time,
+            COUNT(1) AS count
+        FROM
+            shf_ltl_pre_goods
+        WHERE
+            {fetch_where}
+        -- 	时间筛选
+            AND create_time > :start_time
+            AND create_time <= :end_time
+        GROUP BY 
+            FROM_UNIXTIME(create_time, '%%Y-%%m-%%d')
+        """
+
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR ' \
+                         'from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                             'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = '''
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
+
+        fetch_where += region
+
+        data = cursor.query(command.format(fetch_where=fetch_where), {'start_time': params['start_time'], 'end_time': params['end_time']})
 
         return data
 
@@ -54,7 +139,7 @@ class GoodsPotentialListModel(object):
         user_name,
         ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) goods_counts,
         ( SELECT COUNT(1) FROM shb_orders WHERE owner_id = shu_users.id AND `status` = 3)  orders_counts,
-        FROM_UNIXTIME(shu_users.create_time, '%Y-%m-%d') register_time
+        FROM_UNIXTIME(shu_users.create_time, '%%Y-%%m-%%d') register_time
         """
 
         fetch_where = """1=1"""
@@ -93,13 +178,13 @@ class GoodsPotentialListModel(object):
                 fetch_where += " AND {key} = '{value}'".format(key=key, value=value)
 
         # 货源类型 一口价/议价
-        if params.get('goods_type'):
+        if params.get('goods_price_type'):
             fetch_where += """
              AND (
-                ({goods_type}=1 AND is_system_price = 1) OR
-                ({goods_type}=2 AND is_system_price = 0) 
+                ({goods_price_type}=1 AND is_system_price = 1) OR
+                ({goods_price_type}=2 AND is_system_price = 0) 
                 )
-            """.format(goods_type=params['goods_type'])
+            """.format(goods_price_type=params['goods_price_type'])
 
         # 距离类型
         if params.get('haul_dist'):
@@ -173,7 +258,7 @@ class GoodsPotentialListModel(object):
             user_name,
             ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) goods_counts,
             ( SELECT COUNT(1) FROM shb_orders WHERE owner_id = shu_users.id AND `status` = 3)  orders_counts,
-            FROM_UNIXTIME(shu_users.create_time, '%Y-%m-%d') register_time
+            FROM_UNIXTIME(shu_users.create_time, '%%Y-%%m-%%d') register_time
         """
 
         fetch_where = """1=1"""

@@ -12,7 +12,7 @@ class GoodsPotentialDistributionTrend(Resource):
 
     @staticmethod
     @doc.request_goods_potential_distribution_trend_param
-    @filters.GoodsPotentialDistributionTrend.get_result(data=dict, params=dict)
+    @filters.GoodsPotentialDistributionTrend.get_result(data=list, params=dict)
     @operations.GoodsPotentialDistributionTrend.get_goods_potential_distribution_trend(params=dict)
     @verify.GoodsPotentialDistributionTrend.check_params(params=dict)
     def get():

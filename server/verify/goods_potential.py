@@ -1,3 +1,5 @@
+import time
+
 from flask_restful import abort
 
 from server import log
@@ -11,12 +13,37 @@ class GoodsPotentialDistributionTrend(object):
 
     @staticmethod
     @make_decorator
-    def check_params(params, **kwargs):
+    def check_params(params):
         try:
-            pass
+            # 校验有没有登录
+            if sessionOperationClass.check():
+                role, locations_id = sessionOperationClass.get_locations()
+            else:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            params['start_time'] = int(params.get('start_time') or time.time() - 86400 * 7)
+            params['end_time'] = int(params.get('end_time') or time.time())
+            params['periods'] = int(params.get('periods') or 0)
+            params['goods_price_type'] = int(params.get('goods_price_type') or 0)
+            params['business'] = int(params.get('business') or 1)
+            params['haul_dist'] = int(params.get('haul_dist') or 0)
+            params['region_id'] = int(params.get('region_id') or 0)
+
+            # 校验地区权限id
+            if role in (2, 3, 4):
+                if not params['region_id'] in locations_id:
+                    params['region_id'] = locations_id
+
+            # 补全时间
+            params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
+            # 检测时间正确性
+            if not compare_time(params['start_time'], params['end_time']):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+
+            return Response(params=params)
         except Exception as e:
             log.error('error:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='参数非法'))
 
 
 class GoodsPotentialList(object):
@@ -41,7 +68,7 @@ class GoodsPotentialList(object):
             params['to_city_id'] = int(params.get('to_city_id') or 0)
             params['to_county_id'] = int(params.get('to_county_id') or 0)
             params['to_town_id'] = int(params.get('to_town_id') or 0)
-            params['goods_type'] = int(params.get('goods_type') or 0)
+            params['goods_price_type'] = int(params.get('goods_price_type') or 0)
             params['business'] = int(params.get('business') or 1)
             params['haul_dist'] = int(params.get('haul_dist') or 0)
             params['vehicle_length'] = str(params.get('vehicle_length') or 0)

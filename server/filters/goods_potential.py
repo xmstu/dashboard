@@ -1,16 +1,21 @@
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus, build_result
+from server.utils.date_format import get_date_aggregate
 
 
 class GoodsPotentialDistributionTrend(object):
 
     @staticmethod
     @make_decorator
-    def get_result(data):
-        # TODO 过滤参数
-
-        return make_result(APIStatus.Ok), HTTPStatus.Ok
+    def get_result(data, params):
+        # 过滤参数
+        xAxis, series = get_date_aggregate(params['start_time'], params['end_time'], params['periods'], data)
+        ret = {
+            'xAxis': xAxis,
+            'series': series
+        }
+        return make_result(APIStatus.Ok, data=ret), HTTPStatus.Ok
 
 
 class GoodsPotentialList(object):

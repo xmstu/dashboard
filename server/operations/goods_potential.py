@@ -8,8 +8,13 @@ class GoodsPotentialDistributionTrend(object):
     @staticmethod
     @make_decorator
     def get_goods_potential_distribution_trend(params):
-        data = GoodsPotentialDistributionTrendModel.get_data(db.read, params)
-        return Response(data=data)
+        if params.get('business') == 1:
+            data = GoodsPotentialDistributionTrendModel.get_ftl_data(db.read_db, params)
+        elif params.get('business') == 2:
+            data = GoodsPotentialDistributionTrendModel.get_ltl_data(db.read_db, params)
+        else:
+            data = []
+        return Response(data=data, params=params)
 
 
 class GoodsPotentialList(object):
