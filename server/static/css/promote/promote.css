@@ -42,18 +42,12 @@
     line-height: 27px !important;
 }
 
-.layui-form-spec1 {
-    width: 262px !important;
-}
-
-.layui-form-special {
-    width: 202px !important;
-}
-
 .layui-form-spec {
-    width: 164px !important;
+    width: 114px !important;
 }
-
+.layui-form-special {
+    width: 176px!important;
+}
 .badge {
     display: inline-block;
     min-width: 14px;

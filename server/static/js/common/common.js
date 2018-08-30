@@ -552,6 +552,9 @@ var common = {
                 beforeSend:function(){
                   layer.load()
                 },
+                success:function(){
+                  layer.closeAll('loading')
+                },
                 complete: function (Xhttp) {
                     layer.closeAll('loading');
                     if (Xhttp.responseJSON.status == 400 && Xhttp.responseJSON.msg == '货源已成单') {
@@ -630,8 +633,8 @@ var common = {
 };
 setTimeout(function () {
     common.cookieSet();
-    common.messageRequest();
     common.menuSet();
+    common.messageRequest();
     common.returnTop();
     common.periods();
     common.weather();
@@ -641,7 +644,7 @@ setTimeout(function () {
     common.secondMenuSet();
     common.messageSet($('.message-center'), $('.message-center > ul'));
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
-}, 30);
+}, 10);
 setInterval(function () {
     $('.header-content-main').fadeIn('normal').css({'display': 'inline-block'});
     $('#date_now').html('');
