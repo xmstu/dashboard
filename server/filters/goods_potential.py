@@ -106,6 +106,16 @@ class GoodsPotentialList(object):
             else:
                 mobile = mobile + '\n' + detail.get('user_name', '') + '\n'
 
+            if detail.get('stay_time'):
+                stay_time = (str(int(detail['stay_time'] / 3600)) + '小时' if int(
+                    detail['stay_time'] / 3600) > 0 else '') + \
+                               (str(int(detail['stay_time'] % 3600 / 60)) + '分' if int(
+                                   detail['stay_time'] % 3600 / 60) > 0 else '') + \
+                               (str(int(detail['stay_time'] % 3600 % 60)) + '秒' if int(
+                                   detail['stay_time'] % 3600 % 60) > 0 else '')
+            else:
+                stay_time = '-'
+
             result.append({
                 'goods_standard': goods_standard,
                 'goods_type': goods_type,
@@ -115,6 +125,7 @@ class GoodsPotentialList(object):
                 'mobile': mobile,
                 'goods_counts': detail.get('goods_counts'),
                 'orders_counts': detail.get('orders_counts'),
+                'stay_time': stay_time,
                 'register_time': detail.get('register_time')
             })
 
