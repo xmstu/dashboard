@@ -73,8 +73,9 @@ class HeatMapModel(object):
             elif params['field'] == 5:
                 table += """ LEFT JOIN tb_inf_user_login login USING(user_id) """
                 fetch_where += """
-                AND FROM_UNIXTIME(login.last_login_time, "%%Y-%%m-%%d") = FROM_UNIXTIME(:end_time, "%%Y-%%m-%%d")
-                AND login.keep_login_days = :days
+                AND login.last_login_time > :start_time
+                AND login.last_login_time <= :end_time
+                AND (SELECT COUNT( 1 ) FROM tb_inf_user_login WHERE user_id = login.user_id AND last_login_time > :start_time AND last_login_time <= :end_time) = :days
                 """
 
         # 根据级别分组数据
@@ -103,8 +104,8 @@ class HeatMapModel(object):
             group_condition=group_condition, region_group=region_group)
 
         start_time = params.get('start_time', time.time() - 86400 * 7)
-        end_time = params.get('end_time', time.time() - 86400)
-        days = int((end_time + 1 - start_time) / 86400)
+        end_time = params.get('end_time', time.time())
+        days = int(round((end_time - start_time) / 86400))
 
         kwargs = {
             "start_time": start_time,

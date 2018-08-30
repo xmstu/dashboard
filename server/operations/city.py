@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from server import log
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.city import CityOrderListModel, CityResourceBalanceModel, CityNearbyCarsModel

@@ -78,7 +78,8 @@ def background_thread():
         print('上一次长期用车消息的数量:', last_count)
         # 下次更新推送消息时隔10分钟
         count += 1
-        print('第%d次后台监控定时任务完成' % count)
+        print('第%d次后台监控定时任务完成,当前时间是%s' % (count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))))
+        print('\n')
         time.sleep(600)
 
 
