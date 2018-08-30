@@ -172,12 +172,14 @@ var setAbout = {
                 cols: [[
                     {field: 'goods_standard', title: '货物规格'},
                     {field: 'goods_type', title: '货物类型'},
-                    {field: 'address', title: '出发地-目的地', width: 300},
+                    {field: 'address', title: '出发地-目的地', width: 360},
                     {field: 'vehicle', title: '车型要求'},
                     {field: 'price', title: '运费'},
                     {field: 'mobile', title: '用户信息'},
                     {field: 'goods_counts', title: '发货数'},
                     {field: 'orders_counts', title: '完成数'},
+                    {field:'query_time',title:'查价时间'},
+                    {field:'stay_time',title:'查价时长'},
                     {field: 'register_time', title: '注册时间'}
                 ]],
                 done: function (res, curr, count) {
@@ -283,7 +285,7 @@ var setAbout = {
             },
 
             title: {
-                text: '用户变化趋势曲线图'
+                text: '潜在货源趋势曲线图'
             },
             subtitle: {
                 text: null
