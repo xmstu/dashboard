@@ -2,7 +2,7 @@ from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus, build_result
 from server.utils.date_format import get_date_aggregate
-from server.utils.extend import timestamp2date
+from server.utils.extend import timestamp2date, interval_time_to_format_time
 
 
 class GoodsPotentialDistributionTrend(object):
@@ -108,12 +108,7 @@ class GoodsPotentialList(object):
                 mobile = mobile + '\n' + detail.get('user_name', '') + '\n'
 
             if detail.get('stay_time'):
-                stay_time = (str(int(detail['stay_time'] / 3600)) + '小时' if int(
-                    detail['stay_time'] / 3600) > 0 else '') + \
-                               (str(int(detail['stay_time'] % 3600 / 60)) + '分' if int(
-                                   detail['stay_time'] % 3600 / 60) > 0 else '') + \
-                               (str(int(detail['stay_time'] % 3600 % 60)) + '秒' if int(
-                                   detail['stay_time'] % 3600 % 60) > 0 else '')
+                stay_time = interval_time_to_format_time(detail['stay_time'])
             else:
                 stay_time = '-'
 

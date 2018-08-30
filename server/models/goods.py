@@ -35,8 +35,8 @@ class GoodsList(object):
                 shf_goods.is_deleted,
                 CASE WHEN
                 (shf_goods.STATUS IN ( 1, 2 ) 
-                AND (( shf_goods.loading_time_is_realtime = 1 AND ( expired_timestamp + 600 ) < UNIX_TIMESTAMP()) 
-                    OR ( shf_goods.loading_time_is_realtime = 0 AND expired_timestamp < UNIX_TIMESTAMP())))
+                AND (( shf_goods.loading_time_is_realtime = 1 AND ( shf_goods.expired_timestamp + 600 ) < UNIX_TIMESTAMP()) 
+                    OR ( shf_goods.loading_time_is_realtime = 0 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP())))
                 THEN 1 ELSE 0 END AS expire,
                 -- 旧车型
                 (SELECT IF(shf_goods_vehicles.attribute_value_id = 0, '不限车型', GROUP_CONCAT(shm_dictionary_items.`name`))
@@ -177,8 +177,8 @@ class GoodsList(object):
             if params['goods_status'] == 4:
                 fetch_where += """ 
                         AND shf_goods.STATUS IN ( 1, 2 ) 
-                        AND (( shf_goods.loading_time_is_realtime = 1 AND ( expired_timestamp + 600 ) < UNIX_TIMESTAMP()) 
-                            OR ( shf_goods.loading_time_is_realtime = 0 AND expired_timestamp < UNIX_TIMESTAMP())) """
+                        AND (( shf_goods.loading_time_is_realtime = 1 AND ( shf_goods.expired_timestamp + 600 ) < UNIX_TIMESTAMP()) 
+                            OR ( shf_goods.loading_time_is_realtime = 0 AND shf_goods.expired_timestamp < UNIX_TIMESTAMP())) """
 
         # 是否通话
         if params['is_called']:

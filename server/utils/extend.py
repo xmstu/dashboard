@@ -196,6 +196,17 @@ def date_to_timestamp(start_date, end_date):
     return start_timestamp, end_timestamp + 86399
 
 
+def interval_time_to_format_time(interval_time):
+    format_time = (str(int(interval_time / 3600)) + '小时' if int(
+        interval_time / 3600) > 0 else '') + \
+                (str(int(interval_time % 3600 / 60)) + '分' if int(
+                    interval_time % 3600 / 60) > 0 else '') + \
+                (str(int(interval_time % 3600 % 60)) + '秒' if int(
+                    interval_time % 3600 % 60) > 0 else '')
+
+    return format_time
+
+
 def check_region_id(region_id, locations_id):
     if region_id == 0:
         return False
