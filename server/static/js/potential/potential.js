@@ -178,6 +178,7 @@ var setAbout = {
                     {field: 'mobile', title: '用户信息'},
                     {field: 'goods_counts', title: '发货数'},
                     {field: 'orders_counts', title: '完成数'},
+                    {field:'stay_time',title:'查价时长'},
                     {field: 'register_time', title: '注册时间'}
                 ]],
                 done: function (res, curr, count) {
@@ -283,7 +284,7 @@ var setAbout = {
             },
 
             title: {
-                text: '用户变化趋势曲线图'
+                text: '潜在货源趋势曲线图'
             },
             subtitle: {
                 text: null
