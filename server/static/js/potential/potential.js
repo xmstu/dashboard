@@ -5,6 +5,8 @@ var setAbout = {
     init: function () {
         /*给表单设置默认值，时间转换秒是前端做的*/
         $('.layui-table-cell').css({'height': 'auto!important'});
+        $('.potential-menu-about > a').addClass('selected-active');
+        $('.potential-menu-about > a>i').addClass('select-active');
         $('#date_show_one').val(String(common.getNowFormatDate()[2]));
         $('#date_show_two').val(String(common.getNowFormatDate()[3]));
         $('#start_date_one').val(String(common.getNowFormatDate()[2]));
@@ -199,10 +201,11 @@ var setAbout = {
                         var str = $(this).text();
                         if (str != '') {
                             str = str.split('\n');
-                            if (str[0] != '' && str[1] == '') {
-                                $(this).html(str[0])
-                            } else if (str[0] != '' && str[1] != '') {
+                            console.log(str.length);
+                            if (str.length > 1) {
                                 $(this).html(str[0] + str[1])
+                            } else {
+                                $(this).html(str[0])
                             }
                         }
                     });
