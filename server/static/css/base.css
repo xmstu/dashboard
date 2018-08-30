@@ -69,6 +69,9 @@ s,i,em{font-style:normal;text-decoration:none;}
 .mr-10{
     margin-right:10px;
 }
+.mr-16{
+    margin-right: 16px;
+}
 .mr-20{
     margin-right:20px;
 }
@@ -152,4 +155,7 @@ s,i,em{font-style:normal;text-decoration:none;}
 }
 .l-p-3-5{
     letter-spacing: 3.5px;
+}
+.vt{
+    vertical-align: top!important;
 }

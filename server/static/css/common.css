@@ -385,7 +385,7 @@ body {
 }
 
 .main-content > .main-content-left {
-    width: 8%;
+    width:140px;
     top: 42px;
     background: #1a2732 !important;
     -webkit-background-size: cover;
@@ -588,7 +588,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
 .main-content-right {
     padding: .2%;
     height: auto;
-    margin-left: 8%;
+    margin-left:140px;
     margin-top: 42px;
     background: #f1f1f1;
     padding-right: 0;

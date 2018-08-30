@@ -39,7 +39,9 @@ var set = {
                         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function () {
                             if (_that.find('.read-status').text() == '未读' && res.status == 100000) {
                                 _that.find('.read-status').html('已读')
+
                             }
+                             layer.closeAll('loading')
                         })
                     }
                 });
@@ -64,9 +66,11 @@ var set = {
         }
     },
     resetData: function (str) {
-        /*js反转义*/
+        /*js反转义,有很多慢慢加*/
         str = str.replace(/&lt;/g, '<');
         str = str.replace(/&gt;/g, '>');
+        str = str.replace(/&nbsp;/g, '');
+        str = str.replace(/\n/g, '');
         return str
     }
 };
