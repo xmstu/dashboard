@@ -2,6 +2,7 @@ from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
 from server.status import make_result, APIStatus, HTTPStatus, build_result
 from server.utils.date_format import get_date_aggregate
+from server.utils.extend import timestamp2date
 
 
 class GoodsPotentialDistributionTrend(object):
@@ -126,6 +127,7 @@ class GoodsPotentialList(object):
                 'goods_counts': detail.get('goods_counts'),
                 'orders_counts': detail.get('orders_counts'),
                 'stay_time': stay_time,
+                'query_time': timestamp2date(detail.get('query_time'), accuracy=2),
                 'register_time': detail.get('register_time')
             })
 

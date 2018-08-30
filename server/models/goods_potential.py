@@ -140,6 +140,7 @@ class GoodsPotentialListModel(object):
         ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) goods_counts,
         ( SELECT COUNT(1) FROM shb_orders WHERE owner_id = shu_users.id AND `status` = 3)  orders_counts,
         stay_time,
+        shf_potential_goods.create_time query_time,
         FROM_UNIXTIME(shu_users.create_time, '%Y-%m-%d') register_time
         """
 
@@ -260,6 +261,7 @@ class GoodsPotentialListModel(object):
             ( SELECT COUNT( 1 ) FROM shf_goods WHERE user_id = shu_users.id ) goods_counts,
             ( SELECT COUNT(1) FROM shb_orders WHERE owner_id = shu_users.id AND `status` = 3)  orders_counts,
             0 AS stay_time,
+            shf_ltl_pre_goods.create_time query_time,
             FROM_UNIXTIME(shu_users.create_time, '%Y-%m-%d') register_time
         """
 
