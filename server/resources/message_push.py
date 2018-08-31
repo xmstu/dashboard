@@ -17,7 +17,7 @@ def background_thread():
         print('当前长期用车消息的数量:', now_count)
         if now_count and last_count:
             new_count = now_count - last_count
-        if new_count:
+        if new_count and new_count > 0:
             print('有新的长期用车消息,数量为:', new_count)
             new_data = LongTermVehiclModel.get_data(db.read_db, new_count)
             if new_data:
@@ -71,7 +71,8 @@ def background_thread():
                                 'create_time': int(time.time()),
                                 'update_time': int(time.time())
                             })
-                            MessageSystemModel.insert_user_message(db.write_bi, data)
+                        MessageSystemModel.insert_user_message(db.write_bi, data)
+                        data.clear()
                 except Exception as e:
                     log.error('消息推送失败,错误原因是:{}'.format(e))
         last_count = now_count
@@ -80,7 +81,7 @@ def background_thread():
         count += 1
         print('第%d次后台监控定时任务完成,当前时间是%s' % (count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))))
         print('\n')
-        time.sleep(600)
+        time.sleep(10)
 
 
 def handle(data):
@@ -99,5 +100,5 @@ def handle(data):
             detail.setdefault('region_id', region_id)
         except Exception as e:
             log.error('长期用车信息匹配错误，错误原因是:{}'.format(e))
-
+            data = []
     return data

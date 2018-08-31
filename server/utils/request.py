@@ -1,7 +1,7 @@
 # coding=utf-8
 # author=veficos
 
-import html, re
+import html
 
 from flask_restful import abort
 from flask_restful import request

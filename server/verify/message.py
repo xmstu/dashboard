@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-
+import re
 from flask_restful import abort
-
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
@@ -30,6 +29,7 @@ class MessageSystemVerify(object):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='消息类型错误'))
         if int(params.get('push_role')) not in [0,1,2,3,4]:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推送角色错误'))
+        params['content'] = re.sub(r'&nbsp;|\s', '', params['content'])
         params = {
             'user_id': user_id,
             'title': params['title'],
