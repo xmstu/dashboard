@@ -172,14 +172,14 @@ var setAbout = {
                 cols: [[
                     {field: 'goods_standard', title: '货物规格'},
                     {field: 'goods_type', title: '货物类型'},
-                    {field: 'address', title: '出发地-目的地', width: 360},
+                    {field: 'address', title: '出发地-目的地', width: 300},
                     {field: 'vehicle', title: '车型要求'},
                     {field: 'price', title: '运费'},
+                    {field:'query_time',title:'查价时间'},
+                    {field:'stay_time',title:'查价时长'},
                     {field: 'mobile', title: '用户信息'},
                     {field: 'goods_counts', title: '发货数'},
                     {field: 'orders_counts', title: '完成数'},
-                    {field:'query_time',title:'查价时间'},
-                    {field:'stay_time',title:'查价时长'},
                     {field: 'register_time', title: '注册时间'}
                 ]],
                 done: function (res, curr, count) {
@@ -408,7 +408,7 @@ $('#goods_search_box').click(function (e) {
         to_county_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
         goods_price_type: $('#goods_type_first').val(),
         business: $('#business_type').val(),
-        haul_dist: $('#haul_dist').val(),
+        haul_dist: $('#haul_dist_table').val(),
         vehicle_name: $('#vehicle_name').val(),
         special_tag: $('#special_tag').val(),
         register_start_time: register_start_time,
@@ -416,6 +416,8 @@ $('#goods_search_box').click(function (e) {
         record_start_time: record_start_time,
         record_end_time: record_end_time
     };
+    console.log($('#haul_dist_table').val());
+    console.log('test:'+data.haul_dist)
     var url = '/potential/list/?from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_county_id=' + data.to_county_id + '&goods_price_type=' + data.goods_price_type + '&business=' + data.business + '&haul_dist=' + data.haul_dist + '&vehicle_name=' + data.vehicle_name + '&special_tag=' + data.special_tag + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&record_start_time=' + data.record_start_time + '&record_end_time=' + data.record_end_time;
     setAbout.tableSet(url)
 });
