@@ -29,18 +29,6 @@ def background_thread():
                         region_id = detail.get('region_id')
                         msg_id = MessageSystemModel.insert_system_message(db.write_bi, detail)
                         data = []
-                        # 向后台用户推送长期用车消息
-                        system_user_list = MessageSystemModel.get_system_user(db.read_db)
-                        for system_user in system_user_list:
-                            data.append({
-                                'account': system_user['account'],
-                                'role': system_user['role'],
-                                'sys_msg_id': msg_id,
-                                'create_time': int(time.time()),
-                                'update_time': int(time.time())
-                            })
-                            MessageSystemModel.insert_user_message(db.write_bi, data)
-                        data.clear()
                         # 将数据发送给对应地区的城市经理
                         city_manager_list = MessageSystemModel.get_city_manager_by_region_id(db.read_bi, region_id)
                         for city_manager in city_manager_list:
