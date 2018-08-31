@@ -11,8 +11,9 @@ def background_thread():
     """后台监控程序，10分钟监控数据库一次，检查数据库变化，如果有变化，将对应信息写到信息表"""
     new_count = 0
     last_count = 0
-    count = 0
+    count = 1
     while True:
+        log.info('第%d次后台监控定时任务开始,当前时间是%s' % (count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))))
         now_count = LongTermVehiclModel.get_count(db.read_db)
         print('当前长期用车消息的数量:', now_count)
         if now_count and last_count:
@@ -67,10 +68,10 @@ def background_thread():
         last_count = now_count
         print('上一次长期用车消息的数量:', last_count)
         # 下次更新推送消息时隔10分钟
-        count += 1
         log.info('第%d次后台监控定时任务完成,当前时间是%s' % (count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))))
+        count += 1
         print('\n')
-        time.sleep(600)
+        time.sleep(10)
 
 
 def handle(data):
