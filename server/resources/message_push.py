@@ -46,7 +46,8 @@ def background_thread():
                         # 区镇合伙人
                         suppliers_user_list = MessageSystemModel.get_suppliers_user_by_region_id(db.read_db, region_id)
                         # 网点管理员
-                        supplier_nodes_user_list = MessageSystemModel.get_supplier_nodes_by_region_id(db.read_db, region_id)
+                        supplier_nodes_user_list = MessageSystemModel.get_supplier_nodes_by_region_id(db.read_db,
+                                                                                                      region_id)
                         suppliers_user_account_list = [i.get('account') for i in suppliers_user_list]
                         for i in supplier_nodes_user_list:
                             if i.get('account') not in suppliers_user_account_list:
