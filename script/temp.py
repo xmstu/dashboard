@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 import time
 
 from script.db import MySQLdb
