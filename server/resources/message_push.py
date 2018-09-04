@@ -93,3 +93,4 @@ def handle(data):
             log.error('长期用车信息匹配错误，错误原因是:{}'.format(e))
             data = []
     return data
+

@@ -12,20 +12,30 @@ def handle(result_data):
         # 下载渠道不为空
         if download_channel:
             if from_channel:
-                if from_channel == 'miniprogram':
-                    pass
-                elif from_channel == 'qudao=tuijian':
-                    i['from_channel'] = '推荐注册'
-                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
+                if from_channel in ('h5注册页面(url无qudao=)', 'qudao=tuijian', '推荐注册', '无-未知', '无-安卓'):
+                    i['from_channel'] = 'h5-qudao=tuijian'
+                elif from_channel in ('qudao=youzhan100', 'qudao=youzhan85'):
+                    i['from_channel'] = 'h5-qudao=youzhan60'
+                elif from_channel == '省省智能物流网站':
+                    i['from_channel'] = 'ss56-website'
+                elif from_channel in ('省省回头车小程序', 'miniprogram'):
+                    i['from_channel'] = 'sshtc-miniprogram'
                 else:
                     i['from_channel'] = download_channel
-                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
+                ret.append({'from_channel': i['from_channel'], 'id': i['id']})
         else:
             if from_channel:
-                if from_channel == 'miniprogram':
-                    pass
-                elif from_channel == 'qudao=tuijian':
-                    i['from_channel'] = '推荐注册'
+                if from_channel in ('h5注册页面(url无qudao=)', 'qudao=tuijian', '推荐注册', '无-未知', '无-安卓'):
+                    i['from_channel'] = 'h5-qudao=tuijian'
+                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
+                elif from_channel in ('qudao=youzhan100', 'qudao=youzhan85'):
+                    i['from_channel'] = 'h5-qudao=youzhan60'
+                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
+                elif from_channel == '省省智能物流网站':
+                    i['from_channel'] = 'ss56-website'
+                    ret.append({'from_channel': i['from_channel'], 'id': i['id']})
+                elif from_channel in ('省省回头车小程序', 'miniprogram'):
+                    i['from_channel'] = 'sshtc-miniprogram'
                     ret.append({'from_channel': i['from_channel'], 'id': i['id']})
                 elif from_channel in ('上门安装',
                                       '上门推荐',
@@ -95,6 +105,7 @@ if __name__ == '__main__':
     # })
 
     all_count = reader.query_one("""SELECT count(1) all_count FROM `shu_user_profiles` WHERE is_deleted = 0""")['all_count']
+    print('Begin updating, All needed update data:{}, now:{}'.format(all_count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
     for step in range(0, all_count, 10000):
         command = """
                     SELECT
@@ -108,16 +119,15 @@ if __name__ == '__main__':
                     LIMIT 10000 OFFSET %s
                     """ % step
         result_data = handle(reader.query(command))
-        print('start')
+        print(' ' * 10, 'start')
         # 提交
         try:
             with writer.begin() as db_write:
                 cmd = """UPDATE shu_user_profiles SET from_channel=:from_channel WHERE id =:id"""
                 rowcount = db_write.conn.update(cmd, result_data)
-                print('finished rowcount:', rowcount)
-                print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), len(result_data))
-                print('\t')
+                print(' ' * 10, 'finished rowcount:', rowcount, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), len(result_data))
         except Exception as e:
-            print('write error happen:', e)
+            print(' ' * 10, 'write error happen:', e)
         finally:
-            print('end')
+            print(' ' * 10, 'end')
+    print('End updating, now:{}'.format(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())))
