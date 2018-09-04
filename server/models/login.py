@@ -15,7 +15,7 @@ class Login(object):
         FROM sha_users
         LEFT JOIN sha_user_profiles ON sha_users.id = sha_user_profiles.user_id
         WHERE user_name = :user_name AND `password` = :password AND sha_users.is_deleted = 0
-        AND sha_users.id IN (43, 236, 320, 321, 322, 324)
+        AND sha_users.id IN (43, 236, 294, 320, 321, 322, 324)
         """
         result = cursor.query_one(command, {'user_name': user_name, 'password': password})
 
