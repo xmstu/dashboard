@@ -26,7 +26,8 @@ class HeatMap(object):
             # 当前权限下所有地区
             if sessionOperationClass.check():
                 role, locations_id = sessionOperationClass.get_locations()
-                if role in (2, 3, 4):
+                # 校验权限id
+                if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
                     params['role_region_id'] = locations_id
                     L = []
                     if len(locations_id) > 1:
@@ -45,7 +46,7 @@ class HeatMap(object):
                     else:
                         params['authority_region_id'] = locations_id[0]
                         params['region_id'] = params['region_id'] if params['region_id'] != '0' else params['authority_region_id']
-                elif role == 1:
+                elif role == '超级管理员':
                     params['role_region_id'] = locations_id + ['0']
                 else:
                     params['role_region_id'] = ''

@@ -9,11 +9,9 @@ class LoginSetting(object):
 
     @staticmethod
     @make_decorator
-    def post(user_name, password, role):
-        if role and role not in (1, 4):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='角色选择错误'))
+    def post(user_name, password):
         if user_name and password:
-            return Response(user_name=user_name, password=password, role=role)
+            return Response(user_name=user_name, password=password)
 
         abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound))
 

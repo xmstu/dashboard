@@ -30,9 +30,8 @@ class GoodsPotentialDistributionTrend(object):
             params['region_id'] = int(params.get('region_id') or 0)
 
             # 校验地区权限id
-            if role in (2, 3, 4):
-                if not params['region_id'] in locations_id:
-                    params['region_id'] = locations_id
+            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id'] in locations_id:
+                params['region_id'] = locations_id
 
             # 补全时间
             params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
@@ -55,8 +54,6 @@ class GoodsPotentialList(object):
             # 校验有没有登录
             if sessionOperationClass.check():
                 role, locations_id = sessionOperationClass.get_locations()
-                if role == 1:
-                    locations_id = None
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
@@ -77,7 +74,11 @@ class GoodsPotentialList(object):
             params['register_end_time'] = int(params.get('register_end_time') or 0)
             params['record_start_time'] = int(params.get('record_start_time') or 0)
             params['record_end_time'] = int(params.get('record_end_time') or 0)
-            params['region_id'] = locations_id
+            params['region_id'] = int(params.get('region_id') or 0)
+
+            # 校验权限id
+            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id'] in locations_id:
+                params['region_id'] = locations_id
             # 补全时间
             params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
             params['record_start_time'], params['record_end_time'] = complement_time(params['record_start_time'], params['record_end_time'])

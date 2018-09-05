@@ -20,17 +20,16 @@ class Login(Resource):
     @doc.request_user_login
     @doc.response_user_login_success
     @filters.Login.insert_session(result=bool)
-    @operations.LoginDecorator.common_check(user_name=str, password=str, role=int)
-    @verify.LoginSetting.post(user_name=str, password=str, role=int)
+    @operations.LoginDecorator.common_check(user_name=str, password=str)
+    @verify.LoginSetting.post(user_name=str, password=str)
     def post():
         """用户登录"""
         payload = get_payload()
         user_name = payload.get('user_name', '')
         password = payload.get('password', '')
-        role = payload.get('role', 1)
-        resp = Response(user_name=user_name, password=password, role=role)
+        resp = Response(user_name=user_name, password=password)
 
-        log.info('获取用户登录请求参数: [user_name: %s][password: %s][resp: %s]' % (resp['user_name'], resp['password'], resp['role']))
+        log.info('获取用户登录请求参数: [user_name: %s][password: %s]' % (resp['user_name'], resp['password']))
         return resp
 
     @staticmethod

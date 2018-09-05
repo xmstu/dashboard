@@ -8,6 +8,7 @@ from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
 from server.meta.session_operation import sessionOperationClass
 
+
 class CityResourceBalance(object):
     @staticmethod
     @make_decorator
@@ -30,7 +31,9 @@ class CityResourceBalance(object):
 
         # 当前权限下所有地区
         role, locations_id = sessionOperationClass.get_locations()
-        if role in (2, 3, 4) and not region_id:
+        if role == '超级管理员':
+            region_id = 0
+        if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not region_id:
             region_id = locations_id
 
         params = {
@@ -63,7 +66,9 @@ class CityOrderList(object):
 
             # 当前权限下所有地区
             role, locations_id = sessionOperationClass.get_locations()
-            if role in (2, 3, 4) and not region_id:
+            if role == '超级管理员':
+                region_id = 0
+            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not region_id:
                 region_id = locations_id
 
             params = {

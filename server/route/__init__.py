@@ -9,7 +9,6 @@ from server.route.transport import *
 from server.route.map import *
 from server.route.potential import *
 from server.route.order import *
-from server.route.introduce import *
 from server.route.price import *
 from server.route.verify_vehicle import *
 from server.route.message import *

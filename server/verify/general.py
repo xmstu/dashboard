@@ -1,6 +1,5 @@
 from flask_restful import abort
 
-from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result
 

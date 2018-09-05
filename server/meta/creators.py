@@ -11,6 +11,7 @@ def StaticClass(name, *args, **kwargs):
         func.__name__: func for func in methods
     })
 
+
 class DictModel(dict):
     def __init__(self, *args, **kwargs):
         super(DictModel, self).__init__(*args, **kwargs)

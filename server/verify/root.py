@@ -30,11 +30,13 @@ class RootManagement(object):
         try:
             params['account'] = str(params.get('account') or '')
             params['user_name'] = str(params.get('user_name') or '')
-            params['password'] = pwd = str(params.get('password') or '')
-            params['region_id'] = int(params.get('region_id') or 0)
-            params['user_id'] = int(params.get('user_id') or 0)
+            pwd = str(params.get('password') or '')
+            params['role_id'] = int(params.get('role_id') or 0)
+            params['admin_id'] = int(params.get('admin_id') or 0)
+            params['is_active'] = int(params.get('is_active') or 0)
             # 加密密码
-            params['password'] = pwd_to_hash(pwd)
+            if pwd:
+                params['password'] = pwd_to_hash(pwd)
             return Response(params=params)
         except Exception as e:
             log.error('error:{}'.format(e))
@@ -47,7 +49,8 @@ class RootManagement(object):
             params['account'] = str(params.get('account') or '')
             params['user_name'] = str(params.get('user_name') or '')
             params['password'] = pwd = str(params.get('password') or '')
-            params['region_id'] = int(params.get('region_id') or 0)
+            params['role_id'] = int(params.get('role_id') or 0)
+            params['is_active'] = int(params.get('is_active') or 0)
 
             if not Check.is_mobile(params['account']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='账号非法'))
@@ -58,3 +61,59 @@ class RootManagement(object):
         except Exception as e:
             log.error('error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
+
+
+class RootRoleManagement(object):
+
+    @staticmethod
+    @make_decorator
+    def check_post_params(params):
+        try:
+            params['role_name'] = str(params.get('role_name') or '')
+            params['role_comment'] = str(params.get('role_comment') or '')
+            params['region_id'] = int(params.get('region_id') or 0)
+            params['page_id_list'] = str(params.get('page_id_list') or '')
+
+            # 参数校验
+            if not params['role_name']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='必须要有角色名称'))
+
+            if not params['region_id']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最起码要有一个地区id'))
+
+            if not params['page_id_list']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最起码要有一个页面id'))
+
+            params['page_id_list'] = [int(i) for i in params['page_id_list'].split(',')]
+
+            return Response(params=params)
+        except Exception as e:
+            log.error('校验新增角色参数时出错,错误是:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
+
+    @staticmethod
+    def check_put_params(params):
+        try:
+            params['role_id'] = int(params.get('role_id') or 0)
+
+            params['role_name'] = str(params.get('role_name') or '')
+            params['role_comment'] = str(params.get('role_comment') or '')
+            params['region_id'] = int(params.get('region_id') or 0)
+            params['page_id_list'] = str(params.get('page_id_list') or '')
+
+            # 判断role_id是否存在
+            if not params['role_id']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='role_id不能为空或0'))
+
+            # 参数校验
+            if not params['role_name'] and not params['role_comment'] and not params['region_id'] and not params['page_id_list']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最起码请输入一个参数'))
+
+            # 如果有page_id_list
+            if params['page_id_list']:
+                params['page_id_list'] = [int(i) for i in params['page_id_list'].split(',')]
+
+            return Response(params=params)
+        except Exception as e:
+            log.error('Error:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))

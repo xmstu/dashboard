@@ -277,7 +277,7 @@ class PromoteQuality(object):
             GROUP BY FROM_UNIXTIME(create_time, '%%%%Y-%%%%m-%%%%d')"""
 
             # 城市经理且推广人员为空
-            if params['role'] == 4 and not promoter_ids:
+            if '城市经理' in params['role'] and not promoter_ids:
                 command = command % 'AND referrer_user_id IN (0) '
             # 非城市经理查看所有人
             elif not promoter_ids:
@@ -303,7 +303,7 @@ class PromoteQuality(object):
                 %s """
 
                 # 城市经理且推广人员为空
-                if params['role'] == 4 and not promoter_ids:
+                if '城市经理' in params['role'] and not promoter_ids:
                     command = command % 'AND referrer_user_id IN (0) '
                 # 非城市经理查看所有人
                 elif not promoter_ids:
@@ -409,7 +409,7 @@ class PromoteQuality(object):
                 return []
 
             # 城市经理且推广人员为空
-            if params['role'] == 4 and not promoter_ids:
+            if '城市经理' in params['role'] and not promoter_ids:
                 command = command % 'AND referrer_user_id IN (0) '
             # 非城市经理查看所有人
             elif not promoter_ids:
@@ -519,7 +519,7 @@ class PromoteQuality(object):
                 return []
 
             # 城市经理且推广人员为空
-            if params['role'] == 4 and not promoter_ids:
+            if '城市经理' in params['role'] and not promoter_ids:
                 command = command % 'AND referrer_user_id IN (0) '
             # 非城市经理查看所有人
             elif not promoter_ids:

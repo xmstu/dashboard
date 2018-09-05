@@ -8,19 +8,20 @@ import time
 class sessionOperationClass(object):
     """session操作类"""
     @staticmethod
-    def insert(user_info, role, locations):
+    def insert(user_info, locations):
         """登录"""
         try:
             session['login'] = {
                 'account': user_info['account'],
                 'user_id': user_info['id'],
                 'user_name': user_info['user_name'] if user_info['user_name'] else '',
-                'mobile': user_info['mobile'],
+                'mobile': user_info['account'],
                 'avatar_url': user_info['avatar_url'] if user_info[
                     'avatar_url'] else 'https://mp.huitouche.com/static/images/newicon.png',
                 'login_time': time.time(),
-                'role': role,
-                'locations': locations
+                'role': user_info['role'],
+                'locations': locations,
+                'path': user_info['path']
             }
 
             return True
@@ -50,7 +51,7 @@ class sessionOperationClass(object):
     def get_locations():
         """获取角色和地区权限"""
         role = session['login']['role']
-        region_id = [str(i) for i in session['login'].get('locations', [])]
+        region_id = session['login'].get('locations', [])
         return role, region_id
 
     @staticmethod
@@ -63,5 +64,5 @@ class sessionOperationClass(object):
     @staticmethod
     def get_user_locations():
         """获取地区权限"""
-        region_id = [str(i) for i in session['login'].get('locations', [])]
+        region_id = session['login'].get('locations', [])
         return region_id

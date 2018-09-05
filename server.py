@@ -8,6 +8,7 @@ from server.resources.message_push import background_thread
 def inner():
     t = threading.Thread(target=background_thread, args=())
     t.start()
+    print(app.url_map)
     app.run(host='127.0.0.1', port=2333)
 
 

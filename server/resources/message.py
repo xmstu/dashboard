@@ -23,7 +23,7 @@ class MessageSystem(Resource):
         # 后台用户
         if sessionOperationClass.check():
             role, user_id = sessionOperationClass.get_role()
-            if role == 1:
+            if role == '超级管理员':
                 resp = Response(params=get_all_arg())
                 return resp
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取消息列表'))
@@ -38,7 +38,7 @@ class MessageSystem(Resource):
         # 后台用户
         if sessionOperationClass.check():
             role, user_id = sessionOperationClass.get_role()
-            if role == 1:
+            if role == '超级管理员':
                 resp = Response(params=get_payload(), user_id=user_id)
                 return resp
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户发布'))
@@ -55,7 +55,7 @@ class MessageSystemOperator(Resource):
         # 后台用户
         if sessionOperationClass.check():
             role, user_id = sessionOperationClass.get_role()
-            if role == 1:
+            if role == '超级管理员':
                 resp = Response(params=get_payload(), user_id=user_id, msg_id=id)
                 return resp
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户修改'))
@@ -68,7 +68,7 @@ class MessageSystemOperator(Resource):
         # 后台用户
         if sessionOperationClass.check():
             role, user_id = sessionOperationClass.get_role()
-            if role == 1:
+            if role == '超级管理员':
                 resp = Response(params={
                     'user_id': user_id,
                     'msg_id': id

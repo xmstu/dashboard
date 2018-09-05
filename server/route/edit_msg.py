@@ -1,26 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from server import app
-from flask import render_template, session, redirect
-from server.cache_data import init_regions
-from server.meta.session_operation import sessionOperationClass
 from server.meta.login_record import visitor_record
+from server.meta.route_func import route_func
+from server.route.all_route import all_route, all_route_html
+
+edit_sys_msg = all_route.edit_sys_msg
+edit_sys_msg_html = all_route_html[edit_sys_msg]
 
 
-@app.route('/edit-message/', endpoint='edit_msg')
+@app.route(edit_sys_msg, endpoint='edit_sys_msg')
 @visitor_record
-def edit_message():
-    """消息中心"""
-    if not sessionOperationClass.check():
-        return redirect('/login/')
-    # 用户名，头像, 地区
-    user_name = session['login'].get('user_name', '')
-    avatar_url = session['login'].get('avatar_url', 'https://mp.huitouche.com/static/images/newicon.png')
-    locations = [{'region_id': i, 'name': init_regions.to_full_short_name(i)} for i in
-                 session['login'].get('locations', [])]
-    role = session['login'].get('role', 0)
-    if role == 4:
-        locations = init_regions.get_city_next_region(session['login'].get('locations', []))
-    return render_template('/message/edit-message.html', user_name=user_name, avatar_url=avatar_url, locations=locations, role=role)
-
-# app.add_url_rule('/order/', 'order', order)
+def edit_sys_msg():
+    """消息中心修改页面"""
+    return route_func(edit_sys_msg, edit_sys_msg_html)

@@ -1,24 +1,15 @@
 # -*- coding: utf-8 -*-
 from server import app
-from flask import render_template, session, redirect
-from server.cache_data import init_regions
-from server.meta.session_operation import sessionOperationClass
 from server.meta.login_record import visitor_record
+from server.meta.route_func import route_func
+from server.route.all_route import all_route, all_route_html
+
+home = all_route.home
+home_html = all_route_html[home]
+
 
 @app.route('/home/', endpoint='home')
-@app.route('/admin/', endpoint='admin')
 @visitor_record
 def home():
     """主页"""
-    if not sessionOperationClass.check():
-        return redirect('/login/')
-    # 用户名，头像, 地区
-    user_name = session['login'].get('user_name', '')
-    account = session['login'].get('account', '')
-    avatar_url = session['login'].get('avatar_url', 'https://mp.huitouche.com/static/images/newicon.png')
-    locations = [{'region_id': i, 'name': init_regions.to_full_short_name(i)} for i in
-                 session['login'].get('locations', [])]
-    role = session['login'].get('role', 0)
-    if role == 4:
-        locations = init_regions.get_city_next_region(session['login'].get('locations', []))
-    return render_template('/admin/home.html', user_name=user_name, avatar_url=avatar_url, locations=locations, role=role, account=account)
+    return route_func(home, home_html)

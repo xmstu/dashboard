@@ -17,5 +17,6 @@ class Weather(Resource):
         resp = Response(ip=ip)
         return resp
 
+
 ns = api.namespace('weather', description='获取所在城市接口')
 ns.add_resource(Weather, '/')

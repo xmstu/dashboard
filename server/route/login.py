@@ -47,14 +47,16 @@ def broker():
             log.warn('区镇合伙人查询区域为空: [mobile: %s]' % mobile)
             return render_template('/exception/except.html', status_coder=400, title='参数错误',
                                    content='区镇合伙人查询区域为空')
+        supplier_path = "/goods/, /admin/, /home/, /map/, /message/, /order/, /potential/, /price/, /promote/, /transport/, /user/, /vehicle/"
         user_info = {
             'id': result[0]['user_id'],
             'user_name': result[0]['user_name'],
             'mobile': result[0]['mobile'],
             'avatar_url': result[0]['avatar_url'],
-            'account': result[0]['mobile']
+            'account': result[0]['mobile'],
+            'role': result[0]['role'],
+            'path': supplier_path
         }
-        role = result[0]['role']
         locations = [location['region_id'] for location in result]
         locations = set(locations)
         # 先将locations中所有region_id的父级id查出来，然后去重
@@ -66,7 +68,7 @@ def broker():
                 locations.add(parent_id)
         locations = list(locations)
         # 登录
-        if sessionOperationClass.insert(user_info, role, locations):
+        if sessionOperationClass.insert(user_info, locations):
             return redirect('/home/')
         else:
             return render_template('/exception/except.html', status_coder=400, title='参数错误',

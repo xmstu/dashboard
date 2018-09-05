@@ -14,36 +14,27 @@ from server.models.login import Login
 from server.status import make_result, HTTPStatus, APIStatus
 from server.database import db
 
+
 class LoginDecorator(object):
 
     @staticmethod
     @make_decorator
-    def common_check(user_name, password, role):
+    def common_check(user_name, password):
         """登录"""
         try:
-            user_info = {}
-            # 后台用户
-            if role == 1:
-                user_info = Login.get_user_by_admin(db.read_db, user_name, password)
-            # 城市经理
-            elif role == 4:
-                user_info = Login.get_user_by_city_manage(db.read_bi, user_name, password)
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.PasswdError, msg='用户身份错误'))
-
+            # 管理员用户
+            user_info = Login.get_user_by_admin(db.read_bi, user_name, password)
             if not user_info:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.NotUser, msg='找不到该用户'))
-            # 地区
-            locations = []
             # 后台
-            if role == 1:
+            if '1' in user_info['region_id']:
                 locations = [i for i in init_regions.region if init_regions.region[i]['level'] == 1]
-            elif role == 4:
-                locations = [user_info['region_id']]
+            else:
+                locations = user_info['region_id'].split(',')
 
             user_info['account'] = user_name
             # 写入session
-            result = sessionOperationClass.insert(user_info, role, locations)
+            result = sessionOperationClass.insert(user_info, locations)
 
             return Response(result=result)
         except Exception as e:
