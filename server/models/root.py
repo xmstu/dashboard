@@ -223,10 +223,44 @@ class RootRoleManagementModel(object):
     @staticmethod
     def put_data(cursor, params):
         try:
+            update_sql = """id=id"""
+            # 直接更新的字段
+            svs_list = ('role_name', 'role_comment', 'region_id')
+            for key, value in params.items():
+                if key in svs_list and value and isinstance(value, int):
+                    update_sql += ', {key} = {value}'.format(key=key, value=value)
+                elif key in svs_list and value and isinstance(value, str):
+                    key = key.split('_')[1]
+                    update_sql += ", {key} = '{value}'".format(key=key, value=value)
             if params.get('page_id_list'):
-                page_id_list = params.pop('page_id_list')
+                page_id_set = set(params.pop('page_id_list'))
+                # 找出所有当前角色的权限页面id
+                role_page_sql = """
+                SELECT
+                    page_id
+                FROM
+                    tb_inf_pages
+                    INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.page_id = tb_inf_pages.id
+                    INNER JOIN tb_inf_roles ON tb_inf_role_pages.role_id = tb_inf_roles.id AND tb_inf_roles.id = %d
+                """ % params['role_id']
+                role_page_id_list = cursor.query(role_page_sql)
+                role_page_id_set = {i['page_id'] for i in role_page_id_list}
+
+                # 要删除关联的page_id
+                needed_delete_set = role_page_id_set - page_id_set
+                # 要增加关联的page_id
+                needed_add_set = page_id_set - role_page_id_set
+                if needed_delete_set:
+                    pass
+                if needed_add_set:
+                    pass
+
+            command = """
+            UPDATE tb_inf_roles SET {update_sql} WHERE id=:role_id
+            """
             with cursor.begin() as tran:
-                pass
+                row_count = tran.conn.update(command.format(update_sql), {'role_id': params['role_id']})
+                return row_count
         except Exception as e:
             log.error('Error:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改角色失败'))
