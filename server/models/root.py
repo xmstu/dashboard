@@ -328,25 +328,29 @@ class RootRoleManagementModel(object):
             WHERE 
                 tb_inf_pages.is_deleted = 0;
             """
-
             role_page_list = cursor.query(role_page_command, params)
             page_id_set = {i['page_id'] for i in role_page_list}
 
             menu_list = cursor.query(menu_command)
             menu_set = {i['menu_name'] for i in menu_list}
 
-            ret = [{menu: []} for menu in menu_set]
-            for detail in menu_list:
-                if detail['page_id'] in page_id_set:
-                    detail['status'] = 1
-                else:
+            ret = {menu: [] for menu in menu_set}
+
+            if params['role_id'] == 0:
+                for detail in menu_list:
                     detail['status'] = 0
+            else:
+                for detail in menu_list:
+                    if detail['page_id'] in page_id_set:
+                        detail['status'] = 1
+                    else:
+                        detail['status'] = 0
+
             # 构造数据格式
-            for d in ret:
-                for key in d:
-                    for detail in menu_list:
-                        if detail['menu_name'] == key:
-                            d[key].append({detail['page_name']: detail['page_id'], 'status': detail['status']})
+            for key in ret:
+                for detail in menu_list:
+                    if detail['menu_name'] == key:
+                        ret[key].append({detail['page_name']: detail['page_id'], 'status': detail['status']})
 
             return ret
         except Exception as e:

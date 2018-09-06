@@ -51,6 +51,8 @@ class RootManagementOperator(Resource):
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == '超级管理员':
+                if not isinstance(admin_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 return Response(params={'admin_id': admin_id})
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除账户'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
@@ -64,6 +66,8 @@ class RootManagementOperator(Resource):
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == '超级管理员':
+                if not isinstance(admin_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 if admin_id == 0:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='用户id不能为0'))
                 params = get_payload()
@@ -79,6 +83,8 @@ class RootManagementOperator(Resource):
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == '超级管理员':
+                if not isinstance(admin_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 resp = Response(admin_id=int(admin_id))
                 return resp
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
@@ -127,6 +133,8 @@ class RootRoleManagementOperator(Resource):
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == '超级管理员':
+                if not isinstance(role_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 if role_id == 0:
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='角色id不能为0'))
                 params = get_payload()
@@ -142,6 +150,8 @@ class RootRoleManagementOperator(Resource):
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == '超级管理员':
+                if not isinstance(role_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 return Response(params={'role_id': role_id})
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
@@ -153,13 +163,45 @@ class RootRoleManagementOperator(Resource):
         if sessionOperationClass.check():
             role, _ = sessionOperationClass.get_role()
             if role == '超级管理员':
+                if not isinstance(role_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 return Response(params={'role_id': role_id})
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
+class RootPageManagement(Resource):
+
+    @staticmethod
+    def get():
+        """获取所有页面id,名称和路径"""
+        pass
+
+    @staticmethod
+    def post():
+        """新增一个页面"""
+        pass
+
+
+class RootPageManagementOperator(Resource):
+
+    @staticmethod
+    def put(page_id):
+        """修改当前页面的名称,备注和路径等"""
+        pass
+
+    @staticmethod
+    def delete(page_id):
+        """删除当前页面"""
+        pass
+
+
 ns = api.namespace('root', description='用户管理')
 ns.add_resource(RootManagement, '/management/')
 ns.add_resource(RootManagementOperator, '/management/<int:admin_id>')
+
 ns.add_resource(RootRoleManagement, '/role_management/')
 ns.add_resource(RootRoleManagementOperator, '/role_management/<int:role_id>')
+
+ns.add_resource(RootPageManagement, '/page_management/')
+ns.add_resource(RootPageManagementOperator, '/page_management/<int:page_id>')
