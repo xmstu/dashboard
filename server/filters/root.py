@@ -31,4 +31,3 @@ class RootRoleManagement(object):
             else:
                 i['region_name'] = init_regions.to_region(i.get('region_id'))
         return build_result(APIStatus.Ok, data=role_list, count=data.get('count', 0)), HTTPStatus.Ok
-

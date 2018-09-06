@@ -62,8 +62,8 @@ class RootManagementModel(object):
 
             return role_list
         except Exception as e:
-            log.error('获取用角色失败,失败原因是:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+            log.error('获取当前用户角色失败,失败原因是:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.BadRequest, msg='获取当前用户角色失败'))
 
     @staticmethod
     def put_data(cursor, params):
@@ -108,8 +108,6 @@ class RootManagementModel(object):
         except Exception as e:
             log.error('更新用户失败,失败原因是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='服务器内部错误,更新管理后台用户失败'))
-
-
 
     @staticmethod
     def delete_data(cursor, params):
@@ -291,3 +289,37 @@ class RootRoleManagementModel(object):
         except Exception as e:
             log.error('修改角色失败,失败原因是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改角色失败'))
+
+    @staticmethod
+    def delete_data(cursor, params):
+        try:
+            with cursor.begin() as tran:
+                command = """
+                UPDATE tb_inf_roles SET is_deleted = 1 WHERE id =:role_id
+                """
+                rowcount = tran.conn.update(command, params)
+                return rowcount
+        except Exception as e:
+            log.error('删除角色失败,失败原因是:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除角色失败'))
+
+    @staticmethod
+    def get_role_pages(cursor, params):
+        try:
+            command = """
+            SELECT
+                tb_inf_pages.id page_id,
+                `name` page_name
+            FROM
+                tb_inf_pages
+                INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.page_id = tb_inf_pages.id AND tb_inf_role_pages.is_deleted = 0
+            WHERE
+                tb_inf_pages.is_deleted = 0
+                AND tb_inf_role_pages.role_id = :role_id
+            """
+            page_list = cursor.query(command, params)
+            page_list = [{i['page_id']: i['page_name']} for i in page_list]
+            return page_list
+        except Exception as e:
+            log.error('获取权限页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取权限页面失败'))

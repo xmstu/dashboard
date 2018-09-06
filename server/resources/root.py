@@ -136,9 +136,26 @@ class RootRoleManagementOperator(Resource):
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
+    @operations.RootRoleManagement.delete_data(params=dict)
     def delete(role_id):
         """删除当前角色"""
-        pass
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                return Response(params={'role_id': role_id})
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+
+    @staticmethod
+    @operations.RootRoleManagement.get_role_pages(params=dict)
+    def get(role_id):
+        """获取当前角色所有的权限页面名称和页面id"""
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                return Response(params={'role_id': role_id})
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 ns = api.namespace('root', description='用户管理')
