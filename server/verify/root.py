@@ -144,3 +144,20 @@ class RootPageManagement(object):
         except Exception as e:
             log.error('请求参数有误:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+
+    @staticmethod
+    @make_decorator
+    def put_data(params):
+        try:
+            params['page_name'] = str(params.get('page_name') or '')
+            params['page_comment'] = str(params.get('page_comment') or '')
+            params['page_path'] = str(params.get('page_path') or '')
+            params['parent_menu_id'] = int(params.get('parent_menu_id') or 0)
+
+            if not params['page_name'] and not params['page_comment'] and not params['page_path'] and not params['parent_menu_id']:
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最起码请传一个参数'))
+
+            return Response(params=params)
+        except Exception as e:
+            log.error('请求参数有误:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))

@@ -399,7 +399,6 @@ class RootPageManagementModel(object):
     @staticmethod
     def post_data(cursor, params):
         try:
-
             with cursor.begin() as tran:
                 command = """
                 INSERT INTO
@@ -412,3 +411,26 @@ class RootPageManagementModel(object):
         except Exception as e:
             log.error('添加页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加页面失败'))
+
+    @staticmethod
+    def put_data(cursor, params):
+        try:
+            update_page_sql = """id=id"""
+            # 直接更新的字段
+            svs_list = ('page_name', 'page_comment', 'page_path', 'parent_menu_id')
+            for key, value in params.items():
+                if key in svs_list and value and isinstance(value, int):
+                    update_page_sql += ', {key} = {value}'.format(key='menu_id', value=value)
+                elif key in svs_list and value and isinstance(value, str):
+                    key = key.split('_')[1]
+                    update_page_sql += ", {key} = '{value}'".format(key=key, value=value)
+            update_page_sql += ", {key} = {value}".format(key='update_time', value=int(time.time()))
+            command = """
+            UPDATE tb_inf_pages SET {update_page_sql} WHERE id=:page_id
+            """
+            with cursor.begin() as tran:
+                rowcount = tran.conn.update(command.format(update_page_sql=update_page_sql), {'page_id': params['page_id']})
+                return rowcount
+        except Exception as e:
+            log.error('修改页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改页面失败'))

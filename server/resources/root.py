@@ -202,9 +202,23 @@ class RootPageManagement(Resource):
 class RootPageManagementOperator(Resource):
 
     @staticmethod
+    @doc.request_root_page_management_add
+    @operations.RootPageManagement.put_data(params=dict)
+    @verify.RootPageManagement.put_data(params=dict)
     def put(page_id):
         """修改当前页面的名称,备注和路径等"""
-        pass
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                if not isinstance(page_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='page_id必须是整数'))
+                if page_id == 0:
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='页面id不能为0'))
+                params = get_payload()
+                params.setdefault('page_id', page_id)
+                return Response(params=params)
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员修改页面'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     def delete(page_id):

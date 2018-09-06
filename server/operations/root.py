@@ -148,3 +148,16 @@ class RootPageManagement(object):
         except Exception as e:
             log.error('添加页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加页面失败'))
+
+    @staticmethod
+    @make_decorator
+    def put_data(params):
+        try:
+            rowcount = RootPageManagementModel.put_data(db.write_bi, params)
+            if rowcount:
+                return make_result(APIStatus.Ok), HTTPStatus.Ok
+            else:
+                abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改页面失败'))
+        except Exception as e:
+            log.error('修改页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改页面失败'))
