@@ -434,3 +434,15 @@ class RootPageManagementModel(object):
         except Exception as e:
             log.error('修改页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改页面失败'))
+
+    @staticmethod
+    def delete_data(cursor, params):
+        try:
+            with cursor.begin() as tran:
+                command = """
+                UPDATE tb_inf_pages SET is_deleted = 1 WHERE id=:page_id
+                """
+                return tran.conn.delete(command, params)
+        except Exception as e:
+            log.error('请求参数有误:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='请求参数有误'))

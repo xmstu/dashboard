@@ -161,3 +161,17 @@ class RootPageManagement(object):
         except Exception as e:
             log.error('修改页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改页面失败'))
+
+    @staticmethod
+    @make_decorator
+    def delete_data(params):
+        try:
+            rowcount = RootPageManagementModel.delete_data(db.write_bi, params)
+            if rowcount:
+                return make_result(APIStatus.Ok), HTTPStatus.Ok
+            else:
+                abort(HTTPStatus.InternalServerError,
+                      **make_result(status=APIStatus.InternalServerError, msg='账户不存在，删除页面失败或页面不能重复删除'))
+        except Exception as e:
+            log.error('删除页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除页面失败'))

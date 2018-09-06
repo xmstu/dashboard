@@ -221,9 +221,17 @@ class RootPageManagementOperator(Resource):
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
+    @operations.RootPageManagement.delete_data(params=dict)
     def delete(page_id):
         """删除当前页面"""
-        pass
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                if not isinstance(page_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='page_id必须是整数'))
+                return Response(params={'page_id': page_id})
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除页面'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     def get(page_id):
