@@ -29,7 +29,7 @@ def message():
 
 @app.route('/edit-message/', endpoint='edit-message')
 @visitor_record
-def message():
+def edit_message():
     """消息管理"""
     if not sessionOperationClass.check():
         return redirect('/login/')

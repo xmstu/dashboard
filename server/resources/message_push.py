@@ -72,7 +72,7 @@ def background_thread():
         log.info('第%d次后台监控定时任务完成,当前时间是%s' % (count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))))
         count += 1
         print('\n')
-        time.sleep(10)
+        time.sleep(6000)
 
 
 def handle(data):
