@@ -58,7 +58,7 @@ class RootManagementModel(object):
             """ % admin_id
             role_list = cursor.query(cmd)
 
-            role_list = [{i['role_id']: i['name']} for i in role_list]
+            role_list = [{i['name']: i['role_id']} for i in role_list]
 
             return role_list
         except Exception as e:
@@ -306,20 +306,49 @@ class RootRoleManagementModel(object):
     @staticmethod
     def get_role_pages(cursor, params):
         try:
-            command = """
+            role_page_command = """
             SELECT
-                tb_inf_pages.id page_id,
-                `name` page_name
+                tb_inf_pages.id page_id
             FROM
                 tb_inf_pages
                 INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.page_id = tb_inf_pages.id AND tb_inf_role_pages.is_deleted = 0
             WHERE
                 tb_inf_pages.is_deleted = 0
-                AND tb_inf_role_pages.role_id = :role_id
+                AND tb_inf_role_pages.role_id = :role_id;
             """
-            page_list = cursor.query(command, params)
-            page_list = [{i['page_id']: i['page_name']} for i in page_list]
-            return page_list
+
+            menu_command = """
+            SELECT
+                tb_inf_pages.id page_id,
+                tb_inf_pages.`name` page_name,
+                tb_inf_menus.`name` menu_name
+            FROM
+                tb_inf_pages
+                INNER JOIN tb_inf_menus ON tb_inf_menus.id = tb_inf_pages.menu_id AND tb_inf_menus.is_deleted = 0
+            WHERE 
+                tb_inf_pages.is_deleted = 0;
+            """
+
+            role_page_list = cursor.query(role_page_command, params)
+            page_id_set = {i['page_id'] for i in role_page_list}
+
+            menu_list = cursor.query(menu_command)
+            menu_set = {i['menu_name'] for i in menu_list}
+
+            ret = [{menu: []} for menu in menu_set]
+            for detail in menu_list:
+                if detail['page_id'] in page_id_set:
+                    detail['status'] = 1
+                else:
+                    detail['status'] = 0
+            # 构造数据格式
+            for d in ret:
+                for key in d:
+                    for detail in menu_list:
+                        if detail['menu_name'] == key:
+                            d[key].append({detail['page_name']: detail['page_id'], 'status': detail['status']})
+
+            return ret
         except Exception as e:
             log.error('获取权限页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取权限页面失败'))
