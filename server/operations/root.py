@@ -3,7 +3,7 @@ from flask_restful import abort
 from server import log
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.root import RootManagementModel, RootRoleManagementModel
+from server.models.root import RootManagementModel, RootRoleManagementModel, RootPageManagementModel
 from server.status import HTTPStatus, make_result, APIStatus
 
 
@@ -122,3 +122,29 @@ class RootRoleManagement(object):
         except Exception as e:
             log.error('获取当前角色的权限页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取当前角色的权限页面失败'))
+
+
+class RootPageManagement(object):
+
+    @staticmethod
+    @make_decorator
+    def get_all_pages(params):
+        try:
+            data = RootPageManagementModel.get_all_pages(db.read_bi, params)
+            return make_result(status=APIStatus.Ok, data=data), HTTPStatus.Ok
+        except Exception as e:
+            log.error('获取所有页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取所有页面失败'))
+
+    @staticmethod
+    @make_decorator
+    def post_data(params):
+        try:
+            page_id = RootPageManagementModel.post_data(db.write_bi, params)
+            if page_id:
+                return make_result(APIStatus.Ok), HTTPStatus.Ok
+            else:
+                abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加页面失败'))
+        except Exception as e:
+            log.error('添加页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加页面失败'))

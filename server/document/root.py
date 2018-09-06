@@ -37,3 +37,10 @@ request_root_role_management_put = api.doc(body=api.model('request_root_manageme
     'region_id': fields.Integer(description='地区id'),
     'page_id_list': fields.String(description='页面id列表'),
 }))
+
+request_root_page_management_add = api.doc(body=api.model('request_root_page_management_add', {
+    'page_name': fields.String(description='页面名称'),
+    'page_comment': fields.String(description='页面备注'),
+    'page_path': fields.String(description='页面路径'),
+    'parent_menu_id': fields.Integer(description='页面的父菜单id'),
+}))

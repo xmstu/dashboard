@@ -118,3 +118,29 @@ class RootRoleManagement(object):
         except Exception as e:
             log.error('Error:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+
+
+class RootPageManagement(object):
+
+    @staticmethod
+    @make_decorator
+    def post_data(params):
+        try:
+            params['page_name'] = str(params.get('page_name') or '')
+            params['page_comment'] = str(params.get('page_comment') or '')
+            params['page_path'] = str(params.get('page_path') or '')
+            params['parent_menu_id'] = int(params.get('parent_menu_id') or 0)
+
+            # 判断是否传入页面名称
+            if not params['page_name']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请传入页面名称'))
+            # 判断是否传入页面路径
+            if not params['page_path']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请传入路径'))
+            # 判断是否有父菜单id
+            if not params['parent_menu_id']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请传入父菜单id'))
+            return Response(params=params)
+        except Exception as e:
+            log.error('请求参数有误:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))

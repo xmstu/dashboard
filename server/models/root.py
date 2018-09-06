@@ -356,3 +356,59 @@ class RootRoleManagementModel(object):
         except Exception as e:
             log.error('获取权限页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取权限页面失败'))
+
+
+class RootPageManagementModel(object):
+
+    @staticmethod
+    def get_all_pages(cursor, params):
+        try:
+            fields = """
+                tb_inf_pages.id page_id,
+                tb_inf_pages.`name` page_name,
+                tb_inf_pages.`comment` page_comment,
+                tb_inf_pages.path page_path,
+                tb_inf_menus.id menu_id,
+                tb_inf_menus.`name` menu_name
+            """
+            command = """
+            SELECT
+                {fields}
+            FROM
+                tb_inf_pages
+                INNER JOIN tb_inf_menus ON tb_inf_menus.id = tb_inf_pages.menu_id AND tb_inf_menus.is_deleted = 0
+            WHERE
+                tb_inf_pages.is_deleted = 0
+            """
+            count = cursor.query_one(command.format(fields="""COUNT(1) count"""))['count']
+
+            command += """ LIMIT {0}, {1} """.format(params.get('page'), params.get('limit'))
+
+            page_list = cursor.query(command.format(fields=fields))
+
+            data = {
+                'page_list': page_list if page_list else [],
+                'count': count if count else 0
+            }
+
+            return data
+        except Exception as e:
+            log.error('获取所有页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取所有页面失败'))
+
+    @staticmethod
+    def post_data(cursor, params):
+        try:
+
+            with cursor.begin() as tran:
+                command = """
+                INSERT INTO
+                    tb_inf_pages(name, comment, path, menu_id, create_time, update_time)
+                VALUES(:page_name, :page_comment, :page_path, :parent_menu_id, :create_time, :update_time)
+                """
+                params['create_time'] = params['update_time'] = int(time.time())
+                page_id = tran.conn.insert(command, params)
+                return page_id
+        except Exception as e:
+            log.error('添加页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加页面失败'))

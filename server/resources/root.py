@@ -173,14 +173,30 @@ class RootRoleManagementOperator(Resource):
 class RootPageManagement(Resource):
 
     @staticmethod
+    @doc.request_root_management_get
+    @operations.RootPageManagement.get_all_pages(params=dict)
+    @verify.RootManagement.check_get_params(params=dict)
     def get():
         """获取所有页面id,名称和路径"""
-        pass
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                return Response(params=get_all_arg())
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
+    @doc.request_root_page_management_add
+    @operations.RootPageManagement.post_data(params=dict)
+    @verify.RootPageManagement.post_data(params=dict)
     def post():
         """新增一个页面"""
-        pass
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                return Response(params=get_payload())
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户新增页面'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class RootPageManagementOperator(Resource):
@@ -193,6 +209,11 @@ class RootPageManagementOperator(Resource):
     @staticmethod
     def delete(page_id):
         """删除当前页面"""
+        pass
+
+    @staticmethod
+    def get(page_id):
+        """获取当前页面的所有父菜单,如果page_id为0,返回所有status=0的父菜单"""
         pass
 
 
