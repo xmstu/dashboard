@@ -175,3 +175,13 @@ class RootPageManagement(object):
         except Exception as e:
             log.error('删除页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除页面失败'))
+
+    @staticmethod
+    @make_decorator
+    def get_page_menus(params):
+        try:
+            menu_list = RootPageManagementModel.get_page_menus(db.read_bi, params)
+            return make_result(status=APIStatus.Ok, data=menu_list), HTTPStatus.Ok
+        except Exception as e:
+            log.error('获取当前页面的父菜单失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取当前页面的父菜单失败'))

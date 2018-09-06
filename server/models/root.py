@@ -444,5 +444,46 @@ class RootPageManagementModel(object):
                 """
                 return tran.conn.delete(command, params)
         except Exception as e:
-            log.error('请求参数有误:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='请求参数有误'))
+            log.error('删除页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除页面失败'))
+
+    @staticmethod
+    def get_page_menus(cursor, params):
+        try:
+            page_menu_cmd = """
+            SELECT
+                tb_inf_menus.id
+            FROM
+                tb_inf_menus
+                INNER JOIN tb_inf_pages ON tb_inf_pages.menu_id = tb_inf_menus.id AND tb_inf_pages.is_deleted = 0
+            WHERE	
+                tb_inf_menus.is_deleted = 0
+                AND tb_inf_pages.id = :page_id;
+            """
+            all_menu_cmd = """
+            SELECT
+                id,
+                `name`
+            FROM
+                tb_inf_menus
+            WHERE
+                tb_inf_menus.is_deleted = 0;
+            """
+            page_menu = cursor.query(page_menu_cmd, params)
+            all_menu = cursor.query(all_menu_cmd)
+            if params['page_id'] == 0:
+                for detail in all_menu:
+                    detail['status'] = 0
+            else:
+                page_menu_id_set = {i['id'] for i in page_menu}
+                for detail in all_menu:
+                    if detail['id'] in page_menu_id_set:
+                        detail['status'] = 1
+                    else:
+                        detail['status'] = 0
+            all_menu = [{i['name']: i['id'], 'status': i['status']} for i in all_menu]
+            return all_menu
+
+        except Exception as e:
+            log.error('获取父菜单失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取父菜单失败'))
