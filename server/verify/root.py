@@ -92,6 +92,7 @@ class RootRoleManagement(object):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
 
     @staticmethod
+    @make_decorator
     def check_put_params(params):
         try:
             params['role_id'] = int(params.get('role_id') or 0)

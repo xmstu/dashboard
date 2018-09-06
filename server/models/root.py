@@ -223,44 +223,71 @@ class RootRoleManagementModel(object):
     @staticmethod
     def put_data(cursor, params):
         try:
-            update_sql = """id=id"""
+            update_role_sql = """id=id"""
             # 直接更新的字段
             svs_list = ('role_name', 'role_comment', 'region_id')
             for key, value in params.items():
                 if key in svs_list and value and isinstance(value, int):
-                    update_sql += ', {key} = {value}'.format(key=key, value=value)
+                    update_role_sql += ', {key} = {value}'.format(key=key, value=value)
                 elif key in svs_list and value and isinstance(value, str):
                     key = key.split('_')[1]
-                    update_sql += ", {key} = '{value}'".format(key=key, value=value)
-            if params.get('page_id_list'):
-                page_id_set = set(params.pop('page_id_list'))
-                # 找出所有当前角色的权限页面id
-                role_page_sql = """
-                SELECT
-                    page_id
-                FROM
-                    tb_inf_pages
-                    INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.page_id = tb_inf_pages.id
-                    INNER JOIN tb_inf_roles ON tb_inf_role_pages.role_id = tb_inf_roles.id AND tb_inf_roles.id = %d
-                """ % params['role_id']
-                role_page_id_list = cursor.query(role_page_sql)
-                role_page_id_set = {i['page_id'] for i in role_page_id_list}
-
-                # 要删除关联的page_id
-                needed_delete_set = role_page_id_set - page_id_set
-                # 要增加关联的page_id
-                needed_add_set = page_id_set - role_page_id_set
-                if needed_delete_set:
-                    pass
-                if needed_add_set:
-                    pass
-
-            command = """
-            UPDATE tb_inf_roles SET {update_sql} WHERE id=:role_id
-            """
+                    update_role_sql += ", {key} = '{value}'".format(key=key, value=value)
             with cursor.begin() as tran:
-                row_count = tran.conn.update(command.format(update_sql), {'role_id': params['role_id']})
+                if params.get('page_id_list'):
+                    page_id_set = set(params.pop('page_id_list'))
+                    # 找出所有当前角色的权限页面id
+                    role_page_sql = """
+                    SELECT
+                        page_id
+                    FROM
+                        tb_inf_role_pages 
+                    WHERE
+                        tb_inf_role_pages.role_id = %d
+                    """ % params['role_id']
+                    role_page_id_list = cursor.query(role_page_sql)
+                    role_page_id_set = {i['page_id'] for i in role_page_id_list}
+
+                    # 要删除关联的page_id
+                    needed_delete_set = role_page_id_set - page_id_set
+                    # 要增加关联的page_id
+                    needed_add_set = page_id_set - role_page_id_set
+                    # 需要将is_deleted更新为0的page_id
+                    needed_update_set = page_id_set & role_page_id_set
+
+                    # 更新角色id与页面id的关联
+                    if needed_delete_set:
+                        delete_sql = """
+                        UPDATE
+                            tb_inf_role_pages
+                            SET is_deleted = 1
+                        WHERE page_id = %d AND role_id = %d;
+                        """
+                        for page_id in needed_delete_set:
+                            tran.conn.update(delete_sql % (page_id, params['role_id']))
+                    if needed_add_set:
+                        insert_sql = """
+                        INSERT INTO tb_inf_role_pages(role_id, page_id, create_time, update_time)
+                        VALUES(%d, %d, %d, %d)
+                        """
+                        create_time = update_time = int(time.time())
+                        for page_id in needed_add_set:
+                            tran.conn.update(insert_sql % (params['role_id'], page_id, create_time, update_time))
+                    if needed_update_set:
+                        update_role_page_sql = """
+                       UPDATE
+                           tb_inf_role_pages
+                           SET is_deleted = 0
+                       WHERE page_id = %d AND role_id = %d;
+                           """
+                        for page_id in needed_update_set:
+                            tran.conn.update(update_role_page_sql % (page_id, params['role_id']))
+
+                # 更新角色
+                command = """
+                UPDATE tb_inf_roles SET {update_role_sql} WHERE id=:role_id
+                """
+                row_count = tran.conn.update(command.format(update_role_sql=update_role_sql), {'role_id': params['role_id']})
                 return row_count
         except Exception as e:
-            log.error('Error:{}'.format(e))
+            log.error('修改角色失败,失败原因是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改角色失败'))
