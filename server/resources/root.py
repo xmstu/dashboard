@@ -281,6 +281,7 @@ class RootMenuManagementOperator(Resource):
     @staticmethod
     @doc.request_root_menu_management_add
     @operations.RootMenuManagement.put_data(params=dict)
+    @verify.RootMenuManagement.put_data(params=dict)
     def put(menu_id):
         """修改当前菜单"""
         if sessionOperationClass.check():

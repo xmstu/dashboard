@@ -547,7 +547,23 @@ class RootMenuManagementModel(object):
     @staticmethod
     def put_data(cursor, params):
         try:
-            pass
+            menu_id = params.pop('menu_id')
+            update_menu_sql = """id=id"""
+            # 直接更新的字段
+            svs_list = ('menu_name', 'menu_comment', 'page_id', 'parent_menu_id')
+            for key, value in params.items():
+                if key in svs_list and value and isinstance(value, int):
+                    update_menu_sql += ', {key} = {value}'.format(key=key, value=value)
+                elif key in svs_list and value and isinstance(value, str):
+                    key = key.split('_')[1]
+                    update_menu_sql += ", {key} = '{value}'".format(key=key, value=value)
+            update_menu_sql += ", {key} = {value}".format(key='update_time', value=int(time.time()))
+            command = """
+                        UPDATE tb_inf_menus SET {update_menu_sql} WHERE id=:menu_id
+                        """
+            with cursor.begin() as tran:
+                rowcount = tran.conn.update(command.format(update_menu_sql=update_menu_sql), {'menu_id': menu_id})
+                return rowcount
         except Exception as e:
             log.error('修改菜单失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改菜单失败'))

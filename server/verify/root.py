@@ -182,3 +182,21 @@ class RootMenuManagement(object):
         except Exception as e:
             log.error('请求参数有误:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+
+    @staticmethod
+    @make_decorator
+    def put_data(params):
+        try:
+            params['menu_name'] = str(params.get('menu_name') or '')
+            params['menu_comment'] = str(params.get('menu_comment') or '')
+            params['page_id'] = int(params.get('page_id') or 0)
+            params['parent_menu_id'] = int(params.get('parent_menu_id') or 0)
+
+            # 判断是否传入修改参数
+            if not params['menu_name'] and not params['menu_comment'] and not params['page_id'] and not params['parent_menu_id']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最起码请传一个参数'))
+
+            return Response(params=params)
+        except Exception as e:
+            log.error('请求参数有误:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
