@@ -20,6 +20,7 @@ class sessionOperationClass(object):
                     'avatar_url'] else 'https://mp.huitouche.com/static/images/newicon.png',
                 'login_time': time.time(),
                 'role': user_info['role'],
+                'role_id': user_info['role_id'],
                 'locations': locations,
                 'path': user_info['path']
             }

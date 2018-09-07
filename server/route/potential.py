@@ -13,4 +13,5 @@ potential_html = all_route_html[potential]
 @visitor_record
 def potential():
     """潜在货源页面"""
+    potential = all_route.potential
     return route_func(potential, potential_html)

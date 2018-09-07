@@ -13,4 +13,5 @@ order_html = all_route_html[order]
 @visitor_record
 def order():
     """推广统计页面"""
+    order = all_route.order
     return route_func(order, order_html)

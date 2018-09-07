@@ -13,4 +13,5 @@ transport_html = all_route_html[transport]
 @visitor_record
 def transport():
     """运力统计页面"""
+    transport = all_route.transport
     return route_func(transport, transport_html)

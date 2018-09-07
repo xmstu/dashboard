@@ -13,4 +13,5 @@ map_html = all_route_html[map]
 @visitor_record
 def map():
     """热力图"""
+    map = all_route.map
     return route_func(map, map_html)

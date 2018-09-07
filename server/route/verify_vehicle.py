@@ -13,4 +13,5 @@ vehicle_html = all_route_html[vehicle]
 @visitor_record
 def vehicle():
     """车辆认证页面"""
+    vehicle = all_route.vehicle
     return route_func(vehicle, vehicle_html)

@@ -13,4 +13,5 @@ user_html = all_route_html[user]
 @visitor_record
 def user():
     """用户统计页面"""
+    user = all_route.user
     return route_func(user, user_html)

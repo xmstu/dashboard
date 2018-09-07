@@ -4,6 +4,7 @@ from server.cache_data import init_regions
 from server.meta.session_operation import sessionOperationClass
 from server.meta.login_record import visitor_record
 
+
 @app.route('/introduce/', endpoint='introduce')
 @visitor_record
 def introduce():

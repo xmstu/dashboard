@@ -13,4 +13,5 @@ goods_html = all_route_html[goods]
 @visitor_record
 def goods():
     """货源统计页面"""
+    goods = all_route.goods
     return route_func(goods, goods_html)

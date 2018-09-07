@@ -13,4 +13,5 @@ promote_html = all_route_html[promote]
 @visitor_record
 def promote():
     """推广统计页面"""
+    promote = all_route.promote
     return route_func(promote, promote_html)

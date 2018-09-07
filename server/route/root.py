@@ -9,8 +9,9 @@ root = all_route.root
 root_html = all_route_html[root]
 
 
-@app.route('/root/', endpoint='root_manage')
+@app.route(root, endpoint='root_manage')
 @visitor_record
 def root():
     """用户管理页面"""
+    root = all_route.root
     return route_func(root, root_html)

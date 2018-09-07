@@ -13,4 +13,5 @@ edit_sys_msg_html = all_route_html[edit_sys_msg]
 @visitor_record
 def edit_sys_msg():
     """消息中心修改页面"""
+    edit_sys_msg = all_route.edit_sys_msg
     return route_func(edit_sys_msg, edit_sys_msg_html)

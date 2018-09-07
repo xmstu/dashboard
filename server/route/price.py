@@ -13,4 +13,5 @@ price_html = all_route_html[price]
 @visitor_record
 def price():
     """价格统计页面"""
+    price = all_route.price
     return route_func(price, price_html)

@@ -12,4 +12,5 @@ home_html = all_route_html[home]
 @visitor_record
 def home():
     """主页"""
+    home = all_route.home
     return route_func(home, home_html)

@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # author=hexm
-import hashlib
-
+from flask import g
 from flask_restful import abort
 
 from server.cache_data import init_regions
@@ -27,15 +26,16 @@ class LoginDecorator(object):
             if not user_info:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.NotUser, msg='找不到该用户'))
             # 后台
-            if '1' in user_info['region_id']:
+            if '1' == user_info['region_id']:
                 locations = [i for i in init_regions.region if init_regions.region[i]['level'] == 1]
             else:
-                locations = user_info['region_id'].split(',')
+                locations = user_info['region_id']
 
             user_info['account'] = user_name
             # 写入session
             result = sessionOperationClass.insert(user_info, locations)
 
+            print('='*50, g.user_session)
             return Response(result=result)
         except Exception as e:
             log.error('用户登录失败[error: %s]' % (e, ), exc_info=True)

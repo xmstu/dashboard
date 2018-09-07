@@ -1,44 +1,49 @@
 # -*- coding: utf-8 -*-
 from server import log
+from flask import g
+from operator import itemgetter
 
 
 class Login(object):
     @staticmethod
     def get_user_by_admin(cursor, user_name, password):
         """后台用户登录"""
-        # command = """
-        # SELECT sha_users.id,
-        # sha_user_profiles.mobile,
-        # sha_user_profiles.real_name AS user_name,
-        # '' AS avatar_url
-        #
-        # FROM sha_users
-        # LEFT JOIN sha_user_profiles ON sha_users.id = sha_user_profiles.user_id
-        # WHERE user_name = :user_name AND `password` = :password AND sha_users.is_deleted = 0
-        # AND sha_users.id IN (43, 236, 294, 320, 321, 322, 324)
-        # """
         command = """
         SELECT
             tb_inf_admins.id,
             account,
             user_name,
             avatar_url,
-            GROUP_CONCAT(DISTINCT tb_inf_roles.`name`) role,
+            tb_inf_roles.id role_id,
+            tb_inf_roles.`name` role,
             GROUP_CONCAT(DISTINCT region_id) region_id,
-            GROUP_CONCAT(DISTINCT path) path
+            GROUP_CONCAT(DISTINCT path) path 
         FROM
             tb_inf_admins
-            INNER JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id
-            INNER JOIN tb_inf_roles ON tb_inf_roles.id = tb_inf_admin_roles.role_id
-            INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.role_id = tb_inf_roles.id
-            INNER JOIN tb_inf_pages ON tb_inf_pages.id = tb_inf_role_pages.page_id
+            INNER JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id AND tb_inf_admin_roles.is_deleted = 0
+            INNER JOIN tb_inf_roles ON tb_inf_roles.id = tb_inf_admin_roles.role_id AND tb_inf_roles.is_deleted = 0
+            INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.role_id = tb_inf_roles.id AND tb_inf_role_pages.is_deleted = 0
+            INNER JOIN tb_inf_pages ON tb_inf_pages.id = tb_inf_role_pages.page_id AND tb_inf_pages.is_deleted = 0
         WHERE
-            user_name = :user_name
+            tb_inf_admins.is_deleted = 0
+            AND user_name = :user_name
             AND `password` = :password
-        GROUP BY tb_inf_admins.id;
+        GROUP BY
+            role_id
         """
-        result = cursor.query_one(command, {'user_name': user_name, 'password': password})
+        result = cursor.query(command, {'user_name': user_name, 'password': password})
+        user_session = []
+        for detail in result:
+            user_session.append({
+                'role_name': detail['role'],
+                'role_id': detail['role_id'],
+                'region_id': detail['region_id'],
+                'path': detail['path']
+            })
+        g.user_session = user_session
 
+        result.sort(key=itemgetter('id'))
+        result = result[0]
         log.info('获取后台登录用户sql参数: [user_name: %s][password: %s]' % (user_name, password))
         return result if result else None
 
@@ -74,25 +79,3 @@ class Login(object):
 
         log.info('获取区镇合伙人登录sql参数: [mobile: %s]' % (mobile))
         return result if result else None
-
-    @staticmethod
-    def get_user_by_city_manage(cursor, account, password):
-        """城市经理登录"""
-        try:
-            command = """
-            SELECT
-            id,
-            account AS mobile,
-            user_name,
-            avatar_url,
-            region_id
-            
-            FROM tb_inf_city_manager
-            WHERE account = :account AND `password` = :password AND is_deleted = 0
-            """
-            result = cursor.query_one(command, {'account': account, 'password': password})
-
-            log.debug('获取后台登录用户sql参数: [account: %s][password: %s]' % (account, password))
-            return result if result else None
-        except Exception as e:
-            log.warn('城市经理登录失败 [error: %s]' % e, exc_info=True)

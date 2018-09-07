@@ -15,6 +15,7 @@ edit_message_html = all_route_html[edit_message]
 @visitor_record
 def message():
     """消息列表"""
+    message = all_route.message
     return route_func(message, message_html)
 
 
@@ -22,4 +23,5 @@ def message():
 @visitor_record
 def edit_message():
     """消息中心修改页面"""
+    edit_message = all_route.edit_message
     return route_func(edit_message, edit_message_html)
