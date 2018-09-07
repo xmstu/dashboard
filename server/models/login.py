@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from server import log
-from flask import g
 from operator import itemgetter
+from flask import session, abort
+
+from server.meta.session_operation import sessionOperationClass
+from server.status import HTTPStatus, make_result, APIStatus
 
 
 class Login(object):
@@ -35,12 +38,15 @@ class Login(object):
         user_session = []
         for detail in result:
             user_session.append({
-                'role_name': detail['role'],
+                'role': detail['role'],
                 'role_id': detail['role_id'],
-                'region_id': detail['region_id'],
+                'locations': detail['region_id'],
                 'path': detail['path']
             })
-        g.user_session = user_session
+
+        flag = sessionOperationClass.add_session('user_session', user_session)
+        if not flag:
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加session失败'))
 
         result.sort(key=itemgetter('id'))
         result = result[0]

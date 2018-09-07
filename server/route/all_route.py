@@ -10,6 +10,8 @@ from server.meta.route_func import route_func
 # RouteUrl = namedtuple('RouteUrl', ['route', 'endpoint', 'template'])
 
 
+# 统一管理需要权限的路由
+
 @app.route('/goods/', endpoint='goods')
 @visitor_record
 def goods_func():
@@ -24,6 +26,7 @@ def edit_sys_msg_func():
     return route_func('/edit_sys_msg/', '/edit_sys_msg/edit-sys-message.html')
 
 
+@app.route('/home/', endpoint='home')
 @app.route('/admin/', endpoint='admin')
 @visitor_record
 def home_func():

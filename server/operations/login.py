@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # author=hexm
-from flask import g
 from flask_restful import abort
 
 from server.cache_data import init_regions
@@ -34,8 +33,6 @@ class LoginDecorator(object):
             user_info['account'] = user_name
             # 写入session
             result = sessionOperationClass.insert(user_info, locations)
-
-            print('='*50, g.user_session)
             return Response(result=result)
         except Exception as e:
             log.error('用户登录失败[error: %s]' % (e, ), exc_info=True)

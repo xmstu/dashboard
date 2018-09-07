@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from flask import session
-from server.logger import log
 import time
+
+from flask import session
+
+from server.logger import log
 
 
 class sessionOperationClass(object):
     """session操作类"""
+
     @staticmethod
     def insert(user_info, locations):
         """登录"""
@@ -67,3 +70,25 @@ class sessionOperationClass(object):
         """获取地区权限"""
         region_id = session['login'].get('locations', [])
         return region_id
+
+    @staticmethod
+    def change_role(role_info):
+        """改变角色"""
+        try:
+            session['login']['role'] = role_info['role']
+            session['login']['role_id'] = role_info['role_id']
+            session['login']['locations'] = role_info['locations']
+            session['login']['path'] = role_info['path']
+            return True
+        except Exception as e:
+            log.error('改变角色出错 [ERROR: %s]' % e, exc_info=True)
+            return False
+
+    @staticmethod
+    def add_session(key, value):
+        try:
+            session[key] = value
+            return True
+        except Exception as e:
+            log.error('增加session失败:{}'.format(e))
+            return False
