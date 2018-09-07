@@ -200,7 +200,7 @@ class RootRoleManagementModel(object):
 
                 role_id = tran.conn.insert(role_sql, params)
 
-                # 为tb_inf_role_pages新增记录
+                # 为role_pages中间表新增关联记录
                 params['role_id'] = role_id
                 params['create_time'] = int(time.time())
                 params['update_time'] = int(time.time())
@@ -487,3 +487,79 @@ class RootPageManagementModel(object):
         except Exception as e:
             log.error('获取父菜单失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取父菜单失败'))
+
+
+class RootMenuManagementModel(object):
+
+    @staticmethod
+    def get_all_menus(cursor, params):
+        try:
+            fields = """
+                id,
+                `name`,
+                `comment`,
+                page_id,
+                parent_menu_id
+            """
+            cmd = """
+            SELECT
+                {fields}
+            FROM
+                `tb_inf_menus`
+            WHERE tb_inf_menus.is_deleted = 0
+            """
+
+            count = cursor.query_one(cmd.format(fields="""COUNT(1) count"""))['count']
+
+            cmd += """ LIMIT {0}, {1} """.format(params.get('page'), params.get('limit'))
+
+            menu_list = cursor.query(cmd.format(fields=fields))
+
+            data = {
+                'menu_list': menu_list if menu_list else [],
+                'count': count if count else 0
+            }
+
+            return data
+        except Exception as e:
+            log.error('获取所有菜单页面失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取所有菜单页面失败'))
+
+    @staticmethod
+    def post_data(cursor, params):
+        try:
+            with cursor.begin() as tran:
+
+                command = """
+                INSERT INTO tb_inf_menus(name, comment, page_id, parent_menu_id, create_time, update_time) 
+                VALUES(:menu_name, :menu_comment, :page_id, :parent_menu_id, :create_time, :update_time);
+                """
+                params['create_time'] = int(time.time())
+                params['update_time'] = int(time.time())
+
+                menu_id = tran.conn.insert(command, params)
+
+                return menu_id
+        except Exception as e:
+            log.error('添加菜单失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加菜单失败'))
+
+    @staticmethod
+    def put_data(cursor, params):
+        try:
+            pass
+        except Exception as e:
+            log.error('修改菜单失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改菜单失败'))
+
+    @staticmethod
+    def delete_data(cursor, params):
+        try:
+            with cursor.begin() as tran:
+                command = """
+                UPDATE tb_inf_menus SET is_deleted = 1 WHERE id=:menu_id
+                """
+                return tran.conn.delete(command, params)
+        except Exception as e:
+            log.error('删除菜单失败:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除菜单失败'))

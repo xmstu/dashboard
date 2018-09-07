@@ -247,6 +247,69 @@ class RootPageManagementOperator(Resource):
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
+class RootMenuManagement(Resource):
+
+    @staticmethod
+    @doc.request_root_management_get
+    @operations.RootMenuManagement.get_all_menus(params=dict)
+    @verify.RootManagement.check_get_params(params=dict)
+    def get():
+        """获取所有菜单列表"""
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                resp = Response(params=get_all_arg())
+                return resp
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取菜单列表'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+
+    @staticmethod
+    @doc.request_root_menu_management_add
+    @operations.RootMenuManagement.post_data(params=dict)
+    @verify.RootMenuManagement.post_data(params=dict)
+    def post():
+        """新增菜单"""
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                return Response(params=get_payload())
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户新增菜单'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+
+
+class RootMenuManagementOperator(Resource):
+    @staticmethod
+    @doc.request_root_menu_management_add
+    @operations.RootMenuManagement.put_data(params=dict)
+    def put(menu_id):
+        """修改当前菜单"""
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                if not isinstance(menu_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='menu_id必须是整数'))
+                if menu_id == 0:
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='menu_id不能为0'))
+                params = get_payload()
+                params.setdefault('menu_id', menu_id)
+                return Response(params=params)
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员修改菜单详情'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+
+    @staticmethod
+    @operations.RootMenuManagement.delete_data(params=dict)
+    def delete(menu_id):
+        """删除当前菜单"""
+        if sessionOperationClass.check():
+            role, _ = sessionOperationClass.get_role()
+            if role == '超级管理员':
+                if not isinstance(menu_id, int):
+                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='menu_id必须是整数'))
+                return Response(params={'menu_id': menu_id})
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除菜单'))
+        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+
+
 ns = api.namespace('root', description='用户管理')
 ns.add_resource(RootManagement, '/management/')
 ns.add_resource(RootManagementOperator, '/management/<int:admin_id>')
@@ -256,3 +319,6 @@ ns.add_resource(RootRoleManagementOperator, '/role_management/<int:role_id>')
 
 ns.add_resource(RootPageManagement, '/page_management/')
 ns.add_resource(RootPageManagementOperator, '/page_management/<int:page_id>')
+
+ns.add_resource(RootMenuManagement, '/menu_management/')
+ns.add_resource(RootMenuManagementOperator, '/menu_management/<int:menu_id>')

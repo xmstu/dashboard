@@ -44,3 +44,10 @@ request_root_page_management_add = api.doc(body=api.model('request_root_page_man
     'page_path': fields.String(description='页面路径'),
     'parent_menu_id': fields.Integer(description='页面的父菜单id'),
 }))
+
+request_root_menu_management_add = api.doc(body=api.model('request_root_menu_management_add', {
+    'menu_name': fields.String(description='菜单名称'),
+    'menu_comment': fields.String(description='菜单备注'),
+    'page_id': fields.Integer(description='关联的页面id'),
+    'parent_menu_id': fields.Integer(description='菜单的父菜单id'),
+}))
