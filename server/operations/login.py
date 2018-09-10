@@ -25,10 +25,10 @@ class LoginDecorator(object):
             if not user_info:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.NotUser, msg='找不到该用户'))
             # 后台
-            if '1' == user_info['region_id']:
+            if user_info['region_id'] == 1:
                 locations = [i for i in init_regions.region if init_regions.region[i]['level'] == 1]
             else:
-                locations = user_info['region_id']
+                locations = [user_info['region_id']]
 
             # 写入session
             result = sessionOperationClass.insert(user_info, locations)

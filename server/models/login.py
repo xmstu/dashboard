@@ -18,7 +18,7 @@ class Login(object):
             avatar_url,
             tb_inf_roles.id role_id,
             tb_inf_roles.`name` role,
-            GROUP_CONCAT(DISTINCT region_id) region_id,
+            region_id,
             GROUP_CONCAT(DISTINCT path) path,
             GROUP_CONCAT(DISTINCT tb_inf_menus.`name`) menu_name
         FROM

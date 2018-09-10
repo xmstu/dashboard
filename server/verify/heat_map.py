@@ -21,7 +21,7 @@ class HeatMap(object):
             params['field'] = int(params.get('field', None) or 1)
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400*7)
             params['end_time'] = int(params.get('end_time', None) or time.time())
-            params['region_id'] = str(params.get('region_id', None) or 0)
+            params['region_id'] = str(params.get('region_id', None) or '0')
 
             # 当前权限下所有地区
             if sessionOperationClass.check():

@@ -56,7 +56,7 @@ class sessionOperationClass(object):
     def get_locations():
         """获取角色和地区权限"""
         role = session['login']['role']
-        region_id = session['login'].get('locations', [])
+        region_id = [str(i) for i in session['login'].get('locations', [])]
         return role, region_id
 
     @staticmethod
