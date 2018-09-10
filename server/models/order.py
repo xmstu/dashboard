@@ -103,7 +103,7 @@ class OrdersReceivedStatisticsList(object):
 
         complete_sql = """ AND shb_orders.`status` = 3 """
         pending_sql = """ AND shb_orders.`status` IN (1, 2) """
-        cancel_sql = """ AND shb_orders.`status` = -1 """
+        cancel_sql = """ AND shb_orders.`status` = -1 AND shb_orders.is_reassigned = 0 """
 
         complete_order = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where + complete_sql))
         pending_order = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where + pending_sql))
@@ -384,7 +384,7 @@ class OrderListModel(object):
             AND (
             ( {order_status}=1 AND so.`status` in (1,2) ) OR
             ( {order_status}=2 AND so.`status` = 3 ) OR
-            ( {order_status}=3 AND so.`status` = -1)
+            ( {order_status}=3 AND so.`status` = -1 AND so.is_reassigned = 0)
             )
             """.format(order_status=params['order_status'])
 
