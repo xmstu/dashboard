@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from server import log
-from operator import itemgetter
-from flask import session, abort
+from flask import abort
 
+from server import log
 from server.meta.session_operation import sessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 
@@ -20,13 +19,15 @@ class Login(object):
             tb_inf_roles.id role_id,
             tb_inf_roles.`name` role,
             GROUP_CONCAT(DISTINCT region_id) region_id,
-            GROUP_CONCAT(DISTINCT path) path 
+            GROUP_CONCAT(DISTINCT path) path,
+            GROUP_CONCAT(DISTINCT tb_inf_menus.`name`) menu_name
         FROM
             tb_inf_admins
             INNER JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id AND tb_inf_admin_roles.is_deleted = 0
             INNER JOIN tb_inf_roles ON tb_inf_roles.id = tb_inf_admin_roles.role_id AND tb_inf_roles.is_deleted = 0
             INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.role_id = tb_inf_roles.id AND tb_inf_role_pages.is_deleted = 0
             INNER JOIN tb_inf_pages ON tb_inf_pages.id = tb_inf_role_pages.page_id AND tb_inf_pages.is_deleted = 0
+            INNER JOIN tb_inf_menus ON tb_inf_menus.id = tb_inf_pages.menu_id AND tb_inf_menus.is_deleted = 0
         WHERE
             tb_inf_admins.is_deleted = 0
             AND user_name = :user_name
@@ -41,14 +42,14 @@ class Login(object):
                 'role': detail['role'],
                 'role_id': detail['role_id'],
                 'locations': detail['region_id'],
-                'path': detail['path']
+                'path': detail['path'],
+                'menu_name': detail['menu_name']
             })
 
-        flag = sessionOperationClass.set_session('user_session', user_session)
-        if not flag:
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加session失败'))
+        if not sessionOperationClass.set_session('user_session', user_session):
+            abort(HTTPStatus.InternalServerError,
+                  **make_result(status=APIStatus.InternalServerError, msg='添加session失败'))
 
-        result.sort(key=itemgetter('id'))
         result = result[0]
         log.info('获取后台登录用户sql参数: [user_name: %s][password: %s]' % (user_name, password))
         return result if result else None

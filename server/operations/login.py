@@ -30,7 +30,6 @@ class LoginDecorator(object):
             else:
                 locations = user_info['region_id']
 
-            user_info['account'] = user_name
             # 写入session
             result = sessionOperationClass.insert(user_info, locations)
             return Response(result=result)

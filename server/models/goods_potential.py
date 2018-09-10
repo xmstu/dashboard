@@ -158,7 +158,12 @@ class GoodsPotentialListModel(object):
         """
         # 地区权限
         region = ' AND 1=1 '
-        if params['region_id'] and isinstance(params['region_id'], list):
+        if params['region_id'] and isinstance(params['region_id'], int):
+            region = 'AND (from_province_id = %(region_id)s ' \
+                     'OR from_city_id = %(region_id)s ' \
+                     'OR from_county_id = %(region_id)s ' \
+                     'OR from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
+        elif params['region_id'] and isinstance(params['region_id'], list):
             region = '''
                     AND (
                     from_province_id IN (%(region_id)s)
@@ -280,7 +285,12 @@ class GoodsPotentialListModel(object):
 
         # 地区权限
         region = ' AND 1=1 '
-        if params['region_id'] and isinstance(params['region_id'], list):
+        if params['region_id'] and isinstance(params['region_id'], int):
+            region = 'AND (from_province_id = %(region_id)s ' \
+                     'OR from_city_id = %(region_id)s ' \
+                     'OR from_county_id = %(region_id)s ' \
+                     'OR from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
+        elif params['region_id'] and isinstance(params['region_id'], list):
             region = '''
                     AND (
                     from_province_id IN (%(region_id)s)

@@ -30,7 +30,7 @@ class GoodsPotentialDistributionTrend(object):
             params['region_id'] = int(params.get('region_id') or 0)
 
             # 校验地区权限id
-            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id'] in locations_id:
+            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not str(params['region_id']) in locations_id:
                 params['region_id'] = locations_id
 
             # 补全时间
@@ -41,7 +41,7 @@ class GoodsPotentialDistributionTrend(object):
 
             return Response(params=params)
         except Exception as e:
-            log.error('error:{}'.format(e))
+            log.error('前端传入参数错误:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='参数非法'))
 
 
@@ -77,7 +77,7 @@ class GoodsPotentialList(object):
             params['region_id'] = int(params.get('region_id') or 0)
 
             # 校验权限id
-            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id'] in locations_id:
+            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not str(params['region_id']) in locations_id:
                 params['region_id'] = locations_id
             # 补全时间
             params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])

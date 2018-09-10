@@ -25,7 +25,8 @@ class sessionOperationClass(object):
                 'role': user_info['role'],
                 'role_id': user_info['role_id'],
                 'locations': locations,
-                'path': user_info['path']
+                'path': user_info['path'],
+                'menu_name': user_info['menu_name']
             }
 
             return True
@@ -72,13 +73,15 @@ class sessionOperationClass(object):
         return region_id
 
     @staticmethod
-    def change_role(role_info):
+    def change_role(login, role_info):
         """改变角色"""
         try:
+            session['login'] = login
             session['login']['role'] = role_info['role']
             session['login']['role_id'] = role_info['role_id']
             session['login']['locations'] = role_info['locations']
             session['login']['path'] = role_info['path']
+            session['login']['menu_name'] = role_info['menu_name']
             return True
         except Exception as e:
             log.error('改变角色出错 [ERROR: %s]' % e, exc_info=True)
