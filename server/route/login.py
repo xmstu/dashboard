@@ -47,7 +47,8 @@ def broker():
             log.warn('区镇合伙人查询区域为空: [mobile: %s]' % mobile)
             return render_template('/exception/except.html', status_coder=400, title='参数错误',
                                    content='区镇合伙人查询区域为空')
-        supplier_path = "/goods/, /admin/, /home/, /map/, /message/, /order/, /potential/, /price/, /promote/, /transport/, /user/, /vehicle/"
+        supplier_path = "/goods/, /admin/, /home/, /map/, /message/, /order/, /potential/, /price/," \
+                        " /promote/, /transport/, /user/, /vehicle/"
         user_info = {
             'id': result[0]['user_id'],
             'user_name': result[0]['user_name'],
