@@ -44,7 +44,7 @@ class Login(object):
                 'path': detail['path']
             })
 
-        flag = sessionOperationClass.add_session('user_session', user_session)
+        flag = sessionOperationClass.set_session('user_session', user_session)
         if not flag:
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加session失败'))
 

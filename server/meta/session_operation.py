@@ -85,10 +85,17 @@ class sessionOperationClass(object):
             return False
 
     @staticmethod
-    def add_session(key, value):
+    def set_session(key, value):
         try:
             session[key] = value
             return True
         except Exception as e:
             log.error('增加session失败:{}'.format(e))
             return False
+
+    @staticmethod
+    def get_session(key):
+        try:
+            return session[key]
+        except Exception as e:
+            log.error('获取session失败:{}'.format(e))

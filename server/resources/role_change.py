@@ -15,7 +15,7 @@ class RoleChange(Resource):
     @staticmethod
     def get():
         if sessionOperationClass.check():
-            return make_result(APIStatus.Ok, data=session['user_session']), HTTPStatus.Ok
+            return make_result(APIStatus.Ok, data=sessionOperationClass.get_session('user_session')), HTTPStatus.Ok
 
 
 class RoleChangeOperator(Resource):
