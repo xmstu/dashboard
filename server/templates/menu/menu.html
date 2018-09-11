@@ -9,6 +9,29 @@
     </div>
     <ul class="layui-nav layui-nav-tree" lay-filter="nav-slider">
 
+        {% for menu_path in role_menu_path %}
+            {% for menu_name, path_dict in menu_path.items() %}
+            <li class="layui-nav-item message-menu-about">
+                <a href="javascript:;"  id="second_menu_box">
+                    <i class="iconfont icon-suo"></i>{{ menu_name }}
+                    <i class="iconfont icon-xia"></i>
+                </a>
+                <ol class="second-menu-list" id="second_menu_list">
+                    {% for path_name, path  in path_dict.items() %}
+                    <li>
+                         <a href={{ path }}>
+                             <i class="iconfont icon-yuandianxiao"></i>
+                            {{ path_name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ol>
+
+            </li>
+            {% endfor %}
+        {% endfor %}
+
+
         {% if role == '超级管理员' or "/home/" in path or "/admin/" in path %}
         <li class="layui-nav-item area-menu-about">
             <a class="first-menu-list" href="/admin/">

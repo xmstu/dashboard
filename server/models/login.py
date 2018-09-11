@@ -20,7 +20,8 @@ class Login(object):
             tb_inf_roles.`name` role,
             region_id,
             tb_inf_menus.`name` menu_name,
-            GROUP_CONCAT( DISTINCT path ) path
+            GROUP_CONCAT( DISTINCT path ) path,
+            GROUP_CONCAT( DISTINCT tb_inf_pages.`name` ) path_name
         FROM
             tb_inf_admins
             INNER JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id 
@@ -58,7 +59,7 @@ class Login(object):
                 if role['role_id'] == detail['role_id']:
                     role['role_all_path'] += detail['path'] + ','
                     role['role_all_menu'] += detail['menu_name'] + ','
-                    role['role_menu_path'].append({detail['menu_name']: detail['path'].split(',')})
+                    role['role_menu_path'].append({detail['menu_name']: dict(zip(detail['path_name'].split(','), detail['path'].split(',')))})
             role['role_all_path'] = role['role_all_path'].strip(',')
             role['role_all_menu'] = role['role_all_menu'].strip(',')
             role.pop('path')
