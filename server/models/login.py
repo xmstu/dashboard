@@ -19,7 +19,6 @@ class Login(object):
             tb_inf_roles.id role_id,
             tb_inf_roles.`name` role,
             region_id,
-            tb_inf_menus.id menu_id,
             tb_inf_menus.`name` menu_name,
             GROUP_CONCAT( DISTINCT path ) path
         FROM
@@ -57,9 +56,11 @@ class Login(object):
         for role in role_list:
             for detail in result:
                 if role['role_id'] == detail['role_id']:
-                    role['role_all_path'] += detail['path']
-                    role['role_all_menu'] += detail['menu_name']
+                    role['role_all_path'] += detail['path'] + ','
+                    role['role_all_menu'] += detail['menu_name'] + ','
                     role['role_menu_path'].append({detail['menu_name']: detail['path'].split(',')})
+            role['role_all_path'] = role['role_all_path'].strip(',')
+            role['role_all_menu'] = role['role_all_menu'].strip(',')
             role.pop('path')
             role.pop('menu_name')
 

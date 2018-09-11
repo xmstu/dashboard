@@ -36,7 +36,7 @@ class RootManagement(object):
             params['is_active'] = int(params.get('is_active') or 0)
             # 加密密码
             if pwd:
-                params['password'] = pwd_to_hash(pwd)
+                params['password'] = pwd_to_hash(params['user_name'], pwd)
             return Response(params=params)
         except Exception as e:
             log.error('error:{}'.format(e))
@@ -55,7 +55,7 @@ class RootManagement(object):
             if not Check.is_mobile(params['account']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='账号非法'))
             # 加密密码
-            params['password'] = pwd_to_hash(pwd)
+            params['password'] = pwd_to_hash(params['user_name'], pwd)
 
             return Response(params=params)
         except Exception as e:

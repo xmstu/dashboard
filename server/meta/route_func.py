@@ -23,7 +23,9 @@ def route_func(route, template_name):
     role = session['login'].get('role', '')
     path = session['login'].get('role_all_path', '')
     role_all_menu = session['login'].get('role_all_menu', '')
+    role_menu_path = session['login'].get('role_menu_path', '')
     if '城市经理' in role:
         locations = init_regions.get_city_next_region(session['login'].get('locations', []))
     return render_template(template_name, user_name=user_name, avatar_url=avatar_url, locations=locations,
-                           role=role, account=account, path=path, role_all_menu=role_all_menu)
+                           role=role, account=account, path=path, role_all_menu=role_all_menu,
+                           role_menu_path=role_menu_path)

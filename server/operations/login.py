@@ -11,6 +11,7 @@ from server.meta.decorators import make_decorator, Response
 from server.models.login import Login
 from server.status import make_result, HTTPStatus, APIStatus
 from server.database import db
+from server.utils.extend import pwd_to_hash
 
 
 class LoginDecorator(object):
@@ -20,6 +21,7 @@ class LoginDecorator(object):
     def common_check(user_name, password):
         """登录"""
         try:
+            password = pwd_to_hash(user_name, password)
             # 管理员用户
             user_info = Login.get_user_by_admin(db.read_bi, user_name, password)
             if not user_info:

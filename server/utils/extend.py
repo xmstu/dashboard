@@ -265,7 +265,9 @@ data_price = {
 }
 
 
-def pwd_to_hash(pwd):
+def pwd_to_hash(user_name, pwd):
     m2 = hashlib.md5()
-    m2.update(pwd.encode("utf-8"))  # 参数必须是byte类型，否则报Unicode-objects must be encoded before hashing错误
+    # 明文密码加salt
+    pwd = user_name + pwd + 'sshtc'
+    m2.update(pwd.encode("utf-8"))
     return m2.hexdigest()
