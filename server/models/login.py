@@ -70,7 +70,7 @@ class Login(object):
             user_session.append({
                 'role': detail['role'],
                 'role_id': detail['role_id'],
-                'locations': detail['region_id'],
+                'locations': str(detail['region_id']),
                 'role_all_path': detail['role_all_path'],
                 'role_all_menu': detail['role_all_menu'],
                 'role_menu_path': detail['role_menu_path']
