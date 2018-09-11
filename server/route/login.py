@@ -6,7 +6,7 @@ from server import app
 from server.cache_data import init_regions
 from server.database import db
 from server.logger import log
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.models.login import Login
 from server.utils.broker_token import decode
 from server.utils.init_regions import InitRegionModel
@@ -16,7 +16,7 @@ from server.utils.init_regions import InitRegionModel
 def login():
     """登录页面"""
     # 已登录返回首页
-    if sessionOperationClass.check():
+    if SessionOperationClass.check():
         return redirect('/home/')
     return render_template('/login/login.html')
 
@@ -26,8 +26,8 @@ def broker():
     """区镇合伙人登录"""
     try:
         # 清空登录信息
-        if sessionOperationClass.check():
-            sessionOperationClass.deleted()
+        if SessionOperationClass.check():
+            SessionOperationClass.deleted()
         # 区镇合伙人验证
         token = request.args.get('token', None)
         if not token:
@@ -47,16 +47,23 @@ def broker():
             log.warn('区镇合伙人查询区域为空: [mobile: %s]' % mobile)
             return render_template('/exception/except.html', status_coder=400, title='参数错误',
                                    content='区镇合伙人查询区域为空')
-        supplier_path = "/goods/, /admin/, /home/, /map/, /message/, /order/, /potential/, /price/," \
-                        " /promote/, /transport/, /user/, /vehicle/"
+
+        # 统一区镇合伙人的密码
+        password = 'e10adc3949ba59abbe56e057f20f883e'
+        # 通过bi库获取角色和角色的页面权限,菜单和页面的关系
+        supplier_role_result = Login.get_user_by_admin(db.read_bi, mobile, password)
+
         user_info = {
+            'account': result[0]['mobile'],
             'id': result[0]['user_id'],
             'user_name': result[0]['user_name'],
             'mobile': result[0]['mobile'],
             'avatar_url': result[0]['avatar_url'],
-            'account': result[0]['mobile'],
-            'role': result[0]['role'],
-            'path': supplier_path
+            'role': supplier_role_result['role'],
+            'role_id': supplier_role_result['role_id'],
+            'role_all_path': supplier_role_result['role_all_path'],
+            'role_all_menu': supplier_role_result['role_all_menu'],
+            'role_menu_path': supplier_role_result['role_menu_path'],
         }
         locations = [location['region_id'] for location in result]
         locations = set(locations)
@@ -69,7 +76,7 @@ def broker():
                 locations.add(parent_id)
         locations = list(locations)
         # 登录
-        if sessionOperationClass.insert(user_info, locations):
+        if SessionOperationClass.insert(user_info, locations):
             return redirect('/home/')
         else:
             return render_template('/exception/except.html', status_coder=400, title='参数错误',

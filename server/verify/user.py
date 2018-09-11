@@ -7,7 +7,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.cache_data import init_regions
 from server.utils.extend import compare_time, complement_time
 
@@ -38,7 +38,7 @@ class UserStatistic(object):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             # 当前权限下所有地区
-            role, locations_id = sessionOperationClass.get_locations()
+            role, locations_id = SessionOperationClass.get_locations()
             if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not region_id:
                 region_id = locations_id
 
@@ -98,7 +98,7 @@ class UserList(object):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='注册时间有误'))
 
             # 当前权限下所有地区
-            role, locations_id = sessionOperationClass.get_locations()
+            role, locations_id = SessionOperationClass.get_locations()
             if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not region_id:
                 region_id = locations_id
             params = {

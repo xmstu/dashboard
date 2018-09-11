@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator, Response
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.extend import compare_time, check_region_id
 
@@ -24,8 +24,8 @@ class HeatMap(object):
             params['region_id'] = str(params.get('region_id', None) or '0')
 
             # 当前权限下所有地区
-            if sessionOperationClass.check():
-                role, locations_id = sessionOperationClass.get_locations()
+            if SessionOperationClass.check():
+                role, locations_id = SessionOperationClass.get_locations()
                 # 校验权限id
                 if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
                     params['role_region_id'] = locations_id

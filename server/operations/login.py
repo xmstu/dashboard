@@ -4,7 +4,7 @@
 from flask_restful import abort
 
 from server.cache_data import init_regions
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 
 from server.logger import log
 from server.meta.decorators import make_decorator, Response
@@ -31,7 +31,7 @@ class LoginDecorator(object):
                 locations = [user_info['region_id']]
 
             # 写入session
-            result = sessionOperationClass.insert(user_info, locations)
+            result = SessionOperationClass.insert(user_info, locations)
             return Response(result=result)
         except Exception as e:
             log.error('用户登录失败[error: %s]' % (e, ), exc_info=True)

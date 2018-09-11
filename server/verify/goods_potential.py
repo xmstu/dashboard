@@ -4,7 +4,7 @@ from flask_restful import abort
 
 from server import log
 from server.meta.decorators import make_decorator, Response
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.extend import complement_time, compare_time
 
@@ -16,8 +16,8 @@ class GoodsPotentialDistributionTrend(object):
     def check_params(params):
         try:
             # 校验有没有登录
-            if sessionOperationClass.check():
-                role, locations_id = sessionOperationClass.get_locations()
+            if SessionOperationClass.check():
+                role, locations_id = SessionOperationClass.get_locations()
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
@@ -52,8 +52,8 @@ class GoodsPotentialList(object):
     def check_params(page, limit, params):
         try:
             # 校验有没有登录
-            if sessionOperationClass.check():
-                role, locations_id = sessionOperationClass.get_locations()
+            if SessionOperationClass.check():
+                role, locations_id = SessionOperationClass.get_locations()
             else:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 

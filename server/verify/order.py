@@ -4,7 +4,7 @@ from flask_restful import abort
 
 from server import log
 from server.meta.decorators import make_decorator, Response
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.extend import compare_time, date_to_timestamp, complement_time
 
@@ -27,8 +27,8 @@ class OrdersReceivedStatistics(object):
             params['SXB'] = int(params.get('SXB', None) or 0)
 
             # 当前权限下所有地区
-            if sessionOperationClass.check():
-                role, locations_id = sessionOperationClass.get_locations()
+            if SessionOperationClass.check():
+                role, locations_id = SessionOperationClass.get_locations()
                 if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id']:
                     params['region_id'] = locations_id
             else:
@@ -58,8 +58,8 @@ class CancelOrderReason(object):
             params['region_id'] = int(params.get('region_id', None) or 0)
 
             # 当前权限下所有地区
-            if sessionOperationClass.check():
-                role, locations_id = sessionOperationClass.get_locations()
+            if SessionOperationClass.check():
+                role, locations_id = SessionOperationClass.get_locations()
                 if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id']:
                     params['region_id'] = locations_id
             else:
@@ -117,8 +117,8 @@ class OrderList(object):
             params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
 
             # 当前权限下所有地区
-            if sessionOperationClass.check():
-                role, locations_id = sessionOperationClass.get_locations()
+            if SessionOperationClass.check():
+                role, locations_id = SessionOperationClass.get_locations()
                 if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['node_id']:
                     params['node_id'] = locations_id
             else:

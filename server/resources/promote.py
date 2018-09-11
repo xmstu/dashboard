@@ -8,7 +8,7 @@ import server.verify.general as general_verify
 from server import api
 from server import verify, operations, filters
 from server.meta.decorators import Response
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.utils.request import get_all_arg, get_arg_int, get_payload
 
 
@@ -52,7 +52,7 @@ class PromoteEffect(Resource):
     @verify.PromoteEffect.check_add_params(role=int, user_id=int, payload=dict)
     def post():
         """新增推广人员"""
-        role, user_id = sessionOperationClass.get_role()
+        role, user_id = SessionOperationClass.get_role()
         payload = get_payload()
         return Response(role=role, user_id=user_id, payload=payload)
 
@@ -65,7 +65,7 @@ class PromoteDelete(Resource):
     @verify.PromoteEffect.check_delete_params(role=int, user_id=int, promoter_mobile=str)
     def delete(mobile):
         """删除推广人员"""
-        role, user_id = sessionOperationClass.get_role()
+        role, user_id = SessionOperationClass.get_role()
         promoter_mobile = mobile
         return Response(role=role, user_id=user_id, promoter_mobile=promoter_mobile)
 

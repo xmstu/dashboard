@@ -4,7 +4,7 @@ from flask_restful import abort
 
 from server import log
 from server.meta.decorators import make_decorator, Response
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.extend import compare_time
 
@@ -30,8 +30,8 @@ class PriceTrend(object):
             params['end_time'] = int(params.get('end_time') or time.time() - 86400)
 
             # 当前权限下所有地区
-            if sessionOperationClass.check():
-                role, locations_id = sessionOperationClass.get_locations()
+            if SessionOperationClass.check():
+                role, locations_id = SessionOperationClass.get_locations()
                 if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params.get('region_id'):
                     params['region_id'] = locations_id
                 elif role == '超级管理员':

@@ -8,7 +8,7 @@ import server.document.root as doc
 from server import api
 from server import verify, operations, filters
 from server.meta.decorators import Response
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.utils.request import *
 
 
@@ -20,8 +20,8 @@ class RootManagement(Resource):
     @verify.RootManagement.check_get_params(params=dict)
     def get():
         """获取用户管理列表"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params=get_all_arg())
                 return resp
@@ -34,8 +34,8 @@ class RootManagement(Resource):
     @verify.RootManagement.check_post_params(params=dict)
     def post():
         """增加新的用户"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params=get_payload())
                 return resp
@@ -48,8 +48,8 @@ class RootManagementOperator(Resource):
     @operations.RootManagement.delete_data(params=dict)
     def delete(admin_id):
         """删除该账户"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(admin_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
@@ -63,8 +63,8 @@ class RootManagementOperator(Resource):
     @verify.RootManagement.check_put_params(params=dict)
     def put(admin_id):
         """修改当前用户id的账号或者密码"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(admin_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
@@ -80,8 +80,8 @@ class RootManagementOperator(Resource):
     @operations.RootManagement.get_role(admin_id=int)
     def get(admin_id):
         """获取当前用户所有角色"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(admin_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
@@ -99,8 +99,8 @@ class RootRoleManagement(Resource):
     @verify.RootManagement.check_get_params(params=dict)
     def get():
         """获取所有角色的列表"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params=get_all_arg())
                 return resp
@@ -113,8 +113,8 @@ class RootRoleManagement(Resource):
     @verify.RootRoleManagement.check_post_params(params=dict)
     def post():
         """新增一个角色"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params=get_payload())
                 return resp
@@ -130,8 +130,8 @@ class RootRoleManagementOperator(Resource):
     @verify.RootRoleManagement.check_put_params(params=dict)
     def put(role_id):
         """修改当前角色的名称,地区权限,页面权限"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(role_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
@@ -147,8 +147,8 @@ class RootRoleManagementOperator(Resource):
     @operations.RootRoleManagement.delete_data(params=dict)
     def delete(role_id):
         """删除当前角色"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(role_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
@@ -160,8 +160,8 @@ class RootRoleManagementOperator(Resource):
     @operations.RootRoleManagement.get_role_pages(params=dict)
     def get(role_id):
         """获取当前角色所有的权限页面名称和页面id"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(role_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
@@ -178,8 +178,8 @@ class RootPageManagement(Resource):
     @verify.RootManagement.check_get_params(params=dict)
     def get():
         """获取所有页面id,名称和路径"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 return Response(params=get_all_arg())
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
@@ -191,8 +191,8 @@ class RootPageManagement(Resource):
     @verify.RootPageManagement.post_data(params=dict)
     def post():
         """新增一个页面"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 return Response(params=get_payload())
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户新增页面'))
@@ -207,8 +207,8 @@ class RootPageManagementOperator(Resource):
     @verify.RootPageManagement.put_data(params=dict)
     def put(page_id):
         """修改当前页面的名称,备注和路径等"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(page_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='page_id必须是整数'))
@@ -224,8 +224,8 @@ class RootPageManagementOperator(Resource):
     @operations.RootPageManagement.delete_data(params=dict)
     def delete(page_id):
         """删除当前页面"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(page_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='page_id必须是整数'))
@@ -237,8 +237,8 @@ class RootPageManagementOperator(Resource):
     @operations.RootPageManagement.get_page_menus(params=dict)
     def get(page_id):
         """获取当前页面的所有父菜单,如果page_id为0,返回所有status=0的父菜单"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(page_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='page_id必须是整数'))
@@ -255,8 +255,8 @@ class RootMenuManagement(Resource):
     @verify.RootManagement.check_get_params(params=dict)
     def get():
         """获取所有菜单列表"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params=get_all_arg())
                 return resp
@@ -269,8 +269,8 @@ class RootMenuManagement(Resource):
     @verify.RootMenuManagement.post_data(params=dict)
     def post():
         """新增菜单"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 return Response(params=get_payload())
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户新增菜单'))
@@ -284,8 +284,8 @@ class RootMenuManagementOperator(Resource):
     @verify.RootMenuManagement.put_data(params=dict)
     def put(menu_id):
         """修改当前菜单"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(menu_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='menu_id必须是整数'))
@@ -301,8 +301,8 @@ class RootMenuManagementOperator(Resource):
     @operations.RootMenuManagement.delete_data(params=dict)
     def delete(menu_id):
         """删除当前菜单"""
-        if sessionOperationClass.check():
-            role, _ = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, _ = SessionOperationClass.get_role()
             if role == '超级管理员':
                 if not isinstance(menu_id, int):
                     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='menu_id必须是整数'))

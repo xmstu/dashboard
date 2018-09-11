@@ -6,7 +6,7 @@ import time
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 
 
 class CityResourceBalance(object):
@@ -30,7 +30,7 @@ class CityResourceBalance(object):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
         # 当前权限下所有地区
-        role, locations_id = sessionOperationClass.get_locations()
+        role, locations_id = SessionOperationClass.get_locations()
         if role == '超级管理员':
             region_id = 0
         if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not region_id:
@@ -65,7 +65,7 @@ class CityOrderList(object):
             mobile = int(params.get('mobile', None) or 0)
 
             # 当前权限下所有地区
-            role, locations_id = sessionOperationClass.get_locations()
+            role, locations_id = SessionOperationClass.get_locations()
             if role == '超级管理员':
                 region_id = 0
             if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not region_id:

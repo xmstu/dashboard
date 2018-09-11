@@ -7,7 +7,7 @@ from flask import session
 from server.logger import log
 
 
-class sessionOperationClass(object):
+class SessionOperationClass(object):
     """session操作类"""
 
     @staticmethod
@@ -25,8 +25,9 @@ class sessionOperationClass(object):
                 'role': user_info['role'],
                 'role_id': user_info['role_id'],
                 'locations': locations,
-                'path': user_info['path'],
-                'menu_name': user_info['menu_name']
+                'role_all_path': user_info['role_all_path'],
+                'role_all_menu': user_info['role_all_menu'],
+                'role_menu_path': user_info['role_menu_path']
             }
 
             return True
@@ -80,8 +81,9 @@ class sessionOperationClass(object):
             session['login']['role'] = role_info['role']
             session['login']['role_id'] = role_info['role_id']
             session['login']['locations'] = role_info['locations']
-            session['login']['path'] = role_info['path']
-            session['login']['menu_name'] = role_info['menu_name']
+            session['login']['role_all_path'] = role_info['role_all_path']
+            session['login']['role_all_menu'] = role_info['role_all_menu']
+            session['login']['role_menu_path'] = role_info['role_menu_path']
             return True
         except Exception as e:
             log.error('改变角色出错 [ERROR: %s]' % e, exc_info=True)

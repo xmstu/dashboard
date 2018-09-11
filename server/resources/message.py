@@ -6,7 +6,7 @@ from flask_restplus import Resource
 import server.document.message as doc
 from server import operations, api, verify, filters
 from server.meta.decorators import Response
-from server.meta.session_operation import sessionOperationClass
+from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.request import get_payload, get_all_arg
 
@@ -21,8 +21,8 @@ class MessageSystem(Resource):
     def get():
         """获取消息列表"""
         # 后台用户
-        if sessionOperationClass.check():
-            role, user_id = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, user_id = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params=get_all_arg())
                 return resp
@@ -36,8 +36,8 @@ class MessageSystem(Resource):
     def post():
         """消息发布"""
         # 后台用户
-        if sessionOperationClass.check():
-            role, user_id = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, user_id = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params=get_payload(), user_id=user_id)
                 return resp
@@ -53,8 +53,8 @@ class MessageSystemOperator(Resource):
     def put(id):
         """修改消息内容"""
         # 后台用户
-        if sessionOperationClass.check():
-            role, user_id = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, user_id = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params=get_payload(), user_id=user_id, msg_id=id)
                 return resp
@@ -66,8 +66,8 @@ class MessageSystemOperator(Resource):
     def delete(id):
         """删除消息内容"""
         # 后台用户
-        if sessionOperationClass.check():
-            role, user_id = sessionOperationClass.get_role()
+        if SessionOperationClass.check():
+            role, user_id = SessionOperationClass.get_role()
             if role == '超级管理员':
                 resp = Response(params={
                     'user_id': user_id,
@@ -87,7 +87,7 @@ class MessageUser(Resource):
     @verify.MessageUserVerify.check_get_list_params(params=dict)
     def get():
         """获取消息列表"""
-        if not sessionOperationClass.check():
+        if not SessionOperationClass.check():
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
         resp = Response(params=get_all_arg())
@@ -101,7 +101,7 @@ class MessageUserOperator(Resource):
     @verify.MessageUserVerify.check_is_read_params(params=dict, msg_id=int)
     def get(id):
         """消息已读"""
-        if not sessionOperationClass.check():
+        if not SessionOperationClass.check():
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
         resp = Response(params=get_all_arg(), msg_id=id)
         return resp
