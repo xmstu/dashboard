@@ -26,7 +26,7 @@ class MessageSystem(object):
             # 写入系统消息表
             msg_id = MessageSystemModel.insert_system_message(db.write_bi, params)
             # 后台用户
-            system_user = MessageSystemModel.get_system_user(db.read_db)
+            system_user = MessageSystemModel.get_system_user(db.read_bi)
             # 区镇合伙人
             suppliers_user = MessageSystemModel.get_suppliers_user(db.read_db)
             # 网点管理员
@@ -190,7 +190,7 @@ class MessageSystem(object):
         try:
             # 删除用户消息
             MessageSystemModel.delete_user_message(db.write_bi, params)
-            # 删除系统消息表
+            # 删除系统消息
             MessageSystemModel.delete_system_message(db.write_bi, params)
             return make_result(APIStatus.Ok), HTTPStatus.Ok
         except Exception as e:

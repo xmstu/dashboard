@@ -76,9 +76,20 @@ class MessageSystemModel(object):
     def get_system_user(cursor):
         """获取后台用户"""
         command = """
-        SELECT DISTINCT user_name AS account, 1 AS role
-        FROM sha_users
-        WHERE is_deleted = 0"""
+        SELECT
+            user_name AS account,
+            tb_inf_roles.type AS role
+        FROM
+            tb_inf_admins
+            INNER JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id 
+            AND tb_inf_admin_roles.is_deleted = 0 
+            INNER JOIN tb_inf_roles ON tb_inf_admin_roles.role_id = tb_inf_roles.id
+            AND tb_inf_roles.is_deleted = 0 
+        WHERE
+            tb_inf_admins.is_deleted = 0 
+            AND tb_inf_roles.type = 1
+        GROUP BY
+            tb_inf_admins.id;"""
 
         result = cursor.query(command)
         return result if result else []
@@ -166,9 +177,20 @@ class MessageSystemModel(object):
     def get_city_manager(cursor):
         """获取城市经理"""
         command = """
-        SELECT DISTINCT account, 4 AS role
-        FROM tb_inf_city_manager
-        WHERE is_deleted = 0"""
+        SELECT
+            user_name AS account,
+            tb_inf_roles.type AS role
+        FROM
+            tb_inf_admins
+            INNER JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id 
+            AND tb_inf_admin_roles.is_deleted = 0 
+            INNER JOIN tb_inf_roles ON tb_inf_admin_roles.role_id = tb_inf_roles.id
+            AND tb_inf_roles.is_deleted = 0 
+        WHERE
+            tb_inf_admins.is_deleted = 0 
+            AND tb_inf_roles.type = 4
+        GROUP BY
+            tb_inf_admins.id;"""
 
         result = cursor.query(command)
         return result if result else []
