@@ -1,15 +1,26 @@
 # -*- coding: utf-8 -*-
 
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, session
 
 from server import app
 from server.cache_data import init_regions
 from server.database import db
 from server.logger import log
+from server.meta.login_record import visitor_record
+from server.meta.route_func import open_route_func
 from server.meta.session_operation import SessionOperationClass
 from server.models.login import Login
 from server.utils.broker_token import decode
 from server.utils.init_regions import InitRegionModel
+
+
+@app.route('/introduce/', endpoint='introduce')
+@visitor_record
+def introduce():
+    """省省统计中心介绍页面"""
+    if not SessionOperationClass.check():
+        return redirect('/login/')
+    return render_template('/introduce/introduce.html')
 
 
 @app.route('/login/')
@@ -83,3 +94,18 @@ def broker():
                                    content='登录写入session失败')
     except Exception as e:
         log.error('区镇合伙人登录异常: [error: %s]' % e, exc_info=True)
+
+
+@app.route('/home/', endpoint='home')
+@app.route('/admin/', endpoint='admin')
+@visitor_record
+def home_func():
+    """主页"""
+    return open_route_func('/admin/home.html/')
+
+
+@app.route('/message/', endpoint='message')
+@visitor_record
+def edit_message_func():
+    """用户消息页面"""
+    return open_route_func('/message/message.html')

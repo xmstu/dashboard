@@ -9,6 +9,12 @@
     </div>
     <ul class="layui-nav layui-nav-tree" lay-filter="nav-slider">
 
+        <li class="layui-nav-item area-menu-about">
+            <a class="first-menu-list" href="/admin/">
+                <i class="iconfont icon-zhuye"></i>区域概况
+            </a>
+        </li>
+
         {% for menu_path in role_menu_path %}
             {% for menu_name, path_dict in menu_path.items() %}
             <li class="layui-nav-item message-menu-about">
@@ -30,111 +36,5 @@
             </li>
             {% endfor %}
         {% endfor %}
-
-
-        {% if role == '超级管理员' or "/home/" in path or "/admin/" in path %}
-        <li class="layui-nav-item area-menu-about">
-            <a class="first-menu-list" href="/admin/">
-                <i class="iconfont icon-zhuye"></i>区域概况
-            </a>
-        </li>
-        {% endif %}
-
-
-        {% if role == '超级管理员' or "/user/" in path %}
-        <li class="layui-nav-item user-menu-about">
-            <a class="first-menu-list" href="/user/">
-                <i class="iconfont icon-user"></i>用户统计
-            </a>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' or "/promote/" in path %}
-        <li class="layui-nav-item promote-menu-about">
-            <a class="first-menu-list" href="/promote/">
-                <i class="iconfont icon-xianlu"></i>推广统计
-            </a>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' or "/transport/" in path %}
-        <li class="layui-nav-item transport-menu-about">
-            <a class="first-menu-list" href="/transport/">
-                <i class="iconfont icon-line"></i>运力统计
-            </a>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' or "/vehicle/" in path %}
-        <li class="layui-nav-item vehicle-menu-about">
-            <a class="first-menu-list" href="/vehicle/">
-                <i class="iconfont icon-cheliangguanli"></i>认证车辆
-            </a>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' or "/goods/" in path %}
-        <li class="layui-nav-item goods-menu-about">
-            <a class="first-menu-list" href="/goods/">
-                <i class="iconfont icon-tongji"></i>货源统计
-            </a>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' or "/potential/" in path %}
-        <li class="layui-nav-item potential-menu-about">
-            <a class="first-menu-list" href="/potential/">
-                <i class="iconfont icon-yincang"></i>潜在货源
-            </a>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' or "/order/" in path %}
-        <li class="layui-nav-item order-menu-about">
-            <a class="first-menu-list" href="/order/">
-                <i class="iconfont icon-dingdan"></i>订单统计
-            </a>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' or "/price/" in path %}
-        <li class="layui-nav-item price-menu-about">
-            <a class="first-menu-list" href="/price/">
-                <i class="iconfont icon-qian"></i>价格统计
-            </a>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' or "/map/" in path %}
-        <li class="layui-nav-item map-menu-about">
-            <a class="first-menu-list" href="/map/">
-                <i class="iconfont icon-relitu"></i>热力图
-            </a>
-            <u class="menu-line" style="display: none;"></u>
-        </li>
-        {% endif %}
-
-        {% if role == '超级管理员' %}
-            <li class="layui-nav-item message-menu-about">
-                <a href="javascript:;"  id="second_menu_box">
-                    <i class="iconfont icon-suo"></i>权限管理
-                    <i class="iconfont icon-xia"></i>
-                </a>
-                <ol class="second-menu-list" id="second_menu_list">
-                    <li>
-                         <a href="/edit-message/">
-                             <i class="iconfont icon-yuandianxiao"></i>
-                            消息编辑
-                        </a>
-                    </li>
-                      <li>
-                        <a href="/root/">
-                            <i class="iconfont icon-yuandianxiao"></i>用户管理
-                        </a>
-                    </li>
-                </ol>
-            </li>
-        {% endif %}
-
     </ul>
 </nav>

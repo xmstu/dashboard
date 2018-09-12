@@ -2,18 +2,10 @@ from flask import session, render_template
 from werkzeug.utils import redirect
 
 from server.cache_data import init_regions
-from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus
 
 
-def route_func(route, template_name):
-    if not SessionOperationClass.check():
-        return redirect('/login/')
-    if '超级管理员' not in session['login'].get('role'):
-        # 判断路由是否在用户的权限路由中
-        if route not in session['login'].get('role_all_path'):
-            return render_template('/exception/except.html', status_coder=HTTPStatus.Forbidden, title='服务器拒绝该请求',
-                                   content='你没有权限访问当前页面')
+def common_route_func(template_name):
     # 用户名，头像, 地区
     user_name = session['login'].get('user_name', '')
     account = session['login'].get('account', '')
@@ -29,3 +21,21 @@ def route_func(route, template_name):
     return render_template(template_name, user_name=user_name, avatar_url=avatar_url, locations=locations,
                            role=role, account=account, path=path, role_all_menu=role_all_menu,
                            role_menu_path=role_menu_path)
+
+
+def open_route_func(template_name):
+    if not session.get('login'):
+        return redirect('/login/')
+
+    return common_route_func(template_name)
+
+
+def close_route_func(route, template_name):
+    if not session.get('login'):
+        return redirect('/login/')
+    if '超级管理员' not in session['login'].get('role'):
+        # 判断路由是否在用户的权限路由中
+        if route not in session['login'].get('role_all_path'):
+            return render_template('/exception/except.html', status_coder=HTTPStatus.Forbidden, title='服务器拒绝该请求',
+                                   content='你没有权限访问当前页面')
+    return common_route_func(template_name)

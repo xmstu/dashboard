@@ -2,6 +2,7 @@
 
 import time
 
+
 class MessageSystemModel(object):
     @staticmethod
     def get_sys_msg_list_count(cursor):
@@ -203,6 +204,7 @@ class MessageSystemModel(object):
         """
         result = cursor.update(command, params)
         return result
+
 
 class MessageUserModel(object):
     @staticmethod
