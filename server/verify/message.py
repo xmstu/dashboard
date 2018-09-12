@@ -70,8 +70,10 @@ class MessageUserVerify(object):
     @staticmethod
     @make_decorator
     def check_get_list_params(params):
-        if not params.get('account'):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='用户获取失败'))
+        params['user_name'] = str(params.get('user_name') or '')
+        params['account'] = str(params.get('account') or '')
+        if not(params.get('user_name') or params.get('account')):
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='用户名获取失败'))
         if not params.get('page') or not params['page'].isdigit():
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='页数错误'))
         if not params.get('limit') or not params['limit'].isdigit():

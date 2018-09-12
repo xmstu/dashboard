@@ -25,16 +25,10 @@ class MessageSystem(object):
         try:
             # 写入系统消息表
             msg_id = MessageSystemModel.insert_system_message(db.write_bi, params)
-            # 后台用户
-            system_user = MessageSystemModel.get_system_user(db.read_bi)
-            # 区镇合伙人
-            suppliers_user = MessageSystemModel.get_suppliers_user(db.read_db)
-            # 网点管理员
-            supplier_nodes_user = MessageSystemModel.get_supplier_nodes(db.read_db)
-            # 城市经理
-            city_manager = MessageSystemModel.get_city_manager(db.read_bi)
             # 推送角色
             if params['push_role'] == 1:
+                # 后台用户
+                system_user = MessageSystemModel.get_system_user(db.read_bi)
                 data = []
                 for i in system_user:
                     data.append({
@@ -46,6 +40,8 @@ class MessageSystem(object):
                     })
                 MessageSystemModel.insert_user_message(db.write_bi, data)
             elif params['push_role'] == 2:
+                # 区镇合伙人
+                suppliers_user = MessageSystemModel.get_suppliers_user(db.read_db)
                 data = []
                 for i in suppliers_user:
                     data.append({
@@ -57,6 +53,8 @@ class MessageSystem(object):
                     })
                 MessageSystemModel.insert_user_message(db.write_bi, data)
             elif params['push_role'] == 3:
+                # 网点管理员
+                supplier_nodes_user = MessageSystemModel.get_supplier_nodes(db.read_db)
                 data = []
                 for i in supplier_nodes_user:
                     data.append({
@@ -68,6 +66,8 @@ class MessageSystem(object):
                     })
                 MessageSystemModel.insert_user_message(db.write_bi, data)
             elif params['push_role'] == 4:
+                # 城市经理
+                city_manager = MessageSystemModel.get_city_manager(db.read_bi)
                 data = []
                 for i in city_manager:
                     data.append({
@@ -79,6 +79,14 @@ class MessageSystem(object):
                     })
                 MessageSystemModel.insert_user_message(db.write_bi, data)
             else:
+                # 后台用户
+                system_user = MessageSystemModel.get_system_user(db.read_bi)
+                # 区镇合伙人
+                suppliers_user = MessageSystemModel.get_suppliers_user(db.read_db)
+                # 网点管理员
+                supplier_nodes_user = MessageSystemModel.get_supplier_nodes(db.read_db)
+                # 城市经理
+                city_manager = MessageSystemModel.get_city_manager(db.read_bi)
                 # 去重
                 users = city_manager + supplier_nodes_user + suppliers_user + system_user
                 repeat = []
@@ -196,6 +204,7 @@ class MessageSystem(object):
         except Exception as e:
             log.error('消息删除异常: [error: %s]' % e, exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='消息删除异常'))
+
 
 class MessageUser(object):
     @staticmethod

@@ -23,7 +23,8 @@ request_system_message_put = api.doc(body=api.model('request_system_message_put'
 }))
 
 request_user_message_list_get = api.doc(params={
-    'account': '用户名: data-account属性',
+    'user_name': '用户名',
+    'account': '用户账户,手机号',
     'page': '页数',
     'limit': '条数',
 })

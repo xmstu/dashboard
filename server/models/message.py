@@ -235,7 +235,7 @@ class MessageUserModel(object):
         command = """
         SELECT COUNT(*) AS count
         FROM tb_inf_user_message
-        WHERE account = :account
+        WHERE account IN (:account, :user_name)
         AND is_deleted = 0
         """
         result = cursor.query_one(command, params)
@@ -247,7 +247,7 @@ class MessageUserModel(object):
         command = """
         SELECT COUNT(*) AS count
         FROM tb_inf_user_message
-        WHERE account = :account
+        WHERE account IN (:account, :user_name)
         AND is_deleted = 0
         AND is_read = 0
         """
@@ -261,7 +261,7 @@ class MessageUserModel(object):
         SELECT tb_inf_user_message.id, is_read, tb_inf_user_message.create_time, tb_inf_system_message.title, tb_inf_system_message.content
         FROM tb_inf_user_message
         INNER JOIN tb_inf_system_message ON tb_inf_user_message.sys_msg_id = tb_inf_system_message.id
-        WHERE account = :account
+        WHERE account IN (:account, :user_name)
         AND tb_inf_user_message.is_deleted = 0
         ORDER BY is_read
         LIMIT :page, :limit"""
