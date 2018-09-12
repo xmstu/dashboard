@@ -3,6 +3,7 @@ import time
 
 from server import log
 from server.database import db
+from server.failover.electioneer import ElectioneerKazooEngine, Electioneer
 from server.models.long_term_vehicle import LongTermVehiclModel
 from server.models.message import MessageSystemModel
 
@@ -93,4 +94,10 @@ def handle(data):
             log.error('长期用车信息匹配错误，错误原因是:{}'.format(e))
             data = []
     return data
+
+
+_engine = ElectioneerKazooEngine(hosts='192.168.10.139:31081')
+
+election = Electioneer(engine=_engine, path='/election', identifier=None, election_func=background_thread)
+
 

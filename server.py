@@ -2,11 +2,11 @@
 import threading
 
 from server import app
-from server.resources.message_push import background_thread
+from server.resources.message_push import election
 
 
 def inner():
-    t = threading.Thread(target=background_thread, args=())
+    t = threading.Thread(target=election.start, args=())
     t.start()
     print(app.url_map)
     app.run(host='127.0.0.1', port=2333)

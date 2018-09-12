@@ -53,6 +53,4 @@ if __name__ == '__main__':
 
     election.start()
 
-    while True:
-        time.sleep(30)
 
