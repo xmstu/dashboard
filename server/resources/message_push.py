@@ -41,7 +41,8 @@ def background_thread():
                                 'create_time': int(time.time()),
                                 'update_time': int(time.time())
                             })
-                            MessageSystemModel.insert_user_message(db.write_bi, data)
+                            if data:
+                                MessageSystemModel.insert_user_message(db.write_bi, data)
                         data.clear()
                         # 将数据发送给对应地区的区镇合伙人和网点管理人
                         # 区镇合伙人
@@ -62,8 +63,9 @@ def background_thread():
                                 'create_time': int(time.time()),
                                 'update_time': int(time.time())
                             })
-                        MessageSystemModel.insert_user_message(db.write_bi, data)
-                        data.clear()
+                        if data:
+                            MessageSystemModel.insert_user_message(db.write_bi, data)
+                            data.clear()
                         log.info('消息推送成功,消息id是:{}'.format(msg_id))
                 except Exception as e:
                     log.error('消息推送失败,错误原因是:{}'.format(e))
@@ -73,7 +75,7 @@ def background_thread():
         log.info('第%d次后台监控定时任务完成,当前时间是%s' % (count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))))
         count += 1
         print('\n')
-        time.sleep(600)
+        time.sleep(10)
 
 
 def handle(data):
