@@ -125,7 +125,7 @@ class RootRoleManagement(Resource):
 class RootRoleManagementOperator(Resource):
 
     @staticmethod
-    @doc.request_root_management_put
+    @doc.request_root_role_management_put
     @operations.RootRoleManagement.put_data(params=dict)
     @verify.RootRoleManagement.check_put_params(params=dict)
     def put(role_id):

@@ -25,6 +25,7 @@ request_root_management_put = api.doc(body=api.model('request_root_management_pu
 }))
 
 request_root_role_management_add = api.doc(body=api.model('request_root_role_management_add', {
+    'type': fields.Integer(description='角色大类:管理员1,合伙人2,网点管理员3,城市经理4'),
     'role_name': fields.String(description='角色名称'),
     'role_comment': fields.String(description='角色备注'),
     'region_id': fields.Integer(description='地区id'),
@@ -32,6 +33,7 @@ request_root_role_management_add = api.doc(body=api.model('request_root_role_man
 }))
 
 request_root_role_management_put = api.doc(body=api.model('request_root_management_put', {
+    'type': fields.Integer(description='角色大类:管理员1,合伙人2,网点管理员3,城市经理4'),
     'role_name': fields.String(description='角色名称'),
     'role_comment': fields.String(description='角色备注'),
     'region_id': fields.Integer(description='地区id'),

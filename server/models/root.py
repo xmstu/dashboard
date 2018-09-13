@@ -160,6 +160,7 @@ class RootRoleManagementModel(object):
     @staticmethod
     def get_role_list(cursor, params):
         fields = """
+        type,
         tb_inf_roles.id,
         tb_inf_roles.`name` role_name,
         region_id,
@@ -194,8 +195,8 @@ class RootRoleManagementModel(object):
         try:
             with cursor.begin() as tran:
                 role_sql = """
-                INSERT INTO tb_inf_roles(name, comment, region_id) 
-                VALUES(:role_name, :role_comment, :region_id)
+                INSERT INTO tb_inf_roles(`type`, `name`, comment, region_id) 
+                VALUES(:type, :role_name, :role_comment, :region_id)
                 """
 
                 role_id = tran.conn.insert(role_sql, params)
@@ -223,7 +224,7 @@ class RootRoleManagementModel(object):
         try:
             update_role_sql = """id=id"""
             # 直接更新的字段
-            svs_list = ('role_name', 'role_comment', 'region_id')
+            svs_list = ('type', 'role_name', 'role_comment', 'region_id')
             for key, value in params.items():
                 if key in svs_list and value and isinstance(value, int):
                     update_role_sql += ', {key} = {value}'.format(key=key, value=value)

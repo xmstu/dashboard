@@ -69,12 +69,20 @@ class RootRoleManagement(object):
     @make_decorator
     def check_post_params(params):
         try:
+            params['type'] = int(params.get('type') or 0)
             params['role_name'] = str(params.get('role_name') or '')
             params['role_comment'] = str(params.get('role_comment') or '')
             params['region_id'] = int(params.get('region_id') or 0)
             params['page_id_list'] = str(params.get('page_id_list') or '')
 
             # 参数校验
+            if not params['type']:
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='必须要有角色大类别'))
+
+            if params['type'] not in (1, 2, 3, 4):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest,
+                                                           msg='必须是管理员,合伙人,网点管理员,城市经理中的一个类别'))
+
             if not params['role_name']:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='必须要有角色名称'))
 
@@ -96,18 +104,23 @@ class RootRoleManagement(object):
     def check_put_params(params):
         try:
             params['role_id'] = int(params.get('role_id') or 0)
-
+            params['type'] = int(params.get('type') or 0)
             params['role_name'] = str(params.get('role_name') or '')
             params['role_comment'] = str(params.get('role_comment') or '')
             params['region_id'] = int(params.get('region_id') or 0)
             params['page_id_list'] = str(params.get('page_id_list') or '')
+
+            # 判断type是否存在并是否在(1,2,3,4)
+            if params['type'] and params['type'] not in (1, 2, 3, 4):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest,
+                                                           msg='必须是管理员,合伙人,网点管理员,城市经理中的一个类别'))
 
             # 判断role_id是否存在
             if not params['role_id']:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='role_id不能为空或0'))
 
             # 参数校验
-            if not params['role_name'] and not params['role_comment'] and not params['region_id'] and not params['page_id_list']:
+            if not params['type'] and not params['role_name'] and not params['role_comment'] and not params['region_id'] and not params['page_id_list']:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最起码请输入一个参数'))
 
             # 如果有page_id_list
