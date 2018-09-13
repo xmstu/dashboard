@@ -15,14 +15,14 @@
             </a>
         </li>
 
-        {% for menu_path in role_menu_path %}
-            {% for menu_name, path_dict in menu_path.items() %}
+        {% for menu_name, path_dict in role_menu_path.items() %}
             <li class="layui-nav-item message-menu-about">
-                <a href="javascript:;"  id="second_menu_box">
+                <a href="javascript:;"  id="second_menu_box_{{ loop.index }}">
                     <i class="iconfont icon-suo"></i>{{ menu_name }}
                     <i class="iconfont icon-xia"></i>
                 </a>
-                <ol class="second-menu-list" id="second_menu_list">
+
+                <ol class="second-menu-list" id="second_menu_list_{{ loop.index }}">
                     {% for path_name, path in path_dict.items() %}
                     <li>
                          <a href={{ path }}>
@@ -32,9 +32,8 @@
                     </li>
                     {% endfor %}
                 </ol>
-
             </li>
-            {% endfor %}
         {% endfor %}
+
     </ul>
 </nav>

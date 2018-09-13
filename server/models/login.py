@@ -51,7 +51,7 @@ class Login(object):
                 role_set.add(detail['role_id'])
                 detail['role_all_path'] = ''
                 detail['role_all_menu'] = ''
-                detail['role_menu_path'] = []
+                detail['role_menu_path'] = {}
                 role_list.append(detail)
 
         for role in role_list:
@@ -59,7 +59,7 @@ class Login(object):
                 if role['role_id'] == detail['role_id']:
                     role['role_all_path'] += detail['path'] + ','
                     role['role_all_menu'] += detail['menu_name'] + ','
-                    role['role_menu_path'].append({detail['menu_name']: dict(zip(detail['path_name'].split(','), detail['path'].split(',')))})
+                    role['role_menu_path'].update({detail['menu_name']: dict(zip(detail['path_name'].split(','), detail['path'].split(',')))})
             role['role_all_path'] = role['role_all_path'].strip(',')
             role['role_all_menu'] = role['role_all_menu'].strip(',')
             role.pop('path')

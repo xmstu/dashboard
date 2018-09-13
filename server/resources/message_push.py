@@ -75,7 +75,7 @@ def background_thread():
         log.info('第%d次后台监控定时任务完成,当前时间是%s' % (count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))))
         count += 1
         print('\n')
-        time.sleep(600)
+        time.sleep(10)
 
 
 def handle(data):
@@ -101,5 +101,3 @@ def handle(data):
 _engine = ElectioneerKazooEngine(hosts='192.168.10.139:31081')
 
 election = Electioneer(engine=_engine, path='/election', identifier=None, election_func=background_thread)
-
-
