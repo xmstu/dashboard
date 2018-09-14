@@ -1,6 +1,6 @@
 var set = {
     init: function () {
-        var _that = this;
+        var _this = this;
         layui.use(['layer', 'laydate', 'element', 'laypage'], function () {
             var layer = layui.layer;
             var laydate = layui.laydate;
@@ -22,16 +22,15 @@ var set = {
                 for (var i = 0; i < count; i++) {
                      str += '<div class="layui-colla-item">';
                         str += '<div data-value="' + data[i].id + '" class="layui-colla-title">' + data[i].title;
-                        str += '<p class="layui-colla-title-child"><span>' + data[i].date + '</span><i class="read-status orange">' + _that.setAbout(data[i].is_read) + '</i></p></div>';
+                        str += '<p class="layui-colla-title-child"><span>' + data[i].date + '</span><i class="read-status orange">' + _this.setAbout(data[i].is_read) + '</i></p></div>';
                     if (i == 0) {
                         str += '<div class="layui-colla-content  layui-show">' + data[i].content + '</div></div>';
                     } else {
                         str += '<div class="layui-colla-content ">' + data[i].content + '</div></div>';
                     }
                 }
-                $('.layui-collapse').html(_that.resetData(str));
+                $('.layui-collapse').html(_this.resetData(str));
                 element.init();//告诉layui对js模板重新渲染
-                element.on('collapse(message_list)', function (data) {
                     if (data.show == true) {
                         var url = '/message/user/' + $(this).attr('data-value') + '/?account=' + $('#user-info').attr('data-account');
                         var data = {};
@@ -44,7 +43,6 @@ var set = {
                              layer.closeAll('loading')
                         })
                     }
-                });
                 laypage.render({
                     elem: $('#pagination')
                     , count: count

@@ -8,7 +8,6 @@
         </section>
     </div>
     <ul class="layui-nav layui-nav-tree" lay-filter="nav-slider">
-
         <li class="layui-nav-item area-menu-about">
             <a class="first-menu-list" href="/admin/">
                 <i class="iconfont icon-zhuye"></i>区域概况
@@ -17,11 +16,10 @@
 
         {% for menu_name, path_dict in role_menu_path.items() %}
             <li class="layui-nav-item message-menu-about">
-                <a href="javascript:;"  id="second_menu_box_{{ loop.index }}">
-                    <i class="iconfont icon-suo"></i>{{ menu_name }}
+                <a href="javascript:;"  class="second-menu-box" id="second_menu_box_{{ loop.index }}">
+                    <i class="iconfont icon-pic"></i>{{ menu_name }}
                     <i class="iconfont icon-xia"></i>
                 </a>
-
                 <ol class="second-menu-list" id="second_menu_list_{{ loop.index }}">
                     {% for path_name, path in path_dict.items() %}
                     <li>
@@ -34,6 +32,5 @@
                 </ol>
             </li>
         {% endfor %}
-
     </ul>
 </nav>

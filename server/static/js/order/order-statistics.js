@@ -13,10 +13,10 @@ setTimeout(function () {
 }, 10);
 
 function init() {
-    $('.part-2 .layui-input-inline').width(102)
-    $('.part-2 .layui-inline').addClass('mr4')
+    $('.part-2 .layui-input-inline').width(102);
+    $('.part-2 .layui-inline').addClass('mr4');
     $('.layui-form-item').width(184);
-$('.part-1-top .layui-form-item').css({width:182})
+$('.part-1-top .layui-form-item').css({width:182});
     $('#from_region_id').address({
         offsetLeft: '0',
         level: 3,
@@ -31,6 +31,10 @@ $('.part-1-top .layui-form-item').css({width:182})
 
         }
     });
+    /*二级*/
+    $('.menu-transaction').addClass('menu-active');
+    $('.menu-transaction').next('.second-menu-list').css({'display':'block'});
+    $('.menu-transaction').next('.second-menu-list').find('li:nth-of-type(2)').find('a').addClass('selected-active')
 }
 
 layui.use(['laydate', 'form', 'table'], function () {

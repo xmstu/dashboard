@@ -549,11 +549,11 @@ var common = {
         layui.use('layer', function () {
             var layer = layui.layer;
             $.ajaxSetup({
-                beforeSend:function(){
-                  layer.load()
+                beforeSend: function () {
+                    layer.load()
                 },
-                success:function(){
-                  layer.closeAll('loading')
+                success: function () {
+                    layer.closeAll('loading')
                 },
                 complete: function (Xhttp) {
                     layer.closeAll('loading');
@@ -589,24 +589,27 @@ var common = {
             'page': 1,
             'limit': 6
         };
+        var counts = data.limit;
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             var data = res.data;
+            if (data != '') {
+                for (var i = 0; i < counts; i++) {
+                    var id = data[i].id;
+                    var create_time = data[i].create_time;
+                    var title = data[i].title;
+                    var is_read = data[i].is_read;
+                    str += '<li class="message-center-simple" value="' + id + '"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
+                }
+                $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
+                $(".message-count-show").after(str);
+            }
             var str = '';
             var unread = res.unread;
-            $('.header .layui-badge').css({'display':'block'})
-            if(unread==0){
-                $('.message-center .layui-badge').css({'background':'#ccc'})
+            $('.header .layui-badge').css({'display': 'block'})
+            if (unread == 0) {
+                $('.message-center .layui-badge').css({'background': '#ccc'})
             }
             $('.message-center .layui-badge').html(res.count);
-            for (var i = 0; i < res.count; i++) {
-                var id = data[i].id;
-                var create_time = data[i].create_time;
-                var title = data[i].title;
-                var is_read = data[i].is_read;
-                str += '<li class="message-center-simple" value="' + id + '"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
-            }
-            $(".message-count-show").html('当前有' + res.count + '条（已读：'+(res.count-unread)+';未读:'+unread+'）消息！');
-            $(".message-count-show").after(str);
 
             function select() {
                 if (is_read == 1) {
@@ -617,20 +620,56 @@ var common = {
             }
         })
     },
-    secondMenuSet: function () {
-        var second = $('#second_menu_box');
-        $(second).click(function () {
-            $(this).addClass('menu-active')
-            $(".icon-xia").toggleClass("icon-rotate");
-            $(".second-menu-list").slideToggle("fast");
+    secondMenuSet: function (second, second_child) {
+        var second = second;
+        second.click(function () {
+            second.addClass('menu-active').parent('li').siblings().find('.second-menu-box').removeClass('menu-active');
+            second.find(".icon-xia").toggleClass("icon-rotate");
+            second_child.slideToggle("fast");
             if ($('.menu-line').height() == 376) {
                 $('.menu-line').height(442)
             } else if ($('.menu-line').height() == 442) {
                 $('.menu-line').height(376)
             }
         });
+    },
+    iconSet: function (setAbout,value, icon) {
+        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-qian'];
+        var value = value.replace(/(^\s*)|(\s*$)/g, "");
+        var setAbout = setAbout;
+        switch (value) {
+            case '交易统计':
+                icon.addClass(arr[4]);
+                setAbout.addClass('menu-transaction');
+                break;
+            case '价格统计':
+                icon.addClass(arr[6]);
+                setAbout.addClass('menu-price');
+                break;
+            case '地图工具':
+                icon.addClass(arr[2]);
+                setAbout.addClass('menu-map');
+                break;
+            case '推广统计':
+                icon.addClass(arr[1]);
+                setAbout.addClass('menu-promote');
+                break;
+            case '权限管理':
+                icon.addClass(arr[5]);
+                setAbout.addClass('menu-power');
+                break;
+            case '用户统计':
+                icon.addClass(arr[3]);
+                 setAbout.addClass('menu-users');
+                break;
+            case '运力统计':
+                icon.addClass(arr[0]);
+                setAbout.addClass('menu-transport');
+                break;
+        }
     }
 };
+
 setTimeout(function () {
     common.cookieSet();
     common.menuSet();
@@ -641,14 +680,21 @@ setTimeout(function () {
     common.init();
     common.setLink();
     common.ajaxSetting();
-    common.secondMenuSet();
     common.messageSet($('.message-center'), $('.message-center > ul'));
     common.showData('#show_hide', '.header > .header-right .dropdown-menu');
+
+
 }, 10);
+var second_menu = $('.second-menu-box');
+$.each(second_menu, function (val, index) {
+    common.secondMenuSet($(this), $('#second_menu_list_' + (val + 1)));
+    console.info($(this).text().replace(/(^\s*)|(\s*$)/g, ""));
+    common.iconSet($(this),$(this).text(), $(this).find('.icon-pic'))
+});
 setInterval(function () {
     $('.header-content-main').fadeIn('normal').css({'display': 'inline-block'});
     $('#date_now').html('');
     $('#hour_now').html('');
     $('#date_now').html(common.dateNow()[0]);
     $('#hour_now').html(common.dateNow()[1]);
-}, 1000);
+}, 1500);
