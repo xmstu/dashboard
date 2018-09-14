@@ -16,8 +16,6 @@
     <article class="main-content">
         {% include '/menu/menu.html' %}
         <aside class="main-content-right" style="opacity: 1;">
-            <section class="main-content-right-header"><span>统计中心</span> / <span>数据统计</span> / <span>运力统计</span>
-            </section>
             <div>
                 <div class="m-c-l-content">
                     <div class="part-2">
@@ -27,64 +25,122 @@
                         </div>
                     </div>
                     <div class="part-3">
-                        <button class="layui-btn add-user" id="add_user"><i style="font-size:13px" class="iconfont icon-jiahao"></i>新增人员</button>
+                        <button class="layui-btn add-user" id="add_user"><i style="font-size:13px"
+                                                                            class="iconfont icon-jiahao"></i>新增人员
+                        </button>
                         <table class="layui-hide" id="root_table"></table>
+                    </div>
+                    <div class="river"></div>
+                    <div class="part-4">
+                        <div class="part-4-top">
+                            <h2><i class="iconfont icon-renqun"></i>角色权限管理</h2>
+                            <hr>
+                        </div>
+                        <button class="layui-btn add-user" id="add_user_city_manager"><i style="font-size:13px"
+                                                                                         class="iconfont icon-jiahao"></i>新增人员
+                        </button>
+                        <div id="root_city_table"></div>
                     </div>
                 </div>
             </div>
         </aside>
     </article>
+    <!--下面的是弹窗部分，这个页面弹窗有点多(╯▽╰)-->
     <div id="popup" style="display: none;">
         <form class="layui-form layui-form-pane" action="">
             <div style="display: block" class="layui-form-item">
-                <label class="layui-form-label">人员号码</label>
+                <label class="layui-form-label">人员账号</label>
                 <div class="layui-input-block">
-                    <input id="phone_number" type="text" maxLength="11" name="mobile" autocomplete="off" placeholder="输入新增城市经理的手机号码" class="layui-input">
+                    <input id="phone_number" type="text" maxLength="11" name="mobile" autocomplete="off"
+                           placeholder="登陆账号" class="layui-input">
                 </div>
             </div>
-            <div style="display: block;" class="layui-form-item">
-                <label class="layui-form-label">人员姓名</label>
+              <div style="display: block" class="layui-form-item">
+                <label class="layui-form-label">用户姓名</label>
                 <div class="layui-input-block">
-                    <input id="user_name" type="text" name="name" autocomplete="off" placeholder="输入新增城市经理的姓名" class="layui-input">
+                    <input id="user_name" type="text" maxLength="11" name="mobile" autocomplete="off"
+                           placeholder="用户姓名" class="layui-input">
                 </div>
             </div>
             <div style="display: block;" class="layui-form-item">
                 <label class="layui-form-label">登陆密码</label>
                 <div class="layui-input-block">
-                    <input id="add_user_password" type="password" name="name" autocomplete="off" placeholder="输入新增城市经理的密码" class="layui-input">
+                    <input id="add_user_password" type="password" name="name" autocomplete="off"
+                           placeholder="输入密码" class="layui-input">
                 </div>
             </div>
-             <div style="display: block;" class="layui-form-item">
-                <label class="layui-form-label">所在城市</label>
+            <div style="display: block;" class="layui-form-item">
+                <label class="layui-form-label">角色id</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" id="city_picker_search" readonly autocomplete="off" placeholder="选择新增城市经理所在城市" class="layui-input">
+                    <input type="text" name="name" id="role_id" autocomplete="off"
+                           placeholder="<没校验，输入与后台保存一致的地区id就行了>" class="layui-input">
                 </div>
             </div>
         </form>
         <button class="layui-btn" id="confirm_add">确定添加</button>
     </div>
-     <div id="popup_one" style="display: none;">
+    <div id="popup_one" style="display: none;">
         <form class="layui-form layui-form-pane" action="">
             <div style="display: block" class="layui-form-item">
                 <label class="layui-form-label">人员姓名</label>
                 <div class="layui-input-block">
-                    <input id="name_edit" type="text" maxLength="11" name="mobile" autocomplete="off" class="layui-input">
+                    <input id="name_edit" type="text" maxLength="11" name="mobile" autocomplete="off"
+                           class="layui-input">
                 </div>
             </div>
             <div style="display: block;" class="layui-form-item">
                 <label class="layui-form-label">重置密码</label>
                 <div class="layui-input-block">
-                    <input id="password" type="password" name="name" autocomplete="off" placeholder="请输入密码" class="layui-input">
+                    <input id="password" type="password" name="name" autocomplete="off" placeholder="请输入密码"
+                           class="layui-input">
                 </div>
             </div>
-             <div style="display: block;" class="layui-form-item">
+            <div style="display: block;" class="layui-form-item">
                 <label class="layui-form-label">所在城市</label>
                 <div class="layui-input-block">
-                    <input  type="text" name="name" id="city_picker_search_second" readonly autocomplete="off" placeholder="选择新增城市经理所在城市" class="layui-input">
+                    <input type="text" name="name" id="city_picker_search_second" readonly autocomplete="off"
+                           placeholder="选择新增城市经理所在城市" class="layui-input">
                 </div>
             </div>
         </form>
         <button class="layui-btn" id="confirm_fix">确定修改</button>
+    </div>
+    <div id="popup_two" style="display: none;padding: 15px;">
+        <form action="" class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-form layui-form-pane">
+                    <div style="display: block" class="layui-form-item">
+                        <label class="layui-form-label">人员姓名</label>
+                        <div class="layui-input-block">
+                            <input id="role_edit" type="text" name="role" placeholder="请填写角色名称" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div style="display: block;" class="layui-form-item">
+                        <label class="layui-form-label">重置密码</label>
+                        <div class="layui-input-block">
+                            <input id="area_edit" type="text" name="area" autocomplete="off" placeholder="请填写地区"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" name="like[hide]" title="潜在货源">
+                    <input type="checkbox" name="like[goods]" title="货源统计" checked="">
+                    <input type="checkbox" name="like[vehicle]" title="认证车辆">
+                    <input type="checkbox" name="like[transport]" title="运力统计">
+                    <input type="checkbox" name="like[promote]" title="推广统计">
+                    <input type="checkbox" name="like[price]" title="价格统计">
+                    <input type="checkbox" name="like[usersMan]" title="用户管理">
+                    <input type="checkbox" name="like[editMsg]" title="消息编辑">
+                    <input type="checkbox" name="like[orders]" title="订单统计">
+                    <input type="checkbox" name="like[heatMap]" title="热力图">
+                </div>
+                <div class="confirm-btn-box">
+                    <button class="layui-btn" id="confirm_fix_root">确认修改</button>
+                </div>
+            </div>
+        </form>
     </div>
 </article>
 <span style="display: none!important">
