@@ -16,7 +16,7 @@ request_root_management_add = api.doc(body=api.model('request_root_management_ad
     'role_id': fields.Integer(description='角色id'),
 }))
 
-request_root_management_put = api.doc(body=api.model('request_root_management_put', {
+request_root_put = api.doc(body=api.model('request_root_put', {
     'account': fields.String(description='手机号'),
     'user_name': fields.String(description='用户名'),
     'password': fields.String(description='密码'),
@@ -32,13 +32,6 @@ request_root_role_management_add = api.doc(body=api.model('request_root_role_man
     'page_id_list': fields.String(description='页面id列表'),
 }))
 
-request_root_role_management_put = api.doc(body=api.model('request_root_management_put', {
-    'type': fields.Integer(description='角色大类:管理员1,合伙人2,网点管理员3,城市经理4'),
-    'role_name': fields.String(description='角色名称'),
-    'role_comment': fields.String(description='角色备注'),
-    'region_id': fields.Integer(description='地区id'),
-    'page_id_list': fields.String(description='页面id列表'),
-}))
 
 request_root_page_management_add = api.doc(body=api.model('request_root_page_management_add', {
     'page_name': fields.String(description='页面名称'),

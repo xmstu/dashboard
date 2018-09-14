@@ -58,7 +58,7 @@ class RootManagementOperator(Resource):
         abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
-    @doc.request_root_management_put
+    @doc.request_root_put
     @operations.RootManagement.put_data(params=dict)
     @verify.RootManagement.check_put_params(params=dict)
     def put(admin_id):
@@ -125,7 +125,7 @@ class RootRoleManagement(Resource):
 class RootRoleManagementOperator(Resource):
 
     @staticmethod
-    @doc.request_root_role_management_put
+    @doc.request_root_role_management_add
     @operations.RootRoleManagement.put_data(params=dict)
     @verify.RootRoleManagement.check_put_params(params=dict)
     def put(role_id):
