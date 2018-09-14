@@ -1,7 +1,7 @@
 import re
 import time
 
-from server import log
+from server import log, configs
 from server.database import db
 from server.failover.electioneer import ElectioneerKazooEngine, Electioneer
 from server.models.long_term_vehicle import LongTermVehiclModel
@@ -82,7 +82,7 @@ class BackgroundThread:
         """后台监控程序，10分钟监控数据库一次，检查数据库变化，如果有变化，将对应信息写到信息表"""
         while True:
             self.background_task()
-            time.sleep(10)
+            time.sleep(600)
 
     def background_task(self):
         log.info('第%d次后台监控定时任务开始,当前时间是%s' % (self._run_count, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))))
@@ -126,5 +126,5 @@ class BackgroundThread:
 
 background_thread = BackgroundThread()
 
-_engine = ElectioneerKazooEngine(hosts='192.168.10.139:31081')
+_engine = ElectioneerKazooEngine(hosts=configs.env.zookeeper.host)
 election = Electioneer(engine=_engine, path='/election', identifier=None, election_func=background_thread.start)

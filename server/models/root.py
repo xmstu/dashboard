@@ -30,7 +30,8 @@ class RootManagementModel(object):
             tb_inf_admins.id
         """
 
-        count = cursor.query_one(command.format(fields="""COUNT(1) count"""))['count']
+        count = cursor.query(command.format(fields="""COUNT(1) count"""))
+        count = len(count)
 
         command += """ LIMIT {0}, {1} """.format(params.get('page'), params.get('limit'))
 

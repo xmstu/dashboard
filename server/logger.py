@@ -34,4 +34,5 @@ def __create_logger(conf):
 
     return logger
 
+
 log = __create_logger(configs.remote.union.log)
