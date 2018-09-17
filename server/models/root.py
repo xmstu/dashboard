@@ -388,12 +388,7 @@ class RootPageManagementModel(object):
 
             page_list = cursor.query(command.format(fields=fields))
 
-            data = {
-                'page_list': page_list if page_list else [],
-                'count': count if count else 0
-            }
-
-            return data
+            return page_list if page_list else [], count if count else 0
         except Exception as e:
             log.error('获取所有页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取所有页面失败'))

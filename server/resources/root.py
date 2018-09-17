@@ -312,7 +312,7 @@ class RootMenuManagementOperator(Resource):
 
 
 ns = api.namespace('root', description='用户管理')
-ns.add_resource(RootManagement, '/management/')
+ns.add_resource(RootManagement, '/management')
 ns.add_resource(RootManagementOperator, '/management/<int:admin_id>')
 
 ns.add_resource(RootRoleManagement, '/role_management/')

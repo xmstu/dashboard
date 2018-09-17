@@ -5,7 +5,7 @@ from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.root import RootManagementModel, RootRoleManagementModel, RootPageManagementModel, \
     RootMenuManagementModel
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_result, APIStatus, build_result
 
 
 class RootManagement(object):
@@ -131,8 +131,8 @@ class RootPageManagement(object):
     @make_decorator
     def get_all_pages(params):
         try:
-            data = RootPageManagementModel.get_all_pages(db.read_bi, params)
-            return make_result(status=APIStatus.Ok, data=data), HTTPStatus.Ok
+            page_list, count = RootPageManagementModel.get_all_pages(db.read_bi, params)
+            return build_result(status=APIStatus.Ok, count=count, data=page_list), HTTPStatus.Ok
         except Exception as e:
             log.error('获取所有页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取所有页面失败'))
