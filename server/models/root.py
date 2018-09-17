@@ -310,51 +310,32 @@ class RootRoleManagementModel(object):
         try:
             role_page_command = """
             SELECT
-                tb_inf_pages.id page_id
-            FROM
-                tb_inf_pages
-                INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.page_id = tb_inf_pages.id AND tb_inf_role_pages.is_deleted = 0
-            WHERE
-                tb_inf_pages.is_deleted = 0
-                AND tb_inf_role_pages.role_id = :role_id;
-            """
-
-            menu_command = """
-            SELECT
                 tb_inf_pages.id page_id,
-                tb_inf_pages.`name` page_name,
-                tb_inf_menus.`name` menu_name
-            FROM
-                tb_inf_pages
-                INNER JOIN tb_inf_menus ON tb_inf_menus.id = tb_inf_pages.menu_id AND tb_inf_menus.is_deleted = 0
-            WHERE 
-                tb_inf_pages.is_deleted = 0;
+                `name`,
+            CASE WHEN tb_inf_pages.id IN (
+                    SELECT
+                        tb_inf_pages.id page_id 
+                    FROM
+                        tb_inf_pages
+                        INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.page_id = tb_inf_pages.id 
+                        AND tb_inf_role_pages.is_deleted = 0 
+                    WHERE
+                        tb_inf_pages.is_deleted = 0 
+                        AND tb_inf_role_pages.role_id = :role_id 
+                        ) THEN
+                        1 ELSE 0 
+                    END AS `status` 
+                FROM
+                    tb_inf_pages
+                WHERE
+                    tb_inf_pages.is_deleted = 0 
+            GROUP BY
+                tb_inf_pages.id;
             """
+
             role_page_list = cursor.query(role_page_command, params)
-            page_id_set = {i['page_id'] for i in role_page_list}
 
-            menu_list = cursor.query(menu_command)
-            menu_set = {i['menu_name'] for i in menu_list}
-
-            ret = {menu: [] for menu in menu_set}
-
-            if params['role_id'] == 0:
-                for detail in menu_list:
-                    detail['status'] = 0
-            else:
-                for detail in menu_list:
-                    if detail['page_id'] in page_id_set:
-                        detail['status'] = 1
-                    else:
-                        detail['status'] = 0
-
-            # 构造数据格式
-            for key in ret:
-                for detail in menu_list:
-                    if detail['menu_name'] == key:
-                        ret[key].append({detail['page_name']: detail['page_id'], 'status': detail['status']})
-
-            return ret
+            return role_page_list
         except Exception as e:
             log.error('获取权限页面失败:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取权限页面失败'))
