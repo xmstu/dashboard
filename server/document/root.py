@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from flask_restplus.fields import Integer
+
 from server import api
 from flask_restplus import fields
 
@@ -29,7 +31,7 @@ request_root_role_management_add = api.doc(body=api.model('request_root_role_man
     'role_name': fields.String(description='角色名称'),
     'role_comment': fields.String(description='角色备注'),
     'region_id': fields.Integer(description='地区id'),
-    'page_id_list': fields.String(description='页面id列表'),
+    'page_id_list': fields.List(Integer, description='页面id列表'),
 }))
 
 

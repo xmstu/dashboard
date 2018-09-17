@@ -73,7 +73,7 @@ class RootRoleManagement(object):
             params['role_name'] = str(params.get('role_name') or '')
             params['role_comment'] = str(params.get('role_comment') or '')
             params['region_id'] = int(params.get('region_id') or 0)
-            params['page_id_list'] = str(params.get('page_id_list') or '')
+            params['page_id_list'] = list(params.get('page_id_list') or [])
 
             # 参数校验
             if not params['type']:
@@ -92,8 +92,6 @@ class RootRoleManagement(object):
             if not params['page_id_list']:
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='最起码要有一个页面id'))
 
-            params['page_id_list'] = [int(i) for i in params['page_id_list'].split(',')]
-
             return Response(params=params)
         except Exception as e:
             log.error('校验新增角色参数时出错,错误是:{}'.format(e))
@@ -108,7 +106,7 @@ class RootRoleManagement(object):
             params['role_name'] = str(params.get('role_name') or '')
             params['role_comment'] = str(params.get('role_comment') or '')
             params['region_id'] = int(params.get('region_id') or 0)
-            params['page_id_list'] = str(params.get('page_id_list') or '')
+            params['page_id_list'] = list(params.get('page_id_list') or [])
 
             # 判断type是否存在并是否在(1,2,3,4)
             if params['type'] and params['type'] not in (1, 2, 3, 4):
@@ -125,7 +123,7 @@ class RootRoleManagement(object):
 
             # 如果有page_id_list
             if params['page_id_list']:
-                params['page_id_list'] = [int(i) for i in params['page_id_list'].split(',')]
+                pass
 
             return Response(params=params)
         except Exception as e:
