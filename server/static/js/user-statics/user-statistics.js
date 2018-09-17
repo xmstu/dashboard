@@ -3,9 +3,8 @@ $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 var requestStart = $('#date_show_one').val() + ' 00:00:00';
 var requestEnd = $('#date_show_two').val() + ' 23:59:59';
 setTimeout(function () {
-   $('.menu-power').addClass('menu-active');
-        $('.menu-users').next('.second-menu-list').css({'display': 'block'});
-        $('.menu-users').next('.second-menu-list').find('.users-second-menu').addClass('selected-active')
+    $('.user-menu-about > a').addClass("selected-active")
+    $('.user-menu-about > a >i').addClass("select-active")
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);
 

@@ -633,101 +633,38 @@ var common = {
             }
         });
     },
-    iconSet: function (setAbout, value, icon) {
-        /*根据中文显示用js控制样式以后，后台每增加一个页面，这里也要对应增加一个判断*/
+    iconSet: function (setAbout,value, icon) {
         var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-qian'];
         var value = value.replace(/(^\s*)|(\s*$)/g, "");
         var setAbout = setAbout;
-        var children = '';
         switch (value) {
             case '交易统计':
                 icon.addClass(arr[4]);
                 setAbout.addClass('menu-transaction');
-                children = setAbout.next().children();
-                //console.log(children)
-                $.each(children, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '潜在货源') {
-                        $(this).find('a').addClass('lurk-goods')
-                    }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '订单统计') {
-                        $(this).find('a').addClass('order-second-menu')
-                    }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '货源统计') {
-                        $(this).find('a').addClass('goods-second-menu')
-                    }
-                });
+                break;
             case '价格统计':
                 icon.addClass(arr[6]);
                 setAbout.addClass('menu-price');
-                var children_1 = setAbout.next().children();
-                $.each(children_1, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '价格统计') {
-                        $(this).find('a').addClass('price-second-menu')
-                    }
-                })
                 break;
             case '地图工具':
                 icon.addClass(arr[2]);
                 setAbout.addClass('menu-map');
-                var children_2 = setAbout.next().children();
-                $.each(children_2, function (val, index) {
-
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '热力图') {
-                        $(this).find('a').addClass('distribute-second-menu')
-                    }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '高德地图') {
-                        $(this).find('a').addClass('gaode-second-menu')
-                    }
-                })
                 break;
             case '推广统计':
                 icon.addClass(arr[1]);
                 setAbout.addClass('menu-promote');
-                var children_3 = setAbout.next().children();
-                $.each(children_3, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '推广统计') {
-                        $(this).find('a').addClass('promote-second-menu')
-                    }
-
-                })
                 break;
             case '权限管理':
                 icon.addClass(arr[5]);
                 setAbout.addClass('menu-power');
-                var children_4 = setAbout.next().children();
-                $.each(children_4, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '消息编辑') {
-                        $(this).find('a').addClass('editMSG-second-menu')
-                    }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户管理') {
-                        $(this).find('a').addClass('userManager-second-menu')
-                    }
-                });
                 break;
             case '用户统计':
                 icon.addClass(arr[3]);
-                setAbout.addClass('menu-users');
-                var children_5 = setAbout.next().children();
-                $.each(children_5, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户统计') {
-                        $(this).find('a').addClass('users-second-menu')
-                    }
-
-                })
+                 setAbout.addClass('menu-users');
                 break;
             case '运力统计':
                 icon.addClass(arr[0]);
                 setAbout.addClass('menu-transport');
-                var children_6 = setAbout.next().children();
-                $.each(children_6, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '认证车辆') {
-                        $(this).find('a').addClass('vehicle-second-menu')
-                    }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '运力统计') {
-                        $(this).find('a').addClass('transport-second-menu')
-                    }
-
-                })
                 break;
         }
     }
@@ -752,7 +689,7 @@ var second_menu = $('.second-menu-box');
 $.each(second_menu, function (val, index) {
     common.secondMenuSet($(this), $('#second_menu_list_' + (val + 1)));
     console.info($(this).text().replace(/(^\s*)|(\s*$)/g, ""));
-    common.iconSet($(this), $(this).text(), $(this).find('.icon-pic'))
+    common.iconSet($(this),$(this).text(), $(this).find('.icon-pic'))
 });
 setInterval(function () {
     $('.header-content-main').fadeIn('normal').css({'display': 'inline-block'});

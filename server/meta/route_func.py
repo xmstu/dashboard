@@ -1,5 +1,4 @@
-from flask import session, render_template
-from werkzeug.utils import redirect
+from flask import session, render_template, redirect
 
 from server.cache_data import init_regions
 from server.status import HTTPStatus

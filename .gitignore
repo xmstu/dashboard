@@ -79,5 +79,3 @@ enviroment.js
 #config
 server/configs.py
 configs.py
-server.py
-server/static/favicon.ico

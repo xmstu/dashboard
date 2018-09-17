@@ -9,7 +9,7 @@ from server.filters.city import *
 from server.filters.weather import *
 from server.filters.order import *
 from server.filters.transport import *
-from server.filters.heat_map import *
+from server.filters.map import *
 from server.filters.price import *
 from server.filters.verify_vehicle import *
 from server.filters.city_manager import *

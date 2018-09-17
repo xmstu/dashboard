@@ -1,8 +1,9 @@
 var ue = UE.getEditor('editor');
 window.onload=function() {
-    $('.menu-power').addClass('menu-active');
-    $('.menu-power').next('.second-menu-list').css({'display': 'block'});
-    $('.menu-power').next('.second-menu-list').find('.editMSG-second-menu').addClass('selected-active')
+    var secondMenu = document.getElementById('second_menu_list');
+    secondMenu.style.display = 'block';
+     $('#second_menu_list>li:nth-of-type(1) a').addClass('selected-active');
+    $('#second_menu_box').addClass('menu-active')
 }
  $(window).load(function(){
  $('.main-content-right').addClass('animated fadeIn')
