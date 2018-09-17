@@ -178,7 +178,7 @@ class RootRoleManagementModel(object):
         GROUP BY tb_inf_roles.id
         """
 
-        count = cursor.query_one(command.format(fields="""COUNT(1)"""))
+        count = cursor.query(command.format(fields="""COUNT(1)"""))
         count = len(count)
         command += """ LIMIT {0}, {1} """.format(params.get('page'), params.get('limit'))
 
