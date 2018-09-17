@@ -11,7 +11,7 @@ from server.operations.city import *
 from server.operations.weather import *
 from server.operations.order import *
 from server.operations.transport import *
-from server.operations.map import *
+from server.operations.heat_map import *
 from server.operations.price import *
 from server.operations.verify_vehicle import *
 from server.operations.city_manager import *

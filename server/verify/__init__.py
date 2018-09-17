@@ -11,7 +11,7 @@ from server.verify.goods_potential import *
 from server.verify.city import *
 from server.verify.order import *
 from server.verify.transport import *
-from server.verify.map import *
+from server.verify.heat_map import *
 from server.verify.price import *
 from server.verify.verify_vehicle import *
 from server.verify.city_manager import *

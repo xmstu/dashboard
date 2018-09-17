@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, session
 
 from server import app
 from server.cache_data import init_regions
@@ -106,6 +106,6 @@ def home_func():
 
 @app.route('/message/', endpoint='message')
 @visitor_record
-def message_func():
+def edit_message_func():
     """用户消息页面"""
     return open_route_func('/message/message.html')

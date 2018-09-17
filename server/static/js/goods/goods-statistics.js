@@ -36,7 +36,7 @@ function init() {
     });
     $('.menu-transaction').addClass('menu-active');
     $('.menu-transaction').next('.second-menu-list').css({'display':'block'});
-    $('.menu-transaction').next('.second-menu-list').find('li:nth-of-type(3)').find('a').addClass('selected-active')
+    $('.menu-transaction').next('.second-menu-list').find('.goods-second-menu').addClass('selected-active')
     Highcharts.getOptions().colors = Highcharts.map(Highcharts.getOptions().colors, function (color) {
         return {
             radialGradient: {cx: 0.5, cy: 0.3, r: 0.7},

@@ -1,7 +1,9 @@
 var set = {
     init: function () {
         var that = this;
-        $('.vehicle-menu-about>a').addClass('selected-active');
+        $('.menu-power').addClass('menu-active');
+        $('.menu-users').next('.second-menu-list').css({'display': 'block'});
+        $('.menu-users').next('.second-menu-list').find('.vehicle-second-menu').addClass('selected-active')
         layui.use(['layer', 'laydate'], function () {
             var layer = layui.layer;
             var laydate = layui.laydate;
