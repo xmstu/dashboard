@@ -405,9 +405,17 @@ select:disabled {
 .layui-form-checkbox{
     height: 28px;
     line-height: 26px;
-    padding-right: 26px;
+    padding-right: 24px;
 }
 .layui-form-checkbox i {
     width: 28px;
 }
-
+.checkbox {
+    padding: 14px;
+    padding-left: 0;
+    padding-right: 0;
+}
+.confirm-btn-box {
+    text-align: center;
+    padding-top: 10px;
+}

@@ -102,13 +102,16 @@ http.ajax.post_no_loading = function(async, cache, url, data, contentType, callb
         success: function(result) {
             if (typeof callback == "function") {
                 callback(result);
-                return
+                return false;
             }
+        },
+        error:function(){
+            return false;
         },
         complete:function(response){
             if(typeof cb=='function'){
                 cb(response)
-                return
+                return false;
             }
         }
     })

@@ -1,19 +1,18 @@
 var set = {
     init: function () {
-     /*   var secondMenu = document.getElementById('second_menu_list');
-        secondMenu.style.display = 'block';
-        $('#second_menu_list>li:nth-of-type(2) a').addClass('selected-active');
-        $('#second_menu_box').addClass('menu-active');*/
-        layui.use(['form','layer', 'table'], function () {
+        /*   var secondMenu = document.getElementById('second_menu_list');
+           secondMenu.style.display = 'block';
+           $('#second_menu_list>li:nth-of-type(2) a').addClass('selected-active');
+           $('#second_menu_box').addClass('menu-active');*/
+        layui.use(['form', 'layer', 'table'], function () {
             var layer = layui.layer;
             var table = layui.table;
-            var form = layui.form;
+             form = layui.form;
             var url = '/root/management/';
-             var role_url = '/root/role_management/';
+            var role_url = '/root/role_management/';
             /*-----从这里到下面的注释是用户管理*/
             var tableIns = table.render({
                 elem: '#root_table',
-                even: true,
                 url: url,
                 skin: 'nob',
                 response: {
@@ -21,6 +20,7 @@ var set = {
                     statusCode: 100000
                 }
                 , cols: [[
+                    {field: 'id', title: '角色ID'},
                     {field: 'user_name', title: '姓名'},
                     {field: 'account', title: '手机号'},
                     {field: 'role_name', title: '用户角色'},
@@ -34,23 +34,24 @@ var set = {
                 done: function (res) {
                     layer.closeAll('loading');
                     $('.edit-icon').click(function () {
-                        var content = $(this).parents('tr').children('td:eq(0)').find('.layui-table-cell').text();
+                        var content = $(this).parents('tr').children('td:eq(1)').find('.layui-table-cell').text();
+                        /*设置全局变量，函数外访问*/
                         user_id = $(this).attr('data-id');
-                        phone = $(this).parents('tr').children('td:eq(1)').find('.layui-table-cell').text();
+                        phone = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
                         var location = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
                         $('#name_edit').val(content);
-                        $('#city_picker_search_second').val(location);
                         layer.open({
                             type: 1,
                             title: '编辑信息',
                             closeBtn: 1,
                             shadeClose: true,
-                            area: ['450px', '270px'],
+                            area: ['460px', '290px'],
                             skin: "layui-layer-molv",
                             content: $('#popup_one')
                         });
                     });
-                    $('#confirm_add').click(function () {
+                    $('#confirm_add').click(function (e) {
+                        e.preventDefault()
                         var phone_number = $('#phone_number').val();
                         var role_id = $('#role_id').val();
                         var user_name = $('#user_name').val();
@@ -60,7 +61,7 @@ var set = {
                             "account": phone_number,
                             "user_name": user_name,
                             "password": add_user_password,
-                            "region_id": role_id
+                            "role_id": role_id
                         };
                         data = JSON.stringify(data);
                         http.ajax.post_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
@@ -71,11 +72,11 @@ var set = {
                             }
                             setTimeout(function () {
                                 layer.closeAll();
-                                tableIns.reload();
+                                window.location.reload();
                             }, 700)
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
-                                layer.msg('普通管理员无权限', {
+                                layer.msg('失败', {
                                     time: 1000
                                 });
                                 setTimeout(function () {
@@ -87,12 +88,13 @@ var set = {
                     $('#confirm_fix').click(function () {
                         var name_edit = $('#name_edit').val();
                         var password = $('#password').val();
-                        var city_picker_search_second = $('#city_picker_search_second').attr('cityid');
+                        var role_id =  $('#user_id').val();
                         var data = {
                             "account": phone,
                             "user_name": name_edit,
                             "password": password,
-                            "region_id": city_picker_search_second
+                            "role_id":role_id,
+                            "is_active":$('input[name=role]:checked').val()
                         };
                         data = JSON.stringify(data);
                         var url = '/root/management/' + user_id;
@@ -108,7 +110,7 @@ var set = {
                             }
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
-                                layer.msg('普通管理员无权限', {
+                                layer.msg('失败', {
                                     time: 1000
                                 });
                                 setTimeout(function () {
@@ -170,7 +172,7 @@ var set = {
             /*---------------------------------------------------------*/
             /*从这里是角色管理*/
             /*从这里是角色管理*/
-           var tableRender = table.render({
+            var tableRender = table.render({
                 elem: '#root_city_table',
                 even: true,
                 url: role_url,
@@ -193,23 +195,23 @@ var set = {
                 done: function (res) {
                     layer.closeAll('loading');
                     $('.edit-operate').click(function () {
-                       /* var content = $(this).parents('tr').children('td:eq(0)').find('.layui-table-cell').text();
-                        user_id = $(this).attr('data-id');
-                        phone = $(this).parents('tr').children('td:eq(1)').find('.layui-table-cell').text();
-                        var location = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
-                        $('#name_edit').val(content);
-                        $('#city_picker_search_second').val(location);*/
+                        /* var content = $(this).parents('tr').children('td:eq(0)').find('.layui-table-cell').text();
+                         user_id = $(this).attr('data-id');
+                         phone = $(this).parents('tr').children('td:eq(1)').find('.layui-table-cell').text();
+                         var location = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
+                         $('#name_edit').val(content);
+                         $('#city_picker_search_second').val(location);*/
                         layer.open({
                             type: 1,
                             title: '编辑信息',
                             closeBtn: 1,
                             shadeClose: true,
-                            area: ['550px', '270px'],
+                            area: ['550px', '320px'],
                             skin: "layui-layer-molv",
                             content: $('#popup_two')
                         });
                     });
-                    /*$('#confirm_add').click(function () {
+                    $('#confirm_add_root').click(function () {
                         var phone_number = $('#phone_number').val();
                         var city_picker_search = $('#city_picker_search').attr('cityid');
                         var user_name = $('#user_name').val();
@@ -243,7 +245,7 @@ var set = {
                             }
                         })
                     });
-                    $('#confirm_fix').click(function () {
+                    /*$('#confirm_fix').click(function () {
                         var name_edit = $('#name_edit').val();
                         var password = $('#password').val();
                         var city_picker_search_second = $('#city_picker_search_second').attr('cityid');
@@ -344,9 +346,34 @@ var set = {
                 title: '新增城市经理',
                 closeBtn: 1,
                 shadeClose: true,
-                area: ['450px', '320px'],
+                area: ['450px', '300px'],
                 skin: "layui-layer-molv",
                 content: $('#popup')
+            });
+
+        })
+        $('#add_user_city_manager').click(function (e) {
+            e.preventDefault();
+            /*不想分页就写100*/
+            var url = '/root/page_management/?page=1&limit=100';
+            http.ajax.get_no_loading(true,false,url,{},http.ajax.CONTENT_TYPE_2,function(res){
+                var page_list = res.data.page_list;
+                var str = '';
+                for(var i =0;i<page_list.length;i++){
+                    str+='<input type="checkbox" data-id="'+page_list[i].page_id+'" name="like[root_page_'+i+']" title='+page_list[i].page_name+'>'
+                }
+                $('.checkbox').html(str);
+                /*告诉layui重载*/
+                form.render(null,'add_root');
+            });
+            layer.open({
+                type: 1,
+                title: '新增城市经理',
+                closeBtn: 1,
+                shadeClose: true,
+                area: ['512px', '320px'],
+                skin: "layui-layer-molv",
+                content: $('#popup_three')
             });
 
         })
