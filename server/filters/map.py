@@ -7,7 +7,7 @@ from server.utils.constant import d_user, d_goods, d_vehicle, d_order
 from server.utils.extend import ExtendHandler
 
 
-class HeatMap(object):
+class DistributionMap(object):
 
     @staticmethod
     @make_decorator
@@ -70,3 +70,23 @@ class HeatMap(object):
         }
 
         return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+
+
+class GoodsMap(object):
+
+    @staticmethod
+    @make_decorator
+    def get_result(data):
+        # TODO 过滤参数
+
+        return make_result(APIStatus.Ok), HTTPStatus.Ok
+
+
+class UsersMap(object):
+
+    @staticmethod
+    @make_decorator
+    def get_result(data):
+        # TODO 过滤参数
+
+        return make_result(APIStatus.Ok), HTTPStatus.Ok
