@@ -3,7 +3,7 @@ import time
 from server.utils.constant import vehicle_name_id
 
 
-class HeatMapModel(object):
+class DistributionMapModel(object):
 
     @staticmethod
     def get_user(cursor, params, region_level):
@@ -380,5 +380,42 @@ class HeatMapModel(object):
             "ret_list": orders_list if orders_list else [],
             "region_group": region_group
         }
+
+        return data
+
+
+class GoodsMapModel(object):
+
+    @staticmethod
+    def get_data(cursor, params):
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """
+
+        """
+
+        data = cursor.query(command)
+
+        return data
+
+
+class UsersMapModel(object):
+
+    @staticmethod
+    def get_data(cursor, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
 
         return data

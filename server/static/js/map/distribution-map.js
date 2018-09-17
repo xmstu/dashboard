@@ -78,7 +78,7 @@ var set = {
                     $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
                 }
             });
-            var url = '/map/heat_map/';
+            var url = '/map/distribution_map/';
             var area_select = $('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
             var map_select = $('.map-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
             var data = {

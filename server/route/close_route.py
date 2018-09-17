@@ -22,11 +22,25 @@ def edit_sys_msg_func():
     return close_route_func('/edit_sys_msg/', '/edit_sys_msg/edit-sys-message.html')
 
 
-@app.route('/map/', endpoint='map')
+@app.route('/distribution_map/', endpoint='distribution_map')
 @visitor_record
-def map_func():
-    """热力图"""
-    return close_route_func('/map/', '/map/heat-map.html')
+def distribution_map():
+    """分布图"""
+    return close_route_func('/distribution_map/', '/map/distribution-map.html')
+
+
+@app.route('/goods_map/', endpoint='goods_map')
+@visitor_record
+def goods_map():
+    """货源热力地图"""
+    return close_route_func('/goods_map/', '/map/goods-map.html')
+
+
+@app.route('/users_map/', endpoint='users_map')
+@visitor_record
+def users_map():
+    """用户热力地图"""
+    return close_route_func('/users_map/', '/map/users-map.html')
 
 
 @app.route('/edit-message/', endpoint='edit-message')

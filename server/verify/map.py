@@ -7,10 +7,10 @@ from server.cache_data import init_regions
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
-from server.utils.extend import compare_time, check_region_id
+from server.utils.extend import compare_time, check_region_id, date2timestamp, timestamp2date
 
 
-class HeatMap(object):
+class DistributionMap(object):
 
     @staticmethod
     @make_decorator
@@ -63,3 +63,54 @@ class HeatMap(object):
         except Exception as e:
             log.error('error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='拒绝请求'))
+
+
+class GoodsMap(object):
+
+    @staticmethod
+    @make_decorator
+    def check_params(params):
+        try:
+            today_begin = date2timestamp(timestamp2date(time.time()))
+
+            params['goods_price_type'] = int(params.get('goods_price_type', None) or 0)
+            params['haul_dist'] = int(params.get('haul_dist', None) or 0)
+            params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
+            params['goods_status'] = int(params.get('goods_status', None) or 0)
+            params['special_tag'] = int(params.get('special_tag', None) or 0)
+            params['delivery_start_time'] = int(params.get('delivery_start_time', None) or today_begin)
+            params['delivery_end_time'] = int(params.get('delivery_end_time', None) or time.time())
+            params['register_start_time'] = int(params.get('register_start_time', None) or today_begin)
+            params['register_end_time'] = int(params.get('register_end_time', None) or time.time())
+
+            # 补全时间
+            params['delivery_start_time'], params['delivery_end_time'] = complement_time(params['delivery_start_time'], params['delivery_end_time'])
+            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
+
+            # 当前权限下所有地区
+            if not SessionOperationClass.check():
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            # 获取角色和权限地区id
+            role, locations_id = SessionOperationClass.get_locations()
+            params['role_region_id'] = locations_id
+
+            if not compare_time(params['start_time'], params['end_time']):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+
+            return Response(params=params)
+        except Exception as e:
+            log.error('error:{}'.format(e), exc_info=True)
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='拒绝请求'))
+
+
+class UsersMap(object):
+
+    @staticmethod
+    @make_decorator
+    def check_params(params, **kwargs):
+        try:
+            pass
+        except Exception as e:
+            log.error('error:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
