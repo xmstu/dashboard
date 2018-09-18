@@ -393,8 +393,8 @@ class GoodsMapModel(object):
 
         command = """
         SELECT
-            from_latitude AS latitude,
-            from_longitude AS longitude,
+            from_latitude AS lat,
+            from_longitude AS lng,
             COUNT( 1 ) count 
         FROM
             shf_goods
