@@ -26,7 +26,7 @@
             </p>
             <p class="weather-city-search"></p>
            <div class="role-change-box">
-                <span>切换：</span><ol class="layui-nav" lay-filter="header">
+                <ol class="layui-nav" lay-filter="header">
                     <li class="layui-nav-item">
                         <a href="javascript:;">切换身份</a>
                         <dl class="layui-nav-child">
@@ -72,13 +72,14 @@
     .message-center > ul {
         display: none;
     }
-    .layui-nav {
+    .header .layui-nav {
         display: inline-block;
         background: none;
         padding: 0;
+        height: 100%;
     }
-    .layui-nav-child {
-        top: 38px;
+    .header .layui-nav-child {
+        top: 42px;
         background: none;
 
     }

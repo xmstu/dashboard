@@ -187,6 +187,7 @@ body {
     float: right;
     line-height: 20px;
     font-size: 12px;
+      height: 100%;
 }
 .header-right {
     min-width: 29%;
