@@ -223,6 +223,8 @@ class RootRoleManagementModel(object):
     @staticmethod
     def put_data(cursor, params):
         try:
+            # 记录更新的次数
+            row_count = 0
             update_role_sql = """id=id"""
             # 直接更新的字段
             svs_list = ('type', 'role_name', 'role_comment', 'region_id')
@@ -263,7 +265,7 @@ class RootRoleManagementModel(object):
                         WHERE page_id = %d AND role_id = %d;
                         """
                         for page_id in needed_delete_set:
-                            tran.conn.update(delete_sql % (page_id, params['role_id']))
+                            row_count += tran.conn.update(delete_sql % (page_id, params['role_id']))
                     if needed_add_set:
                         insert_sql = """
                         INSERT INTO tb_inf_role_pages(role_id, page_id, create_time, update_time)
@@ -271,7 +273,7 @@ class RootRoleManagementModel(object):
                         """
                         create_time = update_time = int(time.time())
                         for page_id in needed_add_set:
-                            tran.conn.update(insert_sql % (params['role_id'], page_id, create_time, update_time))
+                            row_count += tran.conn.update(insert_sql % (params['role_id'], page_id, create_time, update_time))
                     if needed_update_set:
                         update_role_page_sql = """
                        UPDATE
@@ -280,13 +282,13 @@ class RootRoleManagementModel(object):
                        WHERE page_id = %d AND role_id = %d;
                            """
                         for page_id in needed_update_set:
-                            tran.conn.update(update_role_page_sql % (page_id, params['role_id']))
+                            row_count += tran.conn.update(update_role_page_sql % (page_id, params['role_id']))
 
                 # 更新角色
                 command = """
                 UPDATE tb_inf_roles SET {update_role_sql} WHERE id=:role_id
                 """
-                row_count = tran.conn.update(command.format(update_role_sql=update_role_sql), {'role_id': params['role_id']})
+                row_count += tran.conn.update(command.format(update_role_sql=update_role_sql), {'role_id': params['role_id']})
                 return row_count
         except Exception as e:
             log.error('修改角色失败,失败原因是:{}'.format(e))

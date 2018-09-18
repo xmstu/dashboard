@@ -123,7 +123,7 @@ class RootRoleManagement(object):
 
             # 如果有page_id_list
             if params['page_id_list']:
-                pass
+                params['page_id_list'] = [int(i) for i in params['page_id_list']]
 
             return Response(params=params)
         except Exception as e:
