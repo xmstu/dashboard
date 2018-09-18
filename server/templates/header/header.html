@@ -25,7 +25,7 @@
                 </span>
             </p>
             <p class="weather-city-search"></p>
-           <div class="role-change-box">
+            <div class="role-change-box">
                 <ol class="layui-nav" lay-filter="header">
                     <li class="layui-nav-item">
                         <a href="javascript:;">切换身份</a>
@@ -46,13 +46,20 @@
                 <b class="user_name_icon" style="" id="user-info" data-role="{{ role }}"
                    data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}"
                    data-account="{{ account }}">Hi,{{ user_name }}</b>
-                <span id="show_hide" style="cursor:pointer;color: #fff;" class="layui-icon">&#xe61a;</span>
-                <ul class="dropdown-menu" style="display:none;">
-                    <li><a href="/password/"><i class="iconfont icon-shezhi1"></i> <span
-                            style="border-left: 1px dashed #ccc;padding-left: 5px;">修改密码</span></a></li>
-                    <li class="loginOut"><a href="#"><i class="iconfont icon-secede"></i> <span
-                            style="border-left: 1px dashed #ccc; padding-left: 5px;">退出登陆</span></a></li>
-                </ul>
+
+                <ol class="layui-nav" lay-filter="">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">退出登陆</a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="/password/"><span>修改密码</span></a>
+                            </dd>
+                            <dd class="loginOut">
+                                <a href="#"><span>退出登陆</span></a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ol>
                 <div class="message-center">
                     <i class="iconfont icon-xiaoxi1"></i><b class="layui-badge" style="display: none;">..</b>
                     <ul>
@@ -72,16 +79,21 @@
     .message-center > ul {
         display: none;
     }
+
     .header .layui-nav {
         display: inline-block;
         background: none;
         padding: 0;
         height: 100%;
     }
-    .header .layui-nav-child {
-        top: 42px;
-        background: none;
 
+    .header .layui-nav-child {
+        top: 48px;
+        background: #fff;
+    }
+
+    .header .layui-nav .layui-nav-item a {
+        line-height: 42px;
     }
 </style>
 <script>
