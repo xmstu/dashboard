@@ -1,7 +1,9 @@
 var set = {
     init: function () {
         var that = this;
-        $('.vehicle-menu-about>a').addClass('selected-active');
+        $('.menu-transport').addClass('menu-active');
+        $('.menu-transport').next('.second-menu-list').css({'display': 'block'});
+        $('.menu-transport').next('.second-menu-list').find('.vehicle-second-menu').addClass('selected-active')
         layui.use(['layer', 'laydate'], function () {
             var layer = layui.layer;
             var laydate = layui.laydate;
@@ -10,7 +12,7 @@ var set = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[0]),
                 calendar: true,
-                 format:'yyyy/MM/dd',
+                format: 'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
                     var endTime = $('#date_show_two').val();
@@ -33,7 +35,7 @@ var set = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[3]),
                 calendar: true,
-                 format:'yyyy/MM/dd',
+                format: 'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_one').val();
                     var endTime = $('#date_show_two').val();
@@ -56,7 +58,7 @@ var set = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[3]),
                 calendar: true,
-                 format:'yyyy/MM/dd',
+                format: 'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_three').val();
                     var endTime = $('#date_show_four').val();
@@ -79,7 +81,7 @@ var set = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[3]),
                 calendar: true,
-                 format:'yyyy/MM/dd',
+                format: 'yyyy/MM/dd',
                 done: function (val, index) {
                     var startTime = $('#date_show_three').val();
                     var endTime = $('#date_show_four').val();

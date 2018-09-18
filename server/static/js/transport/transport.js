@@ -6,10 +6,11 @@ var dataSet = {
         $('#date_show_three').val(String(common.getNowFormatDate()[2]));
         $('#date_show_four').val(String(common.getNowFormatDate()[3]));
         setTimeout(function () {
+            $('.menu-transport').addClass('menu-active');
+            $('.menu-transport').next('.second-menu-list').css({'display': 'block'});
+            $('.menu-transport').next('.second-menu-list').find('.transport-second-menu').addClass('selected-active')
             $('.layui-form-item .layui-inline ').css({'margin-right': 0});
             $('.part-2').css({'padding-top': '0px', 'border-top': 0});
-            $('.transport-menu-about>a').addClass('selected-active');
-            that.radar_chart_init($('#charts_container_two'));
             that.tableRender('/transport/list/');
         }, 10);
         $('#area_select').address({
@@ -41,7 +42,7 @@ var dataSet = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[0]),
                 calendar: true,
-              format:'yyyy/MM/dd',
+                format: 'yyyy/MM/dd',
                 done: function (val, index) {
                     if ($('#date_show_three').val() == '') {
                         $('#date_show_three').next('.date-tips').show();
@@ -55,7 +56,7 @@ var dataSet = {
                 theme: '#009688',
                 calendar: true,
                 max: String(common.getNowFormatDate()[0]),
-                format:'yyyy/MM/dd',
+                format: 'yyyy/MM/dd',
                 done: function (val, index) {
                     if ($('#date_show_four').val() == '') {
                         $('#date_show_four').next('.date-tips').show();
@@ -69,7 +70,7 @@ var dataSet = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[0]),
                 calendar: true,
-                 format:'yyyy/MM/dd',
+                format: 'yyyy/MM/dd',
                 done: function (val, index) {
                     if ($('#start_time_show').val() == '' || val == '') {
                         $('#start_time_show').next('.date-tips').show();
@@ -83,7 +84,7 @@ var dataSet = {
                 theme: '#009688',
                 max: String(common.getNowFormatDate()[0]),
                 calendar: true,
-                 format:'yyyy/MM/dd',
+                format: 'yyyy/MM/dd',
                 done: function (val, index) {
                     if ($('#end_time_show').val() == '' || val == '') {
                         $('#end_time_show').next('.date-tips').show();
@@ -261,7 +262,7 @@ var dataSet = {
                                         type: 1,
                                         title: '运力统计车型雷达图',
                                         content: $('#popup'),
-                                        shadeClose:true,
+                                        shadeClose: true,
                                         area: ['1300px', '540px'],
                                         skin: 'layui-layer-molv',
                                         colseBtn: 1

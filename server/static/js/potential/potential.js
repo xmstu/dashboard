@@ -3,10 +3,12 @@
  */
 var setAbout = {
     init: function () {
+        /*侧边栏样式*/
+          $('.menu-transaction').addClass('menu-active');
+          $('.menu-transaction').next('.second-menu-list').css({'display': 'block'});
+          $('.menu-transaction').next('.second-menu-list').find('.lurk-goods').addClass('selected-active');
         /*给表单设置默认值，时间转换秒是前端做的*/
         $('.layui-table-cell').css({'height': 'auto!important'});
-        $('.potential-menu-about > a').addClass('selected-active');
-        $('.potential-menu-about > a>i').addClass('select-active');
         $('#date_show_one').val(String(common.getNowFormatDate()[2]));
         $('#date_show_two').val(String(common.getNowFormatDate()[3]));
         $('#start_date_one').val(String(common.getNowFormatDate()[2]));
