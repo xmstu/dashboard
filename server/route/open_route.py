@@ -72,8 +72,8 @@ def broker():
                 locations.add(parent_id)
         locations = list(locations)
 
-        # 通过bi库获取角色和角色的页面权限,菜单和页面的关系
-        max_region_level = max([init_regions.get_current_region_level(i) for i in parent_id_set])
+        # 通过当前用户拥有的地区的最高等级判断是区镇合伙人还是网点管理员
+        max_region_level = max([init_regions.get_current_region_level(i) for i in locations])
         if max_region_level == 3:
             role = '区镇合伙人'
             role_id = Login.get_role_id_by_role(db.read_bi, role)
