@@ -83,7 +83,7 @@ input:-ms-input-placeholder {
 }
 
 .animated.fadeIn {
-    animation-duration: 1s
+    animation-duration: .3s
 }
 
 @keyframes fadeInUp {

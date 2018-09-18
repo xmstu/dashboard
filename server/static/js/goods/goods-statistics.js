@@ -13,8 +13,9 @@ $('#end_time_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_three').val(String(common.getNowFormatDate()[2]));
 $('#end_time_three').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
-    $('.goods-menu-about > a').addClass('selected-active')
-    $('.goods-menu-about > a>i').addClass('select-active')
+   $('.menu-transcation').addClass('menu-active');
+    $('.menu-transcation').next('.second-menu-list').css({'display': 'block'});
+    $('.menu-transcation').next('.second-menu-list').find('.goods-second-menu').addClass('selected-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
     common.dateInterval_Ano($('#start_date_three').val(), $('#end_time_three').val())
 }, 10);

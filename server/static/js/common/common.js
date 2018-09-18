@@ -656,6 +656,7 @@ var common = {
                         $(this).find('a').addClass('goods-second-menu')
                     }
                 });
+                 break;
             case '价格统计':
                 icon.addClass(arr[6]);
                 setAbout.addClass('menu-price');

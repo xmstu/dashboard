@@ -9,8 +9,9 @@ layui.use('layer', function () {
     $('.layui-form-item').css({width:'184px'})
 });
 setTimeout(function () {
-    $('.promote-menu-about>a').addClass('selected-active');
-    $('.promote-menu-about>a>i').addClass('select-active');
+    $('.menu-promote').addClass('menu-active');
+    $('.menu-promote').next('.second-menu-list').css({'display': 'block'});
+    $('.menu-promote').next('.second-menu-list').find('.promote-second-menu').addClass('selected-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);
 layui.use(['laydate', 'layer', 'form', 'table'], function () {
@@ -19,6 +20,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     var form = layui.form;
     var layer = layui.layer;
     form.on('select(is_actived)', function (data) {
+        /*监听select达到模拟联动效果*/
         if (data.value == '1') {
             $('#select_spec_two').addClass('none').removeClass('area-select-options-setting');
             $('#select_spec_three').addClass('none').removeClass('area-select-options-setting');

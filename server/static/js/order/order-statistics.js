@@ -7,8 +7,9 @@ $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_one').val(String(common.getNowFormatDate()[2]));
 $('#end_time_one').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
-    $('.order-menu-about>a').addClass('selected-active');
-    $('.order-menu-about>a>i').addClass('select-active');
+    $('.menu-transaction').addClass('menu-active');
+    $('.menu-transaction').next('.second-menu-list').css({'display': 'block'});
+    $('.menu-transaction').next('.second-menu-list').find('.order-second-menu').addClass('selected-active');
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);
 
@@ -16,7 +17,7 @@ function init() {
     $('.part-2 .layui-input-inline').width(102);
     $('.part-2 .layui-inline').addClass('mr4');
     $('.layui-form-item').width(184);
-$('.part-1-top .layui-form-item').css({width:182});
+    $('.part-1-top .layui-form-item').css({width: 182});
     $('#from_region_id').address({
         offsetLeft: '0',
         level: 3,
@@ -33,7 +34,7 @@ $('.part-1-top .layui-form-item').css({width:182});
     });
     /*二级*/
     $('.menu-transaction').addClass('menu-active');
-    $('.menu-transaction').next('.second-menu-list').css({'display':'block'});
+    $('.menu-transaction').next('.second-menu-list').css({'display': 'block'});
     $('.menu-transaction').next('.second-menu-list').find('li:nth-of-type(2)').find('a').addClass('selected-active')
 }
 
@@ -44,7 +45,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         elem: '#date_show_one',
         theme: '#009688',
         calendar: true,
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -65,7 +66,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -86,7 +87,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#start_date_one').val();
             var endTime = $('#end_time_one').val();
@@ -107,7 +108,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-        format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#start_date_one').val();
             var endTime = $('#end_time_one').val();
@@ -129,7 +130,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         max: String(common.getNowFormatDate()[0]),
         calendar: true,
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#create_start_time').val();
             var endTime = $('#create_end_time').val();
@@ -150,7 +151,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         max: String(common.getNowFormatDate()[0]),
         calendar: true,
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#create_start_time').val();
             var endTime = $('#create_end_time').val();
@@ -174,7 +175,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         max: String(common.getNowFormatDate()[0]),
         calendar: true,
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#load_start_time').val();
             var endTime = $('#load_end_time').val();
@@ -198,7 +199,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         theme: '#009688',
         max: String(common.getNowFormatDate()[0]),
         calendar: true,
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#load_start_time').val();
             var endTime = $('#load_end_time').val();
@@ -355,7 +356,7 @@ var setAbout = {
             start_time: requestStart,
             end_time: requestEnd,
             goods_type: $('#cancel_reason_types').val(),
-            goods_price_type:$('#goods_price_type1').val(),
+            goods_price_type: $('#goods_price_type1').val(),
             cancel_type: $('#cancel_reason_roles').val(),
             region_id: $('#cancel_reason_area').val() == '' ? common.role_area_show($('#super_manager_area_select_one')) : $.trim($('#cancel_reason_area').val())
         };
@@ -385,7 +386,7 @@ var setAbout = {
                         str += '<tr>'
                         $('.cancel-reason-types').html('').append(str)
                     }
-                    var string = '<tr class="cancel_reason_total"><td>取消总数：<span>'+res.data.sum_count+'单</span></td></tr>';
+                    var string = '<tr class="cancel_reason_total"><td>取消总数：<span>' + res.data.sum_count + '单</span></td></tr>';
                     $('.cancel-reason-types').append(string)
                 }
             })
@@ -401,13 +402,13 @@ var setAbout = {
             start_time: requestStart,
             end_time: requestEnd,
             periods: $('.periods>li').find('button.active').val(),
-            goods_price_type:$('#goods_price_type').val(),
+            goods_price_type: $('#goods_price_type').val(),
             goods_type: $('#goods_type_show').val(),
             dimension: $('#dimension').val(),
             region_id: $.trim($('#region_id_show').val()) == '' ? common.role_area_show($('#super_manager_area_select_zero')) : $.trim($('#region_id_show').val()),
             comment_type: $('#comment_type').val(),
             pay_method: $('#pay_method').val(),
-            SXB:$("#CHART_SXB").val()
+            SXB: $("#CHART_SXB").val()
         };
         layui.use('layer', function () {
             var layer = layui.layer;
@@ -505,8 +506,8 @@ var setAbout = {
                         if ($(this).text().length >= 2) {
                             var result = $(this).text().split('\n');
                             $(this).html('<span style="">司机:' + result[0] + '</span><br><span style="">货主:' + result[1] + '</span>')
-                        }else if($(this).text().length<2){
-                             $(this).html('<span style="">司机:该司机未对货主进行评价</span><br><span style="">货主:该货主未对司机进行评价</span>')
+                        } else if ($(this).text().length < 2) {
+                            $(this).html('<span style="">司机:该司机未对货主进行评价</span><br><span style="">货主:该货主未对司机进行评价</span>')
                         }
                     });
                     $("td[data-field='driver']").children().each(function (val) {
@@ -586,21 +587,21 @@ $('#goods_search_box').on('click', function (e) {
         if (load_end_time != '') {
             load_end_time = common.timeTransform(load_end_time + ' 23:59:59')
         }
-        if(load_start_time!=''&&load_end_time==''){
-            load_end_time=common.currentTime();
+        if (load_start_time != '' && load_end_time == '') {
+            load_end_time = common.currentTime();
         }
-         if(load_start_time==''&&load_end_time!=''){
-               layer.tips('请输入开始日期！', '#load_start_time', {
-                    tips: [1, '#009688'],
-                    time: 3000
-                });
-                 return false;
+        if (load_start_time == '' && load_end_time != '') {
+            layer.tips('请输入开始日期！', '#load_start_time', {
+                tips: [1, '#009688'],
+                time: 3000
+            });
+            return false;
         }
         var data = {
             order_id: $.trim($('#order_id').val()),
             consignor_mobile: $.trim($('#consignor_mobile').val()),
             driver_mobile: $.trim($('#driver_mobile').val()),
-            order_price_type:$.trim($('#order_price_type').val()),
+            order_price_type: $.trim($('#order_price_type').val()),
             order_type: $.trim($('#order_type').val()),
             order_status: $.trim($('#order_status').val()),
             vehicle_length: $.trim($('#vehicle_length').val()),
@@ -616,15 +617,15 @@ $('#goods_search_box').on('click', function (e) {
             to_province_id: $('#to_region_id').attr('provinceid') == undefined ? '' : $('#to_region_id').attr('provinceid'),
             to_city_id: $('#to_region_id').attr('cityid') == undefined ? '' : $('#to_region_id').attr('cityid'),
             to_county_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
-            SXB:$('#TABLE_SXB').val(),
+            SXB: $('#TABLE_SXB').val(),
             start_order_time: create_start_time,
             end_order_time: create_end_time,
             start_complete_time: load_start_time,
             end_complete_time: load_end_time
         };
-        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile + '&driver_mobile=' + data.driver_mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_county_id=' + data.to_county_id+ '&order_price_type=' +
-            data.order_price_type  + '&order_type=' +
-            data.order_type + '&order_status=' + data.order_status + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&spec_tag=' + data.spec_tag + '&node_id=' + data.node_id + '&is_change_price=' + data.is_change_price + '&pay_status=' + data.pay_status + '&comment_type=' + data.comment_type + '&SXB=' + data.SXB  + '&start_order_time=' + data.start_order_time + '&end_order_time=' + data.end_order_time + '&start_complete_time=' + data.start_complete_time + '&end_complete_time=' + data.end_complete_time;
+        var url = '/order/list/?order_id=' + data.order_id + '&consignor_mobile=' + data.consignor_mobile + '&driver_mobile=' + data.driver_mobile + '&from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_county_id=' + data.to_county_id + '&order_price_type=' +
+            data.order_price_type + '&order_type=' +
+            data.order_type + '&order_status=' + data.order_status + '&vehicle_length=' + data.vehicle_length + '&vehicle_type=' + data.vehicle_type + '&spec_tag=' + data.spec_tag + '&node_id=' + data.node_id + '&is_change_price=' + data.is_change_price + '&pay_status=' + data.pay_status + '&comment_type=' + data.comment_type + '&SXB=' + data.SXB + '&start_order_time=' + data.start_order_time + '&end_order_time=' + data.end_order_time + '&start_complete_time=' + data.start_complete_time + '&end_complete_time=' + data.end_complete_time;
         setAbout.tableRender(url)
     });
 });
@@ -635,17 +636,17 @@ function area_select() {
         $('#super_manager_area').css({'display': 'block'})
         $('#super_manager_area_select_zero').address({
             level: 3,
-             offsetLeft: '-124px'
+            offsetLeft: '-124px'
         });
         $('#super_manager_area_one').css({'display': 'block'})
         $('#super_manager_area_select_one').address({
             level: 3,
-             offsetLeft: '-124px'
+            offsetLeft: '-124px'
         });
         $('#super_manager_area_two').css({'display': 'block'})
         $('#super_manager_area_select_two').address({
             level: 3,
-             offsetLeft: '-124px'
+            offsetLeft: '-124px'
         });
     } else {
         $('#super_manager_area').css({'display': 'none'});
