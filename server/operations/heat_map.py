@@ -11,7 +11,7 @@ class HeatMap(object):
     def get_data(params):
 
         # 获取城市级别
-        region_level = init_regions.get_city_level(params.get('region_id'))
+        region_level = init_regions.get_map_city_level(params.get('region_id'))
 
         # 按用户
         if params.get('dimension') == 1:

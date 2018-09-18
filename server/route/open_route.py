@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template, redirect, request
+from flask_restful import abort
 
 from server import app
 from server.cache_data import init_regions
@@ -10,6 +11,7 @@ from server.meta.login_record import visitor_record
 from server.meta.route_func import open_route_func
 from server.meta.session_operation import SessionOperationClass
 from server.models.login import Login
+from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.broker_token import decode
 from server.utils.init_regions import InitRegionModel
 
@@ -59,23 +61,6 @@ def broker():
             return render_template('/exception/except.html', status_coder=400, title='参数错误',
                                    content='区镇合伙人查询区域为空')
 
-        # 统一区镇合伙人的密码
-        password = 'e10adc3949ba59abbe56e057f20f883e'
-        # 通过bi库获取角色和角色的页面权限,菜单和页面的关系
-        supplier_role_result = Login.get_user_by_admin(db.read_bi, mobile, password)
-
-        user_info = {
-            'account': result[0]['mobile'],
-            'id': result[0]['user_id'],
-            'user_name': result[0]['user_name'],
-            'mobile': result[0]['mobile'],
-            'avatar_url': result[0]['avatar_url'],
-            'role': supplier_role_result['role'],
-            'role_id': supplier_role_result['role_id'],
-            'role_all_path': supplier_role_result['role_all_path'],
-            'role_all_menu': supplier_role_result['role_all_menu'],
-            'role_menu_path': supplier_role_result['role_menu_path'],
-        }
         locations = [location['region_id'] for location in result]
         locations = set(locations)
         # 先将locations中所有region_id的父级id查出来，然后去重
@@ -86,6 +71,28 @@ def broker():
             if child_id_set <= locations:
                 locations.add(parent_id)
         locations = list(locations)
+
+        # 通过bi库获取角色和角色的页面权限,菜单和页面的关系
+        max_region_level = max([init_regions.get_current_region_level(i) for i in parent_id_set])
+        if max_region_level == 3:
+            role = '区镇合伙人'
+            role_id = Login.get_role_id_by_role(db.read_bi, role)
+        elif max_region_level == 4:
+            role = '网点管理员'
+            role_id = Login.get_role_id_by_role(db.read_bi, role)
+        else:
+            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg="拥有的地区权限有误!"))
+
+        user_info = {
+            'account': result[0]['mobile'],
+            'id': result[0]['user_id'],
+            'user_name': result[0]['user_name'],
+            'mobile': result[0]['mobile'],
+            'avatar_url': result[0]['avatar_url'],
+            'role': role,
+            'role_id': role_id,
+        }
+
         # 登录
         if SessionOperationClass.insert(user_info, locations):
             return redirect('/home/')

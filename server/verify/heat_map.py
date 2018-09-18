@@ -32,7 +32,7 @@ class HeatMap(object):
                     L = []
                     if len(locations_id) > 1:
                         for i in locations_id:
-                            level = init_regions.get_city_level(i)
+                            level = init_regions.get_map_city_level(i)
                             L.append((level, i))
                         max_level, min_level = max(L, key=lambda k: k[0])[0], min(L, key=lambda k: k[0])[0]
                         if max_level == min_level:

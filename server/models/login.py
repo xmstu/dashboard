@@ -112,3 +112,18 @@ class Login(object):
 
         log.info('获取区镇合伙人登录sql参数: [mobile: %s]' % (mobile))
         return result if result else None
+
+    @staticmethod
+    def get_role_id_by_role(cursor, role):
+        command = """
+        SELECT
+            id
+        FROM
+            `tb_inf_roles`
+        WHERE
+            `name` = ":role"
+        """
+
+        role_id = cursor.query_one(command, {'role': role})['id']
+
+        return role_id

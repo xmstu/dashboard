@@ -22,7 +22,7 @@ class PromoteEffectDecorator(object):
             promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi, params)
         # 区镇合伙人
         elif params['role'] in ('区镇合伙人', '网点管理员'):
-            city_region = set([init_regions.get_city_level(i)['id'] for i in params['regions']])
+            city_region = set([init_regions.get_map_city_level(i)['id'] for i in params['regions']])
             promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
         else:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='当前登录人员身份错误'))
@@ -81,7 +81,7 @@ class PromoteQualityDecorator(object):
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
             # 区镇合伙人
             elif params['role'] in ('区镇合伙人', '网点管理员'):
-                city_region = set([init_regions.get_city_level(i)['id'] for i in params['regions']])
+                city_region = set([init_regions.get_map_city_level(i)['id'] for i in params['regions']])
                 promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
             else:
