@@ -25,9 +25,6 @@ class SessionOperationClass(object):
                 'role': user_info['role'],
                 'role_id': user_info['role_id'],
                 'locations': locations,
-                'role_all_path': user_info['role_all_path'],
-                'role_all_menu': user_info['role_all_menu'],
-                'role_menu_path': user_info['role_menu_path']
             }
 
             return True
@@ -81,9 +78,6 @@ class SessionOperationClass(object):
             session['login']['role'] = role_info['role']
             session['login']['role_id'] = role_info['role_id']
             session['login']['locations'] = role_info['locations']
-            session['login']['role_all_path'] = role_info['role_all_path']
-            session['login']['role_all_menu'] = role_info['role_all_menu']
-            session['login']['role_menu_path'] = role_info['role_menu_path']
             return True
         except Exception as e:
             log.error('改变角色出错 [ERROR: %s]' % e, exc_info=True)
@@ -104,3 +98,14 @@ class SessionOperationClass(object):
             return session[key]
         except Exception as e:
             log.error('获取session失败:{}'.format(e))
+
+    @staticmethod
+    def update_session(key, **kwargs):
+        try:
+            for detail in session[key]:
+                if detail['role_id'] == session['login']['role_id']:
+                    detail.update(kwargs)
+                    return True
+        except Exception as e:
+            log.error('增加session失败:{}'.format(e))
+            return False

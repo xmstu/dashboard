@@ -18,71 +18,67 @@ class Login(object):
             avatar_url,
             tb_inf_roles.id role_id,
             tb_inf_roles.`name` role,
-            region_id,
-            tb_inf_menus.`name` menu_name,
-            GROUP_CONCAT( DISTINCT path ) path,
-            GROUP_CONCAT( DISTINCT tb_inf_pages.`name` ) path_name
+            region_id
         FROM
             tb_inf_admins
             INNER JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id 
             AND tb_inf_admin_roles.is_deleted = 0
             INNER JOIN tb_inf_roles ON tb_inf_roles.id = tb_inf_admin_roles.role_id 
             AND tb_inf_roles.is_deleted = 0
-            INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.role_id = tb_inf_roles.id 
-            AND tb_inf_role_pages.is_deleted = 0
-            INNER JOIN tb_inf_pages ON tb_inf_pages.id = tb_inf_role_pages.page_id 
-            AND tb_inf_pages.is_deleted = 0
-            INNER JOIN tb_inf_menus ON tb_inf_menus.id = tb_inf_pages.menu_id 
-            AND tb_inf_menus.is_deleted = 0 
         WHERE
             tb_inf_admins.is_deleted = 0 
             AND (user_name = :user_name OR account = :user_name)
             AND `password` = :password
         GROUP BY
-            role_id,
-            tb_inf_menus.id
+            tb_inf_roles.id
         """
         result = cursor.query(command, {'user_name': user_name, 'password': password})
 
-        role_set = set()
-        role_list = list()
-        for detail in result:
-            if detail['role_id'] not in role_set:
-                role_set.add(detail['role_id'])
-                detail['role_all_path'] = ''
-                detail['role_all_menu'] = ''
-                detail['role_menu_path'] = {}
-                role_list.append(detail)
-
-        for role in role_list:
-            for detail in result:
-                if role['role_id'] == detail['role_id']:
-                    role['role_all_path'] += detail['path'] + ','
-                    role['role_all_menu'] += detail['menu_name'] + ','
-                    role['role_menu_path'].update({detail['menu_name']: dict(zip(detail['path_name'].split(','), detail['path'].split(',')))})
-            role['role_all_path'] = role['role_all_path'].strip(',')
-            role['role_all_menu'] = role['role_all_menu'].strip(',')
-            role.pop('path')
-            role.pop('menu_name')
-
         user_session = []
-        for detail in role_list:
+        for detail in result:
             user_session.append({
                 'role': detail['role'],
                 'role_id': detail['role_id'],
                 'locations': str(detail['region_id']),
-                'role_all_path': detail['role_all_path'],
-                'role_all_menu': detail['role_all_menu'],
-                'role_menu_path': detail['role_menu_path']
             })
 
         if not SessionOperationClass.set_session('user_session', user_session):
             abort(HTTPStatus.InternalServerError,
                   **make_result(status=APIStatus.InternalServerError, msg='添加session失败'))
 
-        result = role_list[0]
         log.info('获取后台登录用户sql参数: [user_name: %s][password: %s]' % (user_name, password))
-        return result if result else None
+        return result[0] if result else None
+
+    @staticmethod
+    def get_menu_path_by_role_id(cursor, role_id):
+        """通过角色id动态获取当前角色的页面和菜单"""
+        command = """
+        SELECT
+            tb_inf_menus.`name` menu_name,
+            GROUP_CONCAT( DISTINCT path ) path,
+            GROUP_CONCAT( DISTINCT tb_inf_pages.`name` ) path_name 
+        FROM
+            tb_inf_role_pages
+            INNER JOIN tb_inf_pages ON tb_inf_pages.id = tb_inf_role_pages.page_id 
+            AND tb_inf_pages.is_deleted = 0 
+            AND tb_inf_role_pages.is_deleted = 0
+            INNER JOIN tb_inf_menus ON tb_inf_menus.id = tb_inf_pages.menu_id 
+            AND tb_inf_menus.is_deleted = 0 
+        WHERE
+            tb_inf_role_pages.role_id = :role_id 
+        GROUP BY
+            tb_inf_menus.id
+        """
+        data = cursor.query(command, {'role_id': role_id})
+        role_all_path = []
+        role_menu_path = {}
+        for detail in data:
+            role_all_path.append(detail['path'])
+            role_menu_path.setdefault(detail['menu_name'], dict(zip(detail['path_name'].split(','), detail['path'].split(','))))
+
+        role_all_path = ','.join(role_all_path)
+
+        return role_all_path if role_all_path else '', role_menu_path if role_menu_path else {}
 
     @staticmethod
     def get_partner_user(cursor, mobile):

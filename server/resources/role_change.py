@@ -6,7 +6,9 @@ from flask import session, abort
 from flask_restplus.resource import Resource
 
 from server import api
+from server.database import db
 from server.meta.session_operation import SessionOperationClass
+from server.models.login import Login
 from server.status import HTTPStatus, make_result, APIStatus
 
 
