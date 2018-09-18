@@ -23,7 +23,6 @@ class GoodsMap(Resource):
 
     @staticmethod
     @doc.goods_map_param
-    @filters.GoodsMap.get_result(params=dict, data=dict)
     @operations.GoodsMap.get_data(params=dict)
     @verify.GoodsMap.check_params(params=dict)
     def get():

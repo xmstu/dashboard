@@ -12,7 +12,7 @@ class GoodsListDecorator(object):
         if params.get('new_goods_type') == 1:
             user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('node_id'))
         else:
-            user_id_list = ['0']
+            user_id_list = None
 
         goods_list = GoodsList.get_goods_list(db.read_db, page, limit, user_id_list, params)
 

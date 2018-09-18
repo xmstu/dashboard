@@ -72,16 +72,6 @@ class DistributionMap(object):
         return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
-class GoodsMap(object):
-
-    @staticmethod
-    @make_decorator
-    def get_result(data):
-        # TODO 过滤参数
-
-        return make_result(APIStatus.Ok), HTTPStatus.Ok
-
-
 class UsersMap(object):
 
     @staticmethod

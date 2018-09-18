@@ -212,7 +212,7 @@ class GoodsList(object):
             """.format(vehicle_type=params['vehicle_type'])
 
         # 是否初次下单
-        if params['new_goods_type'] == 1:
+        if user_id_list:
             fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id_list)
 
         # 急需处理

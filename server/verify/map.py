@@ -7,7 +7,7 @@ from server.cache_data import init_regions
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
-from server.utils.extend import compare_time, check_region_id, date2timestamp, timestamp2date
+from server.utils.extend import compare_time, check_region_id, date2timestamp, timestamp2date, complement_time
 
 
 class DistributionMap(object):
@@ -95,7 +95,10 @@ class GoodsMap(object):
             role, locations_id = SessionOperationClass.get_locations()
             params['role_region_id'] = locations_id
 
-            if not compare_time(params['start_time'], params['end_time']):
+            if not compare_time(params['delivery_start_time'], params['delivery_end_time']):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+
+            if not compare_time(params['register_start_time'], params['register_end_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             return Response(params=params)

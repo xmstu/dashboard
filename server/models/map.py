@@ -387,18 +387,97 @@ class DistributionMapModel(object):
 class GoodsMapModel(object):
 
     @staticmethod
-    def get_data(cursor, params):
-        fields = """"""
+    def get_data(cursor, user_id_list, params):
 
-        which_table = """"""
-
-        fetch_where = """"""
+        fetch_where = """ 1=1 """
 
         command = """
-
+        SELECT
+            from_latitude AS latitude,
+            from_longitude AS longitude,
+            COUNT( 1 ) count 
+        FROM
+            shf_goods
+            INNER JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id 
+            INNER JOIN shu_users ON shu_users.id = shf_goods.user_id AND is_test = 0
+        WHERE
+            %s 
+            AND shf_goods.from_longitude != 0
+        GROUP BY
+            from_latitude,
+            from_longitude;
         """
 
-        data = cursor.query(command)
+        # 权限地区
+        region = """ AND 1=1 """
+        if params.get('role_region_id'):
+            region = '''
+                    AND (
+                    shf_goods.from_province_id IN (%(role_region_id)s)
+                    OR shf_goods.from_city_id IN (%(role_region_id)s)
+                    OR shf_goods.from_county_id IN (%(role_region_id)s)
+                    OR shf_goods.from_town_id IN (%(role_region_id)s)
+                    ) ''' % {'role_region_id': ','.join(params['role_region_id'])}
+
+        fetch_where += region
+
+        # 一口价/议价
+        if params.get('goods_price_type'):
+            fetch_where += """
+            AND (
+            ({0}=1 AND is_system_price=1) OR
+            ({0}=2 AND is_system_price=0) 
+            )
+            """.format(params['goods_price_type'])
+
+        # 距离
+        if params.get('haul_dist'):
+            fetch_where += """
+            AND (
+            ({0}=1 AND haul_dist=1) OR
+            ({0}=2 AND haul_dist=2) 
+            )
+            """.format(params['haul_dist'])
+
+        # 车长
+        if params.get('vehicle_length'):
+            fetch_where += """ AND shf_goods_vehicles.`name` = '{0}' """.format(params['vehicle_length'])
+
+        # 货源状态
+        if params.get('goods_status'):
+            fetch_where += """
+            AND (
+            ({0}=1 AND shf_goods.`status` IN (1,2)) OR
+            ({0}=2 AND shf_goods.`status` = 3) OR
+            ({0}=3 AND shf_goods.id IN ( SELECT goods_id FROM shb_orders WHERE `status` = 3 )) OR
+            ({0}=4 AND (shf_goods.`status` = -1 OR shf_goods.is_deleted = 0))
+            )
+            """.format(params['goods_status'])
+
+        # 新用户
+        if user_id_list:
+            fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id_list)
+
+        # 发货时间
+        if params['delivery_start_time'] and params['delivery_end_time']:
+            fetch_where += """ 
+            AND shf_goods.create_time >= {0} 
+            AND shf_goods.create_time < {1} """.format(params['delivery_start_time'], params['delivery_end_time'])
+
+        # 注册时间
+        if params['register_start_time'] and params['register_end_time']:
+            fetch_where += """ 
+                AND shu_users.create_time >= {0} 
+                AND shu_users.create_time < {1} """.format(params['register_start_time'], params['register_end_time'])
+
+        data = cursor.query(command % fetch_where)
+
+        if not data:
+            return []
+
+        for detail in data:
+            detail['latitude'] = float(detail['latitude'])
+            detail['longitude'] = float(detail['longitude'])
 
         return data
 

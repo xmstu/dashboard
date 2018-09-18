@@ -1,7 +1,9 @@
 from server.cache_data import init_regions
 from server.database import db
 from server.meta.decorators import make_decorator, Response
+from server.models.goods import FreshConsignor
 from server.models.map import DistributionMapModel, GoodsMapModel, UsersMapModel
+from server.status import make_result, APIStatus, HTTPStatus
 
 
 class DistributionMap(object):
@@ -36,8 +38,12 @@ class GoodsMap(object):
     @staticmethod
     @make_decorator
     def get_data(params):
-        data = GoodsMapModel.get_data(db.read_db, params)
-        return Response(data=data)
+        if params.get('special_tag') == 1:
+            user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('role_region_id'))
+        else:
+            user_id_list = None
+        data = GoodsMapModel.get_data(db.read_db, user_id_list, params)
+        return make_result(status=APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class UsersMap(object):
