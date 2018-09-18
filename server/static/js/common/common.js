@@ -9,7 +9,7 @@ var common = {
                 $(elem).html('&#xe619;')
             }
         });
-        $(elem2).mouseleave(function () {
+        $(elem).mouseleave(function () {
             $(elem2).slideUp(100);
             $(elem).html('&#xe61a;');
             return false

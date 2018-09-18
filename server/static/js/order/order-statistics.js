@@ -32,10 +32,6 @@ function init() {
 
         }
     });
-    /*二级*/
-    $('.menu-transaction').addClass('menu-active');
-    $('.menu-transaction').next('.second-menu-list').css({'display': 'block'});
-    $('.menu-transaction').next('.second-menu-list').find('li:nth-of-type(2)').find('a').addClass('selected-active')
 }
 
 layui.use(['laydate', 'form', 'table'], function () {

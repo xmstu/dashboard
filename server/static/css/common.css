@@ -272,15 +272,15 @@ body {
 .oneself-set > div:nth-of-type(1) > ul.dropdown-menu {
     position: absolute;
     height: auto;
-    top: 51px;
-    border-top: 2px solid red;
+    top: 42px;
+    border-top: 6px solid #f1f1f1;
     padding-top: 6px;
     background: #fff;
     width: 140px;
     padding-left: 16px;
     box-shadow: 0 0 15px #ddd;
     padding-bottom: 14px;
-    left: -20px
+    left: -20px;
 }
 
 .oneself-set > div:nth-of-type(1) > ul.dropdown-menu > li {

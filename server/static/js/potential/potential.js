@@ -31,10 +31,6 @@ var setAbout = {
 
             }
         });
-        /*二级菜单-这样比较简单(￣▽￣)*/
-        $('.menu-transaction').addClass('menu-active');
-        $('.menu-transaction').next('.second-menu-list').css({'display':'block'});
-        $('.menu-transaction').next('.second-menu-list').children(':first').find('a').addClass('selected-active')
     },
     layui: function () {
         layui.use(['laydate', 'form', 'table'], function () {
