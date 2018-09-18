@@ -1,3 +1,4 @@
+<!--页面中有很多隐藏的复选框为了模拟联动-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,8 +77,8 @@
                                         <div class="layui-input-inline" style="width:112px;">
                                             <select id="test132456456" name="modules" lay-verify="required">
                                                 <option value="">全部业务</option>
-                                                <option value="1">同城</option>
-                                                <option value="2">跨城</option>
+                                                <option value="1">议价</option>
+                                                <option value="2">一口价</option>
                                             </select>
                                         </div>
                                     </div>
@@ -101,39 +102,67 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="layui-form-item none " id="order_select">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">业务类型</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select id="test132456456" name="modules" lay-verify="required">
+                                                <option value="">全部业务</option>
+                                                <option value="1">议价</option>
+                                                <option value="2">一口价</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                    <div class="layui-form-item map-select-options-setting" id="heat_maps_tabs">
                                     <div class="layui-inline " style="">
                                         <label class="layui-form-label">用户类型</label>
                                         <div class="layui-input-inline" style="width:112px;">
                                             <select name="modules" lay-verify="required">
-                                                <option value="1">用户数</option>
-                                                <option value="2">认证数</option>
-                                                <option value="3">活跃数</option>
+                                                <!--这里累计用户和新增用户和接口文档的不一样，接口的写反了-->
+                                                <option value="1">新增用户数</option>
+                                                <option value="2">累计用户数</option>
+                                                <option value="3">累计认证数</option>
+                                                <option value="4">登陆过</option>
+                                                <option value="5">均有登陆过</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                   <div class="layui-form-item layui-form-special none " id="heat_maps_tabs_one">
+                                   <div class="layui-form-item  none " id="heat_maps_tabs_one">
                                     <div class="layui-inline " style="">
                                         <label class="layui-form-label">选择类型</label>
                                         <div class="layui-input-inline" style="width:112px;">
                                             <select name="modules" lay-verify="required">
                                                 <option value="1">货源数</option>
-                                                <option value="2">货源金额</option>
-                                                <option value="3">订单数</option>
-                                                <option value="4">订单金额</option>
+                                                <option value="2">接单数</option>
+                                                <option value="3">取消数</option>
+                                                <option value="4">待接单</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                   <div class="layui-form-item layui-form-special none " id="heat_maps_tabs_two">
+                                 <div class="layui-form-item  none " id="heat_maps_tabs_two">
                                     <div class="layui-inline " style="">
                                         <label class="layui-form-label">业务类型</label>
                                         <div class="layui-input-inline" style="width:112px;">
                                             <select name="modules" lay-verify="required">
                                                 <option value="1">货源所需</option>
-                                                <option value="2">车辆数</option>
-                                                <option value="3">实际接单</option>
+                                                <option value="2">累计车辆数</option>
+                                                <option value="3">活跃车辆数</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                   <div class="layui-form-item  none " id="heat_maps_tabs_three">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">订单类型</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select name="modules" lay-verify="required">
+                                                <option value="1">订单数</option>
+                                                <option value="2">完成数</option>
+                                                <option value="3">进行中</option>
+                                                <option value="4">已取消</option>
                                             </select>
                                         </div>
                                     </div>

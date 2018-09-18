@@ -55,27 +55,43 @@ var set = {
             var start_time = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
             var end_time = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
             form.on('select(methods_select)', function (data) {
+                console.log(data.value);
                 if (data.value == '1') {
                     $('#filter').removeClass('none').addClass('area-select-options-setting');
                     $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
                     $('#role_select').addClass('none').removeClass('area-select-options-setting');
+                    $('#order_select').addClass('none').removeClass('area-select-options-setting');
                     $('#heat_maps_tabs').removeClass('none').addClass('map-select-options-setting');
                     $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
                     $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
+                     $('#heat_maps_tabs_three').addClass('none').removeClass('map-select-options-setting');
                 } else if (data.value == '2') {
                     $('#role_select').removeClass('none').addClass('area-select-options-setting');
                     $('#filter').addClass('none').removeClass('area-select-options-setting');
                     $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
-                    $('#heat_maps_tabs_one').removeClass('none').addClass('map-select-options-setting');
-                    $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
                     $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
+                    $('#order_select').addClass('none').removeClass('area-select-options-setting');
+                     $('#heat_maps_tabs_one').removeClass('none').addClass('map-select-options-setting');
+                    $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs_three').addClass('none').removeClass('map-select-options-setting');
                 } else if (data.value == '3') {
                     $('#vehicle_select').removeClass('none').addClass('area-select-options-setting');
                     $('#filter').addClass('none').removeClass('area-select-options-setting');
                     $('#role_select').addClass('none').removeClass('area-select-options-setting');
-                    $('#heat_maps_tabs_two').removeClass('none').addClass('map-select-options-setting');
-                    $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
+                    $('#order_select').addClass('none').removeClass('area-select-options-setting');
                     $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs_two').removeClass('none').addClass('map-select-options-setting');
+                    $('#heat_maps_tabs_three').addClass('none').removeClass('map-select-options-setting');
+                }else if (data.value == '4') {
+                    $('#order_select').removeClass('none').addClass('area-select-options-setting');
+                    $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
+                    $('#filter').addClass('none').removeClass('area-select-options-setting');
+                    $('#role_select').addClass('none').removeClass('area-select-options-setting');
+                    $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs_three').removeClass('none').addClass('map-select-options-setting');
                 }
             });
             var url = '/map/distribution_map/';
