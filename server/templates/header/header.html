@@ -25,16 +25,27 @@
                 </span>
             </p>
             <p class="weather-city-search"></p>
+           <div class="role-change-box">
+                <span>切换：</span><ol class="layui-nav" lay-filter="header">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">切换身份</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="">移动模块</a></dd>
+                            <dd><a href="">后台模版</a></dd>
+                        </dl>
+                    </li>
+                </ol>
+            </div>
         </div>
     </section>
     <section class="header-right">
         <div class="oneself-set">
             <img width="38" height="38" style="border-radius: 50%;border: 1px dotted #ccc;"
-                 src="{{avatar_url}}" alt="">
+                 src="{{ avatar_url }}" alt="">
             <div>
                 <b class="user_name_icon" style="" id="user-info" data-role="{{ role }}"
-                   data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}" data-account="{{ account }}">Hi,{{
-                    user_name }}</b>
+                   data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}"
+                   data-account="{{ account }}">Hi,{{ user_name }}</b>
                 <span id="show_hide" style="cursor:pointer;color: #fff;" class="layui-icon">&#xe61a;</span>
                 <ul class="dropdown-menu" style="display:none;">
                     <li><a href="/password/"><i class="iconfont icon-shezhi1"></i> <span
@@ -45,13 +56,14 @@
                 <div class="message-center">
                     <i class="iconfont icon-xiaoxi1"></i><b class="layui-badge" style="display: none;">..</b>
                     <ul>
-                        <p class="message-count-show" >....</p>
-                        <li onclick="goTo()"><i class="iconfont icon-xiaolian-"></i>&nbsp; 浏览所有相关信息 </li>
+                        <p class="message-count-show">....</p>
+                        <li onclick="goTo()"><i class="iconfont icon-xiaolian-"></i>&nbsp; 浏览所有相关信息</li>
                     </ul>
                 </div>
                 <span id="project_introduce" class="layui-btn layui-btn-sm"
                       style="background: none;border: 1px dashed #009688;color: #fff;"><i
-                        class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank" href="/introduce/">统计中心介绍</a></span>
+                        class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank"
+                                                           href="/introduce/">统计中心介绍</a></span>
             </div>
         </div>
     </section>
@@ -60,10 +72,20 @@
     .message-center > ul {
         display: none;
     }
+    .layui-nav {
+        display: inline-block;
+        background: none;
+        padding: 0;
+    }
+    .layui-nav-child {
+        top: 38px;
+        background: none;
+
+    }
 </style>
 <script>
-    function goTo(){
-        window.location.href='/message/'
+    function goTo() {
+        window.location.href = '/message/'
     }
 </script>
 <div class="bottom_tools">

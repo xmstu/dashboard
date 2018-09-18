@@ -157,10 +157,11 @@ body {
 .header-content-main {
     border-radius: 30px;
     color: #FFF;
-    padding: 4px 0 6px 1%;
     width: 90%;
     margin-left: 2%;
     display: none;
+    height: 100%;
+    line-height: 40px;
 }
 
 .header-content-main > p {
@@ -172,17 +173,21 @@ body {
 }
 
 .header-content-main > p span {
-    padding: 0 6px;
+    padding: 0 3px;
     color: #fff;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 #weather_now u {
-    margin-right: 6px;
+    margin-right: 2px;
     text-decoration: none;
     color: #fff
 }
-
+.role-change-box {
+    float: right;
+    line-height: 20px;
+    font-size: 12px;
+}
 .header-right {
     min-width: 29%;
     width: 30%;
@@ -573,7 +578,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
     width: 56px;
     text-align: center;
     line-height: 42px;
-    display: inline-block;
+    float: left;
     border-right: 1px solid rgba(0, 0, 0, .1);
 }
 

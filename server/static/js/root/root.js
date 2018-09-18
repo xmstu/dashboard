@@ -91,13 +91,13 @@ var set = {
                     $('#confirm_fix').click(function () {
                         var name_edit = $('#name_edit').val();
                         var password = $('#password').val();
-                        var role_id = $('#user_id').val();
+                        var role_id = Number($('#user_id').val());
                         var data = {
                             "account": phone,
                             "user_name": name_edit,
                             "password": password,
                             "role_id": role_id,
-                            "is_active": $('input[name=role]:checked').val()
+                            "is_active": Number($('input[name=role]:checked').val())
                         };
                         data = JSON.stringify(data);
                         var url = '/root/management/' + user_id;
@@ -198,15 +198,12 @@ var set = {
                 ]],
                 done: function (res) {
                     layer.closeAll('loading');
+                    /*编辑图标点击*/
                     $('.edit-operate').click(function () {
-                        /* var content = $(this).parents('tr').children('td:eq(0)').find('.layui-table-cell').text();
-                         user_id = $(this).attr('data-id');
-                         phone = $(this).parents('tr').children('td:eq(1)').find('.layui-table-cell').text();
-                         var location = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
-                         $('#name_edit').val(content);
-                         $('#city_picker_search_second').val(location);*/
-                        var id = $(this).attr('data-id');
-                        var url = '/root/role_management/'+id;
+                        var content = $(this).parents('tr').children('td:eq(0)').find('.layui-table-cell').text();
+                         role_id = $(this).attr('data-id');
+                         $('#role_name_edit').val(content);
+                        var url = '/root/role_management/'+role_id;
                         http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
                             console.log(res.data);
                               var page_list = res.data;
@@ -231,15 +228,16 @@ var set = {
                         });
                         layer.closeAll('loading')
                     });
-                    $('#confirm_edit_root').click(function (e) {
+                    /*添加*/
+                    $('#confirm_add_root').click(function (e) {
                         e.preventDefault();
-                        var role_name = $('#role_name_edit').val();
-                        var region_id = $('#area_edit').val();
-                        var type = $('#role_edit').val();
-                        var role_comment_edit = $('#role_comment_edit').val();
+                        var role_name = $('#role_name_add').val();
+                        var region_id = $('#area_add').val();
+                        var type = $('#role_add').val();
+                        var role_comment_edit = $('#role_comment_add').val();
                         var page_id_arr = [];
                         /*监听layui生成的元素*/
-                        $('.edit-checkbox .layui-unselect').each(function (val) {
+                        $('.checkbox .layui-unselect').each(function (val) {
                             if ($(this).is('.layui-form-checked')) {
                                 page_id_arr.push($(this).prev().attr('data-id'))
                             }
@@ -269,7 +267,45 @@ var set = {
                             layer.closeAll('loading')
                         })
                     });
-
+                    /*编辑*/
+                     $('#confirm_edit_root').click(function (e) {
+                        e.preventDefault();
+                        var role_name = $('#role_name_edit').val();
+                        var region_id = $('#area_edit').val();
+                        var type = $('#role_edit').val();
+                        var role_comment_edit = $('#role_comment_edit').val();
+                        var page_id_arr = [];
+                        /*监听layui生成的元素*/
+                        $('.edit-checkbox .layui-unselect').each(function (val) {
+                            if ($(this).is('.layui-form-checked')) {
+                                page_id_arr.push(Number($(this).prev().attr('data-id')))
+                            }
+                        });
+                        console.log(page_id_arr);
+                        var url = '/root/role_management/'+role_id;
+                        var data = {
+                            "type": type,
+                            "role_name": role_name,
+                            "role_comment": role_comment_edit,
+                            "region_id": region_id,
+                            "page_id_list": page_id_arr
+                        };
+                        data = JSON.stringify(data);
+                        http.ajax.put_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+                            if (res.status == 100000) {
+                                layer.msg('修改成功', {
+                                    time: 700
+                                })
+                            }
+                            setTimeout(function () {
+                                layer.closeAll();
+                                tableRender.reload();
+                            }, 700)
+                        }, function (xHttp) {
+                            layer.closeAll('loading')
+                        })
+                    });
+                    /*删除*/
                     $('.delete-operate').click(function () {
                         var user_id = $(this).attr('data-id');
                         layer.confirm('确定要删除？', {
@@ -312,6 +348,7 @@ var set = {
 
                         });
                     })
+
                 },
                 page: {
                     layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
@@ -336,7 +373,7 @@ var set = {
         $('#add_user').click(function () {
             layer.open({
                 type: 1,
-                title: '新增城市经理',
+                title: '修改角色信息',
                 closeBtn: 1,
                 shadeClose: true,
                 area: ['450px', '300px'],
@@ -362,7 +399,7 @@ var set = {
             });
             layer.open({
                 type: 1,
-                title: '新增城市经理',
+                title: '新增角色',
                 closeBtn: 1,
                 shadeClose: true,
                 area: ['560px', '520px'],

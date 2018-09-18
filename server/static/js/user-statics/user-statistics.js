@@ -1,14 +1,20 @@
+/**
+ * 用户统计
+ * Created by Creazy_Run on 2018/5/30.
+ */
+/*----------------设置日期框中的初始化值----------------------*/
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 var requestStart = $('#date_show_one').val() + ' 00:00:00';
 var requestEnd = $('#date_show_two').val() + ' 23:59:59';
+/*----------------设置侧边栏样式----------------------*/
 setTimeout(function () {
     $('.menu-users').addClass('menu-active');
     $('.menu-users').next('.second-menu-list').css({'display': 'block'});
     $('.menu-users').next('.second-menu-list').find('.users-second-menu').addClass('selected-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);
-
+/*------------对表单进行校验----------------*/
 layui.use(['laydate', 'layer', 'form', 'table'], function () {
     dataInit();
     var laydate = layui.laydate;
@@ -193,6 +199,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         , page: true
     });
 });
+/*表格搜索*/
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
     var beginTime = $.trim($('#date_show_three').val());
@@ -353,7 +360,7 @@ $('#search_btn').on('click', function (e) {
     e.preventDefault();
     dataInit()
 })
-
+/*图标渲染*/
 function dataInit() {
     var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
     var requestEndTime = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
@@ -389,7 +396,7 @@ function dataInit() {
 Highcharts.setOptions({
     colors: [ /*'#9FE6B8', '#FFDB5C','#ff9f7f',*/  '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
-
+/*图表函数*/
 function chartInit(xAxis, series, interval, x_value1) {
     $('#charts_container_one').highcharts({
         tooltip: {

@@ -16,15 +16,18 @@ var common = {
         })
     },
     init: function () {
-        layui.use(['layer', 'form'], function () {
+        layui.use(['element','layer', 'form'], function () {
             var layer = layui.layer;
             var form = layui.form;
+            var element = layui.element
+            element.on('nav(header)', function(elem){
+                layer.msg(elem.text());
+            });
             var clearBtn = $('.clear-select');
             clearBtn.on('click', function () {
                 $('#is_called').val("");
                 $('#select').reset()
             })
-
         });
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {
@@ -673,11 +676,14 @@ var common = {
                 var children_2 = setAbout.next().children();
                 $.each(children_2, function (val, index) {
 
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '热力图') {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '分布地图') {
                         $(this).find('a').addClass('distribute-second-menu')
                     }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '高德地图') {
-                        $(this).find('a').addClass('gaode-second-menu')
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '货源热图') {
+                        $(this).find('a').addClass('goodsMap-second-menu')
+                    }
+                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户热图') {
+                        $(this).find('a').addClass('userMap-second-menu')
                     }
                 })
                 break;
@@ -731,6 +737,9 @@ var common = {
                 })
                 break;
         }
+    },
+    roleChange:function(){
+
     }
 };
 

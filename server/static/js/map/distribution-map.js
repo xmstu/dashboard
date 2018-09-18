@@ -1,3 +1,10 @@
+/*这个用的是echarts插件实现地图下钻，管理员加载全国的数据并且可以下钻，城市经理看到的是当前区域的数据不可下钻
+* 点击地区向后台传送该地区的id ，后台返回下一级的数据
+*/
+//二级菜单
+ $('.menu-map').addClass('menu-active');
+    $('.menu-map').next('.second-menu-list').css({'display': 'block'});
+    $('.menu-map').next('.second-menu-list').find('.distribute-second-menu').addClass('selected-active')
 var provinces = {
     "台湾": "taiwan",
     "河北": "130000",
@@ -655,8 +662,6 @@ var set = {
         })
     }
 };
-
-
 set.dataInit();
 $('#search_btn').click(function (e) {
     e.preventDefault();

@@ -1,6 +1,8 @@
 /**
+ * 推广统计
  * Created by Creazy_Run on 2018/5/30.
  */
+/*----------------设置日期框中的初始化值----------------------*/
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 layui.use('layer', function () {
@@ -8,12 +10,14 @@ layui.use('layer', function () {
     dataInit();
     $('.layui-form-item').css({width:'184px'})
 });
+/*----------------设置侧边栏样式----------------------*/
 setTimeout(function () {
     $('.menu-promote').addClass('menu-active');
     $('.menu-promote').next('.second-menu-list').css({'display': 'block'});
     $('.menu-promote').next('.second-menu-list').find('.promote-second-menu').addClass('selected-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);
+/*------------对表单进行校验----------------*/
 layui.use(['laydate', 'layer', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
@@ -116,6 +120,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
     });
 
 });
+/*推广中的新增按钮点击*/
 $('#add_promote_person').on('click', function (e) {
     e.preventDefault();
     var str = "<p  style='position: relative;'><span class='phone-number'>人员号码</span><i class='iconfont icon-dianhua'></i><input id='add_users' maxlength='11' type='text' placeholder='请输入推广人号码'></p> ";
