@@ -25,17 +25,6 @@
                 </span>
             </p>
             <p class="weather-city-search"></p>
-            <div class="role-change-box">
-                <ol class="layui-nav" lay-filter="header">
-                    <li class="layui-nav-item">
-                        <a href="javascript:;">切换身份</a>
-                        <dl class="layui-nav-child">
-                            <dd><a href="">移动模块</a></dd>
-                            <dd><a href="">后台模版</a></dd>
-                        </dl>
-                    </li>
-                </ol>
-            </div>
         </div>
     </section>
     <section class="header-right">
@@ -46,7 +35,17 @@
                 <b class="user_name_icon" style="" id="user-info" data-role="{{ role }}"
                    data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}"
                    data-account="{{ account }}">Hi,{{ user_name }}</b>
-
+                <div class="role-change-box">
+                    <ol class="layui-nav" lay-filter="header">
+                        <li class="layui-nav-item">
+                            <a href="javascript:;">切换角色</a>
+                            <dl class="layui-nav-child">
+                                <dd><a href="">移动模块</a></dd>
+                                <dd><a href="">后台模版</a></dd>
+                            </dl>
+                        </li>
+                    </ol>
+                </div>
                 <ol class="layui-nav" lay-filter="">
                     <li class="layui-nav-item">
                         <a href="javascript:;">退出登陆</a>
@@ -70,7 +69,8 @@
                 <span id="project_introduce" class="layui-btn layui-btn-sm"
                       style="background: none;border: 1px dashed #009688;color: #fff;"><i
                         class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank"
-                                                           href="/introduce/">统计中心介绍</a></span>
+                                                           href="/introduce/">统计中心介绍</a>
+                </span>
             </div>
         </div>
     </section>
@@ -78,6 +78,12 @@
 <style>
     .message-center > ul {
         display: none;
+    }
+
+    @media screen and (max-width: 1600px) {
+        #project_introduce {
+            display: none;
+        }
     }
 
     .header .layui-nav {
@@ -101,6 +107,9 @@
         window.location.href = '/message/'
     }
 </script>
+<div class="introduce_tools">
+    <a target="_blank" href="/introduce/"><span>统</span><span>计</span><span>中</span><span>心</span><span>介</span><span>绍</span></a>
+</div>
 <div class="bottom_tools">
     <a id="scrollUp" href="javascript:;" title="飞回顶部"><i class="layui-icon layui-icon-top">&#xe604;</i></a>
 </div>

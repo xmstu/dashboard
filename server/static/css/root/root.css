@@ -362,10 +362,6 @@ select:disabled {
     overflow: visible !important;
 }
 
-.header-content-main {
-    margin-top: 6px
-}
-
 .layui-form-pane .layui-form-label {
     height: 34px;
     line-height: 20px;
