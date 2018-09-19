@@ -48,9 +48,8 @@ class RootManagement(object):
         try:
             params['account'] = str(params.get('account') or '')
             params['user_name'] = str(params.get('user_name') or '')
-            params['password'] = pwd = str(params.get('password') or '')
+            pwd = str(params.get('password') or '')
             params['role_id'] = int(params.get('role_id') or 0)
-            params['is_active'] = int(params.get('is_active') or 0)
 
             if not Check.is_mobile(params['account']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='账号非法'))
