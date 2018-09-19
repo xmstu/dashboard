@@ -273,5 +273,4 @@ def hash_str(word):
 
 def pwd_to_hash(user_name, pwd):
 
-    return hash_str(user_name+hash_str(pwd)+'sshtc')
-
+    return hash_str(user_name+pwd+'sshtc')
