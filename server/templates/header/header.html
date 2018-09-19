@@ -36,13 +36,13 @@
                    data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}"
                    data-account="{{ account }}">Hi,{{ user_name }}</b>
                 <div class="role-change-box">
-                    <ol class="layui-nav" lay-filter="header">
-                        <li class="layui-nav-item">
-                            <a href="javascript:;">切换角色</a>
+                    <ol class="role-change-about" lay-filter="header">
+                        <li class="" id="role_change">
+                            {#   <a href="javascript:;">切换角色</a>
                             <dl class="layui-nav-child">
                                 <dd><a href="">移动模块</a></dd>
                                 <dd><a href="">后台模版</a></dd>
-                            </dl>
+                            </dl>#}
                         </li>
                     </ol>
                 </div>
@@ -60,14 +60,16 @@
                     </li>
                 </ol>
                 <div class="message-center">
-                    <i class="iconfont icon-xiaoxi1"></i><b class="layui-badge" style="display: none;">..</b>
+                    <div class="message-center-count">
+                       <i class="iconfont icon-xiaoxi1"></i><b class="layui-badge" style="display: none;">..</b>
+                    </div>
                     <ul>
                         <p class="message-count-show">....</p>
                         <li onclick="goTo()"><i class="iconfont icon-xiaolian-"></i>&nbsp; 浏览所有相关信息</li>
                     </ul>
                 </div>
                 <span id="project_introduce" class="layui-btn layui-btn-sm"
-                      style="background: none;border: 1px dashed #009688;color: #fff;"><i
+                      style="background: none;color: #fff;"><i
                         class="layui-icon ">&#xe62e;</i><a style="color: #fff" target="_blank"
                                                            href="/introduce/">统计中心介绍</a>
                 </span>
@@ -77,12 +79,16 @@
 </header>
 <style>
     .message-center > ul {
-        display: none;
+        opacity: 0;
     }
 
     @media screen and (max-width: 1600px) {
         #project_introduce {
             display: none;
+        }
+
+        .introduce_tools {
+            display: block !important;
         }
     }
 
@@ -91,16 +97,95 @@
         background: none;
         padding: 0;
         height: 100%;
+        margin-left: 10px;
     }
 
     .header .layui-nav-child {
         top: 48px;
         background: #fff;
+
     }
 
     .header .layui-nav .layui-nav-item a {
         line-height: 42px;
     }
+
+    .header .layui-nav .layui-nav-item > a {
+        padding-left: 10px;
+    }
+
+    .role-change-about {
+        position: relative;
+    }
+
+    #role_change {
+        line-height: 42px;
+        margin-bottom: 6px;
+    }
+
+    .current-role > .layui-nav-more {
+        content: '';
+        width: 0;
+        height: 0;
+        border-style: solid dashed dashed;
+        border-color: #fff transparent transparent;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all .2s;
+        -webkit-transition: all .2s;
+        position: absolute;
+        top: 50%;
+        right: -18px;
+        margin-top: -3px;
+        border-width: 6px;
+        border-top-color: rgba(255, 255, 255, .7);
+    }
+
+    .current-role .layui-nav-mored {
+        margin-top: -9px;
+        border-style: dashed dashed solid;
+        border-color: transparent transparent #fff;
+    }
+
+    .role-change-about dl {
+        opacity: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+        border: 1px solid #d2d2d2;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        position: absolute;
+        top: 48px;
+        background: #fff;
+        padding: 5px 0;
+        left: -18px;
+
+    }
+
+    .role-change-about dl a {
+        line-height: 42px;
+        padding: 0 20px;
+        color: #000;
+        display: block;
+        width: 114px;
+        cursor: pointer;
+
+    }
+
+    .role-change-about dl a:hover {
+        background: #f2f2f2;
+    }
+
+    .current-role {
+        color: rgba(255, 255, 255, .7);
+        line-height: 24px;
+        position: relative;
+    }
+
+    .current-role:hover {
+        color: rgba(255, 255, 255, 1);
+    }
+
 </style>
 <script>
     function goTo() {
@@ -108,7 +193,9 @@
     }
 </script>
 <div class="introduce_tools">
-    <a target="_blank" href="/introduce/"><span>统</span><span>计</span><span>中</span><span>心</span><span>介</span><span>绍</span></a>
+    <b class="tools-tip-icon"></b>
+    <a target="_blank"
+       href="/introduce/"><span>统</span><span>计</span><span>中</span><span>心</span><span>介</span><span>绍</span></a>
 </div>
 <div class="bottom_tools">
     <a id="scrollUp" href="javascript:;" title="飞回顶部"><i class="layui-icon layui-icon-top">&#xe604;</i></a>

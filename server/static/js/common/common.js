@@ -2,6 +2,19 @@ var common = {
     display: function (elem) {
         elem.css({'display': 'none'})
     },
+    sliderShow: function () {
+        $('.tools-tip-icon').mouseenter(function () {
+            $('.introduce_tools').addClass('r-0');
+            $(this).css({display: 'none'})
+        });
+        $('.introduce_tools>a').mouseleave(function () {
+            if ($('.introduce_tools').css('right') == '0px') {
+                $('.tools-tip-icon').css({display: 'block'});
+                $('.introduce_tools').removeClass('r-0')
+            }
+        })
+    },
+    /*消息框显示隐藏*/
     showData: function (elem, elem2) {
         $(elem).mouseenter(function () {
             if ($(elem2).is(':hidden')) {
@@ -16,19 +29,17 @@ var common = {
         })
     },
     init: function () {
-        layui.use(['element','layer', 'form'], function () {
+        layui.use(['element', 'layer', 'form'], function () {
             var layer = layui.layer;
             var form = layui.form;
-            var element = layui.element
-            element.on('nav(header)', function(elem){
-                layer.msg(elem.text());
-            });
+            var element = layui.element;
             var clearBtn = $('.clear-select');
             clearBtn.on('click', function () {
                 $('#is_called').val("");
                 $('#select').reset()
             })
         });
+        /*退出登陆*/
         $('.loginOut').click(function () {
             layer.confirm('您确定要退出登陆？', {
                 skin: 'layui-layer-molv',
@@ -54,7 +65,8 @@ var common = {
                 });
             });
         });
-        var menuStatus = $.cookie('menuStatus')
+        /*根据cookie中menuStatus的值来显示侧边栏的宽度*/
+        var menuStatus = $.cookie('menuStatus');
         if (menuStatus == 'true') {
             $('.icon-caidan').click()
         }
@@ -579,10 +591,10 @@ var common = {
     },
     messageSet: function (elem, elemAno) {
         elem.mouseenter(function () {
-            elemAno.slideDown('fast')
+            elemAno.addClass('animated fadeInUp')
         });
         elemAno.mouseleave(function () {
-            elemAno.slideUp('fast')
+            elemAno.removeClass('animated fadeInUp')
         });
     },
     messageRequest: function () {
@@ -595,19 +607,19 @@ var common = {
         var counts = data.limit;
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             var data = res.data;
+             var unread = res.unread
             if (data != '') {
                 for (var i = 0; i < counts; i++) {
                     var id = data[i].id;
                     var create_time = data[i].create_time;
                     var title = data[i].title;
-                    var is_read = data[i].is_read;
+                    var is_read=data[i].is_read
                     str += '<li class="message-center-simple" value="' + id + '"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
                 }
                 $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
                 $(".message-count-show").after(str);
             }
             var str = '';
-            var unread = res.unread;
             $('.header .layui-badge').css({'display': 'block'})
             if (unread == 0) {
                 $('.message-center .layui-badge').css({'background': '#ccc'})
@@ -659,7 +671,7 @@ var common = {
                         $(this).find('a').addClass('goods-second-menu')
                     }
                 });
-                 break;
+                break;
             case '价格统计':
                 icon.addClass(arr[6]);
                 setAbout.addClass('menu-price');
@@ -682,7 +694,7 @@ var common = {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '货源热图') {
                         $(this).find('a').addClass('goodsMap-second-menu')
                     }
-                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户热图') {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户热图') {
                         $(this).find('a').addClass('userMap-second-menu')
                     }
                 })
@@ -738,32 +750,75 @@ var common = {
                 break;
         }
     },
-    roleChange:function(){
-
+    roleGet: function () {
+        var url = '/role_change/role_change/';
+        http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
+            var str = '';
+            var len = res.data.length;
+            str += '<a class="current-role" href="javascript:;">' + res.data[0].role + '<span class="layui-nav-more"></span></a>';
+            str += '<dl class="role-change-lists">';
+            if (len) {
+                $.each(res.data, function (index, val) {
+                    str += '<dd><a  class="role-change-item" value="' + val.role_id + '">' + val.role + '</a></dd>';
+                })
+            }
+            str += '</dl>';
+            $('#role_change').html(str)
+            /*切换身份写在这里是因为内容动态加载完成之后再执行这里的代码*/
+            $('.current-role').mouseenter(function () {
+                var $height=$('.role-change-lists').height();
+                setTimeout(function () {
+                    $('.role-change-lists').addClass('animated fadeInUp');
+                    $('.current-role > .layui-nav-more').addClass('layui-nav-mored');
+                    $('#role_change').height($height+50)
+                }, 250)
+            });
+           $('#role_change').mouseleave(function () {
+                setTimeout(function () {
+                    $('.role-change-lists').removeClass('animated fadeInUp');
+                    $('.current-role > .layui-nav-more').removeClass('layui-nav-mored');
+                }, 250)
+            })
+           $('.role-change-item').click(function (e) {
+                e.preventDefault();
+               console.log()
+               var url = '/role_change/role_change/'+$(this).attr('value');
+               http.ajax.put_no_loading(true,false,url,{},http.ajax.CONTENT_TYPE_2,function(res){
+                   if(res.status==100000){
+                       layer.closeAll('loading');
+                       layer.msg(res.msg,{
+                           time:700
+                       });
+                       setTimeout(function(){
+                           window.location.reload();
+                       },700)
+                   }
+               })
+        });
+        })
     }
 };
 
-setTimeout(function () {
-    common.cookieSet();
-    common.menuSet();
-    common.messageRequest();
-    common.returnTop();
-    common.periods();
-    common.weather();
-    common.init();
-    common.setLink();
-    common.ajaxSetting();
-    common.messageSet($('.message-center'), $('.message-center > ul'));
-    common.showData('#show_hide', '.header > .header-right .dropdown-menu');
-
-
-}, 10);
+common.cookieSet();
+common.menuSet();
+common.messageRequest();
+common.returnTop();
+common.periods();
+common.weather();
+common.init();
+common.setLink();
+common.ajaxSetting();
+common.messageSet($('.message-center'), $('.message-center > ul'));
+common.showData('#show_hide', '.header > .header-right .dropdown-menu');
+common.sliderShow();
+common.roleGet();
+/*根据中文设置侧边栏样式*/
 var second_menu = $('.second-menu-box');
 $.each(second_menu, function (val, index) {
     common.secondMenuSet($(this), $('#second_menu_list_' + (val + 1)));
-    console.info($(this).text().replace(/(^\s*)|(\s*$)/g, ""));
     common.iconSet($(this), $(this).text(), $(this).find('.icon-pic'))
 });
+/*防止天气信息未加载出来时样式丢失*/
 setInterval(function () {
     $('.header-content-main').fadeIn('normal').css({'display': 'inline-block'});
     $('#date_now').html('');
