@@ -175,6 +175,7 @@ class RootRoleManagementModel(object):
             tb_inf_roles
             INNER JOIN tb_inf_role_pages ON tb_inf_role_pages.role_id = tb_inf_roles.id AND tb_inf_role_pages.is_deleted = 0
             INNER JOIN tb_inf_pages ON tb_inf_pages.id = tb_inf_role_pages.page_id AND tb_inf_pages.is_deleted = 0
+        WHERE tb_inf_roles.is_deleted = 0
         GROUP BY tb_inf_roles.id
         """
 
@@ -298,11 +299,13 @@ class RootRoleManagementModel(object):
     def delete_data(cursor, params):
         try:
             with cursor.begin() as tran:
-                command = """
-                UPDATE tb_inf_roles SET is_deleted = 1 WHERE id =:role_id
-                """
-                rowcount = tran.conn.update(command, params)
-                return rowcount
+                del_role_cmd = """UPDATE tb_inf_roles SET is_deleted = 1 WHERE id =:role_id"""
+                del_admin_role_cmd = """UPDATE tb_inf_admin_roles SET is_deleted = 1 WHERE role_id =:role_id"""
+                del_role_cmd_rowcount = tran.conn.update(del_role_cmd, params)
+                del_admin_role_cmd_rowcount = tran.conn.update(del_admin_role_cmd, params)
+                if del_role_cmd_rowcount and del_admin_role_cmd_rowcount:
+                    return del_role_cmd_rowcount + del_admin_role_cmd_rowcount
+                return
         except Exception as e:
             log.error('删除角色失败,失败原因是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除角色失败'))

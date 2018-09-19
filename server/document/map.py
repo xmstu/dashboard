@@ -25,13 +25,13 @@ goods_map_param = api.doc(params={
 }, description='货源热力图查询参数')
 
 users_map_param = api.doc(params={
-    "goods_price_type": "0.全部;1.一口价;2.议价;",
-    "haul_dist": "0.全部;1.同城;2.跨城;",
-    "vehicle_length": "空字符串:全部;常用车型:4.2米,5.2米等",
-    "goods_status": "0.全部;1.待接单;2.已接单;3.已完成;4.已取消",
-    "special_tag": "0.全部;1.新用户",
-    "delivery_start_time": "开始发货时间",
-    "delivery_end_time": "结束发货时间",
+    "users_type": "0.全部;1.货主;2.司机;3.公司",
+    "is_auth": "0.全部;1.认证;2.未认证;",
+    "active_level": "0.全部;1.1-10天登录;2.11-20天登录;3.20天以上登录",
+    "special_tag": "0.全部;1.发货5次以上;2.接单5次以上;3.完成5次订单以上(司机);"
+                   "4.完成5次订单以上(货主);5.今天发货;6.今天接单;",
     "register_start_time": "开始注册时间",
     "register_end_time": "结束注册时间",
+    "position_start_time": "开始定位时间",
+    "position_end_time": "结束定位时间",
 }, description='用户热力图查询参数')

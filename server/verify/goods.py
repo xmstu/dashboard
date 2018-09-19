@@ -16,7 +16,8 @@ class GoodsList(object):
     def check_params(page, limit, params):
         # 通过params获取参数
         try:
-            create_start_time = int(params.get('create_start_time')) if params.get('create_start_time') else time.time() - 86400 * 7
+            create_start_time = int(params.get('create_start_time')) if params.get(
+                'create_start_time') else time.time() - 86400 * 7
             create_end_time = int(params.get('create_end_time')) if params.get('create_end_time') else time.time()
             register_start_time = int(params.get('register_start_time', None) or 0)
             register_end_time = int(params.get('register_end_time', None) or 0)

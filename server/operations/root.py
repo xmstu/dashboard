@@ -109,7 +109,7 @@ class RootRoleManagement(object):
                 return make_result(APIStatus.Ok), HTTPStatus.Ok
             else:
                 abort(HTTPStatus.InternalServerError,
-                      **make_result(status=APIStatus.InternalServerError, msg='账户不存在，删除账户失败或账户不能重复删除'))
+                      **make_result(status=APIStatus.InternalServerError, msg='删除角色失败'))
         except Exception as e:
             log.error('删除角色失败,失败原因是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除角色失败'))

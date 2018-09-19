@@ -2,6 +2,7 @@
 
 from server.logger import log
 
+
 class VehicleModel(object):
     @staticmethod
     def get_vehicle_length_name(cursor, length_id, user_id):

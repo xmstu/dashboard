@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import request, session
 import time
+
+from flask import request, session
 
 from server.database import db
 from server.models.visitor_record import VisitorRecordModel
@@ -22,4 +23,5 @@ def visitor_record(f):
             }
             VisitorRecordModel.add_record(db.write_bi, visit_data)
         return f(*args, **kwargs)
+
     return insert_db

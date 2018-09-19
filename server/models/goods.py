@@ -9,7 +9,7 @@ class GoodsList(object):
     @staticmethod
     def get_goods_list(cursor, page, limit, user_id_list, params):
 
-        fetch_where = """ AND 1=1 """
+        fetch_where = """ 1=1 """
 
         fields = """
                 shf_goods.id,
@@ -97,8 +97,8 @@ class GoodsList(object):
                         LEFT JOIN shu_user_profiles USING(user_id)
                         LEFT JOIN shu_users ON shf_goods.user_id = shu_users.id
                         LEFT JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
+                        AND shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
                     WHERE 
-                        shf_goods_vehicles.vehicle_attribute = 3 AND shf_goods_vehicles.is_deleted = 0
                         {fetch_where}
         """
 
@@ -245,14 +245,6 @@ class GoodsList(object):
         if params['create_start_time'] and params['create_end_time']:
             fetch_where += """ AND shf_goods.create_time >= %s AND shf_goods.create_time < %s """ % (
                 params['create_start_time'], params['create_end_time'])
-
-        # # 装货时间
-        # if params['load_start_time'] and params['load_end_time']:
-        #     loading_time_date = time.strftime('%Y-%m-%d', time.localtime(params['load_start_time']))
-        #     fetch_where += """ AND ( shf_goods.loading_time_date = '{0}'
-        #     OR -- 新版
-        #     ( shf_goods.loading_time_period_begin >= {1} AND shf_goods.loading_time_period_begin < {2} )) """.format(
-        #     loading_time_date, params['load_start_time'], params['load_end_time'])
 
         # # 注册时间
         if params.get('register_start_time') and params.get('register_end_time'):

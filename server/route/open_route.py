@@ -17,7 +17,6 @@ from server.utils.init_regions import InitRegionModel
 
 
 @app.route('/introduce/', endpoint='introduce')
-@visitor_record
 def introduce():
     """省省统计中心介绍页面"""
     if not SessionOperationClass.check():
