@@ -72,6 +72,7 @@ class RootManagementModel(object):
             admin_id = params.pop('admin_id', 0)
             role_id = params.pop('role_id', 0)
             is_active = params.pop('is_active', 0)
+            rowcount = 0
             with cursor.begin() as tran:
                 update_sql = """id=id"""
                 if admin_id:
@@ -94,18 +95,21 @@ class RootManagementModel(object):
                             WHERE id=:admin_id
                             """
 
-                    rowcount = tran.conn.update(command.format(update_sql=update_sql), args={"admin_id": admin_id})
+                    rowcount += tran.conn.update(command.format(update_sql=update_sql), args={"admin_id": admin_id})
 
                     if role_id:
                         # 查出所有当前用户的角色id
                         role_id_list = tran.conn.query("""SELECT role_id FROM tb_inf_admin_roles WHERE admin_id = %d""" % admin_id)
                         role_id_list = [i['role_id'] for i in role_id_list]
                         if role_id not in role_id_list:
-                            admin_role_id = tran.conn.insert("""INSERT INTO tb_inf_admin_roles(admin_id, role_id) VALUES(%d, %d)""" % (admin_id, role_id))
-                            if admin_role_id:
-                                return True
-                    else:
-                        return rowcount
+                            create_time = update_time = int(time.time())
+                            insert_sql = """
+                            INSERT INTO tb_inf_admin_roles
+                            (admin_id, role_id, create_time, update_time) 
+                            VALUES(%d, %d, %d, %d)""" % (admin_id, role_id, create_time, update_time)
+                            rowcount += tran.conn.insert(insert_sql)
+                    return rowcount
+
         except Exception as e:
             log.error('更新用户失败,失败原因是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='服务器内部错误,更新管理后台用户失败'))
