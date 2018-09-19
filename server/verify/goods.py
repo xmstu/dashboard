@@ -40,7 +40,7 @@ class GoodsList(object):
             is_called = int(params.get('is_called')) if params.get('is_called') else 0
             vehicle_length = str(params.get('vehicle_length')) if params.get('vehicle_length') else 0
             vehicle_type = str(params.get('vehicle_type')) if params.get('vehicle_type') else 0
-            node_id = int(params.get('node_id')) if params.get('node_id') else 0
+            region_id = int(params.get('node_id')) if params.get('node_id') else 0
             new_goods_type = int(params.get('new_goods_type')) if params.get('new_goods_type') else 0
             urgent_goods = int(params.get('urgent_goods')) if params.get('urgent_goods') else 0
             is_addition = int(params.get('is_addition')) if params.get('is_addition') else 0
@@ -54,19 +54,20 @@ class GoodsList(object):
             if not compare_time(create_start_time, create_end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
-            # if not compare_time(load_start_time, load_end_time):
-            #     abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
-
             if not compare_time(register_start_time, register_end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             # 当前权限下所有地区
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-                if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not node_id:
-                    node_id = locations_id
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            role, locations_id = SessionOperationClass.get_locations()
+            if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
+                if not region_id:
+                    region_id = locations_id
+                if str(region_id) not in locations_id:
+                    abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.Forbidden, msg='非权限范围内地区'))
+
 
             params = {
                 "goods_id": goods_id,
@@ -85,7 +86,7 @@ class GoodsList(object):
                 "is_called": is_called,
                 "vehicle_length": vehicle_length,
                 "vehicle_type": vehicle_type,
-                "node_id": node_id,
+                "region_id": region_id,
                 "new_goods_type": new_goods_type,
                 "urgent_goods": urgent_goods,
                 "is_addition": is_addition,
@@ -116,12 +117,15 @@ class CancelGoodsReason(object):
             region_id = int(params.get('region_id', None) or 0)
 
             # 当前权限下所有地区
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-                if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not region_id:
-                    region_id = locations_id
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            role, locations_id = SessionOperationClass.get_locations()
+            if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
+                if not region_id:
+                    region_id = locations_id
+                if str(region_id) not in locations_id:
+                    abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.Forbidden, msg='非权限范围内地区'))
 
             if not compare_time(start_time, end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
@@ -154,12 +158,15 @@ class GoodsDistributionTrend(object):
             payment_method = int(params.get('payment_method') or 0)
 
             # 当前权限下所有地区
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-                if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not region_id:
-                    region_id = locations_id
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            role, locations_id = SessionOperationClass.get_locations()
+            if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
+                if not region_id:
+                    region_id = locations_id
+                if str(region_id) not in locations_id:
+                    abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.Forbidden, msg='非权限范围内地区'))
 
             if not compare_time(start_time, end_time):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))

@@ -265,9 +265,13 @@ data_price = {
 }
 
 
-def pwd_to_hash(user_name, pwd):
+def hash_str(word):
     m2 = hashlib.md5()
-    # 明文密码加salt
-    pwd = user_name + pwd + 'sshtc'
-    m2.update(pwd.encode("utf-8"))
+    m2.update(word.encode("utf-8"))
     return m2.hexdigest()
+
+
+def pwd_to_hash(user_name, pwd):
+
+    return hash_str(user_name+hash_str(pwd)+'sshtc')
+

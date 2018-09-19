@@ -39,7 +39,7 @@ class Login(object):
             user_session.append({
                 'role': detail['role'],
                 'role_id': detail['role_id'],
-                'locations': str(detail['region_id']),
+                'locations': [str(detail['region_id'])],
             })
 
         if not SessionOperationClass.set_session('user_session', user_session):

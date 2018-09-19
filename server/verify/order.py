@@ -27,12 +27,15 @@ class OrdersReceivedStatistics(object):
             params['SXB'] = int(params.get('SXB', None) or 0)
 
             # 当前权限下所有地区
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-                if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id']:
-                    params['region_id'] = locations_id
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            role, locations_id = SessionOperationClass.get_locations()
+            if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
+                if not params['region_id']:
+                    params['region_id'] = locations_id
+                if str(params['region_id']) not in locations_id:
+                    abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.Forbidden, msg='非权限范围内地区'))
 
             # 校验参数
             if not compare_time(params['start_time'], params['end_time']):
@@ -58,12 +61,15 @@ class CancelOrderReason(object):
             params['region_id'] = int(params.get('region_id', None) or 0)
 
             # 当前权限下所有地区
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-                if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id']:
-                    params['region_id'] = locations_id
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            role, locations_id = SessionOperationClass.get_locations()
+            if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
+                if not params['region_id']:
+                    params['region_id'] = locations_id
+                if str(params['region_id']) not in locations_id:
+                    abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.Forbidden, msg='非权限范围内地区'))
 
             if params['start_time'] <= params['end_time'] < time.time():
                 pass
@@ -117,12 +123,15 @@ class OrderList(object):
             params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
 
             # 当前权限下所有地区
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-                if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['node_id']:
-                    params['node_id'] = locations_id
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            role, locations_id = SessionOperationClass.get_locations()
+            if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
+                if not params['node_id']:
+                    params['node_id'] = locations_id
+                if str(params['node_id']) not in locations_id:
+                    abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.Forbidden, msg='非权限范围内地区'))
 
             if not compare_time(params['start_order_time'], params['end_order_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))

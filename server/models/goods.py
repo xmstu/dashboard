@@ -104,18 +104,18 @@ class GoodsList(object):
 
         # 地区
         region = ' AND 1=1 '
-        if params['node_id']:
-            if isinstance(params['node_id'], int):
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
                 region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
-                    'region_id': params['node_id']}
-            elif isinstance(params['node_id'], list):
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
                 region = '''
                         AND (
                         from_province_id IN (%(region_id)s)
                         OR from_city_id IN (%(region_id)s)
                         OR from_county_id IN (%(region_id)s)
                         OR from_town_id IN (%(region_id)s)
-                        ) ''' % {'region_id': ','.join(params['node_id'])}
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
 
         fetch_where += region
 
@@ -272,7 +272,7 @@ class GoodsList(object):
 class FreshConsignor(object):
 
     @staticmethod
-    def get_user_id_list(cursor, node_id):
+    def get_user_id_list(cursor, region_id):
         try:
             # 先找出所有下单少于三次的用户id的结果集
             sql = """
@@ -296,18 +296,18 @@ class FreshConsignor(object):
                     """
             # 地区
             region = ' 1=1 '
-            if node_id:
-                if isinstance(node_id, int):
+            if region_id:
+                if isinstance(region_id, int):
                     region += 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
-                        'region_id': node_id}
-                elif isinstance(node_id, list):
+                        'region_id': region_id}
+                elif isinstance(region_id, list):
                     region += '''
                             AND (
                             from_province_id IN (%(region_id)s)
                             OR from_city_id IN (%(region_id)s)
                             OR from_county_id IN (%(region_id)s)
                             OR from_town_id IN (%(region_id)s)
-                            ) ''' % {'region_id': ','.join(node_id)}
+                            ) ''' % {'region_id': ','.join(region_id)}
             ret = cursor.query(sql.format(region=region))
             user_id_list = [str(i['user_id']) for i in ret]
             return user_id_list
