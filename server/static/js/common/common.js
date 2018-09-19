@@ -589,12 +589,21 @@ var common = {
             })
         })
     },
-    messageSet: function (elem, elemAno) {
+    messageSet: function (elem, elemAno,elem_t) {
+
         elem.mouseenter(function () {
-            elemAno.addClass('animated fadeInUp')
+             elem_t.height('200')
+            setTimeout(function(){
+              elemAno.addClass('animated fadeInUp')
+            },300)
+
         });
-        elemAno.mouseleave(function () {
-            elemAno.removeClass('animated fadeInUp')
+        elem_t.mouseleave(function () {
+            elem_t.height('auto');
+              setTimeout(function(){
+               elemAno.removeClass('animated fadeInUp')
+            },300)
+
         });
     },
     messageRequest: function () {
@@ -607,7 +616,8 @@ var common = {
         var counts = data.limit;
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             var data = res.data;
-             var unread = res.unread
+             var unread = res.unread;
+            var str = '';
             if (data != '') {
                 for (var i = 0; i < counts; i++) {
                     var id = data[i].id;
@@ -619,8 +629,7 @@ var common = {
                 $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
                 $(".message-count-show").after(str);
             }
-            var str = '';
-            $('.header .layui-badge').css({'display': 'block'})
+            $('.header .layui-badge').css({'opacity': '1'})
             if (unread == 0) {
                 $('.message-center .layui-badge').css({'background': '#ccc'})
             }
@@ -778,10 +787,9 @@ var common = {
                     $('.role-change-lists').removeClass('animated fadeInUp');
                     $('.current-role > .layui-nav-more').removeClass('layui-nav-mored');
                 }, 250)
-            })
+            });
            $('.role-change-item').click(function (e) {
                 e.preventDefault();
-               console.log()
                var url = '/role_change/role_change/'+$(this).attr('value');
                http.ajax.put_no_loading(true,false,url,{},http.ajax.CONTENT_TYPE_2,function(res){
                    if(res.status==100000){
@@ -791,7 +799,7 @@ var common = {
                        });
                        setTimeout(function(){
                            window.location.reload();
-                       },700)
+                       },1000)
                    }
                })
         });
@@ -808,7 +816,7 @@ common.weather();
 common.init();
 common.setLink();
 common.ajaxSetting();
-common.messageSet($('.message-center'), $('.message-center > ul'));
+common.messageSet($('.message-center-count'), $('.message-center > ul'),$('.message-center'));
 common.showData('#show_hide', '.header > .header-right .dropdown-menu');
 common.sliderShow();
 common.roleGet();

@@ -253,10 +253,6 @@
     border: 1px solid red;
 }
 
-.message-center > ul {
-    display: none;
-}
-
 #pagination {
     text-align: right;
     padding-right: 3%;
