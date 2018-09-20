@@ -113,11 +113,11 @@ var set = {
                 region_id: ''
             };
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-                    var data_reload = res.data
+                    var data_reload = res.data;
                     var roles = data_reload.authority_region_id;
                     var city_manager_map = data_reload.map_data;
                     var city_manager_tooltip = data_reload.toolTipData;
-                    var city_manager_max_value = data_reload.max_value
+                    var city_manager_max_value = data_reload.max_value;
                     if (data_reload.authority_region_id == 0) {
                         if (res.status == 100000) {
                             var data = res.data;
