@@ -5,8 +5,9 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_result, APIStatus
-from server.utils.extend import Check
+from server.utils.extend import Check, compare_time
 from server.meta.session_operation import SessionOperationClass
+
 
 class PromoteEffect(object):
 
@@ -15,45 +16,29 @@ class PromoteEffect(object):
     def check_params(page, limit, params):
 
         try:
-            # 通过params获取参数，获取不到就赋予默认值
-            user_name = params.get('user_name', '')
-            mobile = params.get('mobile', '')
-            role_type = int(params.get('role_type')) if params.get('role_type') else 0
-            goods_type = int(params.get('goods_type')) if params.get('goods_type') else 0
-            is_actived = int(params.get('is_actived')) if params.get('is_actived') else 0
-            is_car_sticker = int(params.get('is_car_sticker')) if params.get('is_car_sticker') else 0
-            start_time = int(params.get('start_time')) if params.get('start_time') else 0
-            end_time = int(params.get('end_time')) if params.get('end_time') else 0
+            if not SessionOperationClass.check():
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+
+            params['user_name'] = str(params.get('user_name', ''))
+            params['mobile'] = int(params.get('mobile', 0))
+            params['role_type'] = int(params.get('role_type')) if params.get('role_type') else 0
+            params['goods_type'] = int(params.get('goods_type')) if params.get('goods_type') else 0
+            params['is_actived'] = int(params.get('is_actived')) if params.get('is_actived') else 0
+            params['is_car_sticker'] = int(params.get('is_car_sticker')) if params.get('is_car_sticker') else 0
+            params['start_time'] = int(params.get('start_time')) if params.get('start_time') else 0
+            params['end_time'] = int(params.get('end_time')) if params.get('end_time') else 0
+
+            # 判断时间是否合法
+            if not compare_time(params['start_time'], params['end_time']):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='时间参数有误'))
 
             # 获取用户权限和身份
             role, user_id = SessionOperationClass.get_role()
             regions = SessionOperationClass.get_user_locations()
 
-            # 判断时间是否合法
-            if start_time and end_time:
-                if start_time <= end_time:
-                    pass
-                else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
-            elif not start_time and not end_time:
-                pass
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
-
-            # 构造请求参数
-            params = {
-                'role': role,
-                'regions': regions,
-                'user_id': user_id,
-                'user_name': user_name,
-                'mobile': mobile,
-                'role_type': role_type,
-                'goods_type': goods_type,
-                'is_actived': is_actived,
-                'is_car_sticker': is_car_sticker,
-                'start_time': start_time,
-                'end_time': end_time
-            }
+            params['role'] = role
+            params['regions'] = regions
+            params['user_id'] = user_id
 
             return Response(page=page, limit=limit, params=params)
 
@@ -66,7 +51,7 @@ class PromoteEffect(object):
     def check_add_params(role, user_id, payload):
         mobile = payload.get('mobile', '')
         user_name = payload.get('user_name', '')
-        if role != 4:
+        if "城市经理" not in role:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='非城市经理不能添加推广人员'))
         if not user_id:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='管理员id不存在'))
@@ -76,17 +61,17 @@ class PromoteEffect(object):
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推广人姓名不能为空'))
         return Response(user_id=user_id, mobile=mobile, user_name=user_name)
 
-
     @staticmethod
     @make_decorator
     def check_delete_params(role, user_id, promoter_mobile):
-        if role != 4:
+        if "城市经理" not in role:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='非城市经理不能删除推广人员'))
         if not user_id:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='管理员id不存在'))
         if not promoter_mobile:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推广人员不存在'))
         return Response(user_id=user_id, promoter_mobile=promoter_mobile)
+
 
 class PromoteQuality(object):
 
@@ -95,38 +80,25 @@ class PromoteQuality(object):
     def check_params(params):
 
         try:
+            if not SessionOperationClass.check():
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
             # 校验参数
-            start_time = int(params.get('start_time')) if params.get('start_time') else time.time() - 8 * 60 * 60 * 24
-            end_time = int(params.get('end_time')) if params.get('end_time') else time.time() - 60 * 60 * 24
-            periods = int(params.get('periods')) if params.get('periods') else 2
-            dimension = int(params.get('dimension')) if params.get('dimension') else 1
-            data_type = int(params.get('data_type')) if params.get('data_type') else 1
+            params['start_time'] = int(params.get('start_time')) if params.get('start_time') else time.time() - 86400*7
+            params['end_time'] = int(params.get('end_time')) if params.get('end_time') else time.time()
+            params['periods'] = int(params.get('periods')) if params.get('periods') else 2
+            params['dimension'] = int(params.get('dimension')) if params.get('dimension') else 1
+            params['data_type'] = int(params.get('data_type')) if params.get('data_type') else 1
 
             # 获取用户权限和身份
             role, user_id = SessionOperationClass.get_role()
             regions = SessionOperationClass.get_user_locations()
 
-            # 验证参数
-            if start_time and end_time:
-                if start_time <= end_time:
-                    pass
-                else:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
-            elif not start_time and not end_time:
-                pass
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+            if not compare_time(params['start_time'], params['end_time']):
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
 
-            params = {
-                'start_time': start_time,
-                'end_time': end_time,
-                'periods': periods,
-                'dimension': dimension,
-                'data_type': data_type,
-                'role': role,
-                'user_id': user_id,
-                'regions': regions
-            }
+            params['role'] = role
+            params['user_id'] = user_id
+            params['regions'] = regions
 
             return Response(params=params)
         except Exception as e:

@@ -8,6 +8,7 @@ from server.models.promote import PromoteQuality, PromoteEffectList
 from server.status import HTTPStatus, make_result, APIStatus
 from server.cache_data import init_regions
 
+
 class PromoteEffectDecorator(object):
 
     @staticmethod
