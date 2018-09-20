@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import make_result, APIStatus, HTTPStatus, build_result
+from server.status import make_resp, APIStatus, HTTPStatus, make_resp
 from server.utils.extend import ExtendHandler, get_struct_data, timestamp2date
 
 
@@ -50,7 +50,7 @@ class OrdersReceivedStatistics(object):
             'pending_series': pending_series,
             'cancel_series': cancel_series
         }
-        return make_result(APIStatus.Ok, data=ret), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=ret), HTTPStatus.Ok
 
 
 class CancelOrderReason(object):
@@ -60,7 +60,7 @@ class CancelOrderReason(object):
     def get_result(data):
         # TODO 过滤参数
 
-        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class OrderList(object):
@@ -209,9 +209,9 @@ class OrderList(object):
                     'comment': (detail.get('driver_rate_comment', None) or '') + '\n' + (detail.get('owner_rate_comment', None) or ''),
                 })
 
-            return build_result(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求参数有误'))
 
 

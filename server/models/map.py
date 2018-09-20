@@ -475,11 +475,13 @@ class GoodsMapModel(object):
         if not data:
             return []
 
+        max_count = max(data, key=lambda i: i["count"])["count"]
+
         for detail in data:
             detail['lat'] = float(detail['lat'])
             detail['lng'] = float(detail['lng'])
 
-        return data
+        return max_count, data
 
 
 class UsersMapModel(object):

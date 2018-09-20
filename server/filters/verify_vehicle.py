@@ -1,6 +1,6 @@
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import APIStatus, HTTPStatus, build_result
+from server.status import APIStatus, HTTPStatus, make_resp
 from server.utils.constant import vehicle_id_name
 
 
@@ -31,4 +31,4 @@ class VerifyVehicle(object):
                 'last_login_time': detail.get('last_login_time') or '',
             })
 
-        return build_result(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok

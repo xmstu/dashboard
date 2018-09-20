@@ -25,8 +25,8 @@ class RootManagement(Resource):
             if role_type == 1:
                 resp = Response(params=get_all_arg())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @doc.request_root_management_add
@@ -39,8 +39,8 @@ class RootManagement(Resource):
             if role_type == 1:
                 resp = Response(params=get_payload())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员添加账户'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员添加账户'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class RootManagementOperator(Resource):
@@ -52,29 +52,29 @@ class RootManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(admin_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 return Response(params={'admin_id': admin_id})
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除账户'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员删除账户'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @doc.request_root_put
     @operations.RootManagement.put_data(params=dict)
     @verify.RootManagement.check_put_params(params=dict)
     def put(admin_id):
-        """修改当前用户id的账号或者密码"""
+        """修改当前用户id的账号,密码或角色"""
         if SessionOperationClass.check():
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(admin_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 if admin_id == 0:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='用户id不能为0'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='用户id不能为0'))
                 params = get_payload()
                 params.setdefault('admin_id', admin_id)
                 return Response(params=params)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员修改账户'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员修改账户'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @operations.RootManagement.get_role(admin_id=int)
@@ -84,11 +84,11 @@ class RootManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(admin_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 resp = Response(admin_id=int(admin_id))
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class RootRoleManagement(Resource):
@@ -104,8 +104,8 @@ class RootRoleManagement(Resource):
             if role_type == 1:
                 resp = Response(params=get_all_arg())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取角色列表'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户获取角色列表'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @doc.request_root_role_management_add
@@ -118,8 +118,8 @@ class RootRoleManagement(Resource):
             if role_type == 1:
                 resp = Response(params=get_payload())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户新增角色列表'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户新增角色列表'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class RootRoleManagementOperator(Resource):
@@ -134,14 +134,14 @@ class RootRoleManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(role_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 if role_id == 0:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='角色id不能为0'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='角色id不能为0'))
                 params = get_payload()
                 params.setdefault('role_id', role_id)
                 return Response(params=params)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员修改角色'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员修改角色'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @operations.RootRoleManagement.delete_data(params=dict)
@@ -151,10 +151,10 @@ class RootRoleManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(role_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 return Response(params={'role_id': role_id})
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @operations.RootRoleManagement.get_role_pages(params=dict)
@@ -164,10 +164,10 @@ class RootRoleManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(role_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='role_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='role_id必须是整数'))
                 return Response(params={'role_id': role_id})
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class RootPageManagement(Resource):
@@ -182,8 +182,8 @@ class RootPageManagement(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 return Response(params=get_all_arg())
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @doc.request_root_page_management_add
@@ -195,8 +195,8 @@ class RootPageManagement(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 return Response(params=get_payload())
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户新增页面'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户新增页面'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class RootPageManagementOperator(Resource):
@@ -211,14 +211,14 @@ class RootPageManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(page_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='page_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='page_id必须是整数'))
                 if page_id == 0:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='页面id不能为0'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='页面id不能为0'))
                 params = get_payload()
                 params.setdefault('page_id', page_id)
                 return Response(params=params)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员修改页面'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员修改页面'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @operations.RootPageManagement.delete_data(params=dict)
@@ -228,10 +228,10 @@ class RootPageManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(page_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='page_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='page_id必须是整数'))
                 return Response(params={'page_id': page_id})
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除页面'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员删除页面'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @operations.RootPageManagement.get_page_menus(params=dict)
@@ -241,10 +241,10 @@ class RootPageManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(page_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='page_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='page_id必须是整数'))
                 return Response(params={'page_id': page_id})
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员删除角色'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class RootMenuManagement(Resource):
@@ -260,8 +260,8 @@ class RootMenuManagement(Resource):
             if role_type == 1:
                 resp = Response(params=get_all_arg())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取菜单列表'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户获取菜单列表'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @doc.request_root_menu_management_add
@@ -273,8 +273,8 @@ class RootMenuManagement(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 return Response(params=get_payload())
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户新增菜单'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户新增菜单'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class RootMenuManagementOperator(Resource):
@@ -288,14 +288,14 @@ class RootMenuManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(menu_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='menu_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='menu_id必须是整数'))
                 if menu_id == 0:
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='menu_id不能为0'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='menu_id不能为0'))
                 params = get_payload()
                 params.setdefault('menu_id', menu_id)
                 return Response(params=params)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员修改菜单详情'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员修改菜单详情'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @operations.RootMenuManagement.delete_data(params=dict)
@@ -305,10 +305,10 @@ class RootMenuManagementOperator(Resource):
             role_type, _ = SessionOperationClass.get_role()
             if role_type == 1:
                 if not isinstance(menu_id, int):
-                    abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='menu_id必须是整数'))
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='menu_id必须是整数'))
                 return Response(params={'menu_id': menu_id})
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限超级管理员删除菜单'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限超级管理员删除菜单'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 ns = api.namespace('root', description='用户管理')

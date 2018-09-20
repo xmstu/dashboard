@@ -11,7 +11,7 @@ from server.meta.login_record import visitor_record
 from server.meta.route_func import open_route_func
 from server.meta.session_operation import SessionOperationClass
 from server.models.login import Login
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from server.utils.broker_token import decode
 from server.utils.init_regions import InitRegionModel
 
@@ -82,7 +82,7 @@ def broker():
             role_type = 3
             role_id = Login.get_role_id_by_role(db.read_bi, role)
         else:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg="拥有的地区权限有误!"))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg="拥有的地区权限有误!"))
 
         user_info = {
             'account': result[0]['mobile'],
@@ -96,7 +96,7 @@ def broker():
         }
 
         if not SessionOperationClass.set_session("user_session", user_info):
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg="更新区镇合伙人session失败"))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg="更新区镇合伙人session失败"))
 
         # 登录
         if SessionOperationClass.insert(user_info, locations):

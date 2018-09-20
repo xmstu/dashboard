@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from server.meta.decorators import make_decorator
-from server.status import build_result, HTTPStatus, APIStatus, make_result
+from server.status import make_resp, HTTPStatus, APIStatus, make_resp
 from server.cache_data import init_regions
 from server.logger import log
 from server.utils.amap import distance_between_position
@@ -75,7 +75,7 @@ class CityResourceBalance(object):
                     'labelLine': {'show': False}},
                 'emphasis': {'color': 'rgba(0,0,0,0)'}}
              })
-        return make_result(APIStatus.Ok, data=city_result), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=city_result), HTTPStatus.Ok
 
 
 class CityOrderListFilterDecorator(object):
@@ -210,7 +210,7 @@ class CityOrderListFilterDecorator(object):
         ret = sorted(result, key=itemgetter('new', 'create_time'), reverse=True)
 
         data = json.loads(json.dumps(ret))
-        return build_result(APIStatus.Ok, count=goods_counts, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, count=goods_counts, data=data), HTTPStatus.Ok
 
 
 class CityNearbyCars(object):
@@ -220,7 +220,7 @@ class CityNearbyCars(object):
     def get_result(data, goods_type):
         try:
             if not data:
-                return make_result(APIStatus.Ok, data=[]), HTTPStatus.Ok
+                return make_resp(APIStatus.Ok, data=[]), HTTPStatus.Ok
             goods = data['goods']
             driver = data['driver']
             # 过滤接单车型
@@ -352,6 +352,6 @@ class CityNearbyCars(object):
                 sim_arr.sort(key=lambda x: x.get('last_delta', 0))
                 result = top_arr + sim_arr
 
-            return make_result(APIStatus.Ok, data=json.loads(json.dumps(result))), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok, data=json.loads(json.dumps(result))), HTTPStatus.Ok
         except Exception as e:
             log.error('附近车辆过滤错误: %s' % e, exc_info=True)

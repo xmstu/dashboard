@@ -1,5 +1,5 @@
 from server.meta.decorators import make_decorator
-from server.status import build_result, build_result_1, APIStatus, HTTPStatus
+from server.status import make_resp, APIStatus, HTTPStatus, make_resp
 import time
 
 from server.utils.extend import timestamp2date
@@ -13,7 +13,8 @@ class MessageSystem(object):
         for i in data:
             i['create_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i['create_time']))
             i['update_time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i['update_time']))
-        return build_result(APIStatus.Ok, data=data, count=count), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=data, count=count), HTTPStatus.Ok
+
 
 class MessageUser(object):
     @staticmethod
@@ -43,4 +44,4 @@ class MessageUser(object):
         un_read.sort(key=lambda x: x['create_timestamp'], reverse=True)
         is_read.sort(key=lambda x: x['create_timestamp'], reverse=True)
 
-        return build_result_1(APIStatus.Ok, data=un_read+is_read, count=count, unread=unread), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=un_read+is_read, count=count, unread=unread), HTTPStatus.Ok

@@ -5,7 +5,7 @@ import time
 
 from server import log
 from server.meta.decorators import make_decorator, Response
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from server.meta.session_operation import SessionOperationClass
 from server.utils.extend import complement_time, compare_time
 from server.utils.role_regions import get_role_regions
@@ -17,7 +17,7 @@ class CityResourceBalance(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['start_time'] = int(params.get('start_time') or time.time() - 86400*7)
             params['end_time'] = int(params.get('end_time') or time.time())
@@ -31,7 +31,7 @@ class CityResourceBalance(object):
             params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
             # 校验时间
             if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))
             log.debug(
                 '获取供需平衡数据统计检查参数: [region_id: %s][haul_dist: %s][goods_price_type: %s][start_time: %s][end_time: %s]'
                 % (params['region_id'], params['haul_dist'], params['goods_price_type'], params['start_time'],
@@ -39,7 +39,7 @@ class CityResourceBalance(object):
             return Response(params=params)
         except Exception as e:
             log.error('请求供需平衡表有误:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求供需平衡表参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求供需平衡表参数有误'))
 
 
 class CityOrderList(object):
@@ -49,7 +49,7 @@ class CityOrderList(object):
     def check_params(page, limit, params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['goods_type'] = int(params.get('goods_type', None) or 0)
             params['goods_price_type'] = int(params.get('goods_price_type', None) or 0)
@@ -66,5 +66,5 @@ class CityOrderList(object):
 
         except Exception as e:
             log.error('最新接单货源参数错误:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='请求参数有误'))
 

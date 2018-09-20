@@ -3,7 +3,7 @@
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.message import MessageSystemModel, MessageUserModel
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from flask_restful import abort
 from server import log
 import time
@@ -102,11 +102,11 @@ class MessageSystem(object):
                             'update_time': int(time.time())
                         })
                 MessageSystemModel.insert_user_message(db.write_bi, data)
-            return make_result(APIStatus.Ok), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok), HTTPStatus.Ok
 
         except Exception as e:
             log.error('消息发布异常: [error: %s]' % e, exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='消息发布异常'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='消息发布异常'))
 
     @staticmethod
     @make_decorator
@@ -114,9 +114,9 @@ class MessageSystem(object):
         # 查询系统消息
         msg = MessageSystemModel.get_sys_msg_by_id(db.read_bi, params)
         if not msg:
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='该消息不存在'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='该消息不存在'))
         if msg['is_deleted'] == 1:
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='该消息已被删除'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='该消息已被删除'))
         # 删除用户消息
         MessageSystemModel.delete_user_message(db.write_bi, params)
         # 修改系统消息表
@@ -190,7 +190,7 @@ class MessageSystem(object):
                         'update_time': int(time.time())
                     })
             MessageSystemModel.insert_user_message(db.write_bi, data)
-        return make_result(APIStatus.Ok), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok), HTTPStatus.Ok
 
     @staticmethod
     @make_decorator
@@ -200,10 +200,10 @@ class MessageSystem(object):
             MessageSystemModel.delete_user_message(db.write_bi, params)
             # 删除系统消息
             MessageSystemModel.delete_system_message(db.write_bi, params)
-            return make_result(APIStatus.Ok), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok), HTTPStatus.Ok
         except Exception as e:
             log.error('消息删除异常: [error: %s]' % e, exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='消息删除异常'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='消息删除异常'))
 
 
 class MessageUser(object):
@@ -224,4 +224,4 @@ class MessageUser(object):
     def update_msg_read(params):
         """消息已读"""
         MessageUserModel.update_msg_read(db.write_bi, params)
-        return make_result(APIStatus.Ok), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok), HTTPStatus.Ok

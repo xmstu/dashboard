@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from server.meta.decorators import make_decorator
-from server.status import make_result, APIStatus, HTTPStatus
+from server.status import make_resp, APIStatus, HTTPStatus
 
 class cityManagerFilter(object):
     @staticmethod
@@ -24,4 +24,4 @@ class cityManagerFilter(object):
             'order_count': order_count
         }
 
-        return make_result(APIStatus.Ok, data=result), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=result), HTTPStatus.Ok

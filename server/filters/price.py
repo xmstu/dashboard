@@ -2,7 +2,7 @@ from itertools import groupby
 from operator import itemgetter
 
 from server.meta.decorators import make_decorator
-from server.status import make_result, APIStatus, HTTPStatus
+from server.status import make_resp, APIStatus, HTTPStatus
 from server.utils.extend import data_price
 
 
@@ -63,4 +63,4 @@ class PriceTrend(object):
             'recommend_price_two': recommend_price_two
         }
 
-        return make_result(APIStatus.Ok, data=ret), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=ret), HTTPStatus.Ok

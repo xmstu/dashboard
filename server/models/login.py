@@ -3,7 +3,7 @@ from flask import abort
 
 from server import log
 from server.meta.session_operation import SessionOperationClass
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 
 
 class Login(object):
@@ -46,7 +46,7 @@ class Login(object):
 
         if not SessionOperationClass.set_session('user_session', user_session):
             abort(HTTPStatus.InternalServerError,
-                  **make_result(status=APIStatus.InternalServerError, msg='添加session失败'))
+                  **make_resp(status=APIStatus.InternalServerError, msg='添加session失败'))
 
         log.info('获取后台登录用户sql参数: [user_name: %s][password: %s]' % (user_name, password))
         return result[0] if result else None

@@ -2,7 +2,7 @@
 from flask_restful import abort
 
 from server.meta.decorators import make_decorator, Response
-from server.status import make_result, HTTPStatus, APIStatus
+from server.status import make_resp, HTTPStatus, APIStatus
 
 
 class LoginSetting(object):
@@ -13,6 +13,6 @@ class LoginSetting(object):
         if user_name and password:
             return Response(user_name=user_name, password=password)
 
-        abort(HTTPStatus.NotFound, **make_result(status=APIStatus.NotFound))
+        abort(HTTPStatus.NotFound, **make_resp(status=APIStatus.NotFound))
 
 

@@ -3,7 +3,7 @@ import time
 from flask_restful import abort
 
 from server import log
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 
 
 class RootManagementModel(object):
@@ -15,7 +15,7 @@ class RootManagementModel(object):
         tb_inf_admins.id,
         account,
         user_name,
-        IF (GROUP_CONCAT(`name`), GROUP_CONCAT(`name`), '') role_name,
+        GROUP_CONCAT(`name`) role_name,
         tb_inf_admins.is_deleted
         """
 
@@ -49,22 +49,31 @@ class RootManagementModel(object):
         try:
             cmd = """
             SELECT
-                role_id,
-                `name`
-            FROM
-                tb_inf_admin_roles
-                INNER JOIN tb_inf_roles ON tb_inf_roles.id = tb_inf_admin_roles.role_id
+                id role_id,
+                `name`,
+            CASE WHEN id IN (
+                    SELECT
+                        role_id 
+                    FROM
+                        tb_inf_admin_roles
+                        INNER JOIN tb_inf_roles ON tb_inf_roles.id = tb_inf_admin_roles.role_id 
+                        AND tb_inf_roles.is_deleted = 0 
+                    WHERE
+                        tb_inf_admin_roles.is_deleted = 0 
+                        AND admin_id = %d 
+                        ) THEN
+                        1 ELSE 0 
+                    END AS `status` 
+                FROM
+                    tb_inf_roles 
             WHERE
-                admin_id = %d
+                tb_inf_roles.is_deleted = 0
             """ % admin_id
             role_list = cursor.query(cmd)
-
-            role_list = [{i['name']: i['role_id']} for i in role_list]
-
             return role_list
         except Exception as e:
             log.error('获取当前用户角色失败,失败原因是:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.BadRequest, msg='获取当前用户角色失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.BadRequest, msg='获取当前用户角色失败'))
 
     @staticmethod
     def put_data(cursor, params):
@@ -112,7 +121,7 @@ class RootManagementModel(object):
 
         except Exception as e:
             log.error('更新用户失败,失败原因是:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='服务器内部错误,更新管理后台用户失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='服务器内部错误,更新管理后台用户失败'))
 
     @staticmethod
     def delete_data(cursor, params):
@@ -128,7 +137,7 @@ class RootManagementModel(object):
                 return rowcount
         except Exception as e:
             log.error('删除用户失败,失败原因是:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='服务器内部错误,删除管理后台用户失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='服务器内部错误,删除管理后台用户失败'))
 
     @staticmethod
     def post_data(cursor, params):
@@ -157,7 +166,7 @@ class RootManagementModel(object):
                 return admin_id
         except Exception as e:
             log.error('新增管理后台用户失败,错误是:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='服务器内部错误,新增管理后台用户失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='服务器内部错误,新增管理后台用户失败'))
 
 
 class RootRoleManagementModel(object):
@@ -223,7 +232,7 @@ class RootRoleManagementModel(object):
                 return role_id
         except Exception as e:
             log.error('添加角色失败,失败原因是:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加角色失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='添加角色失败'))
 
     @staticmethod
     def put_data(cursor, params):
@@ -297,7 +306,7 @@ class RootRoleManagementModel(object):
                 return row_count
         except Exception as e:
             log.error('修改角色失败,失败原因是:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改角色失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='修改角色失败'))
 
     @staticmethod
     def delete_data(cursor, params):
@@ -312,7 +321,7 @@ class RootRoleManagementModel(object):
                 return
         except Exception as e:
             log.error('删除角色失败,失败原因是:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除角色失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='删除角色失败'))
 
     @staticmethod
     def get_role_pages(cursor, params):
@@ -347,7 +356,7 @@ class RootRoleManagementModel(object):
             return role_page_list
         except Exception as e:
             log.error('获取权限页面失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取权限页面失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='获取权限页面失败'))
 
 
 class RootPageManagementModel(object):
@@ -381,7 +390,7 @@ class RootPageManagementModel(object):
             return page_list if page_list else [], count if count else 0
         except Exception as e:
             log.error('获取所有页面失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取所有页面失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='获取所有页面失败'))
 
     @staticmethod
     def post_data(cursor, params):
@@ -397,7 +406,7 @@ class RootPageManagementModel(object):
                 return page_id
         except Exception as e:
             log.error('添加页面失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加页面失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='添加页面失败'))
 
     @staticmethod
     def put_data(cursor, params):
@@ -420,7 +429,7 @@ class RootPageManagementModel(object):
                 return rowcount
         except Exception as e:
             log.error('修改页面失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改页面失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='修改页面失败'))
 
     @staticmethod
     def delete_data(cursor, params):
@@ -432,7 +441,7 @@ class RootPageManagementModel(object):
                 return tran.conn.delete(command, params)
         except Exception as e:
             log.error('删除页面失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除页面失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='删除页面失败'))
 
     @staticmethod
     def get_page_menus(cursor, params):
@@ -473,7 +482,7 @@ class RootPageManagementModel(object):
 
         except Exception as e:
             log.error('获取父菜单失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取父菜单失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='获取父菜单失败'))
 
 
 class RootMenuManagementModel(object):
@@ -510,7 +519,7 @@ class RootMenuManagementModel(object):
             return data
         except Exception as e:
             log.error('获取所有菜单页面失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='获取所有菜单页面失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='获取所有菜单页面失败'))
 
     @staticmethod
     def post_data(cursor, params):
@@ -529,7 +538,7 @@ class RootMenuManagementModel(object):
                 return menu_id
         except Exception as e:
             log.error('添加菜单失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='添加菜单失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='添加菜单失败'))
 
     @staticmethod
     def put_data(cursor, params):
@@ -553,7 +562,7 @@ class RootMenuManagementModel(object):
                 return rowcount
         except Exception as e:
             log.error('修改菜单失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='修改菜单失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='修改菜单失败'))
 
     @staticmethod
     def delete_data(cursor, params):
@@ -565,4 +574,4 @@ class RootMenuManagementModel(object):
                 return tran.conn.delete(command, params)
         except Exception as e:
             log.error('删除菜单失败:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg='删除菜单失败'))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='删除菜单失败'))

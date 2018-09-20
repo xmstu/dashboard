@@ -9,7 +9,7 @@ from server.meta.session_operation import SessionOperationClass
 from server.logger import log
 from server.meta.decorators import make_decorator, Response
 from server.models.login import Login
-from server.status import make_result, HTTPStatus, APIStatus
+from server.status import make_resp, HTTPStatus, APIStatus
 from server.database import db
 from server.utils.extend import pwd_to_hash
 
@@ -25,7 +25,7 @@ class LoginDecorator(object):
             # 管理员用户
             user_info = Login.get_user_by_admin(db.read_bi, user_name, password)
             if not user_info:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.NotUser, msg='找不到该用户'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.NotUser, msg='找不到该用户'))
             # 后台
             if user_info['region_id'] == 1:
                 locations = [str(i) for i in init_regions.region if init_regions.region[i]['level'] == 1]

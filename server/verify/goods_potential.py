@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from server.utils.extend import complement_time, compare_time
 from server.utils.role_regions import get_role_regions
 
@@ -18,7 +18,7 @@ class GoodsPotentialDistributionTrend(object):
         try:
             # 校验有没有登录
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['start_time'] = int(params.get('start_time') or time.time() - 86400 * 7)
             params['end_time'] = int(params.get('end_time') or time.time())
@@ -34,12 +34,12 @@ class GoodsPotentialDistributionTrend(object):
             params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
             # 检测时间正确性
             if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             return Response(params=params)
         except Exception as e:
             log.error('前端传入参数错误:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='参数非法'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='参数非法'))
 
 
 class GoodsPotentialList(object):
@@ -50,7 +50,7 @@ class GoodsPotentialList(object):
         try:
             # 校验有没有登录
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['from_province_id'] = int(params.get('from_province_id') or 0)
             params['from_city_id'] = int(params.get('from_city_id') or 0)
@@ -78,11 +78,11 @@ class GoodsPotentialList(object):
             params['record_start_time'], params['record_end_time'] = complement_time(params['record_start_time'], params['record_end_time'])
             # 检测时间正确性
             if not compare_time(params['register_start_time'], params['register_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
             if not compare_time(params['record_start_time'], params['record_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             return Response(params=params, page=page, limit=limit)
         except Exception as e:
             log.error('前端传入参数错误:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='参数非法,服务器拒绝该请求'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='参数非法,服务器拒绝该请求'))

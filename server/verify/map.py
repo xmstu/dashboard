@@ -6,7 +6,7 @@ from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from server.utils.extend import compare_time, check_region_id, date2timestamp, timestamp2date, complement_time
 from server.utils.role_regions import get_role_regions
 
@@ -20,7 +20,7 @@ class DistributionMap(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['dimension'] = int(params.get('dimension', None) or 1)
             params['filter'] = params.get('filter', None) or 0
@@ -59,15 +59,15 @@ class DistributionMap(object):
                 params['role_region_id'] = ''
 
             if not check_region_id(params['region_id'], params['role_region_id']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='地区参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='地区参数非法'))
 
             if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             return Response(params=params)
         except Exception as e:
             log.error('校验分布地图参数失败:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='拒绝请求'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='拒绝请求'))
 
 
 class GoodsMap(object):
@@ -77,7 +77,7 @@ class GoodsMap(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['goods_price_type'] = int(params.get('goods_price_type', None) or 0)
             params['haul_dist'] = int(params.get('haul_dist', None) or 0)
@@ -98,15 +98,15 @@ class GoodsMap(object):
             params['role_region_id'] = get_role_regions(0)
 
             if not compare_time(params['delivery_start_time'], params['delivery_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             if not compare_time(params['register_start_time'], params['register_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             return Response(params=params)
         except Exception as e:
             log.error('校验货源热图参数失败:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='拒绝请求'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='拒绝请求'))
 
 
 class UsersMap(object):
@@ -116,7 +116,7 @@ class UsersMap(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['users_type'] = int(params.get('users_type') or 0)
             params['is_auth'] = int(params.get('is_auth') or 0)
@@ -137,12 +137,12 @@ class UsersMap(object):
             params['role_region_id'] = get_role_regions(0)
 
             if not compare_time(params['register_start_time'], params['register_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             if not compare_time(params['position_start_time'], params['position_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             return Response(params=params)
         except Exception as e:
             log.error('校验用户热图参数失败:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='参数非法'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='参数非法'))

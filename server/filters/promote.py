@@ -4,7 +4,7 @@ import json
 from server.utils.date_format import get_date_aggregate
 
 from server.meta.decorators import make_decorator
-from server.status import build_result, APIStatus, HTTPStatus, make_result
+from server.status import make_resp, APIStatus, HTTPStatus, make_resp
 from server.utils.extend import ExtendHandler
 
 
@@ -14,17 +14,17 @@ class PromoteEffect(object):
     @make_decorator
     def get_add_data(result):
         if result:
-            return make_result(APIStatus.Ok), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok), HTTPStatus.Ok
         else:
-            return make_result(APIStatus.BadRequest, msg="添加推广人员失败"), HTTPStatus.BadRequest
+            return make_resp(APIStatus.BadRequest, msg="添加推广人员失败"), HTTPStatus.BadRequest
 
     @staticmethod
     @make_decorator
     def get_delete_data(result):
         if result:
-            return make_result(APIStatus.Ok), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok), HTTPStatus.Ok
         else:
-            return make_result(APIStatus.BadRequest, msg="删除推广人员失败"), HTTPStatus.BadRequest
+            return make_resp(APIStatus.BadRequest, msg="删除推广人员失败"), HTTPStatus.BadRequest
 
     @staticmethod
     @make_decorator
@@ -84,7 +84,7 @@ class PromoteEffect(object):
         data = []
         for detail in result:
             data.append(filter_detail(detail))
-        return build_result(APIStatus.Ok, count=count, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, count=count, data=data), HTTPStatus.Ok
 
 
 class PromoteQuality(object):
@@ -106,4 +106,4 @@ class PromoteQuality(object):
             data = {'xAxis': xAxis, 'series': series, 'last_month': sum(series)}
         else:
             data = {'xAxis': xAxis, 'series': series}
-        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok

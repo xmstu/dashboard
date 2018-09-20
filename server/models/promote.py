@@ -4,7 +4,7 @@ import time
 from flask_restful import abort
 
 from server import log
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 
 
 class PromoteEffectList(object):

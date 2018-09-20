@@ -1,6 +1,6 @@
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import make_result, APIStatus, HTTPStatus, build_result
+from server.status import make_resp, APIStatus, HTTPStatus, make_resp
 from server.utils.date_format import get_date_aggregate
 from server.utils.extend import timestamp2date, interval_time_to_format_time
 
@@ -16,7 +16,7 @@ class GoodsPotentialDistributionTrend(object):
             'xAxis': xAxis,
             'series': series
         }
-        return make_result(APIStatus.Ok, data=ret), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=ret), HTTPStatus.Ok
 
 
 class GoodsPotentialList(object):
@@ -126,4 +126,4 @@ class GoodsPotentialList(object):
                 'register_time': detail.get('register_time')
             })
 
-        return build_result(APIStatus.Ok, count=data.get('count'), data=result), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, count=data.get('count'), data=result), HTTPStatus.Ok

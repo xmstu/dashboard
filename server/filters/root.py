@@ -1,6 +1,6 @@
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import build_result, APIStatus, HTTPStatus
+from server.status import make_resp, APIStatus, HTTPStatus
 
 
 class RootManagement(object):
@@ -10,13 +10,16 @@ class RootManagement(object):
     def get_result(data):
         city_manager_list = data.get('city_manager_list')
         for detail in city_manager_list:
+            if not detail['role_name']:
+                detail['role_name'] = '无角色'
+
             if detail.get('is_deleted') == 0:
                 detail['status'] = '启用'
             elif detail.get('is_deleted') == 1:
                 detail['status'] = '禁用'
             detail.pop('is_deleted')
 
-        return build_result(APIStatus.Ok, data=city_manager_list, count=data.get('count', 0)), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=city_manager_list, count=data.get('count', 0)), HTTPStatus.Ok
 
 
 class RootRoleManagement(object):
@@ -44,4 +47,4 @@ class RootRoleManagement(object):
             elif i['type'] == 4:
                 i['type_name'] = '城市经理'
 
-        return build_result(APIStatus.Ok, data=role_list, count=data.get('count', 0)), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=role_list, count=data.get('count', 0)), HTTPStatus.Ok

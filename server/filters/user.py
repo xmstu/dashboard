@@ -1,7 +1,7 @@
 import json
 
 from server.meta.decorators import make_decorator
-from server.status import build_result, HTTPStatus, APIStatus, make_result
+from server.status import make_resp, HTTPStatus, APIStatus, make_resp
 from server.utils.date_format import get_date_aggregate
 from server.cache_data import init_regions
 
@@ -51,7 +51,7 @@ class UserList(object):
         for detail in user_detail:
             result.append(filter_user_info(detail))
 
-        return build_result(APIStatus.Ok, count=user_list['user_count'], data=result), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, count=user_list['user_count'], data=result), HTTPStatus.Ok
 
 
 class UserStatistic(object):
@@ -69,4 +69,4 @@ class UserStatistic(object):
             data = {'xAxis': xAxis, 'series': series, 'last_month': sum(series)}
         else:
             data = {'xAxis': xAxis, 'series': series}
-        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok

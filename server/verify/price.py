@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from server.utils.extend import compare_time
 from server.utils.role_regions import get_role_regions
 
@@ -17,7 +17,7 @@ class PriceTrend(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
             params['from_province_id'] = int(params.get('from_province_id') or 0)
             params['from_city_id'] = int(params.get('from_city_id') or 0)
             params['from_county_id'] = int(params.get('from_county_id') or 0)
@@ -35,9 +35,9 @@ class PriceTrend(object):
             params['region_id'] = get_role_regions(int(params.get('region_id') or 0))
 
             if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             return Response(params=params)
         except Exception as e:
             log.error('error:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='拒绝请求'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='拒绝请求'))

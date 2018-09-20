@@ -4,7 +4,7 @@ from server.meta.decorators import make_decorator, Response
 from server.models.city import CityOrderListModel, CityResourceBalanceModel, CityNearbyCarsModel
 from server.models.vehicle import VehicleModel
 from server.database import pyredis
-from server.status import HTTPStatus, make_result
+from server.status import HTTPStatus, make_resp
 
 from flask_restful import abort
 import time
@@ -42,13 +42,13 @@ class CityNearbyCars(object):
         # 获取货源信息
         goods = CityNearbyCarsModel.get_goods(db.read_db, goods_id)
         if not goods:
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='货源不存在'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='货源不存在'))
         if goods['is_deleted'] != 0:
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='货源已删除'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='货源已删除'))
         if goods['status'] == 3:
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='货源已成单'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='货源已成单'))
         if goods['status'] == -1:
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='货源已取消'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='货源已取消'))
         # 1.附近车辆-常驻地
         if goods_type == 2:
             driver = get_nearby_driver(goods)

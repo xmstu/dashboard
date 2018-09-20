@@ -37,7 +37,7 @@ class Login(Resource):
         """用户登出"""
         result = SessionOperationClass.deleted()
         if not result:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求参数错误'))
         return {'status': APIStatus.Ok, 'msg': '成功'}, 200
 
 

@@ -5,7 +5,7 @@ import base64
 import hashlib
 import datetime
 from urllib.parse import quote, unquote
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from flask_restful import abort
 
 headers = b'{"alg":"HS256","typ":"JWT"}'
@@ -45,17 +45,17 @@ def decode(token, datatime_format=False):
     token = unquote(token)
     segments = token.split('.')
     if len(segments) != 3:
-        abort(HTTPStatus.UnAuthorized, **make_result(status=APIStatus.UnLogin, msg='token验证失败'))
+        abort(HTTPStatus.UnAuthorized, **make_resp(status=APIStatus.UnLogin, msg='token验证失败'))
     segments = [s.encode() for s in segments]
     signature_origin = segments.pop()
     signature = encrypt(b'.'.join(segments), secret_key.encode())
     signature = base64.standard_b64encode(signature)
     if signature != signature_origin:
-        abort(HTTPStatus.UnAuthorized, **make_result(status=APIStatus.UnLogin, msg='token验证失败'))
+        abort(HTTPStatus.UnAuthorized, **make_resp(status=APIStatus.UnLogin, msg='token验证失败'))
     try:
         payload = json.loads(base64.standard_b64decode(segments[1]).decode())
     except:
-        abort(HTTPStatus.UnAuthorized, **make_result(status=APIStatus.UnLogin, msg='token验证失败'))
+        abort(HTTPStatus.UnAuthorized, **make_resp(status=APIStatus.UnLogin, msg='token验证失败'))
         raise
     if not datatime_format:
         return payload

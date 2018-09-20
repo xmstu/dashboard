@@ -2,7 +2,7 @@ import json
 
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import make_result, APIStatus, HTTPStatus
+from server.status import make_resp, APIStatus, HTTPStatus
 from server.utils.constant import d_user, d_goods, d_vehicle, d_order
 from server.utils.extend import ExtendHandler
 
@@ -69,7 +69,7 @@ class DistributionMap(object):
             "authority_region_id": params.get('authority_region_id', 0)
         }
 
-        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class UsersMap(object):
@@ -79,4 +79,4 @@ class UsersMap(object):
     def get_result(data):
         # TODO 过滤参数
 
-        return make_result(APIStatus.Ok), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok), HTTPStatus.Ok

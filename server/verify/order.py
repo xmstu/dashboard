@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from server.utils.extend import compare_time, complement_time
 from server.utils.role_regions import get_role_regions
 
@@ -17,7 +17,7 @@ class OrdersReceivedStatistics(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 8)
             params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
             params['periods'] = int(params.get('periods', None) or 2)
@@ -33,12 +33,12 @@ class OrdersReceivedStatistics(object):
             params['region_id'] = get_role_regions(params['region_id'])
             # 校验参数
             if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             return Response(params=params)
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='请求参数有误'))
 
 
 class CancelOrderReason(object):
@@ -48,7 +48,7 @@ class CancelOrderReason(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
             params['end_time'] = int(params.get('end_time', None) or time.time())
             params['goods_type'] = int(params.get('goods_type', None) or 0)
@@ -60,12 +60,12 @@ class CancelOrderReason(object):
             params['region_id'] = get_role_regions(params['region_id'])
 
             if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             return Response(params=params)
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='请求参数有误'))
 
 
 class OrderList(object):
@@ -75,7 +75,7 @@ class OrderList(object):
     def check_params(page, limit, params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['order_id'] = int(params.get('order_id', None) or 0)
             params['consignor_mobile'] = int(params.get('consignor_mobile', None) or 0)
@@ -118,15 +118,15 @@ class OrderList(object):
             params['region_id'] = get_role_regions(params['region_id'])
 
             if not compare_time(params['start_order_time'], params['end_order_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             if not compare_time(params['start_complete_time'], params['end_complete_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             if not compare_time(params['register_start_time'], params['register_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求时间参数有误'))
 
             return Response(page=page, limit=limit, params=params)
         except Exception as e:
             log.error('error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='参数非法'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='参数非法'))

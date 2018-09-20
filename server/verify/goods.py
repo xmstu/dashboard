@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from server.utils.extend import compare_time, complement_time
 from server.utils.role_regions import get_role_regions
 
@@ -17,7 +17,7 @@ class GoodsList(object):
     def check_params(page, limit, params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['create_start_time'] = int(params.get('create_start_time') or time.time() - 86400 * 7)
             params['create_end_time'] = int(params.get('create_end_time') or time.time())
@@ -53,16 +53,16 @@ class GoodsList(object):
             params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
             # 校验参数
             if not compare_time(params['create_start_time'], params['create_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))
             if not compare_time(params['register_start_time'], params['register_end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             log.debug("货源列表验证参数{}".format(params))
             return Response(page=page, limit=limit, params=params)
 
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='请求参数有误'))
 
 
 class CancelGoodsReason(object):
@@ -72,7 +72,7 @@ class CancelGoodsReason(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
             params['end_time'] = int(params.get('end_time', None) or time.time())
@@ -86,12 +86,12 @@ class CancelGoodsReason(object):
             params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
             # 校验时间
             if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             return Response(params=params)
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='请求参数有误'))
 
 
 class GoodsDistributionTrend(object):
@@ -101,7 +101,7 @@ class GoodsDistributionTrend(object):
     def check_params(params):
         try:
             if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
             params['end_time'] = int(params.get('end_time', None) or time.time())
@@ -117,9 +117,9 @@ class GoodsDistributionTrend(object):
             params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
             # 校验时间
             if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))
 
             return Response(params=params)
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='请求参数有误'))

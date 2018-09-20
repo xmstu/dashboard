@@ -1,7 +1,7 @@
 from flask_restful import abort
 
 from server.meta.session_operation import SessionOperationClass
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 
 
 def get_role_regions(region_id):
@@ -14,8 +14,8 @@ def get_role_regions(region_id):
             region_id = locations_id
         else:
             if str(region_id) not in locations_id:
-                abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.Forbidden, msg='非权限范围内地区'))
+                abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.Forbidden, msg='非权限范围内地区'))
     else:
-        abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.Forbidden, msg='非权限角色在进行操作'))
+        abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.Forbidden, msg='非权限角色在进行操作'))
 
     return region_id

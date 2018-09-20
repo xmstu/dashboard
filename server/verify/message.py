@@ -3,7 +3,7 @@ import re
 from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 
 
 class MessageSystemVerify(object):
@@ -11,9 +11,9 @@ class MessageSystemVerify(object):
     @make_decorator
     def check_get_list_params(params):
         if not params.get('page') or not params['page'].isdigit():
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='页数错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='页数错误'))
         if not params.get('limit') or not params['limit'].isdigit():
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='条数错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='条数错误'))
         params['limit'] = int(params['limit'])
         params['page'] = (int(params['page']) - 1) * params['limit']
         return Response(params=params)
@@ -22,13 +22,13 @@ class MessageSystemVerify(object):
     @make_decorator
     def check_post_params(params, user_id):
         if not params.get('title'):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='标题为空'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='标题为空'))
         if not params.get('content'):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='内容为空'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='内容为空'))
         if int(params.get('msg_type')) not in [1,2]:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='消息类型错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='消息类型错误'))
         if int(params.get('push_role')) not in [0, 1, 2, 3, 4]:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推送角色错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='推送角色错误'))
         params['content'] = re.sub(r'&nbsp;|\s', '', params['content'])
         params = {
             'user_id': user_id,
@@ -45,13 +45,13 @@ class MessageSystemVerify(object):
     @make_decorator
     def check_put_params(params, user_id, msg_id):
         if not params.get('title'):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='标题为空'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='标题为空'))
         if not params.get('content'):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='内容为空'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='内容为空'))
         if params.get('msg_type') not in [1, 2]:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='消息类型错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='消息类型错误'))
         if params.get('push_role') not in [0, 1, 2, 3, 4]:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='推送角色错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='推送角色错误'))
         params = {
             'user_id': user_id,
             'msg_id': msg_id,
@@ -73,11 +73,11 @@ class MessageUserVerify(object):
         params['user_name'] = str(params.get('user_name') or '')
         params['account'] = str(params.get('account') or '')
         if not(params.get('user_name') or params.get('account')):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='用户名获取失败'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='用户名获取失败'))
         if not params.get('page') or not params['page'].isdigit():
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='页数错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='页数错误'))
         if not params.get('limit') or not params['limit'].isdigit():
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='条数错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='条数错误'))
         params['limit'] = int(params['limit'])
         params['page'] = (int(params['page']) - 1) * params['limit']
         return Response(params=params)
@@ -86,7 +86,7 @@ class MessageUserVerify(object):
     @make_decorator
     def check_is_read_params(params, msg_id):
         if not params.get('account'):
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='用户获取失败'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='用户获取失败'))
 
         params = {
             'account': params['account'],

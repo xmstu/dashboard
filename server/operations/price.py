@@ -4,7 +4,7 @@ from server import log
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.price import PriceTrendModel
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 
 
 class PriceTrend(object):
@@ -17,4 +17,4 @@ class PriceTrend(object):
             return Response(params=params, data=data)
         except Exception as e:
             log.error('Error:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请求参数有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求参数有误'))

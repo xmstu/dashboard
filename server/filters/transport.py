@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import make_result, APIStatus, HTTPStatus, build_result
+from server.status import make_resp, APIStatus, HTTPStatus, make_resp
 from server.utils.extend import ExtendHandler, date2timestamp
 
 
@@ -16,7 +16,7 @@ class TransportRadar(object):
     def get_result(data):
         # TODO 过滤参数
 
-        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class TransportList(object):
@@ -80,8 +80,8 @@ class TransportList(object):
                     'end_time': params['end_time']
                 })
 
-            return build_result(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok, data=result, count=data['count']), HTTPStatus.Ok
         except Exception as e:
             log.error('TransportListFilter Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='过滤参数时有误'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='过滤参数时有误'))
 

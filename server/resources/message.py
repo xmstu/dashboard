@@ -7,7 +7,7 @@ import server.document.message as doc
 from server import operations, api, verify, filters
 from server.meta.decorators import Response
 from server.meta.session_operation import SessionOperationClass
-from server.status import HTTPStatus, make_result, APIStatus
+from server.status import HTTPStatus, make_resp, APIStatus
 from server.utils.request import get_payload, get_all_arg
 
 
@@ -26,8 +26,8 @@ class MessageSystem(Resource):
             if role == '超级管理员':
                 resp = Response(params=get_all_arg())
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户获取消息列表'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户获取消息列表'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @doc.request_system_message_post
@@ -41,8 +41,8 @@ class MessageSystem(Resource):
             if role == '超级管理员':
                 resp = Response(params=get_payload(), user_id=user_id)
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户发布'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户发布'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class MessageSystemOperator(Resource):
@@ -58,8 +58,8 @@ class MessageSystemOperator(Resource):
             if role == '超级管理员':
                 resp = Response(params=get_payload(), user_id=user_id, msg_id=id)
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户修改'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户修改'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @operations.MessageSystem.delete_message(params=dict)
@@ -74,8 +74,8 @@ class MessageSystemOperator(Resource):
                     'msg_id': id
                 })
                 return resp
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='仅限后台用户删除'))
-        abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户删除'))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
 
 class MessageUser(Resource):
@@ -88,7 +88,7 @@ class MessageUser(Resource):
     def get():
         """获取消息列表"""
         if not SessionOperationClass.check():
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
         resp = Response(params=get_all_arg())
         return resp
@@ -102,7 +102,7 @@ class MessageUserOperator(Resource):
     def get(id):
         """消息已读"""
         if not SessionOperationClass.check():
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='未登录用户'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
         resp = Response(params=get_all_arg(), msg_id=id)
         return resp
 

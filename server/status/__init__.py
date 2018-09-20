@@ -146,17 +146,13 @@ Decriptions = {
 }
 
 
-def build_result(status, msg=None, count=None, data=None):
-    return {'status': status, 'msg': msg if msg else Decriptions[status], 'count': count if count else 0,
-            'data': data}
-
-
-def build_result_1(status, msg=None, count=None, data=None, unread=None):
-    return {'status': status, 'msg': msg if msg else Decriptions[status], 'count': count if count else 0,
-            'data': data, 'unread': unread if unread else 0}
-
-
-def make_result(status, msg=None, data=None):
-    if data is not None:
-        return {'status': status, 'msg': msg if msg else Decriptions[status], 'data': data}
-    return {'status': status, 'msg': msg if msg else Decriptions[status]}
+def make_resp(status, msg=None, data=None, **kwargs):
+    if data:
+        result = {'status': status, 'msg': msg if msg else Decriptions[status], 'data': data}
+    else:
+        result = {'status': status, 'msg': msg if msg else Decriptions[status]}
+    for key, value in kwargs.items():
+        if not value:
+            kwargs[key] = 0
+    result.update(kwargs)
+    return result

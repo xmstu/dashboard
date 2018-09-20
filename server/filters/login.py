@@ -4,7 +4,7 @@
 import time
 
 from flask_restful import abort
-from server.status import HTTPStatus, APIStatus, make_result
+from server.status import HTTPStatus, APIStatus, make_resp
 from server.meta.decorators import make_decorator
 
 class Login(object):
@@ -13,7 +13,7 @@ class Login(object):
     @make_decorator
     def insert_session(result):
         if result:
-            return make_result(APIStatus.Ok), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok), HTTPStatus.Ok
         else:
-            abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.InternalServerError, msg='登录失败'))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.InternalServerError, msg='登录失败'))
 

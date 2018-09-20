@@ -6,7 +6,7 @@ from flask_restful import abort
 from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import build_result, APIStatus, HTTPStatus, make_result
+from server.status import make_resp, APIStatus, HTTPStatus, make_resp
 from server.utils.extend import get_struct_data
 
 
@@ -167,10 +167,10 @@ class GoodsList(object):
                 })
 
             result = json.loads(json.dumps(result))
-            return build_result(APIStatus.Ok, count=data['goods_count'], data=result), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok, count=data['goods_count'], data=result), HTTPStatus.Ok
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_result(HTTPStatus.BadRequest, msg='内部服务器错误'))
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='内部服务器错误'))
 
 
 class CancelGoodsReason(object):
@@ -179,7 +179,7 @@ class CancelGoodsReason(object):
     @make_decorator
     def get_result(data):
         pass
-        return make_result(APIStatus.Ok, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class GoodsDistributionTrend(object):
@@ -204,4 +204,4 @@ class GoodsDistributionTrend(object):
             'cancel_order_series': cancel_order_series,
             'goods_user_count_series': goods_user_count_series
         }
-        return make_result(APIStatus.Ok, data=ret), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, data=ret), HTTPStatus.Ok
