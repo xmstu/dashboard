@@ -37,7 +37,7 @@ class Regions(object):
         return [self.region[i] for i in self.region if self.region[i].get('level', 0) == 2]
 
     def get_current_region_level(self, region_id):
-        return self.region.get(int(region_id), {'level': 0})
+        return self.region.get(int(region_id), {'level': 0})['level']
 
     def get_map_city_level(self, region_id):
         """获取地区code上级到城市"""

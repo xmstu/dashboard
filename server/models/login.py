@@ -88,7 +88,7 @@ class Login(object):
         command = """
         -- 区镇合伙人
         SELECT shd_suppliers.user_id,  shu_users.mobile, shd_supplier_areas.region_id,
-        shu_user_profiles.user_name, shu_user_profiles.avatar_url,
+        shu_user_profiles.user_name, shu_user_profiles.avatar_url
         FROM shd_suppliers
         INNER JOIN shu_users ON shd_suppliers.user_id = shu_users.id AND shu_users.is_deleted = 0
         INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
@@ -98,7 +98,7 @@ class Login(object):
         UNION
         -- 网点管理员(可见区域同区镇合伙人)
         SELECT node_manager.id, node_manager.mobile, shd_supplier_areas.region_id,
-        node_manager.user_name, node_manager.avatar_url,
+        node_manager.user_name, node_manager.avatar_url
         FROM shd_suppliers
         INNER JOIN shd_supplier_areas ON shd_suppliers.id = shd_supplier_areas.supplier_id AND shd_supplier_areas.is_deleted = 0
         INNER JOIN (SELECT shu_users.id, shd_suppliers.user_id, shu_users.mobile, shu_user_profiles.user_name, shu_user_profiles.avatar_url
@@ -116,16 +116,16 @@ class Login(object):
         return result if result else None
 
     @staticmethod
-    def get_role_id_by_role(cursor, role):
+    def get_role_id_by_role(cursor, role_type):
         command = """
         SELECT
             id
         FROM
             `tb_inf_roles`
         WHERE
-            `name` = ":role"
+            `type` = :role_type
         """
 
-        role_id = cursor.query_one(command, {'role': role})['id']
+        role_id = cursor.query_one(command, {'role_type': role_type})['id']
 
         return role_id
