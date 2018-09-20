@@ -53,8 +53,8 @@ class UserList(object):
                 abort(HTTPStatus.Forbidden, **make_result(status=APIStatus.UnLogin, msg='未登录'))
 
             params['user_name'] = str(params.get('user_name') or '')
-            params['mobile'] = int(params.get('mobile') or '')
-            params['reference_mobile'] = int(params.get('reference_mobile') or '')
+            params['mobile'] = int(params.get('mobile') or 0)
+            params['reference_mobile'] = int(params.get('reference_mobile') or 0)
             params['download_ch'] = str(params.get('download_ch') or '')
             params['from_channel'] = str(params.get('from_channel') or '')
             params['is_referenced'] = int(params.get('is_referenced') or 0)

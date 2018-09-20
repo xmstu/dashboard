@@ -71,13 +71,16 @@ class SessionOperationClass(object):
         return region_id
 
     @staticmethod
-    def change_role(login, role_info):
+    def change_role(login, index, role_info):
         """改变角色"""
         try:
             session['login'] = login
             session['login']['role'] = role_info['role']
             session['login']['role_id'] = role_info['role_id']
             session['login']['locations'] = role_info['locations']
+
+            # 改变角色在列表中的位置
+            session['user_session'][0], session['user_session'][index] = session['user_session'][index], session['user_session'][0]
             return True
         except Exception as e:
             log.error('改变角色出错 [ERROR: %s]' % e, exc_info=True)

@@ -61,7 +61,7 @@ class TransportList(object):
             params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
             params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
-            params['region_id'] = int(params['region_id'] or 0)
+            params['region_id'] = int(params.get('region_id') or 0)
 
             params['region_id'] = get_role_regions(params['region_id'])
             # 校验时间
