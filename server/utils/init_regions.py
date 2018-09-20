@@ -54,6 +54,7 @@ class Regions(object):
         """获取城市区级信息"""
         result = []
         for k in region_arr:
+            k = int(k)
             for i, j in self.region.items():
                 if k != 441900:
                     if j['parent_id'] == k and j['level'] == 3:
@@ -62,6 +63,7 @@ class Regions(object):
                     if j['parent_id'] == k and j['level'] == 4:
                         result.append({'region_id': i, 'name': j['full_short_name']})
         return result
+
 
 class InitRegionModel(object):
     @staticmethod

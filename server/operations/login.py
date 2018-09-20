@@ -29,6 +29,7 @@ class LoginDecorator(object):
             # 后台
             if user_info['region_id'] == 1:
                 locations = [str(i) for i in init_regions.region if init_regions.region[i]['level'] == 1]
+                SessionOperationClass.update_session("user_session", user_info["role_id"], locations=locations)
             else:
                 locations = [str(user_info['region_id'])]
 

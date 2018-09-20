@@ -105,12 +105,12 @@ class SessionOperationClass(object):
             log.error('获取session失败:{}'.format(e))
 
     @staticmethod
-    def update_session(key, **kwargs):
+    def update_session(key, role_id, **kwargs):
         try:
             for detail in session[key]:
-                if detail['role_id'] == session['login']['role_id']:
+                if detail['role_id'] == role_id:
                     detail.update(kwargs)
                     return True
         except Exception as e:
-            log.error('增加session失败:{}'.format(e))
+            log.error('更新session失败:{}'.format(e))
             return False
