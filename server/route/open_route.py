@@ -75,9 +75,11 @@ def broker():
         max_region_level = max([init_regions.get_current_region_level(i) for i in locations])
         if max_region_level == 3:
             role = '区镇合伙人'
+            role_type = 2
             role_id = Login.get_role_id_by_role(db.read_bi, role)
         elif max_region_level == 4:
             role = '网点管理员'
+            role_type = 3
             role_id = Login.get_role_id_by_role(db.read_bi, role)
         else:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg="拥有的地区权限有误!"))
@@ -89,8 +91,12 @@ def broker():
             'mobile': result[0]['mobile'],
             'avatar_url': result[0]['avatar_url'],
             'role': role,
+            'role_type': role_type,
             'role_id': role_id,
         }
+
+        if not SessionOperationClass.set_session("user_session", user_info):
+            abort(HTTPStatus.InternalServerError, **make_result(status=APIStatus.InternalServerError, msg="更新区镇合伙人session失败"))
 
         # 登录
         if SessionOperationClass.insert(user_info, locations):
