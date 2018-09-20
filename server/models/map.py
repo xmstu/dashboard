@@ -476,8 +476,8 @@ class GoodsMapModel(object):
             return []
 
         for detail in data:
-            detail['latitude'] = float(detail['latitude'])
-            detail['longitude'] = float(detail['longitude'])
+            detail['lat'] = float(detail['lat'])
+            detail['lng'] = float(detail['lng'])
 
         return data
 

@@ -15,7 +15,7 @@ class RootManagementModel(object):
         tb_inf_admins.id,
         account,
         user_name,
-        GROUP_CONCAT(`name`) role_name,
+        IF (GROUP_CONCAT(`name`), GROUP_CONCAT(`name`), '') role_name,
         tb_inf_admins.is_deleted
         """
 
@@ -24,8 +24,8 @@ class RootManagementModel(object):
             {fields}
         FROM
             `tb_inf_admins`
-            INNER JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id AND tb_inf_admin_roles.is_deleted = 0
-            INNER JOIN tb_inf_roles ON tb_inf_roles.id = tb_inf_admin_roles.role_id AND tb_inf_roles.is_deleted = 0
+            LEFT JOIN tb_inf_admin_roles ON tb_inf_admin_roles.admin_id = tb_inf_admins.id AND tb_inf_admin_roles.is_deleted = 0
+            LEFT JOIN tb_inf_roles ON tb_inf_roles.id = tb_inf_admin_roles.role_id AND tb_inf_roles.is_deleted = 0
         GROUP BY
             tb_inf_admins.id
         """
