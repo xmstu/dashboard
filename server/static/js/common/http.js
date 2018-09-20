@@ -18,7 +18,6 @@ http.ajax.get = function(async, cache, url, data, contentType, callback,callback
             })
         },
         complete: function(response) {
-           layer.closeAll(loading)
             if(typeof callbackFn=='function'){
                callbackFn(response)
             }

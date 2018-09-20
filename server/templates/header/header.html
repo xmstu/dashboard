@@ -36,7 +36,8 @@
                    data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}"
                    data-account="{{ account }}">Hi,{{ user_name }}</b>
                 <div class="role-change-box">
-                    <ol class="role-change-about" lay-filter="header">
+                    <ol  class="role-change-about" lay-filter="header">
+                        <li id="role_change"></li>
                     </ol>
                 </div>
                 <ol class="layui-nav" lay-filter="">
@@ -79,6 +80,7 @@
     }
     .message-center > ul {
         opacity: 0;
+        display: none;
     }
 
     @media screen and (max-width: 1600px) {
