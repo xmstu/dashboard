@@ -139,7 +139,7 @@ class ParamsError(Exception):
 
 def complement_time(start_time, end_time):
     if start_time and not end_time:
-        end_time = time.time()
+        end_time = int(time.time())
         if start_time <= end_time:
             return start_time, end_time
         else:

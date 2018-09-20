@@ -7,6 +7,7 @@ from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.extend import complement_time, compare_time
+from server.utils.role_regions import get_role_regions
 
 
 class GoodsPotentialDistributionTrend(object):
@@ -16,9 +17,7 @@ class GoodsPotentialDistributionTrend(object):
     def check_params(params):
         try:
             # 校验有没有登录
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
             params['start_time'] = int(params.get('start_time') or time.time() - 86400 * 7)
@@ -29,10 +28,8 @@ class GoodsPotentialDistributionTrend(object):
             params['haul_dist'] = int(params.get('haul_dist') or 0)
             params['region_id'] = int(params.get('region_id') or 0)
 
-            # 校验地区权限id
-            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not str(params['region_id']) in locations_id:
-                params['region_id'] = locations_id
-
+            # 地区权限id
+            params['region_id'] = get_role_regions(params['region_id'])
             # 补全时间
             params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
             # 检测时间正确性
@@ -52,9 +49,7 @@ class GoodsPotentialList(object):
     def check_params(page, limit, params):
         try:
             # 校验有没有登录
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.UnLogin, msg='请登录'))
 
             params['from_province_id'] = int(params.get('from_province_id') or 0)
@@ -76,9 +71,8 @@ class GoodsPotentialList(object):
             params['record_end_time'] = int(params.get('record_end_time') or 0)
             params['region_id'] = int(params.get('region_id') or 0)
 
-            # 校验权限id
-            if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not str(params['region_id']) in locations_id:
-                params['region_id'] = locations_id
+            # 获取权限地区id
+            params['region_id'] = get_role_regions(params['region_id'])
             # 补全时间
             params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
             params['record_start_time'], params['record_end_time'] = complement_time(params['record_start_time'], params['record_end_time'])

@@ -9,6 +9,5 @@ class cityManagerOperation(object):
     @make_decorator
     def get_city_manager_data(params):
         """获取城市经理提成数据"""
-        # 获取新增用户
         result = cityManagerModel.increased_user_data(db.read_db, params['mobile'], params['start_time'], params['end_time'])
         return Response(data=result)
