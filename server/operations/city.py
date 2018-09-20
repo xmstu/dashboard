@@ -9,6 +9,7 @@ from server.status import HTTPStatus, make_result
 from flask_restful import abort
 import time
 
+
 class CityResourceBalance(object):
     @staticmethod
     @make_decorator

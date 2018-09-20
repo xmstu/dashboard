@@ -23,6 +23,7 @@ class CityResourceBalance(Resource):
                  % (resp['params'].get('region_id', 0), resp['params'].get('goods_type', 0), resp['params'].get('start_time', 0), resp['params'].get('end_time', 0)))
         return resp
 
+
 class CityLatestOpenOrderList(Resource):
     @staticmethod
     @doc.request_order_list_param
