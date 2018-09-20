@@ -14,7 +14,7 @@ request_root_management_add = api.doc(body=api.model('request_root_management_ad
     'account': fields.String(description='手机号'),
     'user_name': fields.String(description='用户名'),
     'password': fields.String(description='密码'),
-    'role_id': fields.Integer(description='角色id'),
+    'role_id': fields.List(fields.Integer, description='角色id列表'),
 }))
 
 request_root_put = api.doc(body=api.model('request_root_put', {

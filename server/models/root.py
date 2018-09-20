@@ -79,7 +79,7 @@ class RootManagementModel(object):
     def put_data(cursor, params):
         try:
             admin_id = params.pop('admin_id', 0)
-            role_id = params.pop('role_id', 0)
+            role_id_set = set(params.pop('role_id', []))
             is_active = params.pop('is_active', 0)
             rowcount = 0
             with cursor.begin() as tran:
@@ -106,17 +106,44 @@ class RootManagementModel(object):
 
                     rowcount += tran.conn.update(command.format(update_sql=update_sql), args={"admin_id": admin_id})
 
-                    if role_id:
+                    if role_id_set:
                         # 查出所有当前用户的角色id
-                        role_id_list = tran.conn.query("""SELECT role_id FROM tb_inf_admin_roles WHERE admin_id = %d""" % admin_id)
-                        role_id_list = [i['role_id'] for i in role_id_list]
-                        if role_id not in role_id_list:
-                            create_time = update_time = int(time.time())
-                            insert_sql = """
-                            INSERT INTO tb_inf_admin_roles
-                            (admin_id, role_id, create_time, update_time) 
-                            VALUES(%d, %d, %d, %d)""" % (admin_id, role_id, create_time, update_time)
-                            rowcount += tran.conn.insert(insert_sql)
+                        cur_role_id_list = tran.conn.query("""SELECT role_id FROM tb_inf_admin_roles WHERE admin_id = %d""" % admin_id)
+                        cur_role_id_set = {i['role_id'] for i in cur_role_id_list}
+
+                        # 需要删除关联的role_id
+                        needed_delete_set = cur_role_id_set - role_id_set
+                        # 需要增加关联的role_id
+                        needed_add_set = role_id_set - cur_role_id_set
+                        # 需要将is_deleted更新为0的role_id
+                        needed_update_set = role_id_set & cur_role_id_set
+
+                        create_time = update_time = int(time.time())
+
+                        if needed_delete_set:
+                            del_sql = """
+                            UPDATE tb_inf_admin_roles SET is_deleted = 1, update_time =:update_time  WHERE role_id = :role_id
+                            """
+                            for del_role_id in needed_delete_set:
+                                rowcount += tran.conn.update(del_sql, {"update_time": update_time, "role_id": del_role_id})
+
+                        if needed_add_set:
+
+                            add_sql = """
+                                            INSERT INTO tb_inf_admin_roles
+                                            (admin_id, role_id, create_time, update_time) 
+                                            VALUES(:admin_id, :role_id, :create_time, :update_time)"""
+                            add_params = {"admin_id": admin_id, "create_time": create_time, "update_time": update_time}
+                            for add_role_id in needed_add_set:
+                                add_params['role_id'] = add_role_id
+                                rowcount += tran.conn.insert(add_sql, add_params)
+
+                        if needed_update_set:
+                            update_sql = """
+                            UPDATE tb_inf_admin_roles SET is_deleted = 0, update_time =:update_time  WHERE role_id = :role_id
+                            """
+                            for update_role_id in needed_update_set:
+                                rowcount += tran.conn.update(update_sql, {"update_time": update_time, "role_id": update_role_id})
                     return rowcount
 
         except Exception as e:
@@ -142,6 +169,7 @@ class RootManagementModel(object):
     @staticmethod
     def post_data(cursor, params):
         try:
+            role_id_list = params.pop('role_id')
             with cursor.begin() as tran:
                 admin_command = """
                         INSERT INTO tb_inf_admins(account, password, user_name, avatar_url) 
@@ -161,9 +189,14 @@ class RootManagementModel(object):
                 params['create_time'] = int(time.time())
                 params['update_time'] = int(time.time())
 
-                tran.conn.insert(role_command, params)
+                row_id_sum = 0
+                for role_id in role_id_list:
+                    params['role_id'] = role_id
+                    row_id_sum += tran.conn.insert(role_command, params)
 
-                return admin_id
+                if admin_id and row_id_sum:
+                    return admin_id + row_id_sum
+                return 0
         except Exception as e:
             log.error('新增管理后台用户失败,错误是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='服务器内部错误,新增管理后台用户失败'))
@@ -287,7 +320,7 @@ class RootRoleManagementModel(object):
                         """
                         create_time = update_time = int(time.time())
                         for page_id in needed_add_set:
-                            row_count += tran.conn.update(insert_sql % (params['role_id'], page_id, create_time, update_time))
+                            row_count += tran.conn.insert(insert_sql % (params['role_id'], page_id, create_time, update_time))
                     if needed_update_set:
                         update_role_page_sql = """
                        UPDATE

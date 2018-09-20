@@ -31,12 +31,13 @@ class RootManagement(object):
             params['account'] = str(params.get('account') or '')
             params['user_name'] = str(params.get('user_name') or '')
             pwd = str(params.get('password') or '')
-            params['role_id'] = int(params.get('role_id') or 0)
+            params['role_id'] = list(params.get('role_id') or [])
             params['admin_id'] = int(params.get('admin_id') or 0)
             params['is_active'] = int(params.get('is_active') or 0)
 
-            if not Check.is_mobile(params['account']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='手机号非法'))
+            if params['account']:
+                if not Check.is_mobile(params['account']):
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='手机号非法'))
             # 加密密码
             if pwd:
                 params['password'] = pwd_to_hash(params['user_name'], pwd)
@@ -52,7 +53,7 @@ class RootManagement(object):
             params['account'] = str(params.get('account') or '')
             params['user_name'] = str(params.get('user_name') or '')
             pwd = str(params.get('password') or '')
-            params['role_id'] = int(params.get('role_id') or 0)
+            params['role_id'] = list(params.get('role_id') or [])
 
             if not Check.is_mobile(params['account']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='手机号非法'))
