@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
 
-from flask import render_template, redirect, request
+from flask import render_template, redirect, request, session
 from flask_restful import abort
 
 from server import app
@@ -28,9 +29,12 @@ def introduce():
 def login():
     """登录页面"""
     # 已登录返回首页
-    if SessionOperationClass.check():
-        return redirect('/home/')
-    return render_template('/login/login.html')
+    if not SessionOperationClass.check():
+        # 设置session过期时间
+        session.permanent = True
+        app.permanent_session_lifetime = timedelta(hours=2)
+        return render_template('/login/login.html')
+    return redirect('/home/')
 
 
 @app.route('/broker/')

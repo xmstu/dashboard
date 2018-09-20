@@ -7,6 +7,7 @@ from flask_restful import abort
 from server.status import HTTPStatus, APIStatus, make_resp
 from server.meta.decorators import make_decorator
 
+
 class Login(object):
 
     @staticmethod
