@@ -592,7 +592,7 @@ var common = {
     messageSet: function (elem, elemAno,elem_t) {
 
         elem.mouseenter(function () {
-             elem_t.height('200')
+             elem_t.height('200');
             setTimeout(function(){
               elemAno.addClass('animated fadeInUp')
             },300)
@@ -616,7 +616,7 @@ var common = {
         var counts = data.limit;
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             var data = res.data;
-             var unread = res.unread;
+            var unread = res.unread;
             var str = '';
             if (data != '') {
                 for (var i = 0; i < counts; i++) {
@@ -629,7 +629,7 @@ var common = {
                 $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
                 $(".message-count-show").after(str);
             }
-            $('.header .layui-badge').css({'opacity': '1'})
+            $('.header .layui-badge').css({'opacity': '1'});
             if (unread == 0) {
                 $('.message-center .layui-badge').css({'background': '#ccc'})
             }
@@ -789,8 +789,9 @@ var common = {
                 }, 250)
             });
            $('.role-change-item').click(function (e) {
-                e.preventDefault();
+               e.preventDefault();
                var url = '/role_change/role_change/'+$(this).attr('value');
+               var text = $(this).text();
                http.ajax.put_no_loading(true,false,url,{},http.ajax.CONTENT_TYPE_2,function(res){
                    if(res.status==100000){
                        layer.closeAll('loading');
@@ -798,8 +799,8 @@ var common = {
                            time:700
                        });
                        setTimeout(function(){
-                           window.location.reload();
-                       },1000)
+                           window.location.href='/admin';
+                       },1300)
                    }
                })
         });

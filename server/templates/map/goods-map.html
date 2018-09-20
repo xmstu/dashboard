@@ -1,10 +1,185 @@
+<!--页面中有很多隐藏的复选框为了模拟联动-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>货源热力图-省省统计中心</title>
+    <link rel="stylesheet" href="../static/css/base.css?v=5.9">
+    <link rel="stylesheet" href="../static/css/iconfont.css?v=5.9">
+    <link rel="stylesheet" href="../static/layui/css/layui.css?v=5.9">
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    <link rel="stylesheet" href="../static/css/common.css?version=1.0.1">
+    <link rel="stylesheet" href="../static/css/promote/promote.css?v=5.9">
 </head>
 <body>
-Hello goods_map
+<article id="page_area" class="page-area clearfix">
+    {% include '/header/header.html' %}
+    <article class="main-content">
+        {% include '/menu/menu.html' %}
+        <aside class="main-content-right" style="opacity: 1;">
+            <div>
+                <div class="m-c-l-content">
+                    <div class="content-header">
+                        <h2><i class="iconfont icon-dituleixianlu"></i>地域统计</h2>
+                        <hr>
+                    </div>
+                    <div class="part-1">
+                        <div class="part-1-top">
+                            <form action="" class="layui-form layui-form-pane">
+                                 <div class="layui-form-item" style="">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">货源类型</label>
+                                    <div class="layui-input-inline" style="width: 98px;">
+                                        <select id="goods_type" name="modules" lay-verify="required" lay-search="">
+                                            <option value="">全部</option>
+                                            <option value="1">一口价</option>
+                                            <option value="2">议价</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" style="width:184px;">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">距离类型</label>
+                                    <div class="layui-input-inline" style="width: 98px;">
+                                        <select id="urgent_goods" name="modules" lay-verify="required" lay-search="">
+                                            <option value="">全部</option>
+                                            <option value="1">同城</option>
+                                            <option value="2">跨城</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                                   <div class="layui-form-item  " id="vehicle_select">
+                                    <div class="layui-inline " style="">
+                                        <label class="layui-form-label">车型选择</label>
+                                        <div class="layui-input-inline" style="width:112px;">
+                                            <select name="modules" lay-verify="required" class="">
+                                                <option value="">全部车型</option>
+                                                <option value="1">小面包车</option>
+                                                <option value="2">中面包车</option>
+                                                <option value="3">小货车</option>
+                                                <option value="4">4.2米</option>
+                                                <option value="5">6.8米</option>
+                                                <option value="6">7.6米</option>
+                                                <option value="7">9.6米</option>
+                                                <option value="8">13米</option>
+                                                <option value="9">17.5米</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">货源状态</label>
+                                    <div class="layui-input-inline" style="width: 98px;">
+                                        <select id="is_addition" name="modules" lay-verify="required" lay-search="">
+                                            <option value="">全部</option>
+                                            <option value="1">待接单</option>
+                                            <option value="2">已接单</option>
+                                            <option value="3">已完成</option>
+                                            <option value="4">已取消</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                          <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 184px">
+                                        <label class="layui-form-label">特殊条件</label>
+                                        <div class="layui-input-inline" style="width: 106px">
+                                            <select id="pay_methods" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">无</option>
+                                                <option value="1">新用户</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                   <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 184px">
+                                        <label class="layui-form-label">展示方式</label>
+                                        <div class="layui-input-inline" style="width: 106px">
+                                            <select id="show_methods" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="1">随时间累加</option>
+                                                <option value="2">按时间区分</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            <article style="display: inline-block; width: auto;">
+                                <div class="layui-form-item publish-time">
+                                    <div class="layui-inline" style="margin-right: 0;">
+                                        <label class="layui-form-label">发货时间</label>
+                                        <div class="layui-input-inline" style="width: 98px;margin-right: 0;">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="create_start_time" name="create_start_time" autocomplete="off"
+                                                   lay-verify="create_start_time" class="layui-input" type="text">
+                                            <span class="date-tips goods-riqi-tips">请选择日期</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span style="display: inline-block;margin-top: 9px;">至</span>
+                                <div class="layui-form-item" style="width:180px ;">
+                                    <div class="layui-inline">
+                                        <div class="layui-input-block" style="margin-left: 4px;">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="create_end_time" name="create_end_time" autocomplete="off"
+                                                   lay-verify="create_end_time" class="layui-input" type="text">
+                                            <span class="date-tips ">请选择日期</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                            <article style="display: inline-block; width: auto;">
+                               <div class="layui-form-item ">
+                                <div class="layui-inline" style="margin-right: 0;">
+                                    <label class="layui-form-label">注册时间</label>
+                                    <div class="layui-input-block" style="width: 98px;">
+                                        <i class="layui-icon layui-icon-riqi "></i>
+                                        <input id="register_start_time" name="load_start_time" autocomplete="off"
+                                               lay-verify="load_start_time" class="layui-input" type="text">
+                                        <span class="date-tips goods-riqi-tips">请选择日期</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span style="display: inline-block;margin-top: 9px;">至</span>
+                            <div class="layui-form-item" style="width:240px ;">
+                                <div class="layui-inline">
+                                    <div class="layui-input-block" style="margin-left: 6px;">
+                                        <i class="layui-icon layui-icon-riqi"></i>
+                                        <input id="register_end_time" name="load_end_time" autocomplete="off"
+                                               lay-verify="load_end_time" class="layui-input" type="text">
+                                        <span class="date-tips">请选择日期</span>
+                                    </div>
+                                </div>
+                            </div>
+                            </article>
+                                <button id="search_btn" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn"><i style="" class="iconfont icon-sousuo1"></i> 搜索</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="part-2">
+                        <div id="container">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </article>
+</article>
+<span style="display: none!important">
+      <script src="https://s95.cnzz.com/z_stat.php?id=1260774712&web_id=1260774712" language="JavaScript"></script>
+</span>
+<script src="../static/js/libs/jquery-2.1.1.min.js?v=5.9"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.9&key=2695516322679bd5768ff1a93b7a9105"></script>
+<script type="text/javascript" src="//a.amap.com/jsapi_demos/static/resource/heatmapData.js"></script>
+<script src="../static/layui/layui.js?v=5.9"></script>
+<script src="../static/js/common/http.js?v=5.9"></script>
+<script src="../static/js/common/common.js?v=5.9"></script>
+<script src="../static/js/map/goods-map.js?v=5.9"></script>
 </body>
 </html>
+

@@ -95,7 +95,7 @@ var set = {
                         var data = {
                             "account": phone,
                             "user_name": name_edit,
-                            "password": password,
+                            "password": hex_md5(password),
                             "role_id": role_id,
                             "is_active": Number($('input[name=role]:checked').val())
                         };

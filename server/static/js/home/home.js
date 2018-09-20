@@ -1,3 +1,6 @@
+/**
+* 首页，上面的圆环是用echarts做的，下面是layui的数据表格。
+*/
 $(".layui-table-cell").css({
     "height": "auto!important"
 });
@@ -14,7 +17,7 @@ setTimeout(function () {
         $(".area-menu-about>a").addClass("selected-active");
         $(".area-menu-about>a>i").addClass("select-active");
     },
-    10);
+10);
 layui.use(["laydate", "form", "table"],
     function () {
         dataInit(dataArr2);
@@ -287,7 +290,7 @@ function tableInit(url) {
                     {
                         field: "goods_time",
                         title: "时间",
-                        width: 154
+                        width: 172
                     },
                     {
                         field: "supplier_node",
