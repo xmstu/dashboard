@@ -594,6 +594,7 @@ var common = {
         elem.mouseenter(function () {
              elem_t.height('200');
             setTimeout(function(){
+                elemAno.css({display:'block'});
               elemAno.addClass('animated fadeInUp')
             },300)
 
@@ -601,6 +602,7 @@ var common = {
         elem_t.mouseleave(function () {
             elem_t.height('auto');
               setTimeout(function(){
+                   elemAno.css({display:'none'});
                elemAno.removeClass('animated fadeInUp')
             },300)
 
@@ -658,7 +660,7 @@ var common = {
         });
     },
     iconSet: function (setAbout, value, icon) {
-        /*根据中文显示用js控制样式以后，后台每增加一个页面，这里也要对应增加一个判断*/
+        /*侧边栏是后端生成的，这里是根据中文显示用js控制样式，以后后台每增加一个页面，这里也要对应增加一个判断*/
         var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-qian'];
         var value = value.replace(/(^\s*)|(\s*$)/g, "");
         var setAbout = setAbout;
@@ -755,7 +757,7 @@ var common = {
                         $(this).find('a').addClass('transport-second-menu')
                     }
 
-                })
+                });
                 break;
         }
     },
@@ -764,6 +766,7 @@ var common = {
         http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
             var str = '';
             var len = res.data.length;
+            console.log('len'+len)
             str += '<a class="current-role" href="javascript:;">' + res.data[0].role + '<span class="layui-nav-more"></span></a>';
             str += '<dl class="role-change-lists">';
             if (len) {
@@ -772,11 +775,12 @@ var common = {
                 })
             }
             str += '</dl>';
-            $('#role_change').html(str)
+            $('#role_change').html(str);
             /*切换身份写在这里是因为内容动态加载完成之后再执行这里的代码*/
             $('.current-role').mouseenter(function () {
                 var $height=$('.role-change-lists').height();
                 setTimeout(function () {
+                     $('.role-change-lists').css({display:'block'});
                     $('.role-change-lists').addClass('animated fadeInUp');
                     $('.current-role > .layui-nav-more').addClass('layui-nav-mored');
                     $('#role_change').height($height+50)
@@ -785,6 +789,8 @@ var common = {
            $('#role_change').mouseleave(function () {
                 setTimeout(function () {
                     $('.role-change-lists').removeClass('animated fadeInUp');
+                    $('.role-change-lists').css({display:'none'});
+                      $('#role_change').height(50);
                     $('.current-role > .layui-nav-more').removeClass('layui-nav-mored');
                 }, 250)
             });

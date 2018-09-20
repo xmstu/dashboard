@@ -50,6 +50,8 @@ var set = {
                     , jump: function (obj) {
                     }
                 })
+            },function(xhttp){
+                layer.closeAll('loading')
             })
         })
 

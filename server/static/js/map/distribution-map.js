@@ -58,7 +58,7 @@ var set = {
         layui.use(['form', 'layer'], function () {
             var layer = layui.layer;
             var form = layui.form;
-            that.init();
+           // that.init();
             var start_time = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
             var end_time = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
             form.on('select(methods_select)', function (data) {
@@ -662,6 +662,7 @@ var set = {
         })
     }
 };
+set.init();
 set.dataInit();
 $('#search_btn').click(function (e) {
     e.preventDefault();

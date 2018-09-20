@@ -36,19 +36,13 @@
                    data-user-name="{{ user_name }}" data-avatar-url="{{ avatar_url }}" data-locations="{{ locations }}"
                    data-account="{{ account }}">Hi,{{ user_name }}</b>
                 <div class="role-change-box">
-                    <ol class="role-change-about" lay-filter="header">
-                        <li class="" id="role_change">
-                            {#   <a href="javascript:;">切换角色</a>
-                            <dl class="layui-nav-child">
-                                <dd><a href="">移动模块</a></dd>
-                                <dd><a href="">后台模版</a></dd>
-                            </dl>#}
-                        </li>
+                    <ol  class="role-change-about" lay-filter="header">
+                        <li id="role_change"></li>
                     </ol>
                 </div>
                 <ol class="layui-nav" lay-filter="">
                     <li class="layui-nav-item">
-                        <a href="javascript:;">退出登陆</a>
+                        <a href="javascript:;">我的账户</a>
                         <dl class="layui-nav-child">
                             <dd>
                                 <a href="/password/"><span>修改密码</span></a>
@@ -86,6 +80,7 @@
     }
     .message-center > ul {
         opacity: 0;
+        display: none;
     }
 
     @media screen and (max-width: 1600px) {
@@ -164,6 +159,7 @@
         background: #fff;
         padding: 5px 0;
         left: -18px;
+        display: none;
 
     }
 

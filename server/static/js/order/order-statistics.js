@@ -161,9 +161,6 @@ layui.use(['laydate', 'form', 'table'], function () {
             } else {
                 $('#create_end_time').next('.date-tips').hide()
             }
-            if (val != '') {
-                $('#create_end_time').next('.date-tips').hide()
-            }
         }
     });
     laydate.render({

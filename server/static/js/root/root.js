@@ -20,7 +20,7 @@ var set = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field: 'id', title: '角色ID'},
+                    {field: 'id', title: '用户ID'},
                     {field: 'user_name', title: '姓名'},
                     {field: 'account', title: '手机号'},
                     {field: 'role_name', title: '用户角色'},
@@ -186,6 +186,7 @@ var set = {
                     statusCode: 100000
                 }
                 , cols: [[
+                    {field:'id',title:"角色ID"},
                     {field: 'role_name', title: '身份信息'},
                     {field: 'region_id', title: '城市id'},
                     {field: 'region_name', title: '管理城市'},
