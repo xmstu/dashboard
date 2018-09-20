@@ -23,6 +23,7 @@ class SessionOperationClass(object):
                     'avatar_url'] else 'https://mp.huitouche.com/static/images/newicon.png',
                 'login_time': time.time(),
                 'role': user_info['role'],
+                'role_type': user_info['role_type'],
                 'role_id': user_info['role_id'],
                 'locations': locations,
             }
@@ -53,16 +54,16 @@ class SessionOperationClass(object):
     @staticmethod
     def get_locations():
         """获取角色和地区权限"""
-        role = session['login']['role']
+        role_type = session['login']['role_type']
         region_id = session['login'].get('locations', [])
-        return role, region_id
+        return role_type, region_id
 
     @staticmethod
     def get_role():
         """获取角色权限"""
-        role = session['login']['role']
+        role_type = session['login']['role_type']
         user_id = session['login']['user_id']
-        return role, user_id
+        return role_type, user_id
 
     @staticmethod
     def get_user_locations():
@@ -76,6 +77,7 @@ class SessionOperationClass(object):
         try:
             session['login'] = login
             session['login']['role'] = role_info['role']
+            session['login']['role_type'] = role_info['role_type']
             session['login']['role_id'] = role_info['role_id']
             session['login']['locations'] = role_info['locations']
 

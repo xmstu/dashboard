@@ -49,12 +49,12 @@ class PromoteEffect(Resource):
     @doc.response_promote_effect_add_param_success
     @filters.PromoteEffect.get_add_data(result=int)
     @operations.PromoteEffectDecorator.add_extension_worker(user_id=int, mobile=str, user_name=str)
-    @verify.PromoteEffect.check_add_params(role=int, user_id=int, payload=dict)
+    @verify.PromoteEffect.check_add_params(role_type=int, user_id=int, payload=dict)
     def post():
         """新增推广人员"""
-        role, user_id = SessionOperationClass.get_role()
+        role_type, user_id = SessionOperationClass.get_role()
         payload = get_payload()
-        return Response(role=role, user_id=user_id, payload=payload)
+        return Response(role_type=role_type, user_id=user_id, payload=payload)
 
 
 class PromoteDelete(Resource):
@@ -62,12 +62,12 @@ class PromoteDelete(Resource):
     @doc.response_promote_effect_delete_param_success
     @filters.PromoteEffect.get_delete_data(result=int)
     @operations.PromoteEffectDecorator.delete_promoter(user_id=int, promoter_mobile=str)
-    @verify.PromoteEffect.check_delete_params(role=int, user_id=int, promoter_mobile=str)
+    @verify.PromoteEffect.check_delete_params(role_type=int, user_id=int, promoter_mobile=str)
     def delete(mobile):
         """删除推广人员"""
-        role, user_id = SessionOperationClass.get_role()
+        role_type, user_id = SessionOperationClass.get_role()
         promoter_mobile = mobile
-        return Response(role=role, user_id=user_id, promoter_mobile=promoter_mobile)
+        return Response(role_type=role_type, user_id=user_id, promoter_mobile=promoter_mobile)
 
 
 ns = api.namespace('promote', description='推广统计')

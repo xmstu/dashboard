@@ -29,9 +29,9 @@ class DistributionMap(object):
             params['end_time'] = int(params.get('end_time', None) or time.time())
             params['region_id'] = str(params.get('region_id', None) or '0')
 
-            role, locations_id = SessionOperationClass.get_locations()
+            role_type, locations_id = SessionOperationClass.get_locations()
             # 校验权限id
-            if '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
+            if 2 == role_type or 3 == role_type or 4 == role_type:
                 params['role_region_id'] = locations_id
                 L = []
                 if len(locations_id) > 1:
@@ -53,7 +53,7 @@ class DistributionMap(object):
                     params['authority_region_id'] = locations_id[0]
                     params['region_id'] = params['region_id'] if params['region_id'] != '0' else params[
                         'authority_region_id']
-            elif role == '超级管理员':
+            elif role_type == 1:
                 params['role_region_id'] = locations_id + ['0']
             else:
                 params['role_region_id'] = ''

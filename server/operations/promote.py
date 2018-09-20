@@ -16,13 +16,13 @@ class PromoteEffectDecorator(object):
     def get_promote_effect_list(page, limit, params):
         promoter_mobile = []
         # 城市经理
-        if '城市经理' in params['role']:
+        if 4 == params['role_big_type']:
             promoter_mobile = PromoteEffectList.get_promoter_mobile_by_city_manage(db.read_bi, params)
         # 管理员
-        elif params['role'] == '超级管理员':
+        elif params['role_big_type'] == 1:
             promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi, params)
         # 区镇合伙人
-        elif params['role'] in ('区镇合伙人', '网点管理员'):
+        elif params['role_big_type'] in (2, 3):
             city_region = set([init_regions.get_map_city_level(i)['id'] for i in params['regions']])
             promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
         else:
@@ -73,15 +73,15 @@ class PromoteQualityDecorator(object):
             before_promote_count = 0
             promote_quality = []
             # 城市经理
-            if '城市经理' in params['role']:
+            if 4 == params['role_type']:
                 promoter_mobile = PromoteQuality.get_promoter_mobile_by_city_manager(db.read_bi, params['user_id'])
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
             # 管理员
-            elif params['role'] == '超级管理员':
+            elif params['role_type'] == 1:
                 promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi, params)
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
             # 区镇合伙人
-            elif params['role'] in ('区镇合伙人', '网点管理员'):
+            elif params['role_type'] in (2, 3):
                 city_region = set([init_regions.get_map_city_level(i)['id'] for i in params['regions']])
                 promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)

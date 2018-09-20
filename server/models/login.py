@@ -18,6 +18,7 @@ class Login(object):
             avatar_url,
             tb_inf_roles.id role_id,
             tb_inf_roles.`name` role,
+            tb_inf_roles.`type` role_type,
             region_id
         FROM
             tb_inf_admins
@@ -38,6 +39,7 @@ class Login(object):
         for detail in result:
             user_session.append({
                 'role': detail['role'],
+                'role_type': detail['role_type'],
                 'role_id': detail['role_id'],
                 'locations': [str(detail['region_id'])],
             })

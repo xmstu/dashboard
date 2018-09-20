@@ -33,10 +33,10 @@ class PromoteEffect(object):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.Forbidden, msg='时间参数有误'))
 
             # 获取用户权限和身份
-            role, user_id = SessionOperationClass.get_role()
+            role_big_type, user_id = SessionOperationClass.get_role()
             regions = SessionOperationClass.get_user_locations()
 
-            params['role'] = role
+            params['role_big_type'] = role_big_type
             params['regions'] = regions
             params['user_id'] = user_id
 
@@ -48,10 +48,10 @@ class PromoteEffect(object):
             
     @staticmethod
     @make_decorator
-    def check_add_params(role, user_id, payload):
+    def check_add_params(role_type, user_id, payload):
         mobile = payload.get('mobile', '')
         user_name = payload.get('user_name', '')
-        if "城市经理" not in role:
+        if not role_type == 4:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='非城市经理不能添加推广人员'))
         if not user_id:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='管理员id不存在'))
@@ -63,8 +63,8 @@ class PromoteEffect(object):
 
     @staticmethod
     @make_decorator
-    def check_delete_params(role, user_id, promoter_mobile):
-        if "城市经理" not in role:
+    def check_delete_params(role_type, user_id, promoter_mobile):
+        if not role_type == 4:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='非城市经理不能删除推广人员'))
         if not user_id:
             abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='管理员id不存在'))
@@ -90,13 +90,13 @@ class PromoteQuality(object):
             params['data_type'] = int(params.get('data_type')) if params.get('data_type') else 1
 
             # 获取用户权限和身份
-            role, user_id = SessionOperationClass.get_role()
+            role_type, user_id = SessionOperationClass.get_role()
             regions = SessionOperationClass.get_user_locations()
 
             if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数非法'))
 
-            params['role'] = role
+            params['role_type'] = role_type
             params['user_id'] = user_id
             params['regions'] = regions
 

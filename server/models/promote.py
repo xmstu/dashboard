@@ -181,6 +181,7 @@ class PromoteEffectList(object):
 
         return result
 
+
 class PromoteQuality(object):
     @staticmethod
     def get_promoter_mobile_by_city_manager(cursor, user_id):
@@ -277,7 +278,7 @@ class PromoteQuality(object):
             GROUP BY FROM_UNIXTIME(create_time, '%%%%Y-%%%%m-%%%%d')"""
 
             # 城市经理且推广人员为空
-            if '城市经理' in params['role'] and not promoter_ids:
+            if 4 == params['role_type'] and not promoter_ids:
                 command = command % 'AND referrer_user_id IN (0) '
             # 非城市经理查看所有人
             elif not promoter_ids:
@@ -303,7 +304,7 @@ class PromoteQuality(object):
                 %s """
 
                 # 城市经理且推广人员为空
-                if '城市经理' in params['role'] and not promoter_ids:
+                if 4 == params['role_type'] and not promoter_ids:
                     command = command % 'AND referrer_user_id IN (0) '
                 # 非城市经理查看所有人
                 elif not promoter_ids:
@@ -409,7 +410,7 @@ class PromoteQuality(object):
                 return []
 
             # 城市经理且推广人员为空
-            if '城市经理' in params['role'] and not promoter_ids:
+            if 4 == params['role_type'] and not promoter_ids:
                 command = command % 'AND referrer_user_id IN (0) '
             # 非城市经理查看所有人
             elif not promoter_ids:
@@ -519,7 +520,7 @@ class PromoteQuality(object):
                 return []
 
             # 城市经理且推广人员为空
-            if '城市经理' in params['role'] and not promoter_ids:
+            if 4 == params['role_type'] and not promoter_ids:
                 command = command % 'AND referrer_user_id IN (0) '
             # 非城市经理查看所有人
             elif not promoter_ids:

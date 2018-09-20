@@ -5,11 +5,11 @@ from server.status import HTTPStatus, make_result, APIStatus
 
 
 def get_role_regions(region_id):
-    role, locations_id = SessionOperationClass.get_locations()
-    if '管理员' in role:
+    role_type, locations_id = SessionOperationClass.get_locations()
+    if 1 == role_type:
         if not region_id:
             region_id = 0
-    elif '区镇合伙人' in role or '网点管理员' in role or '城市经理' in role:
+    elif 2 == role_type or 3 == role_type or 4 == role_type:
         if not region_id:
             region_id = locations_id
         else:
