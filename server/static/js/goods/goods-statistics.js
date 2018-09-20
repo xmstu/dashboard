@@ -1,6 +1,8 @@
 /**
+ * 货源统计
  * Created by Creazy_Run on 2018/5/30.
  */
+/*设置默认日期*/
 $('.layui-table-cell').css({'height': 'auto!important'});
 $('.layui-form-item').css({'width':'184px'})
 $('.chart-area-two-body .layui-form-item').css({'width':'184'})
@@ -13,7 +15,8 @@ $('#end_time_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_three').val(String(common.getNowFormatDate()[2]));
 $('#end_time_three').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
-   $('.menu-transcation').addClass('menu-active');
+    $('.menu-transcation').addClass('menu-active');
+    $('.menu-active .icon-xia').addClass('icon-rotate')
     $('.menu-transcation').next('.second-menu-list').css({'display': 'block'});
     $('.menu-transcation').next('.second-menu-list').find('.goods-second-menu').addClass('selected-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());

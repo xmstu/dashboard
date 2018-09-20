@@ -96,10 +96,12 @@ var set = {
                 }
             });
         });
+         $('.menu-map').addClass('menu-active');
+         $('.menu-active .icon-xia').addClass('icon-rotate')
         $('.menu-map').next('.second-menu-list').css({'display': 'block'});
         $('.menu-map').next('.second-menu-list').find('.goodsMap-second-menu').addClass('selected-active')
     },
-    mapRender: function (heatMapData) {
+    mapRender: function (heatMapData,maxCount) {
         var map = new AMap.Map("container", {
             resizeEnable: true,
             center: [116.418261, 39.921984],
@@ -141,7 +143,7 @@ var set = {
             //设置数据集：该数据为北京部分“公园”数据
             heatmap.setDataSet({
                 data:heatMapData,
-                max: 4
+                max: maxCount
             });
         });
 
@@ -183,13 +185,15 @@ var set = {
                 layer.msg('该条件无数据！', {icon: 5});
             }else {
                 var heatMapData = res.data;
-                _this.mapRender(heatMapData)
+                var maxCount = res.max_count
+                _this.mapRender(heatMapData,maxCount)
             }
         }, function (xhttp) {
             layer.closeAll('loading')
         })
     }
 };
+set.operate();
 set.init();
 set.mapRender();
 $('#search_btn').click(function (e) {

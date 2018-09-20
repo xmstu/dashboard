@@ -1,6 +1,7 @@
 var ue = UE.getEditor('editor');
 window.onload=function() {
     $('.menu-power').addClass('menu-active');
+    $('.menu-active .icon-xia').addClass('icon-rotate')
     $('.menu-power').next('.second-menu-list').css({'display': 'block'});
     $('.menu-power').next('.second-menu-list').find('.editMSG-second-menu').addClass('selected-active')
 }

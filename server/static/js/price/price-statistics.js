@@ -42,6 +42,7 @@ var set = {
         $('#date_show_one').val(common.getNowFormatDate()[7]);
         $('#date_show_two').val(common.getNowFormatDate()[0]);
          $('.menu-price').addClass('menu-active');
+         $('.menu-active .icon-xia').addClass('icon-rotate')
           $('.menu-price').next('.second-menu-list').css({'display': 'block'});
           $('.menu-price').next('.second-menu-list').find('.price-second-menu').addClass('selected-active');
         that.dataInit();

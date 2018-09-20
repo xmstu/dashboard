@@ -7,6 +7,7 @@ var dataSet = {
         $('#date_show_four').val(String(common.getNowFormatDate()[3]));
         setTimeout(function () {
             $('.menu-transport').addClass('menu-active');
+            $('.menu-active .icon-xia').addClass('icon-rotate');
             $('.menu-transport').next('.second-menu-list').css({'display': 'block'});
             $('.menu-transport').next('.second-menu-list').find('.transport-second-menu').addClass('selected-active')
             $('.layui-form-item .layui-inline ').css({'margin-right': 0});

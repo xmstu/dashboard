@@ -8,6 +8,7 @@ $('#start_date_one').val(String(common.getNowFormatDate()[2]));
 $('#end_time_one').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
     $('.menu-transaction').addClass('menu-active');
+    $('.menu-active .icon-xia').addClass('icon-rotate')
     $('.menu-transaction').next('.second-menu-list').css({'display': 'block'});
     $('.menu-transaction').next('.second-menu-list').find('.order-second-menu').addClass('selected-active');
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());

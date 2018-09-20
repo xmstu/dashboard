@@ -13,6 +13,7 @@ layui.use('layer', function () {
 /*----------------设置侧边栏样式----------------------*/
 setTimeout(function () {
     $('.menu-promote').addClass('menu-active');
+    $('.menu-active .icon-xia').addClass('icon-rotate')
     $('.menu-promote').next('.second-menu-list').css({'display': 'block'});
     $('.menu-promote').next('.second-menu-list').find('.promote-second-menu').addClass('selected-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());

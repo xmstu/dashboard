@@ -1,8 +1,10 @@
 /*这个用的是echarts插件实现地图下钻，管理员加载全国的数据并且可以下钻，城市经理看到的是当前区域的数据不可下钻
 * 点击地区向后台传送该地区的id ，后台返回下一级的数据
+* 地区的联动效果是根据layui监听表单选择，让相应的表单显示隐藏来达到联动的效果
 */
 //二级菜单
  $('.menu-map').addClass('menu-active');
+ $('.menu-active .icon-xia').addClass('icon-rotate')
     $('.menu-map').next('.second-menu-list').css({'display': 'block'});
     $('.menu-map').next('.second-menu-list').find('.distribute-second-menu').addClass('selected-active')
 var provinces = {

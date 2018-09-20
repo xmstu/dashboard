@@ -5,6 +5,7 @@ var setAbout = {
     init: function () {
         /*侧边栏样式*/
           $('.menu-transaction').addClass('menu-active');
+          $('.menu-active .icon-xia').addClass('icon-rotate');
           $('.menu-transaction').next('.second-menu-list').css({'display': 'block'});
           $('.menu-transaction').next('.second-menu-list').find('.lurk-goods').addClass('selected-active');
         /*给表单设置默认值，时间转换秒是前端做的*/

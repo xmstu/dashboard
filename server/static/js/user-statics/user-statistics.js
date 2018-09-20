@@ -11,6 +11,7 @@ var requestEnd = $('#date_show_two').val() + ' 23:59:59';
 setTimeout(function () {
     $('.menu-users').addClass('menu-active');
     $('.menu-users').next('.second-menu-list').css({'display': 'block'});
+    $('.menu-active .icon-xia').addClass('icon-rotate');
     $('.menu-users').next('.second-menu-list').find('.users-second-menu').addClass('selected-active')
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
 }, 10);

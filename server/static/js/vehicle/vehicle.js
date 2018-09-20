@@ -2,6 +2,7 @@ var set = {
     init: function () {
         var that = this;
         $('.menu-transport').addClass('menu-active');
+        $('.menu-active .icon-xia').addClass('icon-rotate');
         $('.menu-transport').next('.second-menu-list').css({'display': 'block'});
         $('.menu-transport').next('.second-menu-list').find('.vehicle-second-menu').addClass('selected-active')
         layui.use(['layer', 'laydate'], function () {

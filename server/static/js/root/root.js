@@ -1,6 +1,7 @@
 var set = {
     init: function () {
         $('.menu-power').addClass('menu-active');
+        $('.menu-active .icon-xia').addClass('icon-rotate');
         $('.menu-power').next('.second-menu-list').css({'display': 'block'});
         $('.menu-power').next('.second-menu-list').find('.userManager-second-menu').addClass('selected-active')
         var _this = this;
