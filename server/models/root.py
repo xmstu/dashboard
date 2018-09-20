@@ -108,7 +108,8 @@ class RootManagementModel(object):
 
                     if role_id_set:
                         # 查出所有当前用户的角色id
-                        cur_role_id_list = tran.conn.query("""SELECT role_id FROM tb_inf_admin_roles WHERE admin_id = %d""" % admin_id)
+                        cur_role_id_list = tran.conn.query("""SELECT role_id, is_deleted FROM tb_inf_admin_roles WHERE admin_id = %d""" % admin_id)
+                        relationship = {i["role_id"]: i["is_deleted"] for i in cur_role_id_list}
                         cur_role_id_set = {i['role_id'] for i in cur_role_id_list}
 
                         # 需要删除关联的role_id
@@ -125,7 +126,8 @@ class RootManagementModel(object):
                             UPDATE tb_inf_admin_roles SET is_deleted = 1, update_time =:update_time  WHERE role_id = :role_id
                             """
                             for del_role_id in needed_delete_set:
-                                rowcount += tran.conn.update(del_sql, {"update_time": update_time, "role_id": del_role_id})
+                                if not relationship[del_role_id]:
+                                    rowcount += tran.conn.update(del_sql, {"update_time": update_time, "role_id": del_role_id})
 
                         if needed_add_set:
 
@@ -143,7 +145,8 @@ class RootManagementModel(object):
                             UPDATE tb_inf_admin_roles SET is_deleted = 0, update_time =:update_time  WHERE role_id = :role_id
                             """
                             for update_role_id in needed_update_set:
-                                rowcount += tran.conn.update(update_sql, {"update_time": update_time, "role_id": update_role_id})
+                                if relationship[update_role_id]:
+                                    rowcount += tran.conn.update(update_sql, {"update_time": update_time, "role_id": update_role_id})
                     return rowcount
 
         except Exception as e:
@@ -287,13 +290,15 @@ class RootRoleManagementModel(object):
                     # 找出所有当前角色的权限页面id
                     role_page_sql = """
                     SELECT
-                        page_id
+                        page_id,
+                        is_deleted
                     FROM
                         tb_inf_role_pages 
                     WHERE
                         tb_inf_role_pages.role_id = %d
                     """ % params['role_id']
                     role_page_id_list = cursor.query(role_page_sql)
+                    relationship = {i["page_id"]: i["is_deleted"] for i in role_page_id_list}
                     role_page_id_set = {i['page_id'] for i in role_page_id_list}
 
                     # 要删除关联的page_id
@@ -312,7 +317,8 @@ class RootRoleManagementModel(object):
                         WHERE page_id = %d AND role_id = %d;
                         """
                         for page_id in needed_delete_set:
-                            row_count += tran.conn.update(delete_sql % (page_id, params['role_id']))
+                            if not relationship[page_id]:
+                                row_count += tran.conn.update(delete_sql % (page_id, params['role_id']))
                     if needed_add_set:
                         insert_sql = """
                         INSERT INTO tb_inf_role_pages(role_id, page_id, create_time, update_time)
@@ -329,7 +335,8 @@ class RootRoleManagementModel(object):
                        WHERE page_id = %d AND role_id = %d;
                            """
                         for page_id in needed_update_set:
-                            row_count += tran.conn.update(update_role_page_sql % (page_id, params['role_id']))
+                            if relationship[page_id]:
+                                row_count += tran.conn.update(update_role_page_sql % (page_id, params['role_id']))
 
                 # 更新角色
                 command = """
