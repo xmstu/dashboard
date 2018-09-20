@@ -7,6 +7,7 @@ from server.meta.decorators import make_decorator, Response
 from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_result, APIStatus
 from server.utils.extend import compare_time
+from server.utils.role_regions import get_role_regions
 
 
 class TransportRadar(object):
@@ -15,11 +16,11 @@ class TransportRadar(object):
     @make_decorator
     def check_params(params):
         try:
+            if not SessionOperationClass.check():
+                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
             params['start_time'] = int(params.get('start_time', None) or time.time() - 7 * 86400)
             params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
             params['region_id'] = int(params.get('region_id', None) or 0)
-            # params['business'] = int(params.get('business', None) or 0)
-            # params['business_price'] = int(params.get('business_price', None) or 0)
             params['from_province_id'] = int(params.get('from_province_id', None) or 0)
             params['from_city_id'] = int(params.get('from_city_id', None) or 0)
             params['from_county_id'] = int(params.get('from_county_id', None) or 0)
@@ -30,12 +31,7 @@ class TransportRadar(object):
             params['to_town_id'] = int(params.get('to_town_id', None) or 0)
 
             # 当前权限下所有地区
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-                if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id']:
-                    params['region_id'] = locations_id
-            else:
-                abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
+            params['region_id'] = get_role_regions(params['region_id'])
 
             if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='时间参数有误'))
@@ -53,33 +49,21 @@ class TransportList(object):
     @make_decorator
     def check_params(page, limit, params):
         try:
-
-            # 当前权限下所有地区
-            if SessionOperationClass.check():
-                role, locations_id = SessionOperationClass.get_locations()
-                if ('区镇合伙人' in role or '网点管理员' in role or '城市经理' in role) and not params['region_id']:
-                    params['region_id'] = locations_id
-                elif role == '超级管理员':
-                    params['region_id'] = 0
-            else:
+            if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='请登录'))
-
             # 校验参数并赋予默认值
             params['from_province_id'] = int(params.get('from_province_id', None) or 0)
             params['from_city_id'] = int(params.get('from_city_id', None) or 0)
             params['from_county_id'] = int(params.get('from_county_id', None) or 0)
-            # params['from_town_id'] = int(params.get('from_town_id', None) or 0)
             params['to_province_id'] = int(params.get('to_province_id', None) or 0)
             params['to_city_id'] = int(params.get('to_city_id', None) or 0)
             params['to_county_id'] = int(params.get('to_county_id', None) or 0)
-            # params['to_town_id'] = int(params.get('to_town_id', None) or 0)
             params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
-            # params['business'] = int(params.get('business', None) or 0)
-            # params['business_price'] = int(params.get('business_price', None) or 0)
-            # params['filter'] = int(params.get('filter', None) or 0)
             params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
             params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
+            params['region_id'] = int(params['region_id'] or 0)
 
+            params['region_id'] = get_role_regions(params['region_id'])
             # 校验时间
             if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_result(status=APIStatus.BadRequest, msg='筛选时间参数有误'))

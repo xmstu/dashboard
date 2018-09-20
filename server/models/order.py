@@ -299,18 +299,18 @@ class OrderListModel(object):
 
         # 权限地区
         region = ' AND 1=1 '
-        if params['node_id']:
-            if isinstance(params['node_id'], int):
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
                 region = 'AND (so.from_province_id = %(region_id)s OR so.from_city_id = %(region_id)s OR so.from_county_id = %(region_id)s OR so.from_town_id = %(region_id)s) ' % {
-                    'region_id': params['node_id']}
-            elif isinstance(params['node_id'], list):
+                    'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
                 region = '''
                         AND (
                         so.from_province_id IN (%(region_id)s)
                         OR so.from_city_id IN (%(region_id)s)
                         OR so.from_county_id IN (%(region_id)s)
                         OR so.from_town_id IN (%(region_id)s)
-                        ) ''' % {'region_id': ','.join(params['node_id'])}
+                        ) ''' % {'region_id': ','.join(params['region_id'])}
 
         fetch_where += region
 
@@ -516,7 +516,7 @@ class OrderListModel(object):
 class FreshOwnerModel(object):
 
     @staticmethod
-    def get_fresh_owner_id(bi, db, node_id):
+    def get_fresh_owner_id(bi, db, region_id):
         try:
             # 先找出所有发货小于3的user_id
             good_sql = """
@@ -533,18 +533,18 @@ class FreshOwnerModel(object):
 
             # 权限地区
             region = ' AND 1=1 '
-            if node_id:
-                if isinstance(node_id, int):
+            if region_id:
+                if isinstance(region_id, int):
                     region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
-                        'region_id': node_id}
-                elif isinstance(node_id, list):
+                        'region_id': region_id}
+                elif isinstance(region_id, list):
                     region = '''
                             AND (
                             from_province_id IN (%(region_id)s)
                             OR from_city_id IN (%(region_id)s)
                             OR from_county_id IN (%(region_id)s)
                             OR from_town_id IN (%(region_id)s)
-                            ) ''' % {'region_id': ','.join(node_id)}
+                            ) ''' % {'region_id': ','.join(region_id)}
 
             good_user_ret = bi.query(good_sql.format(region=region))
             good_ret_list = [str(i['user_id']) for i in good_user_ret]
@@ -563,7 +563,7 @@ class FreshOwnerModel(object):
 class FreshDriverModel(object):
 
     @staticmethod
-    def get_fresh_driver_id(cursor, node_id):
+    def get_fresh_driver_id(cursor, region_id):
         try:
             sql = """
                     SELECT
@@ -587,18 +587,18 @@ class FreshDriverModel(object):
 
             # 权限地区
             region = ' 1=1 '
-            if node_id:
-                if isinstance(node_id, int):
+            if region_id:
+                if isinstance(region_id, int):
                     region += 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
-                        'region_id': node_id}
-                elif isinstance(node_id, list):
+                        'region_id': region_id}
+                elif isinstance(region_id, list):
                     region += '''
                             AND (
                             from_province_id IN (%(region_id)s)
                             OR from_city_id IN (%(region_id)s)
                             OR from_county_id IN (%(region_id)s)
                             OR from_town_id IN (%(region_id)s)
-                            ) ''' % {'region_id': ','.join(node_id)}
+                            ) ''' % {'region_id': ','.join(region_id)}
             ret = cursor.query(sql.format(region=region))
             log.debug('获取新司机SQL语句：[sql: %s]' % sql.format(region=region))
             ret = [str(i['driver_id']) for i in ret]

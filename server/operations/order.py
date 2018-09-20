@@ -32,9 +32,9 @@ class OrderList(object):
     @make_decorator
     def get_data(page, limit, params):
         if params.get('spec_tag') == 1:
-            fresh_ids = FreshOwnerModel.get_fresh_owner_id(db.read_bi, db.read_db, params.get('node_id'))
+            fresh_ids = FreshOwnerModel.get_fresh_owner_id(db.read_bi, db.read_db, params.get('region_id'))
         elif params.get('spec_tag') == 2:
-            fresh_ids = FreshDriverModel.get_fresh_driver_id(db.read_db, params.get('node_id'))
+            fresh_ids = FreshDriverModel.get_fresh_driver_id(db.read_db, params.get('region_id'))
         else:
             fresh_ids = ['0']
         data = OrderListModel.get_order_list(db.read_db, page, limit, fresh_ids, params)
