@@ -13,7 +13,6 @@ class Login(object):
         command = """
         SELECT
             tb_inf_admins.id,
-            account,
             user_name,
             avatar_url,
             tb_inf_roles.id role_id,
@@ -28,7 +27,7 @@ class Login(object):
             AND tb_inf_roles.is_deleted = 0
         WHERE
             tb_inf_admins.is_deleted = 0 
-            AND (user_name = :user_name OR account = :user_name)
+            AND user_name = :user_name
             AND `password` = :password
         GROUP BY
             tb_inf_roles.id

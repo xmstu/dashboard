@@ -9,7 +9,6 @@ from server.status import HTTPStatus
 def common_route_func(template_name):
     # 用户名，头像, 地区
     user_name = session['login'].get('user_name', '')
-    account = session['login'].get('account', '')
     avatar_url = session['login'].get('avatar_url', 'https://mp.huitouche.com/static/images/newicon.png')
     locations = [{'region_id': i, 'name': init_regions.to_full_short_name(i)} for i in
                  session['login'].get('locations', [])]
@@ -20,7 +19,7 @@ def common_route_func(template_name):
     if role_type == 4:
         locations = init_regions.get_city_next_region(session['login'].get('locations', []))
     return render_template(template_name, user_name=user_name, avatar_url=avatar_url, locations=locations,
-                           role=role, role_type=role_type, account=account, role_menu_path=role_menu_path)
+                           role=role, role_type=role_type, role_menu_path=role_menu_path)
 
 
 def open_route_func(template_name):

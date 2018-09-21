@@ -88,7 +88,6 @@ def broker():
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg="拥有的地区权限有误!"))
 
         user_info = {
-            'account': result[0]['mobile'],
             'id': result[0]['user_id'],
             'user_name': result[0]['user_name'],
             'mobile': result[0]['mobile'],

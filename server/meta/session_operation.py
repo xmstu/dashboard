@@ -15,10 +15,8 @@ class SessionOperationClass(object):
         """登录"""
         try:
             session['login'] = {
-                'account': user_info['account'],
                 'user_id': user_info['id'],
                 'user_name': user_info['user_name'] if user_info['user_name'] else '',
-                'mobile': user_info['account'],
                 'avatar_url': user_info['avatar_url'] if user_info[
                     'avatar_url'] else 'https://mp.huitouche.com/static/images/newicon.png',
                 'login_time': time.time(),
