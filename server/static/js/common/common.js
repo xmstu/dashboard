@@ -618,16 +618,19 @@ var common = {
         };
         var counts = data.limit;
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+            console.log(res.data)
             var data = res.data;
             var unread = res.unread;
+            var counts = res.count;
             var str = '';
-            if (data&&data != '') {
+            if (data) {
+                alert(1)
                 for (var i = 0; i < counts; i++) {
-                    var id = data[i].id;
+                    var id = data[i].id
                     var create_time = data[i].create_time;
                     var title = data[i].title;
                     var is_read=data[i].is_read
-                    str += '<li class="message-center-simple" value="' + id + '"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
+                    str += '<li class="message-center-simple"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
                 }
                 $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
                 $(".message-count-show").after(str);
