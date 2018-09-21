@@ -31,7 +31,7 @@ def login():
     if not SessionOperationClass.check():
         # 设置session过期时间
         session.permanent = True
-        app.permanent_session_lifetime = timedelta(hours=2)
+        app.permanent_session_lifetime = timedelta(minutes=10)
         return render_template('/login/login.html')
     return redirect('/home/')
 

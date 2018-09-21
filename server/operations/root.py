@@ -50,7 +50,6 @@ class RootManagement(object):
             log.error('Error:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='删除账户失败'))
 
-
     @staticmethod
     @make_decorator
     def post_data(params):

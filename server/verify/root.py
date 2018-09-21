@@ -1,11 +1,9 @@
-import hashlib
-
 from flask_restful import abort
 
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_resp, APIStatus
-from server.utils.extend import pwd_to_hash, Check
+from server.utils.extend import pwd_to_hash
 
 
 class RootManagement(object):
@@ -28,16 +26,13 @@ class RootManagement(object):
     @make_decorator
     def check_put_params(params):
         try:
-            params['account'] = str(params.get('account') or '')
+            params['comment'] = str(params.get('comment') or '')
             params['user_name'] = str(params.get('user_name') or '')
             pwd = str(params.get('password') or '')
             params['role_id'] = list(params.get('role_id') or [])
             params['admin_id'] = int(params.get('admin_id') or 0)
             params['is_active'] = int(params.get('is_active') or 0)
 
-            if params['account']:
-                if not Check.is_mobile(params['account']):
-                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='手机号非法'))
             # 加密密码
             if pwd:
                 params['password'] = pwd_to_hash(params['user_name'], pwd)
@@ -50,13 +45,11 @@ class RootManagement(object):
     @make_decorator
     def check_post_params(params):
         try:
-            params['account'] = str(params.get('account') or '')
+            params['comment'] = str(params.get('comment') or '')
             params['user_name'] = str(params.get('user_name') or '')
             pwd = str(params.get('password') or '')
             params['role_id'] = list(params.get('role_id') or [])
 
-            if not Check.is_mobile(params['account']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='手机号非法'))
             # 加密密码
             params['password'] = pwd_to_hash(params['user_name'], pwd)
 
@@ -121,7 +114,8 @@ class RootRoleManagement(object):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='role_id不能为空或0'))
 
             # 参数校验
-            if not params['type'] and not params['role_name'] and not params['role_comment'] and not params['region_id'] and not params['page_id_list']:
+            if not params['type'] and not params['role_name'] and not params['role_comment'] and not params[
+                'region_id'] and not params['page_id_list']:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='最起码请输入一个参数'))
 
             # 如果有page_id_list
@@ -168,8 +162,9 @@ class RootPageManagement(object):
             params['page_path'] = str(params.get('page_path') or '')
             params['parent_menu_id'] = int(params.get('parent_menu_id') or 0)
 
-            if not params['page_name'] and not params['page_comment'] and not params['page_path'] and not params['parent_menu_id']:
-                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='最起码请传一个参数'))
+            if not params['page_name'] and not params['page_comment'] and not params['page_path'] and not params[
+                'parent_menu_id']:
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='最起码请传一个参数'))
 
             return Response(params=params)
         except Exception as e:
@@ -207,7 +202,8 @@ class RootMenuManagement(object):
             params['parent_menu_id'] = int(params.get('parent_menu_id') or 0)
 
             # 判断是否传入修改参数
-            if not params['menu_name'] and not params['menu_comment'] and not params['page_id'] and not params['parent_menu_id']:
+            if not params['menu_name'] and not params['menu_comment'] and not params['page_id'] and not params[
+                'parent_menu_id']:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='最起码请传一个参数'))
 
             return Response(params=params)
