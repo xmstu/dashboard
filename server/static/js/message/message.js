@@ -9,6 +9,7 @@ var set = {
             var url = '/message/user/';
             var data = {
                 'account': $('#user-info').attr('data-account'),
+                'user_name': $('#user-info').attr('data-user-name'),
                 'page': 1,
                 'limit': 10
             };
@@ -20,9 +21,9 @@ var set = {
                 var data = res.data;
                 var str = '';
                 for (var i = 0; i < count; i++) {
-                     str += '<div class="layui-colla-item">';
-                        str += '<div data-value="' + data[i].id + '" class="layui-colla-title">' + data[i].title;
-                        str += '<p class="layui-colla-title-child"><span>' + data[i].date + '</span><i class="read-status orange">' + _this.setAbout(data[i].is_read) + '</i></p></div>';
+                    str += '<div class="layui-colla-item">';
+                    str += '<div data-value="' + data[i].id + '" class="layui-colla-title collapse-' + i + '">' + data[i].title;
+                    str += '<p class="layui-colla-title-child"><span>' + data[i].date + '</span><i class="read-status orange">' + _this.setAbout(data[i].is_read) + '</i></p></div>';
                     if (i == 0) {
                         str += '<div class="layui-colla-content  layui-show">' + data[i].content + '</div></div>';
                     } else {
@@ -31,18 +32,23 @@ var set = {
                 }
                 $('.layui-collapse').html(_this.resetData(str));
                 element.init();//告诉layui对js模板重新渲染
-                    if (data.show == true) {
-                        var url = '/message/user/' + $(this).attr('data-value') + '/?account=' + $('#user-info').attr('data-account');
-                        var data = {};
-                        var _that = $(this);
-                        http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function () {
-                            if (_that.find('.read-status').text() == '未读' && res.status == 100000) {
-                                _that.find('.read-status').html('已读')
 
-                            }
-                             layer.closeAll('loading')
-                        })
+                element.on('collapse(message_list)', function (data_set) {
+                    if (data_set.show == true) {
+                        var url_set = '/message/user/' + $(this).attr('data-value') + '/?account=' + $('#user-info').attr('data-account');
+                        var _that = $(this);
+                        _this.isRead(url_set, _that)
                     }
+                });
+                /*-----第一条消息默认是展开的所以要单独设置已读状态，写在这里是因为等layui渲染完毕之后再获取dom-----*/
+                var first_msg = $('.collapse-0');
+                console.log(first_msg);
+                var value = first_msg.attr('data-value');
+                // var url_set = '/message/user/' + value + '/?account=' + $('#user-info').attr('data-account');
+                if (first_msg.find('.read-status').html() == '未读') {
+                    first_msg.find('.read-status').html('已读')
+                }
+                /*------------------------------------------------------------------------------------*/
                 laypage.render({
                     elem: $('#pagination')
                     , count: count
@@ -50,13 +56,15 @@ var set = {
                     , jump: function (obj) {
                     }
                 })
-            },function(xhttp){
+            }, function (xhttp) {
                 layer.closeAll('loading')
             })
         })
 
     },
     dataRender: function () {
+
+
     },
     setAbout: function (num) {
         if (num == 1) {
@@ -72,6 +80,15 @@ var set = {
         str = str.replace(/&nbsp;/g, '');
         str = str.replace(/\n/g, '');
         return str
+    },
+    isRead: function (url, element) {
+        http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
+            if (element.find('.read-status').text() == '未读' && res.status == 100000) {
+                element.find('.read-status').html('已读')
+
+            }
+            layer.closeAll('loading')
+        })
     }
 };
 set.init();

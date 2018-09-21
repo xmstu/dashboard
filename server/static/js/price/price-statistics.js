@@ -1,3 +1,4 @@
+/*价格统计*/
 $(window).load(function () {
     $('.main-content-right').addClass('animated fadeIn')
 });
@@ -334,7 +335,7 @@ var set = {
 };
 set.init();
 $('#search_btn').click(function (e) {
-    e.preventDefault()
+    e.preventDefault();
     set.dataInit();
     console.log($('#date_show_one').val())
 })
