@@ -355,7 +355,7 @@ class RootRoleManagementModel(object):
                 del_admin_role_cmd = """UPDATE tb_inf_admin_roles SET is_deleted = 1 WHERE role_id =:role_id"""
                 del_role_cmd_rowcount = tran.conn.update(del_role_cmd, params)
                 del_admin_role_cmd_rowcount = tran.conn.update(del_admin_role_cmd, params)
-                if del_role_cmd_rowcount and del_admin_role_cmd_rowcount:
+                if del_role_cmd_rowcount or del_admin_role_cmd_rowcount:
                     return del_role_cmd_rowcount + del_admin_role_cmd_rowcount
                 return
         except Exception as e:
