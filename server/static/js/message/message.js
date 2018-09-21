@@ -35,9 +35,10 @@ var set = {
 
                 element.on('collapse(message_list)', function (data_set) {
                     if (data_set.show == true) {
-                        var url_set = '/message/user/' + $(this).attr('data-value') + '/?account=' + $('#user-info').attr('data-account');
+                        var url_set = '/message/user/' + $(this).attr('data-value') + '/';
                         var _that = $(this);
-                        _this.isRead(url_set, _that)
+                        var data = JSON.stringify({user_name:$('#user-info').attr('data-user-name')});
+                        _this.isRead(url_set, _that,data)
                     }
                 });
                 /*-----第一条消息默认是展开的所以要单独设置已读状态，写在这里是因为等layui渲染完毕之后再获取dom-----*/
@@ -81,8 +82,8 @@ var set = {
         str = str.replace(/\n/g, '');
         return str
     },
-    isRead: function (url, element) {
-        http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
+    isRead: function (url, element,data) {
+        http.ajax.put_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             if (element.find('.read-status').text() == '未读' && res.status == 100000) {
                 element.find('.read-status').html('已读')
 

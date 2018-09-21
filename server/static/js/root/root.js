@@ -177,9 +177,8 @@ var set = {
                 },
                 page: {
                     layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
-                    , groups: 1 //只显示 1 个连续页码
-                    , first: false //不显示首页
-                    , last: false //不显示尾页
+                    , first: true //不显示首页
+                    , last: true //不显示尾页
                 },
                 id: 'dataTable'
             })
@@ -350,9 +349,8 @@ var set = {
                 },
                 page: {
                     layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
-                    , groups: 1 //只显示 1 个连续页码
-                    , first: false //不显示首页
-                    , last: false //不显示尾页
+                    , first: true //不显示首页
+                    , last: true //不显示尾页
                 },
                 id: 'managerTable'
             })
