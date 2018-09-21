@@ -611,6 +611,7 @@ var common = {
     messageRequest: function () {
         var url = '/message/user/';
         var data = {
+            'user_name':$('#user-info').attr('data-user-name'),
             'account': $('#user-info').attr('data-account'),
             'page': 1,
             'limit': 6

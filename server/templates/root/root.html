@@ -48,7 +48,7 @@
     <!--下面的是弹窗部分，这个页面弹窗有点多(╯▽╰)-->
     <!--用户添加弹窗-->
     <div id="popup" style="display: none;">
-        <form class="layui-form layui-form-pane" action="">
+        <form class="layui-form layui-form-pane" lay-filter="add_user" action="">
             <div style="display: block" class="layui-form-item">
                 <label class="layui-form-label">人员账号</label>
                 <div class="layui-input-block">
@@ -71,18 +71,14 @@
                 </div>
             </div>
             <div style="display: block;" class="layui-form-item">
-                <label class="layui-form-label">角色id</label>
-                <div class="layui-input-block">
-                    <input type="text" name="name" id="role_id" autocomplete="off"
-                           placeholder="没校验，输入与后台保存一致的id就行了" class="layui-input">
-                </div>
+                <div class="user-checkbox"></div>
             </div>
         </form>
         <button class="layui-btn" id="confirm_add">确定添加</button>
     </div>
     <!--用户编辑弹窗-->
     <div id="popup_one" style="display: none;">
-        <form class="layui-form layui-form-pane" action="">
+        <form class="layui-form layui-form-pane" lay-filter="edit_user" action="">
             <div style="display: block" class="layui-form-item">
                 <label class="layui-form-label">人员姓名</label>
                 <div class="layui-input-block">
@@ -98,11 +94,7 @@
                 </div>
             </div>
             <div style="display: block;" class="layui-form-item">
-                <label class="layui-form-label">角色id</label>
-                <div class="layui-input-block">
-                    <input type="text" name="name" id="user_id" autocomplete="off"
-                           placeholder="目前只能写1,2,3,4,5,6" class="layui-input">
-                </div>
+               <div class="edit-user-checkbox"></div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">单选框</label>

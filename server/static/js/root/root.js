@@ -42,12 +42,28 @@ var set = {
                         phone = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
                         var location = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
                         $('#name_edit').val(content);
+                        /**/
+                        var url = '/root/management/' + user_id;
+                        http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
+                            console.log(res);
+                            var role_list = res.data;
+                            var str = '';
+                            if (role_list) {
+                                for (var i = 0; i < role_list.length; i++) {
+                                    str += '<input type="checkbox"  check' + _this.check(role_list[i].status)+ ' lay-filter="checkbox" data-filter="role_checkbox" data-id="' + role_list[i].role_id + '" name="like[root_list_' + i + ']" title=' + role_list[i].name + '>'
+                                }
+                                $('.edit-user-checkbox').html(str);
+                            }
+                            /*告诉layui重载*/
+                            form.render(null, 'edit_user');
+                            layer.closeAll('loading')
+                        });
                         layer.open({
                             type: 1,
                             title: '编辑信息',
                             closeBtn: 1,
                             shadeClose: true,
-                            area: ['460px', '290px'],
+                            area: ['500px', '330px'],
                             skin: "layui-layer-molv",
                             content: $('#popup_one')
                         });
@@ -59,12 +75,20 @@ var set = {
                         var role_id = $('#role_id').val();
                         var user_name = $('#user_name').val();
                         var add_user_password = $('#add_user_password').val();
+                        var user_id_arr = [];
+                        /*监听layui生成的元素*/
+                        $('.user-checkbox .layui-unselect').each(function (val) {
+                            if ($(this).is('.layui-form-checked')) {
+                                user_id_arr.push($(this).prev().attr('data-id'))
+                            }
+                        });
+                        console.log(user_id_arr);
                         var url = '/root/management/';
                         var data = {
                             "account": phone_number,
                             "user_name": user_name,
                             "password": add_user_password,
-                            "role_id": role_id
+                            "role_id": user_id_arr
                         };
                         data = JSON.stringify(data);
                         http.ajax.post_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
@@ -76,7 +100,7 @@ var set = {
                             setTimeout(function () {
                                 layer.closeAll();
                                 window.location.reload();
-                            }, 700)
+                            }, 1400)
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
                                 layer.msg('失败', {
@@ -92,12 +116,18 @@ var set = {
                     $('#confirm_fix').click(function () {
                         var name_edit = $('#name_edit').val();
                         var password = $('#password').val();
-                        var role_id = Number($('#user_id').val());
+                         var role_id_arr = [];
+                        /*监听layui生成的元素*/
+                        $('.edit-user-checkbox .layui-unselect').each(function (val) {
+                            if ($(this).is('.layui-form-checked')) {
+                                role_id_arr.push($(this).prev().attr('data-id'))
+                            }
+                        });
                         var data = {
                             "account": phone,
                             "user_name": name_edit,
                             "password": hex_md5(password),
-                            "role_id": role_id,
+                            "role_id": role_id_arr,
                             "is_active": Number($('input[name=role]:checked').val())
                         };
                         data = JSON.stringify(data);
@@ -110,7 +140,7 @@ var set = {
                                 setTimeout(function () {
                                     layer.closeAll(); //
                                     tableIns.reload()
-                                }, 700)
+                                }, 1400)
                             }
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
@@ -142,7 +172,7 @@ var set = {
                                         });
                                         setTimeout(function () {
                                             tableIns.reload();
-                                        }, 700)
+                                        }, 1400)
                                     }
                                 },
                                 error: function () {
@@ -187,7 +217,7 @@ var set = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field:'id',title:"角色ID"},
+                    {field: 'id', title: "角色ID"},
                     {field: 'role_name', title: '身份信息'},
                     {field: 'region_id', title: '城市id'},
                     {field: 'region_name', title: '管理城市'},
@@ -203,21 +233,21 @@ var set = {
                     /*编辑图标点击*/
                     $('.edit-operate').click(function () {
                         var content = $(this).parents('tr').children('td:eq(0)').find('.layui-table-cell').text();
-                         role_id = $(this).attr('data-id');
-                         $('#role_name_edit').val(content);
-                        var url = '/root/role_management/'+role_id;
+                        role_id = $(this).attr('data-id');
+                        $('#role_name_edit').val(content);
+                        var url = '/root/role_management/' + role_id;
                         http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
                             console.log(res.data);
-                              var page_list = res.data;
-                              var str = '';
-                              for (var i = 0; i < page_list.length; i++) {
-                                  console.log(page_list[i].status)
-                                  str += '<input type="checkbox"  check'+_this.check(page_list[i].status)+' lay-filter="edit_role" data-filter="edit_role_checkbox" data-id="' + page_list[i].page_id + '" name="like[root_edit_' + i + ']" title=' + page_list[i].name + '>'
-                              }
-                              $('.edit-checkbox').html(str);
-                              /*告诉layui重载*/
-                              form.render(null, 'edit_root');
-                              layer.closeAll('loading')
+                            var page_list = res.data;
+                            var str = '';
+                            for (var i = 0; i < page_list.length; i++) {
+                                console.log(page_list[i].status)
+                                str += '<input type="checkbox"  check' + _this.check(page_list[i].status) + ' lay-filter="edit_role" data-filter="edit_role_checkbox" data-id="' + page_list[i].page_id + '" name="like[root_edit_' + i + ']" title=' + page_list[i].name + '>'
+                            }
+                            $('.edit-checkbox').html(str);
+                            /*告诉layui重载*/
+                            form.render(null, 'edit_root');
+                            layer.closeAll('loading')
                         });
                         layer.open({
                             type: 1,
@@ -270,7 +300,7 @@ var set = {
                         })
                     });
                     /*编辑*/
-                     $('#confirm_edit_root').click(function (e) {
+                    $('#confirm_edit_root').click(function (e) {
                         e.preventDefault();
                         var role_name = $('#role_name_edit').val();
                         var region_id = $('#area_edit').val();
@@ -284,7 +314,7 @@ var set = {
                             }
                         });
                         console.log(page_id_arr);
-                        var url = '/root/role_management/'+role_id;
+                        var url = '/root/role_management/' + role_id;
                         var data = {
                             "type": type,
                             "role_name": role_name,
@@ -373,12 +403,28 @@ var set = {
             offsetLeft: 0
         });
         $('#add_user').click(function () {
+            /*获取所有角色列表*/
+            var url = '/root/management/' + 0;
+            http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
+                console.log(res);
+                var role_list = res.data;
+                var str = '';
+                if (role_list) {
+                    for (var i = 0; i < role_list.length; i++) {
+                        str += '<input type="checkbox" lay-filter="checkbox" data-filter="role_checkbox" data-id="' + role_list[i].role_id + '" name="like[root_list_' + i + ']" title=' + role_list[i].name + '>'
+                    }
+                    $('.user-checkbox').html(str);
+                }
+                /*告诉layui重载*/
+                form.render(null, 'add_user');
+                layer.closeAll('loading')
+            });
             layer.open({
                 type: 1,
                 title: '修改角色信息',
                 closeBtn: 1,
                 shadeClose: true,
-                area: ['450px', '300px'],
+                area: ['500px', '330px'],
                 skin: "layui-layer-molv",
                 content: $('#popup')
             });
@@ -386,7 +432,7 @@ var set = {
         })
         $('#add_user_city_manager').click(function (e) {
             e.preventDefault();
-            /*不想分页就写100*/
+            /*获取所有页面列表--不想分页就写100*/
             var url = '/root/page_management/?page=1&limit=100';
             http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
                 var page_list = res.data;
@@ -414,10 +460,10 @@ var set = {
     edit: function () {
         var _that = this;
     },
-    check:function(str){
-        if(str==0){
+    check: function (str) {
+        if (str == 0) {
             return 'e'
-        }else if(str==1) {
+        } else if (str == 1) {
             return 'ed'
         }
     }

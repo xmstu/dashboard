@@ -22,90 +22,16 @@
             </section>
             <div>
                 <div class="m-c-l-content">
-                    <div class="content-header">
-                        <h2><i class="iconfont icon-yingkuipinghengfenxi"></i>供需平衡数据统计</h2>
-                        <hr/>
-                    </div>
                     <div class="part-1">
-                        <div class="part-1-top">
-                            <form action="" class="layui-form layui-form-pane">
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 176px;">
-                                        <label class="layui-form-label">开始日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_one" name="date_one" autocomplete="off"
-                                                   lay-verify="date" class="layui-input" type="text"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 176px;">
-                                        <label class="layui-form-label">结束日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="date_show_two" name="date_two" autocomplete="off"
-                                                   lay-verify="date_show_two" class="layui-input" type="text"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item " id="">
-                                    <div class="layui-inline" style="margin-right: 4px;">
-                                        <label class="layui-form-label">货源类型</label>
-                                        <div class="layui-input-inline" style="width: 110px">
-                                            <select id="goods_price_types" name="modules" lay-verify="required"
-                                                    lay-search="">
-                                                <option value="1">议价</option>
-                                                <option value="2">一口价</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item layui-item-spec" id="">
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">距离类型</label>
-                                        <div class="layui-input-inline" style="width: 110px">
-                                            <select id="haul_dist" name="modules" lay-verify="required" lay-search="">
-                                                <option value="">全部类型</option>
-                                                <option value="1">同城</option>
-                                                <option value="2">跨城</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">所属地区</label>
-                                        <div id="city_manager_two" class="layui-input-inline"
-                                             style="width:110px;display: none;">
-                                            <select id="city_area" name="modules" lay-verify="required" lay-search="">
-                                                <option value="">全部区域</option>
-                                                {% for location in locations %}
-                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
-                                                </option>
-                                                {% endfor %}</select>
-                                        </div>
-                                        <div id="super_manager_area_two" class="layui-input-inline"
-                                             style="width:110px;display: none;">
-                                            <input id="super_manager_area_zero" placeholder="请选择地区"
-                                                   name="super_manager_area_zero" autocomplete="off"
-                                                   lay-verify="super_manager_area_zero" class="layui-input"
-                                                   type="text"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button id="search_btn" style="position: relative;padding-left: 20px;"
-                                        class="layui-btn "><i style="" class="iconfont icon-sousuo1"></i> 搜索
-                                </button>
-                            </form>
-                        </div>
                         <div class="part-1-bottom">
                             <ul class="clearfix" style="position: relative;"></ul>
                         </div>
-                        <div class="river"></div>
                         <div class="part-2">
+                          <div class="content-header">
+                        <h2><i class="iconfont icon-yingkuipinghengfenxi"></i>为货找车</h2>
+                        <hr/>
+                    </div>
                             <form id="select_box" lay-filter="resetForm" action="" class="layui-form layui-form-pane">
-
                                 <div class="layui-form-item">
                                     <div class="layui-inline">
                                         <label class="layui-form-label">货主手机</label>

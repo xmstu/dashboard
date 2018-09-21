@@ -1,6 +1,6 @@
 /**
-* 首页，上面的圆环是用echarts做的，下面是layui的数据表格。
-*/
+ * 首页，上面的圆环是用echarts做的，下面是layui的数据表格。
+ */
 $(".layui-table-cell").css({
     "height": "auto!important"
 });
@@ -17,10 +17,9 @@ setTimeout(function () {
         $(".area-menu-about>a").addClass("selected-active");
         $(".area-menu-about>a>i").addClass("select-active");
     },
-10);
+    10);
 layui.use(["laydate", "form", "table"],
     function () {
-        dataInit(dataArr2);
         layer.load();
         var laydate = layui.laydate;
         var table = layui.table;
@@ -28,7 +27,7 @@ layui.use(["laydate", "form", "table"],
             elem: "#date_show_one",
             theme: "#009688",
             calendar: true,
-            format:'yyyy/MM/dd',
+            format: 'yyyy/MM/dd',
             max: String(common.getNowFormatDate()[0]),
             done: function (val, index) {
                 var startTime = common.timeTransform($("#date_show_one").val());
@@ -43,7 +42,7 @@ layui.use(["laydate", "form", "table"],
             elem: "#date_show_two",
             theme: "#009688",
             calendar: true,
-             format:'yyyy/MM/dd',
+            format: 'yyyy/MM/dd',
             max: String(common.getNowFormatDate()[0]),
             done: function (val, index) {
                 var startTime = common.timeTransform($("#date_show_one").val());
@@ -55,15 +54,7 @@ layui.use(["laydate", "form", "table"],
             }
         })
     });
-$("#search_btn").click(function (e) {
-    e.preventDefault();
-    var current_val = $("#goods_price_types").val();
-    if (current_val == 2) {
-        dataInit(dataArr1)
-    } else if (current_val == 1) {
-        dataInit(dataArr2)
-    }
-});
+
 $("#user_search_box").on("click",
     function (e) {
         e.preventDefault();
@@ -80,156 +71,6 @@ $("#user_search_box").on("click",
         var url = "/city/latest_orders/?goods_type=" + data.goods_type + "&mobile=" + data.mobile + "&is_called=" + data.is_called + "&goods_price_type=" + data.goods_price_type + "&vehicle_length=" + data.vehicle_length + "&node_id=" + data.node_id + "&spec_tag=" + data.spec_tag + "&is_addition=" + data.is_addition;
         tableInit(url)
     });
-
-function dataInit(dataArrSet) {
-    layui.use("layer",
-        function () {
-            var layer = layui.layer;
-            var start_time = $.trim($("#date_show_one").val());
-            var end_time = $.trim($("#date_show_two").val());
-            if (common.timeTransform(start_time) > common.timeTransform(end_time)) {
-                layer.msg("提示：开始时间大于了结束时间！");
-                return false
-            }
-            var haul_dist = $.trim($("#haul_dist").val());
-            var region_id = $.trim($("#city_area").val()) == "" ? common.role_area_show($("#super_manager_area_zero")) : $.trim($("#city_area").val());
-            if (start_time != "") {
-                start_time = common.timeTransform(start_time + " 00:00:00")
-            }
-            if (end_time != "") {
-                end_time = common.timeTransform(end_time + " 23:59:59")
-            }
-            var url = "/city/resource/";
-            var data = {
-                start_time: start_time,
-                end_time: end_time,
-                region_id: region_id,
-                goods_price_type: $('#goods_price_types').val(),
-                haul_dist: haul_dist
-            };
-            http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2,
-                function (res) {
-                    var arr = Object.keys(res.data);
-                    console.log(arr.length)
-                    if (arr.length == 0) {
-                        $('.part-1-bottom > ul').html('')
-                        var results_ = '<li style="font-size: 13px;color: #aaa;text-align: center;line-height: 22px;height: 40px;line-height: 40px;width: 100%;">该条件下无数据</li>'
-                        $('.part-1-bottom > ul').append(results_)
-                    } else if (arr.length > 0) {
-                        var str = "";
-                        for (var i = 0; i < arr.length; i++) {
-                            str += '<li class="charts-lists"><div class="charts-container" id="charts_container_' + i + '"></div><div class="data-list-container' + i + '"></li>';
-                            $(".data-list-container0").append($(".tip-list-show0"))
-                        }
-                        $(".part-1-bottom ul").empty();
-                        $(".part-1-bottom ul").append(str);
-                        var dataStyle = {
-                            normal: {
-                                label: {
-                                    show: false
-                                },
-                                labelLine: {
-                                    show: false
-                                }
-                            }
-                        };
-                        var result = "";
-                        $.each(res.data,
-                            function (index, val) {
-                                if (val[1][2].value < 0) {
-                                    val[1][2].value = 0
-                                }
-                                if (arr.length >= 0) {
-                                    arr.length--
-                                }
-                                 var result_ano = '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ":" + val[0][0].value + "单</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ":" + val[0][1].value + "单</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ":" + val[1][0].value + "辆</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ":" + val[1][1].value + "辆</span>";
-                                        result_ano += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ":" + val[1][2].value + "辆</span>";
-                                        var all_count_ano = '<p class="all_count">货源数:<span>' + (val[0][0].value + val[0][1].value + val[0][2].value) + "单</span></p>";
-                                        var all_count_ano_1 = '<p class="all_count_1">车辆数:<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
-                                if ($("#goods_price_types").val() == 1) {
-                                      $(".data-list-container" + arr.length).html("");
-                                        $(".data-list-container" + arr.length).append(all_count_ano + all_count_ano_1 + result_ano)
-                                } else {
-                                    if ($("#goods_price_types").val() == 2) {
-                                          var result = '<span class=" tip-show-set tip-list-show' + arr.length + '">' + val[0][0].name + ":" + val[0][0].value + "单</span>";
-                                result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][1].name + ":" + val[0][1].value + "单</span>";
-                                result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[0][2].name + ":" + val[0][2].value + "单</span>";
-                                result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][0].name + ":" + val[1][0].value + "辆</span>";
-                                result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][1].name + ":" + val[1][1].value + "辆</span>";
-                                result += '<span class="tip-show-set tip-list-show' + arr.length + '">' + val[1][2].name + ":" + val[1][2].value + "辆</span>";
-                                var all_count = '<p class="all_count">货源数:<span>' + (val[0][0].value + val[0][1].value + val[0][2].value) + "单</span></p>";
-                                var all_count_1 = '<p class="all_count_1">车辆数:<span>' + (val[1][0].value + val[1][1].value) + "辆</span></p>";
-                                $(".data-list-container" + arr.length).html("");
-                                    $(".data-list-container" + arr.length).append(all_count + all_count_1 + result)
-                                    }
-                                }
-                                var dom = document.getElementById("charts_container_" + arr.length + "");
-                                var myChart = echarts.init(dom);
-                                option = {
-                                    title: {
-                                        text: index,
-                                        subtext: null,
-                                        x: "center",
-                                        y: "center",
-                                        itemGap: 20,
-                                        textStyle: {
-                                            color: "skyblue",
-                                            fontFamily: "微软雅黑",
-                                            fontSize: 18,
-                                            fontWeight: "bolder"
-                                        }
-                                    },
-                                    tooltip: {
-                                        trigger: "item",
-                                        show: true,
-                                        formatter: "{a} <br/>{b} : {c} ({d}%)",
-                                        extraCssText: "width:auto;height:60px;background:rgba(0,0,0,.4);"
-                                    },
-                                    legend: {
-                                        orient: "vertical",
-                                        x: "left",
-                                        y: "top",
-                                        data: dataArrSet
-                                    },
-                                    toolbox: {
-                                        show: true,
-                                        feature: {
-                                            mark: {
-                                                show: true
-                                            }
-                                        }
-                                    },
-                                    color: ["skyblue", "#7dd4f8", "#0484C1", "#2973a7", "#497080", "#5fd779", "#56b35d"],
-                                    series: [{
-                                        name: "货源数",
-                                        type: "pie",
-                                        clockWise: false,
-                                        radius: [90, 105],
-                                        itemStyle: dataStyle,
-                                        data: val[0]
-                                    },
-                                        {
-                                            name: "车辆数",
-                                            type: "pie",
-                                            clockWise: false,
-                                            radius: [75, 90],
-                                            itemStyle: dataStyle,
-                                            data: val[1]
-                                        }]
-                                };
-                                if (option && typeof option === "object") {
-                                    myChart.setOption(option, true)
-                                }
-                            });
-                    }
-                    layer.closeAll("loading");
-                    $(".main-content-right").addClass("animated fadeIn")
-                })
-        })
-}
 
 function tableInit(url) {
     layui.use(["layer", "table", "form"],
@@ -307,7 +148,13 @@ function tableInit(url) {
                 done: function (res, curr, count) {
                     layer.closeAll("loading");
                     common.clearSelect()
-                    $("[data-field]>div").css({"padding": "0 6px" });
+                    $("[data-field]>div").css({"padding": "0 6px"});
+                     $("td[data-field='goods_type']").children().each(function (val) {
+                            if ($(this).text() != '') {
+                                var result = $(this).text().split('\n');
+                                $(this).html(result[0] +'<br>'+ result[1])
+                            }
+                        })
                     $(".nearby-one").on("click", function (e) {
                         e.preventDefault();
                         var content_title = $(this).siblings('p.display-content').text()
@@ -319,14 +166,6 @@ function tableInit(url) {
                         var val = $(this).val();
                         var goods_type = $(this).attr('data-type')
                         var url = "/city/nearby_cars/" + val + '?goods_type=' + goods_type;
-                        /*
-                           首页表格按钮框点击弹出的遮罩层筛选<暂时废除>
-                         form.on("select(interest)",
-                               function (res) {
-                                   var value = res.value;
-                                   var url_reset = "/city/nearby_cars/" + val + "?goods_type" + value;
-                                   tableReset(url_reset)
-                               });*/
                         tableReset(url);
                         layer.open({
                             type: 1,
@@ -364,7 +203,7 @@ function tableInit(url) {
                         if ($(this).text() != "") {
                             var str = $(this).text();
                             str = str.split("\n");
-                            $(this).html(str[0] + "<br>" + str[1]+ "<br>" + str[2])
+                            $(this).html(str[0] + "<br>" + str[1] + "<br>" + str[2])
                         }
                     });
                     $("td[data-field='price']").children().each(function () {
@@ -426,6 +265,7 @@ function tableInit(url) {
                             $(this).html(str + "次")
                         }
                     });
+                    $('.main-content-right').addClass('animated fadeIn')
                 },
                 id: "testReload",
                 page: true
@@ -480,7 +320,7 @@ function tableReset(url) {
                         title: "车长",
                         // width: 80
                     },
-                     {
+                    {
                         field: "vehicle_type",
                         title: "车型",
                         // width: 80
@@ -508,7 +348,7 @@ function tableReset(url) {
                         width: 80
                     }]],
                 done: function (res) {
-                   common.ajaxSetting()
+                    common.ajaxSetting()
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
@@ -603,7 +443,7 @@ function popupRender(url) {
                         width: 80
                     }]],
                 done: function (res) {
-                   common.ajaxSetting()
+                    common.ajaxSetting()
                     $("td[data-field='is_trust_member']").children().each(function () {
                         if ($(this).text() != "") {
                             var str = $(this).text();
