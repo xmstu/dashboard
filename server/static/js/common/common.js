@@ -624,7 +624,6 @@ var common = {
             var counts = res.count;
             var str = '';
             if (data) {
-                alert(1)
                 for (var i = 0; i < counts; i++) {
                     var id = data[i].id
                     var create_time = data[i].create_time;
