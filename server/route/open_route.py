@@ -29,9 +29,9 @@ def login():
     """登录页面"""
     # 已登录返回首页
     if not SessionOperationClass.check():
-        # 设置session过期时间
+        # 设置session过期时间为2小时
         session.permanent = True
-        app.permanent_session_lifetime = timedelta(minutes=10)
+        app.permanent_session_lifetime = timedelta(seconds=7200)
         return render_template('/login/login.html')
     return redirect('/home/')
 
