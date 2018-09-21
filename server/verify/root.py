@@ -33,6 +33,9 @@ class RootManagement(object):
             params['admin_id'] = int(params.get('admin_id') or 0)
             params['is_active'] = int(params.get('is_active') or 0)
 
+            if params["role_id"]:
+                params["role_id"] = [int(i) for i in params["role_id"]]
+
             # 加密密码
             if pwd:
                 params['password'] = pwd_to_hash(params['user_name'], pwd)
@@ -49,6 +52,9 @@ class RootManagement(object):
             params['user_name'] = str(params.get('user_name') or '')
             pwd = str(params.get('password') or '')
             params['role_id'] = list(params.get('role_id') or [])
+
+            if params["role_id"]:
+                params["role_id"] = [int(i) for i in params["role_id"]]
 
             # 加密密码
             params['password'] = pwd_to_hash(params['user_name'], pwd)
@@ -87,6 +93,8 @@ class RootRoleManagement(object):
 
             if not params['page_id_list']:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='最起码要有一个页面id'))
+
+            params['page_id_list'] = [int(i) for i in params['page_id_list']]
 
             return Response(params=params)
         except Exception as e:
