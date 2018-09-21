@@ -96,14 +96,14 @@ class MessageUser(Resource):
 
 class MessageUserOperator(Resource):
     @staticmethod
-    @doc.request_user_message_read_get
+    @doc.request_user_message_read_post
     @operations.MessageUser.update_msg_read(params=dict)
     @verify.MessageUserVerify.check_is_read_params(params=dict, msg_id=int)
-    def get(id):
+    def post(msg_id):
         """消息已读"""
         if not SessionOperationClass.check():
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
-        resp = Response(params=get_all_arg(), msg_id=id)
+            abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
+        resp = Response(params=get_payload(), msg_id=msg_id)
         return resp
 
 
@@ -111,4 +111,4 @@ ns = api.namespace('message', description='消息窗口接口')
 ns.add_resource(MessageSystem, '/system/')
 ns.add_resource(MessageSystemOperator, '/system/<int:id>/')
 ns.add_resource(MessageUser, '/user/')
-ns.add_resource(MessageUserOperator, '/user/<int:id>/')
+ns.add_resource(MessageUserOperator, '/user/<int:msg_id>/')

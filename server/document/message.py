@@ -29,9 +29,10 @@ request_user_message_list_get = api.doc(params={
     'limit': '条数',
 })
 
-request_user_message_read_get = api.doc(params={
-    'account': '用户名: data-account属性'
-})
+request_user_message_read_post = api.doc(body=api.model('request_user_message_read_post', {
+    'user_name': fields.String(description='用户名'),
+
+}))
 
 response_system_message_list_get = api.response(200, '成功', api.model('response_system_message_list_get', {
     'state': fields.Integer(description='100000'),

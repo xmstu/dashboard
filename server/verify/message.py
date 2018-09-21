@@ -85,11 +85,11 @@ class MessageUserVerify(object):
     @staticmethod
     @make_decorator
     def check_is_read_params(params, msg_id):
-        if not params.get('account'):
+        if not params.get('user_name'):
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='用户获取失败'))
 
         params = {
-            'account': params['account'],
+            'account': params['user_name'],
             'msg_id': msg_id
         }
         return Response(params=params)
