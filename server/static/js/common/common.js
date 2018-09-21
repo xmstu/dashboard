@@ -616,21 +616,25 @@ var common = {
             'page': 1,
             'limit': 6
         };
-        var counts = data.limit;
+
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
             console.log(res.data)
             var data = res.data;
             var unread = res.unread;
             var counts = res.count;
+            console.log(counts)
             var str = '';
             if (data) {
-                for (var i = 0; i < counts; i++) {
-                    var id = data[i].id
+                console.log(data[0].id)
+                $.each(data,function(val,index){
+                    str += '<li class="message-center-simple"><pre><i class="' + select(index.is_read) + '"></i></pre><p>' + index.title + '</p><span> ' + index.create_time + '</span></li>'
+                })
+              /*  for (var i = 0; i < counts; i++) {
                     var create_time = data[i].create_time;
                     var title = data[i].title;
                     var is_read=data[i].is_read
-                    str += '<li class="message-center-simple"><pre><i class="' + select() + '"></i></pre><p>' + title + '</p><span> ' + create_time + '</span></li>'
-                }
+
+                }*/
                 $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
                 $(".message-count-show").after(str);
             }
@@ -640,7 +644,7 @@ var common = {
             }
             $('.message-center .layui-badge').html(res.count);
 
-            function select() {
+            function select(is_read) {
                 if (is_read == 1) {
                     return 'iconfont icon-xinfeng2'
                 } else if (is_read == 0) {
