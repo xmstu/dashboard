@@ -117,13 +117,13 @@ class MessageSystemModel(object):
             FROM
                 (
                 SELECT
-                    DISTINCT shu_users.mobile AS account,
+                    DISTINCT user_name AS account,
                     region_id
                 FROM
                     shd_supplier_areas ssa
                     INNER JOIN shd_suppliers ss ON ss.id = ssa.supplier_id 
-                    INNER JOIN shu_users ON ss.user_id = shu_users.id 
-                    AND shu_users.is_deleted = 0 
+                    INNER JOIN shu_user_profiles ON ss.user_id = shu_user_profiles.user_id 
+                    AND shu_user_profiles.is_deleted = 0 
                 WHERE
                     ssa.is_deleted = 0 
                 AND ss.is_deleted = 0 
@@ -157,13 +157,13 @@ class MessageSystemModel(object):
             FROM
                 (
                 SELECT
-                    DISTINCT shu_users.mobile AS account,
+                    DISTINCT shu_user_profiles.user_name AS account,
                     region_id
                 FROM
                     shd_supplier_areas ssa
                     INNER JOIN shd_supplier_nodes ssn ON ssn.supplier_id = ssa.supplier_id 
-                    INNER JOIN shu_users ON ssn.manager_user_id = shu_users.id 
-                    AND shu_users.is_deleted = 0 
+                    INNER JOIN shu_user_profiles ON ssn.manager_user_id = shu_user_profiles.user_id 
+                    AND shu_user_profiles.is_deleted = 0 
                     AND ssa.is_deleted = 0 
                     AND ssn.is_deleted = 0 
                 ) AS a
