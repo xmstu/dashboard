@@ -3,7 +3,6 @@ from flask import session, render_template, redirect
 from server.cache_data import init_regions
 from server.database import db
 from server.models.login import Login
-from server.status import HTTPStatus
 
 
 def common_route_func(template_name):
@@ -37,6 +36,5 @@ def close_route_func(route, template_name):
         role_all_path, _ = Login.get_menu_path_by_role_id(db.read_bi, session['login'].get('role_id', 0))
         # 判断路由是否在用户的权限路由中
         if route not in role_all_path:
-            return render_template('/exception/except.html', status_coder=HTTPStatus.Forbidden, title='服务器拒绝该请求',
-                                   content='你没有权限访问当前页面')
+            return redirect('/home/')
     return common_route_func(template_name)
