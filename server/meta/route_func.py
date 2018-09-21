@@ -34,7 +34,7 @@ def close_route_func(route, template_name):
     if not session.get('login'):
         return redirect('/login/')
 
-    if session['login'].get('role_type') == 1:
+    if session['login'].get('role') != "超级管理员":
         role_all_path, _ = Login.get_menu_path_by_role_id(db.read_bi, session['login'].get('role_id', 0))
         # 判断路由是否在用户的权限路由中
         if route not in role_all_path:

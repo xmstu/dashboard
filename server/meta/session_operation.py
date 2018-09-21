@@ -66,6 +66,12 @@ class SessionOperationClass(object):
         return role_type, user_id
 
     @staticmethod
+    def get_role_name():
+        """获取角色名字"""
+        role_name = session['login']['role']
+        return role_name
+
+    @staticmethod
     def get_user_locations():
         """获取地区权限"""
         region_id = session['login'].get('locations', [])
