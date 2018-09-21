@@ -98,11 +98,17 @@ class MessageSystemModel(object):
     def get_suppliers_user(cursor):
         """获取区镇合伙人"""
         command = """
-        SELECT DISTINCT shu_users.mobile AS account, 2 AS role
-        FROM shd_suppliers
-        INNER JOIN shu_users ON shd_suppliers.user_id = shu_users.id
-        AND shu_users.is_deleted = 0
-        WHERE shd_suppliers.is_deleted = 0"""
+        SELECT DISTINCT
+            user_name AS account,
+            2 AS role 
+        FROM
+            shd_suppliers
+            INNER JOIN shu_users ON shd_suppliers.user_id = shu_users.id 
+            AND shu_users.is_deleted = 0 
+            INNER JOIN shu_user_profiles ON shu_user_profiles.user_id = shu_users.id
+            AND shu_user_profiles.is_deleted = 0
+        WHERE
+            shd_suppliers.is_deleted = 0"""
 
         result = cursor.query(command)
         return result if result else []
@@ -124,6 +130,8 @@ class MessageSystemModel(object):
                     INNER JOIN shd_suppliers ss ON ss.id = ssa.supplier_id 
                     INNER JOIN shu_user_profiles ON ss.user_id = shu_user_profiles.user_id 
                     AND shu_user_profiles.is_deleted = 0 
+                    INNER JOIN shu_users ON shu_user_profiles.user_id = shu_users.id 
+                    AND shu_users.is_deleted = 0 
                 WHERE
                     ssa.is_deleted = 0 
                 AND ss.is_deleted = 0 
@@ -138,10 +146,12 @@ class MessageSystemModel(object):
     def get_supplier_nodes(cursor):
         """获取网点管理员"""
         command = """
-        SELECT DISTINCT shu_users.mobile AS account, 3 AS role
+        SELECT DISTINCT user_name AS account, 3 AS role
         FROM shd_supplier_nodes
         INNER JOIN shu_users ON shd_supplier_nodes.manager_user_id = shu_users.id
         AND shu_users.is_deleted = 0
+        INNER JOIN shu_user_profiles ON shu_user_profiles.user_id = shu_users.id
+        AND shu_user_profiles.is_deleted = 0
         WHERE shd_supplier_nodes.is_deleted = 0"""
 
         result = cursor.query(command)
@@ -164,6 +174,8 @@ class MessageSystemModel(object):
                     INNER JOIN shd_supplier_nodes ssn ON ssn.supplier_id = ssa.supplier_id 
                     INNER JOIN shu_user_profiles ON ssn.manager_user_id = shu_user_profiles.user_id 
                     AND shu_user_profiles.is_deleted = 0 
+                    INNER JOIN shu_users ON shu_user_profiles.user_id = shu_users.id 
+                    AND shu_users.is_deleted = 0 
                     AND ssa.is_deleted = 0 
                     AND ssn.is_deleted = 0 
                 ) AS a

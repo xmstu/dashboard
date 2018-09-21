@@ -50,20 +50,20 @@ class MessageSystemOperator(Resource):
     @doc.request_system_message_put
     @operations.MessageSystem.put_message(params=dict)
     @verify.MessageSystemVerify.check_put_params(params=dict, user_id=int, msg_id=int)
-    def put(id):
+    def put(msg_id):
         """修改消息内容"""
         # 后台用户
         if SessionOperationClass.check():
             role_type, user_id = SessionOperationClass.get_role()
             if role_type == 1:
-                resp = Response(params=get_payload(), user_id=user_id, msg_id=id)
+                resp = Response(params=get_payload(), user_id=user_id, msg_id=msg_id)
                 return resp
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户修改'))
         abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
     @operations.MessageSystem.delete_message(params=dict)
-    def delete(id):
+    def delete(msg_id):
         """删除消息内容"""
         # 后台用户
         if SessionOperationClass.check():
@@ -71,7 +71,7 @@ class MessageSystemOperator(Resource):
             if role_type == 1:
                 resp = Response(params={
                     'user_id': user_id,
-                    'msg_id': id
+                    'msg_id': msg_id
                 })
                 return resp
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户删除'))
@@ -109,6 +109,6 @@ class MessageUserOperator(Resource):
 
 ns = api.namespace('message', description='消息窗口接口')
 ns.add_resource(MessageSystem, '/system/')
-ns.add_resource(MessageSystemOperator, '/system/<int:id>/')
+ns.add_resource(MessageSystemOperator, '/system/<int:msg_id>/')
 ns.add_resource(MessageUser, '/user/')
 ns.add_resource(MessageUserOperator, '/user/<int:msg_id>/')

@@ -122,7 +122,7 @@ class MessageSystem(object):
         # 修改系统消息表
         MessageSystemModel.update_system_message(db.write_bi, params)
         # 后台用户
-        system_user = MessageSystemModel.get_system_user(db.read_db)
+        system_user = MessageSystemModel.get_system_user(db.read_bi)
         # 区镇合伙人
         suppliers_user = MessageSystemModel.get_suppliers_user(db.read_db)
         # 网点管理员
