@@ -106,48 +106,47 @@ class RootManagementModel(object):
 
                     rowcount += tran.conn.update(command.format(update_sql=update_sql), args={"admin_id": admin_id})
 
-                    if role_id_set:
-                        # 查出所有当前用户的角色id
-                        cur_role_id_list = tran.conn.query("""SELECT role_id, is_deleted FROM tb_inf_admin_roles WHERE admin_id = %d""" % admin_id)
-                        relationship = {i["role_id"]: i["is_deleted"] for i in cur_role_id_list}
-                        cur_role_id_set = {i['role_id'] for i in cur_role_id_list}
+                    # 查出所有当前用户的角色id
+                    cur_role_id_list = tran.conn.query("""SELECT role_id, is_deleted FROM tb_inf_admin_roles WHERE admin_id = %d""" % admin_id)
+                    relationship = {i["role_id"]: i["is_deleted"] for i in cur_role_id_list}
+                    cur_role_id_set = {i['role_id'] for i in cur_role_id_list}
 
-                        # 需要删除关联的role_id
-                        needed_delete_set = cur_role_id_set - role_id_set
-                        # 需要增加关联的role_id
-                        needed_add_set = role_id_set - cur_role_id_set
-                        # 需要将is_deleted更新为0的role_id
-                        needed_update_set = role_id_set & cur_role_id_set
+                    # 需要删除关联的role_id
+                    needed_delete_set = cur_role_id_set - role_id_set
+                    # 需要增加关联的role_id
+                    needed_add_set = role_id_set - cur_role_id_set
+                    # 需要将is_deleted更新为0的role_id
+                    needed_update_set = role_id_set & cur_role_id_set
 
-                        create_time = update_time = int(time.time())
+                    create_time = update_time = int(time.time())
 
-                        if needed_delete_set:
-                            del_sql = """
-                            UPDATE tb_inf_admin_roles SET is_deleted = 1, update_time =:update_time  WHERE role_id = :role_id
-                            """
-                            for del_role_id in needed_delete_set:
-                                if not relationship[del_role_id]:
-                                    rowcount += tran.conn.update(del_sql, {"update_time": update_time, "role_id": del_role_id})
+                    if needed_delete_set:
+                        del_sql = """
+                        UPDATE tb_inf_admin_roles SET is_deleted = 1, update_time =:update_time  WHERE role_id = :role_id
+                        """
+                        for del_role_id in needed_delete_set:
+                            if not relationship[del_role_id]:
+                                rowcount += tran.conn.update(del_sql, {"update_time": update_time, "role_id": del_role_id})
 
-                        if needed_add_set:
+                    if needed_add_set:
 
-                            add_sql = """
-                                            INSERT INTO tb_inf_admin_roles
-                                            (admin_id, role_id, create_time, update_time) 
-                                            VALUES(:admin_id, :role_id, :create_time, :update_time)"""
-                            add_params = {"admin_id": admin_id, "create_time": create_time, "update_time": update_time}
-                            for add_role_id in needed_add_set:
-                                add_params['role_id'] = add_role_id
-                                rowcount += tran.conn.insert(add_sql, add_params)
+                        add_sql = """
+                                        INSERT INTO tb_inf_admin_roles
+                                        (admin_id, role_id, create_time, update_time) 
+                                        VALUES(:admin_id, :role_id, :create_time, :update_time)"""
+                        add_params = {"admin_id": admin_id, "create_time": create_time, "update_time": update_time}
+                        for add_role_id in needed_add_set:
+                            add_params['role_id'] = add_role_id
+                            rowcount += tran.conn.insert(add_sql, add_params)
 
-                        if needed_update_set:
-                            update_sql = """
-                            UPDATE tb_inf_admin_roles SET is_deleted = 0, update_time =:update_time  WHERE role_id = :role_id
-                            """
-                            for update_role_id in needed_update_set:
-                                if relationship[update_role_id]:
-                                    rowcount += tran.conn.update(update_sql, {"update_time": update_time, "role_id": update_role_id})
-                    return rowcount
+                    if needed_update_set:
+                        update_sql = """
+                        UPDATE tb_inf_admin_roles SET is_deleted = 0, update_time =:update_time  WHERE role_id = :role_id
+                        """
+                        for update_role_id in needed_update_set:
+                            if relationship[update_role_id]:
+                                rowcount += tran.conn.update(update_sql, {"update_time": update_time, "role_id": update_role_id})
+                return rowcount
 
         except Exception as e:
             log.error('更新用户失败,失败原因是:{}'.format(e))
