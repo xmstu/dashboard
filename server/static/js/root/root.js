@@ -91,22 +91,17 @@ var set = {
                         data = JSON.stringify(data);
                         http.ajax.post_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                             if (res.status == 100000) {
-                                layer.msg('添加成功', {
-                                    time: 700
+                                layer.msg('添加成功', function(){
+                                    window.location.reload();
                                 })
                             }
-                            setTimeout(function () {
-                                layer.closeAll();
-                                window.location.reload();
-                            }, 700)
+
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
-                                layer.msg('失败', {
-                                    time: 1000
-                                });
-                                setTimeout(function () {
+                                layer.msg('失败', function(){
                                     layer.closeAll()
-                                }, 1000)
+                                });
+
                             }
                         })
                     });
@@ -132,21 +127,15 @@ var set = {
                         var url = '/root/management/' + user_id;
                         http.ajax.put_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                             if (res.status == 100000) {
-                                layer.msg('修改成功', {
-                                    time: 700
+                                layer.msg('修改成功',function(){
+                                     window.location.reload()
                                 });
-                                setTimeout(function () {
-                                    window.location.reload()
-                                }, 700)
                             }
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
-                                layer.msg('失败', {
-                                    time: 1000
+                                layer.msg('失败', function(){
+                                    layer.closeAll("loading")
                                 });
-                                setTimeout(function () {
-                                    layer.closeAll()
-                                }, 1000)
                             }
                         })
                     });
@@ -164,12 +153,9 @@ var set = {
                                 dataType: 'json',
                                 success: function (res) {
                                     if (res.status == 100000) {
-                                        layer.msg('删除成功', {
-                                            time: 700,
-                                        });
-                                        setTimeout(function () {
+                                        layer.msg('删除成功',function(){
                                             window.location.reload();
-                                        }, 700)
+                                        });
                                     }
                                 },
                                 error: function () {
@@ -177,13 +163,9 @@ var set = {
                                 },
                                 complete: function (xhttp) {
                                     if (xhttp.responseJSON.status != 100000) {
-
-                                        layer.msg('普通管理员无权限', {
-                                            time: 1000
-                                        })
-                                        setTimeout(function () {
+                                        layer.msg('失败', function(){
                                             layer.closeAll()
-                                        }, 1000)
+                                        })
                                     }
                                 }
                             });
@@ -284,14 +266,11 @@ var set = {
                         http.ajax.post_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                             console.log(res)
                             if (res.status == 100000) {
-                                layer.msg('添加成功', {
-                                    time: 700
+                                layer.msg('添加成功',function(){
+                                  layer.closeAll();
+                                window.location.reload();
                                 })
                             }
-                            setTimeout(function () {
-                                layer.closeAll();
-                                window.location.reload();
-                            }, 700)
                         }, function (xHttp) {
                             layer.closeAll('loading')
                         })
@@ -322,14 +301,10 @@ var set = {
                         data = JSON.stringify(data);
                         http.ajax.put_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                             if (res.status == 100000) {
-                                layer.msg('修改成功', {
-                                    time: 700
+                                layer.msg('修改成功',function(){
+                                   window.location.reload();
                                 })
                             }
-                            setTimeout(function () {
-                                layer.closeAll();
-                                window.location.reload();
-                            }, 700)
                         }, function (xHttp) {
                             layer.closeAll('loading')
                         })
@@ -348,12 +323,9 @@ var set = {
                                 dataType: 'json',
                                 success: function (res) {
                                     if (res.status == 100000) {
-                                        layer.msg('删除成功', {
-                                            time: 700,
-                                        });
-                                        setTimeout(function () {
+                                        layer.msg('删除成功', function(){
                                             window.location.reload();
-                                        }, 700)
+                                        });
                                     }
                                 },
                                 error: function () {
@@ -363,12 +335,9 @@ var set = {
                                     layer.closeAll('loading')
                                     if (xhttp.responseJSON.status != 100000) {
 
-                                        layer.msg('普通管理员无权限', {
-                                            time: 1000
+                                        layer.msg('失败', function(){
+                                            layer.closeALl()
                                         })
-                                        setTimeout(function () {
-                                            layer.closeAll()
-                                        }, 1000)
                                     }
                                 }
                             });
