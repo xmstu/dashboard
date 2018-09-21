@@ -116,6 +116,7 @@ var set = {
                                 role_id_arr.push($(this).prev().attr('data-id'))
                             }
                         });
+
                         var data = {
                             "comment": $('#user_comment_edit').val(),
                             "user_name": name_edit,
