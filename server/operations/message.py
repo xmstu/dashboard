@@ -223,5 +223,8 @@ class MessageUser(object):
     @make_decorator
     def update_msg_read(params):
         """消息已读"""
-        MessageUserModel.update_msg_read(db.write_bi, params)
-        return make_resp(APIStatus.Ok), HTTPStatus.Ok
+        rowcount = MessageUserModel.update_msg_read(db.write_bi, params)
+        if rowcount:
+            return make_resp(APIStatus.Ok), HTTPStatus.Ok
+        else:
+            abort(HTTPStatus.InternalServerError, **make_resp(APIStatus.InternalServerError))
