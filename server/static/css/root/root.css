@@ -419,3 +419,6 @@ select:disabled {
 #popup_two .layui-form-item{
     display: block;
 }
+.layui-form-item {
+    display: block;
+}

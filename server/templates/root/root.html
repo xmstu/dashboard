@@ -50,13 +50,6 @@
     <div id="popup" style="display: none;">
         <form class="layui-form layui-form-pane" lay-filter="add_user" action="">
             <div style="display: block" class="layui-form-item">
-                <label class="layui-form-label">人员账号</label>
-                <div class="layui-input-block">
-                    <input id="phone_number" type="text" maxLength="11" name="mobile" autocomplete="off"
-                           placeholder="登陆账号" class="layui-input">
-                </div>
-            </div>
-            <div style="display: block" class="layui-form-item">
                 <label class="layui-form-label">用户姓名</label>
                 <div class="layui-input-block">
                     <input id="user_name" type="text" maxLength="11" name="mobile" autocomplete="off"
@@ -68,6 +61,12 @@
                 <div class="layui-input-block">
                     <input id="add_user_password" type="password" name="name" autocomplete="off"
                            placeholder="输入密码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text block">
+                <label class="layui-form-label">角色备注</label>
+                <div class="layui-input-block">
+                    <textarea id="user_comment_add" placeholder="备注" class="layui-textarea"></textarea>
                 </div>
             </div>
             <div style="display: block;" class="layui-form-item">
@@ -93,8 +92,14 @@
                            class="layui-input">
                 </div>
             </div>
+              <div class="layui-form-item layui-form-text block">
+                <label class="layui-form-label">角色备注</label>
+                <div class="layui-input-block">
+                    <textarea id="user_comment_edit" placeholder="备注" class="layui-textarea"></textarea>
+                </div>
+            </div>
             <div style="display: block;" class="layui-form-item">
-               <div class="edit-user-checkbox"></div>
+                <div class="edit-user-checkbox"></div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">单选框</label>
@@ -109,7 +114,7 @@
     {#上面是用户管理的添加，下面是角色的#}
     <!--角色编辑弹窗和添加的弹窗基本上一样-->
     <div id="popup_two" style="display: none;padding: 15px;">
-       <form action="" class="layui-form" lay-filter="edit_root">
+        <form action="" class="layui-form" lay-filter="edit_root">
             <div class="layui-form-item">
                 <div class="layui-form layui-form-pane">
                     <div class="layui-form-item">
@@ -137,7 +142,8 @@
                     <div class="layui-form-item layui-form-text">
                         <label class="layui-form-label">角色备注</label>
                         <div class="layui-input-block">
-                            <textarea id="role_comment_edit" placeholder="想输就输，不想输就不输" class="layui-textarea"></textarea>
+                            <textarea id="role_comment_edit" placeholder="想输就输，不想输就不输"
+                                      class="layui-textarea"></textarea>
                         </div>
                     </div>
                     <div class="edit-checkbox">

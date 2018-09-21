@@ -23,7 +23,6 @@ var set = {
                 , cols: [[
                     {field: 'id', title: '用户ID'},
                     {field: 'user_name', title: '姓名'},
-                    {field: 'account', title: '手机号'},
                     {field: 'role_name', title: '用户角色'},
                     {field: 'status', title: '状态'},
                     {
@@ -39,7 +38,6 @@ var set = {
                         var content = $(this).parents('tr').children('td:eq(1)').find('.layui-table-cell').text();
                         /*设置全局变量，函数外访问*/
                         user_id = $(this).attr('data-id');
-                        phone = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
                         var location = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
                         $('#name_edit').val(content);
                         /**/
@@ -63,7 +61,7 @@ var set = {
                             title: '编辑信息',
                             closeBtn: 1,
                             shadeClose: true,
-                            area: ['500px', '330px'],
+                            area: ['600px', '500px'],
                             skin: "layui-layer-molv",
                             content: $('#popup_one')
                         });
@@ -71,7 +69,7 @@ var set = {
                     /*用户添加*/
                     $('#confirm_add').click(function (e) {
                         e.preventDefault();
-                        var phone_number = $('#phone_number').val();
+                        var user_command = $('#user_comment_add').val();
                         var role_id = $('#role_id').val();
                         var user_name = $('#user_name').val();
                         var add_user_password = $('#add_user_password').val();
@@ -85,7 +83,7 @@ var set = {
                         console.log(user_id_arr);
                         var url = '/root/management/';
                         var data = {
-                            "account": phone_number,
+                            "comment": user_command,
                             "user_name": user_name,
                             "password": add_user_password,
                             "role_id": user_id_arr
@@ -100,7 +98,7 @@ var set = {
                             setTimeout(function () {
                                 layer.closeAll();
                                 window.location.reload();
-                            }, 1400)
+                            }, 700)
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
                                 layer.msg('失败', {
@@ -124,7 +122,7 @@ var set = {
                             }
                         });
                         var data = {
-                            "account": phone,
+                            "comment": $('#user_comment_edit').val(),
                             "user_name": name_edit,
                             "password": hex_md5(password),
                             "role_id": role_id_arr,
@@ -138,9 +136,8 @@ var set = {
                                     time: 700
                                 });
                                 setTimeout(function () {
-                                    layer.closeAll(); //
-                                    tableIns.reload()
-                                }, 1400)
+                                    window.location.reload()
+                                }, 700)
                             }
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
@@ -171,8 +168,8 @@ var set = {
                                             time: 700,
                                         });
                                         setTimeout(function () {
-                                            tableIns.reload();
-                                        }, 1400)
+                                            window.location.reload();
+                                        }, 700)
                                     }
                                 },
                                 error: function () {
@@ -293,7 +290,7 @@ var set = {
                             }
                             setTimeout(function () {
                                 layer.closeAll();
-                                tableRender.reload();
+                                window.location.reload();
                             }, 700)
                         }, function (xHttp) {
                             layer.closeAll('loading')
@@ -331,7 +328,7 @@ var set = {
                             }
                             setTimeout(function () {
                                 layer.closeAll();
-                                tableRender.reload();
+                                window.location.reload();
                             }, 700)
                         }, function (xHttp) {
                             layer.closeAll('loading')
@@ -355,7 +352,7 @@ var set = {
                                             time: 700,
                                         });
                                         setTimeout(function () {
-                                            tableRender.reload();
+                                            window.location.reload();
                                         }, 700)
                                     }
                                 },
@@ -424,7 +421,7 @@ var set = {
                 title: '修改角色信息',
                 closeBtn: 1,
                 shadeClose: true,
-                area: ['500px', '330px'],
+                area: ['550px', '450px'],
                 skin: "layui-layer-molv",
                 content: $('#popup')
             });
