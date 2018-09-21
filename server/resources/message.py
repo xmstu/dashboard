@@ -96,10 +96,10 @@ class MessageUser(Resource):
 
 class MessageUserOperator(Resource):
     @staticmethod
-    @doc.request_user_message_read_post
+    @doc.request_user_message_read_put
     @operations.MessageUser.update_msg_read(params=dict)
     @verify.MessageUserVerify.check_is_read_params(params=dict, msg_id=int)
-    def post(msg_id):
+    def put(msg_id):
         """消息已读"""
         if not SessionOperationClass.check():
             abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))

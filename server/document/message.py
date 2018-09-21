@@ -29,7 +29,7 @@ request_user_message_list_get = api.doc(params={
     'limit': '条数',
 })
 
-request_user_message_read_post = api.doc(body=api.model('request_user_message_read_post', {
+request_user_message_read_put = api.doc(body=api.model('request_user_message_read_post', {
     'user_name': fields.String(description='用户名'),
 
 }))
