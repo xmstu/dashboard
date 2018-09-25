@@ -127,11 +127,11 @@ class RootManagementModel(object):
 
                     if needed_delete_set:
                         del_sql = """
-                        UPDATE tb_inf_admin_roles SET is_deleted = 1, update_time =:update_time  WHERE role_id = :role_id
+                        UPDATE tb_inf_admin_roles SET is_deleted = 1, update_time =:update_time  WHERE role_id = :role_id AND admin_id =:admin_id
                         """
                         for del_role_id in needed_delete_set:
                             if not relationship[del_role_id]:
-                                rowcount += tran.conn.update(del_sql, {"update_time": update_time, "role_id": del_role_id})
+                                rowcount += tran.conn.update(del_sql, {"update_time": update_time, "role_id": del_role_id, "admin_id": admin_id})
 
                     if needed_add_set:
 
@@ -146,11 +146,11 @@ class RootManagementModel(object):
 
                     if needed_update_set:
                         update_sql = """
-                        UPDATE tb_inf_admin_roles SET is_deleted = 0, update_time =:update_time  WHERE role_id = :role_id
+                        UPDATE tb_inf_admin_roles SET is_deleted = 0, update_time =:update_time  WHERE role_id = :role_id AND admin_id =:admin_id
                         """
                         for update_role_id in needed_update_set:
                             if relationship[update_role_id]:
-                                rowcount += tran.conn.update(update_sql, {"update_time": update_time, "role_id": update_role_id})
+                                rowcount += tran.conn.update(update_sql, {"update_time": update_time, "role_id": update_role_id, "admin_id": admin_id})
                 return rowcount
 
         except Exception as e:
