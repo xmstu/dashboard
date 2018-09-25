@@ -494,7 +494,7 @@ function chartInit(xAxis, series, interval, x_value1) {
 }
 
 function area_select() {
-    var auth_role = $('#user-info').attr('data-role')
+    var auth_role = $('#user-info').attr('data-role-type')
     if (!!auth_role && auth_role == 1) {
         $('#super_manager_area').css({'display': 'block'})
         $('#super_manager_area_select_zero').address({
