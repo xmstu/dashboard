@@ -625,16 +625,9 @@ var common = {
             console.log(counts)
             var str = '';
             if (data) {
-                console.log(data[0].id)
                 $.each(data,function(val,index){
                     str += '<li class="message-center-simple"><pre><i class="' + select(index.is_read) + '"></i></pre><p>' + index.title + '</p><span> ' + index.create_time + '</span></li>'
                 })
-              /*  for (var i = 0; i < counts; i++) {
-                    var create_time = data[i].create_time;
-                    var title = data[i].title;
-                    var is_read=data[i].is_read
-
-                }*/
                 $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
                 $(".message-count-show").after(str);
             }

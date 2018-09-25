@@ -625,7 +625,7 @@ $('#goods_search_box').on('click', function (e) {
 });
 
 function area_select() {
-    var auth_role = $('#user-info').attr('data-role')
+    var auth_role = $('#user-info').attr('data-role-type')
     if (!!auth_role && auth_role == 1) {
         $('#super_manager_area').css({'display': 'block'})
         $('#super_manager_area_select_zero').address({

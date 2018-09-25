@@ -53,7 +53,6 @@ $(document).keyup(function (event) {
 function checkUser(){
     var login = $('input[name="username"]').val();
     var pwd = $('input[name="password"]').val();
-    var role = $('[name=role]:checked').val() ? parseInt($('[name=role]:checked').val()) : 1;
     if (login == '') {
         layer.msg('对不起,您输入的账号不能为空!');
     } else if (pwd == '') {
@@ -62,8 +61,7 @@ function checkUser(){
         var url = '/login/';
         var data = {
             user_name: login,
-            password: hex_md5(pwd),
-            role: role
+            password: hex_md5(pwd)
         };
         data = JSON.stringify(data);
         http.ajax.post(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
