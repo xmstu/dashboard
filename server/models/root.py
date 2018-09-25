@@ -174,8 +174,8 @@ class RootManagementModel(object):
             role_id_list = params.pop('role_id')
             with cursor.begin() as tran:
                 admin_command = """
-                        INSERT INTO tb_inf_admins(comment, password, user_name, avatar_url) 
-                        VALUES(:comment, :password, :user_name, :avatar_url)
+                        INSERT INTO tb_inf_admins(mobile, comment, password, user_name, avatar_url) 
+                        VALUES(:mobile, :comment, :password, :user_name, :avatar_url)
                         """
 
                 params['avatar_url'] = 'https://mp.huitouche.com/static/images/newicon.png'
