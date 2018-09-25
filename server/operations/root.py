@@ -19,10 +19,10 @@ class RootManagement(object):
 
     @staticmethod
     @make_decorator
-    def get_role(admin_id):
-        data = RootManagementModel.get_role(db.read_bi, admin_id)
+    def get_role(params):
+        count, data = RootManagementModel.get_role(db.read_bi, params)
 
-        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
+        return make_resp(APIStatus.Ok, count=count, data=data), HTTPStatus.Ok
 
     @staticmethod
     @make_decorator

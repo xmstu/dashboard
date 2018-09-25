@@ -77,16 +77,19 @@ class RootManagementOperator(Resource):
         abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 
     @staticmethod
-    @operations.RootManagement.get_role(admin_id=int)
+    @doc.request_root_management_get
+    @operations.RootManagement.get_role(params=dict)
+    @verify.RootManagement.check_get_params(params=dict)
     def get(admin_id):
         """获取当前用户所有角色"""
         if SessionOperationClass.check():
             role_name = SessionOperationClass.get_role_name()
             if role_name == "超级管理员":
                 if not isinstance(admin_id, int):
-                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='role_id必须是整数'))
-                resp = Response(admin_id=int(admin_id))
-                return resp
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='admin_id必须是整数'))
+                params = get_all_arg()
+                params.setdefault("admin_id", int(admin_id))
+                return Response(params=params)
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='仅限后台用户获取账户列表'))
         abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='未登录用户'))
 

@@ -3,7 +3,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_resp, APIStatus
-from server.utils.extend import pwd_to_hash
+from server.utils.extend import pwd_to_hash, Check
 
 
 class RootManagement(object):
@@ -26,12 +26,17 @@ class RootManagement(object):
     @make_decorator
     def check_put_params(params):
         try:
+            params['mobile'] = str(params.get('mobile') or '')
             params['comment'] = str(params.get('comment') or '')
             params['user_name'] = str(params.get('user_name') or '')
             pwd = str(params.get('password') or '')
             params['role_id'] = list(params.get('role_id') or [])
             params['admin_id'] = int(params.get('admin_id') or 0)
             params['is_active'] = int(params.get('is_active') or 0)
+
+            if params['mobile']:
+                if not Check.is_mobile(params['mobile']):
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='手机号非法'))
 
             if params["role_id"]:
                 params["role_id"] = [int(i) for i in params["role_id"]]
@@ -48,10 +53,15 @@ class RootManagement(object):
     @make_decorator
     def check_post_params(params):
         try:
+            params['mobile'] = str(params.get('mobile') or '')
             params['comment'] = str(params.get('comment') or '')
             params['user_name'] = str(params.get('user_name') or '')
             pwd = str(params.get('password') or '')
             params['role_id'] = list(params.get('role_id') or [])
+
+            if params['mobile']:
+                if not Check.is_mobile(params['mobile']):
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='手机号非法'))
 
             if params["role_id"]:
                 params["role_id"] = [int(i) for i in params["role_id"]]
