@@ -700,6 +700,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
     border-bottom: 1px solid #eee;
     line-height: 36px;
     color: #000;
+    cursor: pointer;
 }
 
 .message-center > ul > li > pre {

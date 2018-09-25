@@ -626,8 +626,9 @@ var common = {
                 })
                 $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
                 $(".message-count-show").after(str);
+
                 $('.message-center-simple').click(function () {
-                    var route = '/message?msg-item=' + $(this).index();
+                    var route = '/message?msg-item=' + ($(this).index()-1);//因为前面有一个子元素，所以这里要减一才能和前面的相对应。
                     _this.jump(route)
                 })
             }
