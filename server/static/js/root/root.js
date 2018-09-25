@@ -5,10 +5,11 @@ var set = {
         $('.menu-power').next('.second-menu-list').css({'display': 'block'});
         $('.menu-power').next('.second-menu-list').find('.userManager-second-menu').addClass('selected-active')
         var _this = this;
-        layui.use(['form', 'layer', 'table'], function () {
+        layui.use(['form', 'layer', 'table', 'laypage'], function () {
             var layer = layui.layer;
             var table = layui.table;
             form = layui.form;
+            laypage = layui.laypage;
             var url = '/root/management/';
             var role_url = '/root/role_management/';
             /*-----从这里到下面的注释是用户管理*/
@@ -41,14 +42,13 @@ var set = {
                         var location = $(this).parents('tr').children('td:eq(2)').find('.layui-table-cell').text();
                         $('#name_edit').val(content);
                         /**/
-                        var url = '/root/management/' + user_id;
+                        var url = '/root/management/' + user_id+'?page=1&limit=99999';
                         http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
-                            console.log(res);
                             var role_list = res.data;
                             var str = '';
                             if (role_list) {
                                 for (var i = 0; i < role_list.length; i++) {
-                                    str += '<input type="checkbox"  check' + _this.check(role_list[i].status)+ ' lay-filter="checkbox" data-filter="role_checkbox" data-id="' + role_list[i].role_id + '" name="like[root_list_' + i + ']" title=' + role_list[i].name + '>'
+                                    str += '<input type="checkbox"  check' + _this.check(role_list[i].status) + ' lay-filter="checkbox" data-filter="role_checkbox" data-id="' + role_list[i].role_id + '" name="like[root_list_' + i + ']" title=' + role_list[i].name + '>'
                                 }
                                 $('.edit-user-checkbox').html(str);
                             }
@@ -61,7 +61,7 @@ var set = {
                             title: '编辑信息',
                             closeBtn: 1,
                             shadeClose: true,
-                            area: ['600px', '500px'],
+                            area: ['100%', '100%'],
                             skin: "layui-layer-molv",
                             content: $('#popup_one')
                         });
@@ -91,14 +91,14 @@ var set = {
                         data = JSON.stringify(data);
                         http.ajax.post_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                             if (res.status == 100000) {
-                                layer.msg('添加成功', function(){
+                                layer.msg('添加成功', function () {
                                     window.location.reload();
                                 })
                             }
 
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
-                                layer.msg('失败', function(){
+                                layer.msg('失败', function () {
                                     layer.closeAll()
                                 });
 
@@ -109,7 +109,7 @@ var set = {
                     $('#confirm_fix').click(function () {
                         var name_edit = $('#name_edit').val();
                         var password = $('#password').val();
-                         var role_id_arr = [];
+                        var role_id_arr = [];
                         /*监听layui生成的元素*/
                         $('.edit-user-checkbox .layui-unselect').each(function (val) {
                             if ($(this).is('.layui-form-checked')) {
@@ -128,13 +128,13 @@ var set = {
                         var url = '/root/management/' + user_id;
                         http.ajax.put_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                             if (res.status == 100000) {
-                                layer.msg('修改成功',function(){
-                                     window.location.reload()
+                                layer.msg('修改成功', function () {
+                                    window.location.reload()
                                 });
                             }
                         }, function (xhttp) {
                             if (xhttp.responseJSON.status != 100000) {
-                                layer.msg('失败', function(){
+                                layer.msg('失败', function () {
                                     layer.closeAll("loading")
                                 });
                             }
@@ -154,7 +154,7 @@ var set = {
                                 dataType: 'json',
                                 success: function (res) {
                                     if (res.status == 100000) {
-                                        layer.msg('删除成功',function(){
+                                        layer.msg('删除成功', function () {
                                             window.location.reload();
                                         });
                                     }
@@ -164,7 +164,7 @@ var set = {
                                 },
                                 complete: function (xhttp) {
                                     if (xhttp.responseJSON.status != 100000) {
-                                        layer.msg('失败', function(){
+                                        layer.msg('失败', function () {
                                             layer.closeAll()
                                         })
                                     }
@@ -230,10 +230,10 @@ var set = {
                         });
                         layer.open({
                             type: 1,
-                            title: '新增城市经理',
+                            title: '编辑角色信息',
                             closeBtn: 1,
                             shadeClose: true,
-                            area: ['560px', '520px'],
+                            area: ['100%', '100%'],
                             skin: "layui-layer-molv",
                             content: $('#popup_two')
                         });
@@ -264,11 +264,10 @@ var set = {
                         };
                         data = JSON.stringify(data);
                         http.ajax.post_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-                            console.log(res)
                             if (res.status == 100000) {
-                                layer.msg('添加成功',function(){
-                                  layer.closeAll();
-                                window.location.reload();
+                                layer.msg('添加成功', function () {
+                                    layer.closeAll();
+                                    window.location.reload();
                                 })
                             }
                         }, function (xHttp) {
@@ -301,8 +300,8 @@ var set = {
                         data = JSON.stringify(data);
                         http.ajax.put_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                             if (res.status == 100000) {
-                                layer.msg('修改成功',function(){
-                                   window.location.reload();
+                                layer.msg('修改成功', function () {
+                                    window.location.reload();
                                 })
                             }
                         }, function (xHttp) {
@@ -323,7 +322,7 @@ var set = {
                                 dataType: 'json',
                                 success: function (res) {
                                     if (res.status == 100000) {
-                                        layer.msg('删除成功', function(){
+                                        layer.msg('删除成功', function () {
                                             window.location.reload();
                                         });
                                     }
@@ -335,7 +334,7 @@ var set = {
                                     layer.closeAll('loading')
                                     if (xhttp.responseJSON.status != 100000) {
 
-                                        layer.msg('失败', function(){
+                                        layer.msg('失败', function () {
                                             layer.closeALl()
                                         })
                                     }
@@ -369,35 +368,37 @@ var set = {
         });
         $('#add_user').click(function () {
             /*获取所有角色列表*/
-            var url = '/root/management/' + 0;
-            http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
-                console.log(res);
-                var role_list = res.data;
-                var str = '';
-                if (role_list) {
-                    for (var i = 0; i < role_list.length; i++) {
-                        str += '<input type="checkbox" lay-filter="checkbox" data-filter="role_checkbox" data-id="' + role_list[i].role_id + '" name="like[root_list_' + i + ']" title=' + role_list[i].name + '>'
-                    }
-                    $('.user-checkbox').html(str);
+             var url = '/root/management/' + 0 + '?page=1&limit=99999';
+        $('.user-checkbox').html('');
+        http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
+            console.log(res.count);
+            var role_list = res.data;
+            var str = '';
+            if (role_list) {
+                for (var i = 0; i < role_list.length; i++) {
+                    str += '<input type="checkbox" lay-filter="checkbox" data-filter="role_checkbox" data-id="' + role_list[i].role_id + '" name="like[root_list_' + i + ']" title=' + role_list[i].name + '>'
                 }
-                /*告诉layui重载*/
-                form.render(null, 'add_user');
-                layer.closeAll('loading')
-            });
-            layer.open({
-                type: 1,
-                title: '修改角色信息',
-                closeBtn: 1,
-                shadeClose: true,
-                area: ['550px', '450px'],
-                skin: "layui-layer-molv",
-                content: $('#popup')
-            });
+                $('.user-checkbox').html(str);
 
+            }
+            /*告诉layui重载*/
+            form.render(null, 'add_user');
+            layer.closeAll('loading')
+        });
+        layer.open({
+            type: 1,
+            title: '新增用户',
+            closeBtn: 1,
+            shadeClose: true,
+            shade:0,
+            area: ['100%', '100%'],
+            skin: "layui-layer-molv",
+            content: $('#popup')
+        });
+            /*------------------------------------------------------------------------------------------*/
         })
         $('#add_user_city_manager').click(function (e) {
             e.preventDefault();
-            /*获取所有页面列表--不想分页就写100*/
             var url = '/root/page_management/?page=1&limit=10';
             http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
                 var page_list = res.data;
@@ -415,7 +416,7 @@ var set = {
                 title: '新增角色',
                 closeBtn: 1,
                 shadeClose: true,
-                area: ['560px', '520px'],
+                area: ['100%', '100%'],
                 skin: "layui-layer-molv",
                 content: $('#popup_three')
             });
@@ -431,6 +432,9 @@ var set = {
         } else if (str == 1) {
             return 'ed'
         }
+    },
+    addUserSet: function (val) {
+
     }
 };
 set.init();
