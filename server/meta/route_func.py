@@ -1,3 +1,5 @@
+import time
+
 from flask import session, render_template, redirect
 
 from server.cache_data import init_regions
@@ -15,10 +17,12 @@ def common_route_func(template_name):
     role_type = session['login'].get('role_type', '')
     _, role_menu_path = Login.get_menu_path_by_role_id(db.read_bi, session['login'].get('role_id', 0))
 
+    random_num = "?_=" + str(int(time.time()))
+
     if role_type == 4:
         locations = init_regions.get_city_next_region(session['login'].get('locations', []))
     return render_template(template_name, user_name=user_name, avatar_url=avatar_url, locations=locations,
-                           role=role, role_type=role_type, role_menu_path=role_menu_path)
+                           role=role, role_type=role_type, role_menu_path=role_menu_path, random_num=random_num)
 
 
 def open_route_func(template_name):
