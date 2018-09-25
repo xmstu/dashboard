@@ -589,47 +589,47 @@ var common = {
             })
         })
     },
-    messageSet: function (elem, elemAno,elem_t) {
-
+    messageSet: function (elem, elemAno, elem_t) {
         elem.mouseenter(function () {
-             elem_t.height('200');
-            setTimeout(function(){
-                elemAno.css({display:'block'});
-              elemAno.addClass('animated fadeInUp')
-            },300)
-
+            elem_t.height('200');
+            setTimeout(function () {
+                elemAno.css({display: 'block'});
+                elemAno.addClass('animated fadeInUp')
+            }, 300)
         });
         elem_t.mouseleave(function () {
             elem_t.height('auto');
-              setTimeout(function(){
-                   elemAno.css({display:'none'});
-               elemAno.removeClass('animated fadeInUp')
-            },300)
+            setTimeout(function () {
+                elemAno.css({display: 'none'});
+                elemAno.removeClass('animated fadeInUp')
+            }, 300)
 
         });
     },
     messageRequest: function () {
         var url = '/message/user/';
+        var _this = this;
         var data = {
-            'user_name':$('#user-info').attr('data-user-name'),
+            'user_name': $('#user-info').attr('data-user-name'),
             'account': $('#user-info').attr('data-account'),
             'page': 1,
             'limit': 6
         };
 
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-            console.log(res.data)
             var data = res.data;
             var unread = res.unread;
-            var counts = res.count;
-            console.log(counts)
             var str = '';
             if (data) {
-                $.each(data,function(val,index){
-                    str += '<li class="message-center-simple"><pre><i class="' + select(index.is_read) + '"></i></pre><p>' + index.title + '</p><span> ' + index.create_time + '</span></li>'
+                $.each(data, function (val, index) {
+                    str += '<li class="message-center-simple msg-item-' + val + '"><pre><i class="' + select(index.is_read) + '"></i></pre><p>' + index.title + '</p><span> ' + index.create_time + '</span></li>'
                 })
                 $(".message-count-show").html('当前有' + res.count + '条（已读：' + (res.count - unread) + ';未读:' + unread + '）消息！');
                 $(".message-count-show").after(str);
+                $('.message-center-simple').click(function () {
+                    var route = '/message?msg-item=' + $(this).index();
+                    _this.jump(route)
+                })
             }
             $('.header .layui-badge').css({'opacity': '1'});
             if (unread == 0) {
@@ -670,7 +670,6 @@ var common = {
                 icon.addClass(arr[4]);
                 setAbout.addClass('menu-transaction');
                 children = setAbout.next().children();
-                //console.log(children)
                 $.each(children, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '潜在货源') {
                         $(this).find('a').addClass('lurk-goods')
@@ -766,7 +765,6 @@ var common = {
         http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
             var str = '';
             var len = res.data.length;
-            console.log('len'+len)
             str += '<a class="current-role" href="javascript:;">' + res.data[0].role + '<span class="layui-nav-more"></span></a>';
             str += '<dl class="role-change-lists">';
             if (len) {
@@ -778,39 +776,53 @@ var common = {
             $('#role_change').html(str);
             /*切换身份写在这里是因为内容动态加载完成之后再执行这里的代码*/
             $('.current-role').mouseenter(function () {
-                var $height=$('.role-change-lists').height();
+                var $height = $('.role-change-lists').height();
                 setTimeout(function () {
-                     $('.role-change-lists').css({display:'block'});
+                    $('.role-change-lists').css({display: 'block'});
                     $('.role-change-lists').addClass('animated fadeInUp');
                     $('.current-role > .layui-nav-more').addClass('layui-nav-mored');
-                    $('#role_change').height($height+50)
+                    $('#role_change').height($height + 50)
                 }, 250)
             });
-           $('#role_change').mouseleave(function () {
+            $('#role_change').mouseleave(function () {
                 setTimeout(function () {
                     $('.role-change-lists').removeClass('animated fadeInUp');
-                    $('.role-change-lists').css({display:'none'});
-                      $('#role_change').height(50);
+                    $('.role-change-lists').css({display: 'none'});
+                    $('#role_change').height(50);
                     $('.current-role > .layui-nav-more').removeClass('layui-nav-mored');
                 }, 250)
             });
-           $('.role-change-item').click(function (e) {
-               e.preventDefault();
-               var url = '/role_change/role_change/'+$(this).attr('value');
-               var text = $(this).text();
-               http.ajax.put_no_loading(true,false,url,{},http.ajax.CONTENT_TYPE_2,function(res){
-                   if(res.status==100000){
-                       layer.closeAll('loading');
-                       layer.msg(res.msg,{
-                           time:700
-                       });
-                       setTimeout(function(){
-                           window.location.href='/admin';
-                       },1300)
-                   }
-               })
-        });
+            $('.role-change-item').click(function (e) {
+                e.preventDefault();
+                var url = '/role_change/role_change/' + $(this).attr('value');
+                var text = $(this).text();
+                http.ajax.put_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
+                    if (res.status == 100000) {
+                        layer.closeAll('loading');
+                        layer.msg(res.msg, {
+                            time: 700
+                        });
+                        setTimeout(function () {
+                            window.location.href = '/admin';
+                        }, 1300)
+                    }
+                })
+            });
         })
+    },
+    jump: function (str) {
+        window.location.href = str
+    },
+    getUrlParam: function (str) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == str) {
+                return pair[1];
+            }
+        }
+        return (false);
     }
 };
 
@@ -823,7 +835,7 @@ common.weather();
 common.init();
 common.setLink();
 common.ajaxSetting();
-common.messageSet($('.message-center-count'), $('.message-center > ul'),$('.message-center'));
+common.messageSet($('.message-center-count'), $('.message-center > ul'), $('.message-center'));
 common.showData('#show_hide', '.header > .header-right .dropdown-menu');
 common.sliderShow();
 common.roleGet();

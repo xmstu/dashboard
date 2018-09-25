@@ -57,9 +57,9 @@
                     <div class="message-center-count">
                        <i class="iconfont icon-xiaoxi1"></i><b class="layui-badge" style="opacity: 0;">0</b>
                     </div>
-                    <ul>
+                    <ul class="message-box">
                         <p class="message-count-show">目前无消息接收</p>
-                        <li onclick="goTo()"><i class="iconfont icon-xiaolian-"></i>&nbsp; 浏览所有相关信息</li>
+                        <li onclick="common.jump('/messsage/?msg-item=all')"><i class="iconfont icon-xiaolian-"></i>&nbsp; 浏览所有相关信息</li>
                     </ul>
                 </div>
                 <span id="project_introduce" class="layui-btn layui-btn-sm"
@@ -160,7 +160,8 @@
         padding: 5px 0;
         left: -18px;
         display: none;
-
+        max-height: 500px;
+        overflow: scroll;
     }
 
     .role-change-about dl a {
@@ -188,11 +189,6 @@
     }
 
 </style>
-<script>
-    function goTo() {
-        window.location.href = '/message/'
-    }
-</script>
 <div class="introduce_tools">
     <b class="tools-tip-icon"></b>
     <a target="_blank"

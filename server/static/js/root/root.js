@@ -398,7 +398,7 @@ var set = {
         $('#add_user_city_manager').click(function (e) {
             e.preventDefault();
             /*获取所有页面列表--不想分页就写100*/
-            var url = '/root/page_management/?page=1&limit=100';
+            var url = '/root/page_management/?page=1&limit=10';
             http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
                 var page_list = res.data;
                 var str = '';

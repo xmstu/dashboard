@@ -1,3 +1,6 @@
+/*
+* 消息浏览
+*/
 var set = {
     init: function () {
         var _this = this;
@@ -32,7 +35,6 @@ var set = {
                 }
                 $('.layui-collapse').html(_this.resetData(str));
                 element.init();//告诉layui对js模板重新渲染
-
                 element.on('collapse(message_list)', function (data_set) {
                     if (data_set.show == true) {
                         var url_set = '/message/user/' + $(this).attr('data-value') + '/';
@@ -43,9 +45,6 @@ var set = {
                 });
                 /*-----第一条消息默认是展开的所以要单独设置已读状态，写在这里是因为等layui渲染完毕之后再获取dom-----*/
                 var first_msg = $('.collapse-0');
-                console.log(first_msg);
-                var value = first_msg.attr('data-value');
-                // var url_set = '/message/user/' + value + '/?account=' + $('#user-info').attr('data-account');
                 if (first_msg.find('.read-status').html() == '未读') {
                     first_msg.find('.read-status').html('已读')
                 }
