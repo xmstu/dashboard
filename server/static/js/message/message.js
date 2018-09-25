@@ -47,7 +47,7 @@ var set = {
                     $('.collapse-' + param + '').next('.layui-colla-content').addClass('layui-show')
                 }
                 element.init();//告诉layui对js模板重新渲染
-                /*------------------------------------------------------------------------------------*/
+                /*-------------------------------------------------------------------------------------*/
                 laypage.render({
                     elem: $('#pagination'),
                      count: count,
