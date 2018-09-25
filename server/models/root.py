@@ -45,12 +45,15 @@ class RootManagementModel(object):
         return data
 
     @staticmethod
-    def get_role(cursor, admin_id):
+    def get_role(cursor, params):
         try:
+            fields = """
+                id role_id,
+                `name`
+            """
             cmd = """
             SELECT
-                id role_id,
-                `name`,
+                {fields},
             CASE WHEN id IN (
                     SELECT
                         role_id 
@@ -60,7 +63,7 @@ class RootManagementModel(object):
                         AND tb_inf_roles.is_deleted = 0 
                     WHERE
                         tb_inf_admin_roles.is_deleted = 0 
-                        AND admin_id = %d 
+                        AND admin_id = :admin_id
                         ) THEN
                         1 ELSE 0 
                     END AS `status` 
@@ -68,9 +71,11 @@ class RootManagementModel(object):
                     tb_inf_roles 
             WHERE
                 tb_inf_roles.is_deleted = 0
-            """ % admin_id
-            role_list = cursor.query(cmd)
-            return role_list
+            """
+            count = cursor.query_one(cmd.format(fields="COUNT(1) count"), params)['count']
+            cmd += " LIMIT :page, :limit "
+            role_list = cursor.query(cmd.format(fields=fields), params)
+            return count, role_list
         except Exception as e:
             log.error('获取当前用户角色失败,失败原因是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.BadRequest, msg='获取当前用户角色失败'))
