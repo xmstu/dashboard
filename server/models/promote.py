@@ -16,7 +16,7 @@ class PromoteEffectList(object):
         FROM tb_inf_city_manager
         LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
 
-        WHERE tb_inf_city_manager.id = :user_id
+        WHERE tb_inf_city_manager.id = (SELECT id FROM tb_inf_city_manager WHERE region_id = :region_id)
         %s
         AND tb_inf_city_manager.is_deleted = 0
         """
@@ -29,7 +29,7 @@ class PromoteEffectList(object):
             fetch_where += "AND tb_inf_promoter.mobile = '%s' " % params['mobile']
 
         command = command % fetch_where
-        result = cursor.query(command, {'user_id': params['user_id']})
+        result = cursor.query(command, {'user_id': params['user_id'], 'region_id': params['regions'][0]})
 
         return [i['mobile'] for i in result if i['mobile']] if result else []
 
@@ -184,17 +184,17 @@ class PromoteEffectList(object):
 
 class PromoteQuality(object):
     @staticmethod
-    def get_promoter_mobile_by_city_manager(cursor, user_id):
+    def get_promoter_mobile_by_city_manager(cursor, region_id):
         """城市经理获取推广人员信息"""
         command = """
         SELECT tb_inf_promoter.mobile
         FROM tb_inf_city_manager
         LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
 
-        WHERE tb_inf_city_manager.id = :user_id
+        WHERE tb_inf_city_manager.id = (SELECT id FROM tb_inf_city_manager WHERE region_id = :region_id)
         AND tb_inf_city_manager.is_deleted = 0
         """
-        result = cursor.query(command, {'user_id': user_id})
+        result = cursor.query(command, {'region_id': region_id})
 
         return [i['mobile'] for i in result if i['mobile']] if result else []
 

@@ -40,7 +40,7 @@ class Regions(object):
         return self.region.get(int(region_id), {'level': 0})['level']
 
     def get_map_city_level(self, region_id):
-        """获取地区code上级到城市"""
+        """获取地区code上级的level"""
         result = self.region.get(int(region_id), {'level': 0})
         if result['level'] <= 3:
             return result['level']

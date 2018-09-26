@@ -74,7 +74,7 @@ class PromoteQualityDecorator(object):
             promote_quality = []
             # 城市经理
             if 4 == params['role_type']:
-                promoter_mobile = PromoteQuality.get_promoter_mobile_by_city_manager(db.read_bi, params['user_id'])
+                promoter_mobile = PromoteQuality.get_promoter_mobile_by_city_manager(db.read_bi, params['regions'][0])
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
             # 管理员
             elif params['role_type'] == 1:
