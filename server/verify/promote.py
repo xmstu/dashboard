@@ -20,7 +20,7 @@ class PromoteEffect(object):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
             params['user_name'] = str(params.get('user_name', ''))
-            params['mobile'] = int(params.get('mobile', 0))
+            params['mobile'] = str(params.get('mobile', ''))
             params['role_type'] = int(params.get('role_type')) if params.get('role_type') else 0
             params['goods_type'] = int(params.get('goods_type')) if params.get('goods_type') else 0
             params['is_actived'] = int(params.get('is_actived')) if params.get('is_actived') else 0
@@ -31,6 +31,10 @@ class PromoteEffect(object):
             # 判断时间是否合法
             if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='时间参数有误'))
+
+            if params['mobile']:
+                if not Check.is_mobile(params['mobile']):
+                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='手机号非法'))
 
             # 获取用户权限和身份
             role_big_type, user_id = SessionOperationClass.get_role()
