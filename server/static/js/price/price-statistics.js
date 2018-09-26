@@ -1,4 +1,6 @@
-/*价格统计*/
+/**
+ * 价格统计
+ */
 $(window).load(function () {
     $('.main-content-right').addClass('animated fadeIn')
 });

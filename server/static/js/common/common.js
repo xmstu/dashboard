@@ -613,7 +613,7 @@ var common = {
             'user_name': $('#user-info').attr('data-user-name'),
             'account': $('#user-info').attr('data-account'),
             'page': 1,
-            'limit': 6
+            'limit': 8//只显示最新的前八条
         };
 
         http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
