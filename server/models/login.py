@@ -87,7 +87,7 @@ class Login(object):
         command = """
         -- 区镇合伙人
         SELECT shd_suppliers.user_id,  shu_users.mobile, shd_supplier_areas.region_id,
-        shu_user_profiles.user_name, shu_user_profiles.avatar_url
+        shu_user_profiles.user_name, shu_user_profiles.avatar_url, '区镇合伙人' AS role, 2 AS role_type
         FROM shd_suppliers
         INNER JOIN shu_users ON shd_suppliers.user_id = shu_users.id AND shu_users.is_deleted = 0
         INNER JOIN shu_user_profiles ON shu_users.id = shu_user_profiles.user_id
@@ -97,7 +97,7 @@ class Login(object):
         UNION
         -- 网点管理员(可见区域同区镇合伙人)
         SELECT node_manager.id, node_manager.mobile, shd_supplier_areas.region_id,
-        node_manager.user_name, node_manager.avatar_url
+        node_manager.user_name, node_manager.avatar_url, '网点管理员' AS role, 3 AS role_type
         FROM shd_suppliers
         INNER JOIN shd_supplier_areas ON shd_suppliers.id = shd_supplier_areas.supplier_id AND shd_supplier_areas.is_deleted = 0
         INNER JOIN (SELECT shu_users.id, shd_suppliers.user_id, shu_users.mobile, shu_user_profiles.user_name, shu_user_profiles.avatar_url

@@ -74,26 +74,15 @@ def broker():
                 locations.add(parent_id)
         locations = [str(i) for i in locations]
 
-        # 通过当前用户拥有的地区的最高等级判断是区镇合伙人还是网点管理员
-        max_region_level = max([init_regions.get_current_region_level(i) for i in locations])
-        if max_region_level == 3:
-            role = '区镇合伙人'
-            role_type = 2
-            role_id = Login.get_role_id_by_role(db.read_bi, role_type)
-        elif max_region_level == 4:
-            role = '网点管理员'
-            role_type = 3
-            role_id = Login.get_role_id_by_role(db.read_bi, role_type)
-        else:
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg="拥有的地区权限有误!"))
+        role_id = Login.get_role_id_by_role(db.read_bi, result[0]['role_type'])
 
         user_info = {
             'id': result[0]['user_id'],
             'user_name': result[0]['user_name'],
             'mobile': result[0]['mobile'],
             'avatar_url': result[0]['avatar_url'],
-            'role': role,
-            'role_type': role_type,
+            'role': result[0]['role'],
+            'role_type': result[0]['role_type'],
             'role_id': role_id,
         }
 
