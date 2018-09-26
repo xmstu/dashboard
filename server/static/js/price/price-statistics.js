@@ -105,7 +105,6 @@ var set = {
                 trigger: 'axis',
                 position: [10, '70%'],
                 formatter: function (params) {
-                    console.log(params);
                     if (params.length > 1) {
                         var str = '日期：' + params[0].name;
                         var string_data = '今日价格最低：￥' + params[0].data[1];
@@ -329,6 +328,8 @@ var set = {
                 var avg_price = res.data.avg_price;
                 var price_trend_series = res.data.price_trend_series;
                 that.chartRender(price_trend_series, avg_price)
+            },function(){
+                layer.closeAll('loading')
             })
         })
     }
@@ -337,5 +338,4 @@ set.init();
 $('#search_btn').click(function (e) {
     e.preventDefault();
     set.dataInit();
-    console.log($('#date_show_one').val())
 })
