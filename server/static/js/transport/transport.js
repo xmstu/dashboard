@@ -4,7 +4,7 @@ var dataSet = {
         $('.part-2 .layui-form-item').width('184');
         $('.part-3 .layui-input-inline').width('108');
         $('#date_show_three').val(String(common.getNowFormatDate()[2]));
-        $('#date_show_four').val(String(common.getNowFormatDate()[3]));
+        $('#date_show_four').val(String(common.getNowFormatDate()[0]));
         setTimeout(function () {
             $('.menu-transport').addClass('menu-active');
             $('.menu-active .icon-xia').addClass('icon-rotate');
@@ -328,6 +328,8 @@ var dataSet = {
                 } else {
                     return false;
                 }
+            },function(){
+                layer.closeAll('loading')
             })
         });
 

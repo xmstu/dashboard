@@ -132,7 +132,7 @@ input:-ms-input-placeholder {
 
 body {
     font-family: "Menlo", "DejaVu Sans Mono", "Liberation Mono", "Consolas",Arial, Helvetica, sans-serif !important;
-    min-width: 1300px
+    min-width: 1150px
 }
 
 .header {
@@ -628,7 +628,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
     margin-top: 42px;
     background: #f1f1f1;
     padding-right: 0;
-    min-width: 1200px;
+    min-width: 900px;
     position: relative;
     opacity: 0;
     margin-bottom: 24px;

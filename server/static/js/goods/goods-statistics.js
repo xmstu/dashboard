@@ -7,13 +7,13 @@ $('.layui-table-cell').css({'height': 'auto!important'});
 $('.layui-form-item').css({'width':'184px'})
 $('.chart-area-two-body .layui-form-item').css({'width':'184'})
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
-$('#date_show_two').val(String(common.getNowFormatDate()[3]));
+$('#date_show_two').val(String(common.getNowFormatDate()[0]));
 $('#start_date_one').val(String(common.getNowFormatDate()[2]));
-$('#end_time_one').val(String(common.getNowFormatDate()[3]));
+$('#end_time_one').val(String(common.getNowFormatDate()[0]));
 $('#start_date_two').val(String(common.getNowFormatDate()[2]));
-$('#end_time_two').val(String(common.getNowFormatDate()[3]));
+$('#end_time_two').val(String(common.getNowFormatDate()[0]));
 $('#start_date_three').val(String(common.getNowFormatDate()[2]));
-$('#end_time_three').val(String(common.getNowFormatDate()[3]));
+$('#end_time_three').val(String(common.getNowFormatDate()[0]));
 setTimeout(function () {
     /*设置左边二级菜单样式*/
     $('.menu-transcation').addClass('menu-active');
@@ -423,6 +423,8 @@ var dataSet = {
                 } else if (len >= 50) {
                     Chart_twice(data.xAxis, data.wait_order_series, data.recv_order_series, data.cancel_order_series, data.goods_user_count_series, 5)
                 }
+            },function(){
+                layer.closeAll('loading');
             })
         })
     },
@@ -466,6 +468,8 @@ var dataSet = {
                      var string = '<tr class="cancel_reason_total"><td>取消总数：<span>'+res.data.sum_count+'单</span></td></tr>';
                     $('.cancel-reason-types').append(string)
                 }
+            },function(){
+                layer.closeAll('loading')
             })
         })
     }
@@ -512,19 +516,6 @@ Highcharts.setOptions({
         tooltip: {
             shared: true
         },
-       /* legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 1100,
-            y: 0,
-            floating: true,
-            borderWidth: 1,
-            backgroundColor: 'transparent',
-            labelFormatter: function () {
-                return this.name
-            }
-        },*/
         lotOptions: {
             line: {
                 dataLabels: {

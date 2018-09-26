@@ -3,9 +3,9 @@
  */
 $('.layui-table-cell').css({'height': 'auto!important'});
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
-$('#date_show_two').val(String(common.getNowFormatDate()[3]));
+$('#date_show_two').val(String(common.getNowFormatDate()[0]));
 $('#start_date_one').val(String(common.getNowFormatDate()[2]));
-$('#end_time_one').val(String(common.getNowFormatDate()[3]));
+$('#end_time_one').val(String(common.getNowFormatDate()[0]));
 setTimeout(function () {
     $('.menu-transaction').addClass('menu-active');
     $('.menu-active .icon-xia').addClass('icon-rotate')

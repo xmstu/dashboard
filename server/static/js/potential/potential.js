@@ -11,7 +11,7 @@ var setAbout = {
         /*给表单设置默认值，时间转换秒是前端做的*/
         $('.layui-table-cell').css({'height': 'auto!important'});
         $('#date_show_one').val(String(common.getNowFormatDate()[2]));
-        $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+        $('#date_show_two').val(String(common.getNowFormatDate()[0]));
         $('#start_date_one').val(String(common.getNowFormatDate()[2]));
         $('#end_time_one').val(String(common.getNowFormatDate()[3]));
         setTimeout(function () {
@@ -175,7 +175,7 @@ var setAbout = {
                 cols: [[
                     {field: 'goods_standard', title: '货物规格'},
                     {field: 'goods_type', title: '货物类型'},
-                    {field: 'address', title: '出发地-目的地', width: 300},
+                    {field: 'address', title: '出发地-目的地', width: 250},
                     {field: 'vehicle', title: '车型要求'},
                     {field: 'price', title: '运费'},
                     {field:'query_time',title:'查价时间'},
@@ -330,7 +330,7 @@ var setAbout = {
                     dataLabels: {
                         enabled: true,
                         formatter: function () {
-                            return this.point.y + '单';
+                            return this.point.y>0? this.point.y + '单':'';
                         }
                     }
                 },
@@ -345,7 +345,6 @@ var setAbout = {
                     radius: 3.5,
                     lineWidth: 1,
                     symbol: 'circle',
-
                     states: {
                         hover: {
                             enabled: true,
@@ -419,8 +418,6 @@ $('#goods_search_box').click(function (e) {
         record_start_time: record_start_time,
         record_end_time: record_end_time
     };
-    console.log($('#haul_dist_table').val());
-    console.log('test:'+data.haul_dist)
     var url = '/potential/list/?from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_county_id=' + data.to_county_id + '&goods_price_type=' + data.goods_price_type + '&business=' + data.business + '&haul_dist=' + data.haul_dist + '&vehicle_name=' + data.vehicle_name + '&special_tag=' + data.special_tag + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&record_start_time=' + data.record_start_time + '&record_end_time=' + data.record_end_time;
     setAbout.tableSet(url)
 });
