@@ -42,8 +42,8 @@ class GoodsMap(object):
             user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('role_region_id'))
         else:
             user_id_list = None
-        max_count, data = GoodsMapModel.get_data(db.read_db, user_id_list, params)
-        return make_resp(status=APIStatus.Ok, max_count=max_count, data=data), HTTPStatus.Ok
+        max_lat_lng, data = GoodsMapModel.get_data(db.read_db, user_id_list, params)
+        return make_resp(status=APIStatus.Ok, max_lat_lng=max_lat_lng, data=data), HTTPStatus.Ok
 
 
 class UsersMap(object):

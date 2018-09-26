@@ -473,15 +473,16 @@ class GoodsMapModel(object):
         data = cursor.query(command % fetch_where)
 
         if not data:
-            return []
+            return {}, []
 
-        max_count = max(data, key=lambda i: i["count"])["count"]
+        max_data = max(data, key=lambda i: i["count"])
+        max_lat_lng = {"max_count": max_data["count"], "max_lat": float(max_data["lat"]), "lng": float(max_data["lng"])}
 
         for detail in data:
             detail['lat'] = float(detail['lat'])
             detail['lng'] = float(detail['lng'])
 
-        return max_count, data
+        return max_lat_lng if max_lat_lng else {}, data if data else []
 
 
 class UsersMapModel(object):
