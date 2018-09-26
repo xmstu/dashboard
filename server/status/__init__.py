@@ -150,7 +150,7 @@ def make_resp(status, msg=None, data=None, **kwargs):
     if data:
         result = {'status': status, 'msg': msg if msg else Decriptions[status], 'data': data}
     else:
-        result = {'status': status, 'msg': msg if msg else Decriptions[status]}
+        result = {'status': status, 'msg': msg if msg else Decriptions[status], 'data': []}
     for key, value in kwargs.items():
         if not value:
             kwargs[key] = 0
