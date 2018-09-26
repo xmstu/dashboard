@@ -50,6 +50,7 @@ class GoodsList(object):
 
             # 补全时间
             params['create_start_time'], params['create_end_time'] = complement_time(params['create_start_time'], params['create_end_time'])
+            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
             # 校验参数
             if not compare_time(params['create_start_time'], params['create_end_time']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))

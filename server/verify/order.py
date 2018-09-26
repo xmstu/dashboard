@@ -107,8 +107,8 @@ class OrderList(object):
             params['SXB'] = int(params.get('SXB', None) or 0)
 
             # 补全时间
-            params['start_order_time'], params['end_order_time'] = complement_time(params['start_order_time'],
-                                                                                   params['end_order_time'])
+            params['start_order_time'], params['end_order_time'] = complement_time(params['start_order_time'], params['end_order_time'])
+            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
 
             # 当前权限下所有地区
             params['region_id'] = get_role_regions(params['region_id'])

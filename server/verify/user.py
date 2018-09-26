@@ -69,6 +69,9 @@ class UserList(object):
             params['register_start_time'] = int(params.get('register_start_time') or 0)
             params['register_end_time'] = int(params.get('register_end_time') or 0)
 
+            params['last_login_start_time'], params['last_login_end_time'] = complement_time(params['last_login_start_time'], params['last_login_end_time'])
+            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
+
             # 检验最后登陆时间
             if not compare_time(params['last_login_start_time'], params['last_login_end_time']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='最后登录时间有误'))
