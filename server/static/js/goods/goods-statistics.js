@@ -2,7 +2,7 @@
  * 货源统计
  * Created by Creazy_Run on 2018/5/30.
  */
-/*设置默认日期*/
+/*设置一些默认日期*/
 $('.layui-table-cell').css({'height': 'auto!important'});
 $('.layui-form-item').css({'width':'184px'})
 $('.chart-area-two-body .layui-form-item').css({'width':'184'})
@@ -15,6 +15,7 @@ $('#end_time_two').val(String(common.getNowFormatDate()[3]));
 $('#start_date_three').val(String(common.getNowFormatDate()[2]));
 $('#end_time_three').val(String(common.getNowFormatDate()[3]));
 setTimeout(function () {
+    /*设置左边二级菜单样式*/
     $('.menu-transcation').addClass('menu-active');
     $('.menu-active .icon-xia').addClass('icon-rotate')
     $('.menu-transcation').next('.second-menu-list').css({'display': 'block'});
@@ -22,7 +23,7 @@ setTimeout(function () {
     common.dateInterval($('#date_show_one').val(), $('#date_show_one').val());
     common.dateInterval_Ano($('#start_date_three').val(), $('#end_time_three').val())
 }, 10);
-
+/*设置jquery.address地区选择插件*/
 function init() {
     $('#from_region_id').address({
         offsetLeft: '0',
@@ -51,7 +52,7 @@ function init() {
         };
     });
 }
-
+/*运用layui设置日历，表单和数据表格*/
 layui.use(['laydate', 'form', 'table'], function () {
     var laydate = layui.laydate;
     var table = layui.table;
@@ -242,6 +243,7 @@ layui.use(['laydate', 'form', 'table'], function () {
             }
         }
     });
+    /*layui的数据表格*/
     table.render({
         elem: '#LAY_table_goods',
         even: true
@@ -358,7 +360,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         active[type] ? active[type].call(this) : '';
     });
 });
-
+/*下面的是货源漏斗图，暂时先不做*/
 var chart = Highcharts.chart('charts_container_one', {
     chart: {
         type: 'funnel',
@@ -394,6 +396,7 @@ var chart = Highcharts.chart('charts_container_one', {
         ]
     }]
 });
+/*--------------下面是数据调用---------------*/
 var dataSet = {
     charts_two_init: function () {
         var url = '/goods/goods_distribution_trend/';

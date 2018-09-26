@@ -31,6 +31,7 @@ var set = {
                         str += '<div class="layui-colla-content ">' + index.content + '</div></div>';
                     });
                     $('.layui-collapse').html(_this.resetData(str));
+                    /*layui监听面板展开关闭，展开的时候消息已读，未展开为未读*/
                     element.on('collapse(message_list)', function (data_set) {
                         if (data_set.show == true) {
                             var url_set = '/message/user/' + $(this).attr('data-value') + '/';
@@ -40,11 +41,16 @@ var set = {
                         }
                     });
                 }
-                /*-----第一条消息默认是展开的所以要单独设置已读状态，写在这里是因为等layui渲染完毕之后再获取dom-----*/
-                var param = common.getUrlParam('msg-item');
+                /*-----点击消息面板对应展开，写在这里是因为等layui渲染完毕之后再获取dom-----*/
+                var param = common.getUrlParam('msg-item');//根据获取url参数展开对应，根据不同条件告诉后端那条消息已读
+                var data_set = JSON.stringify({user_name: $('#user-info').attr('data-user-name')});
                 if (param == 'all') {
-                    $('.collapse-0').next('.layui-colla-content').addClass('layui-show')
+                    var url = '/message/user/0/';
+                    _this.isRead(url, $('.collapse-0'), data_set)
+                    $('.collapse-0').next('.layui-colla-content').addClass('layui-show');
                 } else {
+                    var url ='/message/user/' + $('.collapse-' + param + '').attr('data-value') + '/';
+                     _this.isRead(url,  $('.collapse-' + param + ''), data_set)
                     $('.collapse-' + param + '').next('.layui-colla-content').addClass('layui-show')
                 }
                 element.init();//告诉layui对js模板重新渲染
