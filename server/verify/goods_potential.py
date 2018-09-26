@@ -73,9 +73,6 @@ class GoodsPotentialList(object):
 
             # 获取权限地区id
             params['region_id'] = get_role_regions(params['region_id'])
-            # 补全时间
-            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
-            params['record_start_time'], params['record_end_time'] = complement_time(params['record_start_time'], params['record_end_time'])
             # 检测时间正确性
             if not compare_time(params['register_start_time'], params['register_end_time']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))

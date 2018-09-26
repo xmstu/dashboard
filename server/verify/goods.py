@@ -19,10 +19,10 @@ class GoodsList(object):
             if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
-            params['create_start_time'] = int(params.get('create_start_time') or time.time() - 86400 * 7)
+            params['create_start_time'] = int(params.get('create_start_time') or time.time() - 86400 * 30)
             params['create_end_time'] = int(params.get('create_end_time') or time.time())
-            params['register_start_time'] = int(params.get('register_start_time') or time.time() - 86400 * 7)
-            params['register_end_time'] = int(params.get('register_end_time') or time.time())
+            params['register_start_time'] = int(params.get('register_start_time') or 0)
+            params['register_end_time'] = int(params.get('register_end_time') or 0)
             params['goods_id'] = int(params.get('goods_id') or 0)
             params['mobile'] = int(params.get('mobile') or 0)
             params['from_province_id'] = int(params.get('from_province_id') or 0)
@@ -50,7 +50,6 @@ class GoodsList(object):
 
             # 补全时间
             params['create_start_time'], params['create_end_time'] = complement_time(params['create_start_time'], params['create_end_time'])
-            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
             # 校验参数
             if not compare_time(params['create_start_time'], params['create_end_time']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))

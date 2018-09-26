@@ -86,14 +86,12 @@ class GoodsMap(object):
             params['special_tag'] = int(params.get('special_tag', None) or 0)
             params['delivery_start_time'] = int(params.get('delivery_start_time', None) or today_begin)
             params['delivery_end_time'] = int(params.get('delivery_end_time', None) or time.time())
-            params['register_start_time'] = int(params.get('register_start_time', None) or today_begin)
-            params['register_end_time'] = int(params.get('register_end_time', None) or time.time())
+            params['register_start_time'] = int(params.get('register_start_time', None) or 0)
+            params['register_end_time'] = int(params.get('register_end_time', None) or 0)
 
             # 补全时间
             params['delivery_start_time'], params['delivery_end_time'] = complement_time(params['delivery_start_time'],
                                                                                          params['delivery_end_time'])
-            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'],
-                                                                                         params['register_end_time'])
             # 获取权限地区id
             params['role_region_id'] = get_role_regions(0)
 

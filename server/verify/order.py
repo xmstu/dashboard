@@ -18,8 +18,8 @@ class OrdersReceivedStatistics(object):
         try:
             if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
-            params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 8)
-            params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
+            params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
+            params['end_time'] = int(params.get('end_time', None) or time.time())
             params['periods'] = int(params.get('periods', None) or 2)
             params['goods_type'] = int(params.get('goods_type', None) or 0)
             params['goods_price_type'] = int(params.get('goods_price_type', None) or 0)
@@ -98,7 +98,7 @@ class OrderList(object):
             params['pay_status'] = int(params.get('pay_status', None) or 0)
             params['is_change_price'] = int(params.get('is_change_price', None) or 0)
             params['comment_type'] = int(params.get('comment_type', None) or 0)
-            params['start_order_time'] = int(params.get('start_order_time', None) or time.time() - 86400 * 7)
+            params['start_order_time'] = int(params.get('start_order_time', None) or time.time() - 86400 * 30)
             params['end_order_time'] = int(params.get('end_order_time', None) or time.time())
             params['start_complete_time'] = int(params.get('start_complete_time', None) or 0)
             params['end_complete_time'] = int(params.get('end_complete_time', None) or 0)
@@ -109,10 +109,6 @@ class OrderList(object):
             # 补全时间
             params['start_order_time'], params['end_order_time'] = complement_time(params['start_order_time'],
                                                                                    params['end_order_time'])
-            params['start_complete_time'], params['end_complete_time'] = complement_time(params['start_complete_time'],
-                                                                                         params['end_complete_time'])
-            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'],
-                                                                                         params['register_end_time'])
 
             # 当前权限下所有地区
             params['region_id'] = get_role_regions(params['region_id'])

@@ -84,7 +84,7 @@ class PromoteQuality(object):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
             # 校验参数
             params['start_time'] = int(params.get('start_time')) if params.get('start_time') else time.time() - 86400*7
-            params['end_time'] = int(params.get('end_time')) if params.get('end_time') else time.time()
+            params['end_time'] = int(params.get('end_time')) if params.get('end_time') else time.time() - 86400
             params['periods'] = int(params.get('periods')) if params.get('periods') else 2
             params['dimension'] = int(params.get('dimension')) if params.get('dimension') else 1
             params['data_type'] = int(params.get('data_type')) if params.get('data_type') else 1

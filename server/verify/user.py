@@ -22,7 +22,7 @@ class UserStatistic(object):
                 abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.UnLogin, msg='未登录'))
 
             params['start_time'] = int(params['start_time'] or time.time() - 86400 * 7)
-            params['end_time'] = int(params['end_time'] or time.time())
+            params['end_time'] = int(params['end_time'] or time.time() - 86400)
             params['periods'] = int(params['periods'] or 2)
             params['user_type'] = int(params['user_type'] or 1)
             params['role_type'] = int(params['role_type'] or 0)
@@ -68,11 +68,6 @@ class UserList(object):
             params['last_login_end_time'] = int(params.get('last_login_end_time') or 0)
             params['register_start_time'] = int(params.get('register_start_time') or 0)
             params['register_end_time'] = int(params.get('register_end_time') or 0)
-
-            params['last_login_start_time'], params['last_login_end_time'] = complement_time(
-                params['last_login_start_time'], params['last_login_end_time'])
-            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'],
-                                                                                         params['register_end_time'])
 
             # 检验最后登陆时间
             if not compare_time(params['last_login_start_time'], params['last_login_end_time']):
