@@ -80,12 +80,11 @@ var set = {
                                 user_id_arr.push($(this).prev().attr('data-id'))
                             }
                         });
-                        console.log(user_id_arr);
                         var url = '/root/management/';
                         var data = {
                             "comment": user_command,
                             "user_name": user_name,
-                            "password": add_user_password,
+                            "password": hex_md5(add_user_password),
                             "role_id": user_id_arr
                         };
                         data = JSON.stringify(data);

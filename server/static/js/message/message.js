@@ -67,7 +67,6 @@ var set = {
                 layer.closeAll('loading')
             })
         })
-
     },
     dataRender: function () {
 

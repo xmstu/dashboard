@@ -112,7 +112,7 @@ http.ajax.post_no_loading = function(async, cache, url, data, contentType, callb
         }
     })
 };
-http.ajax.patch = function(async, cache, url, data, contentType, callback) {
+http.ajax.patch = function(async, cache, url, data, contentType, callback,cb) {
     $.ajax({
         async: async,
         cache: cache,
@@ -126,8 +126,10 @@ http.ajax.patch = function(async, cache, url, data, contentType, callback) {
                 offset: ["55%", "50%"]
             })
         },
-        complete: function() {
-            layer.closeAll("loading")
+        complete: function(xHttp) {
+            if(typeof cb=='function'){
+                cb(xHttp)
+            }
         },
         success: function(result) {
             if (typeof callback == "function") {

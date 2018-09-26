@@ -68,7 +68,7 @@ function checkUser(){
             if (res.msg == '电话号码有误') {
                 layer.msg('号码有误，请核对您的号码！')
             } else if (res.status == '100000') {
-                window.location.href = '/home/'
+                window.location.href = '/home/?_='+new Date().getTime()
             } else {
                 layer.msg('服务器错误')
             }

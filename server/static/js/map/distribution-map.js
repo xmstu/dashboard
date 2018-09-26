@@ -53,7 +53,7 @@ var special = ["北京", "天津", "上海", "重庆", "香港", "澳门"];
 var set = {
     init: function () {
         $('#date_show_one').val(String(common.getNowFormatDate()[2]));
-        $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+        $('#date_show_two').val(String(common.getNowFormatDate()[0]));
     },
     dataInit: function () {
         var that = this;
