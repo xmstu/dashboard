@@ -437,15 +437,16 @@ var set = {
                                                 normal: {
                                                     show: true
                                                     , textStyle: {
-                                                        color: '#999'
-                                                        , fontSize: 13
+                                                        color: '#44c660'
+                                                        , fontSize: 12
                                                     }
                                                 }
                                                 , emphasis: {
                                                     show: true
                                                     , textStyle: {
-                                                        color: '#333'
-                                                        , fontSize: 13
+                                                        color: '#000'
+                                                        , fontSize: 12,
+                                                        fontWeight:'bold'
                                                     }
                                                 }
                                             }
