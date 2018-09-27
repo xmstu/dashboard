@@ -137,7 +137,7 @@ var set = {
             //设置数据集：该数据为北京部分“公园”数据
             heatmap.setDataSet({
                 data: heatMapData,
-                max:maxCount/2
+                max:2
             });
             $('#heatMapHide').click(function () {
                 heatmap.hide();
