@@ -125,7 +125,7 @@ var set = {
             //初始化heatmap对象
             heatmap = new AMap.Heatmap(map, {
                 radius: 10, //给定半径
-                opacity: [0, 0.8]
+                opacity: [0, 1]
                 , gradient: {
                     0.5: 'blue',
                     0.65: 'rgb(117,211,248)',
@@ -137,7 +137,7 @@ var set = {
             //设置数据集：该数据为北京部分“公园”数据
             heatmap.setDataSet({
                 data: heatMapData,
-                max: maxCount
+                max:maxCount/2
             });
             $('#heatMapHide').click(function () {
                 heatmap.hide();
@@ -196,7 +196,6 @@ var set = {
                 layer.closeAll('loading')
             })
         })
-
     }
 };
 set.operate();

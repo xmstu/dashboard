@@ -141,7 +141,9 @@ s,i,em{font-style:normal;text-decoration:none;}
     border-radius: 2px;
     background-color: #009688;
 }
-
+.mr2{
+     margin-right: 2px!important;
+}
 .mr4{
     margin-right: 4px!important;
 }
