@@ -377,12 +377,14 @@ var setAbout = {
                         str += '<td class="cancel-reason-name-"' + i + '>' + cancel_list_dict[i].canceled_reason_text + '</td>';
                         str += '<td class="table-order-count cancel-reason-count-"' + i + '><span>' + cancel_list_dict[i].reason_count + '单</span></td>';
                         str += '<th class="cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>';
-                        str += '<tr>'
+                        str += '<tr>';
                         $('.cancel-reason-types').html('').append(str)
                     }
                     var string = '<tr class="cancel_reason_total"><td>取消总数：<span>' + res.data.sum_count + '单</span></td></tr>';
                     $('.cancel-reason-types').append(string)
                 }
+            },function(){
+                layer.closeAll('loading')
             })
         })
 
@@ -431,6 +433,8 @@ var setAbout = {
                     }
                 }
 
+            },function(){
+                layer.closeAll('loading')
             })
         })
     },
@@ -465,7 +469,7 @@ var setAbout = {
                 done: function (res, curr, count) {
                     $('[data-field]>div').css({'padding': '0 6px'});
                     layer.closeAll('loading');
-                    $('.main-content-right').addClass('animated fadeIn');
+                   // $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='goods_standard']").children().each(function (val) {
                         if ($(this).text() != '') {
                             var result = $(this).text().split('\n');

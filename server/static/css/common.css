@@ -630,8 +630,9 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
     padding-right: 0;
     min-width: 900px;
     position: relative;
-    opacity: 0;
+    opacity: 1;
     margin-bottom: 24px;
+    padding-left: 0;
 }
 
 .main-content-right::after {
