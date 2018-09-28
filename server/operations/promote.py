@@ -35,7 +35,7 @@ class PromoteEffectDecorator(object):
         # 推广列表
         result = PromoteEffectList.get_promote_list(db.read_bi, params, referrer_mobile)
 
-        return Response(result=result, count=count, params=params)
+        return make_resp(APIStatus.Ok, count=count, data=result), HTTPStatus.Ok
 
     @staticmethod
     @make_decorator

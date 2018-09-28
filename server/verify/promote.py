@@ -5,7 +5,7 @@ from flask_restful import abort
 from server import log
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_resp, APIStatus
-from server.utils.extend import Check, compare_time
+from server.utils.extend import Check, compare_time, complement_time
 from server.meta.session_operation import SessionOperationClass
 
 
@@ -19,17 +19,23 @@ class PromoteEffect(object):
             if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
-            params['user_name'] = str(params.get('user_name', ''))
-            params['mobile'] = str(params.get('mobile', ''))
-            params['role_type'] = int(params.get('role_type')) if params.get('role_type') else 0
-            params['goods_type'] = int(params.get('goods_type')) if params.get('goods_type') else 0
-            params['is_actived'] = int(params.get('is_actived')) if params.get('is_actived') else 0
-            params['is_car_sticker'] = int(params.get('is_car_sticker')) if params.get('is_car_sticker') else 0
-            params['start_time'] = int(params.get('start_time')) if params.get('start_time') else 0
-            params['end_time'] = int(params.get('end_time')) if params.get('end_time') else 0
+            params['user_name'] = str(params.get('user_name') or '')
+            params['mobile'] = str(params.get('mobile') or '')
+            params['goods_type'] = int(params.get('goods_type') or 0)
+            params['register_start_time'] = int(params.get('register_start_time') or 0)
+            params['register_end_time'] = int(params.get('register_end_time') or 0)
+            params['statistic_start_time'] = int(params.get('statistic_start_time') or 0)
+            params['statistic_end_time'] = int(params.get('statistic_end_time') or 0)
+
+            # 补全时间
+            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
+            params['statistic_start_time'], params['statistic_end_time'] = complement_time(params['statistic_end_time'], params['statistic_end_time'])
 
             # 判断时间是否合法
-            if not compare_time(params['start_time'], params['end_time']):
+            if not compare_time(params['register_start_time'], params['register_end_time']):
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='时间参数有误'))
+
+            if not compare_time(params['statistic_start_time'], params['statistic_end_time']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='时间参数有误'))
 
             if params['mobile']:

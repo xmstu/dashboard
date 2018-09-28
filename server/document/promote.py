@@ -9,12 +9,11 @@ from server import api
 request_promote_effect_param = api.doc(params={
     'user_name': '用户名,默认:空',
     'mobile': '手机号,默认:空',
-    'role_type': '推荐人角色,0:全部,1:货主,2:司机,3:物流公司,默认:0',
-    'goods_type': '货源类型,0:全部,1:同城,2:跨城,默认:0',
-    'is_actived': '是否活跃,0:全部,1:活跃(连续登录天数>1),2:一般(1-3天未登录),3:即将沉睡(4-10天未登录),4:沉睡(10天以上未登录),5:今天登录,默认:0',
-    'is_car_sticker': '贴车贴,0:全部,1:有,2:无,默认:0',
-    'start_time':'新增日期开始时间,默认:空',
-    'end_time':'新增日期结束时间,默认:空',
+    'goods_type': '货源类型,0:全部,1:一口价,2:议价',
+    'register_start_time': '注册期开始时间,默认:空',
+    'register_end_time': '注册日期结束时间,默认:空',
+    'statistic_start_time': '注册期开始时间,默认:空',
+    'statistic_end_time': '注册日期结束时间,默认:空',
     'page': '页数',
     'limit': '条数'
     }, description='推广统计列表查询参数')

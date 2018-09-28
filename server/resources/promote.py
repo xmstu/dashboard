@@ -30,7 +30,6 @@ class PromoteEffect(Resource):
     @staticmethod
     @doc.request_promote_effect_param
     @doc.response_promote_effect_param_success
-    @filters.PromoteEffect.get_result(result=list, count=int, params=dict)
     @operations.PromoteEffectDecorator.get_promote_effect_list(page=int, limit=int, params=dict)
     @verify.PromoteEffect.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)

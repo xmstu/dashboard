@@ -62,76 +62,110 @@ class PromoteEffectList(object):
     @staticmethod
     def get_promote_list(cursor, params, referrer_mobile):
         """获取推广人员列表"""
-        command = '''
+
+        command = """
         SELECT
-        
-        referrer.*,
-        COUNT(DISTINCT tb_inf_user.user_id) AS user_count,
-        0 AS wake_up_count,
-        COALESCE(SUM(goods_count_SH), 0) AS goods_count_SH,
-        COALESCE(SUM(goods_count_LH), 0) AS goods_count_LH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_SH > 0 AND referrer_mobile = referrer.mobile %(fetch_where)s) AS goods_user_count_SH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE goods_count_LH > 0 AND referrer_mobile = referrer.mobile %(fetch_where)s) AS goods_user_count_LH,
-        (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user WHERE (goods_count_SH > 0 OR goods_count_LH > 0) AND referrer_mobile = referrer.mobile %(fetch_where)s) AS goods_user_count,
-        COALESCE(SUM(order_finished_count_SH_online), 0) AS order_over_count_SH_online,
-        COALESCE(SUM(order_finished_count_SH_unline), 0) AS order_over_count_SH_unline,
-        COALESCE(SUM(order_finished_count_LH_online), 0) AS order_over_count_LH_online,
-        COALESCE(SUM(order_finished_count_LH_unline), 0) AS order_over_count_LH_unline,
-        COALESCE(SUM(goods_price_SH), 0) AS goods_price_SH,
-        COALESCE(SUM(goods_price_LH), 0) AS goods_price_LH,
-        COALESCE(SUM(order_over_price_SH_online), 0) AS order_over_price_SH_online,
-        COALESCE(SUM(order_over_price_SH_unline), 0) AS order_over_price_SH_unline,
-        COALESCE(SUM(order_over_price_LH_online), 0) AS order_over_price_LH_online,
-        COALESCE(SUM(order_over_price_LH_unline), 0) AS order_over_price_LH_unline
-        
-        -- 推广人信息
-        FROM (
-        SELECT user_id, IF(tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name) AS user_name, tb_inf_promoter.mobile
-        FROM tb_inf_promoter
-        LEFT JOIN tb_inf_user ON tb_inf_user.mobile = tb_inf_promoter.mobile
-        AND tb_inf_user.is_deleted = 0
-        WHERE tb_inf_promoter.is_deleted = 0
-        AND tb_inf_promoter.mobile IN (%(promote_mobile)s)) AS referrer
-        -- 用户信息
-        LEFT JOIN tb_inf_user ON referrer.mobile = tb_inf_user.referrer_mobile
-        AND tb_inf_user.recommended_status = 2
-        %(fetch_where)s
-        GROUP BY referrer.mobile
-        '''
+            referrer.*,
+        -- 	注册货主数
+            (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user 
+            WHERE referrer_mobile = referrer.mobile AND recommended_status = 2
+            AND user_type = 1 AND {bi_fetch_where}) AS register_owner_count,
+        -- 	发货数
+            (SELECT COUNT(1) FROM sshuitouche.shf_goods AS sg 
+            WHERE sg.user_id IN (
+            SELECT DISTINCT user_id FROM tb_inf_user WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND {bi_fetch_where}
+            ) AND {db_goods_fetch_where}) AS goods_count,
+        -- 	发货人数
+            ( SELECT COUNT(DISTINCT sg.user_id) FROM sshuitouche.shf_goods AS sg 
+            WHERE sg.user_id IN (
+            SELECT DISTINCT user_id FROM tb_inf_user WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND {bi_fetch_where}
+            ) AND {db_goods_fetch_where}) AS goods_owner_count,
+        -- 货源被接单数
+            ( SELECT COUNT(so.owner_id) FROM sshuitouche.shb_orders AS so INNER JOIN sshuitouche.shf_goods AS sg ON sg.id = so.goods_id 
+            WHERE so.owner_id IN (
+            SELECT DISTINCT user_id FROM tb_inf_user WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND {bi_fetch_where}
+            ) AND {db_orders_fetch_where}) AS goods_received_count,
+        -- 注册司机数
+            (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user 
+            WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND user_type = 2 
+            AND {bi_fetch_where}) AS register_driver_count,
+        -- 认证司机数
+            (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user 
+            WHERE referrer_mobile = referrer.mobile AND recommended_status = 2
+            AND driver_auth = 1 AND {bi_fetch_where}) AS auth_driver_count,
+        -- 司机接单数
+            (SELECT COUNT(1) FROM sshuitouche.shb_orders AS so INNER JOIN sshuitouche.shf_goods AS sg ON sg.id = so.goods_id
+            WHERE so.driver_id IN (
+            SELECT DISTINCT user_id FROM tb_inf_user WHERE referrer_mobile = referrer.mobile AND recommended_status = 2
+            AND {bi_fetch_where}) AND {db_orders_fetch_where}
+            ) AS accept_order_count,
+        -- 百万车贴司机数
+            (
+            SELECT COUNT(su.id) FROM sshuitouche.sml_ads AS sml_ads 
+            INNER JOIN sshuitouche.shu_users AS su ON su.mobile = sml_ads.driver_mobile AND sml_ads.audit = 2 
+            WHERE su.id IN (
+            SELECT DISTINCT user_id FROM tb_inf_user 
+            WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND {bi_fetch_where}
+            )
+            ) AS sticker_driver_count
+        FROM
+            (
+            SELECT
+                user_id,
+            IF
+                ( tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name ) AS user_name,
+                tb_inf_promoter.mobile 
+            FROM
+                tb_inf_promoter
+                LEFT JOIN tb_inf_user ON tb_inf_user.mobile = tb_inf_promoter.mobile 
+                AND tb_inf_user.is_deleted = 0 
+            WHERE
+                tb_inf_promoter.is_deleted = 0 
+                AND tb_inf_promoter.mobile IN (%s) 
+            ) AS referrer
+        GROUP BY
+            referrer.mobile;
+        """
 
-        promote_mobile = ','.join(["'"+i+"'" for i in referrer_mobile])
-        fetch_where = ''
-        # 推荐角色
-        if params['role_type']:
-            fetch_where += 'AND tb_inf_user.user_type = %s ' % params['role_type']
-        # 是否活跃
-        if params['is_actived'] == 1:
-            fetch_where += 'AND tb_inf_user.keep_login_days >= 7 AND tb_inf_user.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY)) '
-        elif params['is_actived'] == 2:
-            fetch_where += '''AND tb_inf_user.last_login_time < UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
-            AND tb_inf_user.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 3 DAY)) '''
-        elif params['is_actived'] == 3:
-            fetch_where += '''AND tb_inf_user.last_login_time < UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 4 DAY))
-            AND tb_inf_user.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 10 DAY)) '''
-        elif params['is_actived'] == 4:
-            fetch_where += 'AND tb_inf_user.last_login_time < UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 10 DAY)) '
-        elif params['is_actived'] == 5:
-            fetch_where += 'AND tb_inf_user.last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY)) '
-        # 贴车贴
-        if params['is_car_sticker'] == 1:
-            fetch_where += 'AND tb_inf_user.is_sticker = 1 '
-        elif params['is_car_sticker'] == 2:
-            fetch_where += 'AND tb_inf_user.is_sticker = 0 '
+        promote_mobile = ','.join(referrer_mobile)
+        bi_fetch_where = ' 1=1 '
+        db_goods_fetch_where = ' 1=1 '
+        db_orders_fetch_where = ' 1=1 '
+
         # 注册日期
-        if params['start_time'] and params['end_time']:
-            fetch_where += 'AND tb_inf_user.create_time > %s AND tb_inf_user.create_time <= %s ' % (params['start_time'], params['end_time'])
+        if params['register_start_time'] and params['register_end_time']:
+            bi_fetch_where += """ 
+            AND create_time >= {} AND create_time < {} 
+            """.format(params['register_start_time'], params['register_end_time'])
 
-        command = command % {
-            'promote_mobile': promote_mobile,
-            'fetch_where': fetch_where,
-        }
+        # 统计时间
+        if params['statistic_start_time'] and params['statistic_end_time']:
+            db_goods_fetch_where += """
+            AND create_time >= {} AND create_time < {}
+            """.format(params['statistic_start_time'], params['statistic_end_time'])
+            db_orders_fetch_where += """
+            AND so.create_time >= {} AND so.create_time < {}
+            """.format(params['statistic_start_time'], params['statistic_end_time'])
 
-        result = cursor.query(command)
+        # 一口价/议价
+        if params['goods_type']:
+            db_goods_fetch_where += """
+            AND (
+            ({goods_type}=1 AND is_system_price = 1) OR
+            ({goods_type}=2 AND is_system_price = 0)
+            )
+            """.format(goods_type=params['goods_type'])
+            db_orders_fetch_where += """
+            AND (
+            ({goods_type}=1 AND sg.is_system_price = 1) OR
+            ({goods_type}=2 AND sg.is_system_price = 0)
+            )
+            """.format(goods_type=params['goods_type'])
+
+        command = command % promote_mobile
+
+        result = cursor.query(command.format(bi_fetch_where=bi_fetch_where, db_goods_fetch_where=db_goods_fetch_where,
+                                             db_orders_fetch_where=db_orders_fetch_where))
         return result if result else []
 
     @staticmethod
