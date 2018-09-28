@@ -462,58 +462,10 @@ var common = {
     clearSelect: function (element) {
 
     },
-    menuSet: function () {
+    menuSet: function () {//全屏和非全屏切换
         var menu_icon = $('.icon-caidan');
         layui.use('layer', function () {
             var layer = layui.layer;
-        });
-        menu_icon.on('click', function () {
-            var $width = $('.main-content-left').width();
-            if ($width >= 110) {
-                var el = document.documentElement;
-                var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
-                if (typeof rfs != "undefined" && rfs) {
-                    rfs.call(el);
-                } else if (typeof window.ActiveXObject != "undefined") {
-                    var wscript = new ActiveXObject("WScript.Shell");
-                    if (wscript != null) {
-                        wscript.SendKeys("{F11}");
-                    }
-                }
-                $.cookie('menuStatus', true, {expires: 7, path: '/'});
-                $(this).css({'transform': 'rotateZ(-90deg)'});
-                $('#second_menu_list').find('a').css({'display': 'none'});
-                $('.icon-xia').css({'opacity': 0});
-                $('.layui-nav-tree').css({'width': '100%', 'margin': 0});
-                $('.nav-content').css({'display': 'none'});
-                $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').width('80%');
-                $('.main-content-left').css({width: '36px', 'margin-left': 0, 'min-width': '36px'});
-                $('.layui-nav-item>a>i:nth-child(1)').css({'margin': '0 7px'});
-                $('.main-content-right').css({'margin-left': '36px'})
-            } else {
-                var el = document;
-                var cfs = el.cancelFullScreen || el.webkitCancelFullScreen ||
-                    el.mozCancelFullScreen || el.exitFullScreen;
-                if (typeof cfs != "undefined" && cfs) {
-                    cfs.call(el);
-                } else if (typeof window.ActiveXObject != "undefined") {
-                    var wscript = new ActiveXObject("WScript.Shell");
-                    if (wscript != null) {
-                        wscript.SendKeys("{F11}");
-                    }
-                }
-                layer.closeAll('tips');
-                $.cookie('menuStatus', false, {expires: 7, 'path': '/'});
-                $('#second_menu_list').find('a').css({'display': 'block'});
-                $(this).css({'transform': 'rotateZ(0deg)'});
-                $('.layui-nav-tree').css({'width': '94%', 'margin': '10px 4% 0 2%'});
-                $('.icon-xia').css({'opacity': 1});
-                $('.nav-content').css({'display': 'block'});
-                $('.main-content-left').css({width: '8%', 'margin-left': 0, 'min-width': '110px'});
-                $('.layui-nav-item>a>i:nth-child(1)').css({'margin-left': '6%', 'margin-right': '10%'});
-                $('nav.main-content-left .layui-nav-tree .layui-nav-item>a').width('80%');
-                $('.main-content-right').css({'margin-left': '8%'})
-            }
         });
         $('#second_menu_box').stop().mouseenter(function () {
             if ($(this).width() < 60) {
@@ -531,15 +483,7 @@ var common = {
                     time: 0
                 });
             }
-        }, function () {
-            if ($(this).width() < 60) {
-                layer.tips($(this).text(), $(this), {
-                    tips: [2, '#009688'],
-                    time: 100
-                });
-            }
         })
-
     },
     currentTime: function () {
         var that = this;
@@ -662,7 +606,7 @@ var common = {
     },
     iconSet: function (setAbout, value, icon) {
         /*侧边栏是后端生成的，这里是根据中文显示用js控制样式，以后后台每增加一个页面，这里也要对应增加一个判断*/
-        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-qian'];
+        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-renminbi'];
         var value = value.replace(/(^\s*)|(\s*$)/g, "");
         var setAbout = setAbout;
         var children = '';
@@ -853,4 +797,4 @@ setInterval(function () {
     $('#hour_now').html('');
     $('#date_now').html(common.dateNow()[0]);
     $('#hour_now').html(common.dateNow()[1]);
-}, 1500);
+}, 1000);

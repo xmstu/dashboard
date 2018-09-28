@@ -82,8 +82,8 @@ var set = {
                     var startTime = $('#register_start_time').val();
                     var endTime = $('#register_end_time').val();
                     common.dateInterval(endTime, startTime);
-                    var startTime = common.timeTransform($('#date_show_one').val())
-                    var endTime = common.timeTransform($('#date_show_two').val())
+                    var startTime = common.timeTransform($('#date_show_one').val());
+                    var endTime = common.timeTransform($('#date_show_two').val());
                     if (startTime > endTime) {
                         layer.msg('提示：开始时间大于了结束时间！');
                         return false;
@@ -144,6 +144,9 @@ var set = {
             });
             $('#heatMapShow').click(function () {
                 heatmap.show();
+                console.log(heatmap.getMap());;
+                console.log(heatmap.getOptions());;
+                console.log(heatmap.getDataSet());;
             });
         });
 

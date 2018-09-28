@@ -16,18 +16,18 @@
 
         {% for menu_name, path_dict in role_menu_path.items() %}
             <li class="layui-nav-item message-menu-about">
-                <a href="javascript:;"  class="second-menu-box" id="second_menu_box_{{ loop.index }}">
-                    <i class="iconfont icon-pic"></i>{{ menu_name }}
+                <a href="javascript:;" class="second-menu-box" id="second_menu_box_{{ loop.index }}">
+                    <i class="iconfont icon-pic"></i><span class="path-name">{{ menu_name }}</span>
                     <i class="iconfont icon-xia"></i>
                 </a>
                 <ol class="second-menu-list" id="second_menu_list_{{ loop.index }}">
                     {% for path_name, path in path_dict.items() %}
-                    <li>
-                         <a href={{ path + random_num }}>
-                             <i class="iconfont icon-yuandianxiao"></i>
-                            {{ path_name }}
-                        </a>
-                    </li>
+                        <li>
+                            <a href={{ path + random_num }}>
+                                <i class="iconfont icon-yuandianxiao"></i>
+                                <span class="path-name" id="path_name">{{ path_name }}</span>
+                            </a>
+                        </li>
                     {% endfor %}
                 </ol>
             </li>
