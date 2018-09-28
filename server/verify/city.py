@@ -4,6 +4,7 @@ from flask_restful import abort
 import time
 
 from server import log
+from server.cache_data import init_regions
 from server.meta.decorators import make_decorator, Response
 from server.status import HTTPStatus, make_resp, APIStatus
 from server.meta.session_operation import SessionOperationClass
@@ -56,12 +57,13 @@ class CityOrderList(object):
             params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
             params['is_called'] = int(params.get('is_called', None) or 0)
             params['is_addition'] = int(params.get('is_addition', None) or 0)
-            params['region_id'] = int(params.get('region_id', None) or 0)
+            params['region_id'] = int(params.get('node_id', None) or 0)
             params['spec_tag'] = int(params.get('spec_tag', None) or 0)
             params['mobile'] = int(params.get('mobile', None) or 0)
 
             # 当前权限下所有地区
             params['region_id'] = get_role_regions(params['region_id'])
+
             return Response(page=page, limit=limit, params=params)
 
         except Exception as e:

@@ -1,3 +1,6 @@
+import datetime
+import time
+
 vehicle_name = {
     '1': '小面包车',
     '2': '中面包车',
@@ -63,3 +66,23 @@ vehicle_id_name = {'118': '小面包车',
                    '25': '17.5米'}
 
 vehicle_name_list = ['小面包车', '中面包车', '小货车', '4.2米', '5.2米', '6.8米', '7.6米', '9.6米', '13米', '17.5米']
+
+# 今天日期
+today = datetime.date.today()
+# 昨天时间
+yesterday = today - datetime.timedelta(days=1)
+# 明天时间
+tomorrow = today + datetime.timedelta(days=1)
+acquire = today + datetime.timedelta(days=2)
+# 昨天开始时间戳
+yesterday_start_time = int(time.mktime(time.strptime(str(yesterday), '%Y-%m-%d')))
+# 昨天结束时间戳
+yesterday_end_time = int(time.mktime(time.strptime(str(today), '%Y-%m-%d'))) - 1
+# 今天开始时间戳
+today_start_time = yesterday_end_time + 1
+# 今天结束时间戳
+today_end_time = int(time.mktime(time.strptime(str(tomorrow), '%Y-%m-%d'))) - 1
+# 明天开始时间戳
+tomorrow_start_time = int(time.mktime(time.strptime(str(tomorrow), '%Y-%m-%d')))
+# 明天结束时间戳
+tomorrow_end_time = int(time.mktime(time.strptime(str(acquire), '%Y-%m-%d'))) - 1

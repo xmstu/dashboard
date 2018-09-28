@@ -37,7 +37,7 @@ class GoodsList(object):
             params['goods_price_type'] = int(params.get('goods_price_type') or 0)
             params['goods_status'] = int(params.get('goods_status') or 0)
             params['is_called'] = int(params.get('is_called') or 0)
-            params['vehicle_length'] = int(params.get('vehicle_length') or 0)
+            params['vehicle_length'] = str(params.get('vehicle_length') or '')
             params['vehicle_type'] = int(params.get('vehicle_type') or 0)
             params['region_id'] = int(params.get('node_id') or 0)
             params['new_goods_type'] = int(params.get('new_goods_type') or 0)

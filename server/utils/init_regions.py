@@ -39,15 +39,21 @@ class Regions(object):
     def get_current_region_level(self, region_id):
         return self.region.get(int(region_id), {'level': 0})['level']
 
-    def get_map_city_level(self, region_id):
-        """获取地区code上级的level"""
+    def get_upper_region_level(self, region_id):
+        """获取上级地区的level"""
         result = self.region.get(int(region_id), {'level': 0})
         if result['level'] <= 3:
             return result['level']
-        return self.get_map_city_level(result['parent_id'])
+        return self.get_upper_region_level(result['parent_id'])
+
+    def get_parent_city(self, region_id):
+        result = self.region.get(int(region_id), {'level': 0})
+        if result['level'] == 2:
+            return result['id']
+        return self.get_parent_city(result['parent_id'])
 
     def get_parent_id(self, region_id):
-        """获取地区code的上级城市code"""
+        """获取地区code的上级code"""
         return self.region.get(int(region_id), {'parent_id': 0})['parent_id']
 
     def get_city_next_region(self, region_arr):

@@ -1,5 +1,6 @@
 from flask_restful import abort
 
+from server.cache_data import init_regions
 from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_resp, APIStatus
 
@@ -9,7 +10,13 @@ def get_role_regions(region_id):
     if 1 == role_type:
         if not region_id:
             region_id = 0
-    elif 2 == role_type or 3 == role_type or 4 == role_type:
+    elif 4 == role_type:
+        if not region_id:
+            region_id = locations_id
+        else:
+            if str(region_id) not in locations_id and str(init_regions.get_parent_id(region_id)) not in locations_id:
+                abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.Forbidden, msg='非权限范围内地区'))
+    elif 2 == role_type or 3 == role_type:
         if not region_id:
             region_id = locations_id
         else:

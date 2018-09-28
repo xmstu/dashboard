@@ -27,7 +27,7 @@ class TransportList(Resource):
     @staticmethod
     @doc.transport_list_param
     @filters.TransportList.get_result(params=dict, data=dict)
-    @operations.TransportList.get_list(page=int, limit=int, params=dict)
+    @operations.TransportList.get_list(params=dict)
     @verify.TransportList.check_params(page=int, limit=int, params=dict)
     @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():

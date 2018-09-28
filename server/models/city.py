@@ -133,6 +133,7 @@ class CityResourceBalanceModel(object):
         })
         return result if result else []
 
+
 class CityOrderListModel(object):
 
     @staticmethod
