@@ -97,19 +97,19 @@ var set = {
             });
         });
         $('.menu-map').addClass('menu-active');
-        $('.menu-active .icon-xia').addClass('icon-rotate')
+        $('.menu-active .icon-xia').addClass('icon-rotate');
         $('.menu-map').next('.second-menu-list').css({'display': 'block'});
         $('.menu-map').next('.second-menu-list').find('.goodsMap-second-menu').addClass('selected-active')
     },
-    mapRender: function (heatMapData, maxCount,center) {
+    mapRender: function (heatMapData, maxCount, center) {
         var zoom;
         var role = $('#user-info').attr('data-role-type');
         if (role == 1) {
-            zoom = 6
+            zoom = 9
         } else {
             zoom = 11
         }
-        center?center=center:center=[116.418261, 39.921984];
+        center ? center = center : center = [116.418261, 39.921984];
         var map = new AMap.Map("container", {
             resizeEnable: true,
             center: center,
@@ -125,7 +125,7 @@ var set = {
             //初始化heatmap对象
             heatmap = new AMap.Heatmap(map, {
                 radius: 10, //给定半径
-                opacity: [0, 0.8]
+                opacity: [0, 1]
                 , gradient: {
                     0.5: 'blue',
                     0.65: 'rgb(117,211,248)',
@@ -137,7 +137,7 @@ var set = {
             //设置数据集：该数据为北京部分“公园”数据
             heatmap.setDataSet({
                 data: heatMapData,
-                max: maxCount
+                max: 5
             });
             $('#heatMapHide').click(function () {
                 heatmap.hide();
@@ -187,16 +187,15 @@ var set = {
                 } else {
                     var heatMapData = res.data;
                     var maxCount = res.max_lat_lng.max_count;
-                    var center=[];
+                    var center = [];
                     center.push(res.max_lat_lng.lng)
                     center.push(res.max_lat_lng.max_lat);
-                    _this.mapRender(heatMapData, maxCount,center)
+                    _this.mapRender(heatMapData, maxCount, center)
                 }
             }, function (xhttp) {
                 layer.closeAll('loading')
             })
         })
-
     }
 };
 set.operate();

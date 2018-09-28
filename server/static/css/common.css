@@ -791,16 +791,17 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
 
 .layui-badge {
     top: 0;
-    right: -12px;
+    right: -2px;
     font-size: 12px;
-    width: 22px;
-    line-height: 18px;
+    width: 16px;
+    line-height: 16px;
     padding: 0;
+    height: 16px;
 }
 
 .main-content-right-header span {
     color: #aaa;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold
 }
 

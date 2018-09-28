@@ -5,10 +5,11 @@
 //二级菜单
  $('.menu-map').addClass('menu-active');
  $('.menu-active .icon-xia').addClass('icon-rotate')
-    $('.menu-map').next('.second-menu-list').css({'display': 'block'});
-    $('.menu-map').next('.second-menu-list').find('.distribute-second-menu').addClass('selected-active')
+ $('.menu-map').next('.second-menu-list').css({'display': 'block'});
+ $('.menu-map').next('.second-menu-list').find('.distribute-second-menu').addClass('selected-active');
+    /*每个地区对应的id，点击地图的时候获取当前省份的中文名称，根据中文向后端发送对应id*/
 var provinces = {
-    "台湾": "taiwan",
+    "台湾": "710000",
     "河北": "130000",
     "山西": "140000",
     "辽宁": "210000",
@@ -30,17 +31,17 @@ var provinces = {
     "云南": "530000",
     "陕西": "610000",
     "甘肃": "620000",
-    "青海": "630000", //5个自治区
-    "新疆": "650000",
+    "青海": "630000",
+    "新疆": "650000",//5个自治区
     "广西": "450000",
     "内蒙古": "150000",
     "宁夏": "640000",
-    "西藏": "540000", //4个直辖市
-    "北京": "110000",
+    "西藏": "540000",
+    "北京": "110000",//4个直辖市
     "天津": "120000",
     "上海": "310000",
-    "重庆": "500000", //2个特别行政区
-    "香港": "810000",
+    "重庆": "500000",
+    "香港": "810000",//2个特别行政区
     "澳门": "820000"
 };
 var geoCoordMap = {};
@@ -64,7 +65,7 @@ var set = {
             var start_time = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
             var end_time = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
             form.on('select(methods_select)', function (data) {
-                console.log(data.value);
+               /* 通过layui监听表单，根据值让特定的表单显示隐藏，达到联动的效果;*/
                 if (data.value == '1') {
                     $('#filter').removeClass('none').addClass('area-select-options-setting');
                     $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
@@ -73,14 +74,14 @@ var set = {
                     $('#heat_maps_tabs').removeClass('none').addClass('map-select-options-setting');
                     $('#heat_maps_tabs_one').addClass('none').removeClass('map-select-options-setting');
                     $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
-                     $('#heat_maps_tabs_three').addClass('none').removeClass('map-select-options-setting');
+                    $('#heat_maps_tabs_three').addClass('none').removeClass('map-select-options-setting');
                 } else if (data.value == '2') {
                     $('#role_select').removeClass('none').addClass('area-select-options-setting');
                     $('#filter').addClass('none').removeClass('area-select-options-setting');
                     $('#vehicle_select').addClass('none').removeClass('area-select-options-setting');
                     $('#heat_maps_tabs').addClass('none').removeClass('map-select-options-setting');
                     $('#order_select').addClass('none').removeClass('area-select-options-setting');
-                     $('#heat_maps_tabs_one').removeClass('none').addClass('map-select-options-setting');
+                    $('#heat_maps_tabs_one').removeClass('none').addClass('map-select-options-setting');
                     $('#heat_maps_tabs_two').addClass('none').removeClass('map-select-options-setting');
                     $('#heat_maps_tabs_three').addClass('none').removeClass('map-select-options-setting');
                 } else if (data.value == '3') {
@@ -103,6 +104,7 @@ var set = {
                     $('#heat_maps_tabs_three').removeClass('none').addClass('map-select-options-setting');
                 }
             });
+            /*页面初始化的时候获取一级地图数据(全国)*/
             var url = '/map/distribution_map/';
             var area_select = $('.area-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
             var map_select = $('.map-select-options-setting .layui-anim > dd.layui-this').attr('lay-value');
@@ -120,7 +122,7 @@ var set = {
                     var city_manager_map = data_reload.map_data;
                     var city_manager_tooltip = data_reload.toolTipData;
                     var city_manager_max_value = data_reload.max_value;
-                    if (data_reload.authority_region_id == 0) {
+                    if (data_reload.authority_region_id == 0) {//authority_region_id是地区id，如果返回的为0标示全国
                         if (res.status == 100000) {
                             var data = res.data;
                             var data_reset = data.map_data;
@@ -216,6 +218,7 @@ var set = {
                                 animationEasing: 'cubicOut',
                                 animationDurationUpdate: 1000
                             };
+                            /*读取全国地图json，并将数据渲染到该json上*/
                             $.getJSON('/static/map/china.json', function (data) {
                                 d = [];
                                 for (var i = 0; i < data.features.length; i++) {
@@ -230,6 +233,7 @@ var set = {
                                 echarts.registerMap('china', data);
                                 pageSet.renderMap('china', d);
                             });
+                            /*地图点击获取改点击地区的id发送给后台*/
                             chart.on('click', function (params) {
                                 var data_province = {
                                     dimension: $.trim($('#dimension').val()),
@@ -337,6 +341,7 @@ var set = {
                                 });
 
                             });
+                            /*------------------------------------------------------------------------------------------*/
                             var pageSet = {
                                 init: function () {
                                     $.ajax({
@@ -356,9 +361,6 @@ var set = {
                                             });
                                         }
                                     });
-
-                                    $('.map-menu-about>a').addClass('selected-active');
-                                    $('.map-menu-about>a>i').addClass('select-active');
                                     layui.use(['laydate', 'layer', 'form', 'table'], function () {
                                         var form = layui.form;
                                         var table = layui.table;
@@ -435,15 +437,16 @@ var set = {
                                                 normal: {
                                                     show: true
                                                     , textStyle: {
-                                                        color: '#999'
-                                                        , fontSize: 13
+                                                        color: '#44c660'
+                                                        , fontSize: 12
                                                     }
                                                 }
                                                 , emphasis: {
                                                     show: true
                                                     , textStyle: {
-                                                        color: '#333'
-                                                        , fontSize: 13
+                                                        color: '#000'
+                                                        , fontSize: 12,
+                                                        fontWeight:'bold'
                                                     }
                                                 }
                                             }
@@ -484,7 +487,7 @@ var set = {
                         } else {
                             layer.msg('error')
                         }
-                    } else if (data_reload.authority_region_id != 0) {
+                    } else if (data_reload.authority_region_id != 0) {//如果不为零，说明登陆者非超级管理员，根据这个值读取对应json
                         layui.use(['laydate', 'layer', 'form', 'table'], function () {
                             var form = layui.form;
                             var table = layui.table;
@@ -526,14 +529,14 @@ var set = {
                         var chart_container = echarts.init(document.getElementById('map_container'));
                         var mapdata = [];
                         $.getJSON('/static/map/city/' + roles + '.json', function (data) {
-                            echarts.registerMap('hangzhou', data);
+                            echarts.registerMap('分布图', data);
                             var d = [];
                             for (var i = 0; i < data.features.length; i++) {
                                 d.push({
                                     name: data.features[i].properties.name
                                 })
                             }
-                            RenderMap('hangzhou', d);
+                            RenderMap('分布图', d);
                         });
                         var map_option = {
                             backgroundColor: '#f5f5f5',
@@ -646,9 +649,9 @@ var set = {
 
                     function ynameMap_(d) {
                         var ynameMap = [];
-                        var data_length = d.length
+                        var data_length = d.length;
                         if (data_length > 20) {
-                            data_length = 20
+                            data_length = 20;
                             for (var i = 0; i < data_length; i++) {
                                 ynameMap.push(d[i].name);
                             }
