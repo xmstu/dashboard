@@ -20,17 +20,13 @@ class TransportRadar(object):
         try:
             if not SessionOperationClass.check():
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请登录'))
-            params['start_time'] = int(params.get('start_time', None) or time.time() - 7 * 86400)
-            params['end_time'] = int(params.get('end_time', None) or time.time() - 86400)
+            params['start_time'] = int(params.get('start_time', None) or today_start_time)
+            params['end_time'] = int(params.get('end_time', None) or time.time())
             params['region_id'] = int(params.get('region_id', None) or 0)
-            params['from_province_id'] = int(params.get('from_province_id', None) or 0)
             params['from_city_id'] = int(params.get('from_city_id', None) or 0)
             params['from_county_id'] = int(params.get('from_county_id', None) or 0)
-            params['from_town_id'] = int(params.get('from_town_id', None) or 0)
-            params['to_province_id'] = int(params.get('to_province_id', None) or 0)
             params['to_city_id'] = int(params.get('to_city_id', None) or 0)
             params['to_county_id'] = int(params.get('to_county_id', None) or 0)
-            params['to_town_id'] = int(params.get('to_town_id', None) or 0)
 
             # 当前权限下所有地区
             params['region_id'] = get_role_regions(params['region_id'])
@@ -41,7 +37,7 @@ class TransportRadar(object):
             return Response(params=params)
 
         except Exception as e:
-            log.error('Error:{}'.format(e), exc_info=True)
+            log.error('请求参数有误:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求参数有误'))
 
 

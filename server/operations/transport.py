@@ -13,9 +13,9 @@ class TransportRadar(object):
     @make_decorator
     def get_trend(params):
         try:
-            data = TransportRadarModel.get_data(db.read_db, db.read_bi, params)
+            data = TransportRadarModel.get_data(db.read_bi, params)
             if data:
-                return Response(data=data)
+                return make_resp(status=APIStatus.Ok, data=data), HTTPStatus.Ok
             else:
                 abort(HTTPStatus.InternalServerError,
                       **make_resp(status=APIStatus.InternalServerError, msg='获取雷达图数据失败'))
