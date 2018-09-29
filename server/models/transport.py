@@ -187,6 +187,18 @@ class TransportListModel(object):
             to_county_id
             """
 
+        elif params["calc_town"] == 3:
+            fetch_where += """
+            AND from_county_id != 0
+            AND to_county_id != 0
+            """
+            group_fields = group_condition = """
+            from_city_id,
+            from_county_id,
+            to_city_id,
+            to_county_id
+            """
+
         count = cursor.query(command.format(fields="COUNT(1) AS count", fetch_where=fetch_where, group_condition=group_condition), params)
         count = len(count)
 
