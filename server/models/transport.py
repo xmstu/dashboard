@@ -230,13 +230,12 @@ class TransportListModel(object):
     @staticmethod
     def get_data(cursor, params):
 
-        fields = """
-        from_province_id,
+        group_fields = """
         from_city_id,
-        from_county_id,
-        to_province_id,
-        to_city_id,
-        to_county_id,
+        to_city_id
+        """
+
+        fields = """
         COUNT( 1 ) AS vehicle_count,
         IFNULL(
         (
@@ -250,11 +249,16 @@ class TransportListModel(object):
             AND shu_user_stats.last_login_time >= :start_time
             AND shu_user_stats.last_login_time < :end_time
         ) , 0) AS login_driver_count,
-        COUNT( DISTINCT shu_vehicles.user_id ) AS total_driver_count 
+        COUNT( DISTINCT shu_vehicles.user_id ) AS total_driver_count,
         """
 
         fetch_where = """
         AND 1=1
+        """
+
+        group_condition = """
+        from_city_id,
+        to_city_id
         """
 
         command = """
@@ -275,8 +279,7 @@ class TransportListModel(object):
             AND shf_booking_settings.create_time < :end_time
             {fetch_where}
         GROUP BY
-            from_city_id,
-            to_city_id
+            {group_condition}
         """
         # 地区权限
         region = ' AND 1=1 '
@@ -291,20 +294,35 @@ class TransportListModel(object):
 
         fetch_where += region
 
-        # 是否计算区镇
-        if params["calc_town"]:
-            fetch_where += """
-            AND (
-            ({calc_town}=1 AND from_county_id != 0) OR
-            ({calc_town}=2 AND to_county_id != 0)
-            )
-            """.format(calc_town=params["calc_town"])
+        # 计算城市概况
+        general_situation = cursor.query(command.format(fields=fields+group_fields, fetch_where=fetch_where, group_condition=group_condition), params)
 
-        count = cursor.query(command.format(fields="COUNT(1) AS count", fetch_where=fetch_where), params)
+        # 是否计算区镇
+        if params["calc_town"] == 1:
+            fetch_where += """
+            AND from_county_id != 0
+            """
+            group_fields = group_condition = """
+            from_city_id,
+            from_county_id,
+            to_city_id
+            """
+
+        elif params["calc_town"] == 2:
+            fetch_where += """
+            AND to_county_id != 0
+            """
+            group_fields = group_condition = """
+            from_city_id,
+            to_city_id,
+            to_county_id
+            """
+
+        count = cursor.query(command.format(fields="COUNT(1) AS count", fetch_where=fetch_where, group_condition=group_condition), params)
         count = len(count)
 
         command += " LIMIT {0}, {1}".format(params["page"], params["limit"])
 
-        transport_list = cursor.query(command.format(fields=fields, fetch_where=fetch_where), params)
+        transport_list = cursor.query(command.format(fields=fields+group_fields, fetch_where=fetch_where, group_condition=group_condition), params)
 
-        return {"count": count if count else 0, "transport_list": transport_list if transport_list else []}
+        return {"general_situation": general_situation, "count": count if count else 0, "transport_list": transport_list if transport_list else []}
