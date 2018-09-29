@@ -457,7 +457,8 @@ body {
 }
 
 .layui-nav .layui-nav-item i {
-    font-size: 12px
+    font-size: 12px;
+    display:inline-block;
 }
 
 .layui-nav-item > a > i:nth-child(1) {
@@ -487,7 +488,8 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > a {
     padding-left: 0;
     color: #dee;
     font-size: 12px;
-    font-weight: 700
+    font-weight: 700;
+    overflow: inherit;
 }
 .second-menu-list {
     display: none;
@@ -606,7 +608,7 @@ nav.main-content-left .layui-nav-tree .layui-nav-item > ol li > a > i {
 
 .header-tips {
     height: 100%;
-    width: 56px;
+    width: 42px;
     text-align: center;
     line-height: 42px;
     float: left;
@@ -1223,6 +1225,10 @@ body {
 
 .icon-caidan {
     display: inline-block;
+}
+.layui-table-tips-c:before{
+    right: 0;
+    top: -4px;
 }
 
 /*修改layui表格*/

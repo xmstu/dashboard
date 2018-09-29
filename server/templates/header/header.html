@@ -5,9 +5,6 @@
         </a>
     </section>
     <section class="header-content">
-        <div class="header-tips" style="">
-            <i class="iconfont icon-caidan"></i>
-        </div>
         <div class="header-content-main clearfix">
             <p><i class="iconfont icon-kalendar"></i><span id="date_now"></span></p>
             <p><i class="iconfont icon-shijian"></i> <span id="hour_now"></span></p>
@@ -161,7 +158,7 @@
         left: -18px;
         display: none;
         max-height: 500px;
-        overflow: scroll;
+        overflow: auto;
     }
 
     .role-change-about dl a {
@@ -183,7 +180,15 @@
         line-height: 24px;
         position: relative;
     }
-
+    .current-role::after {
+        content: '';
+        position: absolute;
+        height: 4px;
+        background: #5FB878;
+        left: 0;
+        width: 0;
+        bottom: -14px;
+    }
     .current-role:hover {
         color: rgba(255, 255, 255, 1);
     }
