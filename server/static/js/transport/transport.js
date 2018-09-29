@@ -16,7 +16,7 @@ var dataSet = {
         }, 10);
         $('#area_select').address({
             offsetLeft: '-124px',
-            level: 3,
+            level: 4,
             onClose: function () {
             }
         });
@@ -97,7 +97,7 @@ var dataSet = {
 
         });
     },
-    radar_chart_init: function (elem, categories, order_ret, vehicles_ret, goods_ret) {
+    radar_chart_init: function (elem, categories, vehicles_ret, vehicles_all_ret) {
         Highcharts.setOptions({
             colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
         });
@@ -142,20 +142,14 @@ var dataSet = {
             },
             series: [
                 {
-                    name: '实际接单',
-                    data: order_ret,
-                    pointPlacement: 'on',
-                    type: 'area'
-                },
-                {
                     name: '活跃司机数',
                     data: vehicles_ret,
                     pointPlacement: 'on',
                     type: 'line'
                 },
                 {
-                    name: '货源量',
-                    data: goods_ret,
+                    name: '总司机数',
+                    data: vehicles_all_ret,
                     pointPlacement: 'on',
                     type: 'line'
                 }
@@ -240,23 +234,17 @@ var dataSet = {
                                 $('.popup-tbody').html('')
                                 var data = res.data;
                                 var vehicle_name_list = data.vehicle_name_list;
-                                var goods_ret = data.goods_ret;
-                                var orders_ret = data.orders_ret;
                                 var vehicle_ret = data.vehicles_ret;
                                 var vehicles_all_ret = data.vehicles_all_ret
                                 console.log(vehicle_ret);
-                                that.radar_chart_init($('#radar_charts_container'), vehicle_name_list, orders_ret, vehicle_ret, goods_ret);
+                                that.radar_chart_init($('#radar_charts_container'), vehicle_name_list, vehicle_ret, vehicle_all_ret);
                                 for (var i = 0; i < vehicle_name_list.length; i++) {
                                     var str = '<tr>';
                                     str += '<td>' + vehicle_name_list[i] + '</td>';
-                                    str += '<td>' + goods_ret[i] + '单</td>';
                                     str += '<td>' + vehicle_ret[i] + '人</td>';
-                                    str += '<td>' + vehicles_all_ret[i] + '辆</td>';
-                                    str += '<td style="color: #44c660;font-weight: bold;">' + orders_ret[i] + '单</td>';
-                                    str += '<td style="color: #f40;font-weight: bold;">' + that.transition(goods_ret[i], orders_ret[i]) + '</td>';
+                                    str += '<td>' + vehicles_all_ret[i] + '人</td>';
                                     str += '<tr>';
                                     $('.popup-tbody').append(str)
-
                                 }
                                 if ($('.popup-tbody').html() != '') {
                                     layer.open({
@@ -306,25 +294,19 @@ var dataSet = {
             var layer = layui.layer;
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var vehicles_ret = res.data.vehicles_ret;
-                var goods_ret = res.data.goods_ret;
-                var orders_ret = res.data.orders_ret;
                 var vehicle_name_list = res.data.vehicle_name_list;
                 var vehicles_all_ret = res.data.vehicles_all_ret
                 $('.transport-tbody').html('');
                 if (vehicle_name_list.length > 0) {
-                    that.radar_chart_init($('#charts_container_two'), vehicle_name_list, orders_ret, vehicles_ret, goods_ret);
+                    that.radar_chart_init($('#charts_container_two'), vehicle_name_list, vehicles_ret, vehicles_all_ret);
                     for (var i = 0; i < vehicle_name_list.length; i++) {
                         var str = '<tr>';
                         str += '<td>' + vehicle_name_list[i] + '</td>';
-                        str += '<td>' + goods_ret[i] + '单</td>';
                         str += '<td>' + vehicles_ret[i] + '人</td>';
-                        str += '<td>' + vehicles_all_ret[i] + '辆</td>';
-                        str += '<td style="color: #44c660;font-weight: bold;">' + orders_ret[i] + '单</td>';
-                        str += '<td style="color: #f40;font-weight: bold;">' + that.transition(goods_ret[i], orders_ret[i]) + '</td>';
+                        str += '<td>' + vehicles_all_ret[i] + '人</td>';
                         str += '<tr>';
                         $('.transport-tbody').append(str)
                     }
-
                 } else {
                     return false;
                 }
@@ -344,9 +326,9 @@ var dataSet = {
         return result
     },
     area_select: function () {
-        var auth_role = $('#user-info').attr('data-role-type')
+        var auth_role = $('#user-info').attr('data-role-type');
         if (!!auth_role && auth_role == 1) {
-            $('#super_manager_area').css({'display': 'block'})
+            $('#super_manager_area').css({'display': 'block'});
             $('#super_manager_area_select_zero').address({
                 level: 3,
                 offsetLeft: '-124px',
