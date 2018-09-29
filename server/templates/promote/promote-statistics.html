@@ -132,17 +132,6 @@
                                                lay-verify="required|phone" autocomplete="off" class="layui-input">
                                 </div>
                             </div>
-                            <div class="layui-form-item" style="width: 250px;">
-                                    <label class="layui-form-label">推荐角色</label>
-                                    <div class="layui-input-inline" style="width: 108px;">
-                                        <select id="is_referenced" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">全部</option>
-                                            <option value="1">货主</option>
-                                            <option value="2">司机</option>
-                                            <option value="3">物流公司</option>
-                                        </select>
-                                    </div>
-                            </div>
                             <div class="layui-form-item">
                                     <label class="layui-form-label">货源类型</label>
                                     <div class="layui-input-inline" style="width: 104px;">
@@ -152,29 +141,6 @@
                                             <option value="2">一口价</option>
                                         </select>
                                 </div>
-                            </div>
-                            <div class="layui-form-item">
-                                    <label class="layui-form-label">活跃级别</label>
-                                    <div class="layui-input-inline" style="width: 104px;margin-right: 4px;">
-                                        <select id="is_active_select" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">请选择</option>
-                                            <option value="1">连续7天登陆</option>
-                                            <option value="2">一般活跃(1-3未登)</option>
-                                            <option value="3">即将沉睡(4-10未登)</option>
-                                            <option value="4">沉睡(10天以上未登)</option>
-                                            <option value="5">今日登陆</option>
-                                        </select>
-                                    </div>
-                            </div>
-                            <div class="layui-form-item" style="">
-                                    <label class="layui-form-label">粘提车贴</label>
-                                    <div class="layui-input-inline" style="width: 106px;">
-                                        <select id="is_car_sticker" name="modules" lay-verify="required" lay-search="">
-                                            <option value="">请选择</option>
-                                            <option value="1">有</option>
-                                            <option value="2">无</option>
-                                        </select>
-                                    </div>
                             </div>
                             <article style="width: auto;display: inline-block;">
                                 <div class="layui-form-item register-time">
@@ -190,6 +156,24 @@
                                         <i class="layui-icon layui-icon-riqi rili-spec"></i>
                                         <input id="date_show_four" name="date_four" autocomplete="off"
                                                lay-verify="date_show_four" class="layui-input" type="text">
+                                        <span class="date-tips-icon">请选择日期</span>
+                                    </div>
+                            </div>
+                            </article>
+                            <article style="width: auto;display: inline-block;">
+                                <div class="layui-form-item statistics-time">
+                                    <label class="layui-form-label">统计时间</label>
+                                    <div class="layui-input-block">
+                                        <i class="layui-icon layui-icon-riqi"></i>
+                                        <input id="statistics_start_time" name="statistics_start_time" autocomplete="off"
+                                               lay-verify="statistics_start_time" class="layui-input" type="text" style="width: 108px;">
+                                        <span class="date-tips-icon">请选择日期</span>
+                                    </div>
+                            </div><span style="display: inline-block;margin-top: 9px;">至</span><div class="layui-form-item register-end-time">
+                                    <div class="layui-input-block" style="margin-left: 4px;">
+                                        <i class="layui-icon layui-icon-riqi rili-spec"></i>
+                                        <input id="statistics_end_time" name="statistics_end_time" autocomplete="off"
+                                               lay-verify="statistics_end_time" class="layui-input" type="text">
                                         <span class="date-tips-icon">请选择日期</span>
                                     </div>
                             </div>

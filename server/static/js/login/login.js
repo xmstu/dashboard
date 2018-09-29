@@ -6,10 +6,12 @@ $(document).keypress(function (e) {
     }
 });
 $('body').particleground({
-    dotColor: '#f5f5f5',
+    dotColor: '#f1f1f5',
     lineColor: '#f5f5f5',
-    particleRadius: 7.5,
-    'Dot size': 5
+    particleRadius: 8,
+    'Dot size': 5,
+    minSpeedX:0.5,
+    minSpeedY:1
 });
 $('input[name="pwd"]').focus(function () {
     $(this).attr('type', 'password');

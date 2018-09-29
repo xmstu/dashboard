@@ -191,7 +191,7 @@ var set = {
                     var heatMapData = res.data;
                     var maxCount = res.max_lat_lng.max_count;
                     var center = [];
-                    center.push(res.max_lat_lng.lng)
+                    center.push(res.max_lat_lng.lng);
                     center.push(res.max_lat_lng.max_lat);
                     _this.mapRender(heatMapData, maxCount, center)
                 }

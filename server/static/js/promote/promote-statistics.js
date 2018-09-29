@@ -8,7 +8,7 @@ $('#date_show_two').val(String(common.getNowFormatDate()[3]));
 layui.use('layer', function () {
     var layer = layui.layer;
     dataInit();
-    $('.layui-form-item').css({width:'184px'})
+    $('.layui-form-item').css({width: '184px'})
 });
 /*----------------设置侧边栏样式----------------------*/
 setTimeout(function () {
@@ -46,7 +46,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         max: String(common.getNowFormatDate()[3]),
         calendar: true,
-        format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -64,7 +64,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[3]),
-        format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -84,7 +84,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-        format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips-icon').show();
@@ -104,7 +104,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-        format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_four').val() == '') {
                 $('#date_show_four').next('.date-tips-icon').show();
@@ -119,7 +119,46 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             }
         }
     });
-
+    laydate.render({
+        elem: '#statistics_start_time',
+        theme: '#009688',
+        calendar: true,
+        max: String(common.getNowFormatDate()[0]),
+        format: 'yyyy/MM/dd',
+        done: function (val, index) {
+            if ($('#statistics_start_time').val() == '') {
+                $('#statistics_start_time').next('.date-tips-icon').show();
+            } else {
+                $('#statistics_start_time').next('.date-tips-icon').hide()
+            }
+            var startTime = common.timeTransform($('#statistics_start_time').val());
+            var endTime = common.timeTransform($('#statistics_end_time').val());
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
+        }
+    });
+    laydate.render({
+        elem: '#statistics_end_time',
+        theme: '#009688',
+        calendar: true,
+        max: String(common.getNowFormatDate()[0]),
+        format: 'yyyy/MM/dd',
+        done: function (val, index) {
+            if ($('#statistics_end_time').val() == '') {
+                $('#statistics_end_time').next('.date-tips-icon').show();
+            } else {
+                $('#statistics_end_time').next('.date-tips-icon').hide()
+            }
+            var startTime = common.timeTransform($('#statistics_start_time').val());
+            var endTime = common.timeTransform($('#statistics_end_time').val());
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
+        }
+    });
 });
 /*推广中的新增按钮点击*/
 $('#add_promote_person').on('click', function (e) {
@@ -139,12 +178,12 @@ $('#add_promote_person').on('click', function (e) {
             "user_name": username
         };
         if (mobile == '' || mobile.length != 11) {
-            layer.tips('请检查您输入的的手机号码格式','#add_users', {
+            layer.tips('请检查您输入的的手机号码格式', '#add_users', {
                 tips: [1, '#009688'],
                 time: 3000
             });
         } else if (username == '') {
-            layer.tips('请输入推广人员姓名','#add_users_name', {
+            layer.tips('请输入推广人员姓名', '#add_users_name', {
                 tips: [1, '#009688'],
                 time: 3000
             });
@@ -308,40 +347,46 @@ var pageSet = {
             var layer = layui.layer;
             var requestStrat = $('#date_show_three').val();
             var endRequest = $('#date_show_four').val();
+            var statistics_start_time = $('#statistics_start_time').val();
+            var statistics_end_time = $('#statistics_end_time').val();
             if (requestStrat != '') {
                 requestStrat = Number(common.timeTransform($('#date_show_three').val() + ' 00:00:00'));
             }
             if (endRequest != '') {
                 endRequest = common.timeTransform($('#date_show_four').val() + ' 23:59:59');
             }
-            if(requestStrat!=''&&endRequest==''){
-                endRequest=common.currentTime();
+            if (statistics_start_time != '') {
+                statistics_start_time = Number(common.timeTransform($('#statistics_start_time').val() + ' 00:00:00'));
             }
-           if(requestStrat==''&&endRequest!=''){
-                 layer.tips('请输入开始日期！', '#date_show_three', {
+            if (statistics_end_time != '') {
+                statistics_end_time = Number(common.timeTransform($('#statistics_end_time').val() + ' 00:00:00'));
+            }
+            if (requestStrat != '' && endRequest == '') {
+                endRequest = common.currentTime();
+            }
+            if (requestStrat == '' && endRequest != '') {
+                layer.tips('请输入开始日期！', '#date_show_three', {
                     tips: [1, '#009688'],
                     time: 3000
                 });
-                 return false;
+                return false;
             }
             var url = '/promote/effect/';
             var data = {
                 user_name: $('#user_name').val(),
                 mobile: $('#phone_number').val(),
-                role_type: $('#is_referenced').val(),
                 goods_type: $('#goods_type').val(),
-                is_actived: $('#is_active_select').val(),
-                is_car_sticker: $('#is_car_sticker').val(),
-                start_time: requestStrat,
-                end_time: endRequest
+                register_start_time: requestStrat,
+                register_end_time: endRequest,
+                statistics_start_time: statistics_start_time,
+                statistics_end_time: statistics_end_time
             };
-            var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&role_type=' + data.role_type + '&goods_type=' + data.goods_type + '&is_actived=' +
-                data.is_actived + '&is_car_sticker=' + data.is_car_sticker + '&start_time=' + data.start_time + '&end_time=' + data.end_time;
+            var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&goods_type=' + data.goods_type + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&statistics_start_time=' + data.statistics_start_time + '&statistics_end_time=' + data.statistics_end_time;
             that.tableRender(url)
         })
     },
     tableRender: function (url) {
-        layui.use(['layer','table'], function () {
+        layui.use(['layer', 'table'], function () {
             var table = layui.table;
             var layer = layui.layer;
             table.render({
@@ -353,25 +398,25 @@ var pageSet = {
                     statusCode: 100000
                 }
                 , cols: [[
-                      {field: 'reference_name', title: '姓名'}
-                    , {field: 'reference_mobile', title: '手机号'}
-                    , {field: 'user_count', title: '推荐人数'}
-                    , {field: 'wake_up_count', title: '唤醒人数'}
+                    {field: 'user_id', title: '姓名ID'},
+                    {field: 'user_name', title: '姓名'}
+                    , {field: 'mobile', title: '手机号'}
+                    , {field: 'register_owner_count', title: '注册货主数'}
                     , {field: 'goods_count', title: '发货数', sort: true}
-                    , {field: 'goods_user_count', title: '发货人数', sort: true}
-                    , {field: 'order_over_count_online', title: '线上支付'}
-                    , {field: 'order_over_count_unline', title: '线下支付'}
-                    , {field: 'goods_price', title: '货源金额', sort: true}
-                    , {field: 'order_over_price_online', title: '线上完成金额'}
-                    , {field: 'order_over_price_unline', title: '线下完成金额'}
+                    , {field: 'goods_owner_count', title: '发货人数', sort: true}
+                    , {field: 'goods_received_count', title: '货源被接数'}
+                    , {field: 'register_driver_count', title: '注册司机'}
+                    , {field: 'auth_driver_count', title: '认证司机数'}
+                    , {field: 'accept_order_count', title: '司机接单数'}
+                    , {field: 'sticker_driver_count', title: '百万车贴'}
                     , {
                         field: 'wealth', title: '操作', width: 96, templet: function (d) {
-                            return '<button id="deleteButton_' + d.reference_id + '" value="' + d.reference_mobile + '" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
+                            return '<button id="deleteButton_' + d.user_id + '" value="' + d.mobile + '" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
                         }
                     }
                 ]]
                 , done: function (res) {
-                     $('.main-content-right').addClass('animated fadeIn');
+                    $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='user_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
@@ -432,25 +477,33 @@ var pageSet = {
                                 success: function (res) {
                                     if (res.status == 100000) {
                                         layer.msg('已成功删除该条用户。', {icon: 1});
-                                        $('#deleteButton_' + current_val).parents('tr').css({'display': 'none'})
+                                        $('#deleteButton_' + current_val).parents('tr').css({'display': 'none'});
                                         var requestStrat = $('#date_show_three').val();
                                         var endRequest = $('#date_show_four').val();
+                                        var statistics_start_time = $('#statistics_start_time').val();
+                                        var statistics_end_time = $('#statistics_end_time').val();
+
                                         if (requestStrat != '') {
                                             requestStrat = common.timeTransform($('#date_show_three').val() + ' 00:00:00');
                                         }
                                         if (endRequest != '') {
                                             endRequest = common.timeTransform($('#date_show_four').val() + ' 23:59:59');
                                         }
+                                        if (statistics_start_time != '') {
+                                            statistics_start_time = common.timeTransform($('#statistics_start_time').val() + ' 00:00:00');
+                                        }
+                                        if (statistics_end_time != '') {
+                                            statistics_end_time = common.timeTransform($('#statistics_end_time').val() + ' 23:59:59');
+                                        }
                                         table.reload('dataTable', {
                                             where: {
                                                 user_name: $('#user_name').val(),
                                                 mobile: $('#phone_number').val(),
-                                                role_type: $('#is_referenced').val(),
                                                 goods_type: $('#goods_type').val(),
-                                                is_actived: $('#is_active_select').val(),
-                                                is_car_sticker: $('#is_car_sticker').val(),
-                                                start_time: requestStrat,
-                                                end_time: endRequest
+                                                register_start_time: requestStrat,
+                                                register_end_time: endRequest,
+                                                statistics_start_time: statistics_start_time,
+                                                statistics_end_time: statistics_end_time
                                             },
                                             loading: true
                                         });
