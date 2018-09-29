@@ -417,13 +417,13 @@ var pageSet = {
                 ]]
                 , done: function (res) {
                     $('.main-content-right').addClass('animated fadeIn');
-                    $("td[data-field='user_count']").children().each(function () {
+                    $("td[data-field='accept_order_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
-                            $(this).html(str + '人')
+                            $(this).html(str + '次')
                         }
                     })
-                    $("td[data-field='wake_up_count']").children().each(function () {
+                    $("td[data-field='goods_owner_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '人')
@@ -441,23 +441,23 @@ var pageSet = {
                             $(this).html(str + '次')
                         }
                     })
-                    $("td[data-field='order_over_count']").children().each(function () {
+                    $("td[data-field='goods_received_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
                             $(this).html(str + '次')
                         }
                     })
 
-                    $("td[data-field='goods_price']").children().each(function () {
+                    $("td[data-field='sticker_driver_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
-                            $(this).html(str + '元')
+                            $(this).html(str + '次')
                         }
                     })
-                    $("td[data-field='order_over_price']").children().each(function () {
+                    $("td[data-field='auth_driver_count']").children().each(function () {
                         if ($(this).text() != '') {
                             var str = $(this).text();
-                            $(this).html(str + '元')
+                            $(this).html(str + '次')
                         }
                     })
                     $('.promote-delete').on('click', function (e) {
