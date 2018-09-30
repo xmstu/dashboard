@@ -402,8 +402,8 @@ var pageSet = {
                     {field: 'user_name', title: '姓名'}
                     , {field: 'mobile', title: '手机号'}
                     , {field: 'register_owner_count', title: '注册货主数'}
-                    , {field: 'goods_count', title: '发货数', sort: true}
-                    , {field: 'goods_owner_count', title: '发货人数', sort: true}
+                    , {field: 'goods_count', title: '发货数'}
+                    , {field: 'goods_owner_count', title: '发货人数'}
                     , {field: 'goods_received_count', title: '货源被接数'}
                     , {field: 'register_driver_count', title: '注册司机'}
                     , {field: 'auth_driver_count', title: '认证司机数'}

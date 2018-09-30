@@ -16,19 +16,19 @@ var dataSet = {
         }, 10);
         $('#area_select').address({
             offsetLeft: '-124px',
-            level: 3,
+            level: 4,
             onClose: function () {
             }
         });
         $('#start_place').address({
             offsetLeft: '-124px',
-            level: 3,
+            level: 2,
             onClose: function () {
             }
         });
         $('#end_place').address({
             offsetLeft: '-124px',
-            level: 3,
+            level: 2,
             onClose: function () {
             }
         });
@@ -97,7 +97,7 @@ var dataSet = {
 
         });
     },
-    radar_chart_init: function (elem, categories, order_ret, vehicles_ret, goods_ret) {
+    radar_chart_init: function (elem, categories, vehicles_ret, vehicles_all_ret) {
         Highcharts.setOptions({
             colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
         });
@@ -142,20 +142,14 @@ var dataSet = {
             },
             series: [
                 {
-                    name: '实际接单',
-                    data: order_ret,
-                    pointPlacement: 'on',
-                    type: 'area'
-                },
-                {
                     name: '活跃司机数',
                     data: vehicles_ret,
                     pointPlacement: 'on',
                     type: 'line'
                 },
                 {
-                    name: '货源量',
-                    data: goods_ret,
+                    name: '总司机数',
+                    data: vehicles_all_ret,
                     pointPlacement: 'on',
                     type: 'line'
                 }
@@ -177,17 +171,13 @@ var dataSet = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field: 'from_address', title: '出发地', width: 280}
-                    , {field: 'to_address', title: '目的地', width: 280}
-                    , {field: 'mileage', title: '里程'}
-                    , {field: 'goods_count', title: '货源量'}
-                    , {field: 'order_count', title: '接单量'}
-                    , {field: 'vehicle_count', title: '活跃司机'}
-                    , {field: 'vehicle_all_count', title: '所有车辆'}
-                    , {field: 'create_time', title: '统计时间'}
+                    {field: 'from_address', title: '出发地', width: 240}
+                    , {field: 'to_address', title: '目的地', width: 240}
+                    , {field: 'login_driver_count', title: '登陆司机'}
+                    , {field: 'total_driver_count', title: '总司机数'}
                     , {
                         field: 'operate', title: '操作', width: 107, templet: function (d) {
-                            return '<button data-from-province="' + d.from_province_id + '"  data-from-city="' + d.from_city_id + '" data-from-town="' + d.from_town_id + '"  data-from-county="' + d.from_county_id + '" data-to-province="' + d.to_province_id + '"  data-to-city="' + d.to_city_id + '"  data-to-town="' + d.to_town_id + '"  data-to-county="' + d.to_county_id + '" class="layui-btn layui-btn-small radar-btn" data-start-time = "' + d.start_time + '" data-end-time = "' + d.end_time + '" style="padding: 0 8px;"><i class="iconfont icon-leidatu" style="margin-right: 2px"></i>雷达图</button>'
+                            return '<button  data-from-city="' + d.from_city_id + '"  data-to-city="' + d.to_city_id + '" class="layui-btn layui-btn-small radar-btn" data-start-time = "' + d.start_time + '" data-end-time = "' + d.end_time + '" style="padding: 0 8px;"><i class="iconfont icon-leidatu" style="margin-right: 2px"></i>雷达图</button>'
                         }
                     }
                 ]]
@@ -204,26 +194,17 @@ var dataSet = {
                     });
                     $('.radar-btn').on('click', function () {
                         var url = '/transport/radar/';
-                        var business = $(this).val();
-                        var from_province_id = $(this).attr('data-from-province');
                         var from_city_id = $(this).attr('data-from-city');
                         var from_county_id = $(this).attr('data-from-county');
-                        var from_town_id = $(this).attr('data-from-town');
-                        var to_province_id = $(this).attr('data-to-province');
                         var to_city_id = $(this).attr('data-to-city');
                         var to_county_id = $(this).attr('data-to-county');
-                        var to_town_id = $(this).attr('data-to-town');
                         var start_time = $(this).attr('data-start-time');
                         var end_time = $(this).attr('data-end-time');
                         var data = {
-                            'from_province_id': from_province_id,
                             'from_city_id': from_city_id,
                             'from_county_id': from_county_id,
-                            'from_town_id': from_town_id,
-                            'to_province_id': to_province_id,
                             'to_city_id': to_city_id,
                             'to_county_id': to_county_id,
-                            'to_town_id': to_town_id,
                             start_time: start_time,
                             end_time: end_time
 
@@ -234,29 +215,23 @@ var dataSet = {
                             dataType: 'json',
                             data: data,
                             beforeSend: function () {
-
+                                layer.load()
                             },
                             success: function (res) {
                                 $('.popup-tbody').html('')
                                 var data = res.data;
                                 var vehicle_name_list = data.vehicle_name_list;
-                                var goods_ret = data.goods_ret;
-                                var orders_ret = data.orders_ret;
                                 var vehicle_ret = data.vehicles_ret;
                                 var vehicles_all_ret = data.vehicles_all_ret
                                 console.log(vehicle_ret);
-                                that.radar_chart_init($('#radar_charts_container'), vehicle_name_list, orders_ret, vehicle_ret, goods_ret);
+                                that.radar_chart_init($('#radar_charts_container'), vehicle_name_list, vehicle_ret, vehicles_all_ret);
                                 for (var i = 0; i < vehicle_name_list.length; i++) {
                                     var str = '<tr>';
                                     str += '<td>' + vehicle_name_list[i] + '</td>';
-                                    str += '<td>' + goods_ret[i] + '单</td>';
                                     str += '<td>' + vehicle_ret[i] + '人</td>';
-                                    str += '<td>' + vehicles_all_ret[i] + '辆</td>';
-                                    str += '<td style="color: #44c660;font-weight: bold;">' + orders_ret[i] + '单</td>';
-                                    str += '<td style="color: #f40;font-weight: bold;">' + that.transition(goods_ret[i], orders_ret[i]) + '</td>';
+                                    str += '<td>' + vehicles_all_ret[i] + '人</td>';
                                     str += '<tr>';
                                     $('.popup-tbody').append(str)
-
                                 }
                                 if ($('.popup-tbody').html() != '') {
                                     layer.open({
@@ -274,6 +249,7 @@ var dataSet = {
                                 layer.msg('数据请求失败')
                             },
                             complete: function () {
+                                layer.closeAll('loading')
                             }
                         })
 
@@ -306,29 +282,23 @@ var dataSet = {
             var layer = layui.layer;
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 var vehicles_ret = res.data.vehicles_ret;
-                var goods_ret = res.data.goods_ret;
-                var orders_ret = res.data.orders_ret;
                 var vehicle_name_list = res.data.vehicle_name_list;
                 var vehicles_all_ret = res.data.vehicles_all_ret
                 $('.transport-tbody').html('');
                 if (vehicle_name_list.length > 0) {
-                    that.radar_chart_init($('#charts_container_two'), vehicle_name_list, orders_ret, vehicles_ret, goods_ret);
+                    that.radar_chart_init($('#charts_container_two'), vehicle_name_list, vehicles_ret, vehicles_all_ret);
                     for (var i = 0; i < vehicle_name_list.length; i++) {
                         var str = '<tr>';
                         str += '<td>' + vehicle_name_list[i] + '</td>';
-                        str += '<td>' + goods_ret[i] + '单</td>';
                         str += '<td>' + vehicles_ret[i] + '人</td>';
-                        str += '<td>' + vehicles_all_ret[i] + '辆</td>';
-                        str += '<td style="color: #44c660;font-weight: bold;">' + orders_ret[i] + '单</td>';
-                        str += '<td style="color: #f40;font-weight: bold;">' + that.transition(goods_ret[i], orders_ret[i]) + '</td>';
+                        str += '<td>' + vehicles_all_ret[i] + '人</td>';
                         str += '<tr>';
                         $('.transport-tbody').append(str)
                     }
-
                 } else {
                     return false;
                 }
-            },function(){
+            }, function () {
                 layer.closeAll('loading')
             })
         });
@@ -344,9 +314,9 @@ var dataSet = {
         return result
     },
     area_select: function () {
-        var auth_role = $('#user-info').attr('data-role-type')
+        var auth_role = $('#user-info').attr('data-role-type');
         if (!!auth_role && auth_role == 1) {
-            $('#super_manager_area').css({'display': 'block'})
+            $('#super_manager_area').css({'display': 'block'});
             $('#super_manager_area_select_zero').address({
                 level: 3,
                 offsetLeft: '-124px',
@@ -367,10 +337,29 @@ $('#search_btn').on('click', function (e) {
 });
 $('#transport_search_box').click(function (e) {
     e.preventDefault();
+    var from_province_id = $('#start_place').attr('provinceid');
+    var from_city_id = $('#start_place').attr('cityid');
+    var to_province_id = $('#end_place').attr('provinceid');
+    var to_city_id = $('#end_place').attr('cityid');
+
     layui.use('layer', function () {
         var layer = layui.layer;
         var start_time = $('#start_time_show').val();
         var end_time = $('#end_time_show').val();
+          if (from_province_id && !from_city_id) {
+            layer.tips('必须选择到城市级别', '#start_place', {
+                tips: [1, '#009688'],
+                time: 4000
+            });
+            return
+        }
+        if (to_province_id && !to_city_id) {
+            layer.tips('必须选择到城市级别', '#end_place', {
+                tips: [1, '#009688'],
+                time: 4000
+            });
+            return
+        }
         if (start_time != '') {
             start_time = common.timeTransform(start_time + ' 00:00:00')
         }
@@ -378,20 +367,13 @@ $('#transport_search_box').click(function (e) {
             end_time = common.timeTransform(end_time + ' 23:59:59')
         }
         var data = {
-            from_province_id: $('#start_place').attr('provinceid') == undefined ? '' : $('#start_place').attr('provinceid'),
-            from_city_id: $('#start_place').attr('cityid') == undefined ? '' : $('#start_place').attr('cityid'),
-            from_county_id: $('#start_place').attr('districtsid') == undefined ? '' : $('#start_place').attr('districtsid'),
-            to_province_id: $('#end_place').attr('provinceid') == undefined ? '' : $('#end_place').attr('provinceid'),
-            to_city_id: $('#end_place').attr('cityid') == undefined ? '' : $('#end_place').attr('cityid'),
-            to_county_id: $('#end_place').attr('districtsid') == undefined ? '' : $('#end_place').attr('districtsid'),
-            vehicle_length: $('#vehicle_length').val(),
-            business: $('#business_show').val(),
-            filter: $('#transport_filter').val(),
+            from_city_id: from_city_id?from_city_id:'',
+            to_city_id: to_city_id?to_city_id:'',
+            calc_town: $('#computed_type').val(),
             start_time: start_time,
             end_time: end_time
-
         };
-        var url = '/transport/list?from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_county_id=' + data.to_county_id + '&vehicle_length=' + data.vehicle_length + '&business=' + data.business + '&filter=' + data.filter + '&start_time=' + data.start_time + '&end_time=' + data.end_time
+        var url = '/transport/list?from_city_id=' + data.from_city_id + '&to_city_id=' + data.to_city_id + '&calc_town=' + data.calc_town + '&start_time=' + data.start_time + '&end_time=' + data.end_time;
         dataSet.tableRender(url)
     })
 })
