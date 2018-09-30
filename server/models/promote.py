@@ -182,6 +182,18 @@ class PromoteEffectList(object):
 
             fetch_user_id_str = detail['user_id']
 
+            if not fetch_user_id_str:
+                db_data = {
+                    'goods_count': 0,
+                    'goods_owner_count': 0,
+                    'goods_received_count': 0,
+                    'accept_order_count': 0,
+                    'sticker_driver_count': 0,
+                    'mobile': detail['referrer_mobile'],
+                }
+                ret.append(db_data)
+                continue
+
             db_sql = """
                     SELECT *
                     FROM
