@@ -145,7 +145,7 @@ var dataSet = {
                     name: '活跃司机数',
                     data: vehicles_ret,
                     pointPlacement: 'on',
-                    type: 'line'
+                    type: 'area'
                 },
                 {
                     name: '总司机数',
@@ -171,27 +171,35 @@ var dataSet = {
                     statusCode: 100000
                 }
                 , cols: [[
-                    {field: 'from_address', title: '出发地', width: 240}
-                    , {field: 'to_address', title: '目的地', width: 240}
+                    {field: 'from_address', title: '出发地'}
+                    , {field: 'to_address', title: '目的地'}
                     , {field: 'login_driver_count', title: '登陆司机'}
                     , {field: 'total_driver_count', title: '总司机数'}
                     , {
-                        field: 'operate', title: '操作', width: 107, templet: function (d) {
-                            return '<button  data-from-city="' + d.from_city_id + '"  data-to-city="' + d.to_city_id + '" class="layui-btn layui-btn-small radar-btn" data-start-time = "' + d.start_time + '" data-end-time = "' + d.end_time + '" style="padding: 0 8px;"><i class="iconfont icon-leidatu" style="margin-right: 2px"></i>雷达图</button>'
+                        field: 'operate', title: '操作', templet: function (d) {
+                            return '<button  data-from-city="' + d.from_city_id + '"  data-from-county="'+d.from_county_id+'" data-to-city="' + d.to_city_id + '" data-to-county="' + d.to_county_id + '" class="layui-btn layui-btn-small radar-btn" data-start-time = "' + d.start_time + '" data-end-time = "' + d.end_time + '" style="padding: 0 8px;"><i class="iconfont icon-leidatu" style="margin-right: 2px"></i>雷达图</button>'
                         }
                     }
                 ]]
                 ,
                 done: function (res, curr, count) {
                     $('.main-content-right').addClass('animated fadeIn');
-                    $("td[data-field='business']").children().each(function () {
-                        if ($(this).text() == 1) {
-                            $(this).text('同城')
-                        }
-                        if ($(this).text() == 2) {
-                            $(this).text('跨城')
-                        }
-                    });
+                    $('.preview').removeClass('none');
+                    var general_situation=res.general_situation;
+                    var str_ = ''
+                    $('.preview ul').html('')
+                    if(general_situation.length>0){
+                        $.each(general_situation,function(val,index){
+                            console.log(index);
+                            str_+='<li>'+index.from_address+'</li>';
+                            str_+='<li>'+index.to_address+'</li>';
+                            str_+='<li>'+index.login_driver_count+'</li>';
+                            str_+='<li>'+index.total_driver_count+'</li>';
+                        });
+                    }else{
+                          str_+='<li>无数据</li>';
+                    }
+                     $('.preview ul').html(str_)
                     $('.radar-btn').on('click', function () {
                         var url = '/transport/radar/';
                         var from_city_id = $(this).attr('data-from-city');
@@ -252,8 +260,7 @@ var dataSet = {
                                 layer.closeAll('loading')
                             }
                         })
-
-                    })
+                    });
                     common.clearSelect()
                 }
                 , id: 'testReload'
