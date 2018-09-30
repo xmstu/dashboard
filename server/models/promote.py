@@ -60,7 +60,7 @@ class PromoteEffectList(object):
         return [i['mobile'] for i in result if i['mobile']] if result else []
 
     @staticmethod
-    def get_promote_list(cursor, params, referrer_mobile):
+    def get_promote_list(read_bi, read_db, params,  referrer_mobile):
         """获取推广人员列表"""
 
         command = """
@@ -70,21 +70,6 @@ class PromoteEffectList(object):
             (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user 
             WHERE referrer_mobile = referrer.mobile AND recommended_status = 2
             AND user_type = 1 AND {bi_fetch_where}) AS register_owner_count,
-        -- 	发货数
-            (SELECT COUNT(1) FROM sshuitouche.shf_goods AS sg 
-            WHERE sg.user_id IN (
-            SELECT DISTINCT user_id FROM tb_inf_user WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND {bi_fetch_where}
-            ) AND {db_goods_fetch_where}) AS goods_count,
-        -- 	发货人数
-            ( SELECT COUNT(DISTINCT sg.user_id) FROM sshuitouche.shf_goods AS sg 
-            WHERE sg.user_id IN (
-            SELECT DISTINCT user_id FROM tb_inf_user WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND {bi_fetch_where}
-            ) AND {db_goods_fetch_where}) AS goods_owner_count,
-        -- 货源被接单数
-            ( SELECT COUNT(so.owner_id) FROM sshuitouche.shb_orders AS so INNER JOIN sshuitouche.shf_goods AS sg ON sg.id = so.goods_id 
-            WHERE so.owner_id IN (
-            SELECT DISTINCT user_id FROM tb_inf_user WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND {bi_fetch_where}
-            ) AND {db_orders_fetch_where}) AS goods_received_count,
         -- 注册司机数
             (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user 
             WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND user_type = 2 
@@ -92,22 +77,7 @@ class PromoteEffectList(object):
         -- 认证司机数
             (SELECT COUNT(DISTINCT user_id) FROM tb_inf_user 
             WHERE referrer_mobile = referrer.mobile AND recommended_status = 2
-            AND driver_auth = 1 AND {bi_fetch_where}) AS auth_driver_count,
-        -- 司机接单数
-            (SELECT COUNT(1) FROM sshuitouche.shb_orders AS so INNER JOIN sshuitouche.shf_goods AS sg ON sg.id = so.goods_id
-            WHERE so.driver_id IN (
-            SELECT DISTINCT user_id FROM tb_inf_user WHERE referrer_mobile = referrer.mobile AND recommended_status = 2
-            AND {bi_fetch_where}) AND {db_orders_fetch_where}
-            ) AS accept_order_count,
-        -- 百万车贴司机数
-            (
-            SELECT COUNT(su.id) FROM sshuitouche.sml_ads AS sml_ads 
-            INNER JOIN sshuitouche.shu_users AS su ON su.mobile = sml_ads.driver_mobile AND sml_ads.audit = 2 
-            WHERE su.id IN (
-            SELECT DISTINCT user_id FROM tb_inf_user 
-            WHERE referrer_mobile = referrer.mobile AND recommended_status = 2 AND {bi_fetch_where}
-            )
-            ) AS sticker_driver_count
+            AND driver_auth = 1 AND {bi_fetch_where}) AS auth_driver_count
         FROM
             (
             SELECT
@@ -163,16 +133,103 @@ class PromoteEffectList(object):
             """.format(goods_type=params['goods_type'])
 
         command = command % promote_mobile
-
         try:
-            result = cursor.query(
-                command.format(bi_fetch_where=bi_fetch_where, db_goods_fetch_where=db_goods_fetch_where,
-                               db_orders_fetch_where=db_orders_fetch_where))
-            return result if result else []
+            bi_ret = read_bi.query(command.format(bi_fetch_where=bi_fetch_where))
+            db_ret = PromoteEffectList.get_data_from_db(read_bi, read_db, referrer_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where)
+            for i in bi_ret:
+                for j in db_ret:
+                    if i['mobile'] == j['mobile']:
+                        i.update(j)
+                        break
+
+            return bi_ret if bi_ret else []
         except Exception as e:
             log.error('推广统计列表无法获取数据,错误原因是:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='内部服务器错误'))
 
+    @staticmethod
+    def get_data_from_db(read_bi, read_db, referrer_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where):
+        ret = []
+        for mobile in referrer_mobile:
+            tb_sql = """
+                    SELECT
+                        DISTINCT user_id 
+                    FROM tb_inf_user 
+                    WHERE 
+                        referrer_mobile = {mobile}
+                        AND recommended_status = 2 AND {bi_fetch_where}
+                    """
+
+            fetch_user_id = read_bi.query(tb_sql.format(mobile=mobile, bi_fetch_where=bi_fetch_where))
+            fetch_user_id_str = ','.join([str(i['user_id']) for i in fetch_user_id])
+
+            if not fetch_user_id_str:
+                fetch_user_id_str = '-1'
+
+            db_sql = """
+                    SELECT *
+                    FROM
+                    (
+                    SELECT
+                        COUNT( 1 ) AS goods_count,
+                        COUNT( DISTINCT sg.user_id ) AS goods_owner_count
+                    FROM
+                        shf_goods AS sg 
+                    WHERE
+                        sg.user_id IN (%(fetch_user_id_str)s) 
+                        AND {db_goods_fetch_where}
+                    ) 
+                    AS a,
+                    (
+                    SELECT
+                        COUNT( so.owner_id ) AS goods_received_count
+                    FROM
+                        shb_orders AS so
+                        INNER JOIN shf_goods AS sg ON sg.id = so.goods_id 
+                    WHERE
+                        so.owner_id IN (%(fetch_user_id_str)s) 
+                        AND {db_orders_fetch_where}
+                    ) 
+                    AS b,
+                    (
+                    SELECT
+                        COUNT( so.driver_id  ) AS accept_order_count
+                    FROM
+                        shb_orders AS so
+                        INNER JOIN shf_goods AS sg ON sg.id = so.goods_id 
+                    WHERE
+                        so.driver_id IN (%(fetch_user_id_str)s) 
+                        AND {db_orders_fetch_where}
+                    ) 
+                    AS c,
+                    (
+                    SELECT
+                        COUNT( su.id ) AS sticker_driver_count
+                    FROM
+                        sml_ads AS sml_ads
+                        INNER JOIN shu_users AS su ON su.mobile = sml_ads.driver_mobile 
+                        AND sml_ads.audit = 2 
+                    WHERE
+                        su.id IN (%(fetch_user_id_str)s) 
+                    ) 
+                    AS d
+                    """ % {'fetch_user_id_str': fetch_user_id_str}
+
+            db_data = read_db.query(db_sql.format(db_goods_fetch_where=db_goods_fetch_where, db_orders_fetch_where=db_orders_fetch_where))
+            if db_data:
+                db_data = db_data[0]
+                db_data.setdefault('mobile', mobile)
+            else:
+                db_data = {
+                    'goods_count': 0,
+                    'goods_owner_count': 0,
+                    'goods_received_count': 0,
+                    'accept_order_count': 0,
+                    'sticker_driver_count': 0,
+                    'mobile': mobile,
+                }
+            ret.append(db_data)
+        return ret
 
     @staticmethod
     def check_promoter(cursor, user_id, mobile):

@@ -34,13 +34,12 @@ class PromoteEffectDecorator(object):
             if count == 0:
                 return Response(result=[], count=0, params=params)
             # 推广列表
-            result = PromoteEffectList.get_promote_list(db.read_bi, params, referrer_mobile)
+            result = PromoteEffectList.get_promote_list(db.read_bi, db.read_db, params, referrer_mobile)
 
             return make_resp(APIStatus.Ok, count=count, data=result), HTTPStatus.Ok
         except Exception as e:
             log.error('推广统计列表无法获取数据,错误原因是:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='内部服务器错误'))
-
 
     @staticmethod
     @make_decorator
