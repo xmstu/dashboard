@@ -359,7 +359,7 @@ var pageSet = {
                 statistic_start_time = Number(common.timeTransform($('#statistic_start_time').val() + ' 00:00:00'));
             }
             if (statistic_end_time != '') {
-                statistic_end_time = Number(common.timeTransform($('#statistic_end_time').val() + ' 00:00:00'));
+                statistic_end_time = Number(common.timeTransform($('#statistic_end_time').val() + ' 23:59:59'));
             }
             if (requestStrat != '' && endRequest == '') {
                 endRequest = common.currentTime();
