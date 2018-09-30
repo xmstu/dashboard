@@ -23,7 +23,7 @@ class VerifyVehicleList(Resource):
             limit=get_arg_int('limit', 10),
             params=get_all_arg())
 
-        log.debug('获取认证车辆列表{}'.format(resp))
+        log.debug('获取认证车辆列表:{}'.format(resp))
         return resp
 
 

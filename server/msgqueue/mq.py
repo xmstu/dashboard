@@ -7,7 +7,7 @@ try:
 except ImportError:
     import json
 
-from server import log
+from server import log, configs
 
 from kafka import KafkaConsumer, KafkaProducer
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
@@ -58,3 +58,24 @@ class ProducerQueue(object):
                 log.warn('推送的消息格式错误: [msg: %s][msg_type: %s]' % (msg, type(msg)))
         except Exception as e:
             log.warn('推送消息失败: [error: %s]' % (e, ), exc_info=True)
+
+
+if __name__ == '__main__':
+    host = configs.remote.da_msg_push.msgqueue.da.host
+    topic = configs.remote.da_msg_push.msgqueue.da.active_da.topic
+    group_id = configs.remote.da_msg_push.msgqueue.da.active_da.group_id
+    client_id = configs.remote.da_msg_push.msgqueue.da.active_da.client_id
+
+    consumer = ConsumerQueue(topic=topic,
+                             bootstrap_servers=host,
+                             client_id=client_id,
+                             group_id=group_id)
+
+    producer = ProducerQueue(bootstrap_servers=configs.remote.da_msg_pro.msgqueue.da.host)
+
+    msg = {"message": "hello kafka"}
+    producer.push(topic, msg)
+
+    for info in consumer:
+        print("from consumer info is:", info)
+

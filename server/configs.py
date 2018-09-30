@@ -47,3 +47,15 @@ def __da_write_db(conf):
 @configs.register('.union.redis.token')
 def __token(conf):
     pass
+
+
+# 消息推送注册
+# @configs.register('.da_msg_pro')
+# def __da_msg_pro(conf):
+#     pass
+#
+#
+# @configs.register('.da_msg_push')
+# def __da_msg_push(conf):
+#     pass
+
