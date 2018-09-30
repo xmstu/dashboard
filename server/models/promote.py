@@ -135,7 +135,7 @@ class PromoteEffectList(object):
         command = command % promote_mobile
         try:
             bi_ret = read_bi.query(command.format(bi_fetch_where=bi_fetch_where))
-            db_ret = PromoteEffectList.get_data_from_db(read_bi, read_db, referrer_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where)
+            db_ret = PromoteEffectList.get_data_from_db(read_bi, read_db, promote_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where)
             for i in bi_ret:
                 for j in db_ret:
                     if i['mobile'] == j['mobile']:
@@ -148,23 +148,39 @@ class PromoteEffectList(object):
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='内部服务器错误'))
 
     @staticmethod
-    def get_data_from_db(read_bi, read_db, referrer_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where):
+    def get_data_from_db(read_bi, read_db, promote_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where):
         ret = []
-        for mobile in referrer_mobile:
-            tb_sql = """
-                    SELECT
-                        DISTINCT user_id 
-                    FROM tb_inf_user 
-                    WHERE 
-                        referrer_mobile = {mobile}
-                        AND recommended_status = 2 AND {bi_fetch_where}
-                    """
 
-            fetch_user_id = read_bi.query(tb_sql.format(mobile=mobile, bi_fetch_where=bi_fetch_where))
-            fetch_user_id_str = ','.join([str(i['user_id']) for i in fetch_user_id])
+        tb_sql = """
+                SELECT 
+                    referrer_mobile,
+                    GROUP_CONCAT(DISTINCT user_id) AS user_id
+                FROM
+                    tb_inf_user 
+                WHERE
+                    referrer_mobile IN(%(promote_mobile)s)
+                    AND recommended_status = 2 AND {bi_fetch_where}
+                GROUP BY
+                    referrer_mobile
+                """ % {'promote_mobile': promote_mobile}
 
-            if not fetch_user_id_str:
-                fetch_user_id_str = '-1'
+        fetch_user = read_bi.query(tb_sql.format(bi_fetch_where=bi_fetch_where))
+        if not fetch_user:
+            ret = []
+            for mobile in promote_mobile.split(','):
+                ret.append({
+                        'goods_count': 0,
+                        'goods_owner_count': 0,
+                        'goods_received_count': 0,
+                        'accept_order_count': 0,
+                        'sticker_driver_count': 0,
+                        'mobile': mobile,
+                    })
+            return ret
+
+        for detail in fetch_user:
+
+            fetch_user_id_str = detail['user_id']
 
             db_sql = """
                     SELECT *
@@ -218,7 +234,7 @@ class PromoteEffectList(object):
             db_data = read_db.query(db_sql.format(db_goods_fetch_where=db_goods_fetch_where, db_orders_fetch_where=db_orders_fetch_where))
             if db_data:
                 db_data = db_data[0]
-                db_data.setdefault('mobile', mobile)
+                db_data.setdefault('mobile', detail['referrer_mobile'])
             else:
                 db_data = {
                     'goods_count': 0,
@@ -226,7 +242,7 @@ class PromoteEffectList(object):
                     'goods_received_count': 0,
                     'accept_order_count': 0,
                     'sticker_driver_count': 0,
-                    'mobile': mobile,
+                    'mobile': detail['referrer_mobile'],
                 }
             ret.append(db_data)
         return ret
