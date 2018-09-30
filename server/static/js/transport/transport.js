@@ -155,7 +155,6 @@ var dataSet = {
                 }
             ]
         })
-
     },
     tableRender: function (table_url) {
         var that = this;

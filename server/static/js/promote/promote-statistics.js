@@ -120,19 +120,19 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         }
     });
     laydate.render({
-        elem: '#statistics_start_time',
+        elem: '#statistic_start_time',
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
         format: 'yyyy/MM/dd',
         done: function (val, index) {
-            if ($('#statistics_start_time').val() == '') {
-                $('#statistics_start_time').next('.date-tips-icon').show();
+            if ($('#statistic_start_time').val() == '') {
+                $('#statistic_start_time').next('.date-tips-icon').show();
             } else {
-                $('#statistics_start_time').next('.date-tips-icon').hide()
+                $('#statistic_start_time').next('.date-tips-icon').hide()
             }
-            var startTime = common.timeTransform($('#statistics_start_time').val());
-            var endTime = common.timeTransform($('#statistics_end_time').val());
+            var startTime = common.timeTransform($('#statistic_start_time').val());
+            var endTime = common.timeTransform($('#statistic_end_time').val());
             if (startTime > endTime) {
                 layer.msg('提示：开始时间大于了结束时间！');
                 return false;
@@ -140,19 +140,19 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         }
     });
     laydate.render({
-        elem: '#statistics_end_time',
+        elem: '#statistic_end_time',
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
         format: 'yyyy/MM/dd',
         done: function (val, index) {
-            if ($('#statistics_end_time').val() == '') {
-                $('#statistics_end_time').next('.date-tips-icon').show();
+            if ($('#statistic_end_time').val() == '') {
+                $('#statistic_end_time').next('.date-tips-icon').show();
             } else {
-                $('#statistics_end_time').next('.date-tips-icon').hide()
+                $('#statistic_end_time').next('.date-tips-icon').hide()
             }
-            var startTime = common.timeTransform($('#statistics_start_time').val());
-            var endTime = common.timeTransform($('#statistics_end_time').val());
+            var startTime = common.timeTransform($('#statistic_start_time').val());
+            var endTime = common.timeTransform($('#statistic_end_time').val());
             if (startTime > endTime) {
                 layer.msg('提示：开始时间大于了结束时间！');
                 return false;
@@ -347,19 +347,19 @@ var pageSet = {
             var layer = layui.layer;
             var requestStrat = $('#date_show_three').val();
             var endRequest = $('#date_show_four').val();
-            var statistics_start_time = $('#statistics_start_time').val();
-            var statistics_end_time = $('#statistics_end_time').val();
+            var statistic_start_time = $('#statistic_start_time').val();
+            var statistic_end_time = $('#statistic_end_time').val();
             if (requestStrat != '') {
                 requestStrat = Number(common.timeTransform($('#date_show_three').val() + ' 00:00:00'));
             }
             if (endRequest != '') {
                 endRequest = common.timeTransform($('#date_show_four').val() + ' 23:59:59');
             }
-            if (statistics_start_time != '') {
-                statistics_start_time = Number(common.timeTransform($('#statistics_start_time').val() + ' 00:00:00'));
+            if (statistic_start_time != '') {
+                statistic_start_time = Number(common.timeTransform($('#statistic_start_time').val() + ' 00:00:00'));
             }
-            if (statistics_end_time != '') {
-                statistics_end_time = Number(common.timeTransform($('#statistics_end_time').val() + ' 00:00:00'));
+            if (statistic_end_time != '') {
+                statistic_end_time = Number(common.timeTransform($('#statistic_end_time').val() + ' 00:00:00'));
             }
             if (requestStrat != '' && endRequest == '') {
                 endRequest = common.currentTime();
@@ -378,10 +378,10 @@ var pageSet = {
                 goods_type: $('#goods_type').val(),
                 register_start_time: requestStrat,
                 register_end_time: endRequest,
-                statistics_start_time: statistics_start_time,
-                statistics_end_time: statistics_end_time
+                statistic_start_time: statistic_start_time,
+                statistic_end_time: statistic_end_time
             };
-            var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&goods_type=' + data.goods_type + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&statistics_start_time=' + data.statistics_start_time + '&statistics_end_time=' + data.statistics_end_time;
+            var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&goods_type=' + data.goods_type + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&statistic_start_time=' + data.statistic_start_time + '&statistic_end_time=' + data.statistic_end_time;
             that.tableRender(url)
         })
     },
@@ -480,8 +480,8 @@ var pageSet = {
                                         $('#deleteButton_' + current_val).parents('tr').css({'display': 'none'});
                                         var requestStrat = $('#date_show_three').val();
                                         var endRequest = $('#date_show_four').val();
-                                        var statistics_start_time = $('#statistics_start_time').val();
-                                        var statistics_end_time = $('#statistics_end_time').val();
+                                        var statistic_start_time = $('#statistic_start_time').val();
+                                        var statistic_end_time = $('#statistic_end_time').val();
 
                                         if (requestStrat != '') {
                                             requestStrat = common.timeTransform($('#date_show_three').val() + ' 00:00:00');
@@ -489,11 +489,11 @@ var pageSet = {
                                         if (endRequest != '') {
                                             endRequest = common.timeTransform($('#date_show_four').val() + ' 23:59:59');
                                         }
-                                        if (statistics_start_time != '') {
-                                            statistics_start_time = common.timeTransform($('#statistics_start_time').val() + ' 00:00:00');
+                                        if (statistic_start_time != '') {
+                                            statistic_start_time = common.timeTransform($('#statistic_start_time').val() + ' 00:00:00');
                                         }
-                                        if (statistics_end_time != '') {
-                                            statistics_end_time = common.timeTransform($('#statistics_end_time').val() + ' 23:59:59');
+                                        if (statistic_end_time != '') {
+                                            statistic_end_time = common.timeTransform($('#statistic_end_time').val() + ' 23:59:59');
                                         }
                                         table.reload('dataTable', {
                                             where: {
@@ -502,8 +502,8 @@ var pageSet = {
                                                 goods_type: $('#goods_type').val(),
                                                 register_start_time: requestStrat,
                                                 register_end_time: endRequest,
-                                                statistics_start_time: statistics_start_time,
-                                                statistics_end_time: statistics_end_time
+                                                statistic_start_time: statistic_start_time,
+                                                statistic_end_time: statistic_end_time
                                             },
                                             loading: true
                                         });
