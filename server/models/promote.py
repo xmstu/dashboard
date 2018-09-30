@@ -111,10 +111,10 @@ class PromoteEffectList(object):
         # 统计时间
         if params['statistic_start_time'] and params['statistic_end_time']:
             db_goods_fetch_where += """
-            AND create_time >= {} AND create_time < {}
+            AND create_time >= {0} AND create_time < {1}
             """.format(params['statistic_start_time'], params['statistic_end_time'])
             db_orders_fetch_where += """
-            AND so.create_time >= {} AND so.create_time < {}
+            AND so.create_time >= {0} AND so.create_time < {1}
             """.format(params['statistic_start_time'], params['statistic_end_time'])
 
         # 一口价/议价

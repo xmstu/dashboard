@@ -29,7 +29,7 @@ class PromoteEffect(object):
 
             # 补全时间
             params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
-            params['statistic_start_time'], params['statistic_end_time'] = complement_time(params['statistic_end_time'], params['statistic_end_time'])
+            params['statistic_start_time'], params['statistic_end_time'] = complement_time(params['statistic_start_time'], params['statistic_end_time'])
 
             # 判断时间是否合法
             if not compare_time(params['register_start_time'], params['register_end_time']):
