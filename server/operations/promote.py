@@ -14,28 +14,33 @@ class PromoteEffectDecorator(object):
     @staticmethod
     @make_decorator
     def get_promote_effect_list(page, limit, params):
-        promoter_mobile = []
-        # 城市经理
-        if 4 == params['role_big_type']:
-            promoter_mobile = PromoteEffectList.get_promoter_mobile_by_city_manage(db.read_bi, params)
-        # 管理员
-        elif params['role_big_type'] == 1:
-            promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi, params)
-        # 区镇合伙人
-        elif params['role_big_type'] in (2, 3):
-            city_region = set([init_regions.get_parent_id(i) for i in params['regions']])
-            promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
-        else:
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='当前登录人员身份错误'))
-        # 推广人员数量即为总数
-        count = len(promoter_mobile)
-        referrer_mobile = promoter_mobile[(page-1)*limit:page*limit+1]
-        if count == 0:
-            return Response(result=[], count=0, params=params)
-        # 推广列表
-        result = PromoteEffectList.get_promote_list(db.read_bi, params, referrer_mobile)
+        try:
+            promoter_mobile = []
+            # 城市经理
+            if 4 == params['role_big_type']:
+                promoter_mobile = PromoteEffectList.get_promoter_mobile_by_city_manage(db.read_bi, params)
+            # 管理员
+            elif params['role_big_type'] == 1:
+                promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi, params)
+            # 区镇合伙人
+            elif params['role_big_type'] in (2, 3):
+                city_region = set([init_regions.get_parent_id(i) for i in params['regions']])
+                promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
+            else:
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='当前登录人员身份错误'))
+            # 推广人员数量即为总数
+            count = len(promoter_mobile)
+            referrer_mobile = promoter_mobile[(page - 1) * limit:page * limit + 1]
+            if count == 0:
+                return Response(result=[], count=0, params=params)
+            # 推广列表
+            result = PromoteEffectList.get_promote_list(db.read_bi, params, referrer_mobile)
 
-        return make_resp(APIStatus.Ok, count=count, data=result), HTTPStatus.Ok
+            return make_resp(APIStatus.Ok, count=count, data=result), HTTPStatus.Ok
+        except Exception as e:
+            log.error('推广统计列表无法获取数据,错误原因是:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='内部服务器错误'))
+
 
     @staticmethod
     @make_decorator

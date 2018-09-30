@@ -164,9 +164,15 @@ class PromoteEffectList(object):
 
         command = command % promote_mobile
 
-        result = cursor.query(command.format(bi_fetch_where=bi_fetch_where, db_goods_fetch_where=db_goods_fetch_where,
-                                             db_orders_fetch_where=db_orders_fetch_where))
-        return result if result else []
+        try:
+            result = cursor.query(
+                command.format(bi_fetch_where=bi_fetch_where, db_goods_fetch_where=db_goods_fetch_where,
+                               db_orders_fetch_where=db_orders_fetch_where))
+            return result if result else []
+        except Exception as e:
+            log.error('推广统计列表无法获取数据,错误原因是:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='内部服务器错误'))
+
 
     @staticmethod
     def check_promoter(cursor, user_id, mobile):
