@@ -70,6 +70,12 @@ class SessionOperationClass(object):
         return role_name
 
     @staticmethod
+    def get_role_id():
+        """获取角色id"""
+        role_id = session['login']['role_id']
+        return role_id
+
+    @staticmethod
     def get_user_locations():
         """获取地区权限"""
         region_id = session['login'].get('locations', [])

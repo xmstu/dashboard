@@ -12,13 +12,14 @@ class PromoteEffectList(object):
     def get_promoter_mobile_by_city_manage(cursor, params):
         """城市经理获取推广人员信息"""
         command = """
-        SELECT tb_inf_promoter.mobile
-        FROM tb_inf_city_manager
-        LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
-
-        WHERE region_id = :region_id
-        %s
-        AND tb_inf_city_manager.is_deleted = 0
+        SELECT
+            tb_inf_promoter.mobile 
+        FROM
+            tb_inf_promoter 
+        WHERE
+            tb_inf_promoter.is_deleted = 0 
+            AND role_id = :role_id
+            %s
         """
         fetch_where = ''
         # 用户名
@@ -29,7 +30,7 @@ class PromoteEffectList(object):
             fetch_where += "AND tb_inf_promoter.mobile = '%s' " % params['mobile']
 
         command = command % fetch_where
-        result = cursor.query(command, {'user_id': params['user_id'], 'region_id': params['regions'][0]})
+        result = cursor.query(command, params)
 
         return [i['mobile'] for i in result if i['mobile']] if result else []
 
@@ -263,12 +264,15 @@ class PromoteEffectList(object):
     def check_promoter(cursor, params):
         """检查推广人员是否存在"""
         command = '''
-        SELECT tb_inf_city_manager.id
-        FROM tb_inf_city_manager
-        LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
-        WHERE region_id = :region_id AND tb_inf_city_manager.is_deleted = 0
-        AND tb_inf_promoter.mobile = :mobile '''
-
+        SELECT
+            id 
+        FROM
+            tb_inf_promoter 
+        WHERE
+            is_deleted = 0
+            AND role_id = :role_id 
+            AND mobile = :mobile 
+        '''
         result = cursor.query_one(command, params)
 
         return result['id'] if result else None
@@ -278,8 +282,8 @@ class PromoteEffectList(object):
         """添加推广人员"""
         try:
             command = '''
-            INSERT INTO tb_inf_promoter(manager_id, user_name, mobile)
-            VALUES ((SELECT id FROM tb_inf_city_manager WHERE region_id = :region_id), :user_name, :mobile)
+            INSERT INTO tb_inf_promoter(role_id, user_name, mobile)
+            VALUES (:role_id, :user_name, :mobile)
             '''
             result = cursor.insert(command, params)
 
@@ -293,7 +297,7 @@ class PromoteEffectList(object):
         command = '''
         UPDATE tb_inf_promoter
         SET is_deleted = 1
-        WHERE manager_id = (SELECT id FROM tb_inf_city_manager WHERE region_id = :region_id) AND mobile = :promoter_mobile
+        WHERE role_id = :role_id AND mobile = :promoter_mobile
         '''
         result = cursor.update(command, params)
 
@@ -302,17 +306,18 @@ class PromoteEffectList(object):
 
 class PromoteQuality(object):
     @staticmethod
-    def get_promoter_mobile_by_city_manager(cursor, region_id):
+    def get_promoter_mobile_by_city_manager(cursor, params):
         """城市经理获取推广人员信息"""
         command = """
-        SELECT tb_inf_promoter.mobile
-        FROM tb_inf_city_manager
-        LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
-
-        WHERE tb_inf_city_manager.id = (SELECT id FROM tb_inf_city_manager WHERE region_id = :region_id)
-        AND tb_inf_city_manager.is_deleted = 0
+        SELECT
+            tb_inf_promoter.mobile 
+        FROM
+            tb_inf_promoter 
+        WHERE
+            tb_inf_promoter.is_deleted = 0 
+            AND role_id = :role_id
         """
-        result = cursor.query(command, {'region_id': region_id})
+        result = cursor.query(command, params)
 
         return [i['mobile'] for i in result if i['mobile']] if result else []
 

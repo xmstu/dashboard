@@ -61,12 +61,12 @@ class PromoteDelete(Resource):
     @doc.response_promote_effect_delete_param_success
     @filters.PromoteEffect.get_delete_data(result=int)
     @operations.PromoteEffectDecorator.delete_promoter(params=dict)
-    @verify.PromoteEffect.check_delete_params(role_type=int, user_id=int, promoter_mobile=str)
+    @verify.PromoteEffect.check_delete_params(role_type=int, promoter_mobile=str)
     def delete(mobile):
         """删除推广人员"""
-        role_type, user_id = SessionOperationClass.get_role()
+        role_type, _ = SessionOperationClass.get_role()
         promoter_mobile = mobile
-        return Response(role_type=role_type, user_id=user_id, promoter_mobile=promoter_mobile)
+        return Response(role_type=role_type, promoter_mobile=promoter_mobile)
 
 
 ns = api.namespace('promote', description='推广统计')

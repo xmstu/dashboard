@@ -43,17 +43,12 @@ class PromoteEffect(object):
                     abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='手机号非法'))
 
             # 获取用户权限和身份
-            role_big_type, user_id = SessionOperationClass.get_role()
-            regions = SessionOperationClass.get_user_locations()
-
-            params['role_big_type'] = role_big_type
-            params['regions'] = regions
-            params['user_id'] = user_id
-
+            params['role_big_type'], _ = SessionOperationClass.get_role()
+            params['role_id'] = SessionOperationClass.get_role_id()
+            params['regions'] = SessionOperationClass.get_user_locations()
             return Response(page=page, limit=limit, params=params)
-
         except Exception as e:
-            log.error('Error:{}'.format(e), exc_info=True)
+            log.error('参数有误:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='参数有误'))
             
     @staticmethod
@@ -61,7 +56,7 @@ class PromoteEffect(object):
     def check_add_params(role_type, user_id, payload):
         mobile = payload.get('mobile', '')
         user_name = str(payload.get('user_name', ''))
-        regions = SessionOperationClass.get_user_locations()
+        role_id = SessionOperationClass.get_role_id()
         if not role_type == 4:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='非城市经理不能添加推广人员'))
         if not user_id:
@@ -73,23 +68,21 @@ class PromoteEffect(object):
         params = {
             "mobile": mobile,
             "user_name": user_name,
-            "region_id": regions[0],
+            "role_id": role_id,
         }
         return Response(params=params)
 
     @staticmethod
     @make_decorator
-    def check_delete_params(role_type, user_id, promoter_mobile):
-        regions = SessionOperationClass.get_user_locations()
+    def check_delete_params(role_type, promoter_mobile):
+        role_id = SessionOperationClass.get_role_id()
         if not role_type == 4:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='非城市经理不能删除推广人员'))
-        if not user_id:
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='管理员id不存在'))
         if not promoter_mobile:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='推广人员不存在'))
         params = {
             "promoter_mobile": promoter_mobile,
-            "region_id": regions[0],
+            "role_id": role_id,
         }
         return Response(params=params)
 
@@ -111,15 +104,14 @@ class PromoteQuality(object):
             params['data_type'] = int(params.get('data_type')) if params.get('data_type') else 1
 
             # 获取用户权限和身份
-            role_type, user_id = SessionOperationClass.get_role()
-            regions = SessionOperationClass.get_user_locations()
+            role_type, _ = SessionOperationClass.get_role()
+            role_id = SessionOperationClass.get_role_id()
 
             if not compare_time(params['start_time'], params['end_time']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
             params['role_type'] = role_type
-            params['user_id'] = user_id
-            params['regions'] = regions
+            params['role_id'] = role_id
 
             return Response(params=params)
         except Exception as e:

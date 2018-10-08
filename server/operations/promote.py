@@ -23,9 +23,9 @@ class PromoteEffectDecorator(object):
             elif params['role_big_type'] == 1:
                 promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi, params)
             # 区镇合伙人
-            elif params['role_big_type'] in (2, 3):
-                city_region = set([init_regions.get_parent_id(i) for i in params['regions']])
-                promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
+            # elif params['role_big_type'] in (2, 3):
+            #     city_region = set([init_regions.get_parent_id(i) for i in params['regions']])
+            #     promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
             else:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='当前登录人员身份错误'))
             # 推广人员数量即为总数
@@ -78,17 +78,17 @@ class PromoteQualityDecorator(object):
             promote_quality = []
             # 城市经理
             if 4 == params['role_type']:
-                promoter_mobile = PromoteQuality.get_promoter_mobile_by_city_manager(db.read_bi, params['regions'][0])
+                promoter_mobile = PromoteQuality.get_promoter_mobile_by_city_manager(db.read_bi, params)
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
             # 管理员
             elif params['role_type'] == 1:
                 promoter_mobile = PromoteQuality.get_promoter_mobile_by_admin(db.read_bi, params)
                 promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
             # 区镇合伙人
-            elif params['role_type'] in (2, 3):
-                city_region = set([init_regions.get_parent_id(i) for i in params['regions']])
-                promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
-                promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
+            # elif params['role_type'] in (2, 3):
+            #     city_region = set([init_regions.get_parent_id(i) for i in params['regions']])
+            #     promoter_mobile = PromoteQuality.get_promoter_mobile_by_suppliers(db.read_bi, city_region, params)
+            #     promoter_ids = PromoteQuality.get_promoter_id(db.read_db, promoter_mobile)
             else:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='当前登录人员身份错误'))
             # 拉新 - 新增 累计
