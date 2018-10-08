@@ -1,6 +1,5 @@
 /**
  * 推广统计
- * Created by Creazy_Run on 2018/5/30.
  */
 /*----------------设置日期框中的初始化值----------------------*/
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
