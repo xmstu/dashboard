@@ -60,7 +60,8 @@ class PromoteEffect(object):
     @make_decorator
     def check_add_params(role_type, user_id, payload):
         mobile = payload.get('mobile', '')
-        user_name = payload.get('user_name', '')
+        user_name = str(payload.get('user_name', ''))
+        regions = SessionOperationClass.get_user_locations()
         if not role_type == 4:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='非城市经理不能添加推广人员'))
         if not user_id:
@@ -69,18 +70,28 @@ class PromoteEffect(object):
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='手机号非法'))
         if not user_name:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='推广人姓名不能为空'))
-        return Response(user_id=user_id, mobile=mobile, user_name=user_name)
+        params = {
+            "mobile": mobile,
+            "user_name": user_name,
+            "region_id": regions[0],
+        }
+        return Response(params=params)
 
     @staticmethod
     @make_decorator
     def check_delete_params(role_type, user_id, promoter_mobile):
+        regions = SessionOperationClass.get_user_locations()
         if not role_type == 4:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='非城市经理不能删除推广人员'))
         if not user_id:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='管理员id不存在'))
         if not promoter_mobile:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='推广人员不存在'))
-        return Response(user_id=user_id, promoter_mobile=promoter_mobile)
+        params = {
+            "promoter_mobile": promoter_mobile,
+            "region_id": regions[0],
+        }
+        return Response(params=params)
 
 
 class PromoteQuality(object):

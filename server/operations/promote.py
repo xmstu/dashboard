@@ -43,14 +43,14 @@ class PromoteEffectDecorator(object):
 
     @staticmethod
     @make_decorator
-    def add_extension_worker(user_id, mobile, user_name):
+    def add_extension_worker(params):
         """添加推广人员"""
         try:
             # 推广人员是否存在
-            is_alive = PromoteEffectList.check_promoter(db.read_bi, user_id, mobile)
+            is_alive = PromoteEffectList.check_promoter(db.read_bi, params)
             if not is_alive:
                 # 添加推广人员
-                result = PromoteEffectList.add_promoter(db.write_bi, user_id, mobile, user_name)
+                result = PromoteEffectList.add_promoter(db.write_bi, params)
                 return Response(result=result)
             return Response(result=0)
         except Exception as e:
@@ -58,10 +58,10 @@ class PromoteEffectDecorator(object):
 
     @staticmethod
     @make_decorator
-    def delete_promoter(user_id, promoter_mobile):
+    def delete_promoter(params):
         """删除推广人员"""
         try:
-            result = PromoteEffectList.delete_promoter(db.write_bi, user_id, promoter_mobile)
+            result = PromoteEffectList.delete_promoter(db.write_bi, params)
             return Response(result=result)
         except Exception as e:
             log.error('删除推广人员失败: [error: %s]' % e, exc_info=True)

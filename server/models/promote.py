@@ -16,7 +16,7 @@ class PromoteEffectList(object):
         FROM tb_inf_city_manager
         LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
 
-        WHERE tb_inf_city_manager.id = (SELECT id FROM tb_inf_city_manager WHERE region_id = :region_id)
+        WHERE region_id = :region_id
         %s
         AND tb_inf_city_manager.is_deleted = 0
         """
@@ -260,49 +260,42 @@ class PromoteEffectList(object):
         return ret
 
     @staticmethod
-    def check_promoter(cursor, user_id, mobile):
+    def check_promoter(cursor, params):
         """检查推广人员是否存在"""
         command = '''
         SELECT tb_inf_city_manager.id
         FROM tb_inf_city_manager
         LEFT JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
-        WHERE tb_inf_city_manager.id = :user_id AND tb_inf_city_manager.is_deleted = 0
+        WHERE region_id = :region_id AND tb_inf_city_manager.is_deleted = 0
         AND tb_inf_promoter.mobile = :mobile '''
 
-        result = cursor.query_one(command, {'user_id': user_id, 'mobile': mobile})
+        result = cursor.query_one(command, params)
 
         return result['id'] if result else None
 
     @staticmethod
-    def add_promoter(cursor, user_id, mobile, user_name):
+    def add_promoter(cursor, params):
         """添加推广人员"""
         try:
             command = '''
             INSERT INTO tb_inf_promoter(manager_id, user_name, mobile)
-            VALUES (:manager_id, :user_name, :mobile)
+            VALUES ((SELECT id FROM tb_inf_city_manager WHERE region_id = :region_id), :user_name, :mobile)
             '''
-            result = cursor.insert(command, {
-                'manager_id': user_id,
-                'mobile': mobile,
-                'user_name': user_name
-            })
+            result = cursor.insert(command, params)
 
             return result
         except Exception as e:
-            log.error('添加推广人员失败: [user_id: %s][user_name: %s][mobile: %s][error: %s]' % (user_id, user_name, mobile, e), exc_info=True)
+            log.error('添加推广人员失败: [error: %s]' % e, exc_info=True)
 
     @staticmethod
-    def delete_promoter(cursor, user_id, promoter_mobile):
+    def delete_promoter(cursor, params):
         """删除推广人员"""
         command = '''
         UPDATE tb_inf_promoter
         SET is_deleted = 1
-        WHERE manager_id = :user_id AND mobile = :promoter_mobile
+        WHERE manager_id = (SELECT id FROM tb_inf_city_manager WHERE region_id = :region_id) AND mobile = :promoter_mobile
         '''
-        result = cursor.update(command, {
-            'user_id': user_id,
-            'promoter_mobile': promoter_mobile
-        })
+        result = cursor.update(command, params)
 
         return result
 
