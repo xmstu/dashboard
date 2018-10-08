@@ -112,6 +112,7 @@ class PromoteQuality(object):
 
             params['role_type'] = role_type
             params['role_id'] = role_id
+            params['regions'] = SessionOperationClass.get_user_locations()
 
             return Response(params=params)
         except Exception as e:
