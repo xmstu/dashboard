@@ -297,7 +297,7 @@ class PromoteEffectList(object):
         command = '''
         UPDATE tb_inf_promoter
         SET is_deleted = 1
-        WHERE role_id = :role_id AND mobile = :promoter_mobile
+        WHERE mobile = :promoter_mobile
         '''
         result = cursor.update(command, params)
 
