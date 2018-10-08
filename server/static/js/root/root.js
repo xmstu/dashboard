@@ -28,7 +28,7 @@ var set = {
                     {field: 'status', title: '状态'},
                     {
                         field: 'region_id', title: '操作', width: 120, templet: function (d) {
-                            return '<i data-id="' + d.id + '" class="layui-icon layui-icon-edit edit-icon" title="编辑"  style="margin-right: 40px;cursor:pointer;">&#xe642;</i><i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon delete-icon"  title="删除" ></i>'
+                            return '<i data-id="' + d.id + '" class="layui-icon layui-icon-edit edit-icon" title="编辑"  style="margin-right: 40px;cursor:pointer;"></i><i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon delete-icon"  title="删除" >&#xe640;</i>'
                         }
                     }
                 ]],
@@ -202,7 +202,7 @@ var set = {
                     {field: 'page_name', title: '管理页面'},
                     {
                         field: 'region_id', title: '操作', width: 120, templet: function (d) {
-                            return '<i data-id="' + d.id + '" class="layui-icon layui-icon-edit edit-operate" title="编辑"  style="margin-right: 40px;cursor:pointer;">&#xe642;</i><i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon delete-operate"  title="删除" ></i>'
+                            return '<i data-id="' + d.id + '" class="layui-icon layui-icon-edit edit-operate" title="编辑"  style="margin-right: 40px;cursor:pointer;"></i><i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon delete-operate"  title="删除" >&#xe640;</i>'
                         }
                     }
                 ]],
