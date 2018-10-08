@@ -349,12 +349,14 @@ class PromoteQuality(object):
         if not city_region:
             return []
         command = """
-        SELECT tb_inf_promoter.mobile
-        FROM tb_inf_city_manager
-        INNER JOIN tb_inf_promoter ON tb_inf_city_manager.id = tb_inf_promoter.manager_id AND tb_inf_promoter.is_deleted = 0
-        WHERE tb_inf_city_manager.is_deleted = 0
-        AND tb_inf_city_manager.region_id IN (%s)
-        %s
+        SELECT
+            mobile
+        FROM
+            tb_inf_promoter
+            INNER JOIN tb_inf_roles ON tb_inf_promoter.role_id = tb_inf_roles.id AND tb_inf_promoter.is_deleted = 0 AND tb_inf_roles.is_deleted = 0
+        WHERE
+            tb_inf_roles.region_id = %d 
+            %s
         """
         fetch_where = ''
         # 用户名
@@ -364,7 +366,7 @@ class PromoteQuality(object):
         if params.get('mobile'):
             fetch_where += "AND tb_inf_promoter.mobile = '%s' " % params['mobile']
 
-        command = command % (','.join([str(i) for i in city_region]), fetch_where)
+        command = command % (city_region, fetch_where)
         result = cursor.query(command)
 
         return [i['mobile'] for i in result if i['mobile']] if result else []
