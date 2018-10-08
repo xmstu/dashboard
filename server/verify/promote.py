@@ -75,14 +75,12 @@ class PromoteEffect(object):
     @staticmethod
     @make_decorator
     def check_delete_params(role_type, promoter_mobile):
-        role_id = SessionOperationClass.get_role_id()
-        if not role_type == 4:
+        if role_type not in (1, 4):
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='非城市经理不能删除推广人员'))
         if not promoter_mobile:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='推广人员不存在'))
         params = {
             "promoter_mobile": promoter_mobile,
-            "role_id": role_id,
         }
         return Response(params=params)
 
