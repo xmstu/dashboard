@@ -199,6 +199,7 @@ $('#add_promote_person').on('click', function (e) {
                 success: function (res) {
                     if (res.status == 100000) {
                         layer.msg('添加成功。', {icon: 6});
+                        window.location.reload();
                     } else {
                         layer.msg('添加失败。', {icon: 5});
                     }
