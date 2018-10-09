@@ -171,7 +171,7 @@ function tableInit(url) {
                             type: 1,
                             title: result_title,
                             shadeClose: true,
-                            area: ["1300px", "600px"],
+                            area: ["1200px", "600px"],
                             skin: "layui-layer-molv",
                             closeBtn: 1,
                             content: $("#popup")
@@ -190,7 +190,7 @@ function tableInit(url) {
                             type: 1,
                             title: result_title,
                             shadeClose: true,
-                            area: ["1300px", "600px"],
+                            area: ["1200px", "600px"],
                             skin: "layui-layer-molv",
                             closeBtn: 1,
                             content: $("#popup_one")
