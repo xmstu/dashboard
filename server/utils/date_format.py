@@ -2,6 +2,7 @@
 import datetime, time, calendar
 from server.logger import log
 
+
 def get_date_aggregate(start_time, end_time, periods, data, date_field='create_time', number_field='count'):
     """日期数据聚合
     start_time: datetime.date类型开始日期

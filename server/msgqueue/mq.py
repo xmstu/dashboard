@@ -52,8 +52,6 @@ class ProducerQueue(object):
         try:
             if isinstance(msg, dict):
                 self.client.send(topic=topic, key=str(msg['id']).encode(), value=json.dumps(msg).encode())
-            elif isinstance(msg, str):
-                self.client.send(topic=topic, key=str(msg['id']).encode(), value=msg.encode())
             else:
                 log.warn('推送的消息格式错误: [msg: %s][msg_type: %s]' % (msg, type(msg)))
         except Exception as e:
@@ -71,7 +69,7 @@ if __name__ == '__main__':
                              client_id=client_id,
                              group_id=group_id)
 
-    producer = ProducerQueue(bootstrap_servers=configs.remote.da_msg_pro.msgqueue.da.host)
+    producer = ProducerQueue(bootstrap_servers=configs.remote.da_msg_push.msgqueue.da.host)
 
     msg = {"message": "hello kafka"}
     producer.push(topic, msg)

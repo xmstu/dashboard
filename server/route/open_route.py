@@ -72,6 +72,19 @@ def broker():
             child_id_set = InitRegionModel.get_child_id(db.read_db, parent_id)
             if child_id_set <= locations:
                 locations.add(parent_id)
+
+        level_list = [init_regions.get_current_region_level(i) for i in locations]
+        max_level = max(level_list)
+        if max_level == 3:
+            role = "区镇合伙人"
+            role_type = 2
+        elif max_level == 4:
+            role = "网点管理员"
+            role_type = 3
+        else:
+            role = "无角色"
+            role_type = -1
+
         locations = [str(i) for i in locations]
 
         role_id = Login.get_role_id_by_role(db.read_bi, result[0]['role_type'])
@@ -81,8 +94,8 @@ def broker():
             'user_name': result[0]['user_name'],
             'mobile': result[0]['mobile'],
             'avatar_url': result[0]['avatar_url'],
-            'role': result[0]['role'],
-            'role_type': result[0]['role_type'],
+            'role': role,
+            'role_type': role_type,
             'role_id': role_id,
         }
 
@@ -112,3 +125,10 @@ def home_func():
 def message_func():
     """用户消息页面"""
     return open_route_func('/message/message.html')
+
+
+@app.route('/business_msg/', endpoint='business_msg')
+@visitor_record
+def business_msg_func():
+    """商业消息页面"""
+    return open_route_func('/business_msg/business_msg.html')

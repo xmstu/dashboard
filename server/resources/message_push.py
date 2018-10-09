@@ -127,4 +127,4 @@ class BackgroundThread:
 background_thread = BackgroundThread()
 
 _engine = ElectioneerKazooEngine(hosts=configs.env.zookeeper.host)
-election = Electioneer(engine=_engine, path='/da_msg_push', identifier=None, election_func=background_thread.start)
+election = Electioneer(engine=_engine, path=configs.remote.da_msg_push, identifier=None, election_func=background_thread.start)
