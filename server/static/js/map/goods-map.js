@@ -124,29 +124,68 @@ var set = {
         map.plugin(["AMap.Heatmap"], function () {
             //初始化heatmap对象
             heatmap = new AMap.Heatmap(map, {
-                radius: 10, //给定半径
+                radius: 20, //给定半径
                 opacity: [0, 1]
                 , gradient: {
-                    0.5: 'blue',
+                    0.5: 'red',
                     0.65: 'rgb(117,211,248)',
-                    0.7: 'rgb(0, 255, 0)',
+                    0.7: '#ef7a82',
                     0.9: '#ffea00',
                     1.0: 'red'
                 }
             });
             //设置数据集：该数据为北京部分“公园”数据
             heatmap.setDataSet({
-                data: heatMapData,
+                //data: heatmapData,
+                data:heatMapData,
                 max: 5
             });
+            //添加信息窗体
+             var infoWindow;
+            //在指定位置打开信息窗体
+            function openInfo(position) {
+                //构建信息窗体中显示的内容
+                var info = [];
+                info.push("<div><div><img style=\"float:left;\" src=\" https://webapi.amap.com/images/autonavi.png \"/></div> ");
+                info.push("<div style=\"padding:0px 0px 0px 4px;\"><b>省省回头车</b>");
+                info.push("用户 : 司机回头客    送货量: 102");
+                info.push("电话 : 010-84107000   邮编 : 100102");
+                info.push("地址 :北京市朝阳区望京阜荣街10号首开广场4层</div></div>");
+                infoWindow = new AMap.InfoWindow({
+                    content: info.join("<br/>")  //使用默认信息窗体框样式，显示信息内容
+                });
+                infoWindow.open(map, position);
+            }
+            //********增加标记marker，并移除上一个marker**********
+            var m = {};
+            map.on('click', function (e) {
+                // alert(map.getZoom());
+                map.remove(m);
+                var LngLat = [e.lnglat.getLng(), e.lnglat.getLat()];
+                var m1 = new AMap.Marker({
+                    position: [e.lnglat.getLng(), e.lnglat.getLat()],
+                    animation: 'AMAP_ANIMATION_DROP',
+                    title: '标题'
+                    //icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png"
+                });
+                m = m1;
+                map.add(m1);
+                openInfo( [e.lnglat.getLng(), e.lnglat.getLat()]);//信息窗体打开
+                $(".weather-city-search").html("地图-经纬度:" + LngLat[0] + "," + LngLat[1]);
+            });
+            map.on('rightclick', function (e) {
+                map.remove(m);
+                $(".weather-city-search").html("");
+            });
+            //********增加标记marker，并移除上一个marker**********
             $('#heatMapHide').click(function () {
                 heatmap.hide();
             });
             $('#heatMapShow').click(function () {
                 heatmap.show();
-                console.log(heatmap.getMap());;
-                console.log(heatmap.getOptions());;
-                console.log(heatmap.getDataSet());;
+                console.log(heatmap.getMap());
+                console.log(heatmap.getOptions());
+                console.log(heatmap.getDataSet());
             });
         });
 
