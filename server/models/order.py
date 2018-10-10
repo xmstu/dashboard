@@ -127,14 +127,14 @@ class CancelOrderReasonModel(object):
 
         command = """
         SELECT
-            shb_orders.canceled_reason_text,
+            `value` AS canceled_reason_text,
             COUNT(1) as reason_count
         FROM
             `shb_orders`
-            LEFT JOIN shf_goods ON shb_orders.goods_id = shf_goods.id 
+            INNER JOIN shm_dictionary_items ON shb_orders.canceled_reason_id = shm_dictionary_items.id 
         WHERE shb_orders.status = -1 AND canceled_user_id != 0
             {fetch_where}
-            GROUP BY canceled_reason_text
+            GROUP BY canceled_reason_id 
             ORDER BY reason_count 
         """
 
@@ -142,16 +142,21 @@ class CancelOrderReasonModel(object):
         region = ' AND 1=1 '
         if params['region_id']:
             if isinstance(params['region_id'], int):
-                region = 'AND (shb_orders.from_province_id = %(region_id)s OR shb_orders.from_city_id = %(region_id)s OR shb_orders.from_county_id = %(region_id)s OR shb_orders.from_town_id = %(region_id)s) ' % {
-                    'region_id': params['region_id']}
+                region = """
+                AND (
+                shb_orders.from_province_id = %(region_id)s 
+                OR shb_orders.from_city_id = %(region_id)s 
+                OR shb_orders.from_county_id = %(region_id)s 
+                OR shb_orders.from_town_id = %(region_id)s) 
+                """ % {'region_id': params['region_id']}
             elif isinstance(params['region_id'], list):
                 region = '''
-                        AND (
-                        shb_orders.from_province_id IN (%(region_id)s)
-                        OR shb_orders.from_city_id IN (%(region_id)s)
-                        OR shb_orders.from_county_id IN (%(region_id)s)
-                        OR shb_orders.from_town_id IN (%(region_id)s)
-                        ) ''' % {'region_id': ','.join(params['region_id'])}
+                AND (
+                shb_orders.from_province_id IN (%(region_id)s)
+                OR shb_orders.from_city_id IN (%(region_id)s)
+                OR shb_orders.from_county_id IN (%(region_id)s)
+                OR shb_orders.from_town_id IN (%(region_id)s)
+                ) ''' % {'region_id': ','.join(params['region_id'])}
 
         fetch_where += region
 
