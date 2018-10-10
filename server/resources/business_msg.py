@@ -7,7 +7,7 @@ from server import operations, filters
 from server.meta.decorators import Response
 from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_resp, APIStatus
-from server.utils.request import get_all_arg
+from server.utils.request import get_all_arg, get_payload
 
 
 class BusinessMsg(Resource):
@@ -27,11 +27,18 @@ class BusinessMsg(Resource):
 
         return Response(params=params)
 
-    # @doc.request_business_msg_post
-    # @operations
-    # def post(self):
-    #     pass
+
+class BusinessMsgOperation(Resource):
+    @doc.request_business_msg_post
+    @operations.BusinessMsgList.put_msg(params=dict)
+    def put(self, msg_id):
+        params = get_payload()
+        params['msg_id'] = int(msg_id)
+        params['follow_name'] = str(params.get('follow_name') or '')
+        params['follow_result'] = str(params.get('follow_result') or '')
+        return Response(params=params)
 
 
 ns = api.namespace('business_msg', description='物流商业信息')
 ns.add_resource(BusinessMsg, '/business_msg/')
+ns.add_resource(BusinessMsgOperation, '/business_msg/<int:msg_id>')

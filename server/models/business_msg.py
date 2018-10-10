@@ -66,3 +66,19 @@ class BusinessMsgListModel(object):
             "count": count if count else 0,
             "data": data if data else []
         }
+
+    @staticmethod
+    def put_msg(cursor, params):
+
+        command = """
+        UPDATE x_activity_inputs 
+        SET follow_admin_name = :follow_name,
+        follow_result = :follow_result 
+        WHERE
+            id = :msg_id
+            AND follow_admin_name = ''
+        """
+
+        row_count = cursor.update(command, params)
+
+        return row_count

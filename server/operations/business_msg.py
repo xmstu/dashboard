@@ -1,3 +1,5 @@
+from flask_restful import abort
+
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.business_msg import BusinessMsgListModel
@@ -13,3 +15,11 @@ class BusinessMsgList(object):
         if not data:
             return make_resp(APIStatus.Ok, count=0, data=[]), HTTPStatus.Ok
         return Response(data=data)
+
+    @staticmethod
+    @make_decorator
+    def put_msg(params):
+        if not BusinessMsgListModel.put_msg(db.write_db, params):
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='修改信息得跟进人和跟进结果失败,请检查是否有新的更新信息'))
+        return make_resp(APIStatus.Ok, msg="修改信息的跟进人或处理结果成功"), HTTPStatus.Ok
+

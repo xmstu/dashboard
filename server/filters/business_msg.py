@@ -18,9 +18,9 @@ class BusinessMsgList(object):
             Lat_B, Lng_B = re_ret[1]
             mileage = calcDistance(float(Lat_A), float(Lng_A), float(Lat_B), float(Lng_B))
 
-            ret = re.sub("<br>装货-经纬度.*?镇id：(\d+|\d+\r\n)", "", detail['content'])
+            ret = re.sub("<br>装货-经纬度.*?镇id：(\d+)", "", detail['content'], re.S)
 
-            ret = re.sub("<br>卸货-经纬度.*?镇id：(\d+|\d+\r\n)", "", ret)
+            ret = re.sub("<br>卸货-经纬度.*?镇id：(\d+)", "", ret, re.S)
 
             detail['content'] = ret + """<br>里程:%dkm<br>""" % mileage
             detail["msg_type"] = "长期用车"
