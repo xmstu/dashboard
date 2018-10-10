@@ -105,7 +105,7 @@ var set = {
         var zoom;
         var role = $('#user-info').attr('data-role-type');
         if (role == 1) {
-            zoom = 9
+            zoom = 6
         } else {
             zoom = 11
         }
