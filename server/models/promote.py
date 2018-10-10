@@ -244,7 +244,9 @@ class PromoteEffectList(object):
                     AS d
                     """ % {'fetch_user_id_str': fetch_user_id_str}
 
-            db_data = read_db.query(db_sql.format(db_goods_fetch_where=db_goods_fetch_where, db_orders_fetch_where=db_orders_fetch_where))
+            db_sql = db_sql.format(db_goods_fetch_where=db_goods_fetch_where, db_orders_fetch_where=db_orders_fetch_where)
+            log.info("推广统计列表查询sql: [db_sql:%s]" % db_sql)
+            db_data = read_db.query(db_sql)
             if db_data:
                 db_data = db_data[0]
                 db_data.setdefault('mobile', detail['referrer_mobile'])
