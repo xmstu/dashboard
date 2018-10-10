@@ -26,7 +26,7 @@ request_cancel_order_reason_param = api.doc(params={
     'end_time': '结束时间',
     'goods_type': '货源类型',
     'goods_price_type': '货源类型,1:议价,2:一口价,默认:0全部',
-    'cancel_type': '取消原因:1.司机取消;2.货主取消',
+    'cancel_type': '取消原因:1.司机取消;2.货主取消;3.司机不接此单',
     'region_id': '地区id'
 }, description='取消订单原因请求参数')
 

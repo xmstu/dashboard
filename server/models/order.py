@@ -190,8 +190,9 @@ class CancelOrderReasonModel(object):
         if params.get('cancel_type'):
             fetch_where += """
             AND (
-            ({cancel_type}=1 AND shb_orders.canceled_user_id = shb_orders.driver_id) OR
-            ({cancel_type}=2 AND shb_orders.canceled_user_id = shb_orders.owner_id)
+            ({cancel_type}=1 AND shb_orders.canceled_user_id = shb_orders.driver_id AND dictionary_id = 22) OR
+            ({cancel_type}=2 AND shb_orders.canceled_user_id = shb_orders.owner_id AND dictionary_id = 23) OR 
+            ({cancel_type}=3 AND shb_orders.canceled_user_id = shb_orders.driver_id AND dictionary_id = 24)
             )
             """.format(cancel_type=params['cancel_type'])
 
