@@ -10,12 +10,33 @@
     <style>.part-2 .layui-form-item {
         width: 190px;
     }
-    .layui-form-item .layui-input-inline{
+
+    .layui-form-item .layui-input-inline {
         width: 110px;
     }
+
     .layui-form-item .layui-inline {
         margin-right: 0;
-    }</style>
+
+    }
+
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+
+    .layui-input, .layui-textarea {
+        margin: 0 auto;
+        width: 90%;
+        margin-top: 20px;
+    }
+
+    .bottom {
+        margin: 0 auto;
+        width: 30%;
+        margin-top: 25px;
+    }
+    </style>
 </head>
 <body>
 <article id="page_area" class="page-area clearfix">
@@ -31,22 +52,25 @@
                         <h2><i class="iconfont icon-qushi1"></i>物流商机</h2>
                         <hr>
                     </div>
-
+                    <div class="part-1">
+                        <table class="layui-hide" id="business_msg_table"></table>
+                    </div>
                 </div>
             </div>
         </aside>
+
     </article>
 </article>
 <span style="display: none!important">
         <script src="https://s22.cnzz.com/z_stat.php?id=1274088436&web_id=1274088436" language="JavaScript"></script>
 </span>
 <script src="../static/js/libs/jquery-2.1.1.min.js?v=5.8"></script>
-<script src="../static/js/libs/highcharts.min.js?v=5.8"></script>
-<script src="../static/js/libs/highcharts-exporting.js?v=5.8"></script>
+{#<script src="../static/js/libs/highcharts.min.js?v=5.8"></script>#}
+{#<script src="../static/js/libs/highcharts-exporting.js?v=5.8"></script>#}
 <script src="../static/js/libs/jquery.address.js?v=5.8"></script>
 <script src="../static/layui/layui.js?v=5.8"></script>
 <script src="../static/js/common/http.js?v=5.8"></script>
 <script src="../static/js/common/common.js?v=5.8"></script>
-<script src="../static/js/user-statics/user-statistics.js?v=5.8"></script>
+<script src="../static/js/business_msg/business_msg.js?v=5.8"></script>
 </body>
 </html>
