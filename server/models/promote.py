@@ -61,7 +61,7 @@ class PromoteEffectList(object):
         return [i['mobile'] for i in result if i['mobile']] if result else []
 
     @staticmethod
-    def get_promote_list(read_bi, read_db, params,  referrer_mobile):
+    def get_promote_list(read_bi, read_db, params, referrer_mobile):
         """获取推广人员列表"""
 
         command = """
@@ -136,7 +136,7 @@ class PromoteEffectList(object):
         command = command % promote_mobile
         try:
             bi_ret = read_bi.query(command.format(bi_fetch_where=bi_fetch_where))
-            db_ret = PromoteEffectList.get_data_from_db(read_bi, read_db, promote_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where)
+            db_ret = PromoteEffectList.get_data_from_db(read_bi, read_db, referrer_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where)
             for i in bi_ret:
                 for j in db_ret:
                     if i['mobile'] == j['mobile']:
@@ -149,52 +149,34 @@ class PromoteEffectList(object):
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='内部服务器错误'))
 
     @staticmethod
-    def get_data_from_db(read_bi, read_db, promote_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where):
+    def get_data_from_db(read_bi, read_db, referrer_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where):
         ret = []
 
         tb_sql = """
                 SELECT 
-                    referrer_mobile,
-                    GROUP_CONCAT(DISTINCT user_id) AS user_id
+                    DISTINCT user_id AS user_id
                 FROM
                     tb_inf_user 
                 WHERE
-                    referrer_mobile IN(%(promote_mobile)s)
+                    referrer_mobile = %s
                     AND recommended_status = 2 AND {bi_fetch_where}
-                GROUP BY
-                    referrer_mobile
-                """ % {'promote_mobile': promote_mobile}
+                """
 
-        fetch_user = read_bi.query(tb_sql.format(bi_fetch_where=bi_fetch_where))
-        if not fetch_user:
-            ret = []
-            for mobile in promote_mobile.split(','):
+        for promote_mobile in referrer_mobile:
+            tb_sql = tb_sql % promote_mobile
+            fetch_user = read_bi.query(tb_sql.format(bi_fetch_where=bi_fetch_where))
+            if not fetch_user:
                 ret.append({
                         'goods_count': 0,
                         'goods_owner_count': 0,
                         'goods_received_count': 0,
                         'accept_order_count': 0,
                         'sticker_driver_count': 0,
-                        'mobile': mobile,
+                        'mobile': promote_mobile,
                     })
-            return ret
-
-        for detail in fetch_user:
-
-            fetch_user_id_str = detail['user_id']
-
-            if not fetch_user_id_str:
-                db_data = {
-                    'goods_count': 0,
-                    'goods_owner_count': 0,
-                    'goods_received_count': 0,
-                    'accept_order_count': 0,
-                    'sticker_driver_count': 0,
-                    'mobile': detail['referrer_mobile'],
-                }
-                ret.append(db_data)
                 continue
 
+            fetch_user_id_str = ','.join((i['user_id'] for i in fetch_user))
             db_sql = """
                     SELECT *
                     FROM
@@ -249,7 +231,7 @@ class PromoteEffectList(object):
             db_data = read_db.query(db_sql)
             if db_data:
                 db_data = db_data[0]
-                db_data.setdefault('mobile', detail['referrer_mobile'])
+                db_data.setdefault('mobile', promote_mobile)
             else:
                 db_data = {
                     'goods_count': 0,
@@ -257,7 +239,7 @@ class PromoteEffectList(object):
                     'goods_received_count': 0,
                     'accept_order_count': 0,
                     'sticker_driver_count': 0,
-                    'mobile': detail['referrer_mobile'],
+                    'mobile': promote_mobile,
                 }
             ret.append(db_data)
         return ret
