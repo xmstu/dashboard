@@ -158,7 +158,7 @@ class PromoteEffectList(object):
                 FROM
                     tb_inf_user 
                 WHERE
-                    referrer_mobile = %(promote_mobile)s
+                    referrer_mobile = {promote_mobile}
                     AND recommended_status = 2 AND {bi_fetch_where}
                 """
 
@@ -212,8 +212,10 @@ class PromoteEffectList(object):
                 """
 
         for promote_mobile in referrer_mobile:
-            tb_sql = tb_sql % {'promote_mobile': promote_mobile}
-            fetch_user = read_bi.query(tb_sql.format(bi_fetch_where=bi_fetch_where))
+            # tb_sql = tb_sql % {'promote_mobile': promote_mobile}
+            tb_sql = tb_sql.format(promote_mobile=promote_mobile, bi_fetch_where=bi_fetch_where)
+            log.info("推广统计查询被推荐人id [tb_sql:%s]" % tb_sql)
+            fetch_user = read_bi.query(tb_sql)
             if not fetch_user:
                 ret.append({
                         'goods_count': 0,
