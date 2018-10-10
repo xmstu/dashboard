@@ -212,10 +212,10 @@ class PromoteEffectList(object):
                 """
 
         for promote_mobile in referrer_mobile:
-            # tb_sql = tb_sql % {'promote_mobile': promote_mobile}
             tb_sql = tb_sql.format(promote_mobile=promote_mobile, bi_fetch_where=bi_fetch_where)
             log.info("推广统计查询被推荐人id [tb_sql:%s]" % tb_sql)
             fetch_user = read_bi.query(tb_sql)
+            log.info("推广统计查询被推荐人id列表 [fetch_user:%r]" % fetch_user)
             if not fetch_user:
                 ret.append({
                         'goods_count': 0,
@@ -228,6 +228,7 @@ class PromoteEffectList(object):
                 continue
             try:
                 fetch_user_id_str = ','.join((i['user_id'] for i in fetch_user))
+                log.info("推广统计查询被推荐人id字符串 [fetch_user_id_str:%s]" % fetch_user_id_str)
                 db_sql = db_sql % {'fetch_user_id_str': fetch_user_id_str}
                 db_sql = db_sql.format(db_goods_fetch_where=db_goods_fetch_where, db_orders_fetch_where=db_orders_fetch_where)
                 log.info("推广统计列表查询sql: [db_sql:%s]" % db_sql)
