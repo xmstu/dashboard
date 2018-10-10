@@ -162,6 +162,55 @@ class PromoteEffectList(object):
                     AND recommended_status = 2 AND {bi_fetch_where}
                 """
 
+        db_sql = """
+                SELECT *
+                FROM
+                (
+                SELECT
+                    COUNT( 1 ) AS goods_count,
+                    COUNT( DISTINCT sg.user_id ) AS goods_owner_count
+                FROM
+                    shf_goods AS sg 
+                WHERE
+                    sg.user_id IN (%(fetch_user_id_str)s) 
+                    AND {db_goods_fetch_where}
+                ) 
+                AS a,
+                (
+                SELECT
+                    COUNT( so.owner_id ) AS goods_received_count
+                FROM
+                    shb_orders AS so
+                    INNER JOIN shf_goods AS sg ON sg.id = so.goods_id 
+                WHERE
+                    so.owner_id IN (%(fetch_user_id_str)s) 
+                    AND {db_orders_fetch_where}
+                ) 
+                AS b,
+                (
+                SELECT
+                    COUNT( so.driver_id  ) AS accept_order_count
+                FROM
+                    shb_orders AS so
+                    INNER JOIN shf_goods AS sg ON sg.id = so.goods_id 
+                WHERE
+                    so.driver_id IN (%(fetch_user_id_str)s) 
+                    AND {db_orders_fetch_where}
+                ) 
+                AS c,
+                (
+                SELECT
+                    COUNT( su.id ) AS sticker_driver_count
+                FROM
+                    sml_ads AS sml_ads
+                    INNER JOIN shu_users AS su ON su.mobile = sml_ads.driver_mobile 
+                    AND sml_ads.audit = 2 
+                WHERE
+                    su.id IN (%(fetch_user_id_str)s) 
+                ) 
+                AS d
+                """
+
         for promote_mobile in referrer_mobile:
             fetch_user = read_bi.query(tb_sql.format(promote_mobile=promote_mobile, bi_fetch_where=bi_fetch_where))
             if not fetch_user:
@@ -174,64 +223,16 @@ class PromoteEffectList(object):
                         'mobile': promote_mobile,
                     })
                 continue
-
-            fetch_user_id_str = ','.join((i['user_id'] for i in fetch_user))
-            db_sql = """
-                    SELECT *
-                    FROM
-                    (
-                    SELECT
-                        COUNT( 1 ) AS goods_count,
-                        COUNT( DISTINCT sg.user_id ) AS goods_owner_count
-                    FROM
-                        shf_goods AS sg 
-                    WHERE
-                        sg.user_id IN (%(fetch_user_id_str)s) 
-                        AND {db_goods_fetch_where}
-                    ) 
-                    AS a,
-                    (
-                    SELECT
-                        COUNT( so.owner_id ) AS goods_received_count
-                    FROM
-                        shb_orders AS so
-                        INNER JOIN shf_goods AS sg ON sg.id = so.goods_id 
-                    WHERE
-                        so.owner_id IN (%(fetch_user_id_str)s) 
-                        AND {db_orders_fetch_where}
-                    ) 
-                    AS b,
-                    (
-                    SELECT
-                        COUNT( so.driver_id  ) AS accept_order_count
-                    FROM
-                        shb_orders AS so
-                        INNER JOIN shf_goods AS sg ON sg.id = so.goods_id 
-                    WHERE
-                        so.driver_id IN (%(fetch_user_id_str)s) 
-                        AND {db_orders_fetch_where}
-                    ) 
-                    AS c,
-                    (
-                    SELECT
-                        COUNT( su.id ) AS sticker_driver_count
-                    FROM
-                        sml_ads AS sml_ads
-                        INNER JOIN shu_users AS su ON su.mobile = sml_ads.driver_mobile 
-                        AND sml_ads.audit = 2 
-                    WHERE
-                        su.id IN (%(fetch_user_id_str)s) 
-                    ) 
-                    AS d
-                    """ % {'fetch_user_id_str': fetch_user_id_str}
-
-            db_sql = db_sql.format(db_goods_fetch_where=db_goods_fetch_where, db_orders_fetch_where=db_orders_fetch_where)
-            log.info("推广统计列表查询sql: [db_sql:%s]" % db_sql)
             try:
+                fetch_user_id_str = ','.join((i['user_id'] for i in fetch_user))
+                db_sql = db_sql % {'fetch_user_id_str': fetch_user_id_str}
+                db_sql = db_sql.format(db_goods_fetch_where=db_goods_fetch_where, db_orders_fetch_where=db_orders_fetch_where)
+                log.info("推广统计列表查询sql: [db_sql:%s]" % db_sql)
                 db_data = read_db.query(db_sql)
             except Exception as e:
                 log.error('推广统计列表查询失败 [失败原因是:%s]' % e)
                 db_data = []
+
             if db_data:
                 db_data = db_data[0]
                 db_data.setdefault('mobile', promote_mobile)
