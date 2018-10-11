@@ -2,6 +2,7 @@
 from server.database import db
 from server.meta.decorators import make_decorator, Response
 from server.models.goods import GoodsList, CancelReasonList, GoodsDistributionTrendList, FreshConsignor
+from server.status import make_resp, APIStatus, HTTPStatus
 
 
 class GoodsListDecorator(object):
@@ -25,8 +26,7 @@ class CancelGoodsReason(object):
     @make_decorator
     def get_cancel_reason_list(params):
         cancel_reason_list = CancelReasonList.get_cancel_reason_list(db.read_db, params)
-
-        return Response(data=cancel_reason_list)
+        return make_resp(APIStatus.Ok, data=cancel_reason_list), HTTPStatus.Ok
 
 
 class GoodsDistributionTrend(object):

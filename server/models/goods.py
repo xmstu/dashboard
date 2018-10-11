@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import time
 
 from server import log
 
@@ -106,8 +105,10 @@ class GoodsList(object):
         region = ' AND 1=1 '
         if params['region_id']:
             if isinstance(params['region_id'], int):
-                region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
-                    'region_id': params['region_id']}
+                region = 'AND (from_province_id = %(region_id)s ' \
+                         'OR from_city_id = %(region_id)s ' \
+                         'OR from_county_id = %(region_id)s ' \
+                         'OR from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
             elif isinstance(params['region_id'], list):
                 region = '''
                         AND (
@@ -169,11 +170,15 @@ class GoodsList(object):
         # 货源状态
         if params['goods_status']:
             if params['goods_status'] == 1:
-                fetch_where += ' AND shf_goods.status IN (1,2) AND shf_goods.expired_timestamp > UNIX_TIMESTAMP() '
+                fetch_where += """
+                 AND shf_goods.status IN (1,2)
+                 AND shf_goods.is_deleted = 0
+                 AND shf_goods.expired_timestamp > UNIX_TIMESTAMP()
+                   """
             if params['goods_status'] == 2:
                 fetch_where += ' AND shf_goods.status = 3 '
             if params['goods_status'] == 3:
-                fetch_where += ' AND (shf_goods.is_deleted = 1 OR shf_goods.status = -1) '
+                fetch_where += ' AND shf_goods.is_deleted = 1 '
             if params['goods_status'] == 4:
                 fetch_where += """ 
                         AND shf_goods.STATUS IN ( 1, 2 ) 
@@ -257,7 +262,8 @@ class GoodsList(object):
         if not fields_value:
             goods_count = cursor.query_one('SELECT COUNT(1) AS goods_count FROM shf_goods WHERE 1=1')['goods_count']
         else:
-            goods_count = cursor.query_one(command.format(fields=" COUNT(1) AS goods_count ", fetch_where=fetch_where))['goods_count']
+            goods_count = cursor.query_one(command.format(fields=" COUNT(1) AS goods_count ", fetch_where=fetch_where))[
+                'goods_count']
 
         fetch_where += """ ORDER BY shf_goods.id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
 
@@ -329,7 +335,7 @@ class CancelReasonList(object):
         FROM
             shf_goods 
         WHERE
-            (shf_goods.is_deleted = 1 OR shf_goods.status = -1)
+            shf_goods.is_deleted = 1
             AND {fetch_where}
         GROUP BY canceled_reason_text
         ORDER BY reason_count
@@ -391,8 +397,8 @@ class CancelReasonList(object):
 
         data = {
             'cancel_list': cancel_list,
-            'cancel_list_dict':cancel_list_dict,
-            'sum_count':sum_count
+            'cancel_list_dict': cancel_list_dict,
+            'sum_count': sum_count
         }
 
         return data
@@ -469,9 +475,9 @@ class GoodsDistributionTrendList(object):
                 )
             """.format(payment_method=params['payment_method'])
 
-        wait_where = """ AND ( status = 1 OR status = 2 ) AND shf_goods.is_deleted = 0"""
+        wait_where = """ AND status IN (1, 2) AND shf_goods.is_deleted = 0"""
         recv_where = """ AND shf_goods.STATUS = 3 AND shf_goods.is_deleted = 0"""
-        cancel_where = """ AND (shf_goods.is_deleted = 1 OR shf_goods.status = -1) """
+        cancel_where = """ AND shf_goods.is_deleted = 1 """
 
         all_order = cursor.query(command.format(flag=1, fetch_where=fetch_where))
         wait_order = cursor.query(command.format(flag=0, fetch_where=fetch_where + wait_where))
