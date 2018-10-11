@@ -606,7 +606,7 @@ var common = {
     },
     iconSet: function (setAbout, value, icon) {
         /*侧边栏是后端生成的，这里是根据中文显示用js控制样式，以后后台每增加一个页面，这里也要对应增加一个判断*/
-        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-renminbi'];
+        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-renminbi','layui-icon-template'];
         var value = value.replace(/(^\s*)|(\s*$)/g, "");
         var setAbout = setAbout;
         var children = '';
@@ -702,6 +702,16 @@ var common = {
                     }
 
                 });
+                break;
+            case '我的区域':
+                icon.addClass(arr[7]);
+                setAbout.addClass('menu-district');
+                var children_7 = setAbout.next().children();
+                $.each(children_7, function (val, index) {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '物流商机') {
+                        $(this).find('a').addClass('district-second-menu')
+                    }
+                })
                 break;
         }
     },

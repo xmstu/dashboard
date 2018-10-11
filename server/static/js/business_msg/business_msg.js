@@ -20,21 +20,22 @@ var set = {
                         {
                             field: 'follow_result', title: '操作', templet: function (d) {
                                 if (d.follow_admin_name != "") {
-                                    return "<i  style=\"color:#FF5722\">恭喜您,此单已谈成！</i>";
+                                    return "<i  style=\"color:#FF5722\">此单已谈成！</i>";
                                 }
                                 if (d.follow_result != "" && d.follow_result != "成功") {
-                                    return '<i  style="color:#000000">下次继续努力！</i><br><i style="color:#2F4056"><i style="color:#94757c">失败原因:</i>'+d.follow_result+'</i>';
+                                    return '<i data-id="' + d.id + '" class="layui-icon layui-btn layui-btn-normal layui-icon-praise success-operate" title="谈成了"  style="cursor:pointer;">谈成了</i>' +
+                                        '<i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon layui-btn layui-btn-danger  layui-icon-face-cry defail-operate"  title="没谈成" >没谈成</i>' +
+                                        '<br><i style="color:#2F4056"><i style="color:#94757c">失败原因:</i>' + d.follow_result + '</i>';
                                 }
 
-                                return '<i data-id="' + d.id + '" data-name="' + "假设跟进人" + '" class="layui-icon layui-btn layui-btn-normal layui-icon-praise success-operate" title="谈成了"  style="margin-right: 40px;cursor:pointer;">谈成了</i>' +
-                                    '<i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon layui-btn layui-btn-danger layui-btn-xs layui-icon-face-cry defail-operate"  title="没谈成" >没谈成</i>'
+                                return '<i data-id="' + d.id + '" class="layui-icon layui-btn layui-btn-normal layui-icon-praise success-operate" title="谈成了"  style="cursor:pointer;">谈成了</i>' +
+                                    '<i data-id="' + d.id + '" style="cursor: pointer" class="layui-icon layui-btn layui-btn-danger  layui-icon-face-cry defail-operate"  title="没谈成" >没谈成</i>'
                             }
                         }
                     ]],
                     done: function (res) {
                         layer.closeAll('loading');
                         $('.defail-operate').click(function () {
-                            var msg_id = $(this).attr('data-id');
                             var msg_id = $(this).attr('data-id');
                             layer.open({
                                 type: 1,
@@ -96,7 +97,7 @@ var set = {
             data = JSON.stringify(data);
             http.ajax.put_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                 if (res.status == 100000) {
-                    layer.msg('没谈成，没关系，下次继续努力！', function () {
+                    layer.msg('没谈成，下次继续努力！', function () {
                         window.location.reload();
                     });
                 }
