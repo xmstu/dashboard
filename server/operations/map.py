@@ -45,6 +45,13 @@ class GoodsMap(object):
         max_lat_lng, data = GoodsMapModel.get_data(db.read_db, user_id_list, params)
         return make_resp(status=APIStatus.Ok, max_lat_lng=max_lat_lng, data=data), HTTPStatus.Ok
 
+    @staticmethod
+    @make_decorator
+    def post_data(params):
+        ret = GoodsMapModel.post_data(db.read_db, params)
+
+        return make_resp(status=APIStatus.Ok, data=ret), HTTPStatus.Ok
+
 
 class UsersMap(object):
 

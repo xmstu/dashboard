@@ -167,7 +167,6 @@ class PromoteEffectList(object):
             fetch_user = read_bi.query(tb_sql)
             try:
                 fetch_user_id_str = ','.join((str(detail['user_id']) for detail in fetch_user))
-                log.info("推广统计查询被推荐人id字符串 [fetch_user_id_str:%s]" % fetch_user_id_str)
                 if not fetch_user_id_str:
                     db_data = None
                 else:

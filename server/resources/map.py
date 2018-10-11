@@ -1,9 +1,12 @@
+from flask_restful import abort
 from flask_restplus import Resource
 
 from server import verify, operations, filters, api
 from server.meta.decorators import Response
-from server.utils.request import get_all_arg
+from server.status import HTTPStatus, make_resp
+from server.utils.request import get_all_arg, get_payload
 import server.document.map as doc
+from server.utils.role_regions import get_role_regions
 
 
 class DistributionMap(Resource):
@@ -29,6 +32,19 @@ class GoodsMap(Resource):
         resp = Response(params=get_all_arg())
 
         return resp
+
+    @staticmethod
+    @doc.goods_map_param_post
+    @operations.GoodsMap.post_data(params=dict)
+    def post():
+        params = get_payload()
+        params["lat"] = float(params.get("lat") or 0)
+        params["lng"] = float(params.get("lng") or 0)
+        params["region_id"] = int(params.get("region_id") or 0)
+        if not params["region_id"]:
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='region_id参数不能为0'))
+        params["region_id"] = get_role_regions(params["region_id"])
+        return Response(params=params)
 
 
 class UsersMap(Resource):

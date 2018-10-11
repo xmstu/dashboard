@@ -1,3 +1,5 @@
+from flask_restplus import fields
+
 from server import api
 
 distribution_map_param = api.doc(params={
@@ -23,6 +25,14 @@ goods_map_param = api.doc(params={
     "register_start_time": "开始注册时间",
     "register_end_time": "结束注册时间",
 }, description='货源热力图查询参数')
+
+
+goods_map_param_post = api.doc(body=api.model('goods_map_param_post', {
+    'lat': fields.Float(description='纬度'),
+    'lng': fields.Float(description='经度'),
+    'region_id': fields.Integer(description='地区id')
+}))
+
 
 users_map_param = api.doc(params={
     "users_type": "0.全部;1.货主;2.司机;3.公司",

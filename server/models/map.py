@@ -1,5 +1,6 @@
 import time
 
+from server.cache_data import init_regions
 from server.utils.constant import vehicle_name_id
 
 
@@ -483,6 +484,73 @@ class GoodsMapModel(object):
             detail['lng'] = float(detail['lng'])
 
         return max_lat_lng if max_lat_lng else {}, data if data else []
+
+    @staticmethod
+    def post_data(cursor, params):
+
+        fetch_where = """ 1 = 1 """
+
+        command = """
+        SELECT
+            from_latitude AS lat,
+            from_longitude AS lng,
+            COUNT( 1 ) count 
+        FROM
+            shf_goods
+            -- INNER JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
+            -- INNER JOIN shu_users ON shu_users.id = shf_goods.user_id 
+            -- AND is_test = 0 
+        WHERE
+            {fetch_where} 
+            AND shf_goods.from_longitude != 0 
+            AND shf_goods.from_latitude != 0
+        GROUP BY
+            from_latitude,
+            from_longitude
+        """
+
+        region_id = params.pop("region_id")
+        lat = params.pop("lat")
+        lng = params.pop("lng")
+        start_lat = lat - 0.008983 * 10
+        end_lat = lat + 0.008983 * 10
+        start_lng = lng - 0.011576 * 10
+        end_lng = lng + 0.011576 * 10
+
+        level = init_regions.get_current_region_level(region_id)
+        if level:
+            fetch_where += """
+            AND (
+            ({level}=1 AND from_province_id={region_id}) OR
+            ({level}=2 AND from_city_id={region_id}) OR
+            ({level}=3 AND from_county_id={region_id}) OR
+            ({level}=4 AND from_town_id={region_id}) 
+            )
+            """.format(level=level, region_id=region_id)
+
+        data = cursor.query(command.format(fetch_where=fetch_where))
+
+        ret = []
+        for detail in data:
+            if detail["lat"] < start_lat:
+                continue
+            if detail["lat"] > end_lat:
+                continue
+            if detail["lng"] < start_lng:
+                continue
+            if detail["lng"] > end_lng:
+                continue
+            ret.append(detail["count"])
+
+        sum_count = sum(ret)
+
+        data = {
+            "lat": lat,
+            "lng": lng,
+            "sum_count": sum_count,
+        }
+
+        return data
 
 
 class UsersMapModel(object):
