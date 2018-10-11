@@ -218,14 +218,17 @@ class PromoteEffectList(object):
             try:
                 fetch_user_id_str = ','.join((str(detail['user_id']) for detail in fetch_user))
                 log.info("推广统计查询被推荐人id字符串 [fetch_user_id_str:%s]" % fetch_user_id_str)
-                db_sql = db_sql % {'fetch_user_id_str': fetch_user_id_str}
-                db_sql = db_sql.format(db_goods_fetch_where=db_goods_fetch_where,
-                                       db_orders_fetch_where=db_orders_fetch_where)
-                log.info("推广统计列表查询sql: [db_sql:%s]" % db_sql)
-                db_data = read_db.query(db_sql)
+                if not fetch_user_id_str:
+                    db_data = None
+                else:
+                    db_sql = db_sql % {'fetch_user_id_str': fetch_user_id_str}
+                    db_sql = db_sql.format(db_goods_fetch_where=db_goods_fetch_where,
+                                           db_orders_fetch_where=db_orders_fetch_where)
+                    log.info("推广统计列表查询sql: [db_sql:%s]" % db_sql)
+                    db_data = read_db.query(db_sql)
             except Exception as e:
                 log.error("推广统计列表查询失败: [ERROR:%s]" % e)
-                db_data = []
+                db_data = None
 
             if db_data:
                 db_data = db_data[0]
