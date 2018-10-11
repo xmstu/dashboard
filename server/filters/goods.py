@@ -25,11 +25,11 @@ class GoodsList(object):
                 if detail.get('expire') == 1:
                     goods_status = '已过期'
                 else:
-                    if detail.get('STATUS') in (1, 2):
+                    if detail.get('STATUS') in (1, 2) and detail.get('is_deleted') == 0:
                         goods_status = '待接单'
-                    elif detail.get('STATUS') == 3:
+                    elif detail.get('STATUS') == 3 and detail.get('is_deleted') == 0:
                         goods_status = '已接单'
-                    elif detail.get('STATUS') == -1 or detail.get('is_deleted') == 1:
+                    elif detail.get('is_deleted') == 1:
                         goods_status = '已取消'
 
                 # 初次下单
@@ -171,15 +171,6 @@ class GoodsList(object):
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='内部服务器错误'))
-
-
-class CancelGoodsReason(object):
-
-    @staticmethod
-    @make_decorator
-    def get_result(data):
-        pass
-        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class GoodsDistributionTrend(object):
