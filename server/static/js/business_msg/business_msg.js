@@ -37,7 +37,6 @@ var set = {
                         layer.closeAll('loading');
                         $('.defail-operate').click(function () {
                             var msg_id = $(this).attr('data-id');
-                            var msg_id = $(this).attr('data-id');
                             layer.open({
                                 type: 1,
                                 title: '没谈成-原因',
