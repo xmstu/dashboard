@@ -38,18 +38,9 @@ class GoodsMap(Resource):
     @doc.goods_map_param_post
     @operations.GoodsMap.post_data(params=dict)
     @verify.GoodsMap.check_params(params=dict)
+    @verify.GoodsMap.check_post_params(params=dict)
     def post():
-        params = get_payload()
-        params["lat"] = float(params.get("lat") or 0)
-        params["lng"] = float(params.get("lng") or 0)
-        params["region_id"] = int(params.get("region_id") or 0)
-        params["multiple"] = float(params.get("multiple") or 0.0)
-        if not params["region_id"]:
-            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='region_id参数不能为0'))
-        if not params["multiple"]:
-            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='multiple参数不能为0'))
-        params["region_id"] = get_role_regions(params["region_id"])
-        return Response(params=params)
+        return Response(params=get_payload())
 
 
 class UsersMap(Resource):

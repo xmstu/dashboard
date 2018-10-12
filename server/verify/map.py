@@ -88,6 +88,24 @@ class GoodsMap(object):
             log.error('校验货源热图参数失败:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='拒绝请求'))
 
+    @staticmethod
+    @make_decorator
+    def check_post_params(params):
+        try:
+            params["lat"] = float(params.get("lat") or 0)
+            params["lng"] = float(params.get("lng") or 0)
+            params["region_id"] = int(params.get("region_id") or 0)
+            params["multiple"] = float(params.get("multiple") or 0.0)
+            if not params["region_id"]:
+                abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='region_id参数不能为0'))
+            if not params["multiple"]:
+                abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='multiple参数不能为0'))
+            params["region_id"] = get_role_regions(params["region_id"])
+            return Response(params=params)
+        except Exception as e:
+            log.error('校验货源热图参数失败:{}'.format(e))
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='校验货源热图参数失败'))
+
 
 class UsersMap(object):
 
