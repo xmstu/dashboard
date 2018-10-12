@@ -391,6 +391,8 @@ class GoodsMapModel(object):
     @staticmethod
     def get_data(cursor, user_id_list, params):
 
+        which_table = """ shf_goods """
+
         fetch_where = """ 1=1 """
 
         command = """
@@ -399,11 +401,10 @@ class GoodsMapModel(object):
             from_longitude AS lng,
             COUNT( 1 ) count 
         FROM
-            shf_goods
-            INNER JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id 
-            INNER JOIN shu_users ON shu_users.id = shf_goods.user_id AND is_test = 0
+            {which_table}
+            -- INNER JOIN shu_users ON shu_users.id = shf_goods.user_id AND is_test = 0
         WHERE
-            %s 
+            {fetch_where} 
             AND shf_goods.from_longitude != 0
         GROUP BY
             from_latitude,
@@ -443,6 +444,7 @@ class GoodsMapModel(object):
 
         # 车长
         if params.get('vehicle_length'):
+            which_table += """ INNER JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id """
             fetch_where += """ AND shf_goods_vehicles.`name` = '{0}' """.format(params['vehicle_length'])
 
         # 货源状态
@@ -472,7 +474,7 @@ class GoodsMapModel(object):
                 AND shu_users.create_time >= {0} 
                 AND shu_users.create_time < {1} """.format(params['register_start_time'], params['register_end_time'])
 
-        data = cursor.query(command % fetch_where)
+        data = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where))
 
         if not data:
             return {}, []
@@ -550,8 +552,6 @@ class GoodsMapModel(object):
             data = min(ret, key=lambda k: k["mileage"])
         else:
             data = {
-                "lat": 0.0,
-                "lng": 0.0,
                 "count": 0,
             }
         return data
