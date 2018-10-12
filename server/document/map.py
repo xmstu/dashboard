@@ -30,7 +30,8 @@ goods_map_param = api.doc(params={
 goods_map_param_post = api.doc(body=api.model('goods_map_param_post', {
     'lat': fields.Float(description='纬度'),
     'lng': fields.Float(description='经度'),
-    'region_id': fields.Integer(description='地区id')
+    'region_id': fields.Integer(description='地区id'),
+    'multiple': fields.Integer(description='范围倍数')
 }))
 
 

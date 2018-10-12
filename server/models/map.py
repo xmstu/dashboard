@@ -515,10 +515,12 @@ class GoodsMapModel(object):
         region_id = params.pop("region_id")
         lat = params.pop("lat")
         lng = params.pop("lng")
-        start_lat = lat - 0.008983 * 10
-        end_lat = lat + 0.008983 * 10
-        start_lng = lng - 0.011576 * 10
-        end_lng = lng + 0.011576 * 10
+        multiple = params.pop("multiple")
+
+        start_lat = lat - 0.008983 * multiple
+        end_lat = lat + 0.008983 * multiple
+        start_lng = lng - 0.011576 * multiple
+        end_lng = lng + 0.011576 * multiple
 
         level = init_regions.get_current_region_level(region_id)
         if level:
@@ -543,16 +545,19 @@ class GoodsMapModel(object):
                 continue
             if detail["lng"] > end_lng:
                 continue
-            detail["lat"] = float(detail["lat"])
-            detail["lng"] = float(detail["lng"])
-            mileage = calcDistance(lat, lng, detail["lat"], detail["lng"])
-            detail["mileage"] = mileage
-            ret.append(detail)
+            ret.append(detail["count"])
         if ret:
-            data = min(ret, key=lambda k: k["mileage"])
+            sum_count = sum(ret)
+            data = {
+                "lat": lat,
+                "lng": lng,
+                "sum_count": sum_count,
+            }
         else:
             data = {
-                "count": 0,
+                "lat": lat,
+                "lng": lng,
+                "sum_count": 0,
             }
         return data
 
