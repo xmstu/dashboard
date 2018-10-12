@@ -1,4 +1,3 @@
-
 var set = {
     init: function () {
         layui.use(['layer', 'laydate'], function () {
@@ -103,20 +102,25 @@ var set = {
         $('.menu-map').next('.second-menu-list').find('.goodsMap-second-menu').addClass('selected-active')
     },
     mapRender: function (heatMapData, maxCount, center) {
+        //******根据权限等级限制缩放等级******
         var zoom;
-        var role = $('#user-info').attr('data-role-type');
+        var role = $('#user-info').attr('data-role-type');//头部可获取登陆用户的等级 1代表超管
         if (role == 1) {
             zoom = 6
         } else {
             zoom = 11
         }
-        center ? center = center : center = [116.418261, 39.921984];
-        var  map = new AMap.Map("container", {
+        center ? center = center : center = [116.418261, 39.921984];//中心点
+        //******根据权限等级限制缩放等级******
+
+        //******定义地图对象******
+        var map = new AMap.Map("container", {
             resizeEnable: true,
             center: center,
             zoom: zoom,
             zooms: [zoom, 14]
         });
+        //******定义地图对象******
         if (!isSupportCanvas()) {
             layer.msg('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~', {
                 time: 1500
@@ -144,19 +148,17 @@ var set = {
                 // data: heatmapData,//模拟数据
                 max: 3
             });
-            console.log(heatmapData);
             //******热力点分布******
-            //添加信息窗体
+            //******在指定位置打开信息窗体******
             var infoWindow;
 
-            //******在指定位置打开信息窗体******
             function openInfo(position, infomation) {
                 console.log(infomation);
                 //构建信息窗体中显示的内容
                 var info = [];
                 //info.push("<div><div><img style=\"float:left; width: 100px;\" src=\" /static/images/loading.gif \"/></div> ");
                 info.push("<div style=\"padding:0px 0px 0px 4px;\"><b>省省回头车</b>");
-                info.push("货源量:" + infomation.data.count);
+                info.push("货源量:" + infomation.data.sum_count);
                 info.push("地址 :" + address + "</div></div>");
                 infoWindow = new AMap.InfoWindow({
                     content: info.join("<br/>"),  //使用默认信息窗体框样式，显示信息内容
@@ -168,6 +170,7 @@ var set = {
             }
 
             //******在指定位置打开信息窗体******
+            //******地图控件******
             var scale = new AMap.Scale({
                     visible: false
                 }),
@@ -178,9 +181,10 @@ var set = {
                     visible: false
                 });
             map.addControl(scale);
-           // map.addControl(toolBar);
+            // map.addControl(toolBar);
             //map.addControl(overView);
             scale.show();
+            //******地图控件******
             //******逆地理编码-通过经纬度获取地址******
             var geocoder;
             var address = "";
@@ -221,18 +225,28 @@ var set = {
                     layer.msg('获取地图信息失败，请重新尝试！');
                     return false;
                 }
-
+                var Zoom_s = {10: 2.5, 11: 1.25, 12: 0.5, 13: 0.25, 14: 0.125}
+                console.log('辐射范围倍数：' + Zoom_s[map.getZoom()]);
                 var data = {
                     "lat": lnglat[1],
                     "lng": lnglat[0],
                     "region_id": adcode,
-                    "multiple":"1"//倍数基本单位是1km
+                    "multiple": Zoom_s[map.getZoom()],//倍数基本单位是1km
+                    goods_price_type: $('#goods_price_type').val(),
+                    haul_dist: $('#haul_dist').val(),
+                    vehicle_length: $('#vehicle_length').val(),
+                    goods_status: $('#goods_status').val(),
+                    special_tag: $('#special_tag').val(),
+                    delivery_start_time: $('#delivery_start_time').val(),
+                    delivery_end_time: $('#delivery_end_time').val(),
+                    register_start_time: $('#register_start_time').val(),
+                    register_end_time: $('#register_end_time').val()
                 };
                 console.log(data);
                 data = JSON.stringify(data);
                 http.ajax.post(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                     if (res.status == 100000) {
-                        if (res.data.count == 0 || res.data.lng == 0) {
+                        if (res.data.sum_count == 0 || res.data.lng == 0) {
                             //返回值经纬度为0
                             layer.msg('没有相关信息点！');
                             map.remove(m);//移除marker标记
@@ -241,7 +255,6 @@ var set = {
                         else {
                             fun(res);
                         }
-
                     }
                 }, function (xhttp) {
                     if (xhttp.responseJSON.status != 100000) {
@@ -252,6 +265,7 @@ var set = {
                 })
             }
 
+            //******ajax获取用户信息******
             //******创建矩形******
             function createRec(LngLat) {
                 //未完成  暂停！
@@ -278,6 +292,7 @@ var set = {
                 map.setFitView([rectangle])
             }
 
+            //******创建矩形******
             //******增加标记marker，并移除上一个marker******
             var m = {};
 
@@ -337,6 +352,7 @@ var set = {
             register_start_time: $('#register_start_time').val(),
             register_end_time: $('#register_end_time').val()
         };
+        console.log(data)
         if (data.delivery_start_time != '') {
             data.delivery_start_time = common.timeTransform($('#delivery_start_time').val() + ' 00:00:00');
         }
