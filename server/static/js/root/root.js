@@ -212,7 +212,7 @@ var set = {
                     $('.edit-operate').click(function () {
                         var content = $(this).parents('tr').children('td:eq(0)').find('.layui-table-cell').text();
                         role_id = $(this).attr('data-id');
-                        $('#role_name_edit').val(content);
+                       // $('#role_name_edit').val(content);
                         var url = '/root/role_management/' + role_id;
                         http.ajax.get_no_loading(true, false, url, {}, http.ajax.CONTENT_TYPE_2, function (res) {
                             console.log(res.data);
