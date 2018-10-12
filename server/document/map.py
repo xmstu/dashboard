@@ -31,7 +31,17 @@ goods_map_param_post = api.doc(body=api.model('goods_map_param_post', {
     'lat': fields.Float(description='纬度'),
     'lng': fields.Float(description='经度'),
     'region_id': fields.Integer(description='地区id'),
-    'multiple': fields.Integer(description='范围倍数')
+    'multiple': fields.Float(description='范围倍数'),
+
+    "goods_price_type": fields.Integer(description="0.全部;1.一口价;2.议价;"),
+    "haul_dist": fields.Integer(description="0.全部;1.同城;2.跨城;"),
+    "vehicle_length": fields.String(description="空字符串:全部;常用车型:4.2米,5.2米等"),
+    "goods_status": fields.Integer(description="0.全部;1.待接单;2.已接单;3.已完成;4.已取消"),
+    "special_tag": fields.Integer(description="0.全部;1.新用户"),
+    "delivery_start_time": fields.Integer(description="开始发货时间"),
+    "delivery_end_time": fields.Integer(description="结束发货时间"),
+    "register_start_time": fields.Integer(description="开始注册时间"),
+    "register_end_time": fields.Integer(description="结束注册时间"),
 }))
 
 

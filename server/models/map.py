@@ -424,56 +424,7 @@ class GoodsMapModel(object):
 
         fetch_where += region
 
-        # 一口价/议价
-        if params.get('goods_price_type'):
-            fetch_where += """
-            AND (
-            ({0}=1 AND is_system_price=1) OR
-            ({0}=2 AND is_system_price=0) 
-            )
-            """.format(params['goods_price_type'])
-
-        # 距离
-        if params.get('haul_dist'):
-            fetch_where += """
-            AND (
-            ({0}=1 AND haul_dist=1) OR
-            ({0}=2 AND haul_dist=2) 
-            )
-            """.format(params['haul_dist'])
-
-        # 车长
-        if params.get('vehicle_length'):
-            which_table += """ INNER JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id """
-            fetch_where += """ AND shf_goods_vehicles.`name` = '{0}' """.format(params['vehicle_length'])
-
-        # 货源状态
-        if params.get('goods_status'):
-            fetch_where += """
-            AND (
-            ({0}=1 AND shf_goods.`status` IN (1,2)) OR
-            ({0}=2 AND shf_goods.`status` = 3) OR
-            ({0}=3 AND shf_goods.id IN ( SELECT goods_id FROM shb_orders WHERE `status` = 3 )) OR
-            ({0}=4 AND (shf_goods.`status` = -1 OR shf_goods.is_deleted = 0))
-            )
-            """.format(params['goods_status'])
-
-        # 新用户
-        if user_id_list:
-            fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id_list)
-
-        # 发货时间
-        if params['delivery_start_time'] and params['delivery_end_time']:
-            fetch_where += """ 
-            AND shf_goods.create_time >= {0} 
-            AND shf_goods.create_time < {1} """.format(params['delivery_start_time'], params['delivery_end_time'])
-
-        # 注册时间
-        if params['register_start_time'] and params['register_end_time']:
-            fetch_where += """ 
-                AND shu_users.create_time >= {0} 
-                AND shu_users.create_time < {1} """.format(params['register_start_time'], params['register_end_time'])
-
+        which_table, fetch_where = GoodsMapModel.complete_fetch_where(params, user_id_list, which_table, fetch_where)
         data = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where))
 
         if not data:
@@ -489,7 +440,9 @@ class GoodsMapModel(object):
         return max_lat_lng if max_lat_lng else {}, data if data else []
 
     @staticmethod
-    def post_data(cursor, params):
+    def post_data(cursor, user_id_list, params):
+
+        which_table = """ shf_goods """
 
         fetch_where = """ 1 = 1 """
 
@@ -499,10 +452,7 @@ class GoodsMapModel(object):
             from_longitude AS lng,
             COUNT( 1 ) count 
         FROM
-            shf_goods
-            -- INNER JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id
-            -- INNER JOIN shu_users ON shu_users.id = shf_goods.user_id 
-            -- AND is_test = 0 
+            {which_table}
         WHERE
             {fetch_where} 
             AND shf_goods.from_longitude != 0 
@@ -533,7 +483,8 @@ class GoodsMapModel(object):
             )
             """.format(level=level, region_id=region_id)
 
-        data = cursor.query(command.format(fetch_where=fetch_where))
+        which_table, fetch_where = GoodsMapModel.complete_fetch_where(params, user_id_list, which_table, fetch_where)
+        data = cursor.query(command.format(which_table=which_table, fetch_where=fetch_where))
 
         ret = []
         for detail in data:
@@ -560,6 +511,63 @@ class GoodsMapModel(object):
                 "sum_count": 0,
             }
         return data
+
+    @staticmethod
+    def complete_fetch_where(params, user_id_list, which_table, fetch_where):
+        # 一口价/议价
+        if params.get('goods_price_type'):
+            fetch_where += """
+                        AND (
+                        ({0}=1 AND is_system_price=1) OR
+                        ({0}=2 AND is_system_price=0) 
+                        )
+                        """.format(params['goods_price_type'])
+
+        # 距离
+        if params.get('haul_dist'):
+            fetch_where += """
+                        AND (
+                        ({0}=1 AND haul_dist=1) OR
+                        ({0}=2 AND haul_dist=2) 
+                        )
+                        """.format(params['haul_dist'])
+
+        # 车长
+        if params.get('vehicle_length'):
+            which_table += """ INNER JOIN shf_goods_vehicles ON shf_goods_vehicles.goods_id = shf_goods.id """
+            fetch_where += """ AND shf_goods_vehicles.`name` = '{0}' """.format(params['vehicle_length'])
+
+        # 货源状态
+        if params.get('goods_status'):
+            fetch_where += """
+                        AND (
+                        ({0}=1 AND shf_goods.`status` IN (1,2)) OR
+                        ({0}=2 AND shf_goods.`status` = 3) OR
+                        ({0}=3 AND shf_goods.id IN ( SELECT goods_id FROM shb_orders WHERE `status` = 3 )) OR
+                        ({0}=4 AND (shf_goods.`status` = -1 OR shf_goods.is_deleted = 0))
+                        )
+                        """.format(params['goods_status'])
+
+        # 新用户
+        if user_id_list:
+            fetch_where += """ AND shf_goods.user_id IN (%s) """ % ','.join(user_id_list)
+
+        # 发货时间
+        if params['delivery_start_time'] and params['delivery_end_time']:
+            fetch_where += """ 
+                        AND shf_goods.create_time >= {0} 
+                        AND shf_goods.create_time < {1} """.format(params['delivery_start_time'],
+                                                                   params['delivery_end_time'])
+
+        # 注册时间
+        if params['register_start_time'] and params['register_end_time']:
+            which_table += """ INNER JOIN shu_users ON shu_users.id = shf_goods.user_id AND is_test = 0 """
+            fetch_where += """ 
+                            AND shu_users.create_time >= {0} 
+                            AND shu_users.create_time < {1} """.format(params['register_start_time'],
+                                                                       params['register_end_time'])
+
+        return which_table, fetch_where
 
 
 class UsersMapModel(object):

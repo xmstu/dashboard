@@ -29,13 +29,15 @@ class GoodsMap(Resource):
     @operations.GoodsMap.get_data(params=dict)
     @verify.GoodsMap.check_params(params=dict)
     def get():
-        resp = Response(params=get_all_arg())
+        params=get_all_arg()
+        params["role_region_id"] = get_role_regions(0)
 
-        return resp
+        return Response(params=params)
 
     @staticmethod
     @doc.goods_map_param_post
     @operations.GoodsMap.post_data(params=dict)
+    @verify.GoodsMap.check_params(params=dict)
     def post():
         params = get_payload()
         params["lat"] = float(params.get("lat") or 0)

@@ -33,7 +33,8 @@ class DistributionMap(object):
             if 4 == role_type:
                 params['role_region_id'] = locations_id
                 params['authority_region_id'] = locations_id[0]
-                params['region_id'] = params['region_id'] if params['region_id'] != '0' else params['authority_region_id']
+                params['region_id'] = params['region_id'] if params['region_id'] != '0' else params[
+                    'authority_region_id']
             elif role_type == 1:
                 params['role_region_id'] = locations_id + ['0']
             else:
@@ -71,10 +72,10 @@ class GoodsMap(object):
             params['register_end_time'] = int(params.get('register_end_time', None) or 0)
 
             # 补全时间
-            params['delivery_start_time'], params['delivery_end_time'] = complement_time(params['delivery_start_time'], params['delivery_end_time'])
-            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
-            # 获取权限地区id
-            params['role_region_id'] = get_role_regions(0)
+            params['delivery_start_time'], params['delivery_end_time'] = complement_time(params['delivery_start_time'],
+                                                                                         params['delivery_end_time'])
+            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'],
+                                                                                         params['register_end_time'])
 
             if not compare_time(params['delivery_start_time'], params['delivery_end_time']):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))

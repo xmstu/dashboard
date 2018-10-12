@@ -39,12 +39,17 @@ class DistributionMap(object):
 class GoodsMap(object):
 
     @staticmethod
-    @make_decorator
-    def get_data(params):
+    def get_new_user_id_list(params):
         if params.get('special_tag') == 1:
             user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('role_region_id'))
         else:
             user_id_list = None
+        return user_id_list
+
+    @staticmethod
+    @make_decorator
+    def get_data(params):
+        user_id_list = GoodsMap.get_new_user_id_list(params)
         max_lat_lng, data = GoodsMapModel.get_data(db.read_db, user_id_list, params)
         return make_resp(status=APIStatus.Ok, max_lat_lng=max_lat_lng, data=data), HTTPStatus.Ok
 
@@ -52,7 +57,8 @@ class GoodsMap(object):
     @make_decorator
     def post_data(params):
         try:
-            ret = GoodsMapModel.post_data(db.read_db, params)
+            user_id_list = GoodsMap.get_new_user_id_list(params)
+            ret = GoodsMapModel.post_data(db.read_db, user_id_list, params)
             return make_resp(status=APIStatus.Ok, data=ret), HTTPStatus.Ok
         except Exception as e:
             log.error('内部服务器错误,获取不到当前经纬度的货源数:{}'.format(e))

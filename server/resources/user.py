@@ -26,6 +26,14 @@ class UserStatistic(Resource):
         return resp
 
 
+class UserBehaviorStatistic(Resource):
+    @staticmethod
+    @doc.request_user_behavior_statistic_param
+    def get():
+        """用户行为变化趋势"""
+        return Response(params=get_all_arg())
+
+
 class UserList(Resource):
 
     @staticmethod
@@ -46,4 +54,5 @@ class UserList(Resource):
 
 ns = api.namespace('user', description='用户统计')
 ns.add_resource(UserStatistic, '/statistic/')
+ns.add_resource(UserBehaviorStatistic, '/behavior_statistic/')
 ns.add_resource(UserList, '/list/')
