@@ -239,8 +239,8 @@ var set = {
                     special_tag: $('#special_tag').val(),
                     delivery_start_time: $('#delivery_start_time').val(),
                     delivery_end_time: $('#delivery_end_time').val(),
-                    register_start_time: $('#register_start_time').val(),
-                    register_end_time: $('#register_end_time').val()
+                    register_start_time:common.timeTransform($('#register_start_time').val() + ' 00:00:00'),
+                    register_end_time: common.timeTransform($('#register_end_time').val() + ' 00:00:00')
                 };
                 console.log(data);
                 data = JSON.stringify(data);
