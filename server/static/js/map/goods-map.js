@@ -1,4 +1,4 @@
-var map = {};
+
 var set = {
     init: function () {
         layui.use(['layer', 'laydate'], function () {
@@ -111,7 +111,7 @@ var set = {
             zoom = 11
         }
         center ? center = center : center = [116.418261, 39.921984];
-        map = new AMap.Map("container", {
+        var  map = new AMap.Map("container", {
             resizeEnable: true,
             center: center,
             zoom: zoom,
@@ -176,13 +176,10 @@ var set = {
                 }),
                 overView = new AMap.OverView({
                     visible: false
-                }),
-                map = new AMap.Map("container", {
-                    resizeEnable: true
                 });
             map.addControl(scale);
-            map.addControl(toolBar);
-            map.addControl(overView);
+           // map.addControl(toolBar);
+            //map.addControl(overView);
             scale.show();
             //******逆地理编码-通过经纬度获取地址******
             var geocoder;
@@ -228,7 +225,8 @@ var set = {
                 var data = {
                     "lat": lnglat[1],
                     "lng": lnglat[0],
-                    "region_id": adcode
+                    "region_id": adcode,
+                    "multiple":"1"//倍数基本单位是1km
                 };
                 console.log(data);
                 data = JSON.stringify(data);
