@@ -705,11 +705,11 @@ var common = {
                 break;
             case '我的区域':
                 icon.addClass(arr[7]);
-                setAbout.addClass('menu-district');
+                setAbout.addClass('menu-business_msg');
                 var children_7 = setAbout.next().children();
                 $.each(children_7, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '物流商机') {
-                        $(this).find('a').addClass('district-second-menu')
+                        $(this).find('a').addClass('business_msg-second-menu')
                     }
                 })
                 break;

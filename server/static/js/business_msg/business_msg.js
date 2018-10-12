@@ -1,4 +1,14 @@
 var set = {
+        //页面初始化
+        page_init: function () {
+            setTimeout(function () {
+                /*设置左边二级菜单样式*/
+                $('.menu-business_msg').addClass('menu-active');
+                $('.menu-active .icon-xia').addClass('icon-rotate')
+                $('.menu-business_msg').next('.second-menu-list').css({'display': 'block'});
+                $('.menu-business_msg').next('.second-menu-list').find('.business_msg-second-menu').addClass('selected-active')
+            }, 10);
+        },
         tableRender: function (url) {
             layui.use(['layer', 'table'], function () {
                 var table = layui.table;
@@ -112,5 +122,5 @@ var set = {
     }
 ;
 
-
+set.page_init();
 set.tableRender('/business_msg/business_msg')
