@@ -36,7 +36,6 @@ class UserStatisticDecorator(object):
     @make_decorator
     def get_user_statistic(params):
         """用户变化趋势统计"""
-        # 用户常驻地
         user_ids = None
         if params['region_id']:
             # 用户自选
@@ -52,3 +51,9 @@ class UserStatisticDecorator(object):
             before_user_count = UserStatistic.get_before_user_count_by_mobile(db.read_db, params, user_ids)
         return Response(params=params, data=user_statistic, before_user_count=before_user_count)
 
+    @staticmethod
+    @make_decorator
+    def get_user_behavior_statistic(params):
+        """用户行为趋势变化统计"""
+        data = UserStatistic.get_user_behavior_statistic(db.read_db, params)
+        return Response(data=data)

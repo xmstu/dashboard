@@ -1,11 +1,9 @@
-from flask_restful import abort
 from flask_restplus import Resource
 
+import server.document.map as doc
 from server import verify, operations, filters, api
 from server.meta.decorators import Response
-from server.status import HTTPStatus, make_resp
 from server.utils.request import get_all_arg, get_payload
-import server.document.map as doc
 from server.utils.role_regions import get_role_regions
 
 
@@ -29,7 +27,7 @@ class GoodsMap(Resource):
     @operations.GoodsMap.get_data(params=dict)
     @verify.GoodsMap.check_params(params=dict)
     def get():
-        params=get_all_arg()
+        params = get_all_arg()
         params["role_region_id"] = get_role_regions(0)
 
         return Response(params=params)

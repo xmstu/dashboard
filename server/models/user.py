@@ -328,3 +328,17 @@ class UserStatistic(object):
         })
 
         return user_statistic if user_statistic else []
+
+    @staticmethod
+    def get_user_behavior_statistic(cursor, params):
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data
