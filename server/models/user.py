@@ -83,20 +83,27 @@ class UserList(object):
                 {fetch_where}
                 """
 
-            # 地区
-            region = ''
-            if params['region_id']:
-                if isinstance(params['region_id'], int):
-                    region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
-                        'region_id': params['region_id']}
-                elif isinstance(params['region_id'], list):
-                    region = '''AND (
-                                from_province_id IN (%(region_id)s)
-                                OR from_city_id IN (%(region_id)s)
-                                OR from_county_id IN (%(region_id)s)
-                                OR from_town_id IN (%(region_id)s)
-                                ) ''' % {'region_id': ','.join(params['region_id'])}
-            fetch_where += region
+            # 推荐人手机
+            if params['reference_mobile']:
+                fetch_where += 'AND referrer_mobile = "%s" ' % params['reference_mobile']
+            else:
+                # 地区
+                region = ''
+                if params['region_id']:
+                    if isinstance(params['region_id'], int):
+                        region = """AND (
+                                    from_province_id = %(region_id)s 
+                                    OR from_city_id = %(region_id)s 
+                                    OR from_county_id = %(region_id)s 
+                                    OR from_town_id = %(region_id)s) """ % {'region_id': params['region_id']}
+                    elif isinstance(params['region_id'], list):
+                        region = '''AND (
+                                    from_province_id IN (%(region_id)s)
+                                    OR from_city_id IN (%(region_id)s)
+                                    OR from_county_id IN (%(region_id)s)
+                                    OR from_town_id IN (%(region_id)s)
+                                    ) ''' % {'region_id': ','.join(params['region_id'])}
+                fetch_where += region
 
             # 用户名
             if params['user_name']:
@@ -104,9 +111,7 @@ class UserList(object):
             # 手机号
             if params['mobile']:
                 fetch_where += 'AND mobile = "%s" ' % params['mobile']
-            # 推荐人手机
-            if params['reference_mobile']:
-                fetch_where += 'AND referrer_mobile = "%s" ' % params['reference_mobile']
+
             # 下载渠道
             if params['download_ch']:
                 fetch_where += 'AND download_channel = "%s" ' % params['download_ch']
@@ -134,7 +139,8 @@ class UserList(object):
                 fetch_where += 'AND company_auth = 1 '
             # 是否活跃
             if params['is_actived'] == 1:
-                fetch_where += 'AND keep_login_days >= 7 AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY)) '
+                fetch_where += """AND keep_login_days >= 7 
+                AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY)) """
             elif params['is_actived'] == 2:
                 fetch_where += '''AND last_login_time < UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 1 DAY))
                 AND last_login_time > UNIX_TIMESTAMP(DATE_SUB(CURDATE(),INTERVAL 3 DAY)) '''
@@ -151,7 +157,11 @@ class UserList(object):
             elif params['is_used'] == 2:
                 fetch_where += 'AND (order_count_SH > 0 OR order_count_SH > 0) '
             elif params['is_used'] == 3:
-                fetch_where += 'AND ( order_finished_count_SH_online > 0 OR order_finished_count_SH_unline > 0 OR order_finished_count_LH_online > 0 OR order_finished_count_LH_unline > 0 ) '
+                fetch_where += """AND ( 
+                order_finished_count_SH_online > 0 
+                OR order_finished_count_SH_unline > 0 
+                OR order_finished_count_LH_online > 0 
+                OR order_finished_count_LH_unline > 0 ) """
 
             # 贴车贴
             if params['is_car_sticker'] == 1:
