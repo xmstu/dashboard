@@ -1,3 +1,6 @@
+from flask_restful import abort
+
+from server import log
 from server.cache_data import init_regions
 from server.database import db
 from server.meta.decorators import make_decorator, Response
@@ -48,9 +51,12 @@ class GoodsMap(object):
     @staticmethod
     @make_decorator
     def post_data(params):
-        ret = GoodsMapModel.post_data(db.read_db, params)
-
-        return make_resp(status=APIStatus.Ok, data=ret), HTTPStatus.Ok
+        try:
+            ret = GoodsMapModel.post_data(db.read_db, params)
+            return make_resp(status=APIStatus.Ok, data=ret), HTTPStatus.Ok
+        except Exception as e:
+            log.error('内部服务器错误,获取不到当前经纬度的货源数:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='内部服务器错误'))
 
 
 class UsersMap(object):

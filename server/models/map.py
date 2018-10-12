@@ -1,6 +1,7 @@
 import time
 
 from server.cache_data import init_regions
+from server.utils.calc_dstance import calcDistance
 from server.utils.constant import vehicle_name_id
 
 
@@ -540,16 +541,19 @@ class GoodsMapModel(object):
                 continue
             if detail["lng"] > end_lng:
                 continue
-            ret.append(detail["count"])
-
-        sum_count = sum(ret)
-
-        data = {
-            "lat": lat,
-            "lng": lng,
-            "sum_count": sum_count,
-        }
-
+            detail["lat"] = float(detail["lat"])
+            detail["lng"] = float(detail["lng"])
+            mileage = calcDistance(lat, lng, detail["lat"], detail["lng"])
+            detail["mileage"] = mileage
+            ret.append(detail)
+        if ret:
+            data = min(ret, key=lambda k: k["mileage"])
+        else:
+            data = {
+                "lat": 0.0,
+                "lng": 0.0,
+                "count": 0,
+            }
         return data
 
 

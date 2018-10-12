@@ -2,7 +2,7 @@ from math import radians, atan, tan, sin, acos, cos
 
 
 def calcDistance(Lat_A, Lng_A, Lat_B, Lng_B):
-    '输入两点的经纬度计算两者距离'
+    """输入两点的经纬度计算两者距离"""
     ra = 6378.140  # 赤道半径 (km)
     rb = 6356.755  # 极半径 (km)
     flatten = (ra - rb) / ra  # 地球扁率
