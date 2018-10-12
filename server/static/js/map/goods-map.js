@@ -240,7 +240,7 @@ var set = {
                     delivery_start_time: $('#delivery_start_time').val(),
                     delivery_end_time: $('#delivery_end_time').val(),
                     register_start_time:common.timeTransform($('#register_start_time').val() + ' 00:00:00'),
-                    register_end_time: common.timeTransform($('#register_end_time').val() + ' 00:00:00')
+                    register_end_time: common.timeTransform($('#register_end_time').val() + ' 23:59:59')
                 };
                 console.log(data);
                 data = JSON.stringify(data);
