@@ -70,3 +70,9 @@ class UserStatistic(object):
         else:
             data = {'xAxis': xAxis, 'series': series}
         return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
+
+    @staticmethod
+    @make_decorator
+    def get_behavior_result(params, data):
+
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok

@@ -29,6 +29,9 @@ class UserStatistic(Resource):
 class UserBehaviorStatistic(Resource):
     @staticmethod
     @doc.request_user_behavior_statistic_param
+    @filters.UserStatistic.get_behavior_result(params=dict, data=list)
+    @operations.UserStatisticDecorator.get_user_behavior_statistic(params=dict)
+    @verify.UserStatistic.check_behavior_params(params=dict)
     def get():
         """用户行为变化趋势"""
         return Response(params=get_all_arg())

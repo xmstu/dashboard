@@ -39,7 +39,31 @@ class UserStatistic(object):
 
             return Response(params=params)
         except Exception as e:
-            log.warn('Error:{}'.format(e), exc_info=True)
+            log.warn('请求参数非法:{}'.format(e), exc_info=True)
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求参数非法'))
+
+    @staticmethod
+    @make_decorator
+    def check_behavior_params(params):
+        try:
+            if not SessionOperationClass.check():
+                abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.UnLogin, msg='未登录'))
+            params['start_time'] = int(params['start_time'] or time.time() - 86400 * 7)
+            params['end_time'] = int(params['end_time'] or time.time())
+            params['periods'] = int(params['periods'] or 2)
+            params['data_type'] = int(params['user_type'] or 1)
+
+            # 补全时间
+            params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
+            # 校验时间
+            if not compare_time(params['start_time'], params['end_time']):
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))
+            # 获取权限地区id
+            params['region_id'] = get_role_regions(0)
+
+            return Response(params=params)
+        except Exception as e:
+            log.error('请求参数非法:{}'.format(e))
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求参数非法'))
 
 
