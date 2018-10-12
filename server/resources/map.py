@@ -43,7 +43,7 @@ class GoodsMap(Resource):
         params["lat"] = float(params.get("lat") or 0)
         params["lng"] = float(params.get("lng") or 0)
         params["region_id"] = int(params.get("region_id") or 0)
-        params["multiple"] = int(params.get("multiple") or 0)
+        params["multiple"] = float(params.get("multiple") or 0.0)
         if not params["region_id"]:
             abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='region_id参数不能为0'))
         if not params["multiple"]:
