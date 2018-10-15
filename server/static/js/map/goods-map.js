@@ -237,8 +237,8 @@ var set = {
                     vehicle_length: $('#vehicle_length').val(),
                     goods_status: $('#goods_status').val(),
                     special_tag: $('#special_tag').val(),
-                    delivery_start_time: $('#delivery_start_time').val(),
-                    delivery_end_time: $('#delivery_end_time').val(),
+                    delivery_start_time: common.timeTransform($('#delivery_start_time').val()+ ' 00:00:00'),
+                    delivery_end_time: common.timeTransform($('#delivery_end_time').val() + ' 23:59:59'),
                     register_start_time:common.timeTransform($('#register_start_time').val() + ' 00:00:00'),
                     register_end_time: common.timeTransform($('#register_end_time').val() + ' 23:59:59')
                 };
