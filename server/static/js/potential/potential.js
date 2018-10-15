@@ -291,7 +291,7 @@ var setAbout = {
                 text: '潜在货源趋势曲线图'
             },
             subtitle: {
-                text: null
+                text: '潜在货源：是用户查询了整车或零担价格，未点击下单按钮，原因可能是价格高了，或者当天不发货，可回电话挽回。'
             },
             xAxis: {
                 tickInterval: interval,
