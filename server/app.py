@@ -25,7 +25,7 @@ api = Api(app, version='5.0.0', title='省省回头车 BI API 5.0.0',
           )
 
 # session超时时间
-app.permanent_session_lifetime = timedelta(days=3)
+app.permanent_session_lifetime = timedelta(seconds=7200)
 
 
 # 跨域设置

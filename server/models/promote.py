@@ -191,7 +191,8 @@ class PromoteEffectList(object):
                                 shb_orders AS so
                                 INNER JOIN shf_goods AS sg ON sg.id = so.goods_id 
                             WHERE
-                                so.owner_id IN (%(fetch_user_id_str)s) 
+                                so.`status` != -1
+                                AND so.owner_id IN (%(fetch_user_id_str)s) 
                                 AND {db_orders_fetch_where}
                             ) 
                             AS b,
