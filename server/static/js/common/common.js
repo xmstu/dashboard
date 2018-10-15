@@ -572,7 +572,7 @@ var common = {
                 $(".message-count-show").after(str);
 
                 $('.message-center-simple').click(function () {
-                    var route = '/message?msg-item=' + ($(this).index()-1);//因为前面有一个子元素，所以这里要减一才能和前面的相对应。
+                    var route = '/message?msg-item=' + ($(this).index() - 1);//因为前面有一个子元素，所以这里要减一才能和前面的相对应。
                     _this.jump(route)
                 })
             }
@@ -606,38 +606,38 @@ var common = {
     },
     iconSet: function (setAbout, value, icon) {
         /*侧边栏是后端生成的，这里是根据中文显示用js控制样式，以后后台每增加一个页面，这里也要对应增加一个判断*/
-        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-renminbi','layui-icon-template'];
+        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-renminbi', 'layui-icon-template'];
         var value = value.replace(/(^\s*)|(\s*$)/g, "");
         var setAbout = setAbout;
         var children = '';
+        var treeNode = ['运力统计', '推广统计', '地图工具', '用户统计', '交易统计', '权限管理', '价格统计', '区域商机'];
         switch (value) {
-            case '交易统计':
-                icon.addClass(arr[4]);
-                setAbout.addClass('menu-transaction');
-                children = setAbout.next().children();
-                $.each(children, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '潜在货源') {
-                        $(this).find('a').addClass('lurk-goods')
+            case treeNode[0]:
+                icon.addClass(arr[0]);
+                setAbout.addClass('menu-transport');
+                var children_6 = setAbout.next().children();
+                $.each(children_6, function (val, index) {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '认证车辆') {
+                        $(this).find('a').addClass('vehicle-second-menu')
                     }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '订单统计') {
-                        $(this).find('a').addClass('order-second-menu')
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '运力统计') {
+                        $(this).find('a').addClass('transport-second-menu')
                     }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '货源统计') {
-                        $(this).find('a').addClass('goods-second-menu')
-                    }
+
                 });
                 break;
-            case '价格统计':
-                icon.addClass(arr[6]);
-                setAbout.addClass('menu-price');
-                var children_1 = setAbout.next().children();
-                $.each(children_1, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '价格统计') {
-                        $(this).find('a').addClass('price-second-menu')
+            case treeNode[1]:
+                icon.addClass(arr[1]);
+                setAbout.addClass('menu-promote');
+                var children_3 = setAbout.next().children();
+                $.each(children_3, function (val, index) {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '推广统计') {
+                        $(this).find('a').addClass('promote-second-menu')
                     }
+
                 })
                 break;
-            case '地图工具':
+            case treeNode[2]:
                 icon.addClass(arr[2]);
                 setAbout.addClass('menu-map');
                 var children_2 = setAbout.next().children();
@@ -654,18 +654,34 @@ var common = {
                     }
                 })
                 break;
-            case '推广统计':
-                icon.addClass(arr[1]);
-                setAbout.addClass('menu-promote');
-                var children_3 = setAbout.next().children();
-                $.each(children_3, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '推广统计') {
-                        $(this).find('a').addClass('promote-second-menu')
+            case treeNode[3]:
+                icon.addClass(arr[3]);
+                setAbout.addClass('menu-users');
+                var children_5 = setAbout.next().children();
+                $.each(children_5, function (val, index) {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户统计') {
+                        $(this).find('a').addClass('users-second-menu')
                     }
 
                 })
                 break;
-            case '权限管理':
+            case treeNode[4]:
+                icon.addClass(arr[4]);
+                setAbout.addClass('menu-transaction');
+                children = setAbout.next().children();
+                $.each(children, function (val, index) {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '潜在货源') {
+                        $(this).find('a').addClass('lurk-goods')
+                    }
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '订单统计') {
+                        $(this).find('a').addClass('order-second-menu')
+                    }
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '货源统计') {
+                        $(this).find('a').addClass('goods-second-menu')
+                    }
+                });
+                break;
+            case treeNode[5]:
                 icon.addClass(arr[5]);
                 setAbout.addClass('menu-power');
                 var children_4 = setAbout.next().children();
@@ -678,37 +694,22 @@ var common = {
                     }
                 });
                 break;
-            case '用户统计':
-                icon.addClass(arr[3]);
-                setAbout.addClass('menu-users');
-                var children_5 = setAbout.next().children();
-                $.each(children_5, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户统计') {
-                        $(this).find('a').addClass('users-second-menu')
+            case treeNode[6]:
+                icon.addClass(arr[6]);
+                setAbout.addClass('menu-price');
+                var children_1 = setAbout.next().children();
+                $.each(children_1, function (val, index) {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '价格统计') {
+                        $(this).find('a').addClass('price-second-menu')
                     }
-
                 })
                 break;
-            case '运力统计':
-                icon.addClass(arr[0]);
-                setAbout.addClass('menu-transport');
-                var children_6 = setAbout.next().children();
-                $.each(children_6, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '认证车辆') {
-                        $(this).find('a').addClass('vehicle-second-menu')
-                    }
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '运力统计') {
-                        $(this).find('a').addClass('transport-second-menu')
-                    }
-
-                });
-                break;
-            case '我的区域':
+            case treeNode[7]:
                 icon.addClass(arr[7]);
                 setAbout.addClass('menu-business_msg');
                 var children_7 = setAbout.next().children();
                 $.each(children_7, function (val, index) {
-                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '物流商机') {
+                    if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '企业用车') {
                         $(this).find('a').addClass('business_msg-second-menu')
                     }
                 })
