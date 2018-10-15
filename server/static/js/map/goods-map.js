@@ -258,9 +258,9 @@ var set = {
                     }
                 }, function (xhttp) {
                     if (xhttp.responseJSON.status != 100000) {
-                        layer.msg('失败', function () {
-                            layer.closeAll("loading")
-                        });
+                        // layer.msg('失败', function () {
+                        //     layer.closeAll("loading")
+                        // });
                     }
                 })
             }
