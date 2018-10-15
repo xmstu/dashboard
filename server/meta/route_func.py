@@ -18,11 +18,12 @@ def common_route_func(template_name):
     _, role_menu_path = Login.get_menu_path_by_role_id(db.read_bi, session['login'].get('role_id', 0))
 
     random_num = "?_=" + str(int(time.time()))
+    version = 1.1
 
     if role_type == 4:
         locations = init_regions.get_city_next_region(session['login'].get('locations', []))
     return render_template(template_name, user_name=user_name, avatar_url=avatar_url, locations=locations,
-                           role=role, role_type=role_type, role_menu_path=role_menu_path, random_num=random_num)
+                           role=role, role_type=role_type, role_menu_path=role_menu_path, random_num=random_num, version=version)
 
 
 def open_route_func(template_name):
