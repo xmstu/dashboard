@@ -4,6 +4,7 @@ import time
 from flask_restful import abort
 
 from server import log
+from server.cache_data import init_regions
 from server.status import HTTPStatus, make_resp, APIStatus
 
 
@@ -85,11 +86,13 @@ class PromoteEffectList(object):
                 user_id,
             IF
                 ( tb_inf_promoter.user_name != '', tb_inf_promoter.user_name, tb_inf_user.user_name ) AS user_name,
-                tb_inf_promoter.mobile 
+                tb_inf_promoter.mobile,
+                region_id
             FROM
                 tb_inf_promoter
                 LEFT JOIN tb_inf_user ON tb_inf_user.mobile = tb_inf_promoter.mobile 
                 AND tb_inf_user.is_deleted = 0 
+                INNER JOIN tb_inf_roles ON tb_inf_promoter.role_id = tb_inf_roles.id
             WHERE
                 tb_inf_promoter.is_deleted = 0 
                 AND tb_inf_promoter.mobile IN (%s) 
@@ -136,13 +139,14 @@ class PromoteEffectList(object):
         command = command % promote_mobile
         try:
             bi_ret = read_bi.query(command.format(bi_fetch_where=bi_fetch_where))
+            for detail in bi_ret:
+                detail["region_name"] = init_regions.to_region(detail["region_id"])
             db_ret = PromoteEffectList.get_data_from_db(read_bi, read_db, referrer_mobile, bi_fetch_where, db_goods_fetch_where, db_orders_fetch_where)
             for i in bi_ret:
                 for j in db_ret:
                     if i['mobile'] == j['mobile']:
                         i.update(j)
                         break
-
             return bi_ret if bi_ret else []
         except Exception as e:
             log.error('推广统计列表无法获取数据,错误原因是:{}'.format(e))
@@ -309,11 +313,17 @@ class PromoteQuality(object):
         """管理员获取推广人员信息"""
         command = """
         SELECT mobile
-        FROM tb_inf_promoter
-        WHERE is_deleted = 0
+        FROM tb_inf_promoter INNER JOIN tb_inf_roles ON tb_inf_promoter.role_id = tb_inf_roles.id
+        WHERE tb_inf_promoter.is_deleted = 0
         %s
         """
-        fetch_where = ''
+        fetch_where = ' AND 1=1 '
+
+        # 管理员根据地区id筛选地推人员
+        if params["region_id"]:
+            fetch_where += """
+                        AND region_id = {}
+                        """.format(params["region_id"])
         # 用户名
         if params.get('user_name'):
             fetch_where += "AND tb_inf_promoter.user_name = '%s' " % params['user_name']

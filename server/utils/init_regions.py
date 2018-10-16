@@ -92,7 +92,6 @@ class InitRegionModel(object):
 
         return Regions({})
 
-
     @staticmethod
     def get_province_id(cursor, province_name):
         try:

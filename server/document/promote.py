@@ -14,6 +14,7 @@ request_promote_effect_param = api.doc(params={
     'register_end_time': '注册日期结束时间,默认:空',
     'statistic_start_time': '注册期开始时间,默认:空',
     'statistic_end_time': '注册日期结束时间,默认:空',
+    'region_id': '用户自选地区id',
     'page': '页数',
     'limit': '条数'
     }, description='推广统计列表查询参数')

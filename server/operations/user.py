@@ -61,6 +61,21 @@ class UserStatisticDecorator(object):
             # 发货人数
             if params["data_type"] == 1:
                 data = UserStatistic.get_consignor(db.read_db, params)
+            # 新增发货人数
+            elif params["data_type"] == 2:
+                data = UserStatistic.get_new_consignor(db.read_db, params)
+            # 流失货主人数
+            elif params["data_type"] == 3:
+                data = UserStatistic.get_lost_consignor(db.read_db, params)
+            # 接单司机人数/完成订单司机数
+            elif params["data_type"] in (4, 5):
+                data = UserStatistic.get_driver(db.read_db, params)
+            # 新增接单人数
+            elif params["data_type"] == 6:
+                data = UserStatistic.get_new_driver(db.read_db, params)
+            # 流失司机人数
+            elif params["data_type"] == 7:
+                data = UserStatistic.get_lost_driver(db.read_db, params)
             else:
                 data = []
             return Response(params=params, data=data)

@@ -14,4 +14,4 @@ from server import app
 if __name__ == '__main__':
     # from werkzeug._reloader import run_with_reloader
     # run_with_reloader(inner)
-    app.run(host='127.0.0.1', port=2333, debug=True)
+    app.run(host='127.0.0.1', port=2333)
