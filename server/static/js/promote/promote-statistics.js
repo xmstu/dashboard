@@ -383,8 +383,7 @@ var pageSet = {
                 statistic_end_time: statistic_end_time,
                 region_id: $.trim($("#node_id").val()) == "" ? common.role_area_show($("#super_manager_area_one")) : $.trim($("#node_id").val())
             };
-            console.log(data);
-            var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&goods_type=' + data.goods_type + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&statistic_start_time=' + data.statistic_start_time + '&statistic_end_time=' + data.statistic_end_time;
+            var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&goods_type=' + data.goods_type + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&statistic_start_time=' + data.statistic_start_time + '&statistic_end_time=' + data.statistic_end_time+'&region_id='+data.region_id;
             that.tableRender(url)
         })
     },
@@ -400,6 +399,7 @@ var pageSet = {
                     statusName: 'status',
                     statusCode: 100000
                 },
+                data:null,
                 totalRow: true,
                 cols: [[
                     {field: 'user_id', title: '姓名ID', unresize: true, totalRowText: '合计行'},
@@ -421,7 +421,7 @@ var pageSet = {
                     }
                 ]]
                 , done: function (res) {
-                    console.log(res)
+                    console.log(JSON.stringify(res))
                     $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='accept_order_count']").children().each(function () {
                         if ($(this).text() != '') {
