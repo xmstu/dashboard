@@ -676,7 +676,7 @@ var common = {
                 var children_3 = setAbout.next().children();
                 $.each(children_3, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '活跃留存') {
-                        $(this).find('a').addClass('active_retain-second-menu')
+                        $(this).find('a').addClass('active-retain-second-menu')
                     }
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户统计') {
                         $(this).find('a').addClass('users-second-menu')
