@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import datetime
+import time
+
 from flask_restful import abort
 
 from server import log
@@ -380,15 +383,36 @@ class UserStatistic(object):
     @staticmethod
     def get_new_consignor(cursor, params):
 
-        fields = """"""
+        sql = """
+        SELECT
+            COUNT(DISTINCT user_id) AS count,
+            FROM_UNIXTIME(sg.create_time, "%Y-%m-%d") AS create_time
+        FROM
+            shf_goods AS sg
+            INNER JOIN shu_users AS su ON su.id = sg.user_id
+            AND su.create_time >= {start_time}
+            AND su.create_time < {end_time}
+        WHERE
+            sg.create_time >= {start_time}
+            AND sg.create_time < {end_time}
+        GROUP BY
+            FROM_UNIXTIME(sg.create_time, "%Y-%m-%d");
+        """
 
-        which_table = """"""
+        start_time = params["start_time"]
+        end_time = params["end_time"]
 
-        fetch_where = """"""
+        data = []
 
-        command = """"""
+        # 统计每日新注册切且进行发货的人数
+        if params["period"] == 2:
+            begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
 
-        data = cursor.query(command)
+            data = cursor.query(sql.format(start_time=start_time, end_time=end_time))
+        # 新增发货人数为当周注册且进行过发货行为的人数/新增发货人数为当月注册且进行过发货行为的人数
+        elif params["period"] in (3, 4):
+            data = cursor.query(sql.format(start_time=start_time, end_time=end_time))
 
         return data
 

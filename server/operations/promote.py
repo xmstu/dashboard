@@ -32,7 +32,7 @@ class PromoteEffectDecorator(object):
             count = len(promoter_mobile)
             referrer_mobile = promoter_mobile[(page - 1) * limit:page * limit + 1]
             if count == 0:
-                return Response(result=[], count=0, params=params)
+                return make_resp(APIStatus.Ok, count=count, data=[]), HTTPStatus.Ok
             # 推广列表
             result = PromoteEffectList.get_promote_list(db.read_bi, db.read_db, params, referrer_mobile)
 
