@@ -383,6 +383,7 @@ class UserStatistic(object):
     @staticmethod
     def get_new_consignor(cursor, params):
 
+        fetch_where = """ 1=1 """
         sql = """
         SELECT
             COUNT(DISTINCT user_id) AS count,
@@ -393,11 +394,31 @@ class UserStatistic(object):
             AND su.create_time >= {start_time}
             AND su.create_time < {end_time}
         WHERE
-            sg.create_time >= {start_time}
+            {fetch_where}
+            AND sg.create_time >= {start_time}
             AND sg.create_time < {end_time}
         GROUP BY
             FROM_UNIXTIME(sg.create_time, "%Y-%m-%d");
         """
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = """
+                                AND (from_province_id = %(region_id)s 
+                                OR from_city_id = %(region_id)s 
+                                OR from_county_id = %(region_id)s 
+                                OR from_town_id = %(region_id)s) """ % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = """
+                                AND (
+                                from_province_id IN (%(region_id)s)
+                                OR from_city_id IN (%(region_id)s)
+                                OR from_county_id IN (%(region_id)s)
+                                OR from_town_id IN (%(region_id)s)
+                                ) """ % {'region_id': ','.join(params['region_id'])}
+
+        fetch_where += region
 
         start_time = params["start_time"]
         end_time = params["end_time"]
@@ -405,73 +426,246 @@ class UserStatistic(object):
         data = []
 
         # 统计每日新注册切且进行发货的人数
-        if params["period"] == 2:
+        if params["periods"] == 2:
             begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
             end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
+            date_val = begin_date
+            while date_val <= end_date:
+                date_str = date_val.strftime("%Y-%m-%d")
+                date_val += datetime.timedelta(days=1)
 
-            data = cursor.query(sql.format(start_time=start_time, end_time=end_time))
+                daily_start_time = time.mktime(time.strptime(date_str, '%Y-%m-%d'))
+                daily_end_time = daily_start_time + 86399
+                daily_data = cursor.query(sql.format(fetch_where=fetch_where, start_time=daily_start_time, end_time=daily_end_time))
+                data += daily_data
+
         # 新增发货人数为当周注册且进行过发货行为的人数/新增发货人数为当月注册且进行过发货行为的人数
-        elif params["period"] in (3, 4):
-            data = cursor.query(sql.format(start_time=start_time, end_time=end_time))
+        elif params["periods"] in (3, 4):
+            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
+            if not data:
+                data = []
 
         return data
 
     @staticmethod
     def get_lost_consignor(cursor, params):
 
-        fields = """"""
+        fetch_where = """ 1=1 """
 
-        which_table = """"""
+        sql = """
+        SELECT
+            FROM_UNIXTIME(sg.create_time, "%Y-%m-%d") AS create_time,
+            COUNT(DISTINCT sg.user_id) AS count
+        FROM
+            shf_goods AS sg
+            INNER JOIN shu_user_stats AS sus ON sg.user_id = sus.user_id 
+            AND sus.last_login_time < UNIX_TIMESTAMP(@last_end_date)
+        WHERE
+            {fetch_where}
+            AND sg.create_time >= {start_time}
+            AND sg.create_time < UNIX_TIMESTAMP(@last_end_date)
+        GROUP BY
+            FROM_UNIXTIME(sg.create_time,"%Y-%m-%d");
+        """
 
-        fetch_where = """"""
+        end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["end_time"])), "%Y-%m-%d")
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = """
+                        AND (from_province_id = %(region_id)s 
+                        OR from_city_id = %(region_id)s 
+                        OR from_county_id = %(region_id)s 
+                        OR from_town_id = %(region_id)s) """ % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = """
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) """ % {'region_id': ','.join(params['region_id'])}
 
-        command = """"""
-
-        data = cursor.query(command)
+        fetch_where += region
+        # 周货主流失率
+        if params["periods"] == 3:
+            cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"),INTERVAL WEEKDAY("{end_date}") DAY);""".format(end_date=end_date))
+            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
+            if not data: data = []
+        # 月货主流失率
+        elif params["periods"] == 4:
+            cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"), INTERVAL DAYOFMONTH("{end_date}") - 1 DAY);""".format(end_date=end_date))
+            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
+            if not data: data = []
+        else:
+            data = []
 
         return data
 
     @staticmethod
     def get_driver(cursor, params):
 
-        fields = """"""
+        fetch_where = """ AND 1=1 """
 
-        which_table = """"""
+        command = """
+        SELECT
+            COUNT(DISTINCT driver_id) AS count,
+            FROM_UNIXTIME(create_time,"%Y-%m-%d") AS create_time
+        FROM
+            shb_orders AS so
+        WHERE
+            create_time >= {start_time}
+            AND create_time < {end_time}
+            {fetch_where}
+        GROUP BY
+            FROM_UNIXTIME(create_time, "%Y-%m-%d");	
+        """
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = """
+                        AND (from_province_id = %(region_id)s 
+                        OR from_city_id = %(region_id)s 
+                        OR from_county_id = %(region_id)s 
+                        OR from_town_id = %(region_id)s) """ % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = """
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) """ % {'region_id': ','.join(params['region_id'])}
+        fetch_where += region
 
-        fetch_where = """"""
+        if params["data_type"] == 5:
+            fetch_where += """ AND `status` = 3 """
 
-        command = """"""
+        data = cursor.query(command.format(start_time=params["start_time"], end_time=params["end_time"], fetch_where=fetch_where))
 
-        data = cursor.query(command)
-
-        return data
+        return data if data else []
 
     @staticmethod
     def get_new_driver(cursor, params):
 
-        fields = """"""
+        fetch_where = """ 1=1 """
 
-        which_table = """"""
+        sql = """
+        SELECT
+            COUNT(DISTINCT driver_id) AS count,
+            FROM_UNIXTIME(so.create_time,"%Y-%m-%d") AS create_time
+        FROM
+            shb_orders AS so
+            INNER JOIN shu_users AS su ON so.driver_id = su.id
+            AND su.create_time >= {start_time}
+            AND su.create_time < {end_time}
+        WHERE
+            {fetch_where}
+            AND so.create_time >= {start_time}
+            AND so.create_time < {end_time}
+        GROUP BY
+            FROM_UNIXTIME(so.create_time,"%Y-%m-%d");
+        """
 
-        fetch_where = """"""
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = """
+                        AND (from_province_id = %(region_id)s 
+                        OR from_city_id = %(region_id)s 
+                        OR from_county_id = %(region_id)s 
+                        OR from_town_id = %(region_id)s) """ % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = """
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) """ % {'region_id': ','.join(params['region_id'])}
+        fetch_where += region
 
-        command = """"""
+        start_time = params["start_time"]
+        end_time = params["end_time"]
 
-        data = cursor.query(command)
+        data = []
 
-        return data
+        # 统计每日新注册且进行接单的人数
+        if params["periods"] == 2:
+            begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
+            date_val = begin_date
+            while date_val <= end_date:
+                date_str = date_val.strftime("%Y-%m-%d")
+                date_val += datetime.timedelta(days=1)
+
+                daily_start_time = time.mktime(time.strptime(date_str, '%Y-%m-%d'))
+                daily_end_time = daily_start_time + 86399
+                daily_data = cursor.query(sql.format(fetch_where=fetch_where, start_time=daily_start_time, end_time=daily_end_time))
+                data += daily_data
+
+        # 新增接单人数为当周注册且进行过接单行为的人数/新增接单人数为当月注册且进行过接单行为的人数
+        elif params["periods"] in (3, 4):
+            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
+            if not data: data = []
+
+        return data if data else []
 
     @staticmethod
     def get_lost_driver(cursor, params):
 
-        fields = """"""
+        fetch_where = """ 1=1 """
 
-        which_table = """"""
+        sql = """
+        SELECT
+            FROM_UNIXTIME(so.create_time,"%Y-%m-%d") AS create_time,
+            COUNT(DISTINCT so.driver_id) AS count
+        FROM
+            shb_orders AS so
+            INNER JOIN shu_user_stats AS sus ON so.driver_id = sus.user_id 
+            AND sus.last_login_time < UNIX_TIMESTAMP(@last_week_end_date)
+        WHERE
+            {fetch_where}
+            AND so.create_time >= {start_time}
+            AND so.create_time < UNIX_TIMESTAMP(@last_week_end_date)
+        GROUP BY
+            FROM_UNIXTIME(so.create_time,"%Y-%m-%d");
+        """
 
-        fetch_where = """"""
+        end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["end_time"])), "%Y-%m-%d")
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = """
+                                AND (from_province_id = %(region_id)s 
+                                OR from_city_id = %(region_id)s 
+                                OR from_county_id = %(region_id)s 
+                                OR from_town_id = %(region_id)s) """ % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = """
+                                AND (
+                                from_province_id IN (%(region_id)s)
+                                OR from_city_id IN (%(region_id)s)
+                                OR from_county_id IN (%(region_id)s)
+                                OR from_town_id IN (%(region_id)s)
+                                ) """ % {'region_id': ','.join(params['region_id'])}
 
-        command = """"""
-
-        data = cursor.query(command)
+        fetch_where += region
+        # 周货主流失率
+        if params["periods"] == 3:
+            cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"),INTERVAL WEEKDAY("{end_date}") DAY);""".format(end_date=end_date))
+            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
+            if not data: data = []
+        # 月货主流失率
+        elif params["periods"] == 4:
+            cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"), INTERVAL DAYOFMONTH("{end_date}") - 1 DAY);""".format(end_date=end_date))
+            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
+            if not data: data = []
+        else:
+            data = []
 
         return data
