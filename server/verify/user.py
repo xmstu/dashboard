@@ -21,13 +21,13 @@ class UserStatistic(object):
             if not SessionOperationClass.check():
                 abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.UnLogin, msg='未登录'))
 
-            params['start_time'] = int(params['start_time'] or time.time() - 86400 * 7)
-            params['end_time'] = int(params['end_time'] or time.time() - 86400)
-            params['periods'] = int(params['periods'] or 2)
-            params['user_type'] = int(params['user_type'] or 1)
-            params['role_type'] = int(params['role_type'] or 0)
-            params['region_id'] = int(params['region_id'] or 0)
-            params['is_auth'] = int(params['is_auth'] or 0)
+            params['start_time'] = int(params.get('start_time') or time.time() - 86400 * 7)
+            params['end_time'] = int(params.get('end_time') or time.time() - 86400)
+            params['periods'] = int(params.get('periods') or 2)
+            params['user_type'] = int(params.get('user_type') or 1)
+            params['role_type'] = int(params.get('role_type') or 0)
+            params['region_id'] = int(params.get('region_id') or 0)
+            params['is_auth'] = int(params.get('is_auth') or 0)
 
             # 补全时间
             params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
@@ -48,10 +48,10 @@ class UserStatistic(object):
         try:
             if not SessionOperationClass.check():
                 abort(HTTPStatus.Forbidden, **make_resp(status=APIStatus.UnLogin, msg='未登录'))
-            params['start_time'] = int(params['start_time'] or time.time() - 86400 * 7)
-            params['end_time'] = int(params['end_time'] or time.time())
-            params['periods'] = int(params['periods'] or 2)
-            params['data_type'] = int(params['user_type'] or 1)
+            params['start_time'] = int(params.get('start_time') or time.time() - 86400 * 7)
+            params['end_time'] = int(params.get('end_time') or time.time())
+            params['periods'] = int(params.get('periods') or 2)
+            params['data_type'] = int(params.get('data_type') or 1)
 
             # 补全时间
             params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])

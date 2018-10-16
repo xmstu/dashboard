@@ -1,9 +1,9 @@
-import json
 
 from server.meta.decorators import make_decorator
-from server.status import make_resp, HTTPStatus, APIStatus, make_resp
+from server.status import HTTPStatus, APIStatus, make_resp
 from server.utils.date_format import get_date_aggregate
 from server.cache_data import init_regions
+
 
 class UserList(object):
 
@@ -74,5 +74,9 @@ class UserStatistic(object):
     @staticmethod
     @make_decorator
     def get_behavior_result(params, data):
-
-        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
+        xAxis, count_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], data)
+        ret = {
+            "xAxis": xAxis,
+            "count_series": count_series,
+        }
+        return make_resp(APIStatus.Ok, data=ret), HTTPStatus.Ok
