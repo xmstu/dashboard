@@ -2,9 +2,163 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>active-retain</title>
+    <title>活跃留存-省省统计中心</title>
+    <link rel="stylesheet" href="../static/css/base.css?v=6.2">
+    <link rel="stylesheet" href="../static/layui/css/layui.css?v=6.2">
+    <link rel="stylesheet" href="../static/css/common.css?v=6.2">
+    <link rel="stylesheet" href="../static/css/iconfont.css?v=6.2">
+    <link rel="stylesheet" href="../static/css/promote/promote.css?v=6.2">
 </head>
 <body>
-hello active-retain.html
+<article id="page_area" class="page-area clearfix">
+    {% include '/header/header.html' %}
+    <article class="main-content">
+        {% include '/menu/menu.html' %}
+        <aside class="main-content-right" style="opacity: 1;">
+            <div>
+                <div class="m-c-l-content">
+                    <div class="content-header">
+                        <h2><i class="iconfont icon-yiquxiao1"></i>活跃用户趋势</h2>
+                        <hr>
+                    </div>
+                    <div class="part-1">
+                        <div class="part-1-top">
+                            <form action="" class="layui-form layui-form-pane">
+                                <div class="layui-form-item ">
+                                    <div class="layui-inline" style="width: 172px;">
+                                        <label class="layui-form-label">开始日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="active_start" name="date_one" autocomplete="off"
+                                                   lay-verify="active_start" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 172px;">
+                                        <label class="layui-form-label">结束日期</label>
+                                        <div class="layui-input-block">
+                                            <i class="layui-icon layui-icon-riqi"></i>
+                                            <input id="active_end" name="date_two" autocomplete="off"
+                                                   lay-verify="active_end" class="layui-input" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="active_periods mr-16">
+                                    <li>
+                                        <button class="active" value="2" id="day_methods">按日</button>
+                                    </li>
+                                    <li>
+                                        <button value="3" id="week_methods">按周</button>
+                                    </li>
+                                    <li>
+                                        <button value="4" id="month_methods">按月</button>
+                                    </li>
+                                </ul>
+                                <div class="layui-form-item" id="">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">用户类型</label>
+                                        <div class="layui-input-inline mr4" style="width: 102px">
+                                            <select id="active_user-type" name="modules" lay-verify="required"
+                                                    lay-search="">
+                                                <option value="">全部</option>
+                                                <option value="1">司机</option>
+                                                <option value="2">货主</option>
+                                                <option value="3">公司</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item" id="">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">特殊条件</label>
+                                        <div class="layui-input-inline mr4" style="width: 102px">
+                                            <select id="active_if" name="modules" lay-verify="required" lay-search="">
+                                                <option value="">无</option>
+                                                <option value="1">排除当天注册</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button id="active_search-btn" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn vt">
+                                    <i style="" class="iconfont icon-sousuo1"></i> 搜索
+                                </button>
+                            </form>
+                        </div>
+                        <div class="part-1-bottom">
+                            <div id="active_charts"></div>
+                        </div>
+                    </div>
+                    <div class="river"></div>
+                    <div class="part-2">
+                        <form action="" class="layui-form layui-form-pane">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline" style="width: 172px;">
+                                    <label class="layui-form-label">开始日期</label>
+                                    <div class="layui-input-block">
+                                        <i class="layui-icon layui-icon-riqi"></i>
+                                        <input id="survival_start" name="date_one" autocomplete="off"
+                                               lay-verify="survival_start" class="layui-input" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline" style="width: 172px;">
+                                    <label class="layui-form-label">结束日期</label>
+                                    <div class="layui-input-block">
+                                        <i class="layui-icon layui-icon-riqi"></i>
+                                        <input id="survival_end" name="date_two" autocomplete="off"
+                                               lay-verify="survival_end" class="layui-input" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" id="">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">用户类型</label>
+                                    <div class="layui-input-inline mr4" style="width: 102px">
+                                        <select id="survival_user-type" name="modules" lay-verify="required"
+                                                lay-search="">
+                                            <option value="">全部</option>
+                                            <option value="1">司机</option>
+                                            <option value="2">货主</option>
+                                            <option value="3">公司</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item" id="">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">用户行为</label>
+                                    <div class="layui-input-inline mr4" style="width: 102px">
+                                        <select id="survival_action" name="modules" lay-verify="required" lay-search="">
+                                            <option value="">登录</option>
+                                            <option value="1">发货</option>
+                                            <option value="2">接单</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="goods_search_box" style="position: relative;padding-left: 20px;"
+                                    class="layui-btn vt"><i style="" class="iconfont icon-sousuo1"></i> 搜索
+                            </button>
+                        </form>
+                        <table class="layui-hide goods-table" id="active_survival_table" lay-filter="LAY_table_goods"></table>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+        {#        {% include '/exception/unfinished.html' %}#}
+    </article>
+</article>
+<script src="../static/js/libs/jquery-2.1.1.min.js"></script>
+<script src="../static/js/libs/highcharts.min.js"></script>
+<script src="../static/js/libs/highcharts-exporting.js"></script>
+<script src="../static/layui/layui.js"></script>
+<script src="../static/js/common/http.js?v={{ version }}"></script>
+<script src="../static/js/common/common.js?v={{ version }}"></script>
+<script src="../static/js/libs/jquery.address.js?v={{ version }}"></script>
+<script src="../static/js/active-retain/active-retain.js?v={{ version }}"></script>
 </body>
 </html>

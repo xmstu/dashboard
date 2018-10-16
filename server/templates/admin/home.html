@@ -27,10 +27,10 @@
                             <ul class="clearfix" style="position: relative;"></ul>
                         </div>
                         <div class="part-2">
-                          <div class="content-header">
-                        <h2><i class="iconfont icon-cheliangguanli"></i>为货找车</h2>
-                        <hr/>
-                    </div>
+                            <div class="content-header">
+                                <h2><i class="iconfont icon-cheliangguanli"></i>为货找车</h2>
+                                <hr/>
+                            </div>
                             <form id="select_box" lay-filter="resetForm" action="" class="layui-form layui-form-pane">
                                 <div class="layui-form-item">
                                     <div class="layui-inline">
@@ -108,8 +108,8 @@
                                             <select id="node_id" name="modules" lay-verify="required" lay-search="">
                                                 <option value="">全部</option>
                                                 {% for location in locations %}
-                                                <option value="{{ location['region_id'] }}">{{ location['name'] }}
-                                                </option>
+                                                    <option value="{{ location['region_id'] }}">{{ location['name'] }}
+                                                    </option>
                                                 {% endfor %}</select>
                                         </div>
                                         <div id="super_manager_area" class="layui-input-inline" style="display: none;">
