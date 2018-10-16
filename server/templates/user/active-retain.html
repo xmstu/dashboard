@@ -113,17 +113,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <ul class="survival_periods mr-16">
-                                <li>
-                                    <button class="active" value="2" id="day_methods">按日</button>
-                                </li>
-                                <li>
-                                    <button value="3" id="week_methods">按周</button>
-                                </li>
-                                <li>
-                                    <button value="4" id="month_methods">按月</button>
-                                </li>
-                            </ul>
                             <div class="layui-form-item" id="">
                                 <div class="layui-inline">
                                     <label class="layui-form-label">用户类型</label>
@@ -154,7 +143,7 @@
                                     class="layui-btn vt"><i style="" class="iconfont icon-sousuo1"></i> 搜索
                             </button>
                         </form>
-                        <table class="layui-hide goods-table" id="LAY_table_goods" lay-filter="LAY_table_goods"></table>
+                        <table class="layui-hide goods-table" id="active_survival_table" lay-filter="LAY_table_goods"></table>
                     </div>
                 </div>
             </div>
@@ -167,9 +156,9 @@
 <script src="../static/js/libs/highcharts.min.js"></script>
 <script src="../static/js/libs/highcharts-exporting.js"></script>
 <script src="../static/layui/layui.js"></script>
-<script src="../static/js/common/http.js"></script>
-<script src="../static/js/common/common.js?v=6.2"></script>
-<script src="../static/js/libs/jquery.address.js?v=6.2"></script>
-<script src="../static/js/active_retain/active_retain.js?v=6.2"></script>
+<script src="../static/js/common/http.js?v={{ version }}"></script>
+<script src="../static/js/common/common.js?v={{ version }}"></script>
+<script src="../static/js/libs/jquery.address.js?v={{ version }}"></script>
+<script src="../static/js/active-retain/active-retain.js?v={{ version }}"></script>
 </body>
 </html>
