@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+from flask_restful import abort
+
 from server import log
+from server.status import HTTPStatus, make_resp, APIStatus
 
 
 class UserList(object):
@@ -330,15 +333,47 @@ class UserStatistic(object):
         return user_statistic if user_statistic else []
 
     @staticmethod
-    def get_user_behavior_statistic(cursor, params):
-        fields = """"""
+    def get_consignor(cursor, params):
 
-        which_table = """"""
+        fetch_where = """ 1=1 """
 
-        fetch_where = """"""
+        command = """
+        SELECT
+            COUNT(DISTINCT user_id) AS count,
+            FROM_UNIXTIME(create_time, "%Y-%m-%d") AS create_time
+        FROM
+            shf_goods
+        WHERE
+            {fetch_where}
+            AND create_time >= :start_time
+            AND create_time < :end_time
+        GROUP BY
+            FROM_UNIXTIME(create_time, "%Y-%m-%d");
+        """
+        # 权限地区
+        region = ' AND 1=1 '
+        if params['region_id']:
+            if isinstance(params['region_id'], int):
+                region = """
+                        AND (from_province_id = %(region_id)s 
+                        OR from_city_id = %(region_id)s 
+                        OR from_county_id = %(region_id)s 
+                        OR from_town_id = %(region_id)s) """ % {'region_id': params['region_id']}
+            elif isinstance(params['region_id'], list):
+                region = """
+                        AND (
+                        from_province_id IN (%(region_id)s)
+                        OR from_city_id IN (%(region_id)s)
+                        OR from_county_id IN (%(region_id)s)
+                        OR from_town_id IN (%(region_id)s)
+                        ) """ % {'region_id': ','.join(params['region_id'])}
 
-        command = """"""
+        fetch_where += region
 
-        data = cursor.query(command)
+        try:
+            data = cursor.query(command, params)
+            return data
+        except Exception as e:
+            log.error('查询发货人数出现错误:{}'.format(e))
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='查询发货人数出现错误'))
 
-        return data

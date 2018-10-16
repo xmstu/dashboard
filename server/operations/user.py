@@ -2,9 +2,11 @@
 
 from flask_restful import abort
 
+from server import log
 from server.meta.decorators import make_decorator, Response
 from server.models.user import UserList,UserStatistic
 from server.database import db
+from server.status import HTTPStatus, make_resp, APIStatus
 
 
 class UserListDecorator(object):
@@ -55,5 +57,14 @@ class UserStatisticDecorator(object):
     @make_decorator
     def get_user_behavior_statistic(params):
         """用户行为趋势变化统计"""
-        data = UserStatistic.get_user_behavior_statistic(db.read_db, params)
-        return Response(data=data)
+        try:
+            # 发货人数
+            if params["data_type"] == 1:
+                data = UserStatistic.get_consignor(db.read_db, params)
+            else:
+                data = []
+            return Response(params=params, data=data)
+        except Exception as e:
+            log.error('查询用户行为趋势出现错误 [Error: %s]' % e)
+            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='查询用户行为趋势出现错误'))
+

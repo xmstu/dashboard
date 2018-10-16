@@ -108,7 +108,7 @@ var set = {
         if (role == 1) {
             zoom = 6
         } else {
-            zoom = 10
+            zoom = 11
         }
         center ? center = center : center = [116.418261, 39.921984];//中心点
         //******根据权限等级限制缩放等级******

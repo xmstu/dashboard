@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from datetime import timedelta
 
-from flask import render_template, redirect, request, session
+from flask import render_template, redirect, request
 from flask_restful import abort
+
 from server import app
 from server.cache_data import init_regions
 from server.database import db
@@ -29,9 +29,6 @@ def login():
     """登录页面"""
     # 已登录返回首页
     if not SessionOperationClass.check():
-        # 设置session过期时间为2小时
-        session.permanent = True
-        app.permanent_session_lifetime = timedelta(seconds=7200)
         return render_template('/login/login.html')
     return redirect('/home/')
 
@@ -100,7 +97,8 @@ def broker():
         }
 
         if not SessionOperationClass.set_session("user_session", user_info):
-            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg="更新区镇合伙人session失败"))
+            abort(HTTPStatus.InternalServerError,
+                  **make_resp(status=APIStatus.InternalServerError, msg="更新区镇合伙人session失败"))
 
         # 登录
         if SessionOperationClass.insert(user_info, locations):

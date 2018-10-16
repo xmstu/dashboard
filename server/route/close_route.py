@@ -99,8 +99,18 @@ def user_func():
     return close_route_func('/user/', '/user/user-statistics.html')
 
 
+@app.route('/active_retain/', endpoint='/active_retain/')
+@visitor_record
+def active_retain():
+    """活跃留存页面"""
+    return close_route_func('/active_retain/', '/user/active-retain.html')
+
+
 @app.route('/vehicle/', endpoint='vehicle')
 @visitor_record
 def vehicle_func():
     """车辆认证页面"""
     return close_route_func('/vehicle/', '/vehicle/verify_vehicle.html')
+
+
+
