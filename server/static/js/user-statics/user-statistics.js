@@ -5,6 +5,8 @@
 /*----------------设置日期框中的初始化值----------------------*/
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
+$('#user-start').val(String(common.getNowFormatDate()[2]));
+$('#user-end').val(String(common.getNowFormatDate()[3]));
 var requestStart = $('#date_show_one').val() + ' 00:00:00';
 var requestEnd = $('#date_show_two').val() + ' 23:59:59';
 /*----------------设置侧边栏样式----------------------*/
@@ -18,6 +20,7 @@ setTimeout(function () {
 /*------------对表单进行校验----------------*/
 layui.use(['laydate', 'layer', 'form', 'table'], function () {
     dataInit();
+    dataInit_user();
     var laydate = layui.laydate;
     var table = layui.table;
     var layer = layui.layer;
@@ -26,7 +29,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -42,7 +45,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-        format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             var startTime = $('#date_show_one').val();
             var endTime = $('#date_show_two').val();
@@ -58,7 +61,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_three').val() == '') {
                 $('#date_show_three').next('.date-tips').show();
@@ -78,9 +81,9 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         calendar: true,
         max: String(common.getNowFormatDate()[0]),
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
-            if ($('#date_show_four').val() == ''||val=='') {
+            if ($('#date_show_four').val() == '' || val == '') {
                 $('#date_show_four').next('.date-tips').show();
             } else {
                 $('#date_show_four').next('.date-tips').hide()
@@ -98,7 +101,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         max: String(common.getNowFormatDate()[0]),
         calendar: true,
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_five').val() == '') {
                 $('#date_show_five').next('.date-tips').show();
@@ -118,7 +121,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         theme: '#009688',
         max: String(common.getNowFormatDate()[0]),
         calendar: true,
-         format:'yyyy/MM/dd',
+        format: 'yyyy/MM/dd',
         done: function (val, index) {
             if ($('#date_show_six').val() == '') {
                 $('#date_show_six').next('.date-tips').show();
@@ -133,6 +136,49 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             }
         }
     });
+    //******行为用户趋势 搜索条件******
+    laydate.render({
+        elem: '#user-start',
+        theme: '#009688',
+        calendar: true,
+        max: String(common.getNowFormatDate()[0]),
+        format: 'yyyy/MM/dd',
+        done: function (val, index) {
+            if ($('#user-start').val() == '') {
+                $('#user-start').next('.date-tips').show();
+            } else {
+                $('#user-start').next('.date-tips').hide()
+            }
+            var startTime = common.timeTransform($('#user-start').val())
+            var endTime = common.timeTransform($('#user-end').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
+        }
+    });
+    laydate.render({
+        elem: '#user-end',
+        theme: '#009688',
+        calendar: true,
+        max: String(common.getNowFormatDate()[0]),
+        format: 'yyyy/MM/dd',
+        done: function (val, index) {
+            if ($('#user-end').val() == '' || val == '') {
+                $('#user-end').next('.date-tips').show();
+            } else {
+                $('#user-end').next('.date-tips').hide()
+            }
+            var startTime = common.timeTransform($('#user-start').val())
+            var endTime = common.timeTransform($('#user-end').val())
+            if (startTime > endTime) {
+                layer.msg('提示：开始时间大于了结束时间！');
+                return false;
+            }
+        }
+    });
+
+    //******行为用户趋势 搜索条件******
     table.render({
         elem: '#LAY_table_user'
         , url: '/user/list/',
@@ -174,9 +220,9 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                     $(this).html(str + '单')
                 }
             })
-              $("td[data-field='user_name']").children().each(function () {
+            $("td[data-field='user_name']").children().each(function () {
                 if ($(this).text() == '') {
-                    $(this).html('未录入').css({'color':'red'})
+                    $(this).html('未录入').css({'color': 'red'})
                 }
             })
             common.clearSelect()
@@ -208,14 +254,14 @@ $('#user_search_box').on('click', function (e) {
     var infinteTime = $.trim($('#date_show_five').val());
     var overTIme = $.trim($('#date_show_six').val());
     if ($('#phone_number').val() != '' && $('#phone_number').val().length != 11) {
-          layer.tips('请检查号码格式', '#phone_number', {
+        layer.tips('请检查号码格式', '#phone_number', {
             tips: [1, '#009688'],
             time: 3000
         });
         return false;
     }
     if ($('#reference_mobile').val() != '' && $('#reference_mobile').val().length != 11) {
-      layer.tips('请检查号码格式', '#reference_mobile', {
+        layer.tips('请检查号码格式', '#reference_mobile', {
             tips: [1, '#009688'],
             time: 3000
         });
@@ -257,7 +303,7 @@ $('#user_search_box').on('click', function (e) {
         overTIme = overTIme
     }
     if (infinteTime !== '' && overTIme == '') {
-         layer.tips('请选择注册日期的结束日期', '#date_show_six', {
+        layer.tips('请选择注册日期的结束日期', '#date_show_six', {
             tips: [1, '#009688'],
             time: 3000
         });
@@ -361,6 +407,7 @@ $('#search_btn').on('click', function (e) {
     e.preventDefault();
     dataInit()
 })
+
 /*图标渲染*/
 function dataInit() {
     var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
@@ -395,8 +442,9 @@ function dataInit() {
 }
 
 Highcharts.setOptions({
-    colors: [ /*'#9FE6B8', '#FFDB5C','#ff9f7f',*/  '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+    colors: [/*'#9FE6B8', '#FFDB5C','#ff9f7f',*/  '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
+
 /*图表函数*/
 function chartInit(xAxis, series, interval, x_value1) {
     $('#charts_container_one').highcharts({
@@ -429,8 +477,8 @@ function chartInit(xAxis, series, interval, x_value1) {
         yAxis: {
             gridLineColor: '#eee',
             gridLineWidth: 1,
-            min:0,
-            allowDecimals:false,
+            min: 0,
+            allowDecimals: false,
             plotLines: [
                 {
                     color: '#ddd',
@@ -493,6 +541,144 @@ function chartInit(xAxis, series, interval, x_value1) {
     });
 }
 
+//行为用户趋势
+function dataInit_user() {
+    var requestStartTime = common.timeTransform($('#user-start').val() + ' 00:00:00');
+    var requestEndTime = common.timeTransform($('#user-end').val() + ' 23:59:59');
+    var url = '/user/statistic/';
+    var data={
+        start_time: requestStartTime,
+        end_time: requestEndTime,
+        periods: $('.periods>li').find('button.active').val(),
+        user_type: $('#user_type').val(),
+        role_type: $('#role_type_first').val(),
+        region_id: $('#region_id').val() == '' ? common.role_area_show($('#super_manager_area_select_zero')) : $('#region_id').val(),
+        is_auth: $("#is_auth").val()
+    }
+    // var data = {
+    //     start_time: requestStartTime,
+    //     end_time: requestEndTime,
+    //     periods: $('.user_periods>li').find('button.active').val(),//按 日 周 月 查询
+    //     user_type: $('#user_data-type').val() //数据类型
+    // };
+    http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+        if (res.status == 100000) {
+            layer.closeAll('loading')
+            var len = res.data.xAxis.length;
+            var X_data = res.data.xAxis;
+            if (len > 0 && len < 20) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit_user(res.data.xAxis, res.data.series, 1, X_data[1])
+            } else if (len > 0 && len >= 20 && len < 40) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit_user(res.data.xAxis, res.data.series, 3, X_data[1])
+            } else if (len > 0 && len >= 40 && len < 90) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit_user(res.data.xAxis, res.data.series, 5, X_data[1])
+            }
+        }
+    })
+}
+
+/*行为用户趋势 图表函数*/
+function chartInit_user(xAxis, series, interval, x_value1) {
+    $('#charts_container_user').highcharts({
+        tooltip: {
+            shared: true,
+            crosshairs: [{
+                width: 1,
+                color: '#ccc'
+            }, {
+                width: 1,
+                color: '#ccc'
+            }]
+        },
+        chart: {
+            zoomType: 'xy'
+        },
+
+        title: {
+            text: '行为用户趋势曲线图'
+        },
+        subtitle: {
+            text: null
+        },
+        xAxis: {
+            tickInterval: interval,
+            categories: xAxis,
+            gridLineColor: '#eee',
+            gridLineWidth: 1
+        },
+        yAxis: {
+            gridLineColor: '#eee',
+            gridLineWidth: 1,
+            min: 0,
+            allowDecimals: false,
+            plotLines: [
+                {
+                    color: '#ddd',
+                    dashStyle: 'dash',
+                    value: x_value1,
+                    width: 1
+                }
+            ],
+            title: {
+                text: '人数 (人)',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value}人',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        return this.point.y + '人';
+                    }
+                }
+            },
+            series: {
+                states: {
+                    hover: {
+                        enabled: true
+                    }
+                }
+            }
+            , marker: {
+                radius: 3.5,
+                lineWidth: 1,
+                //  lineColor: '#666666',
+                symbol: 'circle',
+
+                states: {
+                    hover: {
+                        enabled: true,
+                        radius: 3.5
+                    }
+                }
+            },
+        },
+        series: [{
+            name: '人数',
+            type: 'line',
+            tooltip: {
+                valueSuffix: '人'
+            },
+            data: series
+        }]
+    });
+}
+$('#search_btn_user').on('click', function (e) {
+    e.preventDefault();
+    dataInit_user()
+})
 function area_select() {
     var auth_role = $('#user-info').attr('data-role-type')
     if (!!auth_role && auth_role == 1) {
@@ -518,3 +704,5 @@ function area_select() {
 area_select()
 if ($('#region_id').val() == '') {
 }
+/*初始化下拉框*/
+common.init_select({"1":"新增用户","2":"累计用户","3":"错数据"},document.getElementById('user_data-type'));

@@ -96,7 +96,7 @@ var common = {
         $.ajax({
             type: "POST",
             dataType: "jsonp",
-            url: 'http://api.map.baidu.com/location/ip?ak=ZVizfVIbcLc0qNhduvT3dSbqG8YV8YoP&ip=',
+            url: 'http://api.map.baidu.com/location/ip?ak=m8U4gFO69r0E84nX828eDR1T2t5crH59&ip=',
             success: function (res) {
                 var url = "http://restapi.amap.com/v3/weather/weatherInfo";
                 var postData = {
@@ -160,6 +160,7 @@ var common = {
         var date6 = new Date();//七天前
         var date7 = new Date();//30天
         var date8 = new Date();//90天前
+        var date9 = new Date();//60天前
         date3.setTime(date3.getTime() - 8 * 24 * 60 * 60 * 1000);
         date2.setTime(date2.getTime() + 24 * 60 * 60 * 1000);
         date4.setTime(date4.getTime() - 24 * 60 * 60 * 1000);
@@ -167,6 +168,7 @@ var common = {
         date6.setTime(date6.getTime() - 7 * 24 * 60 * 60 * 1000);
         date7.setTime(date7.getTime() - 30 * 24 * 60 * 60 * 1000);
         date8.setTime(date8.getTime() - 90 * 24 * 60 * 60 * 1000);
+        date9.setTime(date9.getTime() - 60 * 24 * 60 * 60 * 1000);
         var seperator1 = "/";
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
@@ -184,6 +186,8 @@ var common = {
         var date_7 = date7.getDate();
         var month_8 = date8.getMonth() + 1;
         var date_8 = date8.getDate();
+        var month_9 = date9.getMonth() + 1;
+        var date_9 = date9.getDate();
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
@@ -226,6 +230,9 @@ var common = {
         if (date_8 >= 0 && date_8 <= 9) {
             date_8 = "0" + date_8;
         }
+        if (date_9 >= 0 && date_9 <= 9) {
+            date_9 = "0" + date_9;
+        }
         monthAnother > 10 ? monthAnother : "0" + monthAnother;
         dateAnother > 10 ? dateAnother : "0" + dateAnother;
         var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
@@ -236,7 +243,8 @@ var common = {
         var sevenDayAgo = date6.getFullYear() + seperator1 + month_6 + seperator1 + date_6;
         var thirtyDayAgo = date7.getFullYear() + seperator1 + month_7 + seperator1 + date_7;
         var ninetyDayAgo = date8.getFullYear() + seperator1 + month_8 + seperator1 + date_8;
-        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday, sevenDayAgo, thirtyDayAgo, ninetyDayAgo];
+        var sixtyDayAgo = date9.getFullYear() + seperator1 + month_9 + seperator1 + date_9;
+        return [currentdate, tommorwdate, defaultdate, yesterdaydate, beforeYesterday, sevenDayAgo, thirtyDayAgo, ninetyDayAgo, sixtyDayAgo];
     },
     dateInterval: function (num1, num2, dayLength) {
         var date1 = new Date(num1.replace(/-/g, "/"));
@@ -375,6 +383,11 @@ var common = {
     timeTransform: function (str) {
         var date = new Date(str);
         return date.getTime() / 1000;
+    },
+    //转换时间戳+后缀
+    timeTransformWithSuffix: function (str,) {
+        var date = new Date(str);
+        return date.getTime() / 1000 + '';
     },
     periods: function () {
         var lis = $('.periods li');
@@ -606,17 +619,20 @@ var common = {
     },
     iconSet: function (setAbout, value, icon) {
         /*侧边栏是后端生成的，这里是根据中文显示用js控制样式，以后后台每增加一个页面，这里也要对应增加一个判断*/
-        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-renminbi', 'layui-icon-template'];
+
         var value = value.replace(/(^\s*)|(\s*$)/g, "");
         var setAbout = setAbout;
         var children = '';
+        //一级栏目标题
         var treeNode = ['运力统计', '推广统计', '地图工具', '用户统计', '交易统计', '权限管理', '价格统计', '区域商机'];
+        //图标样式
+        var arr = ['icon-techreport-', 'icon-xianlu', 'icon-ditu', 'icon-user', 'icon-caiwu', 'icon-suo', 'icon-renminbi', 'layui-icon-template-1'];
         switch (value) {
             case treeNode[0]:
                 icon.addClass(arr[0]);
                 setAbout.addClass('menu-transport');
-                var children_6 = setAbout.next().children();
-                $.each(children_6, function (val, index) {
+                var children_0 = setAbout.next().children();
+                $.each(children_0, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '认证车辆') {
                         $(this).find('a').addClass('vehicle-second-menu')
                     }
@@ -629,8 +645,8 @@ var common = {
             case treeNode[1]:
                 icon.addClass(arr[1]);
                 setAbout.addClass('menu-promote');
-                var children_3 = setAbout.next().children();
-                $.each(children_3, function (val, index) {
+                var children_1 = setAbout.next().children();
+                $.each(children_1, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '推广统计') {
                         $(this).find('a').addClass('promote-second-menu')
                     }
@@ -657,8 +673,8 @@ var common = {
             case treeNode[3]:
                 icon.addClass(arr[3]);
                 setAbout.addClass('menu-users');
-                var children_5 = setAbout.next().children();
-                $.each(children_5, function (val, index) {
+                var children_3 = setAbout.next().children();
+                $.each(children_3, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '用户统计') {
                         $(this).find('a').addClass('users-second-menu')
                     }
@@ -668,8 +684,8 @@ var common = {
             case treeNode[4]:
                 icon.addClass(arr[4]);
                 setAbout.addClass('menu-transaction');
-                children = setAbout.next().children();
-                $.each(children, function (val, index) {
+                children_4 = setAbout.next().children();
+                $.each(children_4, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '潜在货源') {
                         $(this).find('a').addClass('lurk-goods')
                     }
@@ -684,8 +700,8 @@ var common = {
             case treeNode[5]:
                 icon.addClass(arr[5]);
                 setAbout.addClass('menu-power');
-                var children_4 = setAbout.next().children();
-                $.each(children_4, function (val, index) {
+                var children_5 = setAbout.next().children();
+                $.each(children_5, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '消息编辑') {
                         $(this).find('a').addClass('editMSG-second-menu')
                     }
@@ -697,8 +713,8 @@ var common = {
             case treeNode[6]:
                 icon.addClass(arr[6]);
                 setAbout.addClass('menu-price');
-                var children_1 = setAbout.next().children();
-                $.each(children_1, function (val, index) {
+                var children_6 = setAbout.next().children();
+                $.each(children_6, function (val, index) {
                     if ($(this).find('a').text().replace(/(^\s*)|(\s*$)/g, "") == '价格统计') {
                         $(this).find('a').addClass('price-second-menu')
                     }
@@ -779,6 +795,13 @@ var common = {
             }
         }
         return (false);
+    },
+    /*加载下拉框选项 json对象、初始化对象 如：["0":"请选泽","1":"测试数据1"]、document.getElementByid('id') */
+    init_select: function (obj, oo) {
+        obj.innerHTML = null;
+        for (var i in oo) {
+            obj.options.add(new Option(oo[i], i));
+        }
     }
 };
 
