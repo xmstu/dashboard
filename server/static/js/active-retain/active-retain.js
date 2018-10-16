@@ -3,11 +3,6 @@
  */
 var setAbout = {
     init: function () {
-        /*侧边栏样式*/
-          $('.menu-active_retain').addClass('menu-active');
-          $('.menu-active .icon-xia').addClass('icon-rotate');
-          $('.menu-active_retain').next('.second-menu-list').css({'display': 'block'});
-          $('.menu-active_retain').next('.second-menu-list').find('.lurk-goods').addClass('selected-active');
         /*给表单设置默认值，时间转换秒是前端做的*/
         $('.layui-table-cell').css({'height': 'auto!important'});
         $('#active_start').val(String(common.getNowFormatDate()[2]));
@@ -16,6 +11,14 @@ var setAbout = {
         $('#survival_end').val(String(common.getNowFormatDate()[3]));
         setTimeout(function () {
             common.dateInterval($('#active_start').val(), $('#active_start').val());
+             /*设置左边二级菜单样式*/
+                var current_parent_id='users'//当前页面上一级ID，指目录名
+                var child_id="active-retain";//当前页面ID，指文件名,注意'-'与'_'的区别
+            // 为啥要这样搞？总之锅laitx不背，laitx负责改得更容易操作而已哈哈 可以考虑自动获取url文件名，就不需要管这块儿了。
+                $('.menu-'+current_parent_id).addClass('menu-active');
+                $('.menu-active .icon-xia').addClass('icon-rotate')
+                $('.menu-'+current_parent_id).next('.second-menu-list').css({'display': 'block'});
+                $('.menu-'+current_parent_id).next('.second-menu-list').find('.'+child_id+'-second-menu').addClass('selected-active')
         }, 10);
         $('.layui-form-item').width('184');
         $('#from_region_id').address({
@@ -165,7 +168,7 @@ var setAbout = {
         layui.use('table', function () {
             var table = layui.table;
             table.render({
-                elem: '#LAY_table_goods',
+                elem: '#active_survival_table',
                 even: true
                 , url: url,
                 response: {
@@ -173,17 +176,16 @@ var setAbout = {
                     statusCode: 100000
                 },
                 cols: [[
-                    {field: 'goods_standard', title: '货物规格'},
-                    {field: 'goods_type', title: '货物类型'},
-                    {field: 'address', title: '出发地-目的地', width: 250},
-                    {field: 'vehicle', title: '车型要求'},
-                    {field: 'price', title: '运费'},
-                    {field:'query_time',title:'查价时间'},
-                    {field:'stay_time',title:'查价时长'},
-                    {field: 'mobile', title: '用户信息'},
-                    {field: 'goods_counts', title: '发货数'},
-                    {field: 'orders_counts', title: '完成数'},
-                    {field: 'register_time', title: '注册时间'}
+                    {field: 'goods_standard', title: '时间'},
+                    {field: 'goods_type', title: '用户数'},
+                    {field: 'address', title: '一天', width: 250},
+                    {field: 'vehicle', title: '两天'},
+                    {field: 'price', title: '三天'},
+                    {field:'query_time',title:'四天'},
+                    {field:'stay_time',title:'五天'},
+                    {field: 'mobile', title: '六天'},
+                    {field: 'goods_counts', title: '七天'},
+                    {field: 'orders_counts', title: '八天'}
                 ]],
                 done: function (res, curr, count) {
                     $("td[data-field='mobile']").children().each(function () {
