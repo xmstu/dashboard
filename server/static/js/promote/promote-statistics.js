@@ -8,6 +8,7 @@ layui.use('layer', function () {
     var layer = layui.layer;
     dataInit();
     $('.layui-form-item').css({width: '184px'})
+    $('.area').css({width: '250px'})
 });
 /*----------------设置侧边栏样式----------------------*/
 setTimeout(function () {
@@ -379,8 +380,10 @@ var pageSet = {
                 register_start_time: requestStrat,
                 register_end_time: endRequest,
                 statistic_start_time: statistic_start_time,
-                statistic_end_time: statistic_end_time
+                statistic_end_time: statistic_end_time,
+                region_id: $.trim($("#node_id").val()) == "" ? common.role_area_show($("#super_manager_area_one")) : $.trim($("#node_id").val())
             };
+            console.log(data);
             var url = '/promote/effect/?user_name=' + data.user_name + '&mobile=' + data.mobile + '&goods_type=' + data.goods_type + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&statistic_start_time=' + data.statistic_start_time + '&statistic_end_time=' + data.statistic_end_time;
             that.tableRender(url)
         })
@@ -396,19 +399,21 @@ var pageSet = {
                 , response: {
                     statusName: 'status',
                     statusCode: 100000
-                }
-                , cols: [[
-                    {field: 'user_id', title: '姓名ID'},
-                    {field: 'user_name', title: '姓名'}
+                },
+                totalRow: true,
+                cols: [[
+                    {field: 'user_id', title: '姓名ID', unresize: true, totalRowText: '合计行'},
+                    {field: 'user_name', title: '姓名'},
+                    {field: 'region_name', title: '城市'}
                     , {field: 'mobile', title: '手机号'}
-                    , {field: 'register_owner_count', title: '注册货主数'}
-                    , {field: 'goods_count', title: '发货数'}
-                    , {field: 'goods_owner_count', title: '发货人数'}
-                    , {field: 'goods_received_count', title: '货源被接数'}
-                    , {field: 'register_driver_count', title: '注册司机'}
-                    , {field: 'auth_driver_count', title: '认证司机数'}
-                    , {field: 'accept_order_count', title: '司机接单数'}
-                    , {field: 'sticker_driver_count', title: '百万车贴'}
+                    , {field: 'register_owner_count', title: '注册货主数',totalRow: true}
+                    , {field: 'goods_count', title: '发货数',totalRow: true}
+                    , {field: 'goods_owner_count', title: '发货人数', sort: true,totalRow: true}
+                    , {field: 'goods_received_count', title: '货源被接数', sort: true,totalRow: true}
+                    , {field: 'register_driver_count', title: '注册司机',totalRow: true}
+                    , {field: 'auth_driver_count', title: '认证司机数',totalRow: true}
+                    , {field: 'accept_order_count', title: '司机接单数',totalRow: true}
+                    , {field: 'sticker_driver_count', title: '百万车贴',totalRow: true}
                     , {
                         field: 'wealth', title: '操作', width: 96, templet: function (d) {
                             return '<button id="deleteButton_' + d.user_id + '" value="' + d.mobile + '" class="layui-btn layui-btn-sm promote-delete"><i class="layui-icon">&#xe640;</i>删除</button>'
@@ -416,6 +421,7 @@ var pageSet = {
                     }
                 ]]
                 , done: function (res) {
+                    console.log(res)
                     $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='accept_order_count']").children().each(function () {
                         if ($(this).text() != '') {
@@ -541,3 +547,37 @@ $('#user_search_box').on('click', function (e) {
     pageSet.tableInit();
 });
 
+function area_select() {
+    var auth_role = $("#user-info").attr("data-role-type");
+    if (!!auth_role && auth_role == 1) {
+        $("#super_manager_area").css({
+            "display": "block"
+        });
+        $("#super_manager_area_two").css({
+            "display": "block"
+        });
+        $("#super_manager_area_one").address({
+            level: 3,
+            offsetLeft: '-124px'
+        });
+        $("#super_manager_area_zero").address({
+            level: 3,
+            offsetLeft: '-124px'
+        })
+    } else {
+        $("#super_manager_area").css({
+            "display": "none"
+        });
+        $("#city_manager_area_one").css({
+            "display": "block"
+        });
+        $("#super_manager_area_two").css({
+            "display": "none"
+        });
+        $("#city_manager_two").css({
+            "display": "block"
+        })
+    }
+}
+
+area_select();
