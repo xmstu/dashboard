@@ -345,8 +345,8 @@ class UserStatistic(object):
             shf_goods
         WHERE
             {fetch_where}
-            AND create_time >= :start_time
-            AND create_time < :end_time
+            AND create_time >= {start_time}
+            AND create_time < {end_time}
         GROUP BY
             FROM_UNIXTIME(create_time, "%Y-%m-%d");
         """
@@ -371,9 +371,83 @@ class UserStatistic(object):
         fetch_where += region
 
         try:
-            data = cursor.query(command, params)
+            data = cursor.query(command.format(fetch_where=fetch_where, start_time=params["start_time"], end_time=params["end_time"]))
             return data
         except Exception as e:
             log.error('查询发货人数出现错误:{}'.format(e))
             abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='查询发货人数出现错误'))
 
+    @staticmethod
+    def get_new_consignor(cursor, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data
+
+    @staticmethod
+    def get_lost_consignor(cursor, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data
+
+    @staticmethod
+    def get_driver(cursor, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data
+
+    @staticmethod
+    def get_new_driver(cursor, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data
+
+    @staticmethod
+    def get_lost_driver(cursor, params):
+
+        fields = """"""
+
+        which_table = """"""
+
+        fetch_where = """"""
+
+        command = """"""
+
+        data = cursor.query(command)
+
+        return data

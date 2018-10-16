@@ -26,6 +26,7 @@ class PromoteEffect(object):
             params['register_end_time'] = int(params.get('register_end_time') or 0)
             params['statistic_start_time'] = int(params.get('statistic_start_time') or 0)
             params['statistic_end_time'] = int(params.get('statistic_end_time') or 0)
+            params["region_id"] = int(params.get('region_id') or 0)
 
             # 补全时间
             params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
