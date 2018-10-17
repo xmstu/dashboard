@@ -158,9 +158,12 @@ var set = {
                 var info = [];
                 //info.push("<div><div><img style=\"float:left; width: 100px;\" src=\" /static/images/loading.gif \"/></div> ");
                 info.push("<div style=\"padding:0px 0px 0px 4px;\"><b>省省回头车</b>");
-
-                info.push("发货时间:" +$('#delivery_start_time').val()+"-"+$('#delivery_end_time').val());
-                info.push("注册时间:" +$('#register_start_time').val()+"-"+$('#register_end_time').val());
+                if($('#delivery_start_time').val()!="" || $('#delivery_end_time').val()!=""){
+                    info.push("发货时间:" +$('#delivery_start_time').val()+"-"+($('#delivery_end_time').val() || '至今'));
+                }
+                if($('#register_start_time').val()!="" || $('#register_end_time').val()!=""){
+                    info.push("注册时间:" +$('#register_start_time').val()+"-"+($('#register_end_time').val() || '至今'));
+                }
                 info.push("货源量:" + infomation.data.sum_count);
                 info.push("地址 :" + address + "</div></div>");
                 infoWindow = new AMap.InfoWindow({
@@ -229,12 +232,12 @@ var set = {
                     return false;
                 }
                 var Zoom_s = {10: 2.5, 11: 1.25, 12: 0.5, 13: 0.25, 14: 0.125}
-                console.log('辐射范围倍数：' + Zoom_s[map.getZoom()]);
+               // console.log('辐射范围倍数：' + Zoom_s[map.getZoom()]);
                 var data = {
-                    "lat": lnglat[1],
-                    "lng": lnglat[0],
-                    "region_id": adcode,
-                    "multiple": Zoom_s[map.getZoom()],//倍数基本单位是1km
+                    lat: lnglat[1],
+                    lng: lnglat[0],
+                    region_id: adcode,
+                    multiple: Zoom_s[map.getZoom()],//倍数基本单位是1km
                     goods_price_type: $('#goods_price_type').val(),
                     haul_dist: $('#haul_dist').val(),
                     vehicle_length: $('#vehicle_length').val(),
@@ -245,15 +248,19 @@ var set = {
                     register_start_time:common.timeTransform($('#register_start_time').val() + ' 00:00:00'),
                     register_end_time: common.timeTransform($('#register_end_time').val() + ' 23:59:59')
                 };
-                console.log(data);
-                data = JSON.stringify(data);
+                data=JSON.stringify(data);
                 http.ajax.post(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
                     if (res.status == 100000) {
                         if (res.data.sum_count == 0 || res.data.lng == 0) {
                             //返回值经纬度为0
                             layer.msg('没有相关信息点！');
                             map.remove(m);//移除marker标记
-                            infoWindow.close();//关闭信息窗体
+                            try {
+                                infoWindow.close();//关闭信息窗体
+                            }
+                            catch (e) {
+                                console.log(e)
+                            }
                         }
                         else {
                             fun(res);
@@ -261,41 +268,12 @@ var set = {
                     }
                 }, function (xhttp) {
                     if (xhttp.responseJSON.status != 100000) {
-                        // layer.msg('失败', function () {
-                        //     layer.closeAll("loading")
-                        // });
+                         layer.msg('没有相关信息点');
                     }
                 })
             }
 
             //******ajax获取用户信息******
-            //******创建矩形******
-            function createRec(LngLat) {
-                //未完成  暂停！
-                //基础方法：根据当前点击经纬度 换算半径1000米后的四个经纬度点给后台，后台判断回传
-                //var south=LngLat[0]-2500；
-                var southWest = new AMap.LngLat(116.356449, 39.859008)
-                var northEast = new AMap.LngLat(116.417901, 39.893797)
-                var bounds = new AMap.Bounds(southWest, northEast)
-                var rectangle = new AMap.Rectangle({
-                    bounds: bounds,
-                    strokeColor: 'red',
-                    strokeWeight: 6,
-                    strokeOpacity: 0.5,
-                    strokeDasharray: [30, 10],
-                    // strokeStyle还支持 solid
-                    strokeStyle: 'dashed',
-                    fillColor: 'blue',
-                    fillOpacity: 0.5,
-                    cursor: 'pointer',
-                    zIndex: 50,
-                })
-                rectangle.setMap(map)
-                // 缩放地图到合适的视野级别
-                map.setFitView([rectangle])
-            }
-
-            //******创建矩形******
             //******增加标记marker，并移除上一个marker******
             var m = {};
 
@@ -313,7 +291,6 @@ var set = {
 
             //******增加标记marker，并移除上一个marker******
             map.on('click', function (e) {
-                console.log(heatmap.getMap());
                 var LngLat = [e.lnglat.getLng(), e.lnglat.getLat()];
                 regeoCode(LngLat);//经纬度->地址
                 $(".weather-city-search").html("地图-经纬度:" + LngLat[0] + "," + LngLat[1] + "  缩放级别：" + map.getZoom());
@@ -329,9 +306,6 @@ var set = {
             });
             $('#heatMapShow').click(function () {
                 heatmap.show();
-                console.log(heatmap.getMap());
-                console.log(heatmap.getOptions());
-                console.log(heatmap.getDataSet());
             });
         });
 

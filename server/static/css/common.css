@@ -1059,7 +1059,10 @@ body {
     background: #009688;
     color: #fff
 }
-
+.user_periods li > button.active, .user_periods li > button.active {
+    background: #009688;
+    color: #fff
+}
 .chart-tips {
     font-size: 36px;
     color: #ddd;

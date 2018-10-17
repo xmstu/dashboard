@@ -1,6 +1,4 @@
-/**
- * Created by Creazy_Run on 2018/5/30.
- */
+
 var setAbout = {
     init: function () {
         /*给表单设置默认值，时间转换秒是前端做的*/

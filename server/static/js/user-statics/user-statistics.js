@@ -1,7 +1,4 @@
-/**
- * 用户统计
- * Created by Creazy_Run on 2018/5/30.
- */
+
 /*----------------设置日期框中的初始化值----------------------*/
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
@@ -177,7 +174,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             }
         }
     });
-
     //******行为用户趋势 搜索条件******
     table.render({
         elem: '#LAY_table_user'
@@ -246,7 +242,302 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         , page: true
     });
 });
+/*图标渲染*/
+function dataInit() {
+    var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
+    var requestEndTime = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
+    var data = {
+        start_time: requestStartTime,
+        end_time: requestEndTime,
+        periods: $('.periods>li').find('button.active').val(),
+        user_type: $('#user_type').val(),
+        role_type: $('#role_type_first').val(),
+        region_id: $('#region_id').val() == '' ? common.role_area_show($('#super_manager_area_select_zero')) : $('#region_id').val(),
+        is_auth: $("#is_auth").val()
+    };
+    var url = '/user/statistic/'
+    http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+        if (res.status == 100000) {
+            layer.closeAll('loading')
+            var len = res.data.xAxis.length;
+            var X_data = res.data.xAxis;
+            if (len > 0 && len < 20) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit(res.data.xAxis, res.data.series, 1, X_data[1])
+            } else if (len > 0 && len >= 20 && len < 40) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit(res.data.xAxis, res.data.series, 3, X_data[1])
+            } else if (len > 0 && len >= 40 && len < 90) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit(res.data.xAxis, res.data.series, 5, X_data[1])
+            }
+        }
+    })
+}
+Highcharts.setOptions({
+    colors: [/*'#9FE6B8', '#FFDB5C','#ff9f7f',*/  '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+});
+/*图表函数*/
+function chartInit(xAxis, series, interval, x_value1) {
+    $('#charts_container_one').highcharts({
+        tooltip: {
+            shared: true,
+            crosshairs: [{
+                width: 1,
+                color: '#ccc'
+            }, {
+                width: 1,
+                color: '#ccc'
+            }]
+        },
+        chart: {
+            zoomType: 'xy'
+        },
+
+        title: {
+            text: '用户变化趋势曲线图'
+        },
+        subtitle: {
+            text: null
+        },
+        xAxis: {
+            tickInterval: interval,
+            categories: xAxis,
+            gridLineColor: '#eee',
+            gridLineWidth: 1
+        },
+        yAxis: {
+            gridLineColor: '#eee',
+            gridLineWidth: 1,
+            min: 0,
+            allowDecimals: false,
+            plotLines: [
+                {
+                    color: '#ddd',
+                    dashStyle: 'dash',
+                    value: x_value1,
+                    width: 1
+                }
+            ],
+            title: {
+                text: '人数 (人)',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value}人',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        return this.point.y + '人';
+                    }
+                }
+            },
+            series: {
+                states: {
+                    hover: {
+                        enabled: true
+                    }
+                }
+            }
+            , marker: {
+                radius: 3.5,
+                lineWidth: 1,
+                //  lineColor: '#666666',
+                symbol: 'circle',
+
+                states: {
+                    hover: {
+                        enabled: true,
+                        radius: 3.5
+                    }
+                }
+            },
+        },
+        series: [{
+            name: '人数',
+            type: 'line',
+            tooltip: {
+                valueSuffix: '人'
+            },
+            data: series
+        }]
+    });
+}
+//行为用户趋势
+function dataInit_user() {
+    var requestStartTime = common.timeTransform($('#user-start').val() + ' 00:00:00');
+    var requestEndTime = common.timeTransform($('#user-end').val() + ' 23:59:59');
+    var url = '/user/behavior_statistic/';
+    var data = {
+        start_time: requestStartTime,
+        end_time: requestEndTime,
+        periods: $('.user_periods>li').find('button.active').val(),//按 日 周 月 查询
+        data_type: $('#user_data-type').val() //数据类型
+    };
+    console.log(data);
+    http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+        // res={"status":100000,"msg":"成功",
+        //     "data":{
+        //         "xAxis":["2018-10-09","2018-10-10","2018-10-11","2018-10-12","2018-10-13","2018-10-14","2018-10-15","2018-10-16"],
+        //         "series":[0,0,1,0,0,0,0,1]
+        //     }
+        // }
+
+        if (res.status == 100000) {
+            layer.closeAll('loading')
+            console.log(res);
+            var len = res.data.xAxis.length;
+            var X_data = res.data.xAxis;
+            if (len > 0 && len < 20) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit_user(res.data.xAxis, res.data.count_series, 1, X_data[1])
+            } else if (len > 0 && len >= 20 && len < 40) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit_user(res.data.xAxis, res.data.count_series, 3, X_data[1])
+            } else if (len > 0 && len >= 40 && len < 90) {
+                $('.chart-tips').css({'display': 'none'})
+                chartInit_user(res.data.xAxis, res.data.count_series, 5, X_data[1])
+            }
+        }
+    })
+}
+/*行为用户趋势 图表函数*/
+function chartInit_user(xAxis, series, interval, x_value1) {
+    $('#charts_container_user').highcharts({
+        tooltip: {
+            shared: true,
+            crosshairs: [{
+                width: 1,
+                color: '#ccc'
+            }, {
+                width: 1,
+                color: '#ccc'
+            }]
+        },
+        chart: {
+            zoomType: 'xy'
+        },
+
+        title: {
+            text: '行为用户趋势曲线图'
+        },
+        subtitle: {
+            text: null
+        },
+        xAxis: {
+            tickInterval: interval,
+            categories: xAxis,
+            gridLineColor: '#eee',
+            gridLineWidth: 1
+        },
+        yAxis: {
+            gridLineColor: '#eee',
+            gridLineWidth: 1,
+            min: 0,
+            allowDecimals: false,
+            plotLines: [
+                {
+                    color: '#ddd',
+                    dashStyle: 'dash',
+                    value: x_value1,
+                    width: 1
+                }
+            ],
+            title: {
+                text: '人数 (人)',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value}人',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        return this.point.y + '人';
+                    }
+                }
+            },
+            series: {
+                states: {
+                    hover: {
+                        enabled: true
+                    }
+                }
+            }
+            , marker: {
+                radius: 3.5,
+                lineWidth: 1,
+                //  lineColor: '#666666',
+                symbol: 'circle',
+
+                states: {
+                    hover: {
+                        enabled: true,
+                        radius: 3.5
+                    }
+                }
+            },
+        },
+        series: [{
+            name: '人数',
+            type: 'line',
+            tooltip: {
+                valueSuffix: '人'
+            },
+            data: series
+        }]
+    });
+}
+//地区选择
+function area_select() {
+    var auth_role = $('#user-info').attr('data-role-type')
+    if (!!auth_role && auth_role == 1) {
+        $('#super_manager_area').css({'display': 'block'})
+        $('#super_manager_area_select_zero').address({
+            level: 3,
+            offsetLeft: '-124px',
+        });
+        $('#super_manager_area_one').css({'display': 'block'})
+        $('#super_manager_area_select_one').address({
+            level: 3,
+            offsetLeft: '-124px',
+        });
+    } else {
+        $('#super_manager_area').css({'display': 'none'})
+        $('#super_manager_area_two').css({'display': 'none'})
+        $('#city_manager_one').css({'display': 'block'})
+        $('#city_manager_two').css({'display': 'block'})
+
+    }
+}
+area_select()
+common.periods('user_periods');
 /*表格搜索*/
+$('#search_btn').on('click', function (e) {
+    e.preventDefault();
+    dataInit()
+})
+$('#search_btn_user').on('click', function (e) {
+    e.preventDefault();
+    dataInit_user()
+})
 $('#user_search_box').on('click', function (e) {
     e.preventDefault();
     var beginTime = $.trim($('#date_show_three').val());
@@ -403,306 +694,3 @@ $('#user_search_box').on('click', function (e) {
         });
     })
 });
-$('#search_btn').on('click', function (e) {
-    e.preventDefault();
-    dataInit()
-})
-
-/*图标渲染*/
-function dataInit() {
-    var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
-    var requestEndTime = common.timeTransform($('#date_show_two').val() + ' 23:59:59');
-    var data = {
-        start_time: requestStartTime,
-        end_time: requestEndTime,
-        periods: $('.periods>li').find('button.active').val(),
-        user_type: $('#user_type').val(),
-        role_type: $('#role_type_first').val(),
-        region_id: $('#region_id').val() == '' ? common.role_area_show($('#super_manager_area_select_zero')) : $('#region_id').val(),
-        is_auth: $("#is_auth").val()
-    };
-    var url = '/user/statistic/'
-    http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-        if (res.status == 100000) {
-            layer.closeAll('loading')
-            var len = res.data.xAxis.length;
-            var X_data = res.data.xAxis;
-            if (len > 0 && len < 20) {
-                $('.chart-tips').css({'display': 'none'})
-                chartInit(res.data.xAxis, res.data.series, 1, X_data[1])
-            } else if (len > 0 && len >= 20 && len < 40) {
-                $('.chart-tips').css({'display': 'none'})
-                chartInit(res.data.xAxis, res.data.series, 3, X_data[1])
-            } else if (len > 0 && len >= 40 && len < 90) {
-                $('.chart-tips').css({'display': 'none'})
-                chartInit(res.data.xAxis, res.data.series, 5, X_data[1])
-            }
-        }
-    })
-}
-
-Highcharts.setOptions({
-    colors: [/*'#9FE6B8', '#FFDB5C','#ff9f7f',*/  '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
-});
-
-/*图表函数*/
-function chartInit(xAxis, series, interval, x_value1) {
-    $('#charts_container_one').highcharts({
-        tooltip: {
-            shared: true,
-            crosshairs: [{
-                width: 1,
-                color: '#ccc'
-            }, {
-                width: 1,
-                color: '#ccc'
-            }]
-        },
-        chart: {
-            zoomType: 'xy'
-        },
-
-        title: {
-            text: '用户变化趋势曲线图'
-        },
-        subtitle: {
-            text: null
-        },
-        xAxis: {
-            tickInterval: interval,
-            categories: xAxis,
-            gridLineColor: '#eee',
-            gridLineWidth: 1
-        },
-        yAxis: {
-            gridLineColor: '#eee',
-            gridLineWidth: 1,
-            min: 0,
-            allowDecimals: false,
-            plotLines: [
-                {
-                    color: '#ddd',
-                    dashStyle: 'dash',
-                    value: x_value1,
-                    width: 1
-                }
-            ],
-            title: {
-                text: '人数 (人)',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            },
-            labels: {
-                format: '{value}人',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function () {
-                        return this.point.y + '人';
-                    }
-                }
-            },
-            series: {
-                states: {
-                    hover: {
-                        enabled: true
-                    }
-                }
-            }
-            , marker: {
-                radius: 3.5,
-                lineWidth: 1,
-                //  lineColor: '#666666',
-                symbol: 'circle',
-
-                states: {
-                    hover: {
-                        enabled: true,
-                        radius: 3.5
-                    }
-                }
-            },
-        },
-        series: [{
-            name: '人数',
-            type: 'line',
-            tooltip: {
-                valueSuffix: '人'
-            },
-            data: series
-        }]
-    });
-}
-
-//行为用户趋势
-function dataInit_user() {
-    var requestStartTime = common.timeTransform($('#user-start').val() + ' 00:00:00');
-    var requestEndTime = common.timeTransform($('#user-end').val() + ' 23:59:59');
-    var url = '/user/statistic/';
-    var data={
-        start_time: requestStartTime,
-        end_time: requestEndTime,
-        periods: $('.periods>li').find('button.active').val(),
-        user_type: $('#user_type').val(),
-        role_type: $('#role_type_first').val(),
-        region_id: $('#region_id').val() == '' ? common.role_area_show($('#super_manager_area_select_zero')) : $('#region_id').val(),
-        is_auth: $("#is_auth").val()
-    }
-    // var data = {
-    //     start_time: requestStartTime,
-    //     end_time: requestEndTime,
-    //     periods: $('.user_periods>li').find('button.active').val(),//按 日 周 月 查询
-    //     user_type: $('#user_data-type').val() //数据类型
-    // };
-    http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-        if (res.status == 100000) {
-            layer.closeAll('loading')
-            var len = res.data.xAxis.length;
-            var X_data = res.data.xAxis;
-            if (len > 0 && len < 20) {
-                $('.chart-tips').css({'display': 'none'})
-                chartInit_user(res.data.xAxis, res.data.series, 1, X_data[1])
-            } else if (len > 0 && len >= 20 && len < 40) {
-                $('.chart-tips').css({'display': 'none'})
-                chartInit_user(res.data.xAxis, res.data.series, 3, X_data[1])
-            } else if (len > 0 && len >= 40 && len < 90) {
-                $('.chart-tips').css({'display': 'none'})
-                chartInit_user(res.data.xAxis, res.data.series, 5, X_data[1])
-            }
-        }
-    })
-}
-
-/*行为用户趋势 图表函数*/
-function chartInit_user(xAxis, series, interval, x_value1) {
-    $('#charts_container_user').highcharts({
-        tooltip: {
-            shared: true,
-            crosshairs: [{
-                width: 1,
-                color: '#ccc'
-            }, {
-                width: 1,
-                color: '#ccc'
-            }]
-        },
-        chart: {
-            zoomType: 'xy'
-        },
-
-        title: {
-            text: '行为用户趋势曲线图'
-        },
-        subtitle: {
-            text: null
-        },
-        xAxis: {
-            tickInterval: interval,
-            categories: xAxis,
-            gridLineColor: '#eee',
-            gridLineWidth: 1
-        },
-        yAxis: {
-            gridLineColor: '#eee',
-            gridLineWidth: 1,
-            min: 0,
-            allowDecimals: false,
-            plotLines: [
-                {
-                    color: '#ddd',
-                    dashStyle: 'dash',
-                    value: x_value1,
-                    width: 1
-                }
-            ],
-            title: {
-                text: '人数 (人)',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            },
-            labels: {
-                format: '{value}人',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            }
-        },
-        plotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function () {
-                        return this.point.y + '人';
-                    }
-                }
-            },
-            series: {
-                states: {
-                    hover: {
-                        enabled: true
-                    }
-                }
-            }
-            , marker: {
-                radius: 3.5,
-                lineWidth: 1,
-                //  lineColor: '#666666',
-                symbol: 'circle',
-
-                states: {
-                    hover: {
-                        enabled: true,
-                        radius: 3.5
-                    }
-                }
-            },
-        },
-        series: [{
-            name: '人数',
-            type: 'line',
-            tooltip: {
-                valueSuffix: '人'
-            },
-            data: series
-        }]
-    });
-}
-$('#search_btn_user').on('click', function (e) {
-    e.preventDefault();
-    dataInit_user()
-})
-function area_select() {
-    var auth_role = $('#user-info').attr('data-role-type')
-    if (!!auth_role && auth_role == 1) {
-        $('#super_manager_area').css({'display': 'block'})
-        $('#super_manager_area_select_zero').address({
-            level: 3,
-            offsetLeft: '-124px',
-        });
-        $('#super_manager_area_one').css({'display': 'block'})
-        $('#super_manager_area_select_one').address({
-            level: 3,
-            offsetLeft: '-124px',
-        });
-    } else {
-        $('#super_manager_area').css({'display': 'none'})
-        $('#super_manager_area_two').css({'display': 'none'})
-        $('#city_manager_one').css({'display': 'block'})
-        $('#city_manager_two').css({'display': 'block'})
-
-    }
-}
-
-area_select()
-if ($('#region_id').val() == '') {
-}
-/*初始化下拉框*/
-common.init_select({"1":"新增用户","2":"累计用户","3":"错数据"},document.getElementById('user_data-type'));
