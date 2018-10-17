@@ -421,7 +421,6 @@ var pageSet = {
                     }
                 ]]
                 , done: function (res) {
-                    console.log(JSON.stringify(res))
                     $('.main-content-right').addClass('animated fadeIn');
                     $("td[data-field='accept_order_count']").children().each(function () {
                         if ($(this).text() != '') {

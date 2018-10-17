@@ -158,6 +158,9 @@ var set = {
                 var info = [];
                 //info.push("<div><div><img style=\"float:left; width: 100px;\" src=\" /static/images/loading.gif \"/></div> ");
                 info.push("<div style=\"padding:0px 0px 0px 4px;\"><b>省省回头车</b>");
+
+                info.push("发货时间:" +$('#delivery_start_time').val()+"-"+$('#delivery_end_time').val());
+                info.push("注册时间:" +$('#register_start_time').val()+"-"+$('#register_end_time').val());
                 info.push("货源量:" + infomation.data.sum_count);
                 info.push("地址 :" + address + "</div></div>");
                 infoWindow = new AMap.InfoWindow({
