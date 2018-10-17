@@ -384,13 +384,8 @@ var common = {
         var date = new Date(str);
         return date.getTime() / 1000;
     },
-    //转换时间戳+后缀
-    timeTransformWithSuffix: function (str,) {
-        var date = new Date(str);
-        return date.getTime() / 1000 + '';
-    },
-    periods: function () {
-        var lis = $('.periods li');
+    periods: function (id) {
+        var lis = $('.'+id+' li');
         lis.on('click', function (e) {
             e.preventDefault();
             $(this).find('button').addClass('active').parent('li').siblings('li').find('button').removeClass('active')
@@ -812,7 +807,7 @@ common.cookieSet();
 common.menuSet();
 common.messageRequest();
 common.returnTop();
-common.periods();
+common.periods('periods');
 common.weather();
 common.init();
 common.setLink();
