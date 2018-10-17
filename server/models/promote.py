@@ -320,7 +320,7 @@ class PromoteQuality(object):
         fetch_where = ' AND 1=1 '
 
         # 管理员根据地区id筛选地推人员
-        if params["region_id"]:
+        if params.get("region_id"):
             fetch_where += """
                         AND region_id = {}
                         """.format(params["region_id"])
