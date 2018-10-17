@@ -2,8 +2,6 @@
 # -*- coding:utf-8 -*-
 # author=hexm
 
-from flask_restplus import fields
-from server.status import APIStatus, FeedAPIStatus
 from server import api
 
 request_user_list_param = api.doc(params={
@@ -25,7 +23,7 @@ request_user_list_param = api.doc(params={
     'register_end_time': '注册结束时间',
     'page': '页数',
     'limit': '条数'
-    }, description='用户统计列表查询参数')
+}, description='用户统计列表查询参数')
 
 request_user_statistic_param = api.doc(params={
     'start_time': '开始日期(时间戳),默认:7天前',
@@ -35,12 +33,11 @@ request_user_statistic_param = api.doc(params={
     'role_type': '角色类型,0:全部,1:货主,2:司机,3:物流公司,默认:0',
     'region_id': '地区id,0:全部,其他地区用行政代码(模板写入),默认:0',
     'is_auth': '认证,0:全部,1:认证,2:非认证,默认:0',
-    }, description='用户变化趋势查询参数')
-
+}, description='用户变化趋势查询参数')
 
 request_user_behavior_statistic_param = api.doc(params={
     'start_time': '开始日期(时间戳),默认:7天前',
     'end_time': '结束日期(时间戳),默认:当前时间',
     'periods': '时间周期,2:日，3:周，4:月，默认:2',
     'data_type': '用户类型,1:发货人数,2:新增发货人数,3.流失货主人数,4.接单司机人数,5.完成订单司机数,6.新增接单人数,7.流失司机人数;默认:1',
-    }, description='用户行为变化趋势查询参数')
+}, description='用户行为变化趋势查询参数')

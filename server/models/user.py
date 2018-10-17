@@ -343,15 +343,13 @@ class UserStatistic(object):
         command = """
         SELECT
             COUNT(DISTINCT user_id) AS count,
-            FROM_UNIXTIME(create_time, "%Y-%m-%d") AS create_time
+            FROM_UNIXTIME( create_time, "%Y-%m-%d" ) AS create_time
         FROM
             shf_goods
         WHERE
             {fetch_where}
             AND create_time >= {start_time}
             AND create_time < {end_time}
-        GROUP BY
-            FROM_UNIXTIME(create_time, "%Y-%m-%d");
         """
         # 权限地区
         region = ' AND 1=1 '
@@ -374,6 +372,17 @@ class UserStatistic(object):
         fetch_where += region
 
         try:
+            # 日模式
+            if params["periods"] == 2:
+                command += """ GROUP BY FROM_UNIXTIME(create_time, "%Y-%m-%d") """
+            # 周模式
+            elif params["periods"] == 3:
+                command += """ GROUP BY FROM_UNIXTIME(create_time, "%Y%u") """
+            # 月模式
+            elif params["periods"] == 4:
+                command += """ GROUP BY FROM_UNIXTIME(create_time, "%Y-%m") """
+            else:
+                return []
             data = cursor.query(command.format(fetch_where=fetch_where, start_time=params["start_time"], end_time=params["end_time"]))
             return data
         except Exception as e:
