@@ -406,8 +406,6 @@ class UserStatistic(object):
             {fetch_where}
             AND sg.create_time >= {start_time}
             AND sg.create_time < {end_time}
-        GROUP BY
-            FROM_UNIXTIME(sg.create_time, "%Y-%m-%d");
         """
         # 权限地区
         region = ' AND 1=1 '
@@ -436,6 +434,7 @@ class UserStatistic(object):
 
         # 统计每日新注册切且进行发货的人数
         if params["periods"] == 2:
+            sql += """ GROUP BY FROM_UNIXTIME(sg.create_time, "%Y-%m-%d") """
             begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
             end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
             date_val = begin_date
@@ -449,10 +448,14 @@ class UserStatistic(object):
                 data += daily_data
 
         # 新增发货人数为当周注册且进行过发货行为的人数/新增发货人数为当月注册且进行过发货行为的人数
-        elif params["periods"] in (3, 4):
+        elif params["periods"] == 3:
+            sql += """ GROUP BY FROM_UNIXTIME( sg.create_time, '%Y%u' ) """
             data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
-            if not data:
-                data = []
+            if not data: data = []
+        elif params["periods"] == 4:
+            sql += """ GROUP BY FROM_UNIXTIME( sg.create_time, '%Y-%m' ) """
+            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
+            if not data: data = []
 
         return data
 
@@ -473,8 +476,6 @@ class UserStatistic(object):
             {fetch_where}
             AND sg.create_time >= {start_time}
             AND sg.create_time < UNIX_TIMESTAMP(@last_end_date)
-        GROUP BY
-            FROM_UNIXTIME(sg.create_time,"%Y-%m-%d");
         """
 
         end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["end_time"])), "%Y-%m-%d")
@@ -499,11 +500,13 @@ class UserStatistic(object):
         fetch_where += region
         # 周货主流失率
         if params["periods"] == 3:
+            sql += """ GROUP BY FROM_UNIXTIME(sg.create_time,"%Y%u") """
             cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"),INTERVAL WEEKDAY("{end_date}") DAY);""".format(end_date=end_date))
             data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
             if not data: data = []
         # 月货主流失率
         elif params["periods"] == 4:
+            sql += """ GROUP BY FROM_UNIXTIME(sg.create_time,"%Y-%m-%d") """
             cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"), INTERVAL DAYOFMONTH("{end_date}") - 1 DAY);""".format(end_date=end_date))
             data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
             if not data: data = []
@@ -527,8 +530,6 @@ class UserStatistic(object):
             create_time >= {start_time}
             AND create_time < {end_time}
             {fetch_where}
-        GROUP BY
-            FROM_UNIXTIME(create_time, "%Y-%m-%d");	
         """
         # 权限地区
         region = ' AND 1=1 '
@@ -552,6 +553,18 @@ class UserStatistic(object):
         if params["data_type"] == 5:
             fetch_where += """ AND `status` = 3 """
 
+        # 日模式
+        if params["periods"] == 2:
+            command += """ GROUP BY FROM_UNIXTIME(so.create_time, "%Y-%m-%d") """
+        # 周模式
+        elif params["periods"] == 3:
+            command += """ GROUP BY FROM_UNIXTIME(so.create_time, "%Y%u") """
+        # 月模式
+        elif params["periods"] == 4:
+            command += """ GROUP BY FROM_UNIXTIME(so.create_time, "%Y-%m") """
+        else:
+            return []
+
         data = cursor.query(command.format(start_time=params["start_time"], end_time=params["end_time"], fetch_where=fetch_where))
 
         return data if data else []
@@ -574,8 +587,6 @@ class UserStatistic(object):
             {fetch_where}
             AND so.create_time >= {start_time}
             AND so.create_time < {end_time}
-        GROUP BY
-            FROM_UNIXTIME(so.create_time,"%Y-%m-%d");
         """
 
         # 权限地区
@@ -604,6 +615,7 @@ class UserStatistic(object):
 
         # 统计每日新注册且进行接单的人数
         if params["periods"] == 2:
+            sql += """ GROUP BY FROM_UNIXTIME( so.create_time, '%Y-%m-%d' ) """
             begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
             end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
             date_val = begin_date
@@ -617,7 +629,12 @@ class UserStatistic(object):
                 data += daily_data
 
         # 新增接单人数为当周注册且进行过接单行为的人数/新增接单人数为当月注册且进行过接单行为的人数
-        elif params["periods"] in (3, 4):
+        elif params["periods"] == 3:
+            sql += """ GROUP BY FROM_UNIXTIME( so.create_time, '%Y%u' ) """
+            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
+            if not data: data = []
+        elif params["periods"] == 4:
+            sql += """ GROUP BY FROM_UNIXTIME( so.create_time, '%Y-%m' ) """
             data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
             if not data: data = []
 
@@ -640,8 +657,6 @@ class UserStatistic(object):
             {fetch_where}
             AND so.create_time >= {start_time}
             AND so.create_time < UNIX_TIMESTAMP(@last_week_end_date)
-        GROUP BY
-            FROM_UNIXTIME(so.create_time,"%Y-%m-%d");
         """
 
         end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["end_time"])), "%Y-%m-%d")
@@ -666,11 +681,13 @@ class UserStatistic(object):
         fetch_where += region
         # 周货主流失率
         if params["periods"] == 3:
+            sql += """ GROUP BY FROM_UNIXTIME(so.create_time,"%Y-%m-%d") """
             cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"),INTERVAL WEEKDAY("{end_date}") DAY);""".format(end_date=end_date))
             data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
             if not data: data = []
         # 月货主流失率
         elif params["periods"] == 4:
+            sql += """ GROUP BY FROM_UNIXTIME(so.create_time,"%Y%u") """
             cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"), INTERVAL DAYOFMONTH("{end_date}") - 1 DAY);""".format(end_date=end_date))
             data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
             if not data: data = []
