@@ -6,8 +6,8 @@ from flask_restful import abort
 from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import make_resp, APIStatus, HTTPStatus, make_resp
-from server.utils.extend import get_struct_data
+from server.status import APIStatus, HTTPStatus, make_resp
+from server.utils.date_format import get_date_aggregate
 
 
 class GoodsList(object):
@@ -183,10 +183,10 @@ class GoodsDistributionTrend(object):
         recv_order = data['recv_order']
         cancel_order = data['cancel_order']
 
-        xAxis, goods_user_count_series = get_struct_data(all_order, params, 'goods_user_count')
-        _, wait_order_series = get_struct_data(wait_order, params, 'count')
-        _, recv_order_series = get_struct_data(recv_order, params, 'count')
-        _, cancel_order_series = get_struct_data(cancel_order, params, 'count')
+        xAxis, goods_user_count_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], all_order, number_field='goods_user_count')
+        _, wait_order_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], wait_order)
+        _, recv_order_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], recv_order)
+        _, cancel_order_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], cancel_order)
 
         ret = {
             'xAxis': xAxis,

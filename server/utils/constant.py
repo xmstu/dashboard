@@ -86,3 +86,6 @@ today_end_time = int(time.mktime(time.strptime(str(tomorrow), '%Y-%m-%d'))) - 1
 tomorrow_start_time = int(time.mktime(time.strptime(str(tomorrow), '%Y-%m-%d')))
 # 明天结束时间戳
 tomorrow_end_time = int(time.mktime(time.strptime(str(acquire), '%Y-%m-%d'))) - 1
+
+# 星期
+weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']

@@ -1,7 +1,7 @@
 import time
 
 from server.cache_data import init_regions
-from server.utils.calc_dstance import calcDistance
+from server.utils.calc_distance import calcDistance
 from server.utils.constant import vehicle_name_id
 
 

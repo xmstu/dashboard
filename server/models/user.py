@@ -6,6 +6,7 @@ from flask_restful import abort
 
 from server import log
 from server.status import HTTPStatus, make_resp, APIStatus
+from server.utils.extend import get_last_week_date, get_last_month_date
 
 
 class UserList(object):
@@ -471,13 +472,14 @@ class UserStatistic(object):
         FROM
             shf_goods AS sg
             INNER JOIN shu_user_stats AS sus ON sg.user_id = sus.user_id 
-            AND sus.last_login_time < UNIX_TIMESTAMP(@last_end_date)
+            AND sus.last_login_time < UNIX_TIMESTAMP("{end_time}")
         WHERE
             {fetch_where}
-            AND sg.create_time >= {start_time}
-            AND sg.create_time < UNIX_TIMESTAMP(@last_end_date)
+            AND sg.create_time >= UNIX_TIMESTAMP("{start_time}")
+            AND sg.create_time < UNIX_TIMESTAMP("{end_time}")
         """
 
+        start_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["start_time"])), "%Y-%m-%d")
         end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["end_time"])), "%Y-%m-%d")
         # 权限地区
         region = ' AND 1=1 '
@@ -498,22 +500,29 @@ class UserStatistic(object):
                         ) """ % {'region_id': ','.join(params['region_id'])}
 
         fetch_where += region
+
+        ret = []
         # 周货主流失率
         if params["periods"] == 3:
+            weekdays = []
             sql += """ GROUP BY FROM_UNIXTIME(sg.create_time,"%Y%u") """
-            cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"),INTERVAL WEEKDAY("{end_date}") DAY);""".format(end_date=end_date))
-            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
-            if not data: data = []
+            for last_week_start_day, last_week_end_day in get_last_week_date(start_date, end_date):
+                weekdays.append((last_week_start_day, last_week_end_day))
+                data = cursor.query(sql.format(fetch_where=fetch_where, start_time=last_week_start_day.strftime("%Y-%m-%d %H:%M:%S"), end_time=last_week_end_day.strftime("%Y-%m-%d %H:%M:%S")))
+                ret += data if data else []
+            params["start_time"], params["end_time"] = weekdays[-1][0], weekdays[0][1]
+            del weekdays
         # 月货主流失率
         elif params["periods"] == 4:
-            sql += """ GROUP BY FROM_UNIXTIME(sg.create_time,"%Y-%m-%d") """
-            cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"), INTERVAL DAYOFMONTH("{end_date}") - 1 DAY);""".format(end_date=end_date))
-            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
-            if not data: data = []
-        else:
-            data = []
-
-        return data
+            monthdays = []
+            sql += """ GROUP BY FROM_UNIXTIME(sg.create_time,"%Y-%m") """
+            for last_month_start_day, last_month_end_day in get_last_month_date(start_date, end_date):
+                monthdays.append((last_month_start_day, last_month_end_day))
+                data = cursor.query(sql.format(fetch_where=fetch_where, start_time=last_month_start_day.strftime("%Y-%m-%d %H:%M:%S"), end_time=last_month_end_day.strftime("%Y-%m-%d %H:%M:%S")))
+                ret += data if data else []
+            params["start_time"], params["end_time"] = monthdays[-1][0], monthdays[0][1]
+            del monthdays
+        return ret
 
     @staticmethod
     def get_driver(cursor, params):
@@ -652,13 +661,14 @@ class UserStatistic(object):
         FROM
             shb_orders AS so
             INNER JOIN shu_user_stats AS sus ON so.driver_id = sus.user_id 
-            AND sus.last_login_time < UNIX_TIMESTAMP(@last_week_end_date)
+            AND sus.last_login_time < UNIX_TIMESTAMP("{end_time}")
         WHERE
             {fetch_where}
-            AND so.create_time >= {start_time}
-            AND so.create_time < UNIX_TIMESTAMP(@last_week_end_date)
+            AND so.create_time >= UNIX_TIMESTAMP("{start_time}")
+            AND so.create_time < UNIX_TIMESTAMP("{end_time}")
         """
 
+        start_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["start_time"])), "%Y-%m-%d")
         end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["end_time"])), "%Y-%m-%d")
         # 权限地区
         region = ' AND 1=1 '
@@ -679,19 +689,30 @@ class UserStatistic(object):
                                 ) """ % {'region_id': ','.join(params['region_id'])}
 
         fetch_where += region
+        ret = []
         # 周货主流失率
         if params["periods"] == 3:
-            sql += """ GROUP BY FROM_UNIXTIME(so.create_time,"%Y-%m-%d") """
-            cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"),INTERVAL WEEKDAY("{end_date}") DAY);""".format(end_date=end_date))
-            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
-            if not data: data = []
+            weekdays = []
+            sql += """ GROUP BY FROM_UNIXTIME(so.create_time,"%Y%u") """
+            for last_week_start_day, last_week_end_day in get_last_week_date(start_date, end_date):
+                weekdays.append((last_week_start_day, last_week_end_day))
+                data = cursor.query(
+                    sql.format(fetch_where=fetch_where, start_time=last_week_start_day.strftime("%Y-%m-%d %H:%M:%S"),
+                               end_time=last_week_end_day.strftime("%Y-%m-%d %H:%M:%S")))
+                ret += data if data else []
+            params["start_time"], params["end_time"] = weekdays[-1][0], weekdays[0][1]
+            del weekdays
         # 月货主流失率
         elif params["periods"] == 4:
-            sql += """ GROUP BY FROM_UNIXTIME(so.create_time,"%Y%u") """
-            cursor.query("""SET @last_end_date = DATE_SUB(DATE("{end_date}"), INTERVAL DAYOFMONTH("{end_date}") - 1 DAY);""".format(end_date=end_date))
-            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=params["start_time"]))
-            if not data: data = []
-        else:
-            data = []
+            monthdays = []
+            sql += """ GROUP BY FROM_UNIXTIME(so.create_time,"%Y-%m") """
+            for last_month_start_day, last_month_end_day in get_last_month_date(start_date, end_date):
+                monthdays.append((last_month_start_day, last_month_end_day))
+                data = cursor.query(
+                    sql.format(fetch_where=fetch_where, start_time=last_month_start_day.strftime("%Y-%m-%d %H:%M:%S"),
+                               end_time=last_month_end_day.strftime("%Y-%m-%d %H:%M:%S")))
+                ret += data if data else []
+            params["start_time"], params["end_time"] = monthdays[-1][0], monthdays[0][1]
+            del monthdays
 
-        return data
+        return ret

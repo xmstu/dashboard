@@ -2,7 +2,7 @@ import re
 
 from server.meta.decorators import make_decorator
 from server.status import make_resp, APIStatus, HTTPStatus
-from server.utils.calc_dstance import calcDistance
+from server.utils.calc_distance import calcDistance
 
 
 class BusinessMsgList(object):

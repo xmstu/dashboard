@@ -5,8 +5,9 @@ from flask_restful import abort
 from server import log
 from server.cache_data import init_regions
 from server.meta.decorators import make_decorator
-from server.status import make_resp, APIStatus, HTTPStatus, make_resp
-from server.utils.extend import ExtendHandler, get_struct_data, timestamp2date
+from server.status import APIStatus, HTTPStatus, make_resp
+from server.utils.date_format import get_date_aggregate
+from server.utils.extend import ExtendHandler, timestamp2date
 
 
 class OrdersReceivedStatistics(object):
@@ -14,14 +15,14 @@ class OrdersReceivedStatistics(object):
     @staticmethod
     @make_decorator
     def get_result(data, params):
-        xAxis, complete_order_count_series = get_struct_data(data['complete_order'], params, 'order_counts')
-        _, complete_order_sum_price_series = get_struct_data(data['complete_order'], params, 'order_sum_price')
+        xAxis, complete_order_count_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], data['complete_order'], number_field='order_counts')
+        _, complete_order_sum_price_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], data['complete_order'], number_field='order_sum_price')
 
-        _, pending_order_count_series = get_struct_data(data['pending_order'], params, 'order_counts')
-        _, pending_order_sum_price_series = get_struct_data(data['pending_order'], params, 'order_sum_price')
+        _, pending_order_count_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], data['pending_order'], number_field='order_counts')
+        _, pending_order_sum_price_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], data['pending_order'], number_field='order_sum_price')
 
-        _, cancel_order_count_series = get_struct_data(data['cancel_order'], params, 'order_counts')
-        _, cancel_order_sum_price_series = get_struct_data(data['cancel_order'], params, 'order_sum_price')
+        _, cancel_order_count_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], data['cancel_order'], number_field='order_counts')
+        _, cancel_order_sum_price_series = get_date_aggregate(params["start_time"], params["end_time"], params["periods"], data['cancel_order'], number_field='order_sum_price')
 
         complete_order_count_series = json.loads(json.dumps(complete_order_count_series, default=ExtendHandler.handler_to_float))
         pending_order_count_series = json.loads(json.dumps(pending_order_count_series, default=ExtendHandler.handler_to_float))
@@ -141,10 +142,12 @@ class OrderList(object):
                 freight = '{0}元'.format(str(int(detail['price'])))
 
                 # 构造货主字段
-                cargo_owner = '\n'.join([str(detail['owner_mobile']), str(detail['owner_name']), '新货主' if detail['c2'] < 3 else ''])
+                cargo_owner = '\n'.join(
+                    [str(detail['owner_mobile']), str(detail['owner_name']), '新货主' if detail['c2'] < 3 else ''])
 
                 # 构造司机字段
-                driver = '\n'.join([str(detail['driver_mobile']), str(detail['driver_name']), '新司机' if detail['c1'] < 3 else ''])
+                driver = '\n'.join(
+                    [str(detail['driver_mobile']), str(detail['driver_name']), '新司机' if detail['c1'] < 3 else ''])
 
                 # 订单状态
                 if detail['status'] in (1, 2):
@@ -187,11 +190,16 @@ class OrderList(object):
                 else:
                     owner_evaluation = '未评价'
 
-                latency_time = (str(int(detail['latency_time'] / 3600)) + '小时' if int(detail['latency_time'] / 3600) > 0 else '') + \
-                               (str(int(detail['latency_time'] % 3600 / 60)) + '分' if int(detail['latency_time'] % 3600 / 60) > 0 else '') + \
-                               (str(int(detail['latency_time'] % 3600 % 60)) + '秒' if int(detail['latency_time'] % 3600 % 60) > 0 else '')
+                latency_time = (str(int(detail['latency_time'] / 3600)) + '小时' if int(
+                    detail['latency_time'] / 3600) > 0 else '') + \
+                               (str(int(detail['latency_time'] % 3600 / 60)) + '分' if int(
+                                   detail['latency_time'] % 3600 / 60) > 0 else '') + \
+                               (str(int(detail['latency_time'] % 3600 % 60)) + '秒' if int(
+                                   detail['latency_time'] % 3600 % 60) > 0 else '')
 
-                time_field = (timestamp2date(detail['complete_time'], 2) if detail['complete_time'] else '待完成') + '\n' + (timestamp2date(detail['create_time'], 2) if detail['create_time'] else '未知接单时间')
+                time_field = (timestamp2date(detail['complete_time'], 2) if detail[
+                    'complete_time'] else '待完成') + '\n' + (
+                                 timestamp2date(detail['create_time'], 2) if detail['create_time'] else '未知接单时间')
 
                 result.append({
                     'order_id': detail['id'],
@@ -206,12 +214,11 @@ class OrderList(object):
                     'evaluation': driver_evaluation + '\n' + owner_evaluation,
                     'time_field': time_field,
                     'latency_time': latency_time,
-                    'comment': (detail.get('driver_rate_comment', None) or '') + '\n' + (detail.get('owner_rate_comment', None) or ''),
+                    'comment': (detail.get('driver_rate_comment', None) or '') + '\n' + (
+                                detail.get('owner_rate_comment', None) or ''),
                 })
 
             return make_resp(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok
         except Exception as e:
             log.error('Error:{}'.format(e), exc_info=True)
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='请求参数有误'))
-
-

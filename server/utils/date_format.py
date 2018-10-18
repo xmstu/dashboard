@@ -17,12 +17,17 @@ def get_date_aggregate(start_time, end_time, periods, data, date_field='create_t
         date_count = {}
         for count in data:
             if count[date_field]:
-                create_time = count[date_field].strftime('%Y-%m-%d') if isinstance(count[date_field], int) else count[
-                    'create_time']
+                create_time = count[date_field].strftime('%Y-%m-%d') if isinstance(count[date_field], int) else count['create_time']
                 date_count[create_time] = count.get(number_field, 0)
         # 初始、截止时间段
-        begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
-        end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
+        if isinstance(start_time, int) and isinstance(end_time, int):
+            begin_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
+        elif isinstance(start_time, datetime.datetime) and isinstance(end_time, datetime.datetime):
+            begin_date = start_time
+            end_date = end_time
+        else:
+            raise Exception("start_time and end_time must be timestamp number or datetime cls!")
 
         xAxis = []
         series = []
@@ -44,20 +49,13 @@ def get_date_aggregate(start_time, end_time, periods, data, date_field='create_t
             while end_flag <= end_date:
                 date_str = end_flag.strftime("%Y-%m-%d")
                 sum_count += date_count.get(date_str, 0)
-                date_count.setdefault(date_str, sum_count)
                 # 本周结束
                 if count == 6:
                     xAxis.append(begin_flag.strftime('%Y/%m/%d') + '-' + end_flag.strftime('%Y/%m/%d'))
                     series.append(sum_count)
                     begin_flag = end_flag + datetime.timedelta(days=1)
                     sum_count = 0
-                    count = 0
-                if end_flag == end_date:
-                    xAxis.append(begin_flag.strftime('%Y/%m/%d') + '-' + end_flag.strftime('%Y/%m/%d'))
-                    series.append(sum_count)
-                    begin_flag = end_flag + datetime.timedelta(days=1)
-                    sum_count = 0
-                    count = 0
+                    count = -1
                 end_flag += datetime.timedelta(days=1)
                 count += 1
         # 月
@@ -68,7 +66,7 @@ def get_date_aggregate(start_time, end_time, periods, data, date_field='create_t
             while end_flag <= end_date:
                 date_str = end_flag.strftime("%Y-%m-%d")
                 sum_count += date_count.get(date_str, 0)
-                month_lastweek, month_lastday = calendar.monthrange(begin_flag.year, begin_flag.month)
+                _, month_lastday = calendar.monthrange(begin_flag.year, begin_flag.month)
                 # 结束日期
                 if end_flag == end_date:
                     xAxis.append(begin_flag.strftime('%Y/%m'))
