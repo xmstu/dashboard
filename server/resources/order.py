@@ -1,60 +1,65 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # author=hexm
+import json
+
 from flask_restplus import Resource
 
-from server import log, verify, operations, filters, api
 import server.document.order as doc
-from server.meta.decorators import Response
-from server.utils.request import get_all_arg, get_arg_int
-import server.verify.general as general_verify
+from server import api
+from server.database import pyredis
+from server.filters import order_list_get_result, orders_received_statistics_get_result
+from server.operations import order_list_get_data, cancel_order_get_data, orders_received_statistics_get_data
+from server.status import make_resp, APIStatus, HTTPStatus
+from server.utils.gen_fp import gen_fp
+from server.utils.request import get_all_arg
+from server.verify import order_list_check_params, cancel_order_check_params, orders_received_statistics_check_params
 
 
 class OrdersReceivedStatistics(Resource):
 
     @staticmethod
     @doc.request_order_received_statistics_param
-    @filters.OrdersReceivedStatistics.get_result(data=dict, params=dict)
-    @operations.OrdersReceivedStatistics.get_data(params=dict)
-    @verify.OrdersReceivedStatistics.check_params(params=dict)
     def get():
         """订单趋势统计"""
-        resp = Response(params=get_all_arg())
-
-        return resp
+        params = get_all_arg()
+        params = orders_received_statistics_check_params(params)
+        data = orders_received_statistics_get_data(params)
+        result = orders_received_statistics_get_result(data, params)
+        return result
 
 
 class CancelOrderReason(Resource):
 
     @staticmethod
     @doc.request_cancel_order_reason_param
-    @filters.CancelOrderReason.get_result(data=dict)
-    @operations.CancelOrderReason.get_data(params=dict)
-    @verify.CancelOrderReason.check_params(params=dict)
     def get():
         """取消订单原因统计"""
-        resp = Response(params=get_all_arg())
-
-        return resp
+        params = get_all_arg()
+        cancel_order_check_params(params)
+        data = cancel_order_get_data(params)
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class OrderList(Resource):
 
     @staticmethod
     @doc.request_order_list_param
-    @filters.OrderList.get_result(data=dict, params=dict)
-    @operations.OrderList.get_data(page=int, limit=int, params=dict)
-    @verify.OrderList.check_params(page=int, limit=int, params=dict)
-    @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
     def get():
         """订单列表"""
-        resp = Response(
-            page=get_arg_int('page', 1),
-            limit=get_arg_int('limit', 10),
-            params=get_all_arg())
 
-        log.info('获取订单列表参数{}'.format(resp))
-        return resp
+        # 检查是否有登录指纹，有的话就直接返回redis中保存的结果
+        fp = gen_fp()
+        if pyredis.da_cacher.get(fp):
+            result = pyredis.da_cacher.get(fp)
+            result = json.loads(result)
+            return make_resp(APIStatus.Ok, count=result[-1]["count"], data=result), HTTPStatus.Ok
+
+        params = order_list_check_params(params=get_all_arg())
+        data = order_list_get_data(params)
+        result = order_list_get_result(data)
+
+        return result
 
 
 ns = api.namespace('order', description='订单接口')

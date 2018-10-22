@@ -49,6 +49,10 @@ def __token(conf):
     pass
 
 
+@configs.register('.union.redis.da_cacher')
+def __token(conf):
+    pass
+
 # @configs.register('.da_msg_push')
 # def __da_msg_push(conf):
 #     pass

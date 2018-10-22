@@ -1,5 +1,6 @@
 # coding=utf-8
 # author=veficos
+import redis
 
 from server.meta.creators import DictModel
 from server.configs import configs
@@ -21,14 +22,9 @@ db = DictModel({
 pyredis = DictModel({
     'token': ExtendRedis(ip=configs.remote.union.redis.token.host,
                           port=configs.remote.union.redis.token.port,
-                          db=configs.remote.union.redis.token.db)
+                          db=configs.remote.union.redis.token.db),
+    'da_cacher': redis.StrictRedis(connection_pool=redis.ConnectionPool(host=configs.remote.union.redis.da_cacher.host,
+                                                                       port=configs.remote.union.redis.da_cacher.port,
+                                                                       db=configs.remote.union.redis.da_cacher.db)),
 })
 
-# redis = DictModel({
-#     'token': pyredis.StrictRedis(connection_pool=pyredis.ConnectionPool(host=configs.remote.union.redis.token.host,
-#                                                                         port=configs.remote.union.redis.token.port,
-#                                                                         db=configs.remote.union.redis.token.db)),
-#     'price_cacher': pyredis.StrictRedis(connection_pool=pyredis.ConnectionPool(host=configs.remote.union.redis.price_cache.host,
-#                                                                                port=configs.remote.union.redis.price_cache.port,
-#                                                                                db=configs.remote.union.redis.price_cache.db)),
-# })
