@@ -1,7 +1,6 @@
 import hashlib
 import re
 
-import six
 import w3lib.url
 from flask import session
 from flask_restful import request
@@ -10,16 +9,10 @@ from server.utils.request import get_payload
 
 
 def utf8_string(string):
-    if six.PY2:
-        if isinstance(string, str):
-            return string
-        else:
-            return string.encode('utf-8')
-    elif six.PY3:
-        if isinstance(string, bytes):
-            return string
-        else:
-            return string.encode('utf-8')
+    if isinstance(string, bytes):
+        return string
+    else:
+        return string.encode('utf-8')
 
 
 # 生成请求指纹
