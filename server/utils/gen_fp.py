@@ -6,6 +6,8 @@ import w3lib.url
 from flask import session
 from flask_restful import request
 
+from server.utils.request import get_payload
+
 
 def utf8_string(string):
     if six.PY2:
@@ -28,9 +30,18 @@ def gen_fp():
 
     method = request.method.upper()
 
-    params = request.args.to_dict() if request.args.to_dict() else {}
-    if params:
-        params.pop("_")
+    if method == "GET":
+        params = request.args.to_dict() if request.args.to_dict() else {}
+        if params:
+            try:
+                params.pop("_")
+            except Exception:
+                pass
+
+    elif method == "POST":
+        params = get_payload()
+    else:
+        params = {}
 
     params = str(sorted(params.items()))
 

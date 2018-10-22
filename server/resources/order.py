@@ -18,11 +18,10 @@ class OrdersReceivedStatistics(Resource):
 
     @staticmethod
     @doc.request_order_received_statistics_param
-    @redis_cache()
+    @redis_cache(expire_time=7200)
     def get():
         """订单趋势统计"""
-        params = get_all_arg()
-        params = orders_received_statistics_check_params(params)
+        params = orders_received_statistics_check_params(params=get_all_arg())
         data = orders_received_statistics_get_data(params)
         result = orders_received_statistics_get_result(data, params)
         return result
@@ -32,11 +31,10 @@ class CancelOrderReason(Resource):
 
     @staticmethod
     @doc.request_cancel_order_reason_param
-    @redis_cache()
+    @redis_cache(expire_time=7200)
     def get():
         """取消订单原因统计"""
-        params = get_all_arg()
-        cancel_order_check_params(params)
+        params = cancel_order_check_params(params=get_all_arg())
         data = cancel_order_get_data(params)
         return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
 
@@ -48,7 +46,6 @@ class OrderList(Resource):
     @redis_cache(expire_time=3600)
     def get():
         """订单列表"""
-
         params = order_list_check_params(params=get_all_arg())
         data = order_list_get_data(params)
         result = order_list_get_result(data)
