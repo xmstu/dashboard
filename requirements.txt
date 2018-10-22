@@ -1,7 +1,6 @@
 flask
 flask_restplus==0.10.1
 kazoo
-fluent-logger
 pymysql
 redis
 pymongo

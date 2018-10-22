@@ -11,9 +11,9 @@ def redis_cache(expire_time=1800):
         @functools.wraps(func)
         def wrapped_func(*args, **kwargs):
             fp = gen_fp()
-            if pyredis.da_cacher.get(fp):
+            result = pyredis.da_cacher.get(fp)
+            if result:
                 print("=" * 50, "Using Cache")
-                result = pyredis.da_cacher.get(fp)
                 result = json.loads(result)
                 return make_resp(APIStatus.Ok, count=result[0].get("count", 0), data=result[0].get("data", [])), HTTPStatus.Ok
             result = func(*args, **kwargs)
