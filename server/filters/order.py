@@ -4,11 +4,9 @@ from flask_restful import abort
 
 from server import log
 from server.cache_data import init_regions
-from server.database import pyredis
 from server.status import APIStatus, HTTPStatus, make_resp
 from server.utils.date_format import get_date_aggregate
 from server.utils.extend import ExtendHandler, timestamp2date
-from server.utils.gen_fp import gen_fp
 
 
 def orders_received_statistics_get_result(data, params):
@@ -201,9 +199,6 @@ def order_list_get_result(data):
                             detail.get('owner_rate_comment', None) or ''),
             })
 
-        result.append({"count": data["count"]})
-        fp = gen_fp()
-        pyredis.da_cacher.setex(fp, 600, json.dumps(result))
         return make_resp(APIStatus.Ok, count=data['count'], data=result), HTTPStatus.Ok
     except Exception as e:
         log.error('构造订单列表结果出现错误:[Error:{}]'.format(e), exc_info=True)

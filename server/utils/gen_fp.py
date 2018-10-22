@@ -1,4 +1,5 @@
 import hashlib
+import re
 
 import six
 import w3lib.url
@@ -22,11 +23,15 @@ def utf8_string(string):
 # 生成请求指纹
 def gen_fp():
     # url排序
-    url = w3lib.url.canonicalize_url(request.url)
+    url = re.sub("&_=(\d+)", "", request.url)
+    url = w3lib.url.canonicalize_url(url)
 
     method = request.method.upper()
 
     params = request.args.to_dict() if request.args.to_dict() else {}
+    if params:
+        params.pop("_")
+
     params = str(sorted(params.items()))
 
     data = request.data if request.data else {}
