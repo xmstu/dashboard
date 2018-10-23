@@ -716,7 +716,8 @@ $('#goods_search_box').on('click', function (e) {
                 {field: 'node_id', title: '所属网点'}
             ]],
             done: function (res, curr, count) {
-                layer.closeAll('loading')
+                layer.closeAll('loading');
+                console.log(res);
                 $('[data-field]>div').css({'padding': '0 6px'});
                 $('.nearby').on('click', function () {
                     layer.open({
@@ -736,7 +737,7 @@ $('#goods_search_box').on('click', function (e) {
                 $("td[data-field='price']").children().each(function (val) {
                     if ($(this).text() != '') {
                         var result = $(this).text().split('\n');
-                        $(this).html('<span>' + result[0] + '</span >')
+                        $(this).html('<span>' + result[0] + '<br>' + result[1] + '</span >');
                     }
                 })
                 $("td[data-field='mobile']").children().each(function () {
