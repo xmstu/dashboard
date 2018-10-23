@@ -451,8 +451,18 @@ class UserStatistic(object):
         # 新增发货人数为当周注册且进行过发货行为的人数/新增发货人数为当月注册且进行过发货行为的人数
         elif params["periods"] == 3:
             sql += """ GROUP BY FROM_UNIXTIME( sg.create_time, '%Y%u' ) """
-            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
-            if not data: data = []
+            start_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
+            end_date += datetime.timedelta(days=7)
+
+            weekdays = []
+            for last_week_start_day, last_week_end_day in get_last_week_date(start_date, end_date):
+                weekdays.append((last_week_start_day, last_week_end_day))
+                per_data = cursor.query(sql.format(fetch_where=fetch_where, start_time=last_week_start_day.timestamp(), end_time=last_week_end_day.timestamp()))
+                data += per_data if per_data else []
+            params["start_time"], params["end_time"] = weekdays[-1][0], weekdays[0][1]
+            del weekdays
+
         elif params["periods"] == 4:
             sql += """ GROUP BY FROM_UNIXTIME( sg.create_time, '%Y-%m' ) """
             data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
@@ -640,8 +650,19 @@ class UserStatistic(object):
         # 新增接单人数为当周注册且进行过接单行为的人数/新增接单人数为当月注册且进行过接单行为的人数
         elif params["periods"] == 3:
             sql += """ GROUP BY FROM_UNIXTIME( so.create_time, '%Y%u' ) """
-            data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))
-            if not data: data = []
+            start_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(start_time)), "%Y-%m-%d")
+            end_date = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(end_time)), "%Y-%m-%d")
+            end_date += datetime.timedelta(days=7)
+
+            weekdays = []
+            for last_week_start_day, last_week_end_day in get_last_week_date(start_date, end_date):
+                weekdays.append((last_week_start_day, last_week_end_day))
+                per_data = cursor.query(sql.format(fetch_where=fetch_where, start_time=last_week_start_day.timestamp(),
+                                                   end_time=last_week_end_day.timestamp()))
+                data += per_data if per_data else []
+            params["start_time"], params["end_time"] = weekdays[-1][0], weekdays[0][1]
+            del weekdays
+
         elif params["periods"] == 4:
             sql += """ GROUP BY FROM_UNIXTIME( so.create_time, '%Y-%m' ) """
             data = cursor.query(sql.format(fetch_where=fetch_where, start_time=start_time, end_time=end_time))

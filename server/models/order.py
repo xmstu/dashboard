@@ -221,7 +221,7 @@ class CancelOrderReasonModel(object):
 class OrderListModel(object):
 
     @staticmethod
-    def get_order_list(cursor, page, limit, fresh_ids, params):
+    def get_order_list(cursor, fresh_ids, params):
 
         fields = """
                 so.id,
@@ -507,7 +507,7 @@ class OrderListModel(object):
         ret = cursor.query(command.format(fields=" COUNT(1) AS count ", fetch_where=fetch_where))
         count = len(ret)
 
-        fetch_where += """ DESC LIMIT {0}, {1} """.format((page - 1) * limit, limit)
+        fetch_where += """ DESC LIMIT {0}, {1} """.format(params["page"], params["limit"])
 
         order_list = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 

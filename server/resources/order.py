@@ -1,60 +1,56 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # author=hexm
+
 from flask_restplus import Resource
 
-from server import log, verify, operations, filters, api
 import server.document.order as doc
-from server.meta.decorators import Response
-from server.utils.request import get_all_arg, get_arg_int
-import server.verify.general as general_verify
+from server import api
+from server.filters import order_list_get_result, orders_received_statistics_get_result
+from server.meta.redis_cache import redis_cache
+from server.operations import order_list_get_data, cancel_order_get_data, orders_received_statistics_get_data
+from server.status import make_resp, APIStatus, HTTPStatus
+from server.utils.request import get_all_arg
+from server.verify import order_list_check_params, cancel_order_check_params, orders_received_statistics_check_params
 
 
 class OrdersReceivedStatistics(Resource):
 
     @staticmethod
     @doc.request_order_received_statistics_param
-    @filters.OrdersReceivedStatistics.get_result(data=dict, params=dict)
-    @operations.OrdersReceivedStatistics.get_data(params=dict)
-    @verify.OrdersReceivedStatistics.check_params(params=dict)
+    @redis_cache(expire_time=7200)
     def get():
         """订单趋势统计"""
-        resp = Response(params=get_all_arg())
-
-        return resp
+        params = orders_received_statistics_check_params(params=get_all_arg())
+        data = orders_received_statistics_get_data(params)
+        result = orders_received_statistics_get_result(data, params)
+        return result
 
 
 class CancelOrderReason(Resource):
 
     @staticmethod
     @doc.request_cancel_order_reason_param
-    @filters.CancelOrderReason.get_result(data=dict)
-    @operations.CancelOrderReason.get_data(params=dict)
-    @verify.CancelOrderReason.check_params(params=dict)
+    @redis_cache(expire_time=7200)
     def get():
         """取消订单原因统计"""
-        resp = Response(params=get_all_arg())
-
-        return resp
+        params = cancel_order_check_params(params=get_all_arg())
+        data = cancel_order_get_data(params)
+        return make_resp(APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 class OrderList(Resource):
 
     @staticmethod
     @doc.request_order_list_param
-    @filters.OrderList.get_result(data=dict, params=dict)
-    @operations.OrderList.get_data(page=int, limit=int, params=dict)
-    @verify.OrderList.check_params(page=int, limit=int, params=dict)
-    @general_verify.Paging.check_paging(page=int, limit=int, params=dict)
+    @redis_cache(expire_time=3600)
     def get():
         """订单列表"""
-        resp = Response(
-            page=get_arg_int('page', 1),
-            limit=get_arg_int('limit', 10),
-            params=get_all_arg())
+        params = order_list_check_params(params=get_all_arg())
+        data = order_list_get_data(params)
+        result = order_list_get_result(data)
 
-        log.info('获取订单列表参数{}'.format(resp))
-        return resp
+        return result
 
 
 ns = api.namespace('order', description='订单接口')

@@ -5,8 +5,7 @@
 from flask_restplus.resource import Resource
 
 import server.document.active_retain as doc
-import server.verify.general as general_verify
-from server import api, log
+from server import api
 from server import verify, operations, filters
 from server.meta.decorators import Response
 from server.utils.request import *
@@ -16,6 +15,9 @@ class ActiveUserStatistic(Resource):
 
     @staticmethod
     @doc.request_user_retain_statistic_param
+    @filters.ActiveUserStatistic.get_active_user_statistic(params=dict, data=list)
+    @operations.ActiveUserStatistic.get_active_user_statistic(params=dict)
+    @verify.ActiveUserStatistic.check_params(params=dict)
     def get():
         """获取活跃用户趋势"""
         return Response(params=get_all_arg())
