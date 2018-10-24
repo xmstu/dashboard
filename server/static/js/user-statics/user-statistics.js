@@ -1,4 +1,3 @@
-
 /*----------------设置日期框中的初始化值----------------------*/
 $('#date_show_one').val(String(common.getNowFormatDate()[2]));
 $('#date_show_two').val(String(common.getNowFormatDate()[3]));
@@ -144,14 +143,23 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             if ($('#user-start').val() == '') {
                 $('#user-start').next('.date-tips').show();
             } else {
-                $('#user-start').next('.date-tips').hide()
+                $('#user-start').next('.date-tips').hide();
             }
-            var startTime = common.timeTransform($('#user-start').val())
-            var endTime = common.timeTransform($('#user-end').val())
+            if ($('.user_periods li .active').val() == 3) {//选择按周查询3
+                var what = common.getMyDay(new Date(val));
+                if (what != "周一") {
+                    layer.msg('提示：请选择\'周一\'那一天作为起始条件！');
+                    $('#user-start').val('');
+                    return false;
+                }
+            }
             if (startTime > endTime) {
                 layer.msg('提示：开始时间大于了结束时间！');
                 return false;
             }
+            var startTime = common.timeTransform($('#user-start').val());
+            var endTime = common.timeTransform($('#user-end').val());
+
         }
     });
     laydate.render({
@@ -164,14 +172,24 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             if ($('#user-end').val() == '' || val == '') {
                 $('#user-end').next('.date-tips').show();
             } else {
-                $('#user-end').next('.date-tips').hide()
+                $('#user-end').next('.date-tips').hide();
             }
-            var startTime = common.timeTransform($('#user-start').val())
-            var endTime = common.timeTransform($('#user-end').val())
+            if ($('.user_periods li .active').val() == 3) {//选择按周查询3
+                var what = common.getMyDay(new Date(val));
+                if (what != "周日") {
+                    layer.msg('提示：请选择\'周日\'那一天作为结束条件！<br>若不足一周，请按日/月查询');
+                    $('#user-end').val('');
+                    return false;
+                }
+            }
             if (startTime > endTime) {
                 layer.msg('提示：开始时间大于了结束时间！');
                 return false;
             }
+            var startTime = common.timeTransform($('#user-start').val());
+            var endTime = common.timeTransform($('#user-end').val());
+
+
         }
     });
     //******行为用户趋势 搜索条件******
@@ -221,7 +239,6 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
                     $(this).html('未录入').css({'color': 'red'})
                 }
             })
-            common.clearSelect()
         }
         , cols: [[
             {field: 'user_id', title: '用户ID', sort: true},
@@ -242,6 +259,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
         , page: true
     });
 });
+
 /*图标渲染*/
 function dataInit() {
     var requestStartTime = common.timeTransform($('#date_show_one').val() + ' 00:00:00');
@@ -274,9 +292,11 @@ function dataInit() {
         }
     })
 }
+
 Highcharts.setOptions({
     colors: [/*'#9FE6B8', '#FFDB5C','#ff9f7f',*/  '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
 });
+
 /*图表函数*/
 function chartInit(xAxis, series, interval, x_value1) {
     $('#charts_container_one').highcharts({
@@ -372,6 +392,7 @@ function chartInit(xAxis, series, interval, x_value1) {
         }]
     });
 }
+
 //行为用户趋势
 function dataInit_user() {
     var requestStartTime = common.timeTransform($('#user-start').val() + ' 00:00:00');
@@ -410,6 +431,7 @@ function dataInit_user() {
         }
     })
 }
+
 /*行为用户趋势 图表函数*/
 function chartInit_user(xAxis, series, interval, x_value1) {
     $('#charts_container_user').highcharts({
@@ -505,6 +527,7 @@ function chartInit_user(xAxis, series, interval, x_value1) {
         }]
     });
 }
+
 //地区选择
 function area_select() {
     var auth_role = $('#user-info').attr('data-role-type')
@@ -527,6 +550,7 @@ function area_select() {
 
     }
 }
+
 area_select()
 common.periods('user_periods');
 /*表格搜索*/
