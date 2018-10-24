@@ -9,49 +9,49 @@ from server.utils.extend import Check, compare_time, complement_time
 from server.meta.session_operation import SessionOperationClass
 
 
+def promote_effect_check_params(params):
+
+    try:
+        if not SessionOperationClass.check():
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
+
+        params['user_name'] = str(params.get('user_name') or '')
+        params['mobile'] = str(params.get('mobile') or '')
+        params['goods_type'] = int(params.get('goods_type') or 0)
+        params['register_start_time'] = int(params.get('register_start_time') or 0)
+        params['register_end_time'] = int(params.get('register_end_time') or 0)
+        params['statistic_start_time'] = int(params.get('statistic_start_time') or 0)
+        params['statistic_end_time'] = int(params.get('statistic_end_time') or 0)
+        params["region_id"] = int(params.get('region_id') or 0)
+        params['page'] = int(params.get('page') or 1)
+        params['limit'] = int(params.get('limit') or 10)
+
+        # 补全时间
+        params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
+        params['statistic_start_time'], params['statistic_end_time'] = complement_time(params['statistic_start_time'], params['statistic_end_time'])
+
+        # 判断时间是否合法
+        if not compare_time(params['register_start_time'], params['register_end_time']):
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='时间参数有误'))
+
+        if not compare_time(params['statistic_start_time'], params['statistic_end_time']):
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='时间参数有误'))
+
+        if params['mobile']:
+            if not Check.is_mobile(params['mobile']):
+                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='手机号非法'))
+
+        # 获取用户权限和身份
+        params['role_big_type'], _ = SessionOperationClass.get_role()
+        params['role_id'] = SessionOperationClass.get_role_id()
+        params['regions'] = SessionOperationClass.get_user_locations()
+        return params
+    except Exception as e:
+        log.error('参数有误:{}'.format(e), exc_info=True)
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='参数有误'))
+
+
 class PromoteEffect(object):
-
-    @staticmethod
-    @make_decorator
-    def check_params(page, limit, params):
-
-        try:
-            if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
-
-            params['user_name'] = str(params.get('user_name') or '')
-            params['mobile'] = str(params.get('mobile') or '')
-            params['goods_type'] = int(params.get('goods_type') or 0)
-            params['register_start_time'] = int(params.get('register_start_time') or 0)
-            params['register_end_time'] = int(params.get('register_end_time') or 0)
-            params['statistic_start_time'] = int(params.get('statistic_start_time') or 0)
-            params['statistic_end_time'] = int(params.get('statistic_end_time') or 0)
-            params["region_id"] = int(params.get('region_id') or 0)
-
-            # 补全时间
-            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'], params['register_end_time'])
-            params['statistic_start_time'], params['statistic_end_time'] = complement_time(params['statistic_start_time'], params['statistic_end_time'])
-
-            # 判断时间是否合法
-            if not compare_time(params['register_start_time'], params['register_end_time']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='时间参数有误'))
-
-            if not compare_time(params['statistic_start_time'], params['statistic_end_time']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='时间参数有误'))
-
-            if params['mobile']:
-                if not Check.is_mobile(params['mobile']):
-                    abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='手机号非法'))
-
-            # 获取用户权限和身份
-            params['role_big_type'], _ = SessionOperationClass.get_role()
-            params['role_id'] = SessionOperationClass.get_role_id()
-            params['regions'] = SessionOperationClass.get_user_locations()
-            return Response(page=page, limit=limit, params=params)
-        except Exception as e:
-            log.error('参数有误:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='参数有误'))
-            
     @staticmethod
     @make_decorator
     def check_add_params(role_type, user_id, payload):
@@ -86,34 +86,30 @@ class PromoteEffect(object):
         return Response(params=params)
 
 
-class PromoteQuality(object):
+def promote_quality_check_params(params):
 
-    @staticmethod
-    @make_decorator
-    def check_params(params):
+    try:
+        if not SessionOperationClass.check():
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
+        # 校验参数
+        params['start_time'] = int(params.get('start_time')) if params.get('start_time') else time.time() - 86400*7
+        params['end_time'] = int(params.get('end_time')) if params.get('end_time') else time.time() - 86400
+        params['periods'] = int(params.get('periods')) if params.get('periods') else 2
+        params['dimension'] = int(params.get('dimension')) if params.get('dimension') else 1
+        params['data_type'] = int(params.get('data_type')) if params.get('data_type') else 1
 
-        try:
-            if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
-            # 校验参数
-            params['start_time'] = int(params.get('start_time')) if params.get('start_time') else time.time() - 86400*7
-            params['end_time'] = int(params.get('end_time')) if params.get('end_time') else time.time() - 86400
-            params['periods'] = int(params.get('periods')) if params.get('periods') else 2
-            params['dimension'] = int(params.get('dimension')) if params.get('dimension') else 1
-            params['data_type'] = int(params.get('data_type')) if params.get('data_type') else 1
+        # 获取用户权限和身份
+        role_type, _ = SessionOperationClass.get_role()
+        role_id = SessionOperationClass.get_role_id()
 
-            # 获取用户权限和身份
-            role_type, _ = SessionOperationClass.get_role()
-            role_id = SessionOperationClass.get_role_id()
+        if not compare_time(params['start_time'], params['end_time']):
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
-            if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
+        params['role_type'] = role_type
+        params['role_id'] = role_id
+        params['regions'] = SessionOperationClass.get_user_locations()
 
-            params['role_type'] = role_type
-            params['role_id'] = role_id
-            params['regions'] = SessionOperationClass.get_user_locations()
-
-            return Response(params=params)
-        except Exception as e:
-            log.warn('Error:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='请求参数非法'))
+        return params
+    except Exception as e:
+        log.warn('Error:{}'.format(e), exc_info=True)
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='请求参数非法'))

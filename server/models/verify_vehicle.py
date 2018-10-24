@@ -4,7 +4,7 @@ from server.utils.constant import vehicle_name_id
 class VerifyVehicleModel(object):
 
     @staticmethod
-    def get_data(cursor, page, limit, params):
+    def get_data(cursor, params):
 
         fields = """
             shu_vehicles.id,
@@ -90,7 +90,7 @@ class VerifyVehicleModel(object):
         ret = cursor.query(command.format(fields='COUNT(1)', fetch_where=fetch_where))
         count = len(ret)
 
-        command += """ DESC LIMIT {0}, {1} """.format((page-1)*limit, limit)
+        command += """ DESC LIMIT {0}, {1} """.format(params["page"], params["limit"])
 
         verify_vehicle_list = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 

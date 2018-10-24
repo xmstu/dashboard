@@ -167,7 +167,6 @@ class PromoteEffectList(object):
                         AND recommended_status = 2 AND {bi_fetch_where}
                     """
             tb_sql = tb_sql.format(promote_mobile=promote_mobile, bi_fetch_where=bi_fetch_where)
-            log.info("推广统计查询被推荐人id [tb_sql:%s]" % tb_sql)
             fetch_user = read_bi.query(tb_sql)
             try:
                 fetch_user_id_str = ','.join((str(detail['user_id']) for detail in fetch_user))
@@ -226,7 +225,6 @@ class PromoteEffectList(object):
                     db_sql = db_sql % {'fetch_user_id_str': fetch_user_id_str}
                     db_sql = db_sql.format(db_goods_fetch_where=db_goods_fetch_where,
                                            db_orders_fetch_where=db_orders_fetch_where)
-                    log.info("推广统计列表查询sql: [db_sql:%s]" % db_sql)
                     db_data = read_db.query(db_sql)
             except Exception as e:
                 log.error("推广统计列表查询失败: [ERROR:%s]" % e)

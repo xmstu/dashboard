@@ -12,99 +12,90 @@ from server.utils.role_regions import get_role_regions
 today_begin = date2timestamp(timestamp2date(time.time()))
 
 
-class DistributionMap(object):
+def distribution_map_check_params(params):
+    try:
+        if not SessionOperationClass.check():
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
-    @staticmethod
-    @make_decorator
-    def check_params(params):
-        try:
-            if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
+        params['dimension'] = int(params.get('dimension', None) or 1)
+        params['filter'] = params.get('filter', None) or 0
+        params['field'] = int(params.get('field', None) or 1)
+        params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
+        params['end_time'] = int(params.get('end_time', None) or time.time())
+        params['region_id'] = str(params.get('region_id', None) or '0')
 
-            params['dimension'] = int(params.get('dimension', None) or 1)
-            params['filter'] = params.get('filter', None) or 0
-            params['field'] = int(params.get('field', None) or 1)
-            params['start_time'] = int(params.get('start_time', None) or time.time() - 86400 * 7)
-            params['end_time'] = int(params.get('end_time', None) or time.time())
-            params['region_id'] = str(params.get('region_id', None) or '0')
+        role_type, locations_id = SessionOperationClass.get_locations()
+        # 校验权限id
+        if 4 == role_type:
+            params['role_region_id'] = locations_id
+            params['authority_region_id'] = locations_id[0]
+            params['region_id'] = params['region_id'] if params['region_id'] != '0' else params[
+                'authority_region_id']
+        elif role_type == 1:
+            params['role_region_id'] = locations_id + ['0']
+        else:
+            params['role_region_id'] = ''
 
-            role_type, locations_id = SessionOperationClass.get_locations()
-            # 校验权限id
-            if 4 == role_type:
-                params['role_region_id'] = locations_id
-                params['authority_region_id'] = locations_id[0]
-                params['region_id'] = params['region_id'] if params['region_id'] != '0' else params[
-                    'authority_region_id']
-            elif role_type == 1:
-                params['role_region_id'] = locations_id + ['0']
-            else:
-                params['role_region_id'] = ''
+        if not check_region_id(params['region_id'], params['role_region_id']):
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='地区参数非法'))
 
-            if not check_region_id(params['region_id'], params['role_region_id']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='地区参数非法'))
+        if not compare_time(params['start_time'], params['end_time']):
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
-            if not compare_time(params['start_time'], params['end_time']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
-
-            return Response(params=params)
-        except Exception as e:
-            log.error('校验分布地图参数失败:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='拒绝请求'))
+        return params
+    except Exception as e:
+        log.error('校验分布地图参数失败:{}'.format(e), exc_info=True)
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='拒绝请求'))
 
 
-class GoodsMap(object):
+def goods_map_check_params(params):
+    try:
+        if not SessionOperationClass.check():
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
 
-    @staticmethod
-    @make_decorator
-    def check_params(params):
-        try:
-            if not SessionOperationClass.check():
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.UnLogin, msg='请登录'))
+        params['goods_price_type'] = int(params.get('goods_price_type', None) or 0)
+        params['haul_dist'] = int(params.get('haul_dist', None) or 0)
+        params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
+        params['goods_status'] = int(params.get('goods_status', None) or 0)
+        params['special_tag'] = int(params.get('special_tag', None) or 0)
+        params['delivery_start_time'] = int(params.get('delivery_start_time', None) or today_begin)
+        params['delivery_end_time'] = int(params.get('delivery_end_time', None) or time.time())
+        params['register_start_time'] = int(params.get('register_start_time', None) or 0)
+        params['register_end_time'] = int(params.get('register_end_time', None) or 0)
 
-            params['goods_price_type'] = int(params.get('goods_price_type', None) or 0)
-            params['haul_dist'] = int(params.get('haul_dist', None) or 0)
-            params['vehicle_length'] = str(params.get('vehicle_length', None) or '')
-            params['goods_status'] = int(params.get('goods_status', None) or 0)
-            params['special_tag'] = int(params.get('special_tag', None) or 0)
-            params['delivery_start_time'] = int(params.get('delivery_start_time', None) or today_begin)
-            params['delivery_end_time'] = int(params.get('delivery_end_time', None) or time.time())
-            params['register_start_time'] = int(params.get('register_start_time', None) or 0)
-            params['register_end_time'] = int(params.get('register_end_time', None) or 0)
+        # 补全时间
+        params['delivery_start_time'], params['delivery_end_time'] = complement_time(params['delivery_start_time'],
+                                                                                     params['delivery_end_time'])
+        params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'],
+                                                                                     params['register_end_time'])
 
-            # 补全时间
-            params['delivery_start_time'], params['delivery_end_time'] = complement_time(params['delivery_start_time'],
-                                                                                         params['delivery_end_time'])
-            params['register_start_time'], params['register_end_time'] = complement_time(params['register_start_time'],
-                                                                                         params['register_end_time'])
+        if not compare_time(params['delivery_start_time'], params['delivery_end_time']):
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
-            if not compare_time(params['delivery_start_time'], params['delivery_end_time']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
+        if not compare_time(params['register_start_time'], params['register_end_time']):
+            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
 
-            if not compare_time(params['register_start_time'], params['register_end_time']):
-                abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数非法'))
+        return params
+    except Exception as e:
+        log.error('校验货源热图参数失败:{}'.format(e), exc_info=True)
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='拒绝请求'))
 
-            return Response(params=params)
-        except Exception as e:
-            log.error('校验货源热图参数失败:{}'.format(e), exc_info=True)
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.Forbidden, msg='拒绝请求'))
 
-    @staticmethod
-    @make_decorator
-    def check_post_params(params):
-        try:
-            params["lat"] = float(params.get("lat") or 0)
-            params["lng"] = float(params.get("lng") or 0)
-            params["region_id"] = int(params.get("region_id") or 0)
-            params["multiple"] = float(params.get("multiple") or 0.0)
-            if not params["region_id"]:
-                abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='region_id参数不能为0'))
-            if not params["multiple"]:
-                abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='multiple参数不能为0'))
-            params["region_id"] = get_role_regions(params["region_id"])
-            return Response(params=params)
-        except Exception as e:
-            log.error('校验货源热图参数失败:{}'.format(e))
-            abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='校验货源热图参数失败'))
+def check_map_post_params(params):
+    try:
+        params["lat"] = float(params.get("lat") or 0)
+        params["lng"] = float(params.get("lng") or 0)
+        params["region_id"] = int(params.get("region_id") or 0)
+        params["multiple"] = float(params.get("multiple") or 0.0)
+        if not params["region_id"]:
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='region_id参数不能为0'))
+        if not params["multiple"]:
+            abort(HTTPStatus.BadRequest, **make_resp(HTTPStatus.BadRequest, msg='multiple参数不能为0'))
+        params["region_id"] = get_role_regions(params["region_id"])
+        return params
+    except Exception as e:
+        log.error('校验货源热图参数失败:{}'.format(e))
+        abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='校验货源热图参数失败'))
 
 
 class UsersMap(object):
