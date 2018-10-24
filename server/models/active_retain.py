@@ -79,11 +79,11 @@ class ActiveUserStatisticModel(object):
 
         # 日/周/月 模式
         if params["periods"] == 2:
-            command += """ GROUP BY FROM_UNIXTIME( tiul.last_login_time, "%%%%Y-%%%%m-%%%%d" ) """
+            command += """ GROUP BY FROM_UNIXTIME( tiul.last_login_time, "%Y-%m-%d" ) """
         elif params["periods"] == 3:
-            command += """ GROUP BY FROM_UNIXTIME( tiul.last_login_time, "%%%%Y%%%%u" ) """
+            command += """ GROUP BY FROM_UNIXTIME( tiul.last_login_time, "%Y%u" ) """
         elif params["periods"] == 4:
-            command += """ GROUP BY FROM_UNIXTIME( tiul.last_login_time, "%%%%Y-%%%%m" ) """
+            command += """ GROUP BY FROM_UNIXTIME( tiul.last_login_time, "%Y-%m" ) """
         else:
             return []
 

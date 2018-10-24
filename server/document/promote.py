@@ -49,7 +49,3 @@ request_promote_quality_param = api.doc(params={
     'data_type':'数据类型,1,2,3...默认1',
     }, description='推广统计列表查询参数')
 
-response_promote_quality_param_success = api.response(200, '成功', api.model('response_success', {
-    'state': fields.Integer(description=str(APIStatus.Ok)),
-    'msg': fields.String(description=FeedAPIStatus.Decriptions[APIStatus.Ok]),
-}))

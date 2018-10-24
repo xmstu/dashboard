@@ -24,7 +24,8 @@ class GoodsPotentialDistributionTrendModel(object):
         if params['region_id']:
             if isinstance(params['region_id'], int):
                 region = 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR ' \
-                         'from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {'region_id': params['region_id']}
+                         'from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
+                             'region_id': params['region_id']}
             elif isinstance(params['region_id'], list):
                 region = '''
                         AND (
@@ -54,7 +55,8 @@ class GoodsPotentialDistributionTrendModel(object):
                         )
                         """.format(haul_dist=params['haul_dist'])
 
-        data = cursor.query(command.format(fetch_where=fetch_where), {'start_time': params['start_time'], 'end_time': params['end_time']})
+        data = cursor.query(command.format(fetch_where=fetch_where),
+                            {'start_time': params['start_time'], 'end_time': params['end_time']})
 
         return data
 
@@ -96,7 +98,8 @@ class GoodsPotentialDistributionTrendModel(object):
 
         fetch_where += region
 
-        data = cursor.query(command.format(fetch_where=fetch_where), {'start_time': params['start_time'], 'end_time': params['end_time']})
+        data = cursor.query(command.format(fetch_where=fetch_where),
+                            {'start_time': params['start_time'], 'end_time': params['end_time']})
 
         return data
 
@@ -104,7 +107,7 @@ class GoodsPotentialDistributionTrendModel(object):
 class GoodsPotentialListModel(object):
 
     @staticmethod
-    def get_ftl_data(cursor, page, limit, params):
+    def get_ftl_data(cursor, params):
 
         fields = """
         `name`,
@@ -229,7 +232,7 @@ class GoodsPotentialListModel(object):
 
         count = cursor.query_one(command.format(fields='COUNT(1) AS count', fetch_where=fetch_where))['count']
 
-        command += 'ORDER BY shf_potential_goods.id DESC LIMIT %s, %s' % ((page - 1) * limit, limit)
+        command += 'ORDER BY shf_potential_goods.id DESC LIMIT %s, %s' % (params["page"], params["limit"])
 
         ftl_data = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
@@ -241,7 +244,7 @@ class GoodsPotentialListModel(object):
         return data
 
     @staticmethod
-    def get_ltl_data(cursor, page, limit, params):
+    def get_ltl_data(cursor, params):
         fields = """
             '' AS name,
             weight,
@@ -336,7 +339,7 @@ class GoodsPotentialListModel(object):
 
         count = cursor.query_one(command.format(fields='COUNT(1) AS count', fetch_where=fetch_where))['count']
 
-        command += 'ORDER BY shf_ltl_pre_goods.id DESC LIMIT %s, %s' % ((page - 1) * limit, limit)
+        command += 'ORDER BY shf_ltl_pre_goods.id DESC LIMIT %s, %s' % (params["page"], params["limit"])
 
         ltl_data = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 

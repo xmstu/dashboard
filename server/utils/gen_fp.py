@@ -38,14 +38,11 @@ def gen_fp():
 
     params = str(sorted(params.items()))
 
-    data = request.data if request.data else {}
-    data = str(sorted(data.items()))
-
     # 获取用户名和用户角色作为唯一标识
     user_name = session['login'].get('user_name', '')
     role = session['login'].get('role', '')
 
-    temp_str = url + method + params + data + user_name + role
+    temp_str = url + method + params + user_name + role
 
     sha1 = hashlib.sha1()
 

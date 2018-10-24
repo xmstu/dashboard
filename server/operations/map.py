@@ -9,60 +9,51 @@ from server.models.map import DistributionMapModel, GoodsMapModel, UsersMapModel
 from server.status import APIStatus, HTTPStatus, make_resp
 
 
-class DistributionMap(object):
+def distribution_map_get_data(params):
 
-    @staticmethod
-    @make_decorator
-    def get_data(params):
+    # 获取城市级别
+    region_level = init_regions.get_upper_region_level(params.get('region_id'))
 
-        # 获取城市级别
-        region_level = init_regions.get_upper_region_level(params.get('region_id'))
+    # 按用户
+    if params.get('dimension') == 1:
+        data = DistributionMapModel.get_user(db.read_bi, params, region_level)
+    # 按货源
+    elif params.get('dimension') == 2:
+        data = DistributionMapModel.get_goods(db.read_db, params, region_level)
+    # 按运力
+    elif params.get('dimension') == 3:
+        data = DistributionMapModel.get_vehicle(db.read_db, db.read_bi, params, region_level)
+    # 按订单
+    elif params.get('dimension') == 4:
+        data = DistributionMapModel.get_order(db.read_db, params, region_level)
+    else:
+        data = {}
 
-        # 按用户
-        if params.get('dimension') == 1:
-            data = DistributionMapModel.get_user(db.read_bi, params, region_level)
-        # 按货源
-        elif params.get('dimension') == 2:
-            data = DistributionMapModel.get_goods(db.read_db, params, region_level)
-        # 按运力
-        elif params.get('dimension') == 3:
-            data = DistributionMapModel.get_vehicle(db.read_db, db.read_bi, params, region_level)
-        # 按订单
-        elif params.get('dimension') == 4:
-            data = DistributionMapModel.get_order(db.read_db, params, region_level)
-        else:
-            data = {}
-
-        return Response(params=params, data=data)
+    return data
 
 
-class GoodsMap(object):
+def get_new_user_id_list(params):
+    if params.get('special_tag') == 1:
+        user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('role_region_id'))
+    else:
+        user_id_list = None
+    return user_id_list
 
-    @staticmethod
-    def get_new_user_id_list(params):
-        if params.get('special_tag') == 1:
-            user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('role_region_id'))
-        else:
-            user_id_list = None
-        return user_id_list
 
-    @staticmethod
-    @make_decorator
-    def get_data(params):
-        user_id_list = GoodsMap.get_new_user_id_list(params)
-        max_lat_lng, data = GoodsMapModel.get_data(db.read_db, user_id_list, params)
-        return make_resp(status=APIStatus.Ok, max_lat_lng=max_lat_lng, data=data), HTTPStatus.Ok
+def goods_map_get_data(params):
+    user_id_list = get_new_user_id_list(params)
+    max_lat_lng, data = GoodsMapModel.get_data(db.read_db, user_id_list, params)
+    return make_resp(status=APIStatus.Ok, max_lat_lng=max_lat_lng, data=data), HTTPStatus.Ok
 
-    @staticmethod
-    @make_decorator
-    def post_data(params):
-        try:
-            user_id_list = GoodsMap.get_new_user_id_list(params)
-            ret = GoodsMapModel.post_data(db.read_db, user_id_list, params)
-            return make_resp(status=APIStatus.Ok, data=ret), HTTPStatus.Ok
-        except Exception as e:
-            log.error('内部服务器错误,获取不到当前经纬度的货源数:{}'.format(e))
-            abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='内部服务器错误'))
+
+def goods_map_post_data(params):
+    try:
+        user_id_list = get_new_user_id_list(params)
+        ret = GoodsMapModel.post_data(db.read_db, user_id_list, params)
+        return make_resp(status=APIStatus.Ok, data=ret), HTTPStatus.Ok
+    except Exception as e:
+        log.error('内部服务器错误,获取不到当前经纬度的货源数:{}'.format(e))
+        abort(HTTPStatus.InternalServerError, **make_resp(status=APIStatus.InternalServerError, msg='内部服务器错误'))
 
 
 class UsersMap(object):

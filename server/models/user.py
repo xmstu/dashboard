@@ -51,7 +51,7 @@ class UserList(object):
         return [str(i['user_id']) for i in result if i] if result else []
 
     @staticmethod
-    def get_user_list(cursor, page, limit, params):
+    def get_user_list(cursor, params):
         try:
             fetch_where = ''''''
 
@@ -186,7 +186,7 @@ class UserList(object):
 
             user_count = cursor.query_one(command.format(fields="COUNT(1) AS count", fetch_where=fetch_where))
 
-            fetch_where += """ ORDER BY id DESC LIMIT %s, %s """ % ((page - 1) * limit, limit)
+            fetch_where += """ ORDER BY id DESC LIMIT %s, %s """ % (params["page"], params["limit"])
             # 详情
             user_detail = cursor.query(command.format(fields=fields, fetch_where=fetch_where))
 
