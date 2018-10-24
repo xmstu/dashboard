@@ -581,6 +581,7 @@ var common = {
             var unread = res.unread;
             var str = '';
             if (data) {
+                console.log(data);
                 $.each(data, function (val, index) {
                     str += '<li class="message-center-simple msg-item-' + val + '"><pre><i class="' + select(index.is_read) + '"></i></pre><p>' + index.title + '</p><span> ' + index.create_time + '</span></li>'
                 })

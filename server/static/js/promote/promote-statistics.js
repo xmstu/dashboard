@@ -526,7 +526,6 @@ var pageSet = {
                             layer.close(index)
                         });
                     });
-                    common.clearSelect()
                 }
                 , page: true
                 , id: 'dataTable'
