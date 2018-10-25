@@ -1,3 +1,7 @@
+import datetime
+import time
+
+
 class ActiveUserStatisticModel(object):
 
     @staticmethod
@@ -90,3 +94,339 @@ class ActiveUserStatisticModel(object):
         data = read_bi.query(command.format(fetch_where=fetch_where, start_time=params["start_time"], end_time=params["end_time"]))
 
         return data if data else []
+
+    @staticmethod
+    def get_active_user_login_list(cursor, params):
+
+        fetch_where = """ 1=1 """
+
+        command = """
+        SELECT
+            *
+        FROM
+        (
+        SELECT
+            "{date_str}" AS active_retain_date,
+            COUNT(1) AS first_day_count
+        FROM
+            tb_inf_user
+        WHERE
+            {fetch_where}
+            AND create_time >= UNIX_TIMESTAMP("{date_str}")
+            AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY))
+        ) AS a,
+        (
+        SELECT
+            COUNT(1) AS second_day_count
+        FROM
+            tb_inf_user_login
+        WHERE 
+            user_id IN (SELECT user_id FROM tb_inf_user WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY)))
+            AND last_login_time >= UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY))
+            AND last_login_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 2 DAY))
+        ) AS b,
+        (
+        SELECT
+            COUNT(1) AS third_day_count
+        FROM
+            tb_inf_user_login
+        WHERE 
+            user_id IN (SELECT user_id FROM tb_inf_user WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY)))
+            AND last_login_time >= UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 2 DAY))
+            AND last_login_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 3 DAY))
+        ) AS c,
+        (
+        SELECT
+            COUNT(1) AS fourth_day_count
+        FROM
+            tb_inf_user_login
+        WHERE 
+            user_id IN (SELECT user_id FROM tb_inf_user WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY)))
+            AND last_login_time >= UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 3 DAY))
+            AND last_login_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 4 DAY))
+        ) AS d,
+        (
+        SELECT
+            COUNT(1) AS fifth_day_count
+        FROM
+            tb_inf_user_login
+        WHERE 
+            user_id IN (SELECT user_id FROM tb_inf_user WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY)))
+            AND last_login_time >= UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 4 DAY))
+            AND last_login_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 5 DAY))
+        ) AS e,
+        (
+        SELECT
+            COUNT(1) AS sixth_day_count
+        FROM
+            tb_inf_user_login
+        WHERE 
+            user_id IN (SELECT user_id FROM tb_inf_user WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY)))
+            AND last_login_time >= UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 5 DAY))
+            AND last_login_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 6 DAY))
+        ) AS f,
+        (
+        SELECT
+            COUNT(1) AS seventh_day_count
+        FROM
+            tb_inf_user_login
+        WHERE 
+            user_id IN (SELECT user_id FROM tb_inf_user WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY)))
+            AND last_login_time >= UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 6 DAY))
+            AND last_login_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 7 DAY))
+        ) AS g,
+        (
+        SELECT
+            COUNT(1) AS eighth_day_count
+        FROM
+            tb_inf_user_login
+        WHERE 
+            user_id IN (SELECT user_id FROM tb_inf_user WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 1 DAY)))
+            AND last_login_time >= UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 7 DAY))
+            AND last_login_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}",INTERVAL 8 DAY))
+        ) AS h;
+        """
+        # 权限地区内的用户登录数
+        if params.get("region_id"):
+            fetch_where += """
+            AND from_city_id = {}
+            """.format(params["region_id"])
+
+        # 用户类型
+        if params.get("user_type"):
+            fetch_where += """
+            AND (
+            ({user_type}=1 AND user_type=1) OR
+            ({user_type}=2 AND user_type=2) OR
+            ({user_type}=3 AND user_type=3) 
+            )
+            """.format(user_type=params["user_type"])
+
+        data = []
+        date_val = params.pop("start_date")
+        end_date = params.pop("end_date")
+        while date_val <= end_date:
+            date_str = date_val.strftime("%Y-%m-%d")
+            date_val += datetime.timedelta(days=1)
+            daily_data = cursor.query(command.format(fetch_where=fetch_where, date_str=date_str))
+            data += daily_data
+
+        return data
+
+    @staticmethod
+    def get_active_consignor_list(cursor, params):
+
+        fetch_where = """ 1=1 """
+
+        command = """
+        SELECT
+            *
+        FROM
+        (
+        SELECT
+            "{date_str}" AS active_retain_date,
+            COUNT(DISTINCT user_id) AS first_day_count
+        FROM
+            shf_goods
+        WHERE
+            {fetch_where}
+            AND create_time >= UNIX_TIMESTAMP( "{date_str}" ) 
+            AND create_time < UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 1 DAY) )
+        ) AS a,
+        (
+        SELECT
+            COUNT(DISTINCT user_id) AS second_day_count
+        FROM
+            shf_goods
+        WHERE
+            user_id IN (SELECT DISTINCT user_id FROM shf_goods WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 1 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 2 DAY) )
+        ) AS b,
+        (
+        SELECT
+            COUNT(DISTINCT user_id) AS third_day_count
+        FROM
+            shf_goods
+        WHERE
+            user_id IN (SELECT DISTINCT user_id FROM shf_goods WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 2 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 3 DAY) )
+        ) AS c,
+        (
+        SELECT
+            COUNT(DISTINCT user_id) AS fourth_day_count
+        FROM
+            shf_goods
+        WHERE
+            user_id IN (SELECT DISTINCT user_id FROM shf_goods WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 3 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 4 DAY) )
+        ) AS d,
+        (
+        SELECT
+            COUNT(DISTINCT user_id) AS fifth_day_count
+        FROM
+            shf_goods
+        WHERE
+            user_id IN (SELECT DISTINCT user_id FROM shf_goods WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 4 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 5 DAY) )
+        ) AS e,
+        (
+        SELECT
+            COUNT(DISTINCT user_id) AS sixth_day_count
+        FROM
+            shf_goods
+        WHERE
+            user_id IN (SELECT DISTINCT user_id FROM shf_goods WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 5 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 6 DAY) )
+        ) AS f,
+        (
+        SELECT
+            COUNT(DISTINCT user_id) AS seventh_day_count
+        FROM
+            shf_goods
+        WHERE
+            user_id IN (SELECT DISTINCT user_id FROM shf_goods WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 6 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 7 DAY) )
+        ) AS g,
+        (
+        SELECT
+            COUNT(DISTINCT user_id) AS eighth_day_count
+        FROM
+            shf_goods
+        WHERE
+            user_id IN (SELECT DISTINCT user_id FROM shf_goods WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 7 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 8 DAY) )
+        ) AS h
+        """
+
+        # 权限地区内的用户登录数
+        if params.get("region_id"):
+            fetch_where += """
+                    AND from_city_id = {}
+                    """.format(params["region_id"])
+
+        data = []
+        date_val = params.pop("start_date")
+        end_date = params.pop("end_date")
+        while date_val <= end_date:
+            date_str = date_val.strftime("%Y-%m-%d")
+            date_val += datetime.timedelta(days=1)
+            daily_data = cursor.query(command.format(fetch_where=fetch_where, date_str=date_str))
+            data += daily_data
+
+        return data
+
+    @staticmethod
+    def get_active_driver_list(cursor, params):
+
+        fetch_where = """ 1=1 """
+
+        command = """
+        SELECT
+            *
+        FROM
+        (
+        SELECT
+            "{date_str}" AS active_retain_date,
+            COUNT(DISTINCT driver_id) AS first_day_count
+        FROM
+            shb_orders
+        WHERE
+            {fetch_where}
+            AND create_time >= UNIX_TIMESTAMP( "{date_str}" ) 
+            AND create_time < UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 1 DAY) )
+        ) AS a,
+        (
+        SELECT
+            COUNT(DISTINCT driver_id) AS second_day_count
+        FROM
+            shb_orders
+        WHERE
+            driver_id IN (SELECT DISTINCT driver_id FROM shb_orders WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 1 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 2 DAY) )
+        ) AS b,
+        (
+        SELECT
+            COUNT(DISTINCT driver_id) AS third_day_count
+        FROM
+            shb_orders
+        WHERE
+            driver_id IN (SELECT DISTINCT driver_id FROM shb_orders WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 2 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 3 DAY) )
+        ) AS c,
+        (
+        SELECT
+            COUNT(DISTINCT driver_id) AS fourth_day_count
+        FROM
+            shb_orders
+        WHERE
+            driver_id IN (SELECT DISTINCT driver_id FROM shb_orders WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 3 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 4 DAY) )
+        ) AS d,
+        (
+        SELECT
+            COUNT(DISTINCT driver_id) AS fifth_day_count
+        FROM
+            shb_orders
+        WHERE
+            driver_id IN (SELECT DISTINCT driver_id FROM shb_orders WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 4 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 5 DAY) )
+        ) AS e,
+        (
+        SELECT
+            COUNT(DISTINCT driver_id) AS sixth_day_count
+        FROM
+            shb_orders
+        WHERE
+            driver_id IN (SELECT DISTINCT driver_id FROM shb_orders WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 5 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 6 DAY) )
+        ) AS f,
+        (
+        SELECT
+            COUNT(DISTINCT driver_id) AS seventh_day_count
+        FROM
+            shb_orders
+        WHERE
+            driver_id IN (SELECT DISTINCT driver_id FROM shb_orders WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 6 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 7 DAY) )
+        ) AS g,
+        (
+        SELECT
+            COUNT(DISTINCT driver_id) AS eighth_day_count
+        FROM
+            shb_orders
+        WHERE
+            driver_id IN (SELECT DISTINCT driver_id FROM shb_orders WHERE {fetch_where} AND create_time >= UNIX_TIMESTAMP("{date_str}") AND create_time < UNIX_TIMESTAMP(DATE_ADD("{date_str}", INTERVAL 1 DAY)))
+            AND create_time >= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 7 DAY) )
+            AND create_time <= UNIX_TIMESTAMP( DATE_ADD("{date_str}", INTERVAL 8 DAY) )
+        ) AS h
+        """
+
+        # 权限地区内的用户登录数
+        if params.get("region_id"):
+            fetch_where += """
+                            AND from_city_id = {}
+                            """.format(params["region_id"])
+
+        data = []
+        date_val = params.pop("start_date")
+        end_date = params.pop("end_date")
+        while date_val <= end_date:
+            date_str = date_val.strftime("%Y-%m-%d")
+            date_val += datetime.timedelta(days=1)
+            daily_data = cursor.query(command.format(fetch_where=fetch_where, date_str=date_str))
+            data += daily_data
+
+        return data

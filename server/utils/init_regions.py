@@ -70,6 +70,13 @@ class Regions(object):
                         result.append({'region_id': i, 'name': j['full_short_name']})
         return result
 
+    def get_level_to_prov(self, region_id):
+        """获取地区code到省"""
+        result = self.region.get(int(region_id), {'level': 0})
+        if result['level'] <= 1:
+            return result
+        return self.get_level_to_prov(result['parent_id'])
+
 
 class InitRegionModel(object):
     @staticmethod
