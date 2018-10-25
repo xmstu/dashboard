@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 # author=hexm
-
 from flask_restplus.resource import Resource
 
 import server.document.active_retain as doc
@@ -18,6 +17,7 @@ class ActiveUserStatistic(Resource):
 
     @staticmethod
     @doc.request_user_retain_statistic_param
+    @redis_cache(expire_time=86400)
     @filters.ActiveUserStatistic.get_active_user_statistic(params=dict, data=list)
     @operations.ActiveUserStatistic.get_active_user_statistic(params=dict)
     @verify.ActiveUserStatistic.check_params(params=dict)
