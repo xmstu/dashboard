@@ -8,7 +8,10 @@ import server.document.active_retain as doc
 from server import api
 from server import verify, operations, filters
 from server.meta.decorators import Response
+from server.meta.redis_cache import redis_cache
+from server.operations import get_active_user_list
 from server.utils.request import *
+from server.verify import active_user_list_check_params
 
 
 class ActiveUserStatistic(Resource):
@@ -25,11 +28,13 @@ class ActiveUserStatistic(Resource):
 
 class ActiveUserList(Resource):
 
-    @staticmethod
     @doc.request_user_retain_list_param
-    def get():
+    @redis_cache(expire_time=86400)
+    def get(self):
         """获取留存统计表格"""
-        return Response(params=get_all_arg())
+        params = active_user_list_check_params(params=get_all_arg())
+        data = get_active_user_list(params)
+        return make_resp(status=APIStatus.Ok, data=data), HTTPStatus.Ok
 
 
 ns = api.namespace('active_retain', description='活跃留存')
