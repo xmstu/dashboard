@@ -66,7 +66,7 @@ def gen_special_fp(special_params):
     else:
         params = {}
 
-    region_id = params.get("region_id", 0)
+    region_id = int(params.get("region_id", 0)) + int(params.get("node_id", 0))
 
     # 获取用户名和用户角色作为唯一标识
     user_name = session['login'].get('user_name', '')

@@ -10,17 +10,17 @@ def redis_cache(expire_time=1800, **special_params):
         @functools.wraps(func)
         def wrapped_func(*args, **kwargs):
             if special_params:
-                print("=" * 50, "Using new_user Cache")
                 fp = gen_special_fp(special_params)
             else:
-                print("=" * 50, "Using request Cache")
                 fp = gen_request_fp()
             result = redis_cache_conn.get(fp)
             if result:
+                print("=" * 50, "Using Cache")
                 result = json.loads(result)
                 if len(result) == 2:
                     return result[0], result[1]
                 return result
+            print("=" * 50, "NOT Using Cache")
             result = func(*args, **kwargs)
             redis_cache_conn.set(fp, json.dumps(result), expire_time)
             return result
