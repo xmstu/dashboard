@@ -1,4 +1,3 @@
-
 var setAbout = {
     init: function () {
         /*给表单设置默认值，时间转换秒是前端做的*/
@@ -9,14 +8,14 @@ var setAbout = {
         $('#survival_end').val(String(common.getNowFormatDate()[3]));
         setTimeout(function () {
             common.dateInterval($('#active_start').val(), $('#active_start').val());
-             /*设置左边二级菜单样式*/
-                var current_parent_id='users'//当前页面上一级ID，指目录名
-                var child_id="active-retain";//当前页面ID，指文件名,注意'-'与'_'的区别
+            /*设置左边二级菜单样式*/
+            var current_parent_id = 'users'//当前页面上一级ID，指目录名
+            var child_id = "active-retain";//当前页面ID，指文件名,注意'-'与'_'的区别
             // 为啥要这样搞？总之锅laitx不背，laitx负责改得更容易操作而已哈哈 可以考虑自动获取url文件名，就不需要管这块儿了。
-                $('.menu-'+current_parent_id).addClass('menu-active');
-                $('.menu-active .icon-xia').addClass('icon-rotate')
-                $('.menu-'+current_parent_id).next('.second-menu-list').css({'display': 'block'});
-                $('.menu-'+current_parent_id).next('.second-menu-list').find('.'+child_id+'-second-menu').addClass('selected-active')
+            $('.menu-' + current_parent_id).addClass('menu-active');
+            $('.menu-active .icon-xia').addClass('icon-rotate')
+            $('.menu-' + current_parent_id).next('.second-menu-list').css({'display': 'block'});
+            $('.menu-' + current_parent_id).next('.second-menu-list').find('.' + child_id + '-second-menu').addClass('selected-active')
         }, 10);
         $('.layui-form-item').width('184');
         $('#from_region_id').address({
@@ -179,8 +178,8 @@ var setAbout = {
                     {field: 'address', title: '一天', width: 250},
                     {field: 'vehicle', title: '两天'},
                     {field: 'price', title: '三天'},
-                    {field:'query_time',title:'四天'},
-                    {field:'stay_time',title:'五天'},
+                    {field: 'query_time', title: '四天'},
+                    {field: 'stay_time', title: '五天'},
                     {field: 'mobile', title: '六天'},
                     {field: 'goods_counts', title: '七天'},
                     {field: 'orders_counts', title: '八天'}
@@ -238,18 +237,19 @@ var setAbout = {
             end_time = common.timeTransform(end_time + ' 23:59:59')
         }
         var data = {
-            region_id: '',
             start_time: start_time,
             end_time: end_time,
-            periods: periods,
-            haul_dist:'',
-            business: '',
-            goods_price_type: ''
+            periods:periods,
+            user_type: '0',
+            special_tag: '0',
+            region_id:''
         };
-        var url = '/potential/trend/';
+        console.log(data)
+        var url = '/active_retain/statistic/';
         layui.use('layer', function () {
             var layer = layui.layer;
             http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+                console.log(res);
                 if (res.status == 100000) {
                     var len = res.data.xAxis.length;
                     var X_data = res.data.xAxis;
@@ -330,7 +330,7 @@ var setAbout = {
                     dataLabels: {
                         enabled: true,
                         formatter: function () {
-                            return this.point.y>0? this.point.y + '人':'';
+                            return this.point.y > 0 ? this.point.y + '人' : '';
                         }
                     }
                 },

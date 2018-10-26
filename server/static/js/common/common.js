@@ -28,6 +28,9 @@ var common = {
             return false
         })
     },
+    clearSelect:function(){
+
+    },
     init: function () {
         layui.use(['element', 'layer', 'form'], function () {
             var layer = layui.layer;
