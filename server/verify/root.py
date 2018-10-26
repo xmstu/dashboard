@@ -91,9 +91,9 @@ class RootRoleManagement(object):
             if not params['type']:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='必须要有角色大类别'))
 
-            if params['type'] not in (1, 2, 3, 4):
+            if params['type'] not in (1, 2, 3, 4, 5):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest,
-                                                         msg='必须是管理员,合伙人,网点管理员,城市经理中的一个类别'))
+                                                         msg='必须是管理员,合伙人,网点管理员,城市经理,城市合伙人中中的一个类别'))
 
             if not params['role_name']:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='必须要有角色名称'))
@@ -123,17 +123,16 @@ class RootRoleManagement(object):
             params['page_id_list'] = list(params.get('page_id_list') or [])
 
             # 判断type是否存在并是否在(1,2,3,4)
-            if params['type'] and params['type'] not in (1, 2, 3, 4):
+            if params['type'] and params['type'] not in (1, 2, 3, 4, 5):
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest,
-                                                         msg='必须是管理员,合伙人,网点管理员,城市经理中的一个类别'))
+                                                         msg='必须是管理员,区镇合伙人,网点管理员,城市经理,城市合伙人中的一个类别'))
 
             # 判断role_id是否存在
             if not params['role_id']:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='role_id不能为空或0'))
 
             # 参数校验
-            if not params['type'] and not params['role_name'] and not params['role_comment'] and not params[
-                'region_id'] and not params['page_id_list']:
+            if not params['type'] and not params['role_name'] and not params['role_comment'] and not params['region_id'] and not params['page_id_list']:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='最起码请输入一个参数'))
 
             # 如果有page_id_list
@@ -220,8 +219,7 @@ class RootMenuManagement(object):
             params['parent_menu_id'] = int(params.get('parent_menu_id') or 0)
 
             # 判断是否传入修改参数
-            if not params['menu_name'] and not params['menu_comment'] and not params['page_id'] and not params[
-                'parent_menu_id']:
+            if not params['menu_name'] and not params['menu_comment'] and not params['page_id'] and not params['parent_menu_id']:
                 abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='最起码请传一个参数'))
 
             return Response(params=params)
