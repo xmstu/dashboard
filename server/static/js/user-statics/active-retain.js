@@ -1,4 +1,6 @@
 var setAbout = {
+    survival_url: "/active_retain/list/",
+    active_url: '/active_retain/statistic/',
     init: function () {
         /*给表单设置默认值，时间转换秒是前端做的*/
         $('.layui-table-cell').css({'height': 'auto!important'});
@@ -161,6 +163,7 @@ var setAbout = {
             });
         });
     },
+    //表格数据
     tableSet: function (url) {
         layui.use('table', function () {
             var table = layui.table;
@@ -172,55 +175,22 @@ var setAbout = {
                     statusName: 'status',
                     statusCode: 100000
                 },
+                totalRow: true,
                 cols: [[
-                    {field: 'goods_standard', title: '时间'},
-                    {field: 'goods_type', title: '用户数'},
-                    {field: 'address', title: '一天', width: 250},
-                    {field: 'vehicle', title: '两天'},
-                    {field: 'price', title: '三天'},
-                    {field: 'query_time', title: '四天'},
-                    {field: 'stay_time', title: '五天'},
-                    {field: 'mobile', title: '六天'},
-                    {field: 'goods_counts', title: '七天'},
-                    {field: 'orders_counts', title: '八天'}
+                    {field: 'active_retain_date', title: '时间', unresize: true, totalRowText: '合计行'},
+                    {field: 'first_day_count', title: '一天',totalRow: true},
+                    {field: 'second_day_count', title: '两天',totalRow: true},
+                    {field: 'third_day_count', title: '三天',totalRow: true},
+                    {field: 'fourth_day_count', title: '四天',totalRow: true},
+                    {field: 'fifth_day_count', title: '五天',totalRow: true},
+                    {field: 'sixth_day_count', title: '六天',totalRow: true},
+                    {field: 'seventh_day_count', title: '七天',totalRow: true},
+                    {field: 'eighth_day_count', title: '八天',totalRow: true}
                 ]],
                 done: function (res, curr, count) {
-                    $("td[data-field='mobile']").children().each(function () {
-                        var str = $(this).text();
-                        if (str != '') {
-                            str = str.split('\n');
-                            if (str[0] == '') {
-                                $(this).html(str[0])
-                            } else if (str[0] != '' && str[1] == '' && str[2] != '') {
-                                $(this).html(str[0] + '<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
-                            } else if (str[0] != '' && str[1] != '' && str[2] == '') {
-                                $(this).html(str[0] + '<br>' + str[1])
-                            }
-                            else if (str[0] != '' && str[1] != '' && str[2] != '') {
-                                $(this).html(str[0] + '<br>' + str[1] + '<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ')</span>')
-                            }
-                        }
-                    });
-                    $("td[data-field='goods_type']").children().each(function () {
-                        var str = $(this).text();
-                        if (str != '') {
-                            str = str.split('\n');
-                            console.log(str.length);
-                            if (str.length > 1) {
-                                $(this).html(str[0] + str[1])
-                            } else {
-                                $(this).html(str[0])
-                            }
-                        }
-                    });
-                    $("td[data-field='address']").children().each(function (val) {
-                        if ($(this).text() != '') {
-                            var result = $(this).text().split('\n');
-                            $(this).html(result[0] + '<br>' + result[1] + '<br>' + result[2])
-                        }
-                    })
+
                 }
-                , id: 'goods_reload'
+                , id: 'active_retain_date'
                 , page: true
             });
         })
@@ -230,6 +200,9 @@ var setAbout = {
         var start_time = $('#active_start').val();
         var end_time = $('#active_end').val();
         var periods = $('.active_periods>li').find('button.active').val();
+        var user_type = $('#active_user-type').val();
+        var active_if = $('#active_if').val();
+        var region_id = $('#user_region_id').val() == '' ? common.role_area_show($('#user_super_manager_area_select')) : $('#user_region_id').val();
         if (start_time != '') {
             start_time = common.timeTransform(start_time + ' 00:00:00')
         }
@@ -239,12 +212,12 @@ var setAbout = {
         var data = {
             start_time: start_time,
             end_time: end_time,
-            periods:periods,
-            user_type: '0',
-            special_tag: '0',
-            region_id:''
+            periods: periods,
+            user_type: user_type,
+            special_tag: active_if,
+            region_id: region_id
         };
-        console.log(data)
+        console.log(data);
         var url = '/active_retain/statistic/';
         layui.use('layer', function () {
             var layer = layui.layer;
@@ -268,7 +241,7 @@ var setAbout = {
     },
     tableRender: function () {
         var _this = this;
-        var url = '/potential/list/';
+        var url = setAbout.survival_url;
         _this.tableSet(url)
     },
     chartInit: function (xAxis, series, interval, x_value1) {
@@ -366,14 +339,22 @@ var setAbout = {
     area_select: function () {
         var auth_role = $('#user-info').attr('data-role-type');
         if (!!auth_role && auth_role == 1) {
-            $('#super_manager_area').css({'display': 'block'});
-            $('#super_manager_area_select_zero').address({
+            $('#user_super_manager_area').css({'display': 'block'});
+            $('#user_super_manager_area_select').address({
                 level: 3,
-                offsetLeft: '-124px',
+                offsetLeft: '-124px'
+            });
+            $('#survival_super_manager_area').css({'display': 'block'});
+            $('#survival_super_manager_area_select').address({
+                level: 3,
+                offsetLeft: '-124px'
             });
         } else {
-            $('#super_manager_area').css({'display': 'none'});
-            $('#city_manager_one').css({'display': 'block'});
+            $('#user_super_manager_area').css({'display': 'none'});
+            $('#user_area').css({'display': 'block'});
+
+            $('#survival_super_manager_area').css({'display': 'none'});
+            $('#survival_area').css({'display': 'block'});
         }
     }
 
@@ -385,43 +366,29 @@ setAbout.chartRender();
 setAbout.tableRender();
 $('#goods_search_box').click(function (e) {
     e.preventDefault();
-    var register_start_time = $('#create_start_time').val();
-    var register_end_time = $('#create_end_time').val();
-    var record_start_time = $('#record_start_time').val();
-    var record_end_time = $('#record_end_time').val();
-    if (register_start_time != '') {
-        register_start_time = common.timeTransform(register_start_time + ' 00:00:00')
-    }
-    if (register_end_time != '') {
-        register_end_time = common.timeTransform(register_end_time + ' 23:59:59')
-    }
-    if (record_start_time != '') {
-        record_start_time = common.timeTransform(record_start_time + ' 00:00:00')
-    }
-    if (record_end_time != '') {
-        record_end_time = common.timeTransform(record_end_time + ' 23:59:59')
-    }
     var data = {
-        from_province_id: $('#from_region_id').attr('provinceid') == undefined ? '' : $('#from_region_id').attr('provinceid'),
-        from_city_id: $('#from_region_id').attr('cityid') == undefined ? '' : $('#from_region_id').attr('cityid'),
-        from_county_id: $('#from_region_id').attr('districtsid') == undefined ? '' : $('#from_region_id').attr('districtsid'),
-        to_province_id: $('#to_region_id').attr('provinceid') == undefined ? '' : $('#to_region_id').attr('provinceid'),
-        to_city_id: $('#to_region_id').attr('cityid') == undefined ? '' : $('#to_region_id').attr('cityid'),
-        to_county_id: $('#to_region_id').attr('districtsid') == undefined ? '' : $('#to_region_id').attr('districtsid'),
-        goods_price_type: $('#goods_type_first').val(),
-        business: $('#business_type').val(),
-        haul_dist: $('#haul_dist_table').val(),
-        vehicle_name: $('#vehicle_name').val(),
-        special_tag: $('#special_tag').val(),
-        register_start_time: register_start_time,
-        register_end_time: register_end_time,
-        record_start_time: record_start_time,
-        record_end_time: record_end_time
+        start_date:$('#survival_start').val(),
+        end_date:$('#survival_end').val(),
+        user_type:$('#survival_user-type').val(),
+        user_behavior:$('#survival_action').val(),
+        region_id:$('#survival_region_id').val() == '' ? common.role_area_show($('#survival_super_manager_area_select')) : $('#survival_region_id').val()
     };
-    var url = '/potential/list/?from_province_id=' + data.from_province_id + '&from_city_id=' + data.from_city_id + '&from_county_id=' + data.from_county_id + '&to_province_id=' + data.to_province_id + '&to_city_id=' + data.to_city_id + '&to_county_id=' + data.to_county_id + '&goods_price_type=' + data.goods_price_type + '&business=' + data.business + '&haul_dist=' + data.haul_dist + '&vehicle_name=' + data.vehicle_name + '&special_tag=' + data.special_tag + '&register_start_time=' + data.register_start_time + '&register_end_time=' + data.register_end_time + '&record_start_time=' + data.record_start_time + '&record_end_time=' + data.record_end_time;
+    if (data.start_date != '') {
+        data.start_date = common.timeTransform(data.start_date + ' 00:00:00')
+    }
+    if (data.end_date != '') {
+        data.end_date = common.timeTransform(data.end_date + ' 23:59:59')
+    }
+    console.log(data);
+    var url = setAbout.survival_url +
+        '?start_date=' + data.start_date +
+        '&end_date=' + data.end_date +
+        '&user_type=' + data.user_type +
+        '&user_behavior=' + data.user_behavior +
+        '&region_id=' + data.region_id;
     setAbout.tableSet(url)
 });
 $('#search_btn').click(function (e) {
     e.preventDefault();
     setAbout.chartRender();
-});
+})
