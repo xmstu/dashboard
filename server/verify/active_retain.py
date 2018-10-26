@@ -41,8 +41,8 @@ class ActiveUserStatistic(object):
 
 def active_user_list_check_params(params):
     try:
-        params["start_date"] = str(params.get("start_date") or time.strftime("%Y-%m-%d", time.localtime(time.time() - 7 * 86400)))
-        params["end_date"] = str(params.get("end_date") or time.strftime("%Y-%m-%d", time.localtime(time.time())))
+        params["start_date"] = int(params.get("start_date") or time.time() - 7 * 86400)
+        params["end_date"] = int(params.get("end_date") or time.time())
         params["user_type"] = int(params.get("user_type") or 0)
         params["user_behavior"] = int(params.get("user_behavior") or 1)
         params['region_id'] = int(params.get('region_id') or 0)
@@ -51,8 +51,8 @@ def active_user_list_check_params(params):
         params['region_id'] = get_role_regions(params['region_id'])
 
         # 开始日期和结束日期
-        params["start_date"] = datetime.datetime.strptime(params["start_date"], "%Y-%m-%d")
-        params["end_date"] = datetime.datetime.strptime(params["end_date"], "%Y-%m-%d")
+        params["start_date"] = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["start_date"])), "%Y-%m-%d")
+        params["end_date"] = datetime.datetime.strptime(time.strftime("%Y-%m-%d", time.localtime(params["end_date"])), "%Y-%m-%d")
         if params["start_date"] > params["end_date"]:
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='开始日期必须小于结束日期'))
         log.info("留存列表请求参数 [params: {}]".format(params))
