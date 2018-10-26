@@ -57,11 +57,22 @@ def gen_special_fp(special_params):
 
     special_params = str(sorted(special_params.items()))
 
+    method = request.method.upper()
+
+    if method == "GET":
+        params = request.args.to_dict() if request.args.to_dict() else {}
+    elif method == "POST":
+        params = get_payload()
+    else:
+        params = {}
+
+    region_id = params.get("region_id", 0)
+
     # 获取用户名和用户角色作为唯一标识
     user_name = session['login'].get('user_name', '')
     role = session['login'].get('role', '')
 
-    temp_str = special_params + user_name + role
+    temp_str = special_params + str(region_id) + user_name + role
 
     sha1 = hashlib.sha1()
 
