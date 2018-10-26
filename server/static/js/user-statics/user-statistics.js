@@ -201,6 +201,7 @@ layui.use(['laydate', 'layer', 'form', 'table'], function () {
             statusName: 'status',
             statusCode: 100000
         },
+
         done: function (res, curr, count) {
             $('[data-field]>div').css({'padding': '0 6px'})
             $("[data-field='usual_city']").css({'display': 'none'})
@@ -276,7 +277,7 @@ function dataInit() {
     var url = '/user/statistic/'
     http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
         if (res.status == 100000) {
-            layer.closeAll('loading')
+            layer.closeAll('loading');
             var len = res.data.xAxis.length;
             var X_data = res.data.xAxis;
             if (len > 0 && len < 20) {
@@ -402,9 +403,11 @@ function dataInit_user() {
         start_time: requestStartTime,
         end_time: requestEndTime,
         periods: $('.user_periods>li').find('button.active').val(),//按 日 周 月 查询
-        data_type: $('#user_data-type').val() //数据类型
+        data_type: $('#user_data-type').val(), //数据类型
+        region_id: $('#user_region_id').val() == '' ? common.role_area_show($('#user_super_manager_area_select')) : $('#user_region_id').val()
     };
-    console.log(data);
+   console.log('行为用户筛选');
+   console.log(data);
     http.ajax.get_no_loading(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
         // res={"status":100000,"msg":"成功",
         //     "data":{
@@ -542,11 +545,18 @@ function area_select() {
             level: 3,
             offsetLeft: '-124px',
         });
+        $('#user_super_manager_area').css({'display': 'block'})
+        $('#user_super_manager_area_select').address({
+            level: 3,
+            offsetLeft: '-124px',
+        });
     } else {
-        $('#super_manager_area').css({'display': 'none'})
-        $('#super_manager_area_two').css({'display': 'none'})
-        $('#city_manager_one').css({'display': 'block'})
-        $('#city_manager_two').css({'display': 'block'})
+        $('#super_manager_area').css({'display': 'none'});
+        $('#super_manager_area_two').css({'display': 'none'});
+        $('#user_super_manager_area').css({'display': 'none'});
+        $('#city_manager_one').css({'display': 'block'});
+        $('#city_manager_two').css({'display': 'block'});
+        $('#user_area').css({'display': 'block'})
 
     }
 }
