@@ -46,6 +46,7 @@ def check_behavior_params(params):
         params['end_time'] = int(params.get('end_time') or time.time())
         params['periods'] = int(params.get('periods') or 2)
         params['data_type'] = int(params.get('data_type') or 1)
+        params['region_id'] = int(params.get('region_id') or 0)
 
         # 补全时间
         params['start_time'], params['end_time'] = complement_time(params['start_time'], params['end_time'])
@@ -53,7 +54,7 @@ def check_behavior_params(params):
         if not compare_time(params['start_time'], params['end_time']):
             abort(HTTPStatus.BadRequest, **make_resp(status=APIStatus.BadRequest, msg='时间参数有误'))
         # 获取权限地区id
-        params['region_id'] = get_role_regions(0)
+        params['region_id'] = get_role_regions(params['region_id'])
 
         return params
     except Exception as e:

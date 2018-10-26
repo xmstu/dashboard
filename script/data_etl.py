@@ -111,7 +111,7 @@ def calculate_region(user_area):
         for i in user_area:
             user_arr[i['id']] = {'prov': 0, 'city': 0, 'county': 0, 'town': 0}
             # 车辆
-            if i['vehicles_prov'] or i['vehicles_city'] or i['vehicles_county'] or i['vehicles_town']:
+            if i['vehicles_prov'] not in ('0', None) or i['vehicles_city'] not in ('0', None) or i['vehicles_county'] not in ('0', None) or i['vehicles_town'] not in ('0', None):
                 if i['vehicles_town']:
                     town = i['vehicles_town'].split(',')
                     most_town = sorted([(j, town.count(j)) for j in set(town)], key=lambda x: x[1], reverse=True)
@@ -151,8 +151,8 @@ def calculate_region(user_area):
                             break
 
             # 货源
-            elif i['goods_prov'] or i['goods_city'] or i['goods_county'] or i['goods_town']:
-                if i['goods_town']:
+            elif i['goods_prov'] not in ('0', None) or i['goods_city'] not in ('0', None) or i['goods_county'] not in ('0', None) or i['goods_town'] not in ('0', None):
+                if i['goods_town'] not in ('0', None):
                     town = i['goods_town'].split(',')
                     most_town = sorted([(j, town.count(j)) for j in set(town)], key=lambda x: x[1], reverse=True)
                     user_arr[i['id']]['town'] = 0
@@ -160,7 +160,7 @@ def calculate_region(user_area):
                         if town_id:
                             user_arr[i['id']]['town'] = int(town_id)
                             break
-                if i['goods_county']:
+                if i['goods_county'] not in ('0', None):
                     county = i['goods_county'].split(',')
                     most_county = sorted([(j, county.count(j)) for j in set(county)], key=lambda x: x[1], reverse=True)
                     user_arr[i['id']]['county'] = 0
@@ -174,7 +174,7 @@ def calculate_region(user_area):
                         else:
                             continue
 
-                if i['goods_city']:
+                if i['goods_city'] not in ('0', None):
                     city = i['goods_city'].split(',')
                     most_city = sorted([(j, city.count(j)) for j in set(city)], key=lambda x: x[1], reverse=True)
                     user_arr[i['id']]['city'] = 0
@@ -182,7 +182,7 @@ def calculate_region(user_area):
                         if city_id and user_arr[i['id']]['county'] and city_id[:2] == str(user_arr[i['id']]['county'])[:2]:
                             user_arr[i['id']]['city'] = int(city_id)
                             break
-                if i['goods_prov']:
+                if i['goods_prov'] not in ('0', None):
                     prov = i['goods_prov'].split(',')
                     most_prov = sorted([(j, prov.count(j)) for j in set(prov)], key=lambda x: x[1], reverse=True)
                     user_arr[i['id']]['prov'] = 0
@@ -192,8 +192,8 @@ def calculate_region(user_area):
                             break
 
             # 订单
-            elif i['order_prov'] or i['order_city'] or i['order_county'] or i['order_town']:
-                if i['order_town']:
+            elif i['order_prov'] not in ('0', None) or i['order_city'] not in ('0', None) or i['order_county'] not in ('0', None) or i['order_town'] not in ('0', None):
+                if i['order_town'] not in ('0', None):
                     town = i['order_town'].split(',')
                     most_town = sorted([(j, town.count(j)) for j in set(town)], key=lambda x: x[1], reverse=True)
                     user_arr[i['id']]['town'] = 0
@@ -201,7 +201,7 @@ def calculate_region(user_area):
                         if town_id:
                             user_arr[i['id']]['town'] = int(town_id)
                             break
-                if i['order_county']:
+                if i['order_county'] not in ('0', None):
                     county = i['order_county'].split(',')
                     most_county = sorted([(j, county.count(j)) for j in set(county)], key=lambda x: x[1], reverse=True)
                     user_arr[i['id']]['county'] = 0
@@ -214,7 +214,7 @@ def calculate_region(user_area):
                             break
                         else:
                             continue
-                if i['order_city']:
+                if i['order_city'] not in ('0', None):
                     city = i['order_city'].split(',')
                     most_city = sorted([(j, city.count(j)) for j in set(city)], key=lambda x: x[1], reverse=True)
                     user_arr[i['id']]['city'] = 0
@@ -222,7 +222,7 @@ def calculate_region(user_area):
                         if city_id and user_arr[i['id']]['county'] and city_id[:2] == str(user_arr[i['id']]['county'])[:2]:
                             user_arr[i['id']]['city'] = int(city_id)
                             break
-                if i['order_prov']:
+                if i['order_prov'] not in ('0', None):
                     prov = i['order_prov'].split(',')
                     most_prov = sorted([(j, prov.count(j)) for j in set(prov)], key=lambda x: x[1], reverse=True)
                     user_arr[i['id']]['prov'] = 0
