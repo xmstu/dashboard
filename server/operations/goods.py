@@ -3,14 +3,14 @@ from flask_restful import abort
 
 from server import log
 from server.database import db
-from server.meta.decorators import make_decorator, Response
-from server.models.goods import GoodsList, CancelReasonList, GoodsDistributionTrendList, FreshConsignor
+from server.models.fresh import FreshModel
+from server.models.goods import GoodsList, CancelReasonList, GoodsDistributionTrendList
 from server.status import make_resp, APIStatus, HTTPStatus
 
 
 def get_goods_list(params):
     if params.get('new_goods_type') == 1:
-        user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('node_id'))
+        user_id_list = FreshModel.get_fresh_consignor_id(db.read_db, params.get('node_id'))
     else:
         user_id_list = None
 

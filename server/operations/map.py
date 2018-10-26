@@ -4,7 +4,7 @@ from server import log
 from server.cache_data import init_regions
 from server.database import db
 from server.meta.decorators import make_decorator, Response
-from server.models.goods import FreshConsignor
+from server.models.fresh import FreshModel
 from server.models.map import DistributionMapModel, GoodsMapModel, UsersMapModel
 from server.status import APIStatus, HTTPStatus, make_resp
 
@@ -34,7 +34,7 @@ def distribution_map_get_data(params):
 
 def get_new_user_id_list(params):
     if params.get('special_tag') == 1:
-        user_id_list = FreshConsignor.get_user_id_list(db.read_db, params.get('role_region_id'))
+        user_id_list = FreshModel.get_fresh_consignor_id(db.read_db, params.get('role_region_id'))
     else:
         user_id_list = None
     return user_id_list

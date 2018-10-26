@@ -14,7 +14,7 @@ from server.verify import goods_list_check_params, cancel_goods_reason_check_par
 class GoodsList(Resource):
 
     @doc.request_goods_list_param
-    @redis_cache(expire_time=300)
+    @redis_cache(300)
     def get(self):
         """货源列表"""
 
@@ -29,7 +29,7 @@ class GoodsList(Resource):
 class CancelGoodsReason(Resource):
 
     @doc.request_cancel_reason_param
-    @redis_cache(expire_time=7200)
+    @redis_cache(7200)
     def get(self):
         """取消货源原因"""
         params = cancel_goods_reason_check_params(params=get_all_arg())
@@ -42,7 +42,7 @@ class CancelGoodsReason(Resource):
 class GoodsDistributionTrend(Resource):
 
     @doc.request_goods_distribution_trend_param
-    @redis_cache(expire_time=7200)
+    @redis_cache(7200)
     def get(self):
         """货源分布趋势"""
         params = goods_distribution_trend_check_params(params=get_all_arg())

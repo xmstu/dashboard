@@ -2,8 +2,8 @@ from flask_restful import abort
 
 from server import log
 from server.database import db
-from server.models.order import OrdersReceivedStatisticsList, CancelOrderReasonModel, OrderListModel, FreshOwnerModel, \
-    FreshDriverModel
+from server.models.fresh import FreshModel
+from server.models.order import OrdersReceivedStatisticsList, CancelOrderReasonModel, OrderListModel
 from server.status import HTTPStatus, make_resp, APIStatus
 
 
@@ -29,9 +29,9 @@ def order_list_get_data(params):
 
     try:
         if params.get('spec_tag') == 1:
-            fresh_ids = FreshOwnerModel.get_fresh_owner_id(db.read_bi, db.read_db, params.get('region_id'))
+            fresh_ids = FreshModel.get_fresh_consignor_id(db.read_db, params.get('region_id'))
         elif params.get('spec_tag') == 2:
-            fresh_ids = FreshDriverModel.get_fresh_driver_id(db.read_db, params.get('region_id'))
+            fresh_ids = FreshModel.get_fresh_driver_id(db.read_db, params.get('region_id'))
         else:
             fresh_ids = ['0']
         data = OrderListModel.get_order_list(db.read_db, fresh_ids, params)

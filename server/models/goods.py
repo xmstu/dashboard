@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from server import log
+from server.meta.redis_cache import redis_cache
 
 
 class GoodsList(object):
@@ -273,53 +274,6 @@ class GoodsList(object):
                       'goods_count': goods_count if goods_count else 0}
 
         return goods_list
-
-
-class FreshConsignor(object):
-
-    @staticmethod
-    def get_user_id_list(cursor, region_id):
-        try:
-            # 先找出所有下单少于三次的用户id的结果集
-            sql = """
-                    SELECT
-                        user_id 
-                    FROM
-                        shf_goods 
-                    WHERE
-                        user_id IN (
-                        SELECT DISTINCT
-                            user_id 
-                        FROM
-                            shf_goods 
-                        WHERE
-                            {region}
-                        ) 
-                    GROUP BY
-                        user_id 
-                    HAVING
-                        COUNT( * ) < 3;
-                    """
-            # 地区
-            region = ' 1=1 '
-            if region_id:
-                if isinstance(region_id, int):
-                    region += 'AND (from_province_id = %(region_id)s OR from_city_id = %(region_id)s OR from_county_id = %(region_id)s OR from_town_id = %(region_id)s) ' % {
-                        'region_id': region_id}
-                elif isinstance(region_id, list):
-                    region += '''
-                            AND (
-                            from_province_id IN (%(region_id)s)
-                            OR from_city_id IN (%(region_id)s)
-                            OR from_county_id IN (%(region_id)s)
-                            OR from_town_id IN (%(region_id)s)
-                            ) ''' % {'region_id': ','.join(region_id)}
-            ret = cursor.query(sql.format(region=region))
-            user_id_list = [str(i['user_id']) for i in ret]
-            return user_id_list
-        except Exception as e:
-            log.error('Error:{}'.format(e), exc_info=True)
-            return ['0']
 
 
 class CancelReasonList(object):
