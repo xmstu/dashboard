@@ -124,9 +124,3 @@ def message_func():
     """用户消息页面"""
     return open_route_func('/message/message.html')
 
-
-@app.route('/business_msg/', endpoint='business_msg')
-@visitor_record
-def business_msg_func():
-    """商业消息页面"""
-    return open_route_func('/business_msg/business_msg.html')

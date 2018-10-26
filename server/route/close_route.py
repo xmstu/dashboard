@@ -113,4 +113,22 @@ def vehicle_func():
     return close_route_func('/vehicle/', '/vehicle/verify_vehicle.html')
 
 
+@app.route('/business_msg/', endpoint='business_msg')
+@visitor_record
+def business_msg_func():
+    """商业消息页面"""
+    return close_route_func('/business_msg/', '/business_msg/business_msg.html')
 
+
+@app.route('/city_report/', endpoint='city_report')
+@visitor_record
+def city_report_func():
+    """城市报表"""
+    return close_route_func('/city_report/', '/report/city_report.html')
+
+
+@app.route('/income_statistics/', endpoint='/income_statistics/')
+@visitor_record
+def city_report_func():
+    """收入统计"""
+    return close_route_func('/income_statistics/', '/income/income_statistics.html')
