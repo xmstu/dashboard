@@ -2,17 +2,17 @@
 # author=veficos
 from werkzeug.contrib.cache import RedisCache
 
-from server.configs import configs
+from server.configs import *
 from server.meta.creators import DictModel
-from server.db import MongoLinks
+import pymongo
 from server.db import MySQLdb
 
 
-mongo = DictModel({
-    'user_locations': MongoLinks(config=dict(configs.remote.union.mongo.locations.get()), collection='user_locations')
-})
+mongo_conn = pymongo.MongoClient(host=MONGO_HOST,
+                                 port=MONGO_PORT
+                                 )
 
 
-redis_cache_conn = RedisCache(host=configs.get("redis_host", "127.0.0.1"),
-                              port=configs.get("redis_port", 6309),
-                              db=configs.get("db", 1))
+redis_cache_conn = RedisCache(host=REDIS_HOST,
+                              port=REDIS_PORT,
+                              db=REDIS_DB)
