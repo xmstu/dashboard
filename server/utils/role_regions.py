@@ -1,6 +1,5 @@
 from flask_restful import abort
 
-from server.cache_data import init_regions
 from server.meta.session_operation import SessionOperationClass
 from server.status import HTTPStatus, make_resp, APIStatus
 

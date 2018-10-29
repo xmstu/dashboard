@@ -20,4 +20,3 @@ def create_handler():
 
 log = create_handler()
 
-log.info("hello log")

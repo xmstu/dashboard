@@ -74,7 +74,7 @@ def value_error(e):
 
 
 # 接口页面展示
-if configs.env.deploy != "dev":
+if configs["env"]["deploy"] != "dev":
     @api.documentation
     def disable_document():
         return api.render_root()

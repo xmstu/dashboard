@@ -3,9 +3,7 @@ import datetime
 import hashlib
 import re
 import time
-import math
 
-from server.cache_data import init_regions
 from server.utils.constant import weekdays
 
 
@@ -123,64 +121,6 @@ def interval_time_to_format_time(interval_time):
                     interval_time % 3600 % 60) > 0 else '')
 
     return format_time
-
-
-def check_region_id(region_id, locations_id):
-    if region_id == 0:
-        return False
-    if str(region_id) in locations_id:
-        return True
-    parent_id = init_regions.get_parent_id(region_id)
-    return check_region_id(parent_id, locations_id)
-
-
-class CarPrice(object):
-    _fast = tuple()
-    _distance = 0
-
-    def __init__(self, a, b, c, d, e):
-        self._fast = (a, b, c, d)
-        self._distance = e
-
-    def __str__(self):
-        return 'CarPrice(%s, %s)' % (self._fast, self._distance)
-
-    # 是否在价格区间
-    def is_between(self, distance):
-        # [25, 400)
-        if 25 <= distance <= self._distance:
-            return True
-        else:
-            return False
-
-    # 获取快车价格
-    def get_fast_price(self, d):
-        # y=ax+bx^2+cx^3+d
-        return int(self._fast[0] * d + self._fast[1] * math.pow(d, 2) + self._fast[2] * math.pow(d, 3) + self._fast[3])
-
-
-data_price = {
-    # =26.38+2.54*A2+(-4.3)*(10^-3)*A2^2+6.44*(10^-6)*A2^3
-    '小面包车': [CarPrice(2.54, -4.3/1000, 0.00000644, 26.38, 30), 1.05],
-    # =28.79+2.8*A3+(-3.85)*(10^-3)*A3^2+4.56*(10^-6)*A3^3
-    '中面包车': [CarPrice(2.8, -3.85/1000, 0.00000456, 28.79, 30), 1.2],
-    # =28.08+3.18*A3+(-4.84)*(10^-3)*A3^2+5.37*(10^-6)*A3^3
-    '小货车': [CarPrice(3.18, -4.84/1000, 0.00000537, 28.08, 30), 1.2],
-    # =55.17+3.96*A3+(-3.9)*(10^-3)*A3^2+5.21*(10^-6)*A3^3
-    '4.2米': [CarPrice(3.96, -3.9/1000, 0.00000521, 55.17, 30), 1.17],
-    # =1.04*(10^2)+4.52*A3-2.28*(10^-3)*A3^2
-    '5.2米': [CarPrice(4.52, -2.28/1000, 0, 104, 30), 1.12],
-    # =2.25*(10^2)+3.7*A3+2.52*(10^-3)*A3^2-1.85*(10^-6)*A3^3
-    '6.8米': [CarPrice(3.7, 2.52/1000, -0.00000185, 225, 30), 1.1],
-    # =2.07*(10^2)+4.77*A4+(-1.45)*(10^-3)*A4^2+2.01*(10^-6)*A4^3
-    '7.6米': [CarPrice(4.77, -1.45/1000, 0.00000201, 207, 30), 1.1],
-    # =3.29*(10^2)+6.88*A3+(-1.91)*(10^-3)*A3^2+5.84*(10^-7)*A3^3
-    '9.6米': [CarPrice(6.88, -1.91/1000, 0.000000584, 329, 30), 1.1],
-    # =6.56*(10^2)+9.88*A2-6.26*(10^-3)*A2^2
-    '13米': [CarPrice(9.88, -6.26/1000, 0, 656, 30), 1],
-    # =1.02*(10^3)+11.2*A2-7.48*(10^-3)*A2^2
-    '17.5米': [CarPrice(11.2, -7.48/1000, 0, 1020, 30), 1],
-}
 
 
 def hash_str(word):
