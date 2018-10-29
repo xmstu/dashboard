@@ -2,8 +2,6 @@ import time
 
 from flask import session, render_template, redirect
 
-from server.cache_data import init_regions
-from server.database import db
 from server.models.login import Login
 
 
