@@ -1,0 +1,6 @@
+2018-10-29 10:45:19,677 - __main__ - INFO - Start print log
+2018-10-29 10:45:19,678 - __main__ - WARNING - Something maybe fail.
+2018-10-29 10:45:19,678 - __main__ - INFO - Finish
+2018-10-29 10:51:26,228 - __main__ - INFO - hello log
+2018-10-29 10:53:03,315 - 'da-service' - INFO - hello log
+2018-10-29 10:53:14,476 - da-service - INFO - hello log
