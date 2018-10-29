@@ -24,7 +24,7 @@ layui.use(["laydate", "form", "table"],
         var laydate = layui.laydate;
         var table = layui.table;
         laydate.render({
-            elem: "#date_show_one",
+            elem: "#start_date",
             theme: "#009688",
             calendar: true,
             format: 'yyyy/MM/dd',
@@ -39,7 +39,7 @@ layui.use(["laydate", "form", "table"],
             }
         });
         laydate.render({
-            elem: "#date_show_two",
+            elem: "#end_date",
             theme: "#009688",
             calendar: true,
             format: 'yyyy/MM/dd',
@@ -139,11 +139,6 @@ function tableInit(url) {
                     {
                         field: "employee",
                         title: "发布人",
-                        width: 100
-                    },
-                    {
-                        field: "employee_job",
-                        title: "发布人职位",
                         width: 100
                     },
                     {
@@ -384,102 +379,7 @@ function tableReset(url) {
                         if (value_level == 5) {
                             $(this).html('<p style="color: #009f95;"><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i></p>')
                         }
-                    })
-                    layer.closeAll('loading')
-                }
-            })
-        })
-}
-
-function popupRender(url) {
-    layui.use(["table", 'layer', "form"],
-        function () {
-            var table = layui.table;
-            var layer = layui.layer;
-            layer.load()
-            table.render({
-                elem: "#demo_one",
-                url: url,
-                page: false,
-                width: 1272,
-                response: {
-                    statusName: "status",
-                    statusCode: 100000
-                },
-                loading: true,
-                cols: [[{
-                    field: "name",
-                    title: "司机姓名",
-                    width: 86
-                },
-                    {
-                        field: "mobile",
-                        title: "手机号码",
-                        width: 108
-                    },
-                    {
-                        field: "usual_region",
-                        title: "常驻地",
-                        width: 200
-                    },
-                    {
-                        field: "locations",
-                        title: "最新定位"
-                    },
-                    {
-                        field: "vehicle_length",
-                        title: "车长",
-                        width: 94
-                    },
-                    {
-                        field: "is_trust_member",
-                        title: "诚信会员",
-                        width: 80
-                    },
-                    {
-                        field: "order_count",
-                        title: "接单数",
-                        sort: true,
-                        width: 80
-                    },
-                    {
-                        field: "order_finished",
-                        title: "完成数",
-                        sort: true,
-                        width: 80
-                    },
-                    {
-                        field: "order_cancel",
-                        title: "取消数",
-                        sort: true,
-                        width: 80
-                    }]],
-                done: function (res) {
-                    common.ajaxSetting()
-                    $("td[data-field='is_trust_member']").children().each(function () {
-                        if ($(this).text() != "") {
-                            var str = $(this).text();
-                            if (str == 1) {
-                                $(this).text("是")
-                            } else {
-                                if (str == 0) {
-                                    $(this).text("否")
-                                }
-                            }
-                        }
                     });
-                    $("td[data-field='credit_level']").children().each(function () {
-                        var value_level = $(this).text();
-                        if (value_level == 1) {
-                            $(this).html('<p><i class="iconfont icon-iconfontxingxing"></i></p>')
-                        }
-                        if (value_level == 2) {
-                            $(this).html('<p><i class="iconfont icon-iconfontxingxing"></i></p>')
-                        }
-                        if (value_level == 5) {
-                            $(this).html('<p style="color: #009f95;"><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i></p>')
-                        }
-                    })
                     layer.closeAll('loading')
                 }
             })
