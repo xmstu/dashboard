@@ -17,12 +17,9 @@ def login():
     return redirect('/home/')
 
 
-@app.route('/', endpoint='index')
 @app.route('/index/', endpoint='index')
 def home_func():
     """主页"""
     version = "1.0.0"
     return render_template('/admin/home.html/', user_name="游客", avatar_url=avatar_url, locations="", version=version)
-
-
 
