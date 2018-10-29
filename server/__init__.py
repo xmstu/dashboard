@@ -11,7 +11,7 @@ log：日志对象
 """
 
 from server.app import app, api
-from server.configs import configs
+# from server.configs import configs
 from server.logger import log
 
 

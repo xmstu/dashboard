@@ -785,7 +785,7 @@ var common = {
                             time: 700
                         });
                         setTimeout(function () {
-                            window.location.href = '/admin';
+                            window.location.href = '/index';
                         }, 1300)
                     }
                 })

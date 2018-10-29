@@ -59,16 +59,13 @@ $("#user_search_box").on("click",
     function (e) {
         e.preventDefault();
         var data = {
-            mobile: $('#phone_number').val(),
-            goods_type: $.trim($("#goods_type").val()),
-            is_called: $.trim($("#is_called").val()),
-            vehicle_length: $.trim($("#vehicle_length").val()),
-            node_id: $.trim($("#node_id").val()) == "" ? common.role_area_show($("#super_manager_area_one")) : $.trim($("#node_id").val()),
-            spec_tag: $.trim($("#spec_tag").val()),
-            is_addition: $.trim($("#is_addition").val()),
-            goods_price_type: $('#goods_price_type').val()
+            job_name: $('#job_name').val(),
+            jobs_type: $.trim($("#goods_type").val()),
+            // region: $.trim($("#is_called").val()),
+            pub_time: $.trim($("#vehicle_length").val()),
+            region: $.trim($("#node_id").val()) == "" ? common.role_area_show($("#super_manager_area_one")) : $.trim($("#node_id").val()),
         };
-        var url = "/city/latest_orders/?goods_type=" + data.goods_type + "&mobile=" + data.mobile + "&is_called=" + data.is_called + "&goods_price_type=" + data.goods_price_type + "&vehicle_length=" + data.vehicle_length + "&node_id=" + data.node_id + "&spec_tag=" + data.spec_tag + "&is_addition=" + data.is_addition;
+        var url = "/jobs/jobs_list/?job_name=" + data.job_name + "&jobs_type=" + data.jobs_type + "&pub_time=" + data.pub_time + "&region=" + data.region;
         tableInit(url)
     });
 
@@ -88,63 +85,78 @@ function tableInit(url) {
                     statusCode: 100000
                 },
                 loading: true,
-                cols: [[{
-                    field: "goods_id",
-                    title: "货源ID",
-                    width: 70
-                },
+                cols: [[
                     {
-                        field: "goods_type",
-                        title: "类型",
+                    field: "jobs_name",
+                    title: "职业名称",
+                    width: 70
+                    },
+                    {
+                        field: "jobs_url",
+                        title: "职位链接",
                         width: 78
                     },
                     {
-                        field: "content",
-                        title: "货物规格",
+                        field: "salary_range",
+                        title: "薪资范围",
                         width: 80
                     },
                     {
                         field: "address",
-                        title: "出发地-目的地",
-                        width: 294
+                        title: "公司地址",
+                        width: 200
                     },
                     {
-                        field: "vehicle",
-                        title: "车型要求",
-                        width: 78
+                        field: "experience",
+                        title: "工作经验",
+                        width: 100
                     },
                     {
-                        field: "price",
-                        title: "运费",
-                        width: 120
+                        field: "education",
+                        title: "学历",
+                        width: 100
                     },
                     {
-                        field: "mobile",
-                        title: "货主手机",
+                        field: "company",
+                        title: "公司名字",
+                        width: 100
+                    },
+                    {
+                        field: "company_url",
+                        title: "公司官网",
+                        width: 100
+                    },
+                    {
+                        field: "finance",
+                        title: "融资情况",
                         width: 90
                     },
                     {
-                        field: "call_count",
-                        title: "通话数",
-                        width: 70
+                        field: "pep_num",
+                        title: "公司规模",
+                        width: 100
                     },
                     {
-                        field: "goods_time",
-                        title: "时间",
-                        width: 172
+                        field: "employee",
+                        title: "发布人",
+                        width: 100
                     },
                     {
-                        field: "supplier_node",
-                        title: "所属网点"
+                        field: "employee_job",
+                        title: "发布人职位",
+                        width: 100
                     },
                     {
-                        field: "operate",
-                        title: "附近的车",
-                        width: 100,
-                        templet: function (d) {
-                            return '<button data-type="1" value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn layui-btn-small nearby-one admin-table-button"><i class="iconfont icon-dituleixianlu" style="margin-right: 2px"></i>接单线路</button><button data-type="2"  value="' + d.goods_id + '" id="nearly_' + d.goods_id + '" class="layui-btn nearby-two layui-btn-small admin-table-button"><i class="iconfont icon-qicheqianlian-" style="margin-right: 2px"></i>附近的车</button> <p class="display-content" style="display: none">' + d.from_region + '&nbsp;&nbsp;到&nbsp;&nbsp;' + d.to_region + '(' + d.vehicle + ')</p>'
-                        }
-                    }]],
+                        field: "employee_job",
+                        title: "发布人职位",
+                        width: 100
+                    },
+                    {
+                        field: "pub_time",
+                        title: "发布时间",
+                        width: 100
+                    },
+                    ]],
                 done: function (res, curr, count) {
                     layer.closeAll("loading");
                     common.clearSelect()
@@ -475,8 +487,7 @@ function popupRender(url) {
 }
 
 function area_select() {
-    var auth_role = $("#user-info").attr("data-role-type");
-    if (!!auth_role && auth_role == 1) {
+
         $("#super_manager_area").css({
             "display": "block"
         });
@@ -491,22 +502,8 @@ function area_select() {
             level: 3,
             offsetLeft: '-124px'
         })
-    } else {
-        $("#super_manager_area").css({
-            "display": "none"
-        });
-        $("#city_manager_area_one").css({
-            "display": "block"
-        });
-        $("#super_manager_area_two").css({
-            "display": "none"
-        });
-        $("#city_manager_two").css({
-            "display": "block"
-        })
-    }
 }
 
 area_select();
-common.init()
-var test = $('#select_box select')
+common.init();
+var test = $('#select_box select');

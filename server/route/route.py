@@ -7,7 +7,6 @@ from server.configs import avatar_url, version
 from server.meta.session_operation import SessionOperationClass
 
 
-
 @app.route('/login/')
 def login():
     """登录页面"""
@@ -18,7 +17,7 @@ def login():
 
 
 @app.route('/index/', endpoint='index')
-def home_func():
+def index():
     """主页"""
-    return render_template('/admin/home.html/', user_name="游客", avatar_url=avatar_url, version=version)
+    return render_template('/index/index.html/', user_name="游客", avatar_url=avatar_url, version=version)
 

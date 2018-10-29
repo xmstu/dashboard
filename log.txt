@@ -139,3 +139,545 @@ Traceback (most recent call last):
   File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
     raise NotFound()
 werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:51:09,539 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:51:13,703 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:51:15,871 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:51:28,421 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:51:28,428 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:51:28,894 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:52:03,296 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:52:03,513 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:52:05,532 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:52:05,545 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:52:05,996 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 11:52:26,671 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\helpers.py", line 976, in send_static_file
+    cache_timeout=cache_timeout)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\helpers.py", line 709, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 13:54:12,985 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 13:54:13,008 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 13:54:13,587 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:31:37,542 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:31:37,585 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:31:38,123 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:33:14,054 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:33:14,088 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:33:14,907 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:33:54,996 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:33:55,025 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:33:56,190 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:34:07,763 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:35:05,465 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:35:05,495 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:35:06,993 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:57:50,812 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:57:50,849 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 15:57:51,773 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:42:44,071 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:42:44,092 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:42:44,884 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:43:51,753 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:43:51,779 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:43:53,246 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:43:56,576 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:43:56,614 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:43:57,259 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:44:05,496 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\helpers.py", line 976, in send_static_file
+    cache_timeout=cache_timeout)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\helpers.py", line 709, in send_from_directory
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-10-29 16:44:07,868 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1791, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1774, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 336, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.

@@ -4,7 +4,7 @@ from datetime import timedelta
 from flask import Flask, render_template
 from flask_restplus import Api
 
-from server.configs import configs
+# from server.configs import configs
 from server.logger import log
 from server.status import HTTPStatus
 
@@ -73,8 +73,8 @@ def value_error(e):
     return render_template('/exception/except.html', status_coder=500, title='服务异常', content='服务发生异常: [error: %s]' % e)
 
 
-# 接口页面展示
-if configs["env"]["deploy"] != "dev":
-    @api.documentation
-    def disable_document():
-        return api.render_root()
+# # 接口页面展示
+# if configs["env"]["deploy"] != "dev":
+#     @api.documentation
+#     def disable_document():
+#         return api.render_root()
