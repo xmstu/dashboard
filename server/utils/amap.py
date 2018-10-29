@@ -4,6 +4,7 @@ import requests
 import simplejson as json
 from math import radians, cos, sin, atan, tan, acos
 
+
 def distance_between_position(from_longitude, from_latitude, to_longitude, to_latitude):
     """ 计算地球两点间距离 """
 
@@ -52,6 +53,7 @@ class AMap(object):
                                                       to_longitude=to_longitude, to_latitude=to_latitude)))
 
         return int(result['results'][0]['distance']) / 1000
+
 
 def distance(from_longitude, from_latitude, to_longitude, to_latitude):
     amap = AMap('146c4228971a9f848eeb1b24c7dd005a')
