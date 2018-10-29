@@ -2,6 +2,7 @@
 
 import pymongo
 
+
 class MongoLinks(object):
 
     def __init__(self, config, collection):

@@ -11,18 +11,17 @@ from server.status import HTTPStatus
 # flask对象
 app = Flask(__name__)
 app.config['ERROR_404_HELP'] = False
-app.secret_key = '\x1a\x8dfb#\xb9\xc8\xc3\x05\x86|\xda\x96\xff\xceo3\xf0\xa3\xb8\x8beoW'
+app.secret_key = "\x1a\x8dfb#\xb9\xc8\xc3\x05\x86|\xda\x96\xff\xceo3\xf0\xa3\xb8\x8beoW"
 
 # flask_restplus对象
-api = Api(app, version='5.0.0', title='省省回头车 BI API 5.0.0',
-          description='省省回头车 BI API 5.0.0', authorizations={
+api = Api(app, version='1.0.0', title='da API 1.0.0',
+          description='da API 1.0.0', authorizations={
         'apikey': {
             'type': 'apiKey',
             'in': 'header',
             'name': 'Token'
         }
-    }, security='apikey', ui=True
-          )
+    }, security='apikey', ui=True)
 
 # session超时时间
 app.permanent_session_lifetime = timedelta(seconds=7200)
