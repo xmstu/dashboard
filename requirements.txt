@@ -1,8 +1,6 @@
 flask
 flask_restplus==0.10.1
-kazoo
 pymysql
 redis
 pymongo
-fluent-logger==0.9.3
 w3lib==1.19.0
