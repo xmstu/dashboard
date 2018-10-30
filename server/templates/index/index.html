@@ -48,48 +48,26 @@
                                     <div class="layui-inline">
                                         <label class="layui-form-label">地区</label>
                                         <div class="layui-input-inline">
-                                            <input id="region_name" type="text" name="region_name" maxlength="11"
+                                            <input id="region" type="text" name="region_name" maxlength="11"
                                                    placeholder="请输入选择地区" lay-verify="required|region_name" autocomplete="off"
                                                    class="layui-input">
                                         </div>
                                     </div>
                                 </div>
 
-
-                                <div class="layui-form-item" style="">
-                                    <div class="layui-inline">
-                                        <label class="layui-form-label">所属地区</label>
-                                        <div class="layui-input-inline" id="city_manager_area_one"
-                                             style="display: none;">
-                                            <select id="node_id" name="modules" lay-verify="required" lay-search="">
+                                <div class="layui-form-item">
+                                    <div class="layui-inline" style="width: 184px">
+                                        <label class="layui-form-label">发布时间范围</label>
+                                        <div class="layui-input-inline" style="width: 104px">
+                                            <select id="time_scale" name="modules" lay-verify="required"
+                                                    lay-search="">
                                                 <option value="">全部</option>
+                                                <option value="1">一天以内</option>
+                                                <option value="2">三天以内</option>
+                                                <option value="3">七天以内</option>
+                                                <option value="4">十五天以内</option>
+                                                <option value="5">一个月以内</option>
                                             </select>
-                                        </div>
-                                        <div id="super_manager_area" class="layui-input-inline" style="display: none;">
-                                            <input id="super_manager_area_one" name="super_manager_area_one"
-                                                   autocomplete="off" lay-verify="super_manager_area_one"
-                                                   class="layui-input" type="text" placeholder="请选择地区"/>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 172px;">
-                                        <label class="layui-form-label">开始日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="start_date" name="start_date" autocomplete="off"
-                                                   lay-verify="start_date" class="layui-input" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="layui-form-item">
-                                    <div class="layui-inline" style="width: 172px;">
-                                        <label class="layui-form-label">结束日期</label>
-                                        <div class="layui-input-block">
-                                            <i class="layui-icon layui-icon-riqi"></i>
-                                            <input id="end_date" name="end_date" autocomplete="off"
-                                                   lay-verify="end_date" class="layui-input" type="text">
                                         </div>
                                     </div>
                                 </div>

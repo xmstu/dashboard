@@ -7,8 +7,8 @@ from server.status import HTTPStatus, make_resp, APIStatus
 def check_jobs_list(params):
 
     try:
-        params["job_name"] = str(params.get("job_name", ''))
-        params["region"] = str(params.get("region") or '')
+        params["job_name"] = str(params.get("job_name", 'python'))
+        params["region"] = str(params.get("region") or '广州')
         params["time_scale"] = int(params.get("time_scale") or 0)
         params["page"] = int(params.get("page") or 1)
 

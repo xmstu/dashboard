@@ -15,7 +15,7 @@ class JobList(Resource):
         params = get_all_arg()
         params = check_jobs_list(params)
         result = boss_spider(params)
-        return make_resp(status=APIStatus.Ok, data=result)
+        return make_resp(status=APIStatus.Ok, data=result, count=999999)
 
 
 ns = api.namespace('jobs', description='职位统计')

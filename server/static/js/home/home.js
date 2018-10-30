@@ -13,7 +13,7 @@ $("#date_show_two").val(String(common.getNowFormatDate()[0]));
 var dataArr1 = ["待接单", "已接单", "已取消", "已接单车辆", "待接单车辆数"];
 var dataArr2 = ["待联系", "已联系", "已接单", "已取消", "已接单车辆", "待接单车辆数"];
 setTimeout(function () {
-        tableInit("/city/latest_orders/");
+        tableInit("/jobs/jobs_list/");
         $(".area-menu-about>a").addClass("selected-active");
         $(".area-menu-about>a>i").addClass("select-active");
     },
@@ -60,12 +60,10 @@ $("#user_search_box").on("click",
         e.preventDefault();
         var data = {
             job_name: $('#job_name').val(),
-            jobs_type: $.trim($("#goods_type").val()),
-            // region: $.trim($("#is_called").val()),
-            pub_time: $.trim($("#vehicle_length").val()),
-            region: $.trim($("#node_id").val()) == "" ? common.role_area_show($("#super_manager_area_one")) : $.trim($("#node_id").val()),
+            region: $("#region").val(),
+            time_scale: $("#time_scale").val(),
         };
-        var url = "/jobs/jobs_list/?job_name=" + data.job_name + "&jobs_type=" + data.jobs_type + "&pub_time=" + data.pub_time + "&region=" + data.region;
+        var url = "/jobs/jobs_list/?job_name=" + data.job_name + "&region=" + data.region + "&time_scale=" + data.time_scale;
         tableInit(url)
     });
 
@@ -87,12 +85,12 @@ function tableInit(url) {
                 loading: true,
                 cols: [[
                     {
-                    field: "jobs_name",
-                    title: "职业名称",
-                    width: 70
+                        field: "job_name",
+                        title: "职业名称",
+                        width: 70
                     },
                     {
-                        field: "jobs_url",
+                        field: "job_url",
                         title: "职位链接",
                         width: 78
                     },
@@ -102,7 +100,7 @@ function tableInit(url) {
                         width: 80
                     },
                     {
-                        field: "address",
+                        field: "addr",
                         title: "公司地址",
                         width: 200
                     },
@@ -127,12 +125,17 @@ function tableInit(url) {
                         width: 100
                     },
                     {
+                        field: "sectors",
+                        title: "所属行业",
+                        width: 90
+                    },
+                    {
                         field: "finance",
                         title: "融资情况",
                         width: 90
                     },
                     {
-                        field: "pep_num",
+                        field: "peo_num",
                         title: "公司规模",
                         width: 100
                     },
@@ -151,128 +154,14 @@ function tableInit(url) {
                         title: "发布时间",
                         width: 100
                     },
-                    ]],
-                done: function (res, curr, count) {
-                    layer.closeAll("loading");
-                    common.clearSelect()
-                    $("[data-field]>div").css({"padding": "0 6px"});
-                     $("td[data-field='goods_type']").children().each(function (val) {
-                            if ($(this).text() != '') {
-                                var result = $(this).text().split('\n');
-                                $(this).html(result[0] +'<br>'+ result[1])
-                            }
-                        })
-                    $(".nearby-one").on("click", function (e) {
-                        e.preventDefault();
-                        var content_title = $(this).siblings('p.display-content').text()
-                        if (content_title != '') {
-                            // var result_title = content_title.split('\n')
-                            result_title = '<p>' + content_title + '</p>'
-                        }
-                        layer.load();
-                        var val = $(this).val();
-                        var goods_type = $(this).attr('data-type')
-                        var url = "/city/nearby_cars/" + val + '?goods_type=' + goods_type;
-                        tableReset(url);
-                        layer.open({
-                            type: 1,
-                            title: result_title,
-                            shadeClose: true,
-                            area: ["1200px", "600px"],
-                            skin: "layui-layer-molv",
-                            closeBtn: 1,
-                            content: $("#popup")
-                        })
-                    });
-                    $(".nearby-two").on('click', function (e) {
-                        e.preventDefault()
-                        var content_title = $(this).siblings('p.display-content').text()
-                        if (content_title != '') {
-                            result_title = '<p>' + content_title + '</p'
-                        }
-                        var val = $(this).val();
-                        var goods_type = $(this).attr('data-type')
-                        var url = "/city/nearby_cars/" + val + '?goods_type=' + goods_type;
-                        layer.open({
-                            type: 1,
-                            title: result_title,
-                            shadeClose: true,
-                            area: ["1200px", "600px"],
-                            skin: "layui-layer-molv",
-                            closeBtn: 1,
-                            content: $("#popup_one")
-                        })
-                        layer.load();
-                        popupRender(url)
-                    })
-                    //对后端返回的数据重新进行渲染
-                    $("td[data-field='content']").children().each(function () {
-                        if ($(this).text() != "") {
-                            var str = $(this).text();
-                            str = str.split("\n");
-                            $(this).html(str[0] + "<br>" + str[1] + "<br>" + str[2])
-                        }
-                    });
-                    $("td[data-field='price']").children().each(function () {
-                        if ($(this).text() != "") {
-                            var str = $(this).text();
-                            str = str.split("\n");
-                            $(this).html(str[0] + "<br>" + str[1])
-                        }
-                    });
-                    $("td[data-field='mobile']").children().each(function () {
-                        var str = $(this).text();
-                        if (str != "") {
-                            str = str.split("\n");
-                            if (str[0] == "") {
-                                $(this).html(str[0])
-                            } else {
-                                if (str[0] != "" && str[1] == "" && str[2] != "") {
-                                    $(this).html(str[0] + '<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ")</span>")
-                                } else {
-                                    if (str[0] != "" && str[1] != "" && str[2] == "") {
-                                        $(this).html(str[0] + "<br>" + str[1])
-                                    } else {
-                                        if (str[0] != "" && str[1] != "" && str[2] != "") {
-                                            $(this).html(str[0] + "<br>" + str[1] + '<br><span style="color: #f40;font-weight: bold;">(' + str[2] + ")</span>")
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                    $("td[data-field='vehicle']").children().each(function () {
-                        if ($(this).text() != "") {
-                            var str = $(this).text();
-                            str = str.split("\n");
-                            if (str[1] == "" || str[1] == undefined) {
-                                $(this).html(str[0])
-                            } else {
-                                $(this).html(str[0] + "<br>" + str[1])
-                            }
-                        }
-                    });
-                    $("td[data-field='goods_time']").children().each(function () {
-                        if ($(this).text() != "") {
-                            var str = $(this).text();
-                            str = str.split("\n");
-                            $(this).html("发布:" + str[0] + "<br>装货:" + str[1])
-                        }
-                    });
-                    $("td[data-field='address']").children().each(function () {
-                        if ($(this).text() != "") {
-                            var str = $(this).text();
-                            str = str.split("\n");
-                            $(this).html('<span>' + str[0] + "</span><br>" + str[1] + "<br>" + str[2])
-                        }
-                    });
-                    $("td[data-field='call_count']").children().each(function () {
-                        if ($(this).text() != "") {
-                            var str = $(this).text();
-                            $(this).html(str + "次")
-                        }
-                    });
-                    $('.main-content-right').addClass('animated fadeIn')
+                ]],
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "status": res.status, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
                 },
                 id: "testReload",
                 page: true
@@ -280,128 +169,23 @@ function tableInit(url) {
         })
 }
 
-function tableReset(url) {
-    layui.use(["table", 'layer', "form"],
-        function () {
-            var none_data = null;
-            var layer = layui.layer;
-            var table = layui.table;
-            layer.load()
-            table.render({
-                elem: "#demo",
-                url: url,
-                page: false,
-                width: 1272,
-                response: {
-                    statusName: "status",
-                    statusCode: 100000
-                },
-                loading: true,
-                cols: [[{
-                    field: "name",
-                    title: "司机姓名",
-                    //  width: 86
-                },
-                    {
-                        field: "mobile",
-                        title: "手机号码",
-                        //  width: 108
-                    },
-                    {
-                        field: "booking_line",
-                        title: "接单线路",
-                        width: 300
-                    },
-                    {
-                        field: "booking_time",
-                        title: "设置时间",
-                        //  width: 100
-                    },
-                    {
-                        field: "last_login_time",
-                        title: "最后登陆",
-                        //width: 100
-                    },
-                    {
-                        field: "vehicle_length",
-                        title: "车长",
-                        // width: 80
-                    },
-                    {
-                        field: "vehicle_type",
-                        title: "车型",
-                        // width: 80
-                    },
-                    {
-                        field: "is_trust_member",
-                        title: "诚信会员"
-                    },
-                    {
-                        field: "order_count",
-                        title: "接单数",
-                        sort: true,
-                        //width: 80
-                    },
-                    {
-                        field: "order_finished",
-                        title: "完成数",
-                        sort: true,
-                        width: 80
-                    },
-                    {
-                        field: "order_cancel",
-                        sort: true,
-                        title: "取消数",
-                        width: 80
-                    }]],
-                done: function (res) {
-                    common.ajaxSetting()
-                    $("td[data-field='is_trust_member']").children().each(function () {
-                        if ($(this).text() != "") {
-                            var str = $(this).text();
-                            if (str == 1) {
-                                $(this).text("是")
-                            } else {
-                                if (str == 0) {
-                                    $(this).text("否")
-                                }
-                            }
-                        }
-                    });
-                    $("td[data-field='credit_level']").children().each(function () {
-                        var value_level = $(this).text();
-                        if (value_level == 1) {
-                            $(this).html('<p><i class="iconfont icon-iconfontxingxing"></i></p>')
-                        }
-                        if (value_level == 2) {
-                            $(this).html('<p><i class="iconfont icon-iconfontxingxing"></i></p>')
-                        }
-                        if (value_level == 5) {
-                            $(this).html('<p style="color: #009f95;"><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i><i class="iconfont icon-iconfontxingxing"></i></p>')
-                        }
-                    });
-                    layer.closeAll('loading')
-                }
-            })
-        })
-}
 
 function area_select() {
 
-        $("#super_manager_area").css({
-            "display": "block"
-        });
-        $("#super_manager_area_two").css({
-            "display": "block"
-        });
-        $("#super_manager_area_one").address({
-            level: 3,
-            offsetLeft: '-124px'
-        });
-        $("#super_manager_area_zero").address({
-            level: 3,
-            offsetLeft: '-124px'
-        })
+    $("#super_manager_area").css({
+        "display": "block"
+    });
+    $("#super_manager_area_two").css({
+        "display": "block"
+    });
+    $("#super_manager_area_one").address({
+        level: 3,
+        offsetLeft: '-124px'
+    });
+    $("#super_manager_area_zero").address({
+        level: 3,
+        offsetLeft: '-124px'
+    })
 }
 
 area_select();
