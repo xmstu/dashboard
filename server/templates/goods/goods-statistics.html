@@ -118,8 +118,8 @@
                         </div>
                     <!-------------------这些注释是漏斗图部分，app那边还有部分功能未实现，所以先不做---------------------------->
                     </div>
-
                     <div class="river"></div>
+
                     <div class="charts-area-four">
                         <div class="chart-area-four-header content-header">
                             <h2><i class="layui-icon">&#xe609;</i>全国职位数量概况</h2>
@@ -167,6 +167,69 @@
                             </div>
                         </div>
                     </div>
+
+                <div class="charts-area-four">
+                        <div class="chart-area-four-header content-header">
+                            <h2><i class="layui-icon">&#xe609;</i>职位薪水概况</h2>
+                            <hr>
+                        </div>
+                        <div class="chart-area-four-body">
+                            <form action="" class="layui-form layui-form-pane">
+
+                            <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">职位名称</label>
+                                        <div class="layui-input-inline">
+                                            <input id="salary_search_name" type="text" name="job_name" maxlength="11"
+                                                   placeholder="请输入职位名称" lay-verify="required|job_name" autocomplete="off"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">地区名称</label>
+                                        <div class="layui-input-inline">
+                                            <input id="region_name" type="text" name="region_name" maxlength="11"
+                                                   placeholder="请输入地区名称" lay-verify="required|region_name" autocomplete="off"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button id="searchBox_4" style="position: relative;padding-left: 20px;"
+                                        class="layui-btn"><i
+                                        class="iconfont icon-sousuo1"></i> 搜索
+                                </button>
+
+                            </form>
+                            <div class="chart-area-four-body-bottom">
+                                <div id="charts_container_five"></div>
+                                <div class="chart-area-body-bottom-right">
+                                    <table class="layui-table cancel-reason-table" lay-skin="line">
+                                        <colgroup>
+                                            <col width="300">
+                                            <col width="300">
+                                            <col width="300">
+                                        </colgroup>
+                                        <thead>
+                                        <tr class="thead-tr" style="color: #000;">
+                                            <th>#</th>
+                                            <th>薪水范围</th>
+                                            <th>职位数量</th>
+                                            <th>所占比率</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="cancel-reason-types_two">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </aside>

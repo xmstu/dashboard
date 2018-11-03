@@ -86,14 +86,14 @@ def job_news(search_name='python'):
 
 def job_money(search_name='python', city='全国'):
     city_code = QIANCHENG_CITY_CODE.get(city)
-    result = {}
+    job_salary_list = []
+    job_salary_list_dict = []
     for k, v in SALARY.items():
         url = "https://search.51job.com/list/{},000000,0000,00,9,{},{},2,1.html".format(city_code, v, search_name)
+        print("=" * 50, url)
         headers = {
             "User-Agent": random.choice(USER_AGENTS)
         }
-        response = requests.get(url=url, headers=headers)
-
         response = requests.get(url=url, headers=headers)
 
         data = response.content.decode('gbk')
@@ -102,18 +102,34 @@ def job_money(search_name='python', city='全国'):
         data = etree.HTML(data)
         count = data.xpath('//*[@id="resultList"]/div[2]/div[5]/text()')
 
-        if not count: count = data.xpath('//*[@id="resultList"]/div[3]/div[5]/text()')
+        if not count:
+            count = data.xpath('//*[@id="resultList"]/div[3]/div[5]/text()')
         count = str(count[1]).split('/')[1]
+        count = int(count) * 50
+        if k != "所有":
+            job_salary_list.append([k, count])
+        job_salary_list_dict.append({
+            "row_name": k,
+            "count": count
+        })
 
-        result[k] = int(count) * 50
+    job_salary_list_dict.sort(key=lambda k: k["count"], reverse=True)
+    for index, detail_dict in enumerate(job_salary_list_dict):
+        detail_dict["percentage"] = "%.2f%%" % ((detail_dict["count"] / job_salary_list_dict[0].get("count")) * 100)
 
+    item = job_salary_list_dict.pop(0)
+    result = {
+        "job_salary_list": job_salary_list,
+        "job_salary_list_dict": job_salary_list_dict,
+        "sum_count": item["count"]
+    }
     return result
 
 
 if __name__ == '__main__':
     search_name = "java"
-    print(job_count_spider(search_name))
+    # print(job_count_spider(search_name))
 
-    print(job_news(search_name))
+    # print(job_news(search_name))
 
-    print(job_money())
+    print(job_money(search_name))

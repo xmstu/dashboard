@@ -259,7 +259,7 @@ layui.use(['laydate', 'form', 'table'], function () {
         }
     };
     $('#goods_search_box').on('click', function (e) {
-        e.preventDefault()
+        e.preventDefault();
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
     });
@@ -269,10 +269,8 @@ layui.use(['laydate', 'form', 'table'], function () {
 var dataSet = {
     chart_third_init: function () {
         var url = '/jobs/jobs_pie/';
-        var requestStartTime = common.timeTransform($('#start_date_three').val() + ' 00:00:00');
-        var requestEndTime = common.timeTransform($('#end_time_three').val() + ' 23:59:59');
         var data = {
-            search_name: $('#search_name').val(),
+            search_name: $('#search_name').val()
         };
         layui.use('layer', function () {
             var layer = layui.layer;
@@ -307,117 +305,49 @@ var dataSet = {
                 layer.closeAll('loading')
             })
         })
+    },
+    chart_fourth_init: function () {
+        var url = "/jobs/jobs_salary_pie/";
+        var data = {
+            search_name: $('#salary_search_name').val(),
+            region: $('#region_name').val()
+        };
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            /*左边表格部分*/
+            http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
+                var all_reason = res.data.job_salary_list;
+                if (res.data.job_list == '' && res.data.job_list_dict == '') {
+                    var str = '<p style="color: #ccc; text-align: center; font-size: 24px;width: 400%;line-height: 40px;" >there is no data</p>';
+                    Chart_fourth(all_reason, '该条件下无数据，图表无法展示');
+                    $('#charts_container_five').css('height', '90px');
+                    $('.cancel-reason-types_two').html(str)
+                } else if (res.data.job_list != '' || res.data.job_list_dict != '') {
+                    $('#charts_container_five').css('height', '400px');
+                    Chart_fourth(all_reason, '职位薪水统计');
+                    var cancel_list_dict = res.data.job_salary_list_dict;
+                    var len = cancel_list_dict.length;
+                    $('.cancel-reason-types_two').html('');
+                    for (var i = 0; i < len; i++) {
+                        var str = '';
+                        str += '<tr>';
+                        str += '<td>' + i + '</td>';
+                        str += '<td class=" cancel-reason-name-"' + i + '>' + cancel_list_dict[i].row_name + '</td>';
+                        str += '<td class="table-order-count cancel-reason-count-"' + i + '><span>' + cancel_list_dict[i].count + '个</span></td>';
+                        str += '<th class=" cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>';
+                        str += '<tr>';
+                        $('.cancel-reason-types_two').append(str)
+                    }
+                     var string = '<tr class="cancel_reason_total"><td>薪水范围职位总数：<span>'+res.data.sum_count+'个</span></td></tr>';
+                    $('.cancel-reason-types_two').append(string)
+                }
+            },function(){
+                layer.closeAll('loading')
+            })
+        })
     }
 };
-function Chart_twice(xAxis, wait_order_series, recv_order_series, cancel_order_series, goods_user_count_series, interval) {
-Highcharts.setOptions({
-    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
-});
-    $('#charts_container_two').highcharts({
-        chart: {
-            zoomType: 'xy'
-        },
-        title: {
-            text: '货源分布及发货人数趋势图'
-        },
-        subtitle: {
-            text: null
-        },
-        xAxis: [{
-            tickInterval: interval,
-            categories: xAxis,
-            crosshair: true,
-            gridLineColor: '#eee',
-            gridLineWidth: 1
 
-        }],
-        yAxis: [{
-            labels: {
-                format: '{value}人',
-            },
-            title: {
-                text: '发货人数',
-            }
-        }, {
-            title: {
-                text: '订单统计',
-
-            },
-            labels: {
-                format: '{value} 单',
-            },
-            opposite: true
-        }],
-        tooltip: {
-            shared: true
-        },
-        lotOptions: {
-            line: {
-                dataLabels: {
-                    enabled: true
-                }
-            }
-        },
-        plotOptions: {
-            column: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function () {
-                        return this.point.y > 0 ? this.point.y + '单' : null;
-                    }
-                }
-            },
-            line: {
-                dataLabels: {
-                    enabled: true,
-                    formatter: function () {
-                        return this.point.y > 0 ? this.point.y + '人' : '';
-                    }
-                },
-                tooltip: {valueSuffix: '%'},
-                //曲线点类型："circle", "square", "diamond", "triangle","triangle-down"，默认是"circle"
-                marker: {
-                    radius: 5, symbol: 'circle'
-                },
-            }
-        },
-        series: [{
-            name: '待接单',
-            type: 'column',
-            yAxis: 1,
-            data: wait_order_series,
-            tooltip: {
-                valueSuffix: ' 单'
-            }
-        },
-            {
-                name: '已接单',
-                type: 'column',
-                yAxis: 1,
-                data: recv_order_series,
-                tooltip: {
-                    valueSuffix: ' 单'
-                }
-            }, {
-                name: '已取消',
-                type: 'column',
-                yAxis: 1,
-                data: cancel_order_series,
-                tooltip: {
-                    valueSuffix: ' 单'
-                }
-            }, {
-                name: '发货人数',
-                type: 'line',
-                data: goods_user_count_series,
-                tooltip: {
-                    valueSuffix: '人'
-                }
-
-            }]
-    });
-
-}
 function Chart_third(dataArr, chartsTitle) {
     Highcharts.setOptions({
     colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
@@ -473,12 +403,71 @@ function Chart_third(dataArr, chartsTitle) {
     });
 }
 
+function Chart_fourth(dataArr, chartsTitle) {
+    Highcharts.setOptions({
+    colors: ['#37A2DA', '#32C5E9', '#67E0E3', '#9FE6B8', '#FFDB5C', '#ff9f7f', '#fb7293', '#E062AE', '#E690D1', '#e7bcf3', '#9d96f5', '#8378EA', '#96BFFF']
+});
+    $('#charts_container_five').highcharts({
+        chart: {
+            renderTo: 'chart'
+        },
+        title: {
+            text: chartsTitle
+        },
+        plotArea: {
+            shadow: true,
+            borderWidth: true,
+            backgroundColor: true
+        },
+        tooltip: {
+            formatter: function () {
+                return '<b>' + this.point.name + '</b>: ' + Highcharts.numberFormat(this.percentage, 1) + '% (' +
+                    Highcharts.numberFormat(this.y, 0, ',') + ' 个)';
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        if (this.percentage > 4) return this.point.name;
+                    },
+                    color: 'black',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                        font: '12px Trebuchet MS, Verdana, sans-serif'
+                    }
+                }
+            }
+        },
+        legend: {
+            //backgroundColor: '#FFFFFF',
+            x: 0,
+            y: -30
+        },
+        credits: {
+            enabled: true
+        },
+        series: [{
+            type: 'pie',
+            name: '职位薪水范围数量对比',
+            data: dataArr
+        }]
+    });
+}
+
 $('#searchBox').on('click', function (e) {
     e.preventDefault();
 });
 $('#searchBox_3').on('click', function (e) {
     e.preventDefault();
     dataSet.chart_third_init()
+});
+$('#searchBox_4').on('click', function (e) {
+    e.preventDefault();
+    dataSet.chart_fourth_init()
 });
 function area_select() {
     var auth_role = $('#user-info').attr('data-role-type')
@@ -509,3 +498,4 @@ function area_select() {
 }
 area_select();
 dataSet.chart_third_init();
+dataSet.chart_fourth_init();
