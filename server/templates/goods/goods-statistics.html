@@ -230,11 +230,23 @@
                     <div class="river"></div>
                     <div class="charts-area-four">
                         <div class="chart-area-four-header content-header">
-                            <h2><i class="layui-icon">&#xe609;</i>取消货源原因统计</h2>
+                            <h2><i class="layui-icon">&#xe609;</i>全国职位数量概况</h2>
                             <hr>
                         </div>
                         <div class="chart-area-four-body">
                             <form action="" class="layui-form layui-form-pane">
+
+                            <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label">职位名称</label>
+                                        <div class="layui-input-inline">
+                                            <input id="search_name" type="text" name="job_name" maxlength="11"
+                                                   placeholder="请输入职位名称" lay-verify="required|job_name" autocomplete="off"
+                                                   class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="layui-form-item">
                                     <div class="layui-inline" style="width: 172px;">
                                         <label class="layui-form-label">开始日期</label>
@@ -321,8 +333,8 @@
                                         <thead>
                                         <tr class="thead-tr" style="color: #000;">
                                             <th>#</th>
-                                            <th>取消原因</th>
-                                            <th>取消单数</th>
+                                            <th>地区名称</th>
+                                            <th>职位数量</th>
                                             <th>所占比率</th>
                                         </tr>
                                         </thead>

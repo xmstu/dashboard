@@ -21,3 +21,7 @@ def index():
     """主页"""
     return render_template('/index/index.html/', user_name="游客", avatar_url=avatar_url, version=version)
 
+@app.route('/goods/', endpoint='goods')
+def goods():
+    """主页"""
+    return render_template('/goods/goods-statistics.html/', user_name="游客", avatar_url=avatar_url, version=version)

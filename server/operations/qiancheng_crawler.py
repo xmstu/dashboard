@@ -23,7 +23,8 @@ SALARY = {
 
 
 def job_count_spider(search_name='python'):
-    result = []
+    job_list = []
+    job_list_dict = []
     for k, v in QIANCHENG_CITY_CODE.items():
         url = "https://search.51job.com/list/{},000000,0000,00,9,99,{},2,1.html".format(v, search_name)
         headers = {
@@ -37,11 +38,23 @@ def job_count_spider(search_name='python'):
         if not count:
             count = data.xpath('//*[@id="resultList"]/div[3]/div[5]/text()')
         count = str(count[1]).split('/')[1]
-        result.append({
+        count = int(count) * 50
+        if k != "全国":
+            job_list.append([k, count])
+        job_list_dict.append({
             "region_name": k,
-            "count": int(count) * 50
+            "count": count
         })
-    result.sort(key=lambda k:k["count"], reverse=True)
+    job_list_dict.sort(key=lambda k:k["count"], reverse=True)
+    for index, detail_dict in enumerate(job_list_dict):
+        detail_dict["percentage"] = "%.2f%%" % ((detail_dict["count"] / job_list_dict[0].get("count")) * 100)
+
+    item = job_list_dict.pop(0)
+    result = {
+        "job_list": job_list,
+        "job_list_dict": job_list_dict,
+        "sum_count": item["count"]
+    }
     return result
 
 

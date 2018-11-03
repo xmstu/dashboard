@@ -429,43 +429,39 @@ var dataSet = {
         })
     },
     chart_third_init: function () {
-        var url = '/goods/cancel/';
+        var url = '/jobs/jobs_pie/';
         var requestStartTime = common.timeTransform($('#start_date_three').val() + ' 00:00:00');
         var requestEndTime = common.timeTransform($('#end_time_three').val() + ' 23:59:59');
         var data = {
-            start_time: requestStartTime,
-            end_time: requestEndTime,
-            goods_type: $('#cancel_reason_types').val(),
-            region_id: $('#area_select').val()==''?common.role_area_show($('#super_manager_area_select_one')):$.trim($('#area_select').val()),
-            goods_price_type:$('#goods_price_type2').val()
-        }
+            search_name: $('#search_name').val(),
+        };
         layui.use('layer', function () {
             var layer = layui.layer;
             /*左边表格部分*/
             http.ajax.get(true, false, url, data, http.ajax.CONTENT_TYPE_2, function (res) {
-                var all_reason = res.data.cancel_list;
-                if (res.data.cancel_list_dict == '' && res.data.cancel_list == '') {
+                var all_reason = res.data.job_list;
+                if (res.data.job_list == '' && res.data.job_list_dict == '') {
                     var str = '<p style="color: #ccc; text-align: center; font-size: 24px;width: 400%;line-height: 40px;" >there is no data</p>';
-                    Chart_third(all_reason, '该条件下无数据，图表无法展示')
-                    $('#charts_container_four').css('height', '90px')
+                    Chart_third(all_reason, '该条件下无数据，图表无法展示');
+                    $('#charts_container_four').css('height', '90px');
                     $('.cancel-reason-types').html(str)
-                } else if (res.data.cancel_list != '' || res.data.cancel_list_dict != '') {
-                    $('#charts_container_four').css('height', '400px')
-                    Chart_third(all_reason, '取消原因统计')
-                    var cancel_list_dict = res.data.cancel_list_dict;
+                } else if (res.data.job_list != '' || res.data.job_list_dict != '') {
+                    $('#charts_container_four').css('height', '400px');
+                    Chart_third(all_reason, '职位数量统计');
+                    var cancel_list_dict = res.data.job_list_dict;
                     var len = cancel_list_dict.length;
-                    $('.cancel-reason-types').html('')
+                    $('.cancel-reason-types').html('');
                     for (var i = 0; i < len; i++) {
                         var str = '';
-                        str += '<tr>'
-                        str += '<td>' + i + '</td>'
-                        str += '<td class=" cancel-reason-name-"' + i + '>' + cancel_list_dict[i].canceled_reason_text + '</td>';
-                        str += '<td class="table-order-count cancel-reason-count-"' + i + '><span>' + cancel_list_dict[i].reason_count + '单</span></td>'
-                        str += '<th class=" cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>'
-                        str += '<tr>'
+                        str += '<tr>';
+                        str += '<td>' + i + '</td>';
+                        str += '<td class=" cancel-reason-name-"' + i + '>' + cancel_list_dict[i].region_name + '</td>';
+                        str += '<td class="table-order-count cancel-reason-count-"' + i + '><span>' + cancel_list_dict[i].count + '个</span></td>';
+                        str += '<th class=" cancel-reason-percentage-"' + i + '><span class="badge">' + cancel_list_dict[i].percentage + '</span></th>';
+                        str += '<tr>';
                         $('.cancel-reason-types').append(str)
                     }
-                     var string = '<tr class="cancel_reason_total"><td>取消总数：<span>'+res.data.sum_count+'单</span></td></tr>';
+                     var string = '<tr class="cancel_reason_total"><td>职位总数：<span>'+res.data.sum_count+'个</span></td></tr>';
                     $('.cancel-reason-types').append(string)
                 }
             },function(){
@@ -603,7 +599,7 @@ function Chart_third(dataArr, chartsTitle) {
         tooltip: {
             formatter: function () {
                 return '<b>' + this.point.name + '</b>: ' + Highcharts.numberFormat(this.percentage, 1) + '% (' +
-                    Highcharts.numberFormat(this.y, 0, ',') + ' 单)';
+                    Highcharts.numberFormat(this.y, 0, ',') + ' 个)';
             }
         },
         plotOptions: {
@@ -633,7 +629,7 @@ function Chart_third(dataArr, chartsTitle) {
         },
         series: [{
             type: 'pie',
-            name: '货源取消汇总',
+            name: '地区职位数量对比',
             data: dataArr
         }]
     });

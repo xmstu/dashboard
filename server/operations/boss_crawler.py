@@ -14,7 +14,7 @@ def boss_spider(params):
     page = params.pop("page")
 
     if region:
-        region = CITY_CODE.get(region)
+        region = BOSS_CITY_CODE.get(region)
         if not region: region = 100010000
     else:
         region = 100010000
