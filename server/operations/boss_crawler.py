@@ -4,7 +4,7 @@ import random
 import requests
 from lxml import etree
 
-from server.configs import CITY_CODE, USER_AGENTS
+from server.configs import BOSS_CITY_CODE, USER_AGENTS
 
 
 def boss_spider(params):
