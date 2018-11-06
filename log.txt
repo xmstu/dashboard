@@ -4036,3 +4036,119 @@ Traceback (most recent call last):
   File "D:\Anaconda\envs\dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
     raise NotFound()
 werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-11-06 16:32:16,811 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1590, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1573, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 294, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-11-06 16:32:19,858 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1590, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1573, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 294, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-11-06 16:32:22,252 - da-service - WARNING - 访问了未知路径: [error: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.]
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1590, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1573, in raise_routing_exception
+    raise request.routing_exception
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\ctx.py", line 294, in match_request
+    self.url_adapter.match(return_rule=True)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\werkzeug\routing.py", line 1581, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.
+2018-11-06 16:32:55,448 - da-service - WARNING - 服务发生异常: [error: int() argument must be a string, a bytes-like object or a number, not 'NoneType']
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask_restplus\api.py", line 313, in wrapper
+    resp = resource(*args, **kwargs)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask_restplus\resource.py", line 44, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "F:\dashboard\server\resources\job_list.py", line 50, in get
+    result = get_job_detail_result(params["search_name"], params["region"])
+  File "F:\dashboard\server\operations\job_detail.py", line 118, in get_job_detail_result
+    ret = [int(i) for i in ret]
+  File "F:\dashboard\server\operations\job_detail.py", line 118, in <listcomp>
+    ret = [int(i) for i in ret]
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'NoneType'
+2018-11-06 16:32:55,456 - da-service - WARNING - 服务发生异常: [error: int() argument must be a string, a bytes-like object or a number, not 'NoneType']
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask_restplus\api.py", line 557, in error_router
+    return original_handler(e)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\_compat.py", line 33, in reraise
+    raise value
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask_restplus\api.py", line 313, in wrapper
+    resp = resource(*args, **kwargs)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask_restplus\resource.py", line 44, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "F:\dashboard\server\resources\job_list.py", line 50, in get
+    result = get_job_detail_result(params["search_name"], params["region"])
+  File "F:\dashboard\server\operations\job_detail.py", line 118, in get_job_detail_result
+    ret = [int(i) for i in ret]
+  File "F:\dashboard\server\operations\job_detail.py", line 118, in <listcomp>
+    ret = [int(i) for i in ret]
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'NoneType'
+2018-11-06 16:32:55,464 - da-service - WARNING - 内部服务发生异常: [error: int() argument must be a string, a bytes-like object or a number, not 'NoneType']
+Traceback (most recent call last):
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1982, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1614, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask_restplus\api.py", line 557, in error_router
+    return original_handler(e)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1517, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\_compat.py", line 33, in reraise
+    raise value
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1612, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\app.py", line 1598, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask_restplus\api.py", line 313, in wrapper
+    resp = resource(*args, **kwargs)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask\views.py", line 84, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "C:\ProgramData\Anaconda3\envs\BI-dashboard\lib\site-packages\flask_restplus\resource.py", line 44, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "F:\dashboard\server\resources\job_list.py", line 50, in get
+    result = get_job_detail_result(params["search_name"], params["region"])
+  File "F:\dashboard\server\operations\job_detail.py", line 118, in get_job_detail_result
+    ret = [int(i) for i in ret]
+  File "F:\dashboard\server\operations\job_detail.py", line 118, in <listcomp>
+    ret = [int(i) for i in ret]
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'NoneType'

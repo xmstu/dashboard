@@ -10,7 +10,6 @@ MONGO_HOST = "127.0.0.1"
 MONGO_PORT = 6379
 MONGO_DB = 1
 
-
 USER_AGENTS = [
     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
     "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)",
@@ -119,4 +118,13 @@ QIANCHENG_CITY_CODE = {
     "成都": '090200',
     "重庆": '060000',
     "长沙": '190200',
+}
+
+WORDS = ['爬虫', 'web', '后台', '人工智能', '区块链', '深度学习', '机器学习', 'UI', '前端', 'andriod', 'ios', '网站', 'app', '算法', '数据库']
+
+REDIS_SETTINGS = {
+    'host': "94.191.28.93",
+    'db': 5,
+    'userName': '',
+    'password': ''
 }

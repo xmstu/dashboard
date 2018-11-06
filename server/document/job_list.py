@@ -15,3 +15,8 @@ request_jobs_salary_pie_params = api.doc(params={
     'search_name': '职位名称',
     'region': '地区筛选',
 }, description='职位薪水分布查询参数')
+
+request_jobs_detail_params = api.doc(params={
+    'search_name': '职位名称',
+    'region': '地区筛选',
+}, description='职位薪水分布查询参数')
